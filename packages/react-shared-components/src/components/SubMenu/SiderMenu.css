@@ -1,0 +1,9 @@
+.SiderMenu.ant-layout-sider-collapsed .cde-username {
+    display: none;
+}
+
+.SiderMenu.ant-layout-sider-collapsed #sign_in {
+    text-align: center;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
