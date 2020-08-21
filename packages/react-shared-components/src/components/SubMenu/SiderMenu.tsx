@@ -155,9 +155,9 @@ export default class SiderMenu extends React.PureComponent<ISiderMenu.Props, ISi
     private getIcon(icon) {
         const { styles } = this.props;
         if (typeof icon === 'string' && icon.indexOf('http') === 0) {
-            return < img src={icon} alt="icon" className={styles.icon} />;
+            return < img src={icon} alt="icon"  />;
         } if (typeof icon === 'string') {
-            return <Icon type={icon} className={styles.icon} />;
+            return <Icon type={icon}  />;
         }
         return icon;
     }
@@ -336,13 +336,13 @@ export default class SiderMenu extends React.PureComponent<ISiderMenu.Props, ISi
                 className={'SiderMenu'}
             >
                 {this.getLogo((filter(this.menus, menu => menu.position === IMenuPosition.LOGO) || [])[0])}
-                <div className={styles.sider}>
+                <div >
                     <Menu
                         key="Menu-Middle"
                         theme="dark"
                         mode="inline"
                         {...menuProps}
-                        className={styles.sider}
+                        // className={styles.sider}
                         onOpenChange={this.handleOpenChange}
                         selectedKeys={selectedKeys}
                         style={{ padding: '16px 0', width: '100%' }}

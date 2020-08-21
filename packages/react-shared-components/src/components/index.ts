@@ -6,4 +6,5 @@ export * from './generated';
 export * from './Layout';
 export * from './UserAuth';
 export * from './ErrorPages';
-export * from './Tabs';
+// export * from './Tabs';
+export * from '../components/Menu/SiderMenu';
