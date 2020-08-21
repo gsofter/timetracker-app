@@ -62,13 +62,16 @@ var webpack_opts = {
           { loader: "css-loader" },
           {
             loader: "less-loader",
-            // options: {
-            //   // modifyVars: themeVariables
-            //   modifyVars: {
-            //     'primary-color': '#1DA57A',
-            //   },
-            //   javascriptEnabled: true,
-            // }
+            options: {
+              //     // modifyVars: themeVariables
+              //     modifyVars: {
+              //         'primary-color': '#1DA57A',
+              //     },
+              // javascriptEnabled: true,
+              lessOptions: {
+                javascriptEnabled: true
+              }
+            }
           }
         ]
       },
