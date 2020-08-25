@@ -41,6 +41,7 @@
   "license": "ISC",
   "dependencies": {
     "@admin-layout/core": "../admin-core",
+    "@ant-design/pro-layout": "^6.4.10",
     "@ant-design/pro-provider": "0.0.2",
     "@ant-design/pro-utils": "0.0.5",
     "@umijs/route-utils": "^1.0.5",
