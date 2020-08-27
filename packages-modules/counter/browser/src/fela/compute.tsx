@@ -10,9 +10,10 @@ export const felaPageStore: any[] = [
         component: ComplexWithTheme,
         tab: 'Fela Styling',
         key: 'fela',
-        position: IMenuPosition.MIDDLE,
+        position: IMenuPosition.BOTTOM,
         name: 'Fela Styling',
         path: '/fela',
+        icon: 'solution'
     },
 ];
 

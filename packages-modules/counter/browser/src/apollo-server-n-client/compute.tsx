@@ -19,7 +19,7 @@ export const counterPageStore: any[] = [
     {
         key: 'counter',
         name: 'Counter',
-        icon: 'appstore-o',
+        // icon: 'appstore-o',
         component: Counter,
         position: IMenuPosition.MIDDLE,
         path: '/apollo-server-n-client/counter',

@@ -45,6 +45,31 @@ const config = {
                         }
                     }
                     : {},
+                    module: {
+                        rules: [
+                            {
+                                test: /\.less$/,
+                                use: [
+                                    { loader: "style-loader" },
+                                    { loader: "css-loader" },
+                                    {
+                                        loader: "less-loader",
+                                        options: {
+                                        //     // modifyVars: themeVariables
+                                        //     modifyVars: {
+                                        //         'primary-color': '#1DA57A',
+                                        //     },
+                                            // javascriptEnabled: true,
+                                            lessOptions: {
+                                                javascriptEnabled: true
+                                              }
+                 
+                                        }
+                                    }
+                                ]
+                            },
+                        ]
+                    }
             }
         },
         server: {
