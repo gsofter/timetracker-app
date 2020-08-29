@@ -19,6 +19,7 @@ export const ApplicationMainLayout: React.FC = (props) => {
   const onCollapse = (collapsed) => {
     setCollapsed(collapsed)
   }
+
   return (
     <WithRouter history={history}>
         <Layout style={{ minHeight: '100vh' }}>
