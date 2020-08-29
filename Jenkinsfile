@@ -5,10 +5,10 @@ pipeline {
   agent any
   parameters {
     string(name: 'REPOSITORY_SERVER', defaultValue: 'gcr.io/stack-test-186501', description: 'Registry server URL to pull/push images', trim: true)
-    string(name: 'NAMESPACE', defaultValue: 'default', description: 'In which namespace micro services needs to be deploy', trim: true)
-    string(name: 'CONNECTION_ID', defaultValue: 'test', description: 'connection id', trim: true)
+    string(name: 'NAMESPACE', defaultValue: 'admin-layout', description: 'In which namespace micro services needs to be deploy', trim: true)
+    string(name: 'CONNECTION_ID', defaultValue: 'admin-layout', description: 'connection id', trim: true)
     string(name: 'WORKSPACE_ID', defaultValue: 'admin-layout', description: 'workspace id', trim: true)
-    string(name: 'UNIQUE_NAME', defaultValue: 'default', description: 'chart name', trim: true)
+    string(name: 'UNIQUE_NAME', defaultValue: 'admin-layout', description: 'chart name', trim: true)
     string(name: 'HEMERA_LOG_LEVEL', defaultValue: 'info', description: 'log level for hemera')
     string(name: 'LOG_LEVEL', defaultValue: 'info', description: 'log level')
     string(name: 'DOMAIN_NAME', defaultValue: 'cdebase.io', description: 'domain of the ingress')
