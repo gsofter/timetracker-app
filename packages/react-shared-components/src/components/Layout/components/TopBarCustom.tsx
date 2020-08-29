@@ -1,7 +1,6 @@
 import React,{useState} from 'react';
 import { Avatar, Badge, Row, Col, Tabs} from 'antd';
 import { UserOutlined } from '@ant-design/icons';
-import { Menu, Dropdown, Button } from 'antd';
 
 
 const TabPane = Tabs.TabPane;
@@ -26,12 +25,9 @@ function callback(key) {
 export const TopBarCustom = () => {
     const [isVisible,setIsVisible] = useState(false)
     return(
-        <>
+        <div style={topBar}>
         <Row>
-            <Col span={10}>
-                
-            </Col>
-            <Col span={8}>
+            <Col span={18}>
                 
             </Col>
             <Col span={2}>
@@ -61,6 +57,10 @@ export const TopBarCustom = () => {
             }
             
         </Row>
-        </>
+        </div>
     )
+}
+
+const topBar = {
+    backgroundColor: "#ffff"
 }

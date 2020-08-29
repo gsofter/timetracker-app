@@ -1,16 +1,17 @@
 import React, { CSSProperties, useContext, useEffect, useState } from 'react';
-
+import { Router } from 'react-router-dom'
 import { Layout, Menu, Breadcrumb } from 'antd';
-import { Icon } from '@ant-design/compatible';
 const { Header, Content, Footer, Sider } = Layout;
 const SubMenu = Menu.SubMenu;
-
+const WithRouter = Router as any;
+import { createBrowserHistory } from 'history'
 import 'antd/dist/antd.css';
-import { filteredMenus, filteredRoutes } from './compute';
 import { TopBarCustom } from '../components/TopBarCustom';
-
+import { SiderMenu } from '../components/SubMenu3';
+import {sharedModule} from './compute'
 import { Feature, FeatureWithRouterFactory } from '@common-stack/client-react';
-const features = new Feature(FeatureWithRouterFactory);
+const history = createBrowserHistory();
+const features = new Feature(FeatureWithRouterFactory, sharedModule);
 
 export const ApplicationMainLayout: React.FC = (props) => {
   const [collapsed, setCollapsed] = useState(false); 
@@ -19,62 +20,30 @@ export const ApplicationMainLayout: React.FC = (props) => {
     setCollapsed(collapsed)
   }
   return (
+    <WithRouter history={history}>
         <Layout style={{ minHeight: '100vh' }}>
-        <Sider
-          collapsible
-          collapsed={collapsed}
-          onCollapse={onCollapse}
-        >
-          <div style={{height: "45px"}}>
-            logo
-            </div>  
-          <Menu theme="dark" defaultSelectedKeys={['1']} mode="inline">
-            <Menu.Item key="1">
-              <Icon type="pie-chart" />
-              <span>Optionsss 4</span>
-            </Menu.Item>
-            <Menu.Item key="2">
-              <Icon type="desktop" />
-              <span>Option 2</span>
-            </Menu.Item>
-            <SubMenu
-              key="sub1"
-              title={<span><Icon type="user" /><span>User</span></span>}
-            >
-              <Menu.Item key="3">Tom</Menu.Item>
-              <Menu.Item key="4">Bill</Menu.Item>
-              <Menu.Item key="5">Alex</Menu.Item>
-            </SubMenu>
-            <SubMenu
-              key="sub2"
-              title={<span><Icon type="team" /><span>Team</span></span>}
-            >
-              <Menu.Item key="6">Team 1</Menu.Item>
-              <Menu.Item key="8">Team 2</Menu.Item>
-            </SubMenu>
-            <Menu.Item key="9">
-              <Icon type="file" />
-              <span>File</span>
-            </Menu.Item>
-          </Menu>
-        </Sider>
-        <Layout>
-          <Header style={{ background: '#fff', padding: 0 , height: '45px', lineHeight: '45px'}} >
-            <TopBarCustom/>
-          </Header>
-          <Content style={{ margin: '0 16px' }}>
-            <Breadcrumb style={{ margin: '16px 0' }}>
-              <Breadcrumb.Item>User</Breadcrumb.Item>
-              <Breadcrumb.Item>Bill</Breadcrumb.Item>
-            </Breadcrumb>
-            <div style={{ padding: 15, background: '#fff', minHeight: 100 }}>
-              Main Content Page
-            </div>
-          </Content>
-          <Footer style={{ textAlign: 'center' }}>
-            Ant Design ©2016 Created by Ant UED
-          </Footer>
-        </Layout>
+              
+              <SiderMenu
+                  collapsed={false}
+                  menuData={features.getMenus()}
+                  location={window.location as any}
+                  segments={features.sidebarSegments}
+                />
+            <Layout>
+                <Header style={headerBg}>
+                    <TopBarCustom/>
+                </Header>
+                <Layout.Content>
+                  { features.getRoutes() }
+                </Layout.Content>
+            </Layout>
+              
       </Layout>
+    </WithRouter>
         );
   }
+
+
+const headerBg = {
+  background: "#ffff"
+}
