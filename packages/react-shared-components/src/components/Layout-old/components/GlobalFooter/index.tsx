@@ -1,5 +1,4 @@
-import './index.less';
-
+// import './index.less';
 import React from 'react';
 import classNames from 'classnames';
 import { WithFalse } from '../typings';

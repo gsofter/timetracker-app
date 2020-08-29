@@ -3,7 +3,7 @@ import { Menu } from 'antd';
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import classNames from 'classnames';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
-import { isUrl, isImg } from '@ant-design/pro-utils';
+// import { isUrl, isImg } from '@ant-design/pro-utils';
 
 import { MenuMode, MenuProps } from 'antd/lib/menu';
 import { MenuTheme } from 'antd/lib/menu/MenuContext';
@@ -67,11 +67,11 @@ let IconFont = createFromIconfontCN({
 //   icon: <Icon type="setting" />,
 const getIcon = (icon?: string | React.ReactNode): React.ReactNode => {
   if (typeof icon === 'string' && icon !== '') {
-    if (isUrl(icon) || isImg(icon)) {
-      return (
-        <Icon component={() => <img src={icon} alt="icon" className="ant-pro-sider-menu-icon" />} />
-      );
-    }
+    // if (isUrl(icon) || isImg(icon)) {
+    //   return (
+    //     <Icon component={() => <img src={icon} alt="icon" className="ant-pro-sider-menu-icon" />} />
+    //   );
+    // }
     if (icon.startsWith('icon-')) {
       return <IconFont type={icon} />;
     }
@@ -170,22 +170,22 @@ class MenuUtil {
         <span className="antd-menu-item-title">{name}</span>
       </>
     );
-    const isHttpUrl = isUrl(itemPath);
+    // const isHttpUrl = isUrl(itemPath);
 
     // Is it a http link
-    if (isHttpUrl) {
-      defaultItem = (
-        <a href={itemPath} target={target}>
-          {icon}
-          <span>{name}</span>
-        </a>
-      );
-    }
+    // if (isHttpUrl) {
+    //   defaultItem = (
+    //     <a href={itemPath} target={target}>
+    //       {icon}
+    //       <span>{name}</span>
+    //     </a>
+    //   );
+    // }
 
     if (menuItemRender) {
       const renderItemProps = {
         ...item,
-        isUrl: isHttpUrl,
+        // isUrl: isHttpUrl,
         itemPath,
         isMobile,
         replace: itemPath === location.pathname,
@@ -195,7 +195,7 @@ class MenuUtil {
       if (!this.hasChildren(item)) {
         delete renderItemProps.children;
       }
-      return menuItemRender(renderItemProps, defaultItem);
+      // return menuItemRender(renderItemProps, defaultItem);
     }
     return defaultItem;
   };
