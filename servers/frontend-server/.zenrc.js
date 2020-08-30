@@ -18,7 +18,7 @@ const config = {
             tsLoaderOptions: {
                 configFileName: "./tsconfig.json"
             },
-            webpackDevPort: 3000,
+            webpackDevPort: 3011,
             openBrowser: true,
             defines: {
                 __CLIENT__: true,
@@ -28,7 +28,7 @@ const config = {
             },
             htmlTemplate: "../../tools/html-plugin-template.ejs",
             // Wait for backend to start prior to letting webpack load frontend page
-            waitOn: ['tcp:localhost:8080'],
+            waitOn: ['tcp:localhost:8091'],
             enabled: true,
             webpackConfig: {
                 plugins: [
@@ -45,31 +45,6 @@ const config = {
                         }
                     }
                     : {},
-                    // module: {
-                    //     rules: [
-                    //         {
-                    //             test: /\.less$/,
-                    //             use: [
-                    //                 { loader: "style-loader" },
-                    //                 { loader: "css-loader" },
-                    //                 {
-                    //                     loader: "less-loader",
-                    //                     options: {
-                    //                     //     // modifyVars: themeVariables
-                    //                     //     modifyVars: {
-                    //                     //         'primary-color': '#1DA57A',
-                    //                     //     },
-                    //                         // javascriptEnabled: true,
-                    //                         lessOptions: {
-                    //                             javascriptEnabled: true
-                    //                           }
-                 
-                    //                     }
-                    //                 }
-                    //             ]
-                    //         },
-                    //     ]
-                    // }
             }
         },
         server: {
@@ -123,7 +98,7 @@ const config = {
         frontendBuildDir: "dist",
         dllBuildDir: "dist/.build/dll",
         ssr: false,
-        backendUrl: "http://localhost:8080",
+        backendUrl: "http://localhost:8091",
         webpackDll: true,
         reactHotLoader: true,
         useDefaultPostCss: true,
@@ -138,7 +113,7 @@ const config = {
         ],
         defines: {
             __DEV__: process.env.NODE_ENV === 'development',
-            __GRAPHQL_URL__: '"http://localhost:8080/graphql"',
+            __GRAPHQL_URL__: '"http://localhost:8091/graphql"',
         }
     }
 };
