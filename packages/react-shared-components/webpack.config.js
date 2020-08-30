@@ -56,26 +56,6 @@ var webpack_opts = {
       },
       { test: /\.svg$/, loader: "url-loader?limit=10000" },
       {
-        test: /\.less$/,
-        use: [
-          { loader: "style-loader" },
-          { loader: "css-loader" },
-          {
-            loader: "less-loader",
-            options: {
-              //     // modifyVars: themeVariables
-              //     modifyVars: {
-              //         'primary-color': '#1DA57A',
-              //     },
-              // javascriptEnabled: true,
-              lessOptions: {
-                javascriptEnabled: true
-              }
-            }
-          }
-        ]
-      },
-      {
         test: /\.css$/,
         use: ExtractTextPlugin.extract({
           fallback: "style-loader",
