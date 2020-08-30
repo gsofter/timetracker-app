@@ -1,20 +1,22 @@
 import * as React from 'react';
-import { Layout } from 'antd';
-import { SmileOutlined, HeartOutlined } from '@ant-design/icons';
-import { Route, Switch } from 'react-router';
 import { Feature, FeatureWithRouterFactory } from '@common-stack/client-react';
-import  { ApplicationMainLayout } from '@admin-layout/react-shared-components';
+import { MainLayout } from '@admin-layout/react-shared-components';
+import CounterModule from '@admin-layout/counter-module-browser';
 
-const features = new Feature(FeatureWithRouterFactory);
- 
- 
+const features = new Feature(
+        FeatureWithRouterFactory,
+        CounterModule,
+);
+
+
 
 
 
 // console.log(sharedModule);
 export const MainRoute = props => (
-        <ApplicationMainLayout/>
-
+        <MainLayout sidebarSegments={features.sidebarSegments} sideBarMenus={features.getMenus()}>
+                {features.getRoutes()}
+        </MainLayout>
 );
 
 export default features;
