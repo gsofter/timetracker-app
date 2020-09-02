@@ -1,7 +1,54 @@
 import React,{useState} from 'react';
-import { Avatar, Badge, Row, Col, Tabs} from 'antd';
+import { Avatar, Badge, Row, Col, Tabs, Spin} from 'antd';
 import { UserOutlined } from '@ant-design/icons';
 
+import { useAuth } from "../../../context";
+import Identicon from "identicon.js";
+import Base64 from "base-64";
+
+function UserView ({ collapsed }) {
+    const { user, loading }: any = useAuth();
+
+    if (!user && loading) {
+    return <Spin />;
+    }
+
+    if (!user || user.isTest || user.mock) {
+    return null;
+    }
+
+    return (
+    <span
+        data-user={user.nickname}
+        id={
+        !user || user.isTest || user.mock ? `cde-user-placeholder` : "cde-user"
+        }
+    >
+        <Avatar
+        style={{ marginRight: !collapsed ? "7px" : 0 }}
+        src={getImageUrl(user.picture)}
+        >
+        {user.nickname || "Guest"}
+        </Avatar>{" "}
+        {!collapsed && (
+        <span className="cde-username"> {user.nickname || "Guest"}</span>
+        )}
+    </span>
+    );
+}
+
+const getImageUrl = (picture) => {
+    return (
+        picture ||
+        `data:image/png;base64,${new Identicon(
+        Base64.encode("myawsomestringbebe"),
+        420
+        ).toString()}`
+    );
+};
+const getAvatar = () => {
+    return <UserView collapsed />;
+    }
 
 const TabPane = Tabs.TabPane;
 function callback(key) {
@@ -21,6 +68,7 @@ function callback(key) {
         </>
       );    
   }
+  
 
 export const TopBarCustom = () => {
     const [isVisible,setIsVisible] = useState(false)
@@ -28,7 +76,7 @@ export const TopBarCustom = () => {
         <div style={topBar}>
         <Row>
             <Col span={18}>
-                
+
             </Col>
             <Col span={2}>
                 <div style={{marginTop: 4, float: "right", paddingRight:20}} onClick={()=>{

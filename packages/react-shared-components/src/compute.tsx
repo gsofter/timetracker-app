@@ -7,7 +7,7 @@ import { getFilteredMenus, getFilteredRoutes } from './utils';
 
 export const counterPageStore: any[] = [
     {
-        exact: false,
+        exact: true,
         icon: 'export',
         key: 'dashboard',
         component: EmptyTab,
