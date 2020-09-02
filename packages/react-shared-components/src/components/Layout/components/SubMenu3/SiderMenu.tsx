@@ -9,14 +9,15 @@ import pathToRegexp from "path-to-regexp";
 import { IMenuPosition } from "@common-stack/client-react";
 import Identicon from "identicon.js";
 import Base64 from "base-64";
-import { FelaComponent } from "react-fela";
+import {useFela} from 'react-fela';
 import { useAuth } from "../../../../context";
+import { WithFalse } from "./typings";
 import {
   MenuUnfoldOutlined,
   MenuFoldOutlined,
   FileOutlined,
 } from "@ant-design/icons";
-import { isAbsolute } from "path";
+import { isAbsolute, relative } from "path";
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -51,6 +52,63 @@ function UserView({ collapsed }) {
     </span>
   );
 }
+
+
+export const defaultRenderLogo = (logo: React.ReactNode): React.ReactNode => {
+  if (typeof logo === 'string') {
+    return <img src={logo} alt="logo" />;
+  }
+  if (typeof logo === 'function') {
+    return logo();
+  }
+  return logo;
+};
+
+export const defaultRenderLogoAndTitle = (
+  props: SiderMenuProps,
+  renderKey: string = 'menuHeaderRender',
+): React.ReactNode => {
+  const {
+    logo = 'https://gw.alipayobjects.com/zos/antfincdn/PmY%24TNNDBI/logo.svg',
+    title,
+    layout,
+  } = props;
+  const renderFunction = props[renderKey || ''];
+  if (renderFunction === false) {
+    return null;
+  }
+  const logoDom = defaultRenderLogo(logo);
+  const titleDom = <h1>{title}</h1>;
+
+  if (renderFunction) {
+    // when collapsed, no render title
+    return renderFunction(logoDom, props.collapsed ? null : titleDom, props);
+  }
+
+  if (layout === 'mix' && renderKey === 'menuHeaderRender') {
+    return null;
+  }
+
+  return (
+    <a>
+      {logoDom}
+      {props.collapsed ? null : titleDom}
+    </a>
+  );
+};
+
+export interface SiderMenuProps {
+  logo?: React.ReactNode;
+  onMenuHeaderClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  menuExtraRender?: WithFalse<(props: SiderMenuProps) => React.ReactNode>;
+  hide?: boolean;
+  title?: string; 
+  collapsed?: any; 
+  className?: string;
+  links?: React.ReactNode[];
+  layout?: any;
+}
+
 
 const getImageUrl = (picture) => {
   return (
@@ -110,6 +168,9 @@ export namespace ISiderMenu {
     user?: any;
     some?: any;
     filter?: any;
+    title?: any;
+    menuExtraRender?: any;
+    onOpenChange?: (openKeys: WithFalse<string[]>) => void;
     styles?: {
       grow?: any;
       logo?: any;
@@ -132,11 +193,17 @@ export namespace ISiderMenu {
 }
 export const SiderMenu: React.FC<ISiderMenu.Props> = (props) => {
 
-  const { logo, segments = [], onCollapse, menuData } = props;
+  const { logo, segments = [], onCollapse, menuData, menuExtraRender = false } = props;
   
   const [ openKeys, setKeys ]: any = useState('');
   const [collapsed, setCollapsed]: any = useState(false);
   const [flatMenuKeys, setFloatMenuKeys]: any = useState(null);
+
+  const headerDom = defaultRenderLogoAndTitle(props);
+
+  const extraDom = menuExtraRender && menuExtraRender(props);
+
+  const {css} = useFela(props);
 
   useEffect(() => {
     setFloatMenuKeys(getFlatMenuKeys(props.menuData));
@@ -147,6 +214,8 @@ export const SiderMenu: React.FC<ISiderMenu.Props> = (props) => {
     const {
       location: { pathname },
     } = props;
+
+    console.log(props);
     return getMenuMatchKeys(flatMenuKeys, urlToList(pathname));
   };
   
@@ -348,10 +417,24 @@ export const SiderMenu: React.FC<ISiderMenu.Props> = (props) => {
         className={"SiderMenu"}
         
       >
-        {getLogo(
-          (filter(menuData, (menu) => menu.position === IMenuPosition.LOGO) ||
-            [])[0]
+        {headerDom && collapsed && (
+          <div className={css(styles.antProSiderTitleHide)} id="logo">
+            {headerDom}
+          </div>
         )}
+        {headerDom && !collapsed && (
+          <div className={css(styles.antProSiderLogo)} id="logo">
+            {headerDom}
+          </div>
+        )}
+        {extraDom && (
+          <div
+          className={`css(styles.antProSiderLogo) ${!headerDom && css(styles.antProSiderLogo)}`}
+          >
+            {extraDom}
+          </div>
+        )}
+
         <div>
           <Menu
             key="Menu-Middle"
@@ -365,7 +448,7 @@ export const SiderMenu: React.FC<ISiderMenu.Props> = (props) => {
           >
             {getNavMenuItems(menuData.filter(menu => menu.position === IMenuPosition.MIDDLE))}
           </Menu>
-          <div className="bottom-navigation" style={btnNavigation}>
+          <div className={css(styles.btnNavigation)}>
             {React.createElement(
               collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
               { className: "trigger", onClick: toggle }
@@ -396,18 +479,67 @@ export const SiderMenu: React.FC<ISiderMenu.Props> = (props) => {
 
 export default SiderMenu;
 
-const btnNavigation: {
-  fontSize: string;
-  padding: string;
-  bottom: string;
-  right: string;
-  display: string;
-  position: any;
-} = {
-  fontSize: "25px",
-  padding: "12px",
-  bottom: "5%",
-  right: "5%",
-  display: "flex",
-  position: "absolute",
+const styles: any = {
+  antProSiderLogo: props => (
+    {
+      position: "relative",
+      display: "flex",
+      alignItems: "center",
+      padding: "16px",
+      lineHeight: "32px",
+      cursor: "pointer",
+      '> a > img': {
+        display: "inline-block",
+        height: "32px",
+        verticalAlign: "middle",
+        transition: "height .2s",
+      },
+      '> a > h1': {
+        display: "inline-block",
+        height: "32px",
+        margin: "0 0 0 12px",
+        color: "#fff",
+        fontWeight: "600",
+        fontSize: "18px",
+        lineHeight: "32px",
+        verticalAlign: "middle",
+        animation: "fade-in",
+        animationDuration: ".2s",
+      },
+    }
+  ),
+  antProSiderTitleHide: props => (
+    {
+      position: "relative",
+      '> a > img': {
+        display: "inline-block",
+        height: "32px",
+        verticalAlign: "middle",
+        paddingLeft: "24px",
+        marginTop: "15px",
+        transition: "height .2s",
+      },
+      '> a > h1': {
+        display: "none",
+      },
+    }
+  ),
+  antProSiderLogoExtra: props => (
+    {
+      position: "relative"
+    }
+  ),
+  antProSiderLogoExtraNoLogo: props => (
+    {
+      position: "relative"
+    }
+  ),
+  btnNavigation: props => ({
+    fontSize: "25px",
+    padding: "12px",
+    bottom: "5%",
+    right: "5%",
+    display: "flex",
+    position: "absolute",
+  })
 };
