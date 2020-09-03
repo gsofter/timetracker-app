@@ -198,6 +198,9 @@ export const SiderMenu: React.FC<ISiderMenu.Props> = (props) => {
   const [ openKeys, setKeys ]: any = useState('');
   const [collapsed, setCollapsed]: any = useState(false);
   const [flatMenuKeys, setFloatMenuKeys]: any = useState(null);
+  const [activeItems, setActiveItems]: any = useState([]);
+  const [currentKey, setCurrentKey]: any = useState('');
+  const [defaultKey, setDefaultKey]: any = useState('/');
 
   const headerDom = defaultRenderLogoAndTitle(props);
 
@@ -207,6 +210,12 @@ export const SiderMenu: React.FC<ISiderMenu.Props> = (props) => {
 
   useEffect(() => {
     setFloatMenuKeys(getFlatMenuKeys(props.menuData));
+    let df: any = props.location.pathname.split('/');
+    if(df.length > 1) {
+     df.splice(2, 1); 
+    }
+    setDefaultKey(df.join('/'))
+    setCurrentKey(props.location.pathname);
   }, [])
   
   // Get the currently selected menu
@@ -404,6 +413,10 @@ export const SiderMenu: React.FC<ISiderMenu.Props> = (props) => {
     setCollapsed({ collapsed: state });
   };
 
+  const handleClick = ({ key }) => {
+    setCurrentKey(key)
+  }
+
 
   return (
     <Sider
@@ -441,9 +454,10 @@ export const SiderMenu: React.FC<ISiderMenu.Props> = (props) => {
             theme="dark"
             mode="inline"
             {...menuProps}
-            // className={styles.sider}
+            onClick={handleClick}
+            // openKeys={[currentKey]}
             onOpenChange={handleOpenChange}
-            selectedKeys={selectedKeys}
+            selectedKeys={[currentKey]}
             style={{ padding: "16px 0", width: "100%" }}
           >
             {getNavMenuItems(menuData.filter(menu => menu.position === IMenuPosition.MIDDLE))}
@@ -464,9 +478,11 @@ export const SiderMenu: React.FC<ISiderMenu.Props> = (props) => {
           key="Menu-Bottom"
           theme="dark"
           mode="inline"
+          onClick={handleClick}
           {...menuProps}
+          // openKeys={[currentKey]}
           onOpenChange={handleOpenChange}
-          selectedKeys={selectedKeys}
+          selectedKeys={[currentKey]}
           style={{ padding: "16px 0", width: "100%" }}
         >
           {getNavMenuItems(
