@@ -3,6 +3,11 @@ import { IMenuPosition } from '@common-stack/client-react';
 
 import { Home } from '../common/components/Home';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
+import {
+    MenuUnfoldOutlined,
+    MenuFoldOutlined,
+    FileOutlined
+  } from '@ant-design/icons';
 
 export const commonPageStore: any[] = [
     {
@@ -12,6 +17,7 @@ export const commonPageStore: any[] = [
         name: 'Home',
         component: Home,
         position: IMenuPosition.MIDDLE,
+        icon: <MenuUnfoldOutlined/>,
     },
 ];
 

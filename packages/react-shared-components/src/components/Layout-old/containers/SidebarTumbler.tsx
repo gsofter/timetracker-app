@@ -8,10 +8,11 @@ export const SidebarTumbler = (props) => {
     const toggle = () => mutate({ variables: { state: !data.sidebarState } });
 
     return (
-        <span onClick={toggle}>
-            {data.sidebarState
-                ? <MenuUnfoldOutlined type="menu-unfold" />
-                : <MenuFoldOutlined type="menu-fold" />}
-        </span>
+        <h1>Here is</h1>
+        // <span onClick={toggle}>
+        //     {data.sidebarState
+        //         ? <MenuUnfoldOutlined type="menu-unfold" />
+        //         : <MenuFoldOutlined type="menu-fold" />}
+        // </span>
     );
 };

@@ -17,7 +17,8 @@ export function ApplicationLayout(props) {
         return (
             <Layout hasSider={true} className={`dashboard ${css(styles.page)}`}>
                 {/* <TopNavigation user={user} logout={auth.logout} onCreate={this.openModal} /> */}
-                <Sidebar />
+                {/* <Sidebar /> */}
+                <div>Here</div>
                 <Layout>
                     <Content>
                         <div className={css(styles.container)}>

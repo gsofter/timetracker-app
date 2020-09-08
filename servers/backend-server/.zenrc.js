@@ -52,12 +52,12 @@ const config = {
         dllBuildDir: "dist/.build/dll",
         webpackDll: false,
         persistGraphQL: false,
-        backendUrl: "http://{ip}:8080",
+        backendUrl: "http://{ip}:8091",
         frontendRefreshOnBackendChange: true,
         nodeDebugger: false,
         defines: {
             __DEV__: process.env.NODE_ENV !== 'production',
-            __GRAPHQL_URL__: '"http://localhost:8080/graphql"',
+            __GRAPHQL_URL__: '"http://localhost:8091/graphql"',
         },
 
     }
