@@ -18,7 +18,7 @@ export const counterPageStore: any[] = [
     },
     {
         key: 'counter',
-        name: 'Counter',
+        name: 'Counter Here',
         // icon: 'appstore-o',
         component: Counter,
         position: IMenuPosition.MIDDLE,

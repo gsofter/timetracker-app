@@ -45,7 +45,7 @@ export interface FooterProps {
 }
 
 const FooterView: React.FC<FooterProps> = ({ links, copyright, style, className }: FooterProps) => (
-  <Footer className={className} style={{ padding: 0, ...style }}>
+  <Footer className={className}>
     {/* <GlobalFooter
       links={links !== undefined ? links : defaultLinks}
       copyright={

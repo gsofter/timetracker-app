@@ -1,8 +1,8 @@
 import React, { CSSProperties } from 'react';
 import { Layout } from 'antd';
-// import ConfigProviderWarp from '@ant-design/pro-provider/lib';
+import { ConfigProviderWarp } from '@ant-design/pro-provider';
 
-export const WrapContent: React.FC<{
+const WrapContent: React.FC<{
   isChildrenLayout?: boolean;
   className?: string;
   style?: CSSProperties;
@@ -10,9 +10,16 @@ export const WrapContent: React.FC<{
   contentHeight?: number | string;
 }> = (props) => {
   const { style, className, children } = props;
+
   return (
-    <Layout.Content className={className} style={style}>
-      {children}
-    </Layout.Content>
+    <ConfigProviderWarp>
+      <Layout.Content className={className} 
+      // style={style}
+      >
+        {children}
+      </Layout.Content>
+    // </ConfigProviderWarp>
   );
 };
+
+export default WrapContent;

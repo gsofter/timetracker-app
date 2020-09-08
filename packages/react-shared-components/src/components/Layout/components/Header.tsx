@@ -1,11 +1,10 @@
-import 'antd/dist/antd.css'; 
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Layout } from 'antd';
 import GlobalHeader, { GlobalHeaderProps } from './GlobalHeader';
-import { PureSettings } from '../../defaultSettings';
-import TopNavHeader from '../../TopNavHeader';
-import { WithFalse } from '../../typings';
+import { PureSettings } from './defaultSettings';
+import TopNavHeader from './TopNavHeader';
+import { WithFalse } from './typings';
 
 const { Header } = Layout;
 
@@ -24,6 +23,7 @@ export type HeaderViewProps = Partial<PureSettings> &
     headerContentRender?: WithFalse<(props: HeaderViewProps) => React.ReactNode>;
     siderWidth?: number;
     hasSiderMenu?: boolean;
+    style?: any;
   };
 
 interface HeaderViewState {
@@ -125,6 +125,13 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
       </>
     );
   }
+}
+
+const styleSheet: any = {
+  proFixedHeader: () => ({
+    zIndex: "9",
+    width: "100%",
+ }),
 }
 
 export default HeaderView;

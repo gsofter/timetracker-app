@@ -1,18 +1,18 @@
-// import './index.less';
 import React from 'react';
 import classNames from 'classnames';
-  
+import {useFela} from 'react-fela';
+
 import { HeaderViewProps } from './Header';
 import {
   defaultRenderLogo,
   SiderMenuProps,
   defaultRenderLogoAndTitle,
   defaultRenderCollapsedButton,
-} from '../../Menu/SiderMenu';
-import { PureSettings } from '../../defaultSettings';
-import TopNavHeader from '../../TopNavHeader';
-// import { MenuDataItem } from '../../typings';
-import { WithFalse } from '../../typings';
+} from './SubMenu3/SiderMenu';
+import { PureSettings } from './defaultSettings';
+import TopNavHeader from './TopNavHeader';
+import { MenuDataItem } from './index';
+import { WithFalse } from './typings';
 
 export interface GlobalHeaderProps extends Partial<PureSettings> {
   collapsed?: boolean;
@@ -23,8 +23,9 @@ export interface GlobalHeaderProps extends Partial<PureSettings> {
   rightContentRender?: WithFalse<(props: HeaderViewProps) => React.ReactNode>;
   className?: string;
   prefixCls?: string;
-//   menuData?: MenuDataItem[];
-  style?: React.CSSProperties;
+  menuData?: MenuDataItem[];
+  onMenuHeaderClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
+  // style?: React.CSSProperties;
   menuHeaderRender?: SiderMenuProps['menuHeaderRender'];
   collapsedButtonRender?: SiderMenuProps['collapsedButtonRender'];
   splitMenus?: boolean;
@@ -52,12 +53,13 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
     collapsedButtonRender = defaultRenderCollapsedButton,
     rightContentRender,
     menuHeaderRender,
+    onMenuHeaderClick,
     className: propClassName,
-    style,
+    // style,
     layout,
     children,
     splitMenus,
-    // menuData,
+    menuData,
     prefixCls,
   } = props;
   const baseClassName = `${prefixCls}-global-header`;
@@ -65,17 +67,19 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
     [`${baseClassName}-layout-${layout}`]: layout,
   });
 
+  const {css} = useFela(props);
+  
   if (layout === 'mix' && !isMobile && splitMenus) {
-    // const noChildrenMenuData = (menuData || []).map((item) => ({
-    //   ...item,
-    //   children: undefined,
-    // }));
+    const noChildrenMenuData = (menuData || []).map((item) => ({
+      ...item,
+      children: undefined,
+    }));
     return (
       <TopNavHeader
         mode="horizontal"
         {...props}
         splitMenus={false}
-        // menuData={noChildrenMenuData}
+        menuData={noChildrenMenuData}
         navTheme="dark"
         theme="dark"
       />
@@ -89,7 +93,9 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
   );
 
   return (
-    <div className={className} style={{ ...style }}>
+    <div className={className} 
+    // style={{ ...style }}
+    >
       {isMobile && renderLogo(menuHeaderRender, logoDom)}
       {isMobile && collapsedButtonRender && (
         <span
@@ -105,15 +111,25 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
       )}
       {layout === 'mix' && !isMobile && (
         <>
-          <div className={`${baseClassName}-logo`}>
+          <div className={`${baseClassName}-logo`} onClick={onMenuHeaderClick}>
             {defaultRenderLogoAndTitle({ ...props, collapsed: false }, 'headerTitleRender')}
           </div>
         </>
       )}
-      <div style={{ flex: 1 }}>{children}</div>
+      <div 
+      className={css(styleSheet.rightContentRenderStyle)}
+      >{children}</div>
       {rightContentRender && rightContentRender(props)}
     </div>
   );
 };
 
 export default GlobalHeader;
+
+const styleSheet:any = {
+  rightContentRenderStyle: (props: any) => (
+    {
+      flex: 1,
+    }
+  ),
+}
