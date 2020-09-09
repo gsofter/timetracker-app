@@ -14,7 +14,10 @@ const features = new Feature(
 
 // console.log(sharedModule);
 export const MainRoute = props => (
-        <MainLayout sidebarSegments={features.sidebarSegments} sideBarMenus={features.getMenus()}>
+        <MainLayout 
+                // sidebarSegments={features.sidebarSegments} 
+                route={features.getMenus()}
+                >
                 {features.getRoutes()}
         </MainLayout>
 );
