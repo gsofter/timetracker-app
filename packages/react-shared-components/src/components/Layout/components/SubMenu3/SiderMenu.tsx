@@ -202,7 +202,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
   const headerDom = defaultRenderLogoAndTitle(props);
 
   const extraDom = menuExtraRender && menuExtraRender(props);
-  console.log({props})
   const menuDom = menuContentRender !== false && flatMenuKeys && (
     <BaseMenu
     {...props}
@@ -230,7 +229,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
             }
           }
         }}
-        collapsedWidth={48}
+        collapsedWidth={65}
         className={css(styleSheet.siderMenuStyle)} {...siderClassName}
         width={siderWidth}
         theme={theme}
