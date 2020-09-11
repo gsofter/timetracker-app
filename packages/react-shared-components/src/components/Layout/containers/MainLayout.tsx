@@ -14,7 +14,7 @@ import MenuCounter from '../components/SubMenu3/Counter';
 import RouteContext from '../components/RouteContext';
 import { SiderMenuProps } from '../components/SubMenu3/SiderMenu';
 import Header, { HeaderViewProps } from '../components/Header';
-import defaultSettings, { PureSettings } from '../components/defaultSettings';
+import defaultSettings, { PureSettings, ProSettings } from '../components/defaultSettings';
 import { MenuDataItem, MessageDescriptor, Route, RouterTypes, WithFalse } from '../components/typings';
 import { BaseMenuProps } from '../components/SubMenu3/BaseMenu';
 import { getPageTitleInfo, GetPageTitleProps } from '../components/getPageTitle';
@@ -26,6 +26,7 @@ import WrapContent from '../components/WrapContent';
 import useDeepCompareEffect from '../components/hooks/useDeepCompareEffect';
 import { isBrowser } from '../components/utils/utils';
 import useDocumentTitle from '../components/hooks/useDocumentTitle';
+import SettingDrawer, { SettingDrawerProps, SettingDrawerState } from '../components/SettingDrawer';
 
 // export interface IMainLayoutProps {
 //   sidebarSegments?: any;
@@ -183,6 +184,7 @@ export type BasicLayoutProps = Partial<RouterTypes<Route>> &
 
 
 export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
+  const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(undefined);
   // const [collapsed, setCollapsed] = useState(false);
 
   // const onCollapse = (collapsed) => {
@@ -455,6 +457,9 @@ useDocumentTitle(pageTitleInfo, props.title || defaultSettings.title);
               {/* {footerDom} */}
             </Layout>
           </Layout>
+          <SettingDrawer
+            settings={settings}
+          />
         </div>
       </RouteContext.Provider>
     </MenuCounter.Provider>
