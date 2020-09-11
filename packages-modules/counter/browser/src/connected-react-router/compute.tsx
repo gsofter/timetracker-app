@@ -6,11 +6,14 @@ import { Counter } from './components/Counter';
 import { Dashboard } from '../common/components/Dashboard';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 import { CONNECTED_REACT_ROUTER_ROUTES_TYPES } from './constants';
+import {
+    FileOutlined
+  } from '@ant-design/icons';
 
 export const counterPageStore: any[] = [
     {
         exact: false,
-        icon: 'export',
+        icon: <FileOutlined/>,
         component: Dashboard,
         position: IMenuPosition.MIDDLE,
         name: 'Connected React Router',

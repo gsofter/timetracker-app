@@ -14,7 +14,7 @@ import MenuCounter from '../components/SubMenu3/Counter';
 import RouteContext from '../components/RouteContext';
 import { SiderMenuProps } from '../components/SubMenu3/SiderMenu';
 import Header, { HeaderViewProps } from '../components/Header';
-import defaultSettings, { PureSettings } from '../components/defaultSettings';
+import defaultSettings, { PureSettings, ProSettings } from '../components/defaultSettings';
 import { MenuDataItem, MessageDescriptor, Route, RouterTypes, WithFalse } from '../components/typings';
 import { BaseMenuProps } from '../components/SubMenu3/BaseMenu';
 import { getPageTitleInfo, GetPageTitleProps } from '../components/getPageTitle';
@@ -26,6 +26,7 @@ import WrapContent from '../components/WrapContent';
 import useDeepCompareEffect from '../components/hooks/useDeepCompareEffect';
 import { isBrowser } from '../components/utils/utils';
 import useDocumentTitle from '../components/hooks/useDocumentTitle';
+import SettingDrawer, { SettingDrawerProps, SettingDrawerState } from '../components/SettingDrawer';
 
 // export interface IMainLayoutProps {
 //   sidebarSegments?: any;
@@ -120,7 +121,6 @@ export type BasicLayoutProps = Partial<RouterTypes<Route>> &
 
   const renderSiderMenu = (props: BasicLayoutProps): React.ReactNode => {
     const { layout, isMobile, menuRender} = props
-    console.log(props.route,"sider menu");
     if (props.menuRender === false || props.pure) {
       return null;
     }
@@ -177,13 +177,14 @@ export type BasicLayoutProps = Partial<RouterTypes<Route>> &
     siderWidth: number,
   ): number | undefined => {
     if (hasLeftPadding) {
-      return collapsed ? 48 : siderWidth;
+      return collapsed ? 65 : siderWidth;
     }
     return 0;
   };
 
 
 export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
+  const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(undefined);
   // const [collapsed, setCollapsed] = useState(false);
 
   // const onCollapse = (collapsed) => {
@@ -212,8 +213,15 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
     loading,
     ...rest
   } = props;
-
-  const route: any = { routes: rs };
+  
+  
+  const [route, setRoute] = useState({ routes: rs });
+  
+  useEffect(() => {
+    if(route.routes.toString() !== rs.toString()) {
+      setRoute({ routes: rs });
+    }
+  }, [route])
 
   const propsLayout = compatibleLayout(defaultPropsLayout);
   const { prefixCls } = rest;
@@ -430,7 +438,7 @@ useDocumentTitle(pageTitleInfo, props.title || defaultSettings.title);
       >
         <div>
           <Layout
-            className={css(styleSheet.minHeight)}
+          className={css(styleSheet.layoutCss)} 
             hasSider
             >
             {siderMenuDom }
@@ -449,6 +457,9 @@ useDocumentTitle(pageTitleInfo, props.title || defaultSettings.title);
               {/* {footerDom} */}
             </Layout>
           </Layout>
+          <SettingDrawer
+            settings={settings}
+          />
         </div>
       </RouteContext.Provider>
     </MenuCounter.Provider>
@@ -484,13 +495,6 @@ MainLayout.defaultProps = {
   siderWidth: 208,
   location: isBrowser() ? window.location : undefined,
 };
-
-
-// const styles: any = {
-//   headerBg: props => ({
-//     background: "#ffff"
-//   })
-// };
 const styleSheet:any = {
   minHeight: props => (
     {
@@ -502,11 +506,44 @@ const styleSheet:any = {
       position: 'relative'
     }
   ),
-  baseClassNameHasHeader: ({ headerHeight }) => ({
-    position: 'relative',
-    // tech-page-container
-    '> .tech-page-container': {
-      height: "calc(100vh - 48px)"
-    }
+  layoutCss: ({ theme }) => ({
+    display: 'flex',
+    flexDirection: 'column',
+    width: '100%',
+    minHeight: '100vh',
+  '& .ant-pro-basicLayout .ant-layout-header .ant-pro-fixed-header': {
+    position: 'fixed',
+    top: 0
+  },
+  '& .ant-pro-basicLayout-content': {
+      position: 'relative',
+      margin: '24px'
+   },
+  '& .ant-pro-basicLayout-content .ant-pro-page-container': {
+      margin: '-24px -24px 0'
+   },
+  '& .ant-pro-basicLayout-content-disable-margin': {
+      margin: 0
+   },
+  '& .ant-pro-basicLayout-content-disable-margin .ant-pro-page-container': {
+      margin: 0
+   },
+  '& .ant-pro-basicLayout-content > .ant-layout': {
+      maxHeight: '100%'
+   },
+  '& .ant-pro-basicLayout .ant-pro-basicLayout-is-children .ant-pro-basicLayout-fix-siderbar': {
+      height: '100vh',
+      overflow: 'hidden',
+      transform: 'rotate(0)'
+   },
+  '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .tech-page-container': {
+      height: 'calc(52vh)'
+   },
+  '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children': {
+      minHeight: 'calc(52vh)'
+   },
+  '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar': {
+      height: 'calc(52vh)'
+   },
   }),
 };
