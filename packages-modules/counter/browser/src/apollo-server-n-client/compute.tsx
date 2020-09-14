@@ -4,11 +4,16 @@ import { IMenuPosition } from '@common-stack/client-react';
 import Counter from './containers/Counter';
 import { Dashboard } from '../common/components/Dashboard';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
+import {
+    MenuUnfoldOutlined,
+    MenuFoldOutlined,
+  } from '@ant-design/icons';
+
 
 export const counterPageStore: any[] = [
     {
         exact: false,
-        icon: 'export',
+        icon: <MenuUnfoldOutlined/>,
         key: 'dashboard',
         component: Dashboard,
         tab: 'Apollo Server & Client',
@@ -18,7 +23,7 @@ export const counterPageStore: any[] = [
     },
     {
         key: 'counter',
-        name: 'Counter Here',
+        name: 'Counter',
         // icon: 'appstore-o',
         component: Counter,
         position: IMenuPosition.MIDDLE,
