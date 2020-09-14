@@ -17,7 +17,7 @@ export const commonPageStore: any[] = [
         name: 'Home',
         component: Home,
         position: IMenuPosition.MIDDLE,
-        icon: <MenuUnfoldOutlined/>,
+        icon: <FileOutlined/>,
     },
 ];
 
