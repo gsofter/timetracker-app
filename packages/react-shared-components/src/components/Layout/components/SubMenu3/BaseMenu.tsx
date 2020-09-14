@@ -12,7 +12,6 @@ import { getOpenKeysFromMenuData, isUrl, isImg } from '../utils/utils';
 
 import { MenuDataItem, MessageDescriptor, Route, RouterTypes, WithFalse } from '../typings';
 import MenuCounter from './Counter';
-import { Link } from 'react-router-dom';
 
 export interface BaseMenuProps
   extends Partial<RouterTypes<Route>>,
@@ -127,19 +126,13 @@ class MenuUtil {
 
       return (
         <SubMenu title={title} key={item.key || item.path} onTitleClick={item.onTitleClick}>
-          
-            {this.getNavMenuItems(item.children, true)}
+          {this.getNavMenuItems(item.children, true)}
         </SubMenu>
       );
     }
 
     return (
-      <Menu.Item key={item.key || item.path}>
-        <Link to={item.path}>
-        {this.getMenuItemPath(item, isChildren)}
-
-        </Link>
-        </Menu.Item>
+      <Menu.Item key={item.key || item.path}>{this.getMenuItemPath(item, isChildren)}</Menu.Item>
     );
   };
 
@@ -382,6 +375,7 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
    * 记下最新的 menuData
    */
   postMenuDataRef.current = finallyData;
+
   return (
     <Menu
       {...openKeysProps}
@@ -393,15 +387,9 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
       selectedKeys={selectedKeys}
       // style={style}
       className={cls}
-      onClick={(k) => {
-        openKeysRef.current = k.keyPath as string[];
-        setOpenKeys(k.keyPath as string[])
-        setSelectedKeys(k.keyPath as string[])
-      }}
       onOpenChange={(keys) => {
         openKeysRef.current = keys as string[];
         setOpenKeys(keys as string[]);
-        setSelectedKeys(keys as string[])
       }}
       {...props.menuProps}
     >
