@@ -5,7 +5,7 @@ import { ConfigProviderWarp } from '@ant-design/pro-provider';
 const WrapContent: React.FC<{
   isChildrenLayout?: boolean;
   className?: string;
-  style?: CSSProperties;
+  style?: any;
   location?: any;
   contentHeight?: number | string;
 }> = (props) => {
@@ -14,7 +14,7 @@ const WrapContent: React.FC<{
   return (
     <ConfigProviderWarp>
       <Layout.Content className={className} 
-      // style={style}
+      style={style}
       >
         {children}
       </Layout.Content>

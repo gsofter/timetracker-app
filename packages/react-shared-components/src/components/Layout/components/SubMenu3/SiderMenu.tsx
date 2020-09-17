@@ -91,7 +91,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     isMobile,
     onMenuHeaderClick,
     breakpoint = 'lg',
-    // style,
+    style,
     layout,
     menuExtraRender = false,
     collapsedButtonRender = defaultRenderCollapsedButton,

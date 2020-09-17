@@ -32,7 +32,7 @@ export interface BaseMenuProps
    * 要给菜单的props, 参考antd-menu的属性。https://ant.design/components/menu-cn/
    */
   menuProps?: MenuProps;
-  // style?: React.CSSProperties;
+  style?: any;
   theme?: MenuTheme;
   formatMessage?: (message: MessageDescriptor) => string;
   subMenuItemRender?: WithFalse<
@@ -245,7 +245,7 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
     },
     className,
     handleOpenChange,
-    // style,
+    style,
     menuData,
     menu = { locale: true },
     iconfontUrl,
@@ -391,7 +391,7 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
       theme={theme}
       inlineIndent={16}
       selectedKeys={selectedKeys}
-      // style={style}
+      style={style}
       className={cls}
       onClick={(k) => {
         openKeysRef.current = k.keyPath as string[];

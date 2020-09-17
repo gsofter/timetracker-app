@@ -223,6 +223,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
     }
   }, [route])
 
+  console.log(route.routes, "route routes")
   const propsLayout = compatibleLayout(defaultPropsLayout);
   const { prefixCls } = rest;
   const formatMessage = ({
@@ -350,6 +351,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
     theme: (navTheme || 'dark').toLocaleLowerCase().includes('dark') ? 'dark' : 'light',
   });
 
+console.log(headerDom, 'header dom');
 // render footer dom
 
 // const footerDom = footerRender({

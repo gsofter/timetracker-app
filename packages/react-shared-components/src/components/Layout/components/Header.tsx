@@ -1,7 +1,7 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Layout } from 'antd';
-import GlobalHeader, { GlobalHeaderProps } from './GlobalHeader';
+import GlobalHeader, { GlobalHeaderProps } from './GlobalHeader/index';
 import { PureSettings } from './defaultSettings';
 import TopNavHeader from './TopNavHeader';
 import { WithFalse } from './typings';
@@ -40,6 +40,7 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
       headerRender,
       headerContentRender,
     } = this.props;
+        
     const isTop = layout === 'top';
     let defaultDom = (
       <GlobalHeader onCollapse={onCollapse} {...this.props}>
