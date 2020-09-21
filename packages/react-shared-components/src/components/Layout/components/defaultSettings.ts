@@ -57,7 +57,7 @@ const defaultSettings: ProSettings = {
     locale: true,
   },
   headerHeight: 48,
-  title: 'Ant Design Pro',
+  title: 'CDMBase LLC',
   iconfontUrl: '',
   primaryColor: '#1890ff',
 };

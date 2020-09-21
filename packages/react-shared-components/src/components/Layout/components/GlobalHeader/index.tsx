@@ -65,7 +65,6 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
     prefixCls,
   } = props;
 
-  console.log(props, "props global header page");
   const baseClassName = `${prefixCls}-global-header`;
   const className = classNames(propClassName, baseClassName, {
     [`${baseClassName}-layout-${layout}`]: layout,
@@ -142,7 +141,6 @@ const styleSheet: any = {
       alignItems: "center",
       height: "100%",
       padding: "0 16px",
-      // background: ;
     },
     boxShadow: "0 1px 4px rgba(0,21,41,0.08)",
     "& .ant-pro-global-header > *": {
@@ -155,7 +153,7 @@ const styleSheet: any = {
       fontSize: "20px",
     },
     "& .ant-pro-global-header-layout-mix": {
-      backgroundColor: "red",
+      // backgroundColor: "red",
     },
     "& .ant-pro-global-header-layout-mix .ant-pro-global-header-logo h1": {
       color: "#fff",
