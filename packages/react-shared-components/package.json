@@ -49,7 +49,8 @@
     "react-fontawesome": "^1.6.1",
     "unstated-next": "^1.1.0",
     "use-json-comparison": "^1.0.5",
-    "use-media-antd-query": "^1.0.2"
+    "use-media-antd-query": "^1.0.2", 
+    "react-copy-to-clipboard": "^5.0.2"
   },
   "typings": "lib/index.d.ts",
   "typescript": {
