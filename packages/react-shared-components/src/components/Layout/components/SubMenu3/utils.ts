@@ -1,4 +1,4 @@
-import { MenuDataItem } from './typings';
+import { MenuDataItem } from '../typings';
 
 // /userinfo/2144/id => ['/userinfo','/useinfo/2144,'/userindo/2144/id']
 export function urlToList(url) {

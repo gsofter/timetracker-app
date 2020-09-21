@@ -366,7 +366,6 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
   } = props;
 
   const { css } = useFela(props);
-  console.log(props,"Setting Drawer props here");
 
   const firstRender = useRef<boolean>(true);
 
