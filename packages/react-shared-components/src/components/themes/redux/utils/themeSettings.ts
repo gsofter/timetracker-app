@@ -1,5 +1,5 @@
-import * as R from 'ramda';
-import * as cookie from 'js-cookie';
+import * as R from './node_modules/ramda';
+import * as cookie from './node_modules/js-cookie';
 import { THEMES, COLORS } from '../constants';
 
 export const getTheme = (themeName) => {

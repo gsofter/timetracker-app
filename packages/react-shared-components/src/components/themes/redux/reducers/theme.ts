@@ -1,4 +1,4 @@
-import * as cookie from 'js-cookie';
+import * as cookie from './node_modules/js-cookie';
 import { THEME_ACTION_TYPES, THEMES, COLORS } from '../constants';
 import { getTheme, setThemeSettings } from '../utils';
 
