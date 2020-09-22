@@ -1,6 +1,6 @@
 
 
-import { Feature } from './node_modules/@common-stack/client-react';
+import { Feature } from '@common-stack/client-react';
 import { themeReducer } from './redux';
 
 export default new Feature({
