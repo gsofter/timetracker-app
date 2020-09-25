@@ -135,12 +135,10 @@ const renderSiderMenu = (props: BasicLayoutProps): React.ReactNode => {
   if (props.menuRender === false || props.pure) {
     return null;
   }
-  console.log(layout, isMobile);
   if (layout === "top" && !isMobile) {
     return <SiderMenu {...props} hide />;
   }
   if (menuRender) {
-    console.log("here is menu render");
     return menuRender(props, <SiderMenu {...props} />);
   }
 
@@ -357,7 +355,6 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
   );
 
   // render sider dom
-  console.log(pageTitleInfo,"page title");
   const siderMenuDom = renderSiderMenu({
     ...defaultProps,
     menuData,
