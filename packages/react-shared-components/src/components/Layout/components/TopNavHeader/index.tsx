@@ -2,6 +2,7 @@ import React, { useRef, useState } from "react";
 import classNames from "classnames";
 import ResizeObserver from "rc-resize-observer";
 import { useFela } from "react-fela";
+import AvatarDropdown from "../GlobalHeader/AvatarDropdown";
 
 import {
   SiderMenuProps,
@@ -39,6 +40,7 @@ const RightContent: React.FC<TopNavHeaderProps> = ({
             setRightSize(width);
           }}
         >
+          
           {rightContentRender && (
             <div>
               {rightContentRender({
@@ -64,6 +66,7 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
     layout,
   } = props;
 
+  
   const baseClassName = "ant-pro-top-nav-header";
   const headerDom = defaultRenderLogoAndTitle(
     { ...props, collapsed: false },
@@ -98,6 +101,7 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
           <div style={{ flex: 1 }} className={`${baseClassName}-menu`}>
             <BaseMenu {...props} {...props.menuProps} />
           </div>
+          <AvatarDropdown/>
           {rightContentRender && (
             <RightContent rightContentRender={rightContentRender} {...props} />
           )}
