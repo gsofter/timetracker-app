@@ -27,22 +27,22 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     const menuHeaderDropdown = (
         <FelaComponent style={menuStyle}>
 
-      <Menu  selectedKeys={[]} className="menu" onClick={this.onMenuClick}>
+      <Menu  selectedKeys={[]} className="ant-dropdown-menu ant-dropdown-menu-light antd-pro-components-global-header-index-menu ant-dropdown-menu-root ant-dropdown-menu-vertical" onClick={this.onMenuClick}>
         {menu && (
-            <Menu.Item key="center">
+            <Menu.Item key="center" className="ant-dropdown-menu-item">
             <UserOutlined />
             个人中心
           </Menu.Item>
         )}
         {menu && (
-            <Menu.Item key="settings">
+            <Menu.Item key="settings" className="ant-dropdown-menu-item">
             <SettingOutlined />
             个人设置
           </Menu.Item>
         )}
         {menu && <Menu.Divider />}
 
-        <Menu.Item key="logout">
+        <Menu.Item key="logout" className="ant-dropdown-menu-item">
           <LogoutOutlined />
           退出登录
         </Menu.Item>
@@ -52,7 +52,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     return(
         <FelaComponent style={styleSheet}>
         <HeaderDropdown overlay={menuHeaderDropdown}>
-        <span className='antd-pro-components-global-header-index-action antd-pro-components-global-header-index-account'>
+        <span className='antd-pro-components-global-header-index-action antd-pro-components-global-header-index-account' style={{padding: '18px 0px'}}>
           <Avatar size="small" className='ant-avatar ant-avatar-sm ant-avatar-circle ant-avatar-image antd-pro-components-global-header-index-avatar' src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' alt="avatar" />
           <span className='name anticon'>Username</span>
         </span>
@@ -75,6 +75,32 @@ const menuStyle = (any) => (
         {
             minWidth: '160px'
         },
+        '& .ant-dropdown-menu': 
+        {
+          position: 'relative',
+          margin: '0',
+          padding: '4px 0',
+          textAlign: 'left',
+          listStyleType: 'none',
+          backgroundColor: '#fff',
+          backgroundClip: 'padding-box',
+          borderRadius: '2px',
+          outline: 'none',
+          boxShadow: '0 3px 6px -4px rgba(0,0,0,.12), 0 6px 16px 0 rgba(0,0,0,.08), 0 9px 28px 8px rgba(0,0,0,.05)'
+        },
+        '& .ant-dropdown-menu-item, .ant-dropdown-menu-submenu-title': 
+        {
+          clear: 'both',
+          margin: '0',
+          padding: '5px 12px',
+          color: 'rgba(0,0,0,.85)',
+          fontWeight: '400',
+          fontSize: '14px',
+          lineHeight: '22px',
+          whiteSpace: 'nowrap',
+          cursor: 'pointer',
+          transition: 'all .3s'
+      }
     }
 
 )

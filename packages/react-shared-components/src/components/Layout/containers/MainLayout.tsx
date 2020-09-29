@@ -198,9 +198,10 @@ const getPaddingLeft = (
 };
 
 export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
-  const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(
-    undefined
-  );
+  // const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(
+    // undefined
+  // );
+  const [settings, setSettings] = useState({});
 
   const { css } = useFela(props);
   const {
@@ -497,7 +498,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
                     <>
                     <Breadcrumb.Item>{pageTitleInfo.id.split('.')[1]}</Breadcrumb.Item>
                     <Breadcrumb.Item>
-                      <a href={pageTitleInfo.pageName}>{pageTitleInfo.pageName}</a>
+                      <a href={location.pathname}> {pageTitleInfo.pageName}</a>
                     </Breadcrumb.Item>
                     </>
                   )}
@@ -523,10 +524,11 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
               {/* {footerDom} */}
             </Layout>
           </Layout>
-          <SettingDrawer
+          <SettingDrawer settings={settings} onSettingChange={setSettings} />
+          {/* <SettingDrawer
             settings={settings}
             onSettingChange={(changeSetting) => setSetting(changeSetting)}
-          />
+          /> */}
         </div>
       </RouteContext.Provider>
     </MenuCounter.Provider>
