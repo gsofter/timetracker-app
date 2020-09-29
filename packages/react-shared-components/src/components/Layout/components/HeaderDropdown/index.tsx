@@ -34,7 +34,8 @@ const stylesheet = ({ styles }) => ({
   position: relative,
   '& .menuheight': {
     left: '1180px !important',
-    top: '48px !important'
+    top: '48px !important',
+    width: '150px'
   },
   "& .container > *": {
     backgroundColor: "red",
