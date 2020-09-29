@@ -40,7 +40,6 @@ const RightContent: React.FC<TopNavHeaderProps> = ({
             setRightSize(width);
           }}
         >
-          
           {rightContentRender && (
             <div>
               {rightContentRender({

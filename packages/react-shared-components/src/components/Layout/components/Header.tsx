@@ -5,6 +5,7 @@ import GlobalHeader, { GlobalHeaderProps } from './GlobalHeader/index';
 import { PureSettings } from './defaultSettings';
 import TopNavHeader from './TopNavHeader';
 import { WithFalse } from './typings';
+import AvatarDropdown from "../components/GlobalHeader/AvatarDropdown";
 
 const { Header } = Layout;
 
@@ -44,6 +45,11 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
     const isTop = layout === 'top';
     let defaultDom = (
       <GlobalHeader onCollapse={onCollapse} {...this.props}>
+        <div style={{
+          float: "right"
+        }}>
+        {!isTop && <AvatarDropdown/>}
+        </div>
         {headerContentRender && headerContentRender(this.props)}
       </GlobalHeader>
     );
@@ -111,6 +117,7 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
         )}
         <Header
           style={{
+            position: layout === 'mix' ? "fixed" : "relative",
             padding: 0,
             height: headerHeight,
             lineHeight: `${headerHeight}px`,
