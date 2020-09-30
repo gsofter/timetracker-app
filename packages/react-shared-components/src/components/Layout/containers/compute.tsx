@@ -1,15 +1,9 @@
-import * as React from "react";
 import { IMenuPosition } from "@common-stack/client-react";
 import { Feature, FeatureWithRouterFactory } from "@common-stack/client-react";
 
-import { getFilteredMenus, getFilteredRoutes } from "../../../utils";
+import { getFilteredMenus, getFilteredRoutes } from "../components/utils/menu";
 import { Dashboard } from './Dashboard';
 import { Home } from './HomePage';
-import {
-  MenuUnfoldOutlined,
-  MenuFoldOutlined,
-  FileOutlined,
-} from "@ant-design/icons";
 
 export const commonPageStore: any[] = [
   {

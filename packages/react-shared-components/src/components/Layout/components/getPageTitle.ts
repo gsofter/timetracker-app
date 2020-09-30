@@ -1,6 +1,6 @@
 import pathToRegexp from 'path-to-regexp';
-import { MenuDataItem } from '../../typings';
-import { ProSettings } from '../../defaultSettings';
+import { MenuDataItem } from './typings';
+import { ProSettings } from './defaultSettings';
 
 export const matchParamsPath = (
   pathname: string,
