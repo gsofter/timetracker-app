@@ -1,5 +1,5 @@
 import React, { CSSProperties, useContext, useEffect, useState } from "react";
-import { Layout, PageHeader, Breadcrumb, Tabs } from "antd";
+import { Layout, Breadcrumb } from "antd";
 import { useFela } from "react-fela";
 import SiderMenu from "../components/SubMenu3/index";
 import { useRouteMatch } from 'react-router-dom'
@@ -31,14 +31,12 @@ import {
   getPageTitleInfo,
   GetPageTitleProps,
 } from "../components/getPageTitle";
-import { getBreadcrumbProps } from "../components/utils/getBreadcrumbProps";
 import getMenuData from "../components/utils/getMenuData";
 import getLocales, { LocaleType } from "../components/locales";
 import compatibleLayout from "../components/utils/compatibleLayout";
 import WrapContent from "../components/WrapContent";
 import useDeepCompareEffect from "../components/hooks/useDeepCompareEffect";
 import { isBrowser } from "../components/utils/utils";
-import useDocumentTitle from "../components/hooks/useDocumentTitle";
 import SettingDrawer, {
   SettingDrawerProps,
   SettingDrawerState,
@@ -198,10 +196,9 @@ const getPaddingLeft = (
 };
 
 export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
-  // const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(
-    // undefined
-  // );
-  const [settings, setSettings] = useState({});
+  const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(
+    undefined
+  );
 
   const { css } = useFela(props);
   const {
@@ -223,10 +220,10 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
     loading,
     ...rest
   } = props;
-
   const [route, setRoute] = useState({ routes: rs });
 
   useEffect(() => {
+
     if (route.routes.toString() !== rs.toString()) {
       setRoute({ routes: rs });
     }
@@ -458,6 +455,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
   },[match])
 
   return (
+    <div id="test-pro-layout">
     <MenuCounter.Provider>
       <RouteContext.Provider
         value={{
@@ -487,6 +485,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
                 {...rest}
                 className={contentClassName}
                 style={contentStyle}
+                
               >
                 <div className={classNameLayout}>
                 <div className='ant-pro-page-container-warp'>
@@ -524,14 +523,15 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
               {/* {footerDom} */}
             </Layout>
           </Layout>
-          <SettingDrawer settings={settings} onSettingChange={setSettings} />
-          {/* <SettingDrawer
+          <SettingDrawer
+            getContainer={() => document.getElementById('test-pro-layout')}
             settings={settings}
             onSettingChange={(changeSetting) => setSetting(changeSetting)}
-          /> */}
+          />
         </div>
       </RouteContext.Provider>
     </MenuCounter.Provider>
+    </div>
   );
 };
 
