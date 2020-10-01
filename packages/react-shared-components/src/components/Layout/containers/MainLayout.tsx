@@ -1,7 +1,8 @@
 import React, { CSSProperties, useContext, useEffect, useState } from "react";
-import { Layout } from "antd";
+import { Layout, PageHeader, Breadcrumb, Tabs } from "antd";
 import { useFela } from "react-fela";
 import SiderMenu from "../components/SubMenu3/index";
+import { useRouteMatch } from 'react-router-dom'
 
 import useMergedState from "rc-util/lib/hooks/useMergedState";
 import warning from "warning";
@@ -11,7 +12,7 @@ import Omit from "omit.js";
 import useAntdMediaQuery from "use-media-antd-query";
 import { BreadcrumbProps as AntdBreadcrumbProps } from "antd/lib/breadcrumb";
 import MenuCounter from "../components/SubMenu3/Counter";
-import RouteContext from "../components/RouteContext";
+import RouteContext, { RouteContextType } from "../components/RouteContext";
 import { SiderMenuProps } from "../components/SubMenu3/SiderMenu";
 import Header, { HeaderViewProps } from "../components/Header";
 import defaultSettings, {
@@ -42,6 +43,7 @@ import SettingDrawer, {
   SettingDrawerProps,
   SettingDrawerState,
 } from "../components/SettingDrawer";
+import GridContent from "../components/GridContent/index";
 
 export type BasicLayoutProps = Partial<RouterTypes<Route>> &
   SiderMenuProps &
@@ -133,12 +135,10 @@ const renderSiderMenu = (props: BasicLayoutProps): React.ReactNode => {
   if (props.menuRender === false || props.pure) {
     return null;
   }
-  console.log(layout, isMobile);
   if (layout === "top" && !isMobile) {
     return <SiderMenu {...props} hide />;
   }
   if (menuRender) {
-    console.log("here is menu render");
     return menuRender(props, <SiderMenu {...props} />);
   }
 
@@ -157,7 +157,7 @@ const defaultPageTitleRender = (
   const pageTitleInfo = getPageTitleInfo(pageProps);
   if (pageTitleRender === false) {
     return {
-      title: props.title || "",
+      title: "title",
       id: "",
       pageName: "",
     };
@@ -198,9 +198,10 @@ const getPaddingLeft = (
 };
 
 export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
-  const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(
-    undefined
-  );
+  // const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(
+    // undefined
+  // );
+  const [settings, setSettings] = useState({});
 
   const { css } = useFela(props);
   const {
@@ -218,6 +219,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
     menu,
     isChildrenLayout: propsIsChildrenLayout,
     menuDataRender,
+    breadcrumbRender,
     loading,
     ...rest
   } = props;
@@ -232,6 +234,15 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
 
   const propsLayout = compatibleLayout(defaultPropsLayout);
   const { prefixCls } = rest;
+  const value = useContext(RouteContext);
+  const prefixedClassName = `${prefixCls}-page-container`;
+
+  const classNameLayout = classNames(prefixedClassName, props.className, {
+    // [`${prefixCls}-page-container-ghost`]: ghost,
+  });
+
+  
+
   const formatMessage = ({
     id,
     defaultMessage,
@@ -437,14 +448,14 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
   }, [stringify(props.location)]);
   const [hasFooterToolbar, setHasFooterToolbar] = useState(false);
 
-  // To do this func have dependent less file
-  useDocumentTitle(pageTitleInfo, props.title || defaultSettings.title);
-
-  // gen breadcrumbProps, parameter for pageHeader
-  const breadcrumbProps = getBreadcrumbProps({
-    ...defaultProps,
-    breadcrumbMap,
-  });
+  const [breadcrumbProps, setBreadcrumbProps] = useState({});
+  const match = useRouteMatch();
+  useEffect(() => {
+    setBreadcrumbProps({
+      ...defaultProps,
+      breadcrumbMap
+    })
+  },[match])
 
   return (
     <MenuCounter.Provider>
@@ -466,7 +477,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
           pageTitleInfo,
         }}
       >
-        <div>
+        <div className={className}>
           <Layout className={css(styleSheet.layoutCss)} hasSider>
             {siderMenuDom}
             <Layout className={css(styleSheet.genLayoutStyle)}>
@@ -477,15 +488,47 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
                 className={contentClassName}
                 style={contentStyle}
               >
-                {loading ? "loading" : children}
+                <div className={classNameLayout}>
+                <div className='ant-pro-page-container-warp'>
+                <Breadcrumb>
+                  <Breadcrumb.Item>
+                    <a href="/">Home</a>
+                  </Breadcrumb.Item>
+                  {pageTitleInfo.id.split('.')[1] !== 'Home' && (
+                    <>
+                    <Breadcrumb.Item>{pageTitleInfo.id.split('.')[1]}</Breadcrumb.Item>
+                    <Breadcrumb.Item>
+                      <a href={location.pathname}> {pageTitleInfo.pageName}</a>
+                    </Breadcrumb.Item>
+                    </>
+                  )}
+                  
+                </Breadcrumb>
+                <div className="ant-page-header-heading">
+                  <div className="ant-page-header-heading-left">
+                    <span className="ant-page-header-heading-title">{pageTitleInfo.pageName}</span>
+                  </div>
+                </div>
+                </div>
+                <GridContent>
+                  <div className="ant-pro-page-container-children-content">
+                  {children ? (
+                    <div className="ant-card">
+                      <div className="ant-card-spacing" >{children}</div>
+                    </div>
+                  ) : null}
+                  </div>
+                </GridContent>
+                  </div>
               </WrapContent>
               {/* {footerDom} */}
             </Layout>
           </Layout>
-          <SettingDrawer
+          <SettingDrawer settings={settings} onSettingChange={setSettings} />
+          {/* <SettingDrawer
             settings={settings}
             onSettingChange={(changeSetting) => setSetting(changeSetting)}
-          />
+          /> */}
         </div>
       </RouteContext.Provider>
     </MenuCounter.Provider>
@@ -545,5 +588,84 @@ const styleSheet: any = {
     "& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar": {
       height: "calc(52vh)",
     },
+    "& .ant-pro-page-container-warp": 
+    {
+      backgroundColor: '#fff',
+      padding: '16px'
+    },
+    "& .ant-page-header": {
+      boxSizing: 'border-box',
+      margin: '0',
+      color: 'rgba(0,0,0,.85)',
+      fontSize: '14px',
+      fontVariant: 'tabular-nums',
+      lineHeight: '1.5715',
+      listStyle: 'none',
+      fontFeatureSettings: "tnum , tnum",
+      position: 'relative',
+      padding: '18px 24px',
+      backgroundColor: '#fff'
+    },
+    "& .ant-page-header.has-breadcrumb": {
+      paddingTop: '12px'
+    },
+    "& .ant-pro-page-container-children-content": 
+    {
+      margin: '16px 16px 0'
+    },
+    '&.ant-pro-page-container-warp':
+    {
+      backgroundColor: '#fff'
+    },
+    '& .ant-pro-page-container-warp .ant-tabs-nav': 
+    {
+      margin: 0
+    },
+    '& .ant-pro-page-container-ghost .ant-pro-page-container-warp': {
+      // backgroundColor: 'transparent'
+   },
+    '& .ant-pro-page-container-main .ant-pro-page-container-detail': 
+    {
+      display: 'flex'
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-row': 
+    {
+      display: 'flex',
+      width: '100%'
+   },
+    '& .ant-pro-page-container-main .ant-pro-page-container-title-content': 
+    {
+      marginBottom: '16px'
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-title, .ant-pro-page-container-main .ant-pro-page-container-content': 
+    {
+      flex: 'auto'
+   },
+    '& .ant-pro-page-container-main .ant-pro-page-container-extraContent, .ant-pro-page-container-main .-pro-page-container-main': 
+    {
+      flex: '0 1 auto'
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-main': 
+    {
+
+      width: '100%'
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-title': 
+    {
+      marginBottom: '16px'
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-logo': 
+    {
+      marginBottom: '16px'
+   },
+    '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': 
+    {
+      minWidth: '242px',
+      marginLeft: '88px',
+      textAlign: 'right'
+   },
+   '& .ant-card-spacing': {
+     padding: '16px'
+   }
   }),
 };
