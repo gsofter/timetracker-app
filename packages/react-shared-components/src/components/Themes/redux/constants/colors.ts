@@ -1,0 +1,98 @@
+export default [
+  {
+    name: 'Black',
+    light: '#000000',
+    dark: '#000000',
+    hc: '#000000',
+  },
+  {
+    name: 'Red',
+    light: '#cd3131',
+    dark: '#cd3131',
+    hc: '#cd0000',
+  },
+  {
+    name: 'Green',
+    light: '#00BC00',
+    dark: '#0DBC79',
+    hc: '#00cd00',
+  },
+  {
+    name: 'Yellow',
+    light: '#949800',
+    dark: '#e5e510',
+    hc: '#cdcd00',
+  },
+  {
+    name: 'Blue',
+    light: '#0451a5',
+    dark: '#2472c8',
+    hc: '#0000ee',
+  },
+  {
+    name: 'Black',
+    light: '#bc05bc',
+    dark: '#bc3fbc',
+    hc: '#cd00cd',
+  },
+  {
+    name: 'Cyan',
+    light: '#0598bc',
+    dark: '#11a8cd',
+    hc: '#00cdcd',
+  },
+  {
+    name: 'White',
+    light: '#555555',
+    dark: '#e5e5e5',
+    hc: '#e5e5e5',
+  },
+  {
+    name: 'BrightBlack',
+    light: '#666666',
+    dark: '#666666',
+    hc: '#7f7f7f',
+  },
+  {
+    name: 'BrightRed',
+    light: '#cd3131',
+    dark: '#f14c4c',
+    hc: '#ff0000',
+  },
+  {
+    name: 'BrightGreen',
+    light: '#14CE14',
+    dark: '#23d18b',
+    hc: '#00ff00',
+  },
+  {
+    name: 'BrightYellow',
+    light: '#b5ba00',
+    dark: '#f5f543',
+    hc: '#ffff00',
+  },
+  {
+    name: 'BrightBlue',
+    light: '#0451a5',
+    dark: '#3b8eea',
+    hc: '#5c5cff',
+  },
+  {
+    name: 'BrightMagenta',
+    light: '#bc05bc',
+    dark: '#d670d6',
+    hc: '#ff00ff',
+  },
+  {
+    name: 'BrightCyan',
+    light: '#0598bc',
+    dark: '#29b8db',
+    hc: '#00ffff',
+  },
+  {
+    name: 'BrightWhite',
+    light: '#a5a5a5',
+    dark: '#e5e5e5',
+    hc: '#ffffff',
+  },
+];

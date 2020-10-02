@@ -195,10 +195,11 @@ const getPaddingLeft = (
   return 0;
 };
 
-export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
-  const [settings, setSetting] = useState<Partial<ProSettings> | undefined>(
-    undefined
-  );
+export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
+
+  const [settings, setSettings] = useState({});
+
+  const props = {...main_props, ...settings}
 
   const { css } = useFela(props);
   const {
@@ -332,6 +333,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (props) => {
   });
 
   // Splicing parameters, adding menuData and formatMessage in props
+
   const defaultProps = Omit(
     {
       ...props,
