@@ -234,7 +234,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
 export default SiderMenu;
 
 const styleSheet: any = {
-  siderMenuStyles: (props) => ({
+  siderMenuStyles: ({theme, primaryColor}) => ({
       position: "relative",
       borderRight: "0",
       transition: "background-color 0.3s",
@@ -277,7 +277,7 @@ const styleSheet: any = {
       display: "inline-block",
       height: "32px",
       margin: "0 0 0 12px",
-      color: "#fff",
+      color: theme === "light" ? primaryColor : '#fff',
       fontWeight: "600",
       fontSize: "18px",
       lineHeight: "32px",
@@ -374,7 +374,7 @@ const styleSheet: any = {
       webkitBoxShadow: "inset 0 0 5px rgba(0,21,41,0.05)",
     },
     "& .ant-pro-sider-light .ant-pro-sider-logo h1": {
-       color: '#fff',
+      color: theme === "light" ? primaryColor  : '#fff',
     },
     "& .ant-pro-sider-light .ant-menu-light": {
       borderRightColor: "transparent",

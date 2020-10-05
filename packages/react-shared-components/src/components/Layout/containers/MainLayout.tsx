@@ -200,8 +200,9 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
   const [settings, setSettings] = useState({});
 
   const props = {...main_props, ...settings}
+  
 
-  const { css } = useFela(props);
+  const { css, theme } = useFela(props);
   const {
     children,
     onCollapse: propsOnCollapse,
@@ -528,7 +529,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
           <SettingDrawer
             getContainer={() => document.getElementById('test-pro-layout')}
             settings={settings}
-            onSettingChange={(changeSetting) => setSetting(changeSetting)}
+            onSettingChange={(changeSetting) => setSettings(changeSetting)}
           />
         </div>
       </RouteContext.Provider>
@@ -551,7 +552,7 @@ const styleSheet: any = {
   genLayoutStyle: (props) => ({
     position: "relative",
   }),
-  layoutCss: ({ theme }) => ({
+  layoutCss: ({ theme, primaryColor }) => ({
     display: "flex",
     flexDirection: "column",
     width: "100%",
@@ -668,6 +669,10 @@ const styleSheet: any = {
    },
    '& .ant-card-spacing': {
      padding: '16px'
-   }
+   },
+   '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': 
+    {
+      // backgroundColor: primaryColor,
+    },
   }),
 };
