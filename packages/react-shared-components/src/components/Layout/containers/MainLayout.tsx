@@ -672,7 +672,7 @@ const styleSheet: any = {
    },
    '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': 
     {
-      // backgroundColor: primaryColor,
+      backgroundColor: primaryColor,
     },
   }),
 };

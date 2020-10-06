@@ -237,7 +237,7 @@ const getThemeList = (settings: Partial<ProSettings>) => {
     {
       key: 'light',
       url: 'https://gw.alipayobjects.com/zos/antfincdn/NQ%24zoisaD2/jpRkZQMyYRryryPNtyIC.svg',
-      title: formatMessage({ id: 'app.setting.pagestyle.light' }),
+      title: formatMessage({ id: 'app.setting.pagestyle.dark' }),
     },
   ];
 

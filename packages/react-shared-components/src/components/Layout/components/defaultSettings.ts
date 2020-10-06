@@ -48,7 +48,7 @@ export interface PureSettings {
 export type ProSettings = PureSettings & RenderSetting;
 
 const defaultSettings: ProSettings = {
-  navTheme: 'light',
+  navTheme: 'dark',
   layout: 'side',
   contentWidth: 'Fluid',
   fixedHeader: false,
@@ -59,6 +59,6 @@ const defaultSettings: ProSettings = {
   headerHeight: 48,
   title: 'CDMBase LLC',
   iconfontUrl: '',
-  primaryColor: '#1890ff',
+  primaryColor: '#800080',
 };
 export default defaultSettings;

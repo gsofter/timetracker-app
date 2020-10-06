@@ -247,6 +247,16 @@ const styleSheet: any = {
     "& .ant-pro-sider.ant-layout-sider-light .ant-menu-item-selected a, .ant-pro-sider.ant-layout-sider-light .ant-menu-item a:hover": {
       //  color: ;
     },
+    '& .ant-menu-item-selected a, .ant-menu-item-selected a:hover': 
+    {
+      color: '#fff'
+    },
+    "& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected": {
+      background: theme === "light" ? primaryColor : '#1890ff',
+    },
+    '& .ant-menu-inline .ant-menu-item::after': {
+      borderRight: 'none'
+    },
     "& .ant-pro-sider .ant-menu-inline-collapsed > .ant-menu-item .anticon + span, .ant-pro-sider .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .anticon + span, .ant-pro-sider .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title .anticon + span, .ant-pro-sider .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .anticon + span": {
       display: "none",
     },
