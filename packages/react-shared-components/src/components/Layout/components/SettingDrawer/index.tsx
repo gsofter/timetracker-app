@@ -237,7 +237,7 @@ const getThemeList = (settings: Partial<ProSettings>) => {
     {
       key: 'light',
       url: 'https://gw.alipayobjects.com/zos/antfincdn/NQ%24zoisaD2/jpRkZQMyYRryryPNtyIC.svg',
-      title: formatMessage({ id: 'app.setting.pagestyle.light' }),
+      title: formatMessage({ id: 'app.setting.pagestyle.dark' }),
     },
   ];
 
@@ -415,7 +415,6 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
     prefixCls = 'ant-pro',
   } = props;
 
-  const { css } = useFela(props);
 
   const firstRender = useRef<boolean>(true);
 
@@ -433,8 +432,10 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
   );
   const preStateRef = useRef(settingState);
 
-  const { navTheme = 'dark', primaryColor = 'daybreak', layout = 'sidemenu', colorWeak } =
+  const { navTheme = 'dark', primaryColor = 'purple', layout = 'sidemenu', colorWeak } =
     settingState || {};
+
+    const { css } = useFela({...props, primaryColor });
 
   useEffect(() => {
     // 语言修改，这个是和 locale 是配置起来的
@@ -551,6 +552,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
   }, [JSON.stringify(settingState)]);
   const baseClassName = `${prefixCls}-setting`;
   
+  console.log(primaryColor,"primary color");
   return (
     <Drawer
       visible={show}
@@ -708,15 +710,15 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
 export default SettingDrawer;
 
 const styleSheet : any ={
-  settingDrawerTitle: props => (
+  settingDrawerTitle: ({primaryColor}) => (
     {
       marginBottom: '12px',
-      color: props.color,
+      color: primaryColor,
       fontSize: '14px',
       lineHeight: '22px'
     }
   ),
-  settingDrawerHandle: props => (
+  settingDrawerHandle: ({primaryColor}) => (
     {
       position: 'absolute',
       top: '240px',
@@ -729,14 +731,13 @@ const styleSheet : any ={
       height: '48px',
       fontSize: '16px',
       textAlign: 'center',
-      background: '#1890ff',
-      // background: props.color,
+      background: primaryColor,
       borderRadius: '4px 0 0 4px',
       cursor: 'pointer',
       pointerEvents: 'auto',
      }
   ),
-  proSettingDrawerContent: props => (
+  proSettingDrawerContent: ({primaryColor}) => (
     {
       position: "relative",
       minHeight: "100%",
@@ -746,7 +747,7 @@ const styleSheet : any ={
       },
       '& h3': {
         marginBottom: '12px',
-        color: props.color,
+        color: primaryColor,
         fontSize: '14px',
         lineHeight: '22px'
       },
@@ -774,7 +775,7 @@ const styleSheet : any ={
           height: '100%',
           paddingTop: '15px',
           paddingLeft: '24px',
-          color: props.color,
+          color: primaryColor,
           fontWeight: 'bold',
           fontSize: '14px',
         },
@@ -794,7 +795,7 @@ const styleSheet : any ={
 
         "& .ant-pro-setting-drawer-block-checkbox-selectIcon .action": 
         {
-          color: props.color,
+          color: primaryColor,
         },
         "& .ant-pro-setting-drawer-color_block": 
         {

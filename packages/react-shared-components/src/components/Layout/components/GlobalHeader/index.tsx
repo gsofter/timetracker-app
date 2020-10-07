@@ -93,7 +93,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
     </span>
   );
 
-  const { css } = useFela(props);
+  const { css, theme } = useFela(props);
 
   return (
     <div className={css(styleSheet.heaaderStyles)}>
@@ -134,7 +134,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
 export default GlobalHeader;
 
 const styleSheet: any = {
-  heaaderStyles: (props) => ({
+  heaaderStyles: ({theme}) => ({
     "& .ant-pro-global-header": {
       position: "relative",
       display: "flex",
@@ -143,6 +143,8 @@ const styleSheet: any = {
       padding: "0 16px",
     },
     boxShadow: "0 1px 4px rgba(0,21,41,0.08)",
+    backgroundColor: theme === "light" ? '#fff' : '#011529',
+
     "& .ant-pro-global-header > *": {
       height: "100%",
     },
@@ -153,13 +155,10 @@ const styleSheet: any = {
       fontSize: "20px",
     },
     "& .ant-pro-global-header-layout-mix": {
-      // backgroundColor: "red",
+      backgroundColor: "#011529",
     },
     "& .ant-pro-global-header-layout-mix .ant-pro-global-header-logo h1": {
       color: "#fff",
-    },
-    "& .ant-pro-global-header-layout-mix .anticon": {
-      // color: ;
     },
     "& .ant-pro-global-header-logo": {
       position: "relative",

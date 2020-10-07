@@ -104,12 +104,12 @@ const menuStyle = (any) => (
     }
 
 )
-const styleSheet = (any) => (
+const styleSheet = ({ theme }) => (
     {
         position: relative,
         '& .anticon': {
             display: 'inline-block',
-            color: '#fff',
+            color: theme === "light" ? 'red' : '#fff',
             fontStyle: 'normal',
             lineHeight: 0,
             textAlign: 'center',

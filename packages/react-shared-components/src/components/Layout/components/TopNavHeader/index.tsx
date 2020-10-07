@@ -76,7 +76,9 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
     light: theme === "light",
   });
 
-  const { css } = useFela(props);
+  const { primaryColor = 'daybreak' } = {};
+
+  const { css } = useFela({...props, primaryColor});
 
   return (
     <div className={css(styleSheet.topHeaderStyle)}>
@@ -113,7 +115,7 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
 export default TopNavHeader;
 
 const styleSheet: any = {
-  topHeaderStyle: (props) => ({
+  topHeaderStyle: ({theme, primaryColor}) => ({
     "& .ant-pro-top-nav-header": {
       position: "relative",
       width: "100%",
@@ -122,7 +124,7 @@ const styleSheet: any = {
       transition: "background 0.3s, width 0.2s",
     },
     "& .ant-pro-top-nav-header :global .ant-menu.ant-menu-dark .ant-menu-item-selected, .ant-pro-top-nav-header :global .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected": {
-      background: "#252a3d",
+      // background: "#252a3d",
     },
     "& .ant-pro-top-nav-header .ant-menu-submenu.ant-menu-submenu-horizontal": {
       height: "100%",
@@ -132,9 +134,6 @@ const styleSheet: any = {
     },
     "& .ant-pro-top-nav-header.light": {
       backgroundColor: "#fff",
-    },
-    "& .ant-pro-top-nav-header.light .ant-pro-top-nav-header-logo h1": {
-      color: "#fff",
     },
     "& .ant-pro-top-nav-header.light .anticon": {
       color: "inherit",
@@ -166,7 +165,9 @@ const styleSheet: any = {
     "& .ant-pro-top-nav-header-logo h1": {
       display: "inline-block",
       margin: "0 0 0 12px",
-       color: "#ddd",
+      color: theme === "light" ? { primaryColor } : '#fff',
+
+
       fontWeight: "400",
       fontSize: "16px",
       verticalAlign: "top",

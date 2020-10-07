@@ -1,7 +1,7 @@
 import { createContext } from 'react';
-import { BreadcrumbListReturn } from '../../utils/getBreadcrumbProps';
-import { PureSettings } from '../../defaultSettings';
-import { MenuDataItem } from '../../typings';
+import { BreadcrumbListReturn } from './utils/getBreadcrumbProps';
+import { PureSettings } from './defaultSettings';
+import { MenuDataItem } from './typings';
 
 export interface RouteContextType extends Partial<PureSettings> {
   breadcrumb?: BreadcrumbListReturn;
