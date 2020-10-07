@@ -59,6 +59,6 @@ const defaultSettings: ProSettings = {
   headerHeight: 48,
   title: 'CDMBase LLC',
   iconfontUrl: '',
-  primaryColor: '#800080',
+  primaryColor: '#1890ff',
 };
 export default defaultSettings;

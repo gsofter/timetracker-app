@@ -59,8 +59,8 @@ const ThemeColor: React.ForwardRefRenderFunction<
               <Tag
                 className="theme-color-block"
                 color={color}
-                check={value === key || genThemeToString(value) === key}
-                onClick={() => onChange && onChange(key)}
+                check={value === color || genThemeToString(value) === color}
+                onClick={() => onChange && onChange(color)}
               />
             </Tooltip>
           );
