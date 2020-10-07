@@ -27,11 +27,11 @@ export interface Colors {
     };
 }
 export interface TokenColorsEntity {
-    settings: Settings;
+    settings: ThemeSettings;
     scope?: string | (string)[] | null;
     name?: string | null;
 }
-export interface Settings {
+export interface ThemeSettings {
     foreground?: string | null;
     background?: string | null;
     fontStyle?: string | null;
