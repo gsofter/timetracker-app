@@ -24,7 +24,7 @@ const HeaderDropdown: React.FC<HeaderDropdownProps> = ({
   ...restProps
 }) => (
   <FelaComponent style={stylesheet}>
-    <Dropdown overlayClassName={classNames("menuheight container cls")} {...restProps} />
+    <Dropdown overlayClassName={classNames("menuheight container cls")} {...restProps}/>
   </FelaComponent>
 );
 
@@ -35,7 +35,6 @@ const stylesheet = ({ styles }) => ({
   '& .menuheight': {
     left: '1180px !important',
     top: '48px !important',
-    width: '150px'
   },
   "& .container > *": {
     backgroundColor: "red",

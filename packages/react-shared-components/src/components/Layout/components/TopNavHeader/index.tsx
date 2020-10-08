@@ -180,8 +180,8 @@ const styleSheet: any = {
       border: "none",
     },
   }),
-  widthRightSize: (props) => ({
-    minWidth: "rightSize",
+  widthRightSize: (rightSize) => ({
+    minWidth: rightSize,
   }),
 
   displayFlex: (props) => ({
