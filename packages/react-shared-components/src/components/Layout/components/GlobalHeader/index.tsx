@@ -134,13 +134,16 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
 export default GlobalHeader;
 
 const styleSheet: any = {
-  heaaderStyles: ({theme}) => ({
+  heaaderStyles: ({theme, layout}) => ({
     "& .ant-pro-global-header": {
       position: "relative",
       display: "flex",
       alignItems: "center",
       height: "100%",
       padding: "0 16px",
+    }, 
+    '@media (max-width: 768px)': {
+      padding:  layout === "top" ? "10px 0px" : ''
     },
     boxShadow: "0 1px 4px rgba(0,21,41,0.08)",
     backgroundColor: theme === "light" ? '#fff' : '#011529',
@@ -153,9 +156,14 @@ const styleSheet: any = {
       alignItems: "center",
       marginLeft: "16px",
       fontSize: "20px",
+      color: theme === "light" ? '#000' : '#fff',
     },
     "& .ant-pro-global-header-layout-mix": {
+      color: '#fff',
       backgroundColor: "#011529",
+    },
+    "& .ant-pro-global-header-layout-mix .ant-pro-global-header-collapsed-button": {
+      color: '#fff',
     },
     "& .ant-pro-global-header-layout-mix .ant-pro-global-header-logo h1": {
       color: "#fff",

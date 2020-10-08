@@ -552,11 +552,19 @@ const styleSheet: any = {
   genLayoutStyle: (props) => ({
     position: "relative",
   }),
-  layoutCss: ({ theme, primaryColor }) => ({
+  layoutCss: ({ theme, primaryColor, layout }) => ({
     display: "flex",
     flexDirection: "column",
     width: "100%",
     minHeight: "100vh",
+    "& .ant-pro-fixed-header": {
+      position: layout === 'top' || 'mix' ? "fixed" : "relative",
+      top: 0,
+    },
+    '& .ant-pro-sider-fixed': {
+      position: layout === 'top' || 'mix' ? "fixed" : "relative",
+      height: '100vh',
+    },
     "& .ant-pro-basicLayout .ant-layout-header .ant-pro-fixed-header": {
       position: "fixed",
       top: 0,
@@ -594,7 +602,7 @@ const styleSheet: any = {
     "& .ant-pro-page-container-warp": 
     {
       backgroundColor: '#fff',
-      padding: '16px'
+      padding: '16px',
     },
     "& .ant-page-header": {
       boxSizing: 'border-box',
