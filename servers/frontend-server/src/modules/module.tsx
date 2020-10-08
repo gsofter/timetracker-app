@@ -18,7 +18,7 @@ export const MainRoute = props => (
                 // sidebarSegments={features.sidebarSegments} 
                 route={features.getMenus()}
                 >
-                        {/* <WorkbenchTheme children={features.getRoutes()}/> */}
+                        {features.getRoutes()}
         </MainLayout>
 );
 
