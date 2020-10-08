@@ -27,7 +27,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     const menuHeaderDropdown = (
         <FelaComponent style={menuStyle}>
 
-      <Menu  selectedKeys={[]} className="ant-dropdown-menu ant-dropdown-menu-light antd-pro-components-global-header-index-menu ant-dropdown-menu-root ant-dropdown-menu-vertical" onClick={this.onMenuClick}>
+      <Menu  selectedKeys={[]} className="ant-dropdown-menu ant-dropdown-menu-light antd-pro-components-global-header-index-menu ant-dropdown-menu-root ant-dropdown-menu-vertical" onClick={this.onMenuClick} style={{minWidth: '130px'}}>
         {menu && (
             <Menu.Item key="center" className="ant-dropdown-menu-item">
             <UserOutlined />
@@ -51,7 +51,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     );
     return(
         <FelaComponent style={styleSheet}>
-        <HeaderDropdown overlay={menuHeaderDropdown}>
+        <HeaderDropdown overlay={menuHeaderDropdown} >
         <span className='antd-pro-components-global-header-index-action antd-pro-components-global-header-index-account' style={{padding: '18px 0px'}}>
           <Avatar size="small" className='ant-avatar ant-avatar-sm ant-avatar-circle ant-avatar-image antd-pro-components-global-header-index-avatar' src='https://zos.alipayobjects.com/rmsportal/ODTLcjxAfvqbxHnVXCYX.png' alt="avatar" />
           <span className='name anticon'>Username</span>
