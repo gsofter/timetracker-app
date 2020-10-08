@@ -478,13 +478,12 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
 
     if (key === 'navTheme') {
       updateTheme(value === 'realDark', undefined, hideMessageLoading, props.publicPath);
-      nextState.primaryColor = 'daybreak';
     }
 
     if (key === 'primaryColor') {
       updateTheme(
         nextState.navTheme === 'realDark',
-        value === 'daybreak' ? '' : (value as string),
+        value === '#1890ff' ? '' : (value as string),
         hideMessageLoading,
         props.publicPath,
       );
@@ -551,8 +550,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
     });
   }, [JSON.stringify(settingState)]);
   const baseClassName = `${prefixCls}-setting`;
-  
-  console.log(primaryColor,"primary color");
+
   return (
     <Drawer
       visible={show}
