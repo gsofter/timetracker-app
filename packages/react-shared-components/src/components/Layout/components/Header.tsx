@@ -105,7 +105,7 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
     const right = needFixedHeader ? 0 : undefined;
 
     return (
-      <>
+      <div>
         {needFixedHeader && (
           <Header
             style={{
@@ -117,7 +117,6 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
         )}
         <Header
           style={{
-            position: layout === 'mix' ? "fixed" : "relative",
             padding: 0,
             height: headerHeight,
             lineHeight: `${headerHeight}px`,
@@ -130,7 +129,7 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
         >
           {this.renderContent()}
         </Header>
-      </>
+      </div>
     );
   }
 }
