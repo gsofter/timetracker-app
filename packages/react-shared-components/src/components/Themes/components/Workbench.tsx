@@ -21,7 +21,7 @@ const stylesSheet: any = {
   container: () => ({
     display: 'flex',
     height: '100%',
-    position: 'relative',
+    position: 'relative'
   }),
   child: ({ theme }) => ({
     height: '100%',
