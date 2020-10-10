@@ -192,20 +192,18 @@ const styleSheet: any = {
     "& .ant-pro-global-header-menu .anticon": {
       marginRight: "8px",
     },
+    "& .anticon":
+    {
+      color: theme === "light" && layout === "side" ? "#000" : ""
+    },
     "& .ant-pro-global-header-menu .ant-dropdown-menu-item": {
       minWidth: "160px",
-    },
-    "& .ant-pro-global-header .dark": {
-      // height: ;
     },
     "& .ant-pro-global-header .dark .action": {
       color: "rgba(255,255,255,0.85)",
     },
     "& .ant-pro-global-header .dark .action > i": {
       color: "rgba(255,255,255,0.85)",
-    },
-    "& .ant-pro-global-header .dark .action:hover, & .ant-pro-global-header .dark .action.opened": {
-      // background: ;
     },
     "& .ant-pro-global-header .dark .action .ant-badge": {
       color: "rgba(255,255,255,0.85)",

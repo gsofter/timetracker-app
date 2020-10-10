@@ -3,6 +3,7 @@ import { Layout, Breadcrumb } from "antd";
 import { useFela } from "react-fela";
 import SiderMenu from "../components/SubMenu3/index";
 import { useRouteMatch } from 'react-router-dom'
+import { Helmet } from "react-helmet";
 
 import useMergedState from "rc-util/lib/hooks/useMergedState";
 import warning from "warning";
@@ -42,6 +43,8 @@ import SettingDrawer, {
   SettingDrawerState,
 } from "../components/SettingDrawer";
 import GridContent from "../components/GridContent/index";
+// @ts-ignore
+import favicon from "../../../../favicon.ico";
 
 export type BasicLayoutProps = Partial<RouterTypes<Route>> &
   SiderMenuProps &
@@ -479,6 +482,9 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
         }}
       >
         <div className={className}>
+        <Helmet>
+          <link rel="icon" type="image/png" href={favicon} sizes="16x16" />
+        </Helmet>
           <Layout className={css(styleSheet.layoutCss)} hasSider>
             {siderMenuDom}
             <Layout className={css(styleSheet.genLayoutStyle)}>

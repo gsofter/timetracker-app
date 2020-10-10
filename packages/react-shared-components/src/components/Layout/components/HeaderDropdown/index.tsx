@@ -35,6 +35,7 @@ const stylesheet = ({ styles }) => ({
   '& .menuheight': {
     left: '1180px !important',
     top: '48px !important',
+    maxWidth: '160px !important'
   },
   "& .container > *": {
     backgroundColor: "red",
