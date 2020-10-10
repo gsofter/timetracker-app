@@ -123,9 +123,6 @@ const styleSheet: any = {
       boxShadow: "0 1px 4px 0 rgba(0,21,41,0.12)",
       transition: "background 0.3s, width 0.2s",
     },
-    "& .ant-pro-top-nav-header :global .ant-menu.ant-menu-dark .ant-menu-item-selected, .ant-pro-top-nav-header :global .ant-menu-submenu-popup.ant-menu-dark .ant-menu-item-selected": {
-      // background: "#252a3d",
-    },
     "& .ant-pro-top-nav-header .ant-menu-submenu.ant-menu-submenu-horizontal": {
       height: "100%",
     },

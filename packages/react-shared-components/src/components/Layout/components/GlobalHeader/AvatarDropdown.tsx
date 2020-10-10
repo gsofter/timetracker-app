@@ -27,7 +27,7 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     const menuHeaderDropdown = (
         <FelaComponent style={menuStyle}>
 
-      <Menu  selectedKeys={[]} className="ant-dropdown-menu ant-dropdown-menu-light antd-pro-components-global-header-index-menu ant-dropdown-menu-root ant-dropdown-menu-vertical" onClick={this.onMenuClick} style={{minWidth: '130px'}}>
+      <Menu  selectedKeys={[]} className="ant-dropdown-menu ant-dropdown-menu-light antd-pro-components-global-header-index-menu ant-dropdown-menu-root ant-dropdown-menu-vertical" onClick={this.onMenuClick}>
         {menu && (
             <Menu.Item key="center" className="ant-dropdown-menu-item">
             <UserOutlined />
@@ -71,9 +71,9 @@ const menuStyle = (any) => (
         {
             marginRight: '8px'
         },
-        '& .menu :global(.ant-dropdown-menu-item)': 
+        '& .antd-pro-components-global-header-index-menu .ant-dropdown-menu-item': 
         {
-            minWidth: '160px'
+          minWidth: '160px'
         },
         '& .ant-dropdown-menu': 
         {
@@ -107,6 +107,9 @@ const menuStyle = (any) => (
 const styleSheet = ({ theme }) => (
     {
         position: relative,
+        '& .name': {
+          color: 'red'
+        },
         '& .anticon': {
             display: 'inline-block',
             color: theme === "light" ? 'red' : '#fff',
