@@ -33,19 +33,6 @@ export type IFieldError = {
   message: Scalars['String'];
 };
 
-export type IHealthCheckRequest = {
-  host?: Maybe<Scalars['String']>;
-  topic?: Maybe<Scalars['String']>;
-  type: IHealthCheckType;
-};
-
-export const enum IHealthCheckType {
-  Nats = 'Nats',
-  Redis = 'Redis',
-  Mongo = 'Mongo',
-  Custom = 'Custom'
-};
-
 
 
 export type IMutation = {
@@ -82,15 +69,9 @@ export type IQuery = {
   /**  Counter from Datasource  */
   counterCache?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
-  health?: Maybe<Scalars['Boolean']>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
   sidebarState?: Maybe<Scalars['Boolean']>;
-};
-
-
-export type IQueryhealthArgs = {
-  request: IHealthCheckRequest;
 };
 
 export type ISubscription = {
@@ -209,12 +190,10 @@ export type IResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
   Counter: ResolverTypeWrapper<ICounter>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
-  HealthCheckRequest: IHealthCheckRequest,
-  String: ResolverTypeWrapper<Scalars['String']>,
-  HealthCheckType: IHealthCheckType,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Mutation: ResolverTypeWrapper<{}>,
   Subscription: ResolverTypeWrapper<{}>,
+  String: ResolverTypeWrapper<Scalars['String']>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
@@ -227,12 +206,10 @@ export type IResolversParentTypes = {
   Query: {},
   Counter: ICounter,
   Int: Scalars['Int'],
-  HealthCheckRequest: IHealthCheckRequest,
-  String: Scalars['String'],
-  HealthCheckType: IHealthCheckType,
   Boolean: Scalars['Boolean'],
   Mutation: {},
   Subscription: {},
+  String: Scalars['String'],
   AnyObject: Scalars['AnyObject'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
@@ -275,7 +252,6 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   counter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   counterCache?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
-  health?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IQueryhealthArgs, 'request'>>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   sidebarState?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
 };

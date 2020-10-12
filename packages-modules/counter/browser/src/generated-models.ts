@@ -37,19 +37,6 @@ export type FieldError = {
   message: Scalars['String'];
 };
 
-export type HealthCheckRequest = {
-  host?: Maybe<Scalars['String']>;
-  topic?: Maybe<Scalars['String']>;
-  type: HealthCheckType;
-};
-
-export enum HealthCheckType {
-  Nats = 'Nats',
-  Redis = 'Redis',
-  Mongo = 'Mongo',
-  Custom = 'Custom'
-}
-
 
 
 export type Mutation = {
@@ -87,14 +74,8 @@ export type Query = {
   counterCache?: Maybe<Counter>;
   counterState?: Maybe<ClientCounter>;
   dummy?: Maybe<Scalars['Int']>;
-  health?: Maybe<Scalars['Boolean']>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<Counter>;
-};
-
-
-export type QueryHealthArgs = {
-  request: HealthCheckRequest;
 };
 
 export type Subscription = {
@@ -273,12 +254,10 @@ export type ResolversTypes = {
   Counter: ResolverTypeWrapper<Counter>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   ClientCounter: ResolverTypeWrapper<ClientCounter>,
-  HealthCheckRequest: HealthCheckRequest,
-  String: ResolverTypeWrapper<Scalars['String']>,
-  HealthCheckType: HealthCheckType,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Mutation: ResolverTypeWrapper<{}>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Subscription: ResolverTypeWrapper<{}>,
+  String: ResolverTypeWrapper<Scalars['String']>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
@@ -292,12 +271,10 @@ export type ResolversParentTypes = {
   Counter: Counter,
   Int: Scalars['Int'],
   ClientCounter: ClientCounter,
-  HealthCheckRequest: HealthCheckRequest,
-  String: Scalars['String'],
-  HealthCheckType: HealthCheckType,
-  Boolean: Scalars['Boolean'],
   Mutation: {},
+  Boolean: Scalars['Boolean'],
   Subscription: {},
+  String: Scalars['String'],
   AnyObject: Scalars['AnyObject'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
@@ -346,7 +323,6 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   counterCache?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType>,
   counterState?: Resolver<Maybe<ResolversTypes['ClientCounter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  health?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<QueryHealthArgs, 'request'>>,
   moleculerCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType>,
 };
 
