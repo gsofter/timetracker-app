@@ -4,11 +4,14 @@ const { compose } = require('redux');
 import { ThemeProvider } from 'react-fela';
 import { loadTheme } from '../redux';
 import { WorkbenchComponent } from '../components';
+import { getTheme } from '../redux';
 
 export interface IProps {
   currentTheme?: any;
   loadTheme?: Function;
 }
+
+const currentTheme = getTheme(localStorage.getItem('site-theme') || 'light');
 
 export class WorkbenchTheme extends React.Component<IProps, {}> {
   public componentDidMount() {
@@ -16,8 +19,7 @@ export class WorkbenchTheme extends React.Component<IProps, {}> {
   }
 
   public render() {
-    const { currentTheme, children } = this.props;
-
+    const { children } = this.props;
     return (
       <ThemeProvider theme={currentTheme}>
         <WorkbenchComponent>{children}</WorkbenchComponent>

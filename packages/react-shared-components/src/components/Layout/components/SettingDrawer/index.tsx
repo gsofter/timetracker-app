@@ -432,7 +432,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
   );
   const preStateRef = useRef(settingState);
 
-  const { navTheme = 'dark', primaryColor = '#1890ff', layout = 'sidemenu', colorWeak } =
+  const { navTheme = 'dark', primaryColor = '#1890ff', layout = 'side', colorWeak } =
     settingState || {};
 
     const { css } = useFela({...props, primaryColor });

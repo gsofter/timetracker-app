@@ -4,7 +4,6 @@ import { getTokenColorsScopeSettings } from '../redux';
 export const getWorkbenchColors = (theme) => {
   const settings = getTokenColorsScopeSettings(theme);
   let foreground, background;
-
   if (settings) {
     foreground = settings.foreground;
     background = settings.background;
