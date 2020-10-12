@@ -10,7 +10,7 @@ export const Workbench: React.SFC<IProps> = ({ children}) =>  {
     const { css, theme } = useFela();
 
     return (
-      <div className={cx(css(stylesSheet.container), (theme && theme.className))}>
+      <div className={cx(css(stylesSheet.container))}>
         <div className={cx('monaco-workbench', css(stylesSheet.child))}>{children}</div>
       </div>
     );
