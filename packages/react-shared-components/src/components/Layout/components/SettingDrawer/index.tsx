@@ -111,6 +111,8 @@ const updateTheme = (
   publicPath = '/theme',
 ) => {
   // ssr
+  localStorage.setItem('site-theme', dark ? 'dark' : 'light');
+
   if (typeof window === 'undefined' || !(window as any).umi_plugin_ant_themeVar) {
     return;
   }
@@ -169,8 +171,6 @@ const updateTheme = (
       document.body.appendChild(style);
     }
   }
-
-  localStorage.setItem('site-theme', dark ? 'dark' : 'light');
 };
 
 const getThemeList = (settings: Partial<ProSettings>) => {
@@ -277,7 +277,7 @@ const getThemeList = (settings: Partial<ProSettings>) => {
 
   if (list.find((item) => item.theme === 'dark')) {
     themeList.push({
-      key: 'realDark',
+      key: 'dark',
       url: 'https://gw.alipayobjects.com/zos/antfincdn/hmKaLQvmY2/LCkqqYNmvBEbokSDscrm.svg',
       title: formatMessage({
         id: 'app.setting.pagestyle.dark',
@@ -289,13 +289,13 @@ const getThemeList = (settings: Partial<ProSettings>) => {
   // insert  theme color List
   list.forEach((item) => {
     const color = (item.modifyVars || {})['@primary-color'];
-    if (item.theme === 'dark' && color) {
+    if (item.theme === 'dark' || color) {
       darkColorList.push({
         color,
         ...item,
       });
     }
-    if (!item.theme || item.theme === 'light') {
+    if (item.theme === 'light' || color) {
       lightColorList.push({
         color,
         ...item,
@@ -351,7 +351,7 @@ const initState = (
     // 如果 url 中设置主题，进行一次加载。
     if (oldSetting.navTheme !== params.navTheme && params.navTheme) {
       updateTheme(
-        settings.navTheme === 'realDark',
+        settings.navTheme === 'dark',
         (params as { primaryColor: string }).primaryColor,
         true,
         publicPath,
@@ -366,7 +366,7 @@ const initState = (
 
   // 如果 url 中没有设置主题，并且 url 中的没有加载，进行一次加载。
   if (defaultSettings.navTheme !== settings.navTheme && settings.navTheme) {
-    updateTheme(settings.navTheme === 'realDark', settings.primaryColor, true, publicPath);
+    updateTheme(settings.navTheme === 'dark', settings.primaryColor, true, publicPath);
   }
 };
 
@@ -477,12 +477,12 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
     nextState[key] = value;
 
     if (key === 'navTheme') {
-      updateTheme(value === 'realDark', undefined, hideMessageLoading, props.publicPath);
+      updateTheme(value === 'dark', undefined, hideMessageLoading, props.publicPath);
     }
 
     if (key === 'primaryColor') {
       updateTheme(
-        nextState.navTheme === 'realDark',
+        nextState.navTheme === 'dark',
         value === '#1890ff' ? '' : (value as string),
         hideMessageLoading,
         props.publicPath,
@@ -497,6 +497,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
     }
     if (key === 'layout' && value === 'mix') {
       nextState.navTheme = 'light';
+      nextState.splitMenus = false;
     }
     if (key === 'colorWeak' && value === true) {
       const dom = document.querySelector('body div') as HTMLDivElement;
@@ -608,7 +609,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
           <ThemeColor
             value={primaryColor}
             colors={
-              hideColors ? [] : themeList.colorList[navTheme === 'realDark' ? 'dark' : 'light']
+              hideColors ? [] : themeList.colorList[navTheme === 'dark' ? 'dark' : 'light']
             }
             formatMessage={formatMessage}
             onChange={(color) => changeSetting('primaryColor', color, hideLoading)}

@@ -11,15 +11,13 @@ export interface IProps {
   loadTheme?: Function;
 }
 
-const currentTheme = getTheme(localStorage.getItem('site-theme') || 'light');
-
 export class WorkbenchTheme extends React.Component<IProps, {}> {
   public componentDidMount() {
     this.props.loadTheme();
   }
 
   public render() {
-    const { children } = this.props;
+    const { currentTheme, children } = this.props;
     return (
       <ThemeProvider theme={currentTheme}>
         <WorkbenchComponent>{children}</WorkbenchComponent>
@@ -32,7 +30,7 @@ export default compose(
   ...[
     connect(
       (state: any) => ({
-        currentTheme: state.theme,
+        currentTheme: state.theme || getTheme('light'),
       }),
       dispatch => ({
         loadTheme: () => dispatch(loadTheme()),
