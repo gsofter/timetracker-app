@@ -1,10 +1,10 @@
 import { MainLayout, BasicLayoutProps } from '../containers/MainLayout';
 import DefaultHeader, { HeaderViewProps as HeaderProps } from './Header';
 import TopNavHeader, { TopNavHeaderProps } from './TopNavHeader';
-import SettingDrawer, { SettingDrawerProps, SettingDrawerState } from './SettingDrawer';
 
 import DefaultFooter, { FooterProps } from './Footer';
 import GridContent from '../components/GridContent';
+import SettingDrawer, { SettingDrawerProps, SettingDrawerState } from './SettingDrawer';
 import PageContainer from '../components/PageContainer';
 import RouteContext, { RouteContextType } from './RouteContext';
 import getMenuData from './utils/getMenuData';

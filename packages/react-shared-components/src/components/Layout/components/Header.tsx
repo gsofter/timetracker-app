@@ -1,10 +1,11 @@
 import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Layout } from 'antd';
-import GlobalHeader, { GlobalHeaderProps } from './GlobalHeader';
+import GlobalHeader, { GlobalHeaderProps } from './GlobalHeader/index';
 import { PureSettings } from './defaultSettings';
 import TopNavHeader from './TopNavHeader';
 import { WithFalse } from './typings';
+import AvatarDropdown from "../components/GlobalHeader/AvatarDropdown";
 
 const { Header } = Layout;
 
@@ -40,9 +41,15 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
       headerRender,
       headerContentRender,
     } = this.props;
+        
     const isTop = layout === 'top';
     let defaultDom = (
       <GlobalHeader onCollapse={onCollapse} {...this.props}>
+        <div style={{
+          float: "right"
+        }}>
+        {!isTop && <AvatarDropdown/>}
+        </div>
         {headerContentRender && headerContentRender(this.props)}
       </GlobalHeader>
     );
@@ -98,7 +105,7 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
     const right = needFixedHeader ? 0 : undefined;
 
     return (
-      <>
+      <div>
         {needFixedHeader && (
           <Header
             style={{
@@ -122,7 +129,7 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
         >
           {this.renderContent()}
         </Header>
-      </>
+      </div>
     );
   }
 }

@@ -111,6 +111,8 @@ const updateTheme = (
   publicPath = '/theme',
 ) => {
   // ssr
+  localStorage.setItem('site-theme', dark ? 'dark' : 'light');
+
   if (typeof window === 'undefined' || !(window as any).umi_plugin_ant_themeVar) {
     return;
   }
@@ -169,8 +171,6 @@ const updateTheme = (
       document.body.appendChild(style);
     }
   }
-
-  localStorage.setItem('site-theme', dark ? 'dark' : 'light');
 };
 
 const getThemeList = (settings: Partial<ProSettings>) => {
@@ -182,12 +182,62 @@ const getThemeList = (settings: Partial<ProSettings>) => {
       '@primary-color': string;
     };
     theme: 'dark' | 'light';
-  }[] = (window as any).umi_plugin_ant_themeVar || [];
+  }[] = (window as any).umi_plugin_ant_themeVar || [
+    {
+      key: 'dust',
+      fileName: 'dust.css',
+      modifyVars: {
+        '@primary-color': '#F5222D'
+      }
+    },
+    {
+      key: 'volcano',
+      fileName: 'volcano.css',
+      modifyVars: {
+        '@primary-color': '#FA541C'
+      }
+    },
+    {
+      key: 'sunset',
+      fileName: 'sunset.css',
+      'modifyVars': {
+        '@primary-color': '#FAAD14'
+      }
+    },
+    {
+      key: 'cyan',
+      fileName: 'cyan.css',
+      modifyVars: {
+        '@primary-color': '#13C2C2'
+      }
+    },
+    {
+      key: 'green',
+      fileName: 'green.css',
+      modifyVars: {
+        '@primary-color': '#52C41A'
+      }
+    },
+    {
+      key: 'geekblue',
+      fileName: 'geekblue.css',
+      modifyVars: {
+        '@primary-color': '#2F54EB'
+      }
+    },
+    {
+      key: 'purple',
+      fileName: 'purple.css',
+      modifyVars: {
+        '@primary-color': '#722ED1'
+      }
+    }
+  ];
   const themeList = [
     {
       key: 'light',
       url: 'https://gw.alipayobjects.com/zos/antfincdn/NQ%24zoisaD2/jpRkZQMyYRryryPNtyIC.svg',
-      title: formatMessage({ id: 'app.setting.pagestyle.light' }),
+      title: formatMessage({ id: 'app.setting.pagestyle.dark' }),
     },
   ];
 
@@ -227,7 +277,7 @@ const getThemeList = (settings: Partial<ProSettings>) => {
 
   if (list.find((item) => item.theme === 'dark')) {
     themeList.push({
-      key: 'realDark',
+      key: 'dark',
       url: 'https://gw.alipayobjects.com/zos/antfincdn/hmKaLQvmY2/LCkqqYNmvBEbokSDscrm.svg',
       title: formatMessage({
         id: 'app.setting.pagestyle.dark',
@@ -239,13 +289,13 @@ const getThemeList = (settings: Partial<ProSettings>) => {
   // insert  theme color List
   list.forEach((item) => {
     const color = (item.modifyVars || {})['@primary-color'];
-    if (item.theme === 'dark' && color) {
+    if (item.theme === 'dark' || color) {
       darkColorList.push({
         color,
         ...item,
       });
     }
-    if (!item.theme || item.theme === 'light') {
+    if (item.theme === 'light' || color) {
       lightColorList.push({
         color,
         ...item,
@@ -301,7 +351,7 @@ const initState = (
     // 如果 url 中设置主题，进行一次加载。
     if (oldSetting.navTheme !== params.navTheme && params.navTheme) {
       updateTheme(
-        settings.navTheme === 'realDark',
+        settings.navTheme === 'dark',
         (params as { primaryColor: string }).primaryColor,
         true,
         publicPath,
@@ -316,7 +366,7 @@ const initState = (
 
   // 如果 url 中没有设置主题，并且 url 中的没有加载，进行一次加载。
   if (defaultSettings.navTheme !== settings.navTheme && settings.navTheme) {
-    updateTheme(settings.navTheme === 'realDark', settings.primaryColor, true, publicPath);
+    updateTheme(settings.navTheme === 'dark', settings.primaryColor, true, publicPath);
   }
 };
 
@@ -365,8 +415,6 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
     prefixCls = 'ant-pro',
   } = props;
 
-  const { css } = useFela(props);
-  console.log(props,"Setting Drawer props here");
 
   const firstRender = useRef<boolean>(true);
 
@@ -384,8 +432,10 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
   );
   const preStateRef = useRef(settingState);
 
-  const { navTheme = 'dark', primaryColor = 'daybreak', layout = 'sidemenu', colorWeak } =
+  const { navTheme = 'dark', primaryColor = '#1890ff', layout = 'side', colorWeak } =
     settingState || {};
+
+    const { css } = useFela({...props, primaryColor });
 
   useEffect(() => {
     // 语言修改，这个是和 locale 是配置起来的
@@ -427,14 +477,13 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
     nextState[key] = value;
 
     if (key === 'navTheme') {
-      updateTheme(value === 'realDark', undefined, hideMessageLoading, props.publicPath);
-      nextState.primaryColor = 'daybreak';
+      updateTheme(value === 'dark', undefined, hideMessageLoading, props.publicPath);
     }
 
     if (key === 'primaryColor') {
       updateTheme(
-        nextState.navTheme === 'realDark',
-        value === 'daybreak' ? '' : (value as string),
+        nextState.navTheme === 'dark',
+        value === '#1890ff' ? '' : (value as string),
         hideMessageLoading,
         props.publicPath,
       );
@@ -448,6 +497,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
     }
     if (key === 'layout' && value === 'mix') {
       nextState.navTheme = 'light';
+      nextState.splitMenus = false;
     }
     if (key === 'colorWeak' && value === true) {
       const dom = document.querySelector('body div') as HTMLDivElement;
@@ -501,7 +551,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
     });
   }, [JSON.stringify(settingState)]);
   const baseClassName = `${prefixCls}-setting`;
-  
+
   return (
     <Drawer
       visible={show}
@@ -559,7 +609,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
           <ThemeColor
             value={primaryColor}
             colors={
-              hideColors ? [] : themeList.colorList[navTheme === 'realDark' ? 'dark' : 'light']
+              hideColors ? [] : themeList.colorList[navTheme === 'dark' ? 'dark' : 'light']
             }
             formatMessage={formatMessage}
             onChange={(color) => changeSetting('primaryColor', color, hideLoading)}
@@ -659,15 +709,15 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
 export default SettingDrawer;
 
 const styleSheet : any ={
-  settingDrawerTitle: props => (
+  settingDrawerTitle: ({primaryColor}) => (
     {
       marginBottom: '12px',
-      color: props.color,
+      color: primaryColor,
       fontSize: '14px',
       lineHeight: '22px'
     }
   ),
-  settingDrawerHandle: props => (
+  settingDrawerHandle: ({primaryColor}) => (
     {
       position: 'absolute',
       top: '240px',
@@ -680,14 +730,13 @@ const styleSheet : any ={
       height: '48px',
       fontSize: '16px',
       textAlign: 'center',
-      background: '#1890ff',
-      // background: props.color,
+      background: primaryColor,
       borderRadius: '4px 0 0 4px',
       cursor: 'pointer',
       pointerEvents: 'auto',
      }
   ),
-  proSettingDrawerContent: props => (
+  proSettingDrawerContent: ({primaryColor}) => (
     {
       position: "relative",
       minHeight: "100%",
@@ -697,7 +746,7 @@ const styleSheet : any ={
       },
       '& h3': {
         marginBottom: '12px',
-        color: props.color,
+        color: primaryColor,
         fontSize: '14px',
         lineHeight: '22px'
       },
@@ -725,7 +774,7 @@ const styleSheet : any ={
           height: '100%',
           paddingTop: '15px',
           paddingLeft: '24px',
-          color: props.color,
+          color: primaryColor,
           fontWeight: 'bold',
           fontSize: '14px',
         },
@@ -745,7 +794,7 @@ const styleSheet : any ={
 
         "& .ant-pro-setting-drawer-block-checkbox-selectIcon .action": 
         {
-          color: props.color,
+          color: primaryColor,
         },
         "& .ant-pro-setting-drawer-color_block": 
         {
