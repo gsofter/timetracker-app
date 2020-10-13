@@ -25,8 +25,8 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
     } = this.props;
     const menu = "menus"
     const menuHeaderDropdown = (
-        <FelaComponent style={menuStyle}>
-
+  
+        
       <Menu  selectedKeys={[]} className="ant-dropdown-menu ant-dropdown-menu-light antd-pro-components-global-header-index-menu ant-dropdown-menu-root ant-dropdown-menu-vertical" onClick={this.onMenuClick}>
         {menu && (
             <Menu.Item key="center" className="ant-dropdown-menu-item">
@@ -47,7 +47,6 @@ class AvatarDropdown extends React.Component<GlobalHeaderRightProps> {
           退出登录
         </Menu.Item>
       </Menu>
-        </FelaComponent>
     );
     return(
         <FelaComponent style={styleSheet}>
