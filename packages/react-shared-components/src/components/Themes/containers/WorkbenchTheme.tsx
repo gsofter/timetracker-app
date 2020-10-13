@@ -30,7 +30,7 @@ export default compose(
   ...[
     connect(
       (state: any) => ({
-        currentTheme: state.theme || getTheme('light'),
+        currentTheme: state.themeReducer,
       }),
       dispatch => ({
         loadTheme: () => dispatch(loadTheme()),
