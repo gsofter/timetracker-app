@@ -163,11 +163,8 @@ const styleSheet: any = {
       display: "inline-block",
       margin: "0 0 0 12px",
       color: theme === "light" ? { primaryColor } : '#fff',
-
-
       fontWeight: "400",
       fontSize: "16px",
-      verticalAlign: "top",
     },
     "& .ant-pro-top-nav-header-menu": {
       minWidth: 0,
