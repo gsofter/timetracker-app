@@ -29,7 +29,7 @@ Files explained:
 It uses `lerna.json` for creating the packages structure. Under packages you can create different modules based on its usage. For example:
 
      packages                    - Has the packages to organize the codebase into multi-package repositories.
-         sample-core             - Core interfaces of the packages which can be shared between server and client.
+         admin-layout             - Core interfaces of the packages which can be shared between server and client.
          sample-platform/server      - Core platform interfaces and its implementation code for Server.   
          sample-platform/browser     - Core platform browser State related code which consists of Redux, Graphql Gql and UI Components.
          sample-platform/react-shared-components     - React pure components and containers are defined. 

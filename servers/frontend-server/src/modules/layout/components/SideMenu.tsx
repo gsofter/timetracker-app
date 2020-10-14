@@ -3,15 +3,8 @@ import * as React from 'react';
 import { Link } from 'react-router-dom';
 import * as PropTypes from 'prop-types';
 import pathToRegexp from 'path-to-regexp';
-import { Icon } from '@ant-design/compatible';
-import { Layout, Menu ,Avatar, Drawer, Button } from 'antd';
+import { Layout, Menu, Icon, Avatar } from 'antd';
 import { IMenuPosition } from '@common-stack/client-react';
-import {
-    MenuUnfoldOutlined,
-    MenuFoldOutlined,
-    FileOutlined
-  } from '@ant-design/icons';
-import "./SideMenu.css"
 
 const { Sider } = Layout;
 const { SubMenu } = Menu;
@@ -79,7 +72,6 @@ export namespace ISiderMenu {
 
     export interface CompState {
         openKeys?: any;
-        collapsed: any;
     }
 
     export type Props = CompProps & StateProps;
@@ -96,14 +88,8 @@ export class SiderMenu extends React.PureComponent<ISiderMenu.Props, ISiderMenu.
         this.flatMenuKeys = getFlatMenuKeys(props.menuData);
         this.state = {
             openKeys: this.getDefaultCollapsedSubMenus(props),
-            collapsed: false,
         };
     }
-    toggle = () => {
-        this.setState({
-          collapsed: !this.state.collapsed,
-        });
-    };
 
     public static contextTypes = {
         renderer: PropTypes.any.isRequired,
@@ -147,7 +133,7 @@ export class SiderMenu extends React.PureComponent<ISiderMenu.Props, ISiderMenu.
         if (typeof icon === 'string' && icon.indexOf('http') === 0) {
             return < img src={icon} alt="icon" className={styles.icon} />;
         } if (typeof icon === 'string') {
-            return <Icon type={icon} />;
+            return <div data-type={icon} style={styles.icon} />;
         }
         return icon;
     }
@@ -210,14 +196,14 @@ export class SiderMenu extends React.PureComponent<ISiderMenu.Props, ISiderMenu.
             const childrenItems = this.getNavMenuItems(item.children);
             if (childrenItems && childrenItems.length > 0) {
                 return (
-                    <SubMenu title={<span>{this.getIcon(item.icon)}<span>{item.name}</span></span>} key={item.path}>
+                    <SubMenu title={item.name} key={item.path}>
                         {childrenItems}
                     </SubMenu>
                 );
             }
             return null;
         } else {
-            return <Menu.Item key={item.path} > {this.getMenuItemPath(item)}</Menu.Item>;
+            return <Menu.Item key={item.path}>{this.getMenuItemPath(item)}</Menu.Item>;
         }
     }
     /**
@@ -298,56 +284,44 @@ export class SiderMenu extends React.PureComponent<ISiderMenu.Props, ISiderMenu.
 
         return (
             <Sider
-                trigger={null} 
-                collapsible 
-                collapsed={this.state.collapsed}
+                trigger={null}
+                collapsible={true}
+                collapsed={collapsed}
                 breakpoint="lg"
                 onCollapse={onCollapse}
                 width={256}
                 className={styles.sider}
-                collapsedWidth={48}
             >
                 {this.getLogo((this.menus.filter(menu => menu.position === IMenuPosition.LOGO) || [])[0])}
                 <div className={styles.grow}>
                     <Menu
-                        mode="vertical"
                         key="Menu-Middle"
                         theme="dark"
+                        mode="inline"
                         {...menuProps}
                         className={styles.grow}
                         onOpenChange={this.handleOpenChange}
                         selectedKeys={selectedKeys}
+                        style={{ padding: '16px 0', width: '100%' }}
                     >
                         {this.getNavMenuItems(this.menus.filter(menu => menu.position === IMenuPosition.MIDDLE))}
-        
                     </Menu>
-                    
                     {segments.map((segment, segmentIndex) => (
                         <div key={segmentIndex}>
                             {React.cloneElement(segment, { collapsed })}
                         </div>
                     ))}
                 </div>
-                <div>
-                
-                </div>
-
                 <Menu
                     key="Menu-Bottom"
                     theme="dark"
+                    mode="inline"
                     {...menuProps}
                     onOpenChange={this.handleOpenChange}
                     selectedKeys={selectedKeys}
                     style={{ padding: '16px 0', width: '100%' }}
-                    mode="vertical"
                 >
                     {this.getNavMenuItems(this.menus.filter(menu => menu.position === IMenuPosition.BOTTOM))}
-                    <div className="bottom-navigation">
-                        {React.createElement(this.state.collapsed ? MenuUnfoldOutlined : MenuFoldOutlined,
-                        { className: 'trigger', onClick: this.toggle, })}
-                    </div>
-
-
                 </Menu>
             </Sider>
         );
