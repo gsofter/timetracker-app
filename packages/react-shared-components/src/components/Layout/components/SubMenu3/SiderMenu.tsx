@@ -263,8 +263,8 @@ const styleSheet: any = {
     '& .ant-menu-item-selected a, .ant-menu-item-selected a:hover': {
       color: '#fff'
     },
-    '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': {
-      background: theme === 'light' ? primaryColor : '#1890ff'
+    "& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected": {
+      background: primaryColor ? primaryColor : '#1890ff',
     },
     '& .ant-menu-inline .ant-menu-item::after': {
       borderRight: 'none'
