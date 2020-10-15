@@ -4,7 +4,6 @@ const { compose } = require('redux');
 import { ThemeProvider } from 'react-fela';
 import { loadTheme } from '../redux';
 import { WorkbenchComponent } from '../components';
-import { getTheme } from '../redux';
 
 export interface IProps {
   currentTheme?: any;
@@ -30,7 +29,7 @@ export default compose(
   ...[
     connect(
       (state: any) => ({
-        currentTheme: state.theme || getTheme('light'),
+        currentTheme: state.themeReducer,
       }),
       dispatch => ({
         loadTheme: () => dispatch(loadTheme()),
