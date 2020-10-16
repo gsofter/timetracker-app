@@ -79,7 +79,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps> = (props) => {
       <TopNavHeader
         mode="horizontal"
         {...props}
-        splitMenus={true}
+        splitMenus
         menuData={noChildrenMenuData}
         navTheme="dark"
         theme="dark"

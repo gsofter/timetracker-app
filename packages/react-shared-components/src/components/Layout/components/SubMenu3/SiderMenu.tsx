@@ -244,16 +244,16 @@ const styleSheet: any = {
       marginBottom: '4px'
     },
     '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item a': {
-      //  color: ;
+      color: primaryColor ? primaryColor : '#1890ff'
     },
     '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item-selected a, .ant-pro-sider.ant-layout-sider-light .ant-menu-item a:hover': {
-      //  color: ;
+      color: primaryColor ? primaryColor : '#1890ff'
     },
     '& .ant-menu-item-selected a, .ant-menu-item-selected a:hover': {
       color: '#fff'
     },
     "& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected": {
-      background: primaryColor ? primaryColor : '#1890ff',
+      background: primaryColor ? primaryColor : '#1890ff'
     },
     '& .ant-menu-inline .ant-menu-item::after': {
       borderRight: 'none'
