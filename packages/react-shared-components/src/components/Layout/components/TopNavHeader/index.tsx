@@ -78,7 +78,6 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
   });
 
   const { css } = useFela({...props, primaryColor});
-
   return (
     <div className={css(styleSheet.topHeaderStyle)}>
       <div className={className}>
@@ -122,6 +121,9 @@ const styleSheet: any = {
       boxShadow: "0 1px 4px 0 rgba(0,21,41,0.12)",
       transition: "background 0.3s, width 0.2s",
     },
+    "& .ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover, .ant-menu.ant-menu-dark .ant-menu-item-selected": {
+      background: primaryColor ? primaryColor : '#1890ff'
+    },
     "& .ant-pro-top-nav-header .ant-menu-submenu.ant-menu-submenu-horizontal": {
       height: "100%",
     },
@@ -131,8 +133,14 @@ const styleSheet: any = {
     "& .ant-pro-top-nav-header.light": {
       backgroundColor: "#fff",
     },
+    "& .ant-menu-submenu .ant-menu-submenu-horizontal .ant-menu-submenu-selected": {
+      backgroundColor: primaryColor ? primaryColor : '#1890ff'
+    },
+    "& .ant-menu-submenu .ant-menu-submenu-horizontal .ant-menu-submenu-open .ant-menu-submenu-active, .ant-menu-item:hover, .ant-menu-item-active, .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-submenu-active, .ant-menu-submenu-title:hover, .ant-menu-submenu-selected, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover, ant-menu-item a:hover, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover, .ant-menu-light .ant-menu-item:hover > a, .ant-menu-light .ant-menu-item-active > a, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected a, .ant-menu-item-selected a, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item a:hover, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-selected": {
+      color: primaryColor ? primaryColor : '#1890ff'
+    },
     "& .ant-pro-top-nav-header.light .anticon": {
-      color: primaryColor ? primaryColor : '#1890ff',
+      color: 'inherit',
     },
     "& .ant-pro-top-nav-header-main": {
       display: "flex",
@@ -144,7 +152,7 @@ const styleSheet: any = {
       minWidth: "192px",
     },
     "& .ant-pro-top-nav-header .anticon": {
-       color: primaryColor ? primaryColor : '#1890ff',
+      color: 'inherit',
     },
     "& .ant-pro-top-nav-header-logo": {
       position: "relative",
