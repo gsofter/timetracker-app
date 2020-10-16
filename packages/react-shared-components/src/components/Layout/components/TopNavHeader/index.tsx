@@ -63,6 +63,7 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
     className: propsClassName,
     style,
     layout,
+    primaryColor
   } = props;
 
   
@@ -75,8 +76,6 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
   const className = classNames(baseClassName, propsClassName, {
     light: theme === "light",
   });
-
-  const { primaryColor = 'daybreak' } = {};
 
   const { css } = useFela({...props, primaryColor});
 
@@ -133,7 +132,7 @@ const styleSheet: any = {
       backgroundColor: "#fff",
     },
     "& .ant-pro-top-nav-header.light .anticon": {
-      color: "inherit",
+      color: primaryColor ? primaryColor : '#1890ff',
     },
     "& .ant-pro-top-nav-header-main": {
       display: "flex",
@@ -145,7 +144,7 @@ const styleSheet: any = {
       minWidth: "192px",
     },
     "& .ant-pro-top-nav-header .anticon": {
-      //  color: ;
+       color: primaryColor ? primaryColor : '#1890ff',
     },
     "& .ant-pro-top-nav-header-logo": {
       position: "relative",
@@ -162,7 +161,7 @@ const styleSheet: any = {
     "& .ant-pro-top-nav-header-logo h1": {
       display: "inline-block",
       margin: "0 0 0 12px",
-      color: theme === "light" ? { primaryColor } : '#fff',
+      color: theme === "light" ? primaryColor : '#fff',
       fontWeight: "400",
       fontSize: "16px",
     },
