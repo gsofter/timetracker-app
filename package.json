@@ -70,6 +70,8 @@
     "@admin-layout/core": "file:packages/admin-core",
     "@admin-layout/counter-module-browser": "file:packages-modules/counter/browser",
     "@admin-layout/counter-module-server": "file:packages-modules/counter/server",
+    "@admin-layout/schedule-module-browser": "file:packages-modules/schedule/browser",
+    "@admin-layout/schedule-module-server": "file:packages-modules/schedule/server",
     "@admin-layout/platform-server": "file:packages/admin-platform/server",
     "@admin-layout/react-shared-components": "file:packages/react-shared-components",
     "dataloader": "^2.0.0",
