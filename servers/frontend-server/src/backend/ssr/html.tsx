@@ -39,7 +39,6 @@ const Html = ({
   return (
     <html lang='en' {...htmlAttrs}>
       <head>
-        <meta name='viewport' content='width=device-width, initial-scale=1' />
         {helmet.title.toComponent()}
         {helmet.meta.toComponent()}
         {helmet.link.toComponent()}
