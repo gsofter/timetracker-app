@@ -22,7 +22,7 @@ const Html = ({
   env,
   assetMap,
   styleSheet,
-  helmet
+  helmet,
 }: {
   content?: any;
   state: any;
@@ -37,44 +37,45 @@ const Html = ({
   const bodyAttrs = helmet.bodyAttributes.toComponent(); // react-helmet body document tags
 
   return (
-    <html lang='en' {...htmlAttrs}>
+    <html lang="en" {...htmlAttrs}>
       <head>
         {helmet.title.toComponent()}
         {helmet.meta.toComponent()}
         {helmet.link.toComponent()}
-        <meta charSet='utf-8' />
+        <meta charSet="utf-8" />
 
         <link
-          rel='stylesheet'
-          href='https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css'
+          rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
         />
         {
+     
           <link
-            rel='stylesheet'
-            type='text/css'
+            rel="stylesheet"
+            type="text/css"
             href={`${assetMap['index.css']}`}
           />
         }
         {assetMap['vendor.css'] && (
           <link
-            rel='stylesheet'
-            type='text/css'
+            rel="stylesheet"
+            type="text/css"
             href={`${assetMap['vendor.css']}`}
           />
         )}
-        <style id='font-stylesheet' />
+        <style id="font-stylesheet" />
         {!!__DEV__ && (
           <style
             dangerouslySetInnerHTML={{
               __html: modules.stylesInserts
                 .map((style) => style._getCss())
-                .join('')
+                .join(''),
             }}
           />
         )}
         {styleSheet.map(({ type, rehydration, css, media, support }) => (
           <style
-            id='stylesheet'
+            id="stylesheet"
             dangerouslySetInnerHTML={{ __html: css }}
             data-fela-rehydration={rehydration}
             data-fela-type={type}
@@ -90,44 +91,44 @@ const Html = ({
         })}
       </head>
       <body {...bodyAttrs}>
-        <div className='demo'>
+        <div className="demo">
           <div
-            id='content'
+            id="content"
             dangerouslySetInnerHTML={{
               __html:
                 content ||
-                'Try building the demo:<br/> ...and refreshing this page!'
+                'Try building the demo:<br/> ...and refreshing this page!',
             }}
           />
         </div>
         <script
           dangerouslySetInnerHTML={{
             __html: `window.__ENV__=${serialize(env, {
-              isJSON: true
-            })};`
+              isJSON: true,
+            })};`,
           }}
-          charSet='UTF-8'
+          charSet="UTF-8"
         />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.__APOLLO_STATE__=${serialize(state, {
-              isJSON: true
-            })};`
+              isJSON: true,
+            })};`,
           }}
-          charSet='UTF-8'
+          charSet="UTF-8"
         />
         <script
           dangerouslySetInnerHTML={{
             __html: `window.__PRELOADED_STATE__=${serialize(reduxState, {
-              isJSON: true
-            })};`
+              isJSON: true,
+            })};`,
           }}
-          charSet='UTF-8'
+          charSet="UTF-8"
         />
         {assetMap['vendor.js'] && (
-          <script src={`${assetMap['vendor.js']}`} charSet='utf-8' />
+          <script src={`${assetMap['vendor.js']}`} charSet="utf-8" />
         )}
-        <script src={`${assetMap['index.js']}`} charSet='utf-8' />
+        <script src={`${assetMap['index.js']}`} charSet="utf-8" />
       </body>
     </html>
   );
