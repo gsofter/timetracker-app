@@ -39,6 +39,7 @@ const Html = ({
   return (
     <html lang="en" {...htmlAttrs}>
       <head>
+       <meta name="viewport" content="width=device-width, initial-scale=1" />
         {helmet.title.toComponent()}
         {helmet.meta.toComponent()}
         {helmet.link.toComponent()}
@@ -49,7 +50,7 @@ const Html = ({
           href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
         />
         {
-     
+
           <link
             rel="stylesheet"
             type="text/css"
