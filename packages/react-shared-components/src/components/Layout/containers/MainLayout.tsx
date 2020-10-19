@@ -221,7 +221,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
     menuDataRender,
     breadcrumbRender,
     loading,
-    ...rest,
+    ...rest
   } = props;
   const [route, setRoute] = useState({ routes: rs });
 
@@ -243,7 +243,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
   const formatMessage = ({
     id,
     defaultMessage,
-    ...restParams,
+    ...restParams
   }: {
     id: string;
     defaultMessage?: string;
