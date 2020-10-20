@@ -157,25 +157,15 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
           }
         }}
         collapsedWidth={65}
-        style={
-          isMobile
-            ? {
-                overflow: 'hidden',
-                height: '100%',
-                paddingTop:
-                  layout === 'mix' && !isMobile ? headerHeight : undefined,
-                ...style,
-              }
-            : {
+        style={{
                 overflow: 'hidden',
                 paddingTop:
                   layout === 'mix' && !isMobile ? headerHeight : undefined,
                 ...style,
-              }
-        }
+              }}
         width={siderWidth}
         theme={theme}
-        className={`${siderClassName} custom-sidebar`}
+        className={`${siderClassName}`}
       >
         <div className={css(styleSheet.siderMenuStyles)}>
           {headerDom && (
@@ -445,10 +435,6 @@ const styleSheet: any = {
     },
     '& .ant-pro-sider-menu.mobile-base-menu .ant-menu-submenu-title .ant-pro-menu-item .anticon': {
       paddingTop: '5px',
-    },
-    '& .ant-layout-sider.ant-pro-sider.custom-sidebar': {
-      height: '100%',
-      background: '#001529',
     },
     '@keyframes fade-in': {
       '0%': {
