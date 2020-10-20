@@ -14,7 +14,7 @@ export const schedulerPage: any[] = [
         position: IMenuPosition.BOTTOM,
         name: 'React Big Scheduler',
         path: '/react-big-scheduler',
-        // icon: <ScheduleOutlined />
+        icon: <ScheduleOutlined />
     },
 ];
 
