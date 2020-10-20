@@ -41,7 +41,6 @@
     "@common-stack/server-core": "0.0.234",
     "@admin-layout/core": "file:../../packages/admin-core",
     "@admin-layout/counter-module-server": "file:../../packages-modules/counter/server",
-    "@admin-layout/schedule-module-server": "file:../../packages-modules/schedule/server",
     "@admin-layout/platform-server": "file:../../packages/admin-platform/server",
     "apollo-datasource": "^0.7.0",
     "apollo-logger": "^0.3.3",

@@ -42,9 +42,7 @@
   "author": "CDMBase LLC",
   "license": "ISC",
   "dependencies": {
-    "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser",
-    "@cdmbase/react-big-scheduler": "^0.2.7",
-    "moment": "^2.29.1"
+    "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser"
   },
   "peerDependencies": {
     "@common-stack/client-react": ">=0.0.234",

@@ -6,7 +6,7 @@ import ScheduleModule from '@admin-layout/schedule-module-browser';
 
 const features = new Feature(
         FeatureWithRouterFactory,
-        // CounterModule,
+        CounterModule,
         ScheduleModule
 );
 
