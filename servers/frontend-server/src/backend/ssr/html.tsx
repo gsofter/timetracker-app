@@ -35,7 +35,6 @@ const Html = ({
 }) => {
   const htmlAttrs = helmet.htmlAttributes.toComponent(); // react-helmet html document tags
   const bodyAttrs = helmet.bodyAttributes.toComponent(); // react-helmet body document tags
-
   return (
     <html lang='en' {...htmlAttrs}>
       <head>
