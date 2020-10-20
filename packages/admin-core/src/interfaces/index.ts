@@ -1,2 +1,2 @@
 export * from './generated';
-export * from './user-profile'
+export * from './user-profile';

@@ -45,8 +45,8 @@
     "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser"
   },
   "peerDependencies": {
-    "@common-stack/client-react": ">=0.0.209",
-    "@common-stack/core": ">=0.0.209",
+    "@common-stack/client-react": ">=0.0.234",
+    "@common-stack/core": ">=0.0.234",
     "antd": "^4.5.2"
   },
   "typings": "lib/index.d.ts",

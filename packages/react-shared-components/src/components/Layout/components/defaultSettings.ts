@@ -60,5 +60,6 @@ const defaultSettings: ProSettings = {
   title: 'CDMBase LLC',
   iconfontUrl: '',
   primaryColor: '#1890ff',
+  splitMenus: false
 };
 export default defaultSettings;

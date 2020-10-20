@@ -5,7 +5,7 @@ import GlobalHeader, { GlobalHeaderProps } from './GlobalHeader/index';
 import { PureSettings } from './defaultSettings';
 import TopNavHeader from './TopNavHeader';
 import { WithFalse } from './typings';
-import AvatarDropdown from "../components/GlobalHeader/AvatarDropdown";
+import AvatarDropdown from '../components/GlobalHeader/AvatarDropdown';
 
 const { Header } = Layout;
 
@@ -21,7 +21,9 @@ export type HeaderViewProps = Partial<PureSettings> &
     headerTitleRender?: WithFalse<
       (props: HeaderViewProps, defaultDom: React.ReactNode) => React.ReactNode
     >;
-    headerContentRender?: WithFalse<(props: HeaderViewProps) => React.ReactNode>;
+    headerContentRender?: WithFalse<
+      (props: HeaderViewProps) => React.ReactNode
+    >;
     siderWidth?: number;
     hasSiderMenu?: boolean;
     style?: any;
@@ -39,16 +41,18 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
       navTheme,
       layout,
       headerRender,
-      headerContentRender,
+      headerContentRender
     } = this.props;
-        
+
     const isTop = layout === 'top';
     let defaultDom = (
       <GlobalHeader onCollapse={onCollapse} {...this.props}>
-        <div style={{
-          float: "right"
-        }}>
-        {!isTop && <AvatarDropdown/>}
+        <div
+          style={{
+            float: 'right'
+          }}
+        >
+          {!isTop && <AvatarDropdown />}
         </div>
         {headerContentRender && headerContentRender(this.props)}
       </GlobalHeader>
@@ -57,7 +61,7 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
       defaultDom = (
         <TopNavHeader
           theme={navTheme as 'light' | 'dark'}
-          mode="horizontal"
+          mode='horizontal'
           onCollapse={onCollapse}
           {...this.props}
         />
@@ -81,16 +85,17 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
       headerRender,
       isMobile,
       prefixCls,
-      headerHeight,
+      headerHeight
     } = this.props;
     const needFixedHeader = fixedHeader || layout === 'mix';
     const isTop = layout === 'top';
 
-    const needSettingWidth = needFixedHeader && hasSiderMenu && !isTop && !isMobile;
+    const needSettingWidth =
+      needFixedHeader && hasSiderMenu && !isTop && !isMobile;
 
     const className = classNames(propsClassName, {
       [`${prefixCls}-fixed-header`]: needFixedHeader,
-      [`${prefixCls}-top-menu`]: isTop,
+      [`${prefixCls}-top-menu`]: isTop
     });
 
     if (headerRender === false) {
@@ -111,7 +116,7 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
             style={{
               height: headerHeight,
               lineHeight: `${headerHeight}px`,
-              background: 'transparent',
+              background: 'transparent'
             }}
           />
         )}
@@ -123,7 +128,7 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
             width,
             zIndex: layout === 'mix' ? 100 : 9,
             right,
-            ...style,
+            ...style
           }}
           className={className}
         >
@@ -136,9 +141,9 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
 
 const styleSheet: any = {
   proFixedHeader: () => ({
-    zIndex: "9",
-    width: "100%",
- }),
-}
+    zIndex: '9',
+    width: '100%'
+  })
+};
 
 export default HeaderView;

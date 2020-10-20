@@ -13,7 +13,7 @@ import {
   storeReducer,
   history,
   persistConfig,
-  epicMiddleware,
+  epicMiddleware
 } from '../config/redux-config';
 import modules, { MainRoute } from '../modules';
 import { ConnectedRouter } from 'connected-react-router';
@@ -22,21 +22,29 @@ import { ServerError } from './Error';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
 
-
 const client = createApolloClient();
 
 let store;
-if ((module as any).hot && (module as any).hot.data && (module as any).hot.data.store) {
+if (
+  (module as any).hot &&
+  (module as any).hot.data &&
+  (module as any).hot.data.store
+) {
   // console.log('Restoring Redux store:', JSON.stringify((module as any).hot.data.store.getState()));
   store = (module as any).hot.data.store;
   // replace the reducers always as we don't have ablity to find
   // new reducer added through our `modules`
-  store.replaceReducer(persistReducer(persistConfig, storeReducer((module as any).hot.data.history || history)));
+  store.replaceReducer(
+    persistReducer(
+      persistConfig,
+      storeReducer((module as any).hot.data.history || history)
+    )
+  );
 } else {
   store = createReduxStore();
 }
 if ((module as any).hot) {
-  (module as any).hot.dispose(data => {
+  (module as any).hot.dispose((data) => {
     // console.log("Saving Redux store:", JSON.stringify(store.getState()));
     data.store = store;
     data.history = history;
@@ -81,26 +89,22 @@ export class Main extends React.Component<any, MainState> {
     return this.state.error ? (
       <RedBox error={this.state.error} />
     ) : (
-        modules.getWrappedRoot(
-          (
-            <Provider store={store}>
-              <ApolloProvider client={client}>
-                <RendererProvider renderer={renderer}>
-                  <PersistGate persistor={persistor}>
-                    {modules.getWrappedRoot(
-                      (
-                        <ConnectedRouter history={history}>
-                          <MainRoute />
-                        </ConnectedRouter>
-                      ),
-                    )}
-                  </PersistGate>
-                </RendererProvider>
-              </ApolloProvider>
-            </Provider>
-          ),
-        )
-      );
+      modules.getWrappedRoot(
+        <Provider store={store}>
+          <ApolloProvider client={client}>
+            <RendererProvider renderer={renderer}>
+              <PersistGate persistor={persistor}>
+                {modules.getWrappedRoot(
+                  <ConnectedRouter history={history}>
+                    <MainRoute />
+                  </ConnectedRouter>
+                )}
+              </PersistGate>
+            </RendererProvider>
+          </ApolloProvider>
+        </Provider>
+      )
+    );
   }
 }
 
