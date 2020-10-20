@@ -15,15 +15,15 @@ import {
   MessageDescriptor,
   Route,
   RouterTypes,
-  WithFalse
+  WithFalse,
 } from '../typings';
 import MenuCounter from './Counter';
 import { Link } from 'react-router-dom';
 
 export interface BaseMenuProps
   extends Partial<RouterTypes<Route>>,
-    Omit<MenuProps, 'openKeys' | 'onOpenChange'>,
-    Partial<PureSettings> {
+  Omit<MenuProps, 'openKeys' | 'onOpenChange'>,
+  Partial<PureSettings> {
   className?: string;
   collapsed?: boolean;
   splitMenus?: boolean;
@@ -46,7 +46,7 @@ export interface BaseMenuProps
       item: MenuDataItem & {
         isUrl: boolean;
       },
-      defaultDom: React.ReactNode
+      defaultDom: React.ReactNode,
     ) => React.ReactNode
   >;
   menuItemRender?: WithFalse<
@@ -54,7 +54,7 @@ export interface BaseMenuProps
       item: MenuDataItem & {
         isUrl: boolean;
       },
-      defaultDom: React.ReactNode
+      defaultDom: React.ReactNode,
     ) => React.ReactNode
   >;
   postMenuData?: (menusData?: MenuDataItem[]) => MenuDataItem[];
@@ -63,7 +63,7 @@ export interface BaseMenuProps
 const { SubMenu } = Menu;
 
 let IconFont = createFromIconfontCN({
-  scriptUrl: defaultSettings.iconfontUrl
+  scriptUrl: defaultSettings.iconfontUrl,
 });
 
 // Allow menu.js config icon as string or ReactNode
@@ -79,7 +79,7 @@ const getIcon = (icon?: string | React.ReactNode): React.ReactNode => {
       return (
         <Icon
           component={() => (
-            <img src={icon} alt='icon' className='ant-pro-sider-menu-icon' />
+            <img src={icon} alt="icon" className="ant-pro-sider-menu-icon" />
           )}
         />
       );
@@ -96,32 +96,32 @@ class MenuUtil {
     this.props = props;
   }
 
-  props: BaseMenuProps;
+  public props: BaseMenuProps;
 
-  getNavMenuItems = (
+  public getNavMenuItems = (
     menusData: MenuDataItem[] = [],
-    isChildren: boolean
+    isChildren: boolean,
   ): React.ReactNode[] =>
     menusData
       .filter((item) => item.name && !item.hideInMenu)
       .map((item) => this.getSubMenuOrItem(item, isChildren))
-      .filter((item) => item);
+      .filter((item) => item)
 
-  hasChildren = (item: MenuDataItem) => {
+  public hasChildren = (item: MenuDataItem) => {
     return (
       item &&
       !item.hideChildrenInMenu &&
       item?.children &&
       item.children.some((child) => child && !!child.name && !child.hideInMenu)
     );
-  };
+  }
 
   /**
    * get SubMenu or Item
    */
-  getSubMenuOrItem = (
+  public getSubMenuOrItem = (
     item: MenuDataItem,
-    isChildren: boolean
+    isChildren: boolean,
   ): React.ReactNode => {
     if (Array.isArray(item.children) && this.hasChildren(item)) {
       const name = this.getIntlName(item);
@@ -133,8 +133,8 @@ class MenuUtil {
           <span>{name}</span>
         </span>
       ) : (
-        <span className={`${prefixCls}-menu-item`}>{name}</span>
-      );
+          <span className={`${prefixCls}-menu-item`}>{name}</span>
+        );
 
       // subMenu only title render
       const title = subMenuItemRender
@@ -157,37 +157,37 @@ class MenuUtil {
         <Link to={item.path}>{this.getMenuItemPath(item, isChildren)}</Link>
       </Menu.Item>
     );
-  };
+  }
 
-  getIntlName = (item: MenuDataItem) => {
+  public getIntlName = (item: MenuDataItem) => {
     const { name, locale } = item;
     const {
       menu = {
-        locale: false
+        locale: false,
       },
-      formatMessage
+      formatMessage,
     } = this.props;
     if (locale && menu.locale !== false && formatMessage) {
       return formatMessage({
         id: locale,
-        defaultMessage: name
+        defaultMessage: name,
       });
     }
     return name;
-  };
+  }
 
   /**
    * 判断是否是http链接.返回 Link 或 a
    * Judge whether it is http link.return a or Link
    * @memberof SiderMenu
    */
-  getMenuItemPath = (item: MenuDataItem, isChildren: boolean) => {
+  public getMenuItemPath = (item: MenuDataItem, isChildren: boolean) => {
     const itemPath = this.conversionPath(item.path || '/');
     const {
       location = { pathname: '/' },
       isMobile,
       onCollapse,
-      menuItemRender
+      menuItemRender,
     } = this.props;
     const { target } = item;
     // if local is true formatMessage all name。
@@ -219,7 +219,7 @@ class MenuUtil {
         itemPath,
         isMobile,
         replace: itemPath === location.pathname,
-        onClick: () => onCollapse && onCollapse(true)
+        onClick: () => onCollapse && onCollapse(true),
       };
       // 如果 hideChildrenInMenu 删除掉无用的 children
       if (!this.hasChildren(item)) {
@@ -228,14 +228,14 @@ class MenuUtil {
       return menuItemRender(renderItemProps, defaultItem);
     }
     return defaultItem;
-  };
+  }
 
-  conversionPath = (path: string) => {
+  public conversionPath = (path: string) => {
     if (path && path.indexOf('http') === 0) {
       return path;
     }
     return `/${path || ''}`.replace(/\/+/g, '/');
-  };
+  }
 }
 
 /**
@@ -244,14 +244,14 @@ class MenuUtil {
  */
 const getOpenKeysProps = (
   openKeys: React.ReactText[] | false = [],
-  { layout, collapsed }: BaseMenuProps
+  { layout, collapsed }: BaseMenuProps,
 ): {
   openKeys?: undefined | string[];
 } => {
   let openKeysProps = {};
   if (openKeys && !collapsed && ['side', 'mix'].includes(layout || 'mix')) {
     openKeysProps = {
-      openKeys
+      openKeys,
     };
   }
   return openKeysProps;
@@ -262,7 +262,7 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
     theme,
     mode,
     location = {
-      pathname: '/'
+      pathname: '/',
     },
     className,
     handleOpenChange,
@@ -275,7 +275,7 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
     collapsed,
     selectedKeys: propsSelectedKeys,
     onSelect,
-    openKeys: propsOpenKeys
+    openKeys: propsOpenKeys,
   } = props;
   const openKeysRef = useRef<string[]>([]);
   // 用于减少 defaultOpenKeys 计算的组件
@@ -302,8 +302,8 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
     },
     {
       value: propsOpenKeys === false ? undefined : propsOpenKeys,
-      onChange: handleOpenChange as any
-    }
+      onChange: handleOpenChange as any,
+    },
   );
 
   const [selectedKeys, setSelectedKeys] = useMergedState<string[] | undefined>(
@@ -312,12 +312,12 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
       value: propsSelectedKeys,
       onChange: onSelect
         ? (keys) => {
-            if (onSelect && keys) {
-              onSelect(keys as any);
-            }
+          if (onSelect && keys) {
+            onSelect(keys as any);
           }
-        : undefined
-    }
+        }
+        : undefined,
+    },
   );
 
   useEffect(() => {
@@ -326,7 +326,7 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
     }
     const keys = getSelectedMenuKeys(
       location.pathname || '/',
-      postMenuDataRef.current || []
+      postMenuDataRef.current || [],
     );
     if (keys) {
       openKeysRef.current = keys;
@@ -339,7 +339,7 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
     // reset IconFont
     if (iconfontUrl) {
       IconFont = createFromIconfontCN({
-        scriptUrl: iconfontUrl
+        scriptUrl: iconfontUrl,
       });
     }
   }, [iconfontUrl]);
@@ -348,7 +348,7 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
     // if pathname can't match, use the nearest parent's key
     const keys = getSelectedMenuKeys(
       location.pathname || '/',
-      postMenuDataRef.current || []
+      postMenuDataRef.current || [],
     );
     const animationFrameId = requestAnimationFrame(() => {
       if (keys.join('-') !== (selectedKeys || []).join('-')) {
@@ -373,11 +373,11 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
   const openKeysProps = useMemo(() => getOpenKeysProps(openKeys, props), [
     openKeys && openKeys.join(','),
     props.layout,
-    props.collapsed
+    props.collapsed,
   ]);
 
   const cls = classNames(className, {
-    'top-nav-menu': mode === 'horizontal'
+    'top-nav-menu': mode === 'horizontal',
   });
 
   const [menuUtils] = useState(() => new MenuUtil(props));
@@ -392,7 +392,7 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
     if (splitMenus && openKeys) {
       const keys = getSelectedMenuKeys(
         location.pathname || '/',
-        menuData || []
+        menuData || [],
       );
       const [key] = keys;
       if (key) {
@@ -427,7 +427,7 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
   return (
     <Menu
       {...openKeysProps}
-      key='Menu'
+      key="Menu"
       mode={mode}
       defaultOpenKeys={defaultOpenKeysRef.current}
       theme={theme}
@@ -453,7 +453,7 @@ const BaseMenu: React.FC<BaseMenuProps> = (props) => {
 };
 
 BaseMenu.defaultProps = {
-  postMenuData: (data) => data || []
+  postMenuData: (data) => data || [],
 };
 
 export default BaseMenu;

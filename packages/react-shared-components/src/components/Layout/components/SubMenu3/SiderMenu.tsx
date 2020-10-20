@@ -139,8 +139,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
             flex: `0 0 ${collapsed ? 48 : siderWidth}px`,
             maxWidth: collapsed ? 48 : siderWidth,
             minWidth: collapsed ? 48 : siderWidth,
-            height: '100%',
-            background: '#001529',
             ...style,
           }}
           className={css(styleSheet.siderMenuStyles)}
@@ -258,10 +256,10 @@ const styleSheet: any = {
       marginBottom: '4px',
     },
     '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item a': {
-      //  color: ;
+      color: primaryColor ? primaryColor : '#1890ff',
     },
     '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item-selected a, .ant-pro-sider.ant-layout-sider-light .ant-menu-item a:hover': {
-      //  color: ;
+      color: primaryColor ? primaryColor : '#1890ff',
     },
     '& .ant-menu-item-selected a, .ant-menu-item-selected a:hover': {
       color: '#fff',
