@@ -13,7 +13,7 @@ const { Sider } = Layout;
 
 export const defaultRenderLogo = (logo: React.ReactNode): React.ReactNode => {
   if (typeof logo === 'string') {
-    return <img src={logo} alt='logo' />;
+    return <img src={logo} alt="logo" />;
   }
   if (typeof logo === 'function') {
     return logo();
@@ -23,12 +23,12 @@ export const defaultRenderLogo = (logo: React.ReactNode): React.ReactNode => {
 
 export const defaultRenderLogoAndTitle = (
   props: SiderMenuProps,
-  renderKey: string = 'menuHeaderRender'
+  renderKey: string = 'menuHeaderRender',
 ): React.ReactNode => {
   const {
     logo = 'https://gw.alipayobjects.com/zos/antfincdn/PmY%24TNNDBI/logo.svg',
     title,
-    layout
+    layout,
   } = props;
   const renderFunction = props[renderKey || ''];
   if (renderFunction === false) {
@@ -62,7 +62,7 @@ export interface SiderMenuProps
     (
       logo: React.ReactNode,
       title: React.ReactNode,
-      props?: SiderMenuProps
+      props?: SiderMenuProps,
     ) => React.ReactNode
   >;
   menuFooterRender?: WithFalse<(props?: SiderMenuProps) => React.ReactNode>;
@@ -102,7 +102,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     menuContentRender,
     prefixCls = 'ant-pro',
     onOpenChange,
-    headerHeight
+    headerHeight,
   } = props;
 
   const { css } = useFela(props);
@@ -112,7 +112,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
   const siderClassName = classNames(`${baseClassName}`, {
     [`${baseClassName}-fixed`]: fixSiderbar,
     [`${baseClassName}-layout-${layout}`]: layout && !isMobile,
-    [`${baseClassName}-light`]: theme === 'light'
+    [`${baseClassName}-light`]: theme === 'light',
   });
   const headerDom = defaultRenderLogoAndTitle(props);
 
@@ -120,14 +120,15 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
   const menuDom = menuContentRender !== false && flatMenuKeys && (
     <BaseMenu
       {...props}
-      mode='inline'
+      mode="inline"
       handleOpenChange={onOpenChange}
       style={{
-        width: '100%'
+        width: '100%',
       }}
       className={`${baseClassName}-menu`}
     />
   );
+
   return (
     <>
       {fixSiderbar && (
@@ -138,13 +139,13 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
             flex: `0 0 ${collapsed ? 48 : siderWidth}px`,
             maxWidth: collapsed ? 48 : siderWidth,
             minWidth: collapsed ? 48 : siderWidth,
-            ...style
+            ...style,
           }}
           className={css(styleSheet.siderMenuStyles)}
         />
       )}
       <Sider
-        collapsible
+        collapsible={true}
         trigger={null}
         collapsed={collapsed}
         breakpoint={breakpoint === false ? undefined : breakpoint}
@@ -157,20 +158,21 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
         }}
         collapsedWidth={65}
         style={{
-          overflow: 'hidden',
-          paddingTop: layout === 'mix' && !isMobile ? headerHeight : undefined,
-          ...style
-        }}
+                overflow: 'hidden',
+                paddingTop:
+                  layout === 'mix' && !isMobile ? headerHeight : undefined,
+                ...style,
+              }}
         width={siderWidth}
         theme={theme}
-        className={siderClassName}
+        className={`${siderClassName}`}
       >
         <div className={css(styleSheet.siderMenuStyles)}>
           {headerDom && (
             <div
               className={`${baseClassName}-logo`}
               onClick={layout !== 'mix' ? onMenuHeaderClick : undefined}
-              id='logo'
+              id="logo"
             >
               {headerDom}
             </div>
@@ -187,7 +189,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
             style={{
               flex: 1,
               overflowY: 'auto',
-              overflowX: 'hidden'
+              overflowX: 'hidden',
             }}
           >
             {menuContentRender ? menuContentRender(props, menuDom) : menuDom}
@@ -199,7 +201,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
               className={`${baseClassName}-link-menu`}
               selectedKeys={[]}
               openKeys={[]}
-              mode='inline'
+              mode="inline"
             >
               {(links || []).map((node, index) => (
                 // eslint-disable-next-line react/no-array-index-key
@@ -241,28 +243,31 @@ const styleSheet: any = {
     borderRight: '0',
     transition: 'background-color 0.3s',
     '& .ant-pro-sider.ant-menu-vertical .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-vertical-left .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-vertical-right .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-inline .ant-menu-item:not(:last-child)': {
-      marginBottom: '4px'
+      marginBottom: '4px',
     },
-    '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item a': {
-      color: primaryColor ? primaryColor : '#1890ff'
+    '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item a, .ant-menu-submenu-selected, .ant-menu-submenu-title:hover, .ant-menu-submenu-title i:hover ': {
+      color: primaryColor ? primaryColor : '#1890ff',
     },
-    '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item-selected a, .ant-pro-sider.ant-layout-sider-light .ant-menu-item a:hover': {
-      color: primaryColor ? primaryColor : '#1890ff'
+    '& .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before, .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after': {
+      background: `linear-gradient(to right, ${primaryColor ? primaryColor : '#1890ff'}, ${primaryColor ? primaryColor : '#1890ff'})`
     },
-    '& .ant-menu-item-selected a, .ant-menu-item-selected a:hover': {
-      color: '#fff'
+    '& .ant-pro-sider.ant-layout-sider-light, .ant-pro-sider.ant-layout-sider-light .ant-menu-item:not(.ant-menu-item-selected) a:hover, .ant-menu-item:hover': {
+      color: primaryColor ? primaryColor : '#1890ff',
     },
-    "& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected": {
-      background: primaryColor ? primaryColor : '#1890ff'
+    '& .ant-menu-item-selected a, .ant-menu-item-selected a:hover, .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected a:hover': {
+      color: '#fff',
+    },
+    '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': {
+      background: primaryColor ? primaryColor : '#1890ff',
     },
     '& .ant-menu-inline .ant-menu-item::after': {
-      borderRight: 'none'
+      borderRight: 'none',
     },
     '& .ant-pro-sider .ant-menu-inline-collapsed > .ant-menu-item .anticon + span, .ant-pro-sider .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .anticon + span, .ant-pro-sider .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title .anticon + span, .ant-pro-sider .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .anticon + span': {
-      display: 'none'
+      display: 'none',
     },
     '& .ant-pro-sider ul.ant-menu-sub li.ant-menu-item .ant-pro-menu-item, .ant-pro-sider ul.ant-menu-sub li.ant-menu-submenu .ant-pro-menu-item': {
-      paddingLeft: '8px'
+      paddingLeft: '8px',
     },
     '& .ant-pro-sider-logo': {
       position: 'relative',
@@ -270,19 +275,19 @@ const styleSheet: any = {
       alignItems: 'center',
       padding: '16px 16px',
       lineHeight: '32px',
-      cursor: 'pointer'
+      cursor: 'pointer',
     },
     '& .ant-pro-sider-logo > a': {
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
-      minHeight: '32px'
+      minHeight: '32px',
     },
     '& .ant-pro-sider-logo img': {
       display: 'inline-block',
       height: '32px',
       verticalAlign: 'middle',
-      transition: 'height 0.2s'
+      transition: 'height 0.2s',
     },
     '& .ant-pro-sider-logo h1': {
       display: 'inline-block',
@@ -294,64 +299,64 @@ const styleSheet: any = {
       lineHeight: '32px',
       verticalAlign: 'middle',
       animation: 'fade-in',
-      animationDuration: '0.2s'
+      animationDuration: '0.2s',
     },
     '& .ant-pro-sider-extra': {
       marginBottom: '16px',
-      padding: '0 16px'
+      padding: '0 16px',
     },
     '& .ant-pro-sider-extra-no-logo': {
-      marginTop: '16px'
+      marginTop: '16px',
     },
     '& .ant-pro-sider-menu': {
       position: 'relative',
       zIndex: '10',
       minHeight: '100%',
-      boxShadow: '2px 0 6px rgba(0,21,41,0.35)'
+      boxShadow: '2px 0 6px rgba(0,21,41,0.35)',
     },
     '& .ant-pro-sider .ant-layout-sider-children': {
       display: 'flex',
       flexDirection: 'column',
-      height: '100%'
+      height: '100%',
     },
     '& .ant-pro-sider .ant-layout-sider-children ::-webkit-scrollbar': {
       width: '6px',
-      height: '6px'
+      height: '6px',
     },
     '& .ant-pro-sider .ant-layout-sider-children ::-webkit-scrollbar-track': {
       background: 'rgba(255,255,255,0.15)',
       borderRadius: '3px',
-      webkitBoxShadow: 'inset 0 0 5px rgba(37,37,37,0.05)'
+      webkitBoxShadow: 'inset 0 0 5px rgba(37,37,37,0.05)',
     },
     '& .ant-pro-sider .ant-layout-sider-children ::-webkit-scrollbar-thumb': {
       background: 'rgba(255,255,255,0.2)',
       borderRadius: '3px',
-      webkitBoxShadow: 'inset 0 0 5px rgba(255,255,255,0.05)'
+      webkitBoxShadow: 'inset 0 0 5px rgba(255,255,255,0.05)',
     },
     '& .ant-pro-sider.ant-layout-sider-collapsed .ant-menu-inline-collapsed': {
-      width: '48px'
+      width: '48px',
     },
     '& .ant-pro-sider.ant-layout-sider-collapsed .ant-pro-sider-logo': {
-      padding: '16px 8px'
+      padding: '16px 8px',
     },
     '& .ant-pro-sider .ant-menu-inline-collapsed > .ant-menu-item .sider-menu-item-img + span, .ant-pro-sider .-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item .sider-menu-item-img + span, .ant-pro-sider .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title .sider-menu-item-img + span': {
       display: 'inline-block',
       maxWidth: 0,
-      opacity: 0
+      opacity: 0,
     },
     '& .ant-pro-sider .ant-menu-inline-collapsed .ant-menu-item': {
       width: '48px',
-      padding: '0 16px !important'
+      padding: '0 16px !important',
     },
     '& .ant-pro-sider .ant-menu-inline-collapsed .ant-pro-menu-item-title': {
-      display: 'none'
+      display: 'none',
     },
     '& .ant-pro-sider .ant-menu-inline-collapsed .ant-menu-submenu-title': {
       width: '48px',
-      padding: '0 16px !important'
+      padding: '0 16px !important',
     },
     '& .ant-pro-sider .ant-menu-item .anticon, .ant-pro-sider .ant-menu-submenu-title .anticon': {
-      transition: 'none'
+      transition: 'none',
     },
     '& .ant-pro-sider-fixed': {
       position: 'fixed',
@@ -361,94 +366,94 @@ const styleSheet: any = {
       height: '100%',
       overflow: 'auto',
       overflowx: 'hidden',
-      boxShadow: '2px 0 8px 0 rgba(29,35,41,0.05)'
+      boxShadow: '2px 0 8px 0 rgba(29,35,41,0.05)',
     },
     '& .ant-pro-sider-fixed > .ant-menu-root :not(.ant-pro-sider-link-menu)': {
       height: 'calc(100vh - 64px)',
-      overflowY: 'auto'
+      overflowY: 'auto',
     },
     '& .ant-pro-sider .ant-menu-inline .ant-menu-item, .ant-pro-sider .ant-menu-inline .ant-menu-submenu-title': {
-      width: '100%'
+      width: '100%',
     },
     '& .ant-pro-sider-light': {
       //  backgroundColor: ;
-      boxShadow: '2px 0 8px 0 rgba(29,35,41,0.05)'
+      boxShadow: '2px 0 8px 0 rgba(29,35,41,0.05)',
     },
     '& .ant-pro-sider-light .ant-layout-sider-children ::-webkit-scrollbar-track': {
       background: 'rgba(0,0,0,0.06)',
       borderRadius: '3px',
-      webkitBoxShadow: 'inset 0 0 5px rgba(0,21,41,0.05)'
+      webkitBoxShadow: 'inset 0 0 5px rgba(0,21,41,0.05)',
     },
     '& .ant-pro-sider-light .ant-layout-sider-children ::-webkit-scrollbar-thumb': {
       background: 'rgba(0,0,0,0.12)',
       borderRadius: '3px',
-      webkitBoxShadow: 'inset 0 0 5px rgba(0,21,41,0.05)'
+      webkitBoxShadow: 'inset 0 0 5px rgba(0,21,41,0.05)',
     },
     '& .ant-pro-sider-light .ant-pro-sider-logo h1': {
-      color: theme === 'light' ? primaryColor : '#fff'
+      color: theme === 'light' ? primaryColor : '#fff',
     },
     '& .ant-pro-sider-light .ant-menu-light': {
-      borderRightColor: 'transparent'
+      borderRightColor: 'transparent',
     },
     '& .ant-pro-sider-light .ant-pro-sider-collapsed-button': {
       //  borderTop: ;
     },
     '& .ant-pro-sider-icon': {
       width: '14px',
-      verticalAlign: 'baseline'
+      verticalAlign: 'baseline',
     },
     '& .ant-pro-sider-links': {
-      width: '100%'
+      width: '100%',
     },
     '&.ant-pro-sider-links ul.-menu-root': {
-      height: 'auto'
+      height: 'auto',
     },
     '& .ant-pro-sider-collapsed-button': {
-      borderTop: 'rgba(0,0,0,0.25)'
+      borderTop: 'rgba(0,0,0,0.25)',
     },
     '& .ant-pro-sider-collapsed-button .anticon': {
-      fontSize: '16px'
+      fontSize: '16px',
     },
     '& .ant-pro-sider .top-nav-menu li.ant-menu-item': {
       height: '100%',
-      lineHeight: 1
+      lineHeight: 1,
     },
     '& .ant-pro-sider .drawer .drawer-content': {
       //  background: ;
     },
     '& .ant-pro-sider .ant-menu-item .sider-menu-item-img + span, .ant-pro-sider .ant-menu-submenu-title .sider-menu-item-img + span': {
       opacity: 1,
-      transition: 'opacity 0.3s , width 0.3s'
+      transition: 'opacity 0.3s , width 0.3s',
     },
     '& .ant-menu-inline-collapsed > .ant-menu-item, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-item, .ant-menu-inline-collapsed > .ant-menu-item-group > .ant-menu-item-group-list > .ant-menu-submenu > .ant-menu-submenu-title, .ant-menu-inline-collapsed > .ant-menu-submenu > .ant-menu-submenu-title': {
-      padding: '0 24px'
+      padding: '0 24px',
     },
     '& .ant-pro-sider-menu.mobile-base-menu .ant-menu-submenu-title': {
       height: 'auto',
       lineHeight: '25px',
-      whiteSpace: 'normal'
+      whiteSpace: 'normal',
     },
     '& .ant-pro-sider-menu.mobile-base-menu .ant-menu-submenu-title .ant-pro-menu-item': {
-      display: 'flex'
+      display: 'flex',
     },
     '& .ant-pro-sider-menu.mobile-base-menu .ant-menu-submenu-title .ant-pro-menu-item .anticon': {
-      paddingTop: '5px'
+      paddingTop: '5px',
     },
     '@keyframes fade-in': {
       '0%': {
         display: 'none',
-        opacity: 0
+        opacity: 0,
       },
       '99%': {
         display: 'none',
-        opacity: 0
+        opacity: 0,
       },
       '100%': {
         display: 'block',
-        opacity: 1
-      }
-    }
-  })
+        opacity: 1,
+      },
+    },
+  }),
 };
 const styles: any = {
   btnNavigation: (props) => ({
@@ -457,6 +462,6 @@ const styles: any = {
     bottom: '5%',
     right: '5%',
     display: 'flex',
-    position: 'absolute'
-  })
+    position: 'absolute',
+  }),
 };

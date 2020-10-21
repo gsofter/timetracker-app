@@ -18,19 +18,19 @@ import { SiderMenuProps } from '../components/SubMenu3/SiderMenu';
 import Header, { HeaderViewProps } from '../components/Header';
 import defaultSettings, {
   PureSettings,
-  ProSettings
+  ProSettings,
 } from '../components/defaultSettings';
 import {
   MenuDataItem,
   MessageDescriptor,
   Route,
   RouterTypes,
-  WithFalse
+  WithFalse,
 } from '../components/typings';
 import { BaseMenuProps } from '../components/SubMenu3/BaseMenu';
 import {
   getPageTitleInfo,
-  GetPageTitleProps
+  GetPageTitleProps,
 } from '../components/getPageTitle';
 import getMenuData from '../components/utils/getMenuData';
 import getLocales, { LocaleType } from '../components/locales';
@@ -40,7 +40,7 @@ import useDeepCompareEffect from '../components/hooks/useDeepCompareEffect';
 import { isBrowser } from '../components/utils/utils';
 import SettingDrawer, {
   SettingDrawerProps,
-  SettingDrawerState
+  SettingDrawerState,
 } from '../components/SettingDrawer';
 import GridContent from '../components/GridContent/index';
 // @ts-ignore
@@ -71,7 +71,7 @@ export type BasicLayoutProps = Partial<RouterTypes<Route>> &
     >;
 
     breadcrumbRender?: (
-      routers: AntdBreadcrumbProps['routes']
+      routers: AntdBreadcrumbProps['routes'],
     ) => AntdBreadcrumbProps['routes'];
     menuItemRender?: BaseMenuProps['menuItemRender'];
     pageTitleRender?: WithFalse<
@@ -85,7 +85,7 @@ export type BasicLayoutProps = Partial<RouterTypes<Route>> &
           id: string;
           // 页面标题不带默认的 title
           pageName: string;
-        }
+        },
       ) => string
     >;
     menuDataRender?: (menuData: MenuDataItem[]) => MenuDataItem[];
@@ -110,7 +110,7 @@ export type BasicLayoutProps = Partial<RouterTypes<Route>> &
 const headerRender = (
   props: BasicLayoutProps & {
     hasSiderMenu: boolean;
-  }
+  },
 ): React.ReactNode => {
   if (props.headerRender === false || props.pure) {
     return null;
@@ -137,7 +137,7 @@ const renderSiderMenu = (props: BasicLayoutProps): React.ReactNode => {
     return null;
   }
   if (layout === 'top' && !isMobile) {
-    return <SiderMenu {...props} hide />;
+    return <SiderMenu {...props} hide={true} />;
   }
   if (menuRender) {
     return menuRender(props, <SiderMenu {...props} />);
@@ -148,7 +148,7 @@ const renderSiderMenu = (props: BasicLayoutProps): React.ReactNode => {
 
 const defaultPageTitleRender = (
   pageProps: GetPageTitleProps,
-  props: BasicLayoutProps
+  props: BasicLayoutProps,
 ): {
   title: string;
   id: string;
@@ -160,24 +160,24 @@ const defaultPageTitleRender = (
     return {
       title: 'title',
       id: '',
-      pageName: ''
+      pageName: '',
     };
   }
   if (pageTitleRender) {
     const title = pageTitleRender(
       pageProps,
       pageTitleInfo.title,
-      pageTitleInfo
+      pageTitleInfo,
     );
     if (typeof title === 'string') {
       return {
         ...pageTitleInfo,
-        title
+        title,
       };
     }
     warning(
       typeof title === 'string',
-      'pro-layout: renderPageTitle return value should be a string'
+      'pro-layout: renderPageTitle return value should be a string',
     );
   }
   return pageTitleInfo;
@@ -190,7 +190,7 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 const getPaddingLeft = (
   hasLeftPadding: boolean,
   collapsed: boolean | undefined,
-  siderWidth: number
+  siderWidth: number,
 ): number | undefined => {
   if (hasLeftPadding) {
     return collapsed ? 65 : siderWidth;
@@ -252,7 +252,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
       return props.formatMessage({
         id,
         defaultMessage,
-        ...restParams
+        ...restParams,
       });
     }
     const locales = getLocales();
@@ -290,7 +290,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
       routes,
       menu,
       formatMessage,
-      menuDataRender
+      menuDataRender,
     );
   }
 
@@ -328,7 +328,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
 
   const [collapsed, onCollapse] = useMergedState<boolean>(false, {
     value: props.collapsed,
-    onChange: propsOnCollapse
+    onChange: propsOnCollapse,
   });
 
   // Splicing parameters, adding menuData and formatMessage in props
@@ -338,9 +338,9 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
       ...props,
       formatMessage,
       breadcrumb,
-      layout: compatibleLayout(props.layout) as 'side'
+      layout: compatibleLayout(props.layout) as 'side',
     },
-    ['className', 'style']
+    ['className', 'style'],
   );
 
   // gen page title
@@ -348,9 +348,9 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
     {
       pathname: location.pathname,
       ...defaultProps,
-      breadcrumbMap
+      breadcrumbMap,
     },
-    props
+    props,
   );
 
   // render sider dom
@@ -362,7 +362,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
     theme: (navTheme || 'dark').toLocaleLowerCase().includes('dark')
       ? 'dark'
       : 'light',
-    collapsed
+    collapsed,
   });
 
   // render header dom
@@ -375,7 +375,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
     onCollapse,
     theme: (navTheme || 'dark').toLocaleLowerCase().includes('dark')
       ? 'dark'
-      : 'light'
+      : 'light',
   });
 
   // render footer dom
@@ -387,7 +387,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
   // });
 
   const { isChildrenLayout: contextIsChildrenLayout } = useContext(
-    RouteContext
+    RouteContext,
   );
 
   // 如果 props 中定义，以 props 为准
@@ -407,8 +407,8 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
       [`${baseClassName}-top-menu`]: propsLayout === 'top',
       [`${baseClassName}-is-children`]: isChildrenLayout,
       [`${baseClassName}-fix-siderbar`]: fixSiderbar,
-      [`${baseClassName}-mobile`]: isMobile
-    }
+      [`${baseClassName}-mobile`]: isMobile,
+    },
   );
 
   /**
@@ -417,12 +417,12 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
   const leftSiderWidth = getPaddingLeft(
     !!hasLeftPadding,
     collapsed,
-    siderWidth
+    siderWidth,
   );
 
   // siderMenuDom 为空的时候，不需要 padding
   const genLayoutStyle: CSSProperties = {
-    position: 'relative'
+    position: 'relative',
   };
 
   // if is some layout children, don't need min height
@@ -432,7 +432,7 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
 
   const contentClassName = classNames(`${baseClassName}-content`, {
     [`${baseClassName}-has-header`]: headerDom,
-    [`${baseClassName}-content-disable-margin`]: disableContentMargin
+    [`${baseClassName}-content-disable-margin`]: disableContentMargin,
   });
 
   /**
@@ -451,12 +451,12 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
   useEffect(() => {
     setBreadcrumbProps({
       ...defaultProps,
-      breadcrumbMap
+      breadcrumbMap,
     });
   }, [match]);
 
   return (
-    <div id='test-pro-layout'>
+    <div id="test-pro-layout">
       <MenuCounter.Provider>
         <RouteContext.Provider
           value={{
@@ -473,14 +473,14 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
             // hasFooter: !!footerDom,
             // hasFooterToolbar,
             // setHasFooterToolbar,
-            pageTitleInfo
+            pageTitleInfo,
           }}
         >
           <div className={className}>
             <Helmet>
-              <link rel='icon' type='image/png' href={favicon} sizes='16x16' />
+              <link rel="icon" type="image/png" href={favicon} sizes="16x16" />
             </Helmet>
-            <Layout className={css(styleSheet.layoutCss)} hasSider>
+            <Layout className={css(styleSheet.layoutCss)} hasSider={true}>
               {siderMenuDom}
               <Layout className={css(styleSheet.genLayoutStyle)}>
                 {headerDom}
@@ -491,10 +491,10 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
                   style={contentStyle}
                 >
                   <div className={classNameLayout}>
-                    <div className='ant-pro-page-container-warp'>
+                    <div className="ant-pro-page-container-warp">
                       <Breadcrumb>
                         <Breadcrumb.Item>
-                          <a href='/'>Home</a>
+                          <a href="/">Home</a>
                         </Breadcrumb.Item>
                         {pageTitleInfo.id.split('.')[1] !== 'Home' && (
                           <>
@@ -510,19 +510,19 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
                           </>
                         )}
                       </Breadcrumb>
-                      <div className='ant-page-header-heading'>
-                        <div className='ant-page-header-heading-left'>
-                          <span className='ant-page-header-heading-title'>
+                      <div className="ant-page-header-heading">
+                        <div className="ant-page-header-heading-left">
+                          <span className="ant-page-header-heading-title">
                             {pageTitleInfo.pageName}
                           </span>
                         </div>
                       </div>
                     </div>
                     <GridContent>
-                      <div className='ant-pro-page-container-children-content'>
+                      <div className="ant-pro-page-container-children-content">
                         {children ? (
-                          <div className='ant-card'>
-                            <div className='ant-card-spacing'>{children}</div>
+                          <div className="ant-card">
+                            <div className="ant-card-spacing">{children}</div>
                           </div>
                         ) : null}
                       </div>
@@ -549,14 +549,14 @@ MainLayout.defaultProps = {
   ...defaultSettings,
   prefixCls: 'ant-pro',
   siderWidth: 208,
-  location: isBrowser() ? window.location : undefined
+  location: isBrowser() ? window.location : undefined,
 };
 const styleSheet: any = {
   minHeight: (props) => ({
-    minHeight: '100vh'
+    minHeight: '100vh',
   }),
   genLayoutStyle: (props) => ({
-    position: 'relative'
+    position: 'relative',
   }),
   layoutCss: ({ theme, primaryColor, layout }) => ({
     display: 'flex',
@@ -565,49 +565,49 @@ const styleSheet: any = {
     minHeight: '100vh',
     '& .ant-pro-fixed-header': {
       position: layout === 'top' || 'mix' ? 'fixed' : 'relative',
-      top: 0
+      top: 0,
     },
     '& .ant-pro-sider-fixed': {
       position: layout === 'top' || 'mix' ? 'fixed' : 'relative',
-      height: '100vh'
+      height: '100vh',
     },
     '& .ant-pro-basicLayout .ant-layout-header .ant-pro-fixed-header': {
       position: 'fixed',
-      top: 0
+      top: 0,
     },
     '& .ant-pro-basicLayout-content': {
       position: 'relative',
-      margin: '24px'
+      margin: '24px',
     },
     '& .ant-pro-basicLayout-content .ant-pro-page-container': {
-      margin: '-24px -24px 0'
+      margin: '-24px -24px 0',
     },
     '& .ant-pro-basicLayout-content-disable-margin': {
-      margin: 0
+      margin: 0,
     },
     '& .ant-pro-basicLayout-content-disable-margin .ant-pro-page-container': {
-      margin: 0
+      margin: 0,
     },
     '& .ant-pro-basicLayout-content > .ant-layout': {
-      maxHeight: '100%'
+      maxHeight: '100%',
     },
     '& .ant-pro-basicLayout .ant-pro-basicLayout-is-children .ant-pro-basicLayout-fix-siderbar': {
       height: '100vh',
       overflow: 'hidden',
-      transform: 'rotate(0)'
+      transform: 'rotate(0)',
     },
     '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .tech-page-container': {
-      height: 'calc(52vh)'
+      height: 'calc(52vh)',
     },
     '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children': {
-      minHeight: 'calc(52vh)'
+      minHeight: 'calc(52vh)',
     },
     '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar': {
-      height: 'calc(52vh)'
+      height: 'calc(52vh)',
     },
     '& .ant-pro-page-container-warp': {
       backgroundColor: '#fff',
-      padding: '16px'
+      padding: '16px',
     },
     '& .ant-page-header': {
       boxSizing: 'border-box',
@@ -620,58 +620,59 @@ const styleSheet: any = {
       fontFeatureSettings: 'tnum , tnum',
       position: 'relative',
       padding: '18px 24px',
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
     },
     '& .ant-page-header.has-breadcrumb': {
-      paddingTop: '12px'
+      paddingTop: '12px',
     },
     '& .ant-pro-page-container-children-content': {
-      margin: '16px 16px 0'
+      margin: '16px 16px 0',
     },
     '&.ant-pro-page-container-warp': {
-      backgroundColor: '#fff'
+      backgroundColor: '#fff',
     },
     '& .ant-pro-page-container-warp .ant-tabs-nav': {
-      margin: 0
+      margin: 0,
     },
     '& .ant-pro-page-container-ghost .ant-pro-page-container-warp': {
       // backgroundColor: 'transparent'
     },
     '& .ant-pro-page-container-main .ant-pro-page-container-detail': {
-      display: 'flex'
+      display: 'flex',
     },
     '& .ant-pro-page-container-main .ant-pro-page-container-row': {
       display: 'flex',
-      width: '100%'
+      width: '100%',
     },
     '& .ant-pro-page-container-main .ant-pro-page-container-title-content': {
-      marginBottom: '16px'
+      marginBottom: '16px',
     },
     '& .ant-pro-page-container-main .ant-pro-page-container-title, .ant-pro-page-container-main .ant-pro-page-container-content': {
-      flex: 'auto'
+      flex: 'auto',
     },
     '& .ant-pro-page-container-main .ant-pro-page-container-extraContent, .ant-pro-page-container-main .-pro-page-container-main': {
-      flex: '0 1 auto'
+      flex: '0 1 auto',
     },
     '& .ant-pro-page-container-main .ant-pro-page-container-main': {
-      width: '100%'
+      width: '100%',
     },
     '& .ant-pro-page-container-main .ant-pro-page-container-title': {
-      marginBottom: '16px'
+      marginBottom: '16px',
     },
     '& .ant-pro-page-container-main .ant-pro-page-container-logo': {
-      marginBottom: '16px'
+      marginBottom: '16px',
     },
     '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
       minWidth: '242px',
       marginLeft: '88px',
-      textAlign: 'right'
+      textAlign: 'right',
     },
     '& .ant-card-spacing': {
-      padding: '16px'
+      padding: '16px',
     },
     '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': {
       backgroundColor: primaryColor
-    }
+    },
+    
   })
 };

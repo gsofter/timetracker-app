@@ -41,5 +41,5 @@ export default (
   if (locales[gLocale]) {
     return locales[gLocale];
   }
-  return locales['zh-CN'];
+  return locales['en-US'];
 };

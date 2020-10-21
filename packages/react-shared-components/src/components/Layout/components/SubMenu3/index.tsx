@@ -63,7 +63,7 @@ const SiderMenuWrapper: React.FC<SiderMenuProps> = (props) => {
         ...style,
       }}
       width={siderWidth}
-      bodyStyle={{ height: "100vh", padding: 0 }}
+      bodyStyle={{ height: '100vh', padding: 0, display: 'flex', flexDirection: 'row' }}
     >
       <SiderMenu
         {...omitProps}
