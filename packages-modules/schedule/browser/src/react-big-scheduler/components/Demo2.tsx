@@ -3,7 +3,7 @@ import Scheduler, {
   SchedulerData,
   ViewTypes,
   DATE_FORMAT,
-  DemoData,
+  DemoData
 } from "@cdmbase/react-big-scheduler";
 import "@cdmbase/react-big-scheduler/lib/css/style.css";
 import moment from "moment";
@@ -12,7 +12,7 @@ import { HTML5Backend } from "react-dnd-html5-backend";
 
 export const Demo2 = ({ props }) => {
   let schedulerData = new SchedulerData(
-    "2017-12-18",
+    2027-12-18,
     ViewTypes.Week,
     false,
     false,
@@ -45,31 +45,28 @@ export const Demo2 = ({ props }) => {
       ],
     }
   );
-  schedulerData.localeMoment.locale("en");
 
-  console.log(DemoData,"Demo data")
-
+  console.log(DemoData,"demo")
   const [viewModel, setViewModel] = React.useState(schedulerData);
   React.useEffect(() => {
-    viewModel.setLocaleMoment(moment);
     viewModel.setResources(DemoData.resources);
-    viewModel.setEvents(DemoData.eventsForCustomEventStyle);
+    viewModel.setEvents(DemoData.events);
   }, []);
 
   const prevClick = (schedulerData) => {
     schedulerData.prev();
-    schedulerData.setEvents(DemoData.eventsForCustomEventStyle);
+    schedulerData.setEvents(DemoData.events);
 
     setViewModel(schedulerData);
   };
   const nextClick = (schedulerData) => {
     schedulerData.next();
-    schedulerData.setEvents(DemoData.eventsForCustomEventStyle);
+    schedulerData.setEvents(DemoData.events);
     setViewModel(schedulerData);
   };
   const onSelectDate = (schedulerData, date) => {
     schedulerData.setDate(date);
-    schedulerData.setEvents(DemoData.eventsForCustomEventStyle);
+    schedulerData.setEvents(DemoData.events);
     setViewModel(schedulerData);
   };
   const onViewChange = (schedulerData, view) => {
@@ -78,7 +75,7 @@ export const Demo2 = ({ props }) => {
       view.showAgenda,
       view.isEventPerspective
     );
-    schedulerData.setEvents(DemoData.eventsForCustomEventStyle);
+    schedulerData.setEvents(DemoData.events);
     setViewModel(schedulerData);
   };
   const eventClicked = (schedulerData, event) => {
@@ -110,38 +107,27 @@ export const Demo2 = ({ props }) => {
     setViewModel(schedulerData);
   };
 
-  const newEvent = (
-    schedulerData,
-    slotId,
-    slotName,
-    start,
-    end,
-    type,
-    item
-  ) => {
-    if (
-      confirm(
-        `Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`
-      )
-    ) {
-      let newFreshId = 0;
-      schedulerData.events.forEach((item) => {
-        if (item.id >= newFreshId) newFreshId = item.id + 1;
-      });
+  const newEvent = (schedulerData, slotId, slotName, start, end, type, item) => {
+    if(confirm(`Do you want to create a new event? {slotId: ${slotId}, slotName: ${slotName}, start: ${start}, end: ${end}, type: ${type}, item: ${item}}`)){
 
-      let newEvent = {
-        id: newFreshId,
-        title: "New event you just created",
-        start: start,
-        end: end,
-        resourceId: slotId,
-        bgColor: "purple",
-      };
-      schedulerData.addEvent(newEvent);
+        let newFreshId = 0;
+        schedulerData.events.forEach((item) => {
+            if(item.id >= newFreshId)
+                newFreshId = item.id + 1;
+        });
 
-      setViewModel(schedulerData);
+        let newEvent = {
+            id: newFreshId,
+            title: 'New event you just created',
+            start: start,
+            end: end,
+            resourceId: slotId,
+            bgColor: 'purple'
+        }
+        schedulerData.addEvent(newEvent);
+        setViewModel(schedulerData);
     }
-  };
+}
 
   const updateEventEnd = (schedulerData, event, newEnd) => {
     if (
@@ -197,13 +183,13 @@ export const Demo2 = ({ props }) => {
       backgroundColor =
         event.type == 1 ? "#80C5F6" : event.type == 3 ? "#FA9E95" : "#D9D9D9";
     }
-    let divStyle = {
+    let divStyle: any = {
       borderLeft: borderWidth + "px solid " + borderColor,
       backgroundColor: backgroundColor,
       height: mustBeHeight,
     };
     if (!!agendaMaxEventWidth)
-      // divStyle = {...divStyle, maxWidth: agendaMaxEventWidth};
+      divStyle = {...divStyle , maxWidth: agendaMaxEventWidth};
 
       return (
         <div key={event.id} className={mustAddCssClass} style={divStyle}>
