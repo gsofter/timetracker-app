@@ -74,14 +74,10 @@
     "@admin-layout/react-shared-components": "file:packages/react-shared-components",
     "@admin-layout/schedule-module-browser": "file:packages-modules/schedule/browser",
     "@admin-layout/schedule-module-server": "file:packages-modules/schedule/server",
-    "@cdmbase/react-big-scheduler": "^0.2.7",
     "admin-layout-backend-server": "file:servers/backend-server",
     "admin-layout-frontend-server": "file:servers/frontend-server",
     "admin-layout-moleculer-server": "file:servers/moleculer-server",
-    "dataloader": "^2.0.0",
-    "moment": "^2.29.1",
-    "react-dnd": "^11.1.3",
-    "react-dnd-html5-backend": "^11.1.3"
+    "dataloader": "^2.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",
