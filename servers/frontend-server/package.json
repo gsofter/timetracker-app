@@ -60,6 +60,7 @@
     "@admin-layout/core": "file:../../packages/admin-core",
     "@admin-layout/counter-module-browser": "file:../../packages-modules/counter/browser",
     "@admin-layout/react-shared-components": "file:../../packages/react-shared-components",
+    "@admin-layout/schedule-module-browser": "file:../../packages-modules/schedule/browser",
     "@ant-design/compatible": "^1.0.5",
     "@ant-design/icons": "^4.2.2",
     "antd": "^4.5.2",
