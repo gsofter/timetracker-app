@@ -243,13 +243,16 @@ const styleSheet: any = {
     '& .ant-pro-sider.ant-menu-vertical .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-vertical-left .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-vertical-right .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-inline .ant-menu-item:not(:last-child)': {
       marginBottom: '4px',
     },
-    '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item a': {
+    '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item a, .ant-menu-submenu-selected, .ant-menu-submenu-title:hover, .ant-menu-submenu-title i:hover ': {
       color: primaryColor ? primaryColor : '#1890ff',
     },
-    '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item-selected a, .ant-pro-sider.ant-layout-sider-light .ant-menu-item a:hover': {
+    '& .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before, .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after': {
+      background: `linear-gradient(to right, ${primaryColor ? primaryColor : '#1890ff'}, ${primaryColor ? primaryColor : '#1890ff'})`
+    },
+    '& .ant-pro-sider.ant-layout-sider-light, .ant-pro-sider.ant-layout-sider-light .ant-menu-item:not(.ant-menu-item-selected) a:hover, .ant-menu-item:hover': {
       color: primaryColor ? primaryColor : '#1890ff',
     },
-    '& .ant-menu-item-selected a, .ant-menu-item-selected a:hover': {
+    '& .ant-menu-item-selected a, .ant-menu-item-selected a:hover, .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected a:hover': {
       color: '#fff',
     },
     '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': {
