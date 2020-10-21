@@ -128,6 +128,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
       className={`${baseClassName}-menu`}
     />
   );
+
   return (
     <>
       {fixSiderbar && (
@@ -157,13 +158,14 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
         }}
         collapsedWidth={65}
         style={{
-          overflow: 'hidden',
-          paddingTop: layout === 'mix' && !isMobile ? headerHeight : undefined,
-          ...style,
-        }}
+                overflow: 'hidden',
+                paddingTop:
+                  layout === 'mix' && !isMobile ? headerHeight : undefined,
+                ...style,
+              }}
         width={siderWidth}
         theme={theme}
-        className={siderClassName}
+        className={`${siderClassName}`}
       >
         <div className={css(styleSheet.siderMenuStyles)}>
           {headerDom && (

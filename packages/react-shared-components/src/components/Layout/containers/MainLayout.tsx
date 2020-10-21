@@ -671,7 +671,8 @@ const styleSheet: any = {
       padding: '16px',
     },
     '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': {
-      backgroundColor: primaryColor,
+      backgroundColor: primaryColor
     },
-  }),
+    
+  })
 };
