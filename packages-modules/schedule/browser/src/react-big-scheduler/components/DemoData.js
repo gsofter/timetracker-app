@@ -1,4 +1,4 @@
-const DemoData = {
+export const DemoData = {
     resources: [
         {
             id: 'r0',
@@ -376,5 +376,3 @@ const DemoData = {
         },
     ],
 }
-
-export default DemoData
