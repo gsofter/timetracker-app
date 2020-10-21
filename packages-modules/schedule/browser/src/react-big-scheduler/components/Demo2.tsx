@@ -47,6 +47,8 @@ export const Demo2 = ({ props }) => {
   );
   schedulerData.localeMoment.locale("en");
 
+  console.log(DemoData,"Demo data")
+
   const [viewModel, setViewModel] = React.useState(schedulerData);
   React.useEffect(() => {
     viewModel.setLocaleMoment(moment);
@@ -78,7 +80,6 @@ export const Demo2 = ({ props }) => {
     );
     schedulerData.setEvents(DemoData.eventsForCustomEventStyle);
     setViewModel(schedulerData);
-    console.log(schedulerData, view);
   };
   const eventClicked = (schedulerData, event) => {
     alert(
