@@ -11,7 +11,7 @@ export const schedulerPage: any[] = [
         exact: false,
         icon: <ScheduleOutlined />,
         key: 'scheduler',
-        component: Demo2,
+        component: Home,
         tab: 'React Big Scheduler',
         position: IMenuPosition.MIDDLE,
         name: 'React Big Scheduler',
