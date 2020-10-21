@@ -1,6 +1,7 @@
 var nodeExternals = require('webpack-node-externals');
 var webpack = require('webpack');
 var path = require('path');
+const ExtractTextPlugin = require("extract-text-webpack-plugin");
 
 var webpack_opts = {
   mode: 'development',
@@ -17,6 +18,7 @@ var webpack_opts = {
     extensions: ['.ts', '.tsx', '.graphql', '.graphqls', '.gql']
   },
   plugins: [
+    new ExtractTextPlugin("styles.css"),
     new webpack.LoaderOptionsPlugin({
       options: {
         test: /\.tsx?$/,
@@ -51,6 +53,26 @@ var webpack_opts = {
       test: /\.graphql?/,
       exclude: /node_modules/,
       use: 'raw-loader',
+    },
+    {
+      test: /\.css$/,
+      use: ExtractTextPlugin.extract({
+        fallback: "style-loader",
+        use: [
+          { loader: "css-loader", options: { importLoaders: 1 } },
+          {
+            loader: "postcss-loader",
+            options: {
+              plugins: () => [
+                require("autoprefixer")({
+                  browsers: ["> 1%", "last 2 versions"]
+                })
+              ],
+              config: { path: "./src/postcss.config.js" }
+            }
+          }
+        ]
+      })
     }
     ]
   },
