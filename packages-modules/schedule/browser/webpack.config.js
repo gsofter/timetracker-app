@@ -15,7 +15,7 @@ var webpack_opts = {
     libraryTarget: "commonjs2",
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.graphql', '.graphqls', '.gql']
+    extensions: ['.ts', '.tsx', '.graphql', '.graphqls', '.gql', '.css']
   },
   plugins: [
     new ExtractTextPlugin("styles.css"),

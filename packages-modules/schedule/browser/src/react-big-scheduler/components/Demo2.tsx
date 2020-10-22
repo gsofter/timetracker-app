@@ -5,7 +5,7 @@ import Scheduler, {
   DATE_FORMAT,
   DemoData
 } from "@cdmbase/react-big-scheduler";
-import "@cdmbase/react-big-scheduler/lib/css/style.css";
+// import "@cdmbase/react-big-scheduler/lib/css/style.css";
 import moment from "moment";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
