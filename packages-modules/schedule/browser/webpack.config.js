@@ -77,7 +77,9 @@ var webpack_opts = {
     ]
   },
   externals: [
-    nodeExternals({ modulesDir: "../../../node_modules" }),
+    nodeExternals({ 
+      whitelist: ['@cdmbase/react-big-scheduler/*', 'antd/lib/**/*.css'],
+      modulesDir: "../../../node_modules" }),
     nodeExternals()
   ]
 };
