@@ -2,6 +2,6 @@ import * as React from 'react';
 
 export const Account = () => (
     <div>
-        <h1>Personal Info</h1>
+        <h1>Profile</h1>
     </div>
 );
