@@ -1,0 +1,9 @@
+
+type Context {
+    orgName: String
+}
+
+extend type Query {
+    getContextProperty(keys: [String]): AnyObject
+}
+
