@@ -1,0 +1,4 @@
+
+fragment OrgNameInContext on Context {
+    orgName
+}
