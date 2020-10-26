@@ -5,5 +5,6 @@ import { IClientCacheTypeNames } from '@admin-layout/core';
 export const defaults = {
     Context: {
         __typename: IClientCacheTypeNames.Context,
+        orgName: 'sample'
     },
 };
