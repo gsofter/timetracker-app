@@ -4,7 +4,7 @@ import Scheduler, {
   ViewTypes,
   DATE_FORMAT,
   DemoData,
-} from "@cdmbase/react-big-scheduler";
+} from "@admin-layout/react-shared-components/lib/big_scheduler";
 import moment from "moment";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";

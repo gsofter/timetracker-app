@@ -8,11 +8,14 @@ const lessToJs = require('less-vars-to-js');
 
 var webpack_opts = {
   mode: "development",
-  entry: "./src/index.ts",
+  entry: {
+    index: './src/index.ts',
+    big_scheduler: './src/big-scheduler/index.js'
+  },
   target: "node",
   output: {
     path: path.join(__dirname, "lib"),
-    filename: "index.js",
+    filename: '[name].js',
     libraryTarget: "commonjs2"
   },
   resolve: {
@@ -40,6 +43,19 @@ var webpack_opts = {
       {
         test: /\.tsx?$/,
         loaders: "ts-loader"
+      },
+      {
+        test: /\.jsx?$/,
+        loader: 'babel-loader',
+        exclude: /node_modules/,
+        query: {
+          cacheDirectory: true,
+          presets: [
+            require.resolve('@babel/preset-env'),
+            require.resolve('@babel/preset-react'),          
+          ],
+          plugins: [require.resolve('@babel/plugin-proposal-class-properties')],
+        }
       },
       {
         test: /\.(pdf|jpg|png|gif|svg|ico)$/,

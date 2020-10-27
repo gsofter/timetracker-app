@@ -2,9 +2,8 @@ import * as React from "react";
 import Scheduler, {
   SchedulerData,
   ViewTypes,
-  DATE_FORMAT,
   DemoData
-} from "@cdmbase/react-big-scheduler";
+} from "@admin-layout/react-shared-components/lib/big_scheduler";
 // import "@cdmbase/react-big-scheduler/lib/css/style.css";
 import moment from "moment";
 import { DndProvider } from "react-dnd";
