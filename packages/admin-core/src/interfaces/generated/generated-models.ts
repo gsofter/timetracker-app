@@ -279,6 +279,7 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   getContextProperty?: Resolver<Maybe<IResolversTypes['AnyObject']>, ParentType, ContextType, RequireFields<IQuerygetContextPropertyArgs, never>>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   sidebarState?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  getOrgNameFromContext: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>;
 };
 
 export type ISubscriptionResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Subscription'] = IResolversParentTypes['Subscription']> = {

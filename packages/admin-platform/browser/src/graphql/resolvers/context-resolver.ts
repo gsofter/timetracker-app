@@ -1,13 +1,15 @@
 
-import { IResolvers } from '@admin-layout/core';
+import { IClientCacheTypeNames, IResolvers } from '@admin-layout/core';
 
 export const contextResolver: (services: () => any) => IResolvers = (services) =>  ({
 
     Query: {
-        getOrgNameFromContext: (root, args, context ) => {
+        getOrgNameFromContext: ( root, args, context ) => {
             const data = services().cache.readFragment({
-                fragment: OrgNameInContextFragmentDoc,
+                fragment: context,
                 id: `${IClientCacheTypeNames.Context}`
             });
             return data;
         },
+    }
+});
