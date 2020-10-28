@@ -8,6 +8,9 @@ import { useFela } from 'react-fela';
 import { WithFalse } from '../typings';
 import BaseMenu, { BaseMenuProps } from './BaseMenu';
 import MenuCounter from './Counter';
+import { graphql } from 'react-apollo';
+import compose from 'lodash/flowRight';
+import { OrgNameContextQueryDocument } from '@admin-layout/platform-browser';
 
 const { Sider } = Layout;
 
@@ -104,7 +107,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     onOpenChange,
     headerHeight,
   } = props;
-
   const { css } = useFela(props);
 
   const baseClassName = `${prefixCls}-sider`;
@@ -235,7 +237,16 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
   );
 };
 
-export default SiderMenu;
+const SiderMenuData: any = compose(
+  graphql(OrgNameContextQueryDocument, {
+    props({ data: { error, orgName, id } }: any) {
+      // if (error) { throw new Error(error); }
+      return { orgName: orgName ? orgName : 'sample' , id: id ? id : 'any' };
+    },
+  })
+)(SiderMenu);
+
+export default SiderMenuData;
 
 const styleSheet: any = {
   siderMenuStyles: ({ theme, primaryColor }) => ({
