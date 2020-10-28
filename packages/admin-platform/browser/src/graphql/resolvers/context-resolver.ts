@@ -6,7 +6,7 @@ export const contextResolver: (services: () => any) => IResolvers = (services) =
     Query: {
         getOrgNameFromContext: ( root, args, context ) => {
             const data = services().cache.readFragment({
-                fragment: context,
+                orgName: String,
                 id: `${IClientCacheTypeNames.Context}`
             });
             return data;
