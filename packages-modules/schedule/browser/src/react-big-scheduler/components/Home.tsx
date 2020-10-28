@@ -8,8 +8,10 @@ import Scheduler, {
 import moment from "moment";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
+import { useFela } from "react-fela";
 
 export const Home = ({ props }) => {
+  const { css } = useFela(props);
   let schedulerData = new SchedulerData(
     "2017-12-18",
     ViewTypes.Week,
@@ -150,7 +152,7 @@ export const Home = ({ props }) => {
   };
 
   return (
-    <div>
+    <div className={css(menuStyle.styles)}>
       <DndProvider backend={HTML5Backend}>
         {schedulerData.setEvents && (
           <Scheduler
@@ -173,4 +175,205 @@ export const Home = ({ props }) => {
       </DndProvider>
     </div>
   );
+};
+
+const menuStyle: any = {
+  styles: (theme) => ({
+    position: "relative",
+    "& .header1-text": {
+      fontSize: "25px",
+      color: "#90CDF9",
+      fontWeight: 500,
+    },
+    "& .header2-text": {
+      fontSize: "14px",
+      fontWeight: "500",
+    },
+    "& .header3-text": {
+      fontSize: "12px",
+      fontWeight: "500",
+    },
+    "& .base-text": {
+      fontSize: "12px",
+    },
+    "& .help-text": {
+      fontSize: "12px",
+      color: "#999",
+    },
+    "& .disabled-text": {
+      fontSize: "12px",
+      color: "#ccc",
+    },
+    "& .scheduler": {
+      margin: "20px auto",
+      borderSpacing: 0,
+    },
+    "& .scheduler td": {
+      padding: "0px",
+    },
+    "& .expander-space": {
+      overflow: "hidden",
+      display: "inline-block",
+      width: "1em",
+      height: "1em",
+      lineHeight: "1em",
+      fontSize: ".9em",
+      verticalAlign: "middle",
+      marginTop: "-1%",
+    },
+    "& .resource-view": {
+      border: "1px solid #e9e9e9",
+      overflow: "hidden",
+    },
+    "& .scheduler-view": {
+      border: "1px solid #e9e9e9",
+      margin: "0 0 0 -1px",
+      padding: 0,
+    },
+    "& .scheduler-content": {
+      position: "relative",
+      zIndex: 2,
+    },
+    "& .scheduler-bg": {
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      zIndex: 1,
+    },
+    "& table .resource-table, table.scheduler-bg-table, table.scheduler-table": {
+      width: "100%",
+      margin: 0,
+      padding: 0,
+      borderSpacing: 0,
+      textAlign: "center",
+    },
+    "& table .scheduler-table": {
+      border: "1px solid #e9e9e9",
+    },
+    "& table .scheduler-content-table": {
+      margin: "0",
+      padding: "0",
+      border: "0 solid #e9e9e9",
+      borderSpacing: 0,
+    },
+    "& table .resource-table tr, table.scheduler-bg-table tr, table.scheduler-table tr": {
+      borderBottom: "1px solid #e9e9e9",
+    },
+    "& table.resource-table th, table.scheduler-table th, table.resource-table td, table.scheduler-bg-table td, table.scheduler-table td": {
+      borderRight: "1px solid #e9e9e9",
+      borderBottom: "1px solid #e9e9e9",
+    },
+    "& table.scheduler-bg-table th": {
+      borderRight: "1px solid #e9e9e9",
+    },
+    "& table.resource-table tr th:last-child, table.scheduler-table tr th:last-child": {
+      borderRight: 0,
+    },
+    "& table.resource-table tr td:last-child, table.scheduler-table tr td:last-child": {
+      borderRight: 0,
+    },
+    "& table.scheduler-table tr:last-child td": {
+      borderBottom: 0,
+    },
+    "& .timeline-event": {
+      position: "absolute",
+    },
+    "& .day-event": {
+      position: "relative",
+      display: "inline-block",
+      margin: "0px 5px",
+    },
+    "& .day-event-container": {
+      textAlign: "left",
+      padding: "5px 5px 0 5px",
+    },
+    "& .round-all": {
+      borderRadius: "14px",
+    },
+    "& .round-head": {
+      borderRadius: "14px 0px 0px 14px",
+    },
+    "& .round-tail": {
+      borderRadius: "0px 14px 14px 0px",
+    },
+    "& .round-none": {
+      borderRadius: "0px",
+    },
+    "& .event-container": {
+      position: "relative",
+    },
+    "& .event-item": {
+      margin: "1px 0",
+      width: "100%",
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+      color: "#fff",
+      paddingRight: "20px !important",
+    },
+    "& .overflow-text": {
+      overflow: "hidden",
+      textOverflow: "ellipsis",
+      whiteSpace: "nowrap",
+      paddingRight: "5px !important",
+    },
+    "& .status-dot": {
+      width: "14px",
+      height: "14px",
+      borderRadius: "7px",
+    },
+    "& .ant-radio-button-wrapper-checked": {
+      backgroundColor: "#108EE9",
+      color: "#FFFFFF",
+    },
+    "& .icon-nav:hover": {
+      color: "#1E90FF !important",
+      boxShadow: "0 0 0px !important",
+      cursor: "pointer",
+    },
+    "& .add-more-popover-overlay": {
+      position: "absolute",
+      zIndex: 5,
+      border: "1px solid #e5e5e5",
+      backgroundColor: "#fff",
+      boxShadow: "0 5px 15px rgba(0, 0, 0, 0.25)",
+      padding: "10px",
+    },
+    "& .popover-calendar": {
+      width: "300px",
+    },
+    "& .popover-calendar .ant-calendar": {
+      boxShadow: "0 1px 6px rgba(0,0,0,0) !important",
+    },
+    "& .event-resizer": {
+      position: "absolute",
+      zIndex: 4,
+      display: "block",
+      width: "7px",
+      top: "-1px",
+      bottom: "-1px",
+    },
+    "& .event-start-resizer": {
+      cursor: "w-resize",
+      left: "-1px",
+    },
+    "& .event-end-resizer": {
+      cursor: "e-resize",
+      right: "-1px",
+    },
+    "& .selected-area": {
+      position: "absolute",
+    },
+    "& .slot-cell": {
+      paddingLeft: "4px",
+      paddingRight: "4px",
+    },
+    "& .slot-text": {
+      display: "inline-block",
+      paddingLeft: "4px",
+      paddingRight: "4px",
+    },
+  }),
 };
