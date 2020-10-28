@@ -101,11 +101,12 @@ class MenuUtil {
   public getNavMenuItems = (
     menusData: MenuDataItem[] = [],
     isChildren: boolean,
-  ): React.ReactNode[] =>
-    menusData
+  ): React.ReactNode[] => {
+    return menusData
       .filter((item) => item.name && !item.hideInMenu)
       .map((item) => this.getSubMenuOrItem(item, isChildren))
       .filter((item) => item)
+    }
 
   public hasChildren = (item: MenuDataItem) => {
     return (
@@ -140,7 +141,6 @@ class MenuUtil {
       const title = subMenuItemRender
         ? subMenuItemRender({ ...item, isUrl: false }, defaultTitle)
         : defaultTitle;
-
       return (
         <SubMenu
           title={title}
