@@ -22,7 +22,6 @@ export const counterPageStore: any[] = [
     },
     {
         exact: true,
-        // icon: 'export',
         name: 'Hello',
         component: Hello,
         position: IMenuPosition.MIDDLE,
@@ -31,7 +30,6 @@ export const counterPageStore: any[] = [
     },
     {
         exact: true,
-        // icon: 'export',
         name: 'Counter',
         component: Counter,
         position: IMenuPosition.MIDDLE,
