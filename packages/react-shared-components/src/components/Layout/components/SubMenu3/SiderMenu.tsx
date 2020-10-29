@@ -61,6 +61,7 @@ export interface SiderMenuProps
   extends Pick<BaseMenuProps, Exclude<keyof BaseMenuProps, ['onCollapse']>> {
   logo?: React.ReactNode;
   siderWidth?: number;
+  orgName?: string;
   menuHeaderRender?: WithFalse<
     (
       logo: React.ReactNode,
@@ -109,6 +110,40 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
   } = props;
   const { css } = useFela(props);
 
+  const menuData = props.menuData.map(data => {
+    if (data.path.split('/').includes(':orgName')) {
+      return {
+        path: data.path.split('/').map(value => { if (value === ':orgName') { return props.orgName } else { return value } }).join('/'),
+        children: data.children
+        .map(childData => {
+          if (childData.path.split('/').includes(':orgName')) {
+            return {
+              path: childData.path.split('/').map(childValue => { if (childValue === ':orgName') { return props.orgName } else { return childValue } }).join('/'),
+              exact: childData.exact,
+              icon: childData.icon,
+              key: childData.key.split('/').map(childValue => { if (childValue === ':orgName') { return props.orgName } else { return childValue } }).join('/'),
+              locale: childData.locale,
+              name: childData.name,
+              position: childData.position,
+              pro_layout_parentKeys: [data.path.split('/').map(value => { if (value === ':orgName') { return props.orgName } else { return value } }).join('/')],
+              routes: childData.routes,
+              tab: childData.tab
+            }
+          } else { return childData }
+        }),
+        exact: data.exact,
+        icon: data.icon,
+        key: data.key.split('/').map(value => { if (value === ':orgName') { return props.orgName } else { return value } }).join('/'),
+        locale: data.locale,
+        name: data.name,
+        position: data.position,
+        pro_layout_parentKeys: data.pro_layout_parentKeys,
+        routes: data.routes,
+        tab: data.tab
+      }
+    } else { return data }
+  });
+
   const baseClassName = `${prefixCls}-sider`;
   const { flatMenuKeys } = MenuCounter.useContainer();
   const siderClassName = classNames(`${baseClassName}`, {
@@ -117,11 +152,11 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     [`${baseClassName}-light`]: theme === 'light',
   });
   const headerDom = defaultRenderLogoAndTitle(props);
-
+  const propsData = {...props, menuData}
   const extraDom = menuExtraRender && menuExtraRender(props);
   const menuDom = menuContentRender !== false && flatMenuKeys && (
     <BaseMenu
-      {...props}
+      {...propsData}
       mode="inline"
       handleOpenChange={onOpenChange}
       style={{

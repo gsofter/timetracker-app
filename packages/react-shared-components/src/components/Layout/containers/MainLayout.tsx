@@ -634,9 +634,6 @@ const styleSheet: any = {
     '& .ant-pro-page-container-warp .ant-tabs-nav': {
       margin: 0,
     },
-    '& .ant-pro-page-container-ghost .ant-pro-page-container-warp': {
-      // backgroundColor: 'transparent'
-    },
     '& .ant-pro-page-container-main .ant-pro-page-container-detail': {
       display: 'flex',
     },
@@ -673,6 +670,5 @@ const styleSheet: any = {
     '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': {
       backgroundColor: primaryColor
     },
-    
   })
 };
