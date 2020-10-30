@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { Layout, Menu } from 'antd';
 import classNames from 'classnames';
 import { SiderProps } from 'antd/lib/layout/Sider';
@@ -110,39 +110,31 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
   } = props;
   const { css } = useFela(props);
 
-  const menuData = props.menuData.map(data => {
-    if (data.path.split('/').includes(':orgName')) {
-      return {
-        path: data.path.split('/').map(value => { if (value === ':orgName') { return props.orgName } else { return value } }).join('/'),
-        children: data.children
-        .map(childData => {
-          if (childData.path.split('/').includes(':orgName')) {
-            return {
-              path: childData.path.split('/').map(childValue => { if (childValue === ':orgName') { return props.orgName } else { return childValue } }).join('/'),
-              exact: childData.exact,
-              icon: childData.icon,
-              key: childData.key.split('/').map(childValue => { if (childValue === ':orgName') { return props.orgName } else { return childValue } }).join('/'),
-              locale: childData.locale,
-              name: childData.name,
-              position: childData.position,
-              pro_layout_parentKeys: [data.path.split('/').map(value => { if (value === ':orgName') { return props.orgName } else { return value } }).join('/')],
-              routes: childData.routes,
-              tab: childData.tab
-            }
-          } else { return childData }
-        }),
-        exact: data.exact,
-        icon: data.icon,
-        key: data.key.split('/').map(value => { if (value === ':orgName') { return props.orgName } else { return value } }).join('/'),
-        locale: data.locale,
-        name: data.name,
-        position: data.position,
-        pro_layout_parentKeys: data.pro_layout_parentKeys,
-        routes: data.routes,
-        tab: data.tab
-      }
-    } else { return data }
-  });
+  const changeOrgName = (path, orgName) => {
+    return path.split('/').map(value => { if (value === ':orgName') { return orgName } else { return value } }).join('/')
+  }
+
+  const menuDataHandler = (menus, orgNameData) => {
+    return menus.map(data => {
+      if (data.path.split('/').includes(':orgName')) {
+        return {
+          path: changeOrgName(data.path, orgNameData),
+          children: data.children && menuDataHandler(data.children, orgNameData),
+          exact: data.exact,
+          icon: data.icon,
+          key: changeOrgName(data.key, orgNameData),
+          locale: data.locale,
+          name: data.name,
+          position: data.position,
+          pro_layout_parentKeys: data.pro_layout_parentKeys.length > 0 ? data.pro_layout_parentKeys.map(key => changeOrgName(key, orgNameData)) : [],
+          routes: data.routes,
+          tab: data.tab
+        }
+      } else { return data }
+    });
+  }
+
+  const menuData = menuDataHandler(props.menuData, props.orgName);
 
   const baseClassName = `${prefixCls}-sider`;
   const { flatMenuKeys } = MenuCounter.useContainer();
@@ -422,7 +414,6 @@ const styleSheet: any = {
       width: '100%',
     },
     '& .ant-pro-sider-light': {
-      //  backgroundColor: ;
       boxShadow: '2px 0 8px 0 rgba(29,35,41,0.05)',
     },
     '& .ant-pro-sider-light .ant-layout-sider-children ::-webkit-scrollbar-track': {
@@ -440,9 +431,6 @@ const styleSheet: any = {
     },
     '& .ant-pro-sider-light .ant-menu-light': {
       borderRightColor: 'transparent',
-    },
-    '& .ant-pro-sider-light .ant-pro-sider-collapsed-button': {
-      //  borderTop: ;
     },
     '& .ant-pro-sider-icon': {
       width: '14px',
