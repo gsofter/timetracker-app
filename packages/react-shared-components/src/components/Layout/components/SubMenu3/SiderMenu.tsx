@@ -8,9 +8,6 @@ import { useFela } from 'react-fela';
 import { WithFalse } from '../typings';
 import BaseMenu, { BaseMenuProps } from './BaseMenu';
 import MenuCounter from './Counter';
-import { graphql } from 'react-apollo';
-import compose from 'lodash/flowRight';
-import { OrgNameContextQueryDocument } from '@admin-layout/platform-browser';
 
 const { Sider } = Layout;
 
@@ -61,7 +58,6 @@ export interface SiderMenuProps
   extends Pick<BaseMenuProps, Exclude<keyof BaseMenuProps, ['onCollapse']>> {
   logo?: React.ReactNode;
   siderWidth?: number;
-  orgName?: string;
   menuHeaderRender?: WithFalse<
     (
       logo: React.ReactNode,
@@ -110,32 +106,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
   } = props;
   const { css } = useFela(props);
 
-  const changeOrgName = (path, orgName) => {
-    return path.split('/').map(value => { if (value === ':orgName') { return orgName } else { return value } }).join('/')
-  }
-
-  const menuDataHandler = (menus, orgNameData) => {
-    return menus.map(data => {
-      if (data.path.split('/').includes(':orgName')) {
-        return {
-          path: changeOrgName(data.path, orgNameData),
-          children: data.children && menuDataHandler(data.children, orgNameData),
-          exact: data.exact,
-          icon: data.icon,
-          key: changeOrgName(data.key, orgNameData),
-          locale: data.locale,
-          name: data.name,
-          position: data.position,
-          pro_layout_parentKeys: data.pro_layout_parentKeys.length > 0 ? data.pro_layout_parentKeys.map(key => changeOrgName(key, orgNameData)) : [],
-          routes: data.routes,
-          tab: data.tab
-        }
-      } else { return data }
-    });
-  }
-
-  const menuData = menuDataHandler(props.menuData, props.orgName);
-
   const baseClassName = `${prefixCls}-sider`;
   const { flatMenuKeys } = MenuCounter.useContainer();
   const siderClassName = classNames(`${baseClassName}`, {
@@ -144,11 +114,10 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     [`${baseClassName}-light`]: theme === 'light',
   });
   const headerDom = defaultRenderLogoAndTitle(props);
-  const propsData = {...props, menuData}
   const extraDom = menuExtraRender && menuExtraRender(props);
   const menuDom = menuContentRender !== false && flatMenuKeys && (
     <BaseMenu
-      {...propsData}
+      {...props}
       mode="inline"
       handleOpenChange={onOpenChange}
       style={{
@@ -264,16 +233,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
   );
 };
 
-const SiderMenuData: any = compose(
-  graphql(OrgNameContextQueryDocument, {
-    props({ data: { error, orgName, id } }: any) {
-      // if (error) { throw new Error(error); }
-      return { orgName: orgName ? orgName : 'sample' , id: id ? id : 'any' };
-    },
-  })
-)(SiderMenu);
-
-export default SiderMenuData;
+export default SiderMenu;
 
 const styleSheet: any = {
   siderMenuStyles: ({ theme, primaryColor }) => ({

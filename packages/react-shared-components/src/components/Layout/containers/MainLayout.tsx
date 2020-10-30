@@ -45,6 +45,9 @@ import SettingDrawer, {
 import GridContent from '../components/GridContent/index';
 // @ts-ignore
 import favicon from '../../../../favicon.ico';
+import { graphql } from 'react-apollo';
+import compose from 'lodash/flowRight';
+import { OrgNameContextQueryDocument } from '@admin-layout/platform-browser';
 
 export type BasicLayoutProps = Partial<RouterTypes<Route>> &
   SiderMenuProps &
@@ -55,6 +58,7 @@ export type BasicLayoutProps = Partial<RouterTypes<Route>> &
      * logo url
      */
     logo?: React.ReactNode | WithFalse<() => React.ReactNode>;
+    orgName?: string;
     /**
      * 页面切换的时候触发
      */
@@ -198,10 +202,30 @@ const getPaddingLeft = (
   return 0;
 };
 
-export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
-  const [settings, setSettings] = useState({});
+const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
+  const [settings, setSettings] = useState({}); 
+  const changeOrgName = (path, orgName) => {
+    return path.split('/').map(value => { if (value === ':orgName') { return orgName } else { return value } }).join('/')
+  }
 
-  const props = { ...main_props, ...settings };
+  const routesHandler = (routes, orgName) => {
+    return routes.map(route => {
+      if (route.path.split('/').includes(':orgName')) {
+        return {
+          path: changeOrgName(route.path, orgName),
+          children: route.children && routesHandler(route.children, orgName),
+          exact: route.exact,
+          icon: route.icon,
+          key: changeOrgName(route.key, orgName),
+          name: route.name,
+          position: route.position,
+          tab: route.tab
+        }
+      } else { return route }
+    });
+  }
+
+  const props = { ...main_props, route: routesHandler(main_props.route, main_props.orgName), ...settings };
 
   const { css, theme } = useFela(props);
   const {
@@ -544,7 +568,16 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
   );
 };
 
-MainLayout.defaultProps = {
+export const MainLayout: any = compose(
+  graphql(OrgNameContextQueryDocument, {
+    props({ data: { error, orgName, id } }: any) {
+      if (error) { throw new Error(error); }
+      return { orgName: orgName ? orgName : 'sample' , id: id ? id : 'any' };
+    },
+  })
+)(MainLayoutSection);
+
+MainLayoutSection.defaultProps = {
   logo: 'https://gw.alipayobjects.com/zos/antfincdn/PmY%24TNNDBI/logo.svg',
   ...defaultSettings,
   prefixCls: 'ant-pro',
