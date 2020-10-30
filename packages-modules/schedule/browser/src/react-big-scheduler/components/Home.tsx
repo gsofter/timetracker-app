@@ -1,4 +1,4 @@
-import * as React from "react";
+import React, { useState } from "react";
 import Scheduler, {
   SchedulerData,
   ViewTypes,
@@ -9,8 +9,13 @@ import moment from "moment";
 import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useFela } from "react-fela";
+import { Modal } from "./Modal";
+import { Form, Input, Button, Select, DatePicker, TimePicker } from "antd";
+const { Option } = Select;
 
 export const Home = ({ props }) => {
+  const [isShowing, setIsShowing] = useState(false);
+
   const { css } = useFela(props);
   let schedulerData = new SchedulerData(
     "2017-12-18",
@@ -27,8 +32,6 @@ export const Home = ({ props }) => {
   const schedularWidth = (schedulerData.config.schedulerWidth = "100%");
 
   // const schedular = (schedulerData.documentWidth - schedularBeside) * schedularWidth
-  moment.locale("en");
-
   moment.locale("en");
 
   const [viewModel, setViewModel] = React.useState(schedulerData);
@@ -151,6 +154,76 @@ export const Home = ({ props }) => {
     }
   };
 
+  const toggleExpandFunc = (schedulerData, slotId) => {
+    schedulerData.toggleExpandStatus(slotId);
+    setViewModel(schedulerData);
+  };
+  const openModal = () => {
+    setIsShowing(!isShowing);
+  };
+
+  const onChangeTime = (time, timeString) => {
+    console.log(time, timeString);
+  };
+
+  const renderModalBody = (): JSX.Element => {
+    return (
+      <>
+        <Form
+          labelCol={{ span: 21 }}
+          wrapperCol={{ span: 21 }}
+          layout="vertical"
+        >
+          <Form.Item label="User">
+            <Select>
+              <Select.Option value="user1">User1</Select.Option>
+              <Select.Option value="user2">User2</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="DatePicker">
+            <DatePicker /> &nbsp;
+            <TimePicker use12Hours format="h:mm a" onChange={onChangeTime} />
+            &nbsp;TO &nbsp;
+            <TimePicker use12Hours format="h:mm a" onChange={onChangeTime} />
+            &nbsp;
+            <DatePicker />
+          </Form.Item>
+          <Form.Item label="Minimum Hours">
+            <Input placeholder="5" />
+          </Form.Item>
+          <Form.Item label="Repeats">
+            <Select>
+              <Select.Option value="Never">Never</Select.Option>
+              <Select.Option value="Yes">Yes</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item>
+            <Button htmlType="button">Cancel</Button>
+            &nbsp;
+            <Button type="primary" htmlType="submit">
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </>
+    );
+  };
+
+  let rightCustomHeader = (
+    <div>
+      <span style={{ fontWeight: "bold" }}>
+        <a onClick={openModal}>Add Schedule</a>
+      </span>
+      <Modal
+        modalTitle="Create Schedule"
+        showModal={isShowing}
+        handleClose={() => setIsShowing(false)}
+        modalBody={renderModalBody()}
+      />
+    </div>
+  );
+
   return (
     <div className={css(menuStyle.styles)}>
       <DndProvider backend={HTML5Backend}>
@@ -170,6 +243,8 @@ export const Home = ({ props }) => {
             updateEventEnd={updateEventEnd}
             moveEvent={moveEvent}
             newEvent={newEvent}
+            toggleExpandFunc={toggleExpandFunc}
+            rightCustomHeader={rightCustomHeader}
           />
         )}
       </DndProvider>
