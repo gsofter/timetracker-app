@@ -16,13 +16,14 @@ class Counter extends React.Component<any, any> {
     this.subscription = null;
   }
 
-  public componentWillReceiveProps(nextProps) {
+  public getSnapshotBeforeUpdate(nextProps) {
     if (!nextProps.loading) {
       // Subscribe or re-subscribe
       if (!this.subscription) {
         this.subscribeToCount();
       }
     }
+    return null;
   }
 
   public componentWillUnmount() {

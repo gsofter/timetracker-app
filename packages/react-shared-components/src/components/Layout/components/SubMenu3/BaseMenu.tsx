@@ -17,7 +17,7 @@ import {
   WithFalse,
 } from '../typings';
 import MenuCounter from './Counter';
-import { Link, generatePath } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 
 export interface BaseMenuProps
   extends Partial<RouterTypes<Route>>,
@@ -176,26 +176,13 @@ class MenuUtil {
     return name;
   }
 
-  // @sri to fill params 
-  private fillParms = (path, params) => {
-    try {
-      const generatedPath = generatePath(path, params);
-      return generatedPath;
-    } catch (err) {
-      console.log('--fillParams.path', path)
-      console.log('--fillParams.params', params)
-      console.log('generatePath is errored due to missing orgId');
-    }
-    return null;
-  }
   /**
    * 判断是否是http链接.返回 Link 或 a
    * Judge whether it is http link.return a or Link
    * @memberof SiderMenu
    */
   public getMenuItemPath = (item: MenuDataItem, isChildren: boolean) => {
-    const { params } = this.props;
-    const itemPath = this.fillParms(this.conversionPath(item.path || '/'), params);
+    const itemPath = this.conversionPath(item.path || '/');
     const {
       location = { pathname: '/' },
       isMobile,
