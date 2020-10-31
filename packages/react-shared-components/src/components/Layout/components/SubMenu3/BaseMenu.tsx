@@ -3,7 +3,6 @@ import { Menu } from 'antd';
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import classNames from 'classnames';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
-
 import { MenuMode, MenuProps } from 'antd/lib/menu';
 import { MenuTheme } from 'antd/lib/menu/MenuContext';
 import defaultSettings, { PureSettings } from '../defaultSettings';
@@ -18,7 +17,7 @@ import {
   WithFalse,
 } from '../typings';
 import MenuCounter from './Counter';
-import { Link } from 'react-router-dom';
+import { Link, generatePath } from 'react-router-dom';
 
 export interface BaseMenuProps
   extends Partial<RouterTypes<Route>>,
@@ -40,6 +39,7 @@ export interface BaseMenuProps
   menuProps?: MenuProps;
   style?: any;
   theme?: MenuTheme;
+  params?: any; // @sri added params for additional data.
   formatMessage?: (message: MessageDescriptor) => string;
   subMenuItemRender?: WithFalse<
     (
@@ -106,7 +106,7 @@ class MenuUtil {
       .filter((item) => item.name && !item.hideInMenu)
       .map((item) => this.getSubMenuOrItem(item, isChildren))
       .filter((item) => item)
-    }
+  }
 
   public hasChildren = (item: MenuDataItem) => {
     return (
@@ -176,13 +176,26 @@ class MenuUtil {
     return name;
   }
 
+  // @sri to fill params 
+  private fillParms = (path, params) => {
+    try {
+      const generatedPath = generatePath(path, params);
+      return generatedPath;
+    } catch (err) {
+      console.log('--fillParams.path', path)
+      console.log('--fillParams.params', params)
+      console.log('generatePath is errored due to missing orgId');
+    }
+    return null;
+  }
   /**
    * 判断是否是http链接.返回 Link 或 a
    * Judge whether it is http link.return a or Link
    * @memberof SiderMenu
    */
   public getMenuItemPath = (item: MenuDataItem, isChildren: boolean) => {
-    const itemPath = this.conversionPath(item.path || '/');
+    const { params } = this.props;
+    const itemPath = this.fillParms(this.conversionPath(item.path || '/'), params);
     const {
       location = { pathname: '/' },
       isMobile,
@@ -227,6 +240,7 @@ class MenuUtil {
       }
       return menuItemRender(renderItemProps, defaultItem);
     }
+    console.log('---defaultItem', defaultItem)
     return defaultItem;
   }
 

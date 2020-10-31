@@ -1,7 +1,7 @@
 import React, { CSSProperties, useContext, useEffect, useState } from 'react';
 import { Layout, Breadcrumb } from 'antd';
 import { useFela } from 'react-fela';
-import SiderMenu from '../components/SubMenu3/index';
+import { SiderMenu } from './SiderMenu';
 import { useRouteMatch } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
