@@ -4,6 +4,7 @@ type Context {
 }
 
 extend type Query {
+    getOrgNameFromContext: Context
     getContextProperty(keys: [String]): AnyObject
 }
 
