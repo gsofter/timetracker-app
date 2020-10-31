@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { Layout, Menu } from 'antd';
 import classNames from 'classnames';
 import { SiderProps } from 'antd/lib/layout/Sider';
@@ -8,9 +8,6 @@ import { useFela } from 'react-fela';
 import { WithFalse } from '../typings';
 import BaseMenu, { BaseMenuProps } from './BaseMenu';
 import MenuCounter from './Counter';
-import { graphql } from 'react-apollo';
-import compose from 'lodash/flowRight';
-import { OrgNameContextQueryDocument } from '@admin-layout/platform-browser';
 
 const { Sider } = Layout;
 
@@ -117,7 +114,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     [`${baseClassName}-light`]: theme === 'light',
   });
   const headerDom = defaultRenderLogoAndTitle(props);
-
   const extraDom = menuExtraRender && menuExtraRender(props);
   const menuDom = menuContentRender !== false && flatMenuKeys && (
     <BaseMenu
@@ -236,17 +232,7 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     </>
   );
 };
-
-const SiderMenuData: any = compose(
-  graphql(OrgNameContextQueryDocument, {
-    props({ data: { error, orgName, id } }: any) {
-      // if (error) { throw new Error(error); }
-      return { orgName: orgName ? orgName : 'sample' , id: id ? id : 'any' };
-    },
-  })
-)(SiderMenu);
-
-export default SiderMenuData;
+export default SiderMenu;
 
 const styleSheet: any = {
   siderMenuStyles: ({ theme, primaryColor }) => ({
@@ -387,7 +373,6 @@ const styleSheet: any = {
       width: '100%',
     },
     '& .ant-pro-sider-light': {
-      //  backgroundColor: ;
       boxShadow: '2px 0 8px 0 rgba(29,35,41,0.05)',
     },
     '& .ant-pro-sider-light .ant-layout-sider-children ::-webkit-scrollbar-track': {
@@ -405,9 +390,6 @@ const styleSheet: any = {
     },
     '& .ant-pro-sider-light .ant-menu-light': {
       borderRightColor: 'transparent',
-    },
-    '& .ant-pro-sider-light .ant-pro-sider-collapsed-button': {
-      //  borderTop: ;
     },
     '& .ant-pro-sider-icon': {
       width: '14px',

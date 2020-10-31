@@ -47,6 +47,7 @@ generates:
   packages/react-shared-components/src/components/generated.tsx:
     schema:
       - packages/react-shared-components/src/components/**/*.graphql
+      - packages/admin-platform/browser/src/graphql/**/*.graphql
     documents: 
       - "packages/react-shared-components/src/components/**/gql/**/*.gql"
     config:

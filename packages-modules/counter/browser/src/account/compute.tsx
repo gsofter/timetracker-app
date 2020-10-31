@@ -36,7 +36,6 @@ export const accountPageStore: any[] = [
         name: 'Billing Setting',
         component: Billing,
         position: IMenuPosition.BOTTOM,
-        icon: <UserOutlined/>,
         children: [
             {
                 exact: true,

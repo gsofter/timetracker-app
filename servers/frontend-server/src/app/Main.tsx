@@ -6,7 +6,7 @@ import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import createRenderer from '../config/fela-renderer';
 import { rehydrate, render } from 'fela-dom';
-import { createApolloClient } from '../config/apollo-client';
+import { createApolloClient, cache } from '../config/apollo-client';
 import { epic$, rootEpic } from '../config/epic-config';
 import {
   createReduxStore,
@@ -15,14 +15,22 @@ import {
   persistConfig,
   epicMiddleware
 } from '../config/redux-config';
-import modules, { MainRoute } from '../modules';
+import modules, { MainRoute, container } from '../modules';
 import { ConnectedRouter } from 'connected-react-router';
 import RedBox from './RedBox';
 import { ServerError } from './Error';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
+import { ClientTypes } from '@common-stack/client-core';
+
 
 const client = createApolloClient();
+// attaching the context to client as a workaround.
+container.bind(ClientTypes.ApolloClient).toConstantValue(client);
+container.bind(ClientTypes.InMemoryCache).toConstantValue(cache);
+const services = modules.createService({}, {});
+(client as any).container = services;
+
 
 let store;
 if (

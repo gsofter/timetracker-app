@@ -79,6 +79,7 @@ export type IQuery = {
   counterCache?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
   getContextProperty?: Maybe<Scalars['AnyObject']>;
+  getOrgNameFromContext?: Maybe<IContext>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
   sidebarState?: Maybe<Scalars['Boolean']>;
@@ -97,6 +98,11 @@ export type ISubscription = {
   moleculerCounterUpdate?: Maybe<ICounter>;
 };
 
+export type IOrgNameInContextFragment = (
+  { __typename?: 'Context' }
+  & Pick<IContext, 'orgName'>
+);
+
 export type ItoggleSidebarMutationVariables = {
   state: Scalars['Boolean'];
 };
@@ -107,6 +113,17 @@ export type ItoggleSidebarMutation = (
   & Pick<IMutation, 'toggleSidebar'>
 );
 
+export type IGetOrgNameFromContextQueryVariables = {};
+
+
+export type IGetOrgNameFromContextQuery = (
+  { __typename?: 'Query' }
+  & { getOrgNameFromContext?: Maybe<(
+    { __typename?: 'Context' }
+    & IOrgNameInContextFragment
+  )> }
+);
+
 export type IsidebarStateQueryVariables = {};
 
 
@@ -115,7 +132,11 @@ export type IsidebarStateQuery = (
   & Pick<IQuery, 'sidebarState'>
 );
 
-
+export const OrgNameInContextFragmentDoc = gql`
+    fragment OrgNameInContext on Context {
+  orgName
+}
+    `;
 export const toggleSidebarDocument = gql`
     mutation toggleSidebar($state: Boolean!) {
   toggleSidebar(state: $state) @client
@@ -123,6 +144,14 @@ export const toggleSidebarDocument = gql`
     `;
 export type toggleSidebarMutationResult = ApolloReactCommon.MutationResult<ItoggleSidebarMutation>;
 export type toggleSidebarMutationOptions = ApolloReactCommon.BaseMutationOptions<ItoggleSidebarMutation, ItoggleSidebarMutationVariables>;
+export const GetOrgNameFromContextDocument = gql`
+    query GetOrgNameFromContext {
+  getOrgNameFromContext @client {
+    ...OrgNameInContext
+  }
+}
+    ${OrgNameInContextFragmentDoc}`;
+export type GetOrgNameFromContextQueryResult = ApolloReactCommon.QueryResult<IGetOrgNameFromContextQuery, IGetOrgNameFromContextQueryVariables>;
 export const sidebarStateDocument = gql`
     query sidebarState {
   sidebarState @client
@@ -207,6 +236,7 @@ export type IResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>,
   String: ResolverTypeWrapper<Scalars['String']>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
+  Context: ResolverTypeWrapper<IContext>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Mutation: ResolverTypeWrapper<{}>,
   Subscription: ResolverTypeWrapper<{}>,
@@ -214,7 +244,6 @@ export type IResolversTypes = {
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<IFieldError>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
-  Context: ResolverTypeWrapper<IContext>,
   ClientCacheTypeNames: IClientCacheTypeNames,
 };
 
@@ -225,6 +254,7 @@ export type IResolversParentTypes = {
   Int: Scalars['Int'],
   String: Scalars['String'],
   AnyObject: Scalars['AnyObject'],
+  Context: IContext,
   Boolean: Scalars['Boolean'],
   Mutation: {},
   Subscription: {},
@@ -232,7 +262,6 @@ export type IResolversParentTypes = {
   JSONObject: Scalars['JSONObject'],
   FieldError: IFieldError,
   ID: Scalars['ID'],
-  Context: IContext,
   ClientCacheTypeNames: IClientCacheTypeNames,
 };
 
@@ -277,9 +306,9 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   counterCache?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   getContextProperty?: Resolver<Maybe<IResolversTypes['AnyObject']>, ParentType, ContextType, RequireFields<IQuerygetContextPropertyArgs, never>>,
+  getOrgNameFromContext?: Resolver<Maybe<IResolversTypes['Context']>, ParentType, ContextType>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   sidebarState?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  getOrgNameFromContext: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>;
 };
 
 export type ISubscriptionResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Subscription'] = IResolversParentTypes['Subscription']> = {

@@ -18,7 +18,7 @@ import { invariant } from 'ts-invariant';
 const clientState = modules.getStateParams({resolverContex: () =>  modules.createService({}, {})});
 
 // TODO: add cache redirects to module
-const cache = new InMemoryCache({
+export const cache = new InMemoryCache({
     dataIdFromObject: (result) => modules.getDataIdFromObject(result),
     fragmentMatcher: clientState.fragmentMatcher as any,
  });
