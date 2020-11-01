@@ -14,12 +14,14 @@ const features = new Feature(
 
 // console.log(sharedModule);
 export const MainRoute = props => (
-        <MainLayout 
-                // sidebarSegments={features.sidebarSegments} 
-                route={features.getMenus()}
+        <React.Suspense fallback={<span>Loading....</span>}>
+                <MainLayout
+                        // sidebarSegments={features.sidebarSegments} 
+                        route={features.getMenus()}
                 >
-                <WorkbenchTheme children={features.getRoutes()} />
-        </MainLayout>
+                        <WorkbenchTheme children={features.getRoutes()} />
+                </MainLayout>
+        </React.Suspense>
 );
 
 export default features;
