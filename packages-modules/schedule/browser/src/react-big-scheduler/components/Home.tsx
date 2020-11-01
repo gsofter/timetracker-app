@@ -13,7 +13,7 @@ import { Modal } from "./Modal";
 import { Form, Input, Button, Select, DatePicker, TimePicker } from "antd";
 const { Option } = Select;
 
-export const Home = ({ props }) => {
+export default ({ props }) => {
   const [isShowing, setIsShowing] = useState(false);
 
   const { css } = useFela(props);
