@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IMenuPosition } from '@common-stack/client-react';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
-import { Home, Demo1, Demo2 , Scheduler} from './components/index';
+import { Scheduler} from './components/index';
 import { ScheduleOutlined } from '@ant-design/icons';
 
 
