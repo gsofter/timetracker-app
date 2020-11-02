@@ -10,7 +10,7 @@ import { DndProvider } from "react-dnd";
 import { HTML5Backend } from "react-dnd-html5-backend";
 import { useFela } from "react-fela";
 import { Modal } from "./Modal";
-import { Form, Input, Button, Select, DatePicker, TimePicker } from "antd";
+import { Row, Col, Form, Input, Button, Select, DatePicker, TimePicker } from "antd";
 const { Option } = Select;
 
 export const Home = ({ props }) => {
@@ -26,20 +26,20 @@ export const Home = ({ props }) => {
       // minuteStep: 15
     }
   );
-  console.log({ schedulerData }, "schedular data");
+
+  schedulerData.setResources(DemoData.resources);                                                                                             
+  schedulerData.setEvents(DemoData.events);
 
   const schedularBeside = (schedulerData.config.besidesWidth = 290);
   const schedularWidth = (schedulerData.config.schedulerWidth = "100%");
-
   // const schedular = (schedulerData.documentWidth - schedularBeside) * schedularWidth
-  moment.locale("en");
+  // moment.locale("en");
 
   const [viewModel, setViewModel] = React.useState(schedulerData);
-  React.useEffect(() => {
-    viewModel.setLocaleMoment(moment);
-    viewModel.setResources(DemoData.resources);
-    viewModel.setEvents(DemoData.events);
-  }, []);
+  // React.useEffect(() => {
+  //   viewModel.setResources(DemoData.resources);
+  //   viewModel.setEvents(DemoData.events);
+  // }, []);
 
   const prevClick = (schedulerData) => {
     schedulerData.prev();
@@ -223,13 +223,24 @@ export const Home = ({ props }) => {
       />
     </div>
   );
-
+  
+  let customHeader = (
+    <Row align="middle" justify="space-between" style={{marginBottom: '15px'}}>
+        <Col>
+            Custom Header col 1
+        </Col>
+        <Col>
+            Custom Header col 2
+        </Col>
+    </Row>
+);
   return (
     <div className={css(menuStyle.styles)}>
       <DndProvider backend={HTML5Backend}>
         {schedulerData.setEvents && (
           <Scheduler
             schedulerData={viewModel}
+            customHeader={customHeader}
             prevClick={prevClick}
             nextClick={nextClick}
             onSelectDate={onSelectDate}
