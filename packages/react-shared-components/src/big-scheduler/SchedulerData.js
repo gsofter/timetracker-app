@@ -532,10 +532,10 @@ export default class SchedulerData {
                     id: `${item.id}-${index}`,
                     start: rule.origOptions.tzid
                       ? this.localeMoment.utc(time).utcOffset(this.localeMoment().utcOffset(), true).format(DATETIME_FORMAT)
-                      : this.localeMoment(time).format(DATETIME_FORMAT),
+                      : this.localeMoment(new Date(time)).format(DATETIME_FORMAT),
                     end: rule.origOptions.tzid
                       ? this.localeMoment.utc(time).utcOffset(this.localeMoment().utcOffset(), true).add(oldEnd.diff(oldStart), 'ms').add(this.localeMoment(oldUntil).utcOffset() - this.localeMoment(item.start).utcOffset(), "m").format(DATETIME_FORMAT)
-                      : this.localeMoment(time).add(oldEnd.diff(oldStart), 'ms').format(DATETIME_FORMAT)
+                      : this.localeMoment(new Date(time)).add(oldEnd.diff(oldStart), 'ms').format(DATETIME_FORMAT)
                 };
             });
             newEvents.forEach((newEvent) => {
