@@ -82,7 +82,7 @@ function SelectableCalendar({ localizer }: Props) {
   );
 }
 
-export const Scheduler = (props) => {
+export default (props) => {
   return (
     <div style={{ height: "70vh", width: "1030px" }}>
       <SelectableCalendar localizer={localizer} />
