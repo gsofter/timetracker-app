@@ -41,7 +41,14 @@ class CalendarEvent {
 
 function SelectableCalendar({ localizer }: Props) {
   const [events, setEvents] = useState([
-    // { start: moment(), end: moment().add(1, "hours"), title: "test" }
+    {
+      title: "My event",
+      allDay: true,
+      start: moment().toDate(),
+      end: moment()
+        .add(4, "hours")
+        .toDate(),
+    },
   ] as CalendarEvent[]);
 
   const handleSelect = ({ start, end }) => {
@@ -66,17 +73,14 @@ function SelectableCalendar({ localizer }: Props) {
         selectable
         localizer={localizer}
         events={events}
-        defaultView='month'
+        defaultView="month"
         views={allViews}
-        scrollToTime={new Date(1970, 1, 1, 6)}
         defaultDate={new Date(2020, 4, 21)}
         onSelectEvent={(event) => alert(event.title)}
         onSelectSlot={handleSelect}
         startAccessor="start"
         endAccessor="end"
         titleAccessor="title"
-        step={10}
-        showMultiDayTimes
       />
     </>
   );
