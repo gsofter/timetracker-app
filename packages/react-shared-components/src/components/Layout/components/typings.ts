@@ -32,7 +32,7 @@ export type WithFalse<T> = T | false;
 
 export interface RouterTypes<P> extends Omit<BasicRouteProps, 'location'> {
   computedMatch?: match<P>;
-  route?: Route;
+  route?: any;
   location: BasicRouteProps['location'] | { pathname?: string };
 }
 

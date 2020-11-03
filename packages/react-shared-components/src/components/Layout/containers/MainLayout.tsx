@@ -232,7 +232,13 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
     });
   }
 
-  const props = { ...main_props, route: routesHandler(main_props.route, main_props.params), ...settings };
+  const [props, onRouteChange] = useState({ ...main_props, route: {routes: main_props.route}, ...settings });
+  
+  useEffect(() => {
+    if (props.route.routes.filter(key => key.path.split('/').includes(main_props.params.orgName)).length <= 0) {
+      onRouteChange({ ...main_props, route: { routes: routesHandler(main_props.route, main_props.params) }, ...settings });
+    }
+  });
 
   const { css, theme } = useFela(props);
   const {
@@ -242,7 +248,7 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
     fixSiderbar,
     navTheme,
     contentStyle,
-    route: rs,
+    route,
     layout: defaultPropsLayout,
     style,
     disableContentMargin,
@@ -254,16 +260,6 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
     loading,
     ...rest
   } = props;
-  const [route, setRoute] = useState({ routes: rs });
-
-
-
-
-  useEffect(() => {
-    if (route.routes.toString() !== rs.toString()) {
-      setRoute({ routes: rs });
-    }
-  }, [route]);
 
   const propsLayout = compatibleLayout(defaultPropsLayout);
   const { prefixCls } = rest;
