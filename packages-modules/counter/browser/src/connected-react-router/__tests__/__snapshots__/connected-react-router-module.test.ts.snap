@@ -4,7 +4,7 @@ exports[`connector modules module configuredRoutes 1`] = `
 Array [
   Object {
     "component": [Function],
-    "exact": true,
+    "exact": false,
     "path": "/connected-react-router",
     "routes": Array [
       Object {
@@ -17,7 +17,7 @@ Array [
           "$$typeof": Symbol(react.memo),
           "WrappedComponent": [Function],
           "compare": null,
-          "displayName": "Connect(Counter)",
+          "displayName": "Connect(CounterComponent)",
           "type": [Function],
         },
         "exact": true,
@@ -31,7 +31,7 @@ Array [
 exports[`connector modules module routes 1`] = `
 <Switch>
   <Route
-    exact={true}
+    exact={false}
     path="/connected-react-router"
     render={[Function]}
   />
