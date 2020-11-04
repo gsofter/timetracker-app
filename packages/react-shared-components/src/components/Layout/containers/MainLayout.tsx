@@ -1,4 +1,4 @@
-import React, { CSSProperties, useContext, useEffect, useState } from 'react';
+import React, { CSSProperties, useContext, useEffect, useState, useRef } from 'react';
 import { Layout, Breadcrumb } from 'antd';
 import { useFela } from 'react-fela';
 import SiderMenu from '../components/SubMenu3/index';
@@ -232,7 +232,18 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
     });
   }
 
-  const props = { ...main_props, route: routesHandler(main_props.route, main_props.params), ...settings };
+  const [ props, setUserRoutes ] = useState({ ...main_props, ...settings });
+  const { params, userRoute } = {...props, userRoute: props.route};
+  const prevRoute = useRef({ params, userRoute }).current;
+  useEffect(() => {
+    if (prevRoute.params !== params || prevRoute.userRoute !== userRoute) {
+      setUserRoutes({ ...main_props, route: routesHandler(main_props.route, main_props.params), ...settings });
+    }
+    return () => { 
+      prevRoute.params = params;
+      prevRoute.userRoute = userRoute;
+    };
+  }, [params, userRoute]);
 
   const { css, theme } = useFela(props);
   const {
@@ -254,16 +265,8 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
     loading,
     ...rest
   } = props;
-  const [route, setRoute] = useState({ routes: rs });
 
-
-
-
-  useEffect(() => {
-    if (route.routes.toString() !== rs.toString()) {
-      setRoute({ routes: rs });
-    }
-  }, [route]);
+  const route = { routes: rs };
 
   const propsLayout = compatibleLayout(defaultPropsLayout);
   const { prefixCls } = rest;
