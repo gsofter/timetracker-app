@@ -8,9 +8,11 @@ generates:
       - typescript-graphql-files-modules
   packages/admin-core/src/interfaces/generated/generated-models.ts:
     schema:
+      - packages/admin-platform/browser/src/graphql/**/*.graphql
       - packages/react-shared-components/src/components/**/*.graphql
     documents: 
       - "packages/react-shared-components/src/components/**/gql/**/*.gql"
+      - packages/react-shared-components/src/components/**/*.gql
     config:
       constEnums: true
       noNamespaces: true
@@ -45,6 +47,7 @@ generates:
   packages/react-shared-components/src/components/generated.tsx:
     schema:
       - packages/react-shared-components/src/components/**/*.graphql
+      - packages/admin-platform/browser/src/graphql/**/*.graphql
     documents: 
       - "packages/react-shared-components/src/components/**/gql/**/*.gql"
     config:

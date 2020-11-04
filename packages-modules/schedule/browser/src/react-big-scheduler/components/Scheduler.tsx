@@ -279,7 +279,7 @@ function SelectableCalendar({ localizer }: Props) {
   );
 }
 
-export const Scheduler = (props) => {
+export default (props) => {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>

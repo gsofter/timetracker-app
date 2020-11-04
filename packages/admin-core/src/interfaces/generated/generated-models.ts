@@ -20,6 +20,15 @@ export type Scalars = {
 };
 
 
+export const enum IClientCacheTypeNames {
+  Context = 'Context'
+};
+
+export type IContext = {
+   __typename?: 'Context';
+  orgName?: Maybe<Scalars['String']>;
+};
+
 /**  Database counter  */
 export type ICounter = {
    __typename?: 'Counter';
@@ -69,9 +78,16 @@ export type IQuery = {
   /**  Counter from Datasource  */
   counterCache?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
+  getContextProperty?: Maybe<Scalars['AnyObject']>;
+  getOrgNameFromContext?: Maybe<IContext>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
   sidebarState?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type IQuerygetContextPropertyArgs = {
+  keys?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type ISubscription = {
@@ -81,6 +97,11 @@ export type ISubscription = {
   dummy?: Maybe<Scalars['Int']>;
   moleculerCounterUpdate?: Maybe<ICounter>;
 };
+
+export type IOrgNameInContextFragment = (
+  { __typename?: 'Context' }
+  & Pick<IContext, 'orgName'>
+);
 
 export type ItoggleSidebarMutationVariables = {
   state: Scalars['Boolean'];
@@ -92,6 +113,17 @@ export type ItoggleSidebarMutation = (
   & Pick<IMutation, 'toggleSidebar'>
 );
 
+export type IGetOrgNameFromContextQueryVariables = {};
+
+
+export type IGetOrgNameFromContextQuery = (
+  { __typename?: 'Query' }
+  & { getOrgNameFromContext?: Maybe<(
+    { __typename?: 'Context' }
+    & IOrgNameInContextFragment
+  )> }
+);
+
 export type IsidebarStateQueryVariables = {};
 
 
@@ -100,7 +132,11 @@ export type IsidebarStateQuery = (
   & Pick<IQuery, 'sidebarState'>
 );
 
-
+export const OrgNameInContextFragmentDoc = gql`
+    fragment OrgNameInContext on Context {
+  orgName
+}
+    `;
 export const toggleSidebarDocument = gql`
     mutation toggleSidebar($state: Boolean!) {
   toggleSidebar(state: $state) @client
@@ -108,6 +144,14 @@ export const toggleSidebarDocument = gql`
     `;
 export type toggleSidebarMutationResult = ApolloReactCommon.MutationResult<ItoggleSidebarMutation>;
 export type toggleSidebarMutationOptions = ApolloReactCommon.BaseMutationOptions<ItoggleSidebarMutation, ItoggleSidebarMutationVariables>;
+export const GetOrgNameFromContextDocument = gql`
+    query GetOrgNameFromContext {
+  getOrgNameFromContext @client {
+    ...OrgNameInContext
+  }
+}
+    ${OrgNameInContextFragmentDoc}`;
+export type GetOrgNameFromContextQueryResult = ApolloReactCommon.QueryResult<IGetOrgNameFromContextQuery, IGetOrgNameFromContextQueryVariables>;
 export const sidebarStateDocument = gql`
     query sidebarState {
   sidebarState @client
@@ -190,15 +234,17 @@ export type IResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
   Counter: ResolverTypeWrapper<ICounter>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
+  String: ResolverTypeWrapper<Scalars['String']>,
+  AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
+  Context: ResolverTypeWrapper<IContext>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Mutation: ResolverTypeWrapper<{}>,
   Subscription: ResolverTypeWrapper<{}>,
-  String: ResolverTypeWrapper<Scalars['String']>,
-  AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<IFieldError>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
+  ClientCacheTypeNames: IClientCacheTypeNames,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -206,20 +252,27 @@ export type IResolversParentTypes = {
   Query: {},
   Counter: ICounter,
   Int: Scalars['Int'],
+  String: Scalars['String'],
+  AnyObject: Scalars['AnyObject'],
+  Context: IContext,
   Boolean: Scalars['Boolean'],
   Mutation: {},
   Subscription: {},
-  String: Scalars['String'],
-  AnyObject: Scalars['AnyObject'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
   FieldError: IFieldError,
   ID: Scalars['ID'],
+  ClientCacheTypeNames: IClientCacheTypeNames,
 };
 
 export interface IAnyObjectScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['AnyObject'], any> {
   name: 'AnyObject'
 }
+
+export type IContextResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Context'] = IResolversParentTypes['Context']> = {
+  orgName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
 
 export type ICounterResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Counter'] = IResolversParentTypes['Counter']> = {
   amount?: Resolver<IResolversTypes['Int'], ParentType, ContextType>,
@@ -252,6 +305,8 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   counter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   counterCache?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  getContextProperty?: Resolver<Maybe<IResolversTypes['AnyObject']>, ParentType, ContextType, RequireFields<IQuerygetContextPropertyArgs, never>>,
+  getOrgNameFromContext?: Resolver<Maybe<IResolversTypes['Context']>, ParentType, ContextType>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   sidebarState?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
 };
@@ -264,6 +319,7 @@ export type ISubscriptionResolvers<ContextType = MyContext, ParentType extends I
 
 export type IResolvers<ContextType = MyContext> = {
   AnyObject?: GraphQLScalarType,
+  Context?: IContextResolvers<ContextType>,
   Counter?: ICounterResolvers<ContextType>,
   FieldError?: IFieldErrorResolvers<ContextType>,
   JSON?: GraphQLScalarType,

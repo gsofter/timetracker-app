@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { Layout, Menu } from 'antd';
 import classNames from 'classnames';
 import { SiderProps } from 'antd/lib/layout/Sider';
@@ -104,7 +104,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     onOpenChange,
     headerHeight,
   } = props;
-
   const { css } = useFela(props);
 
   const baseClassName = `${prefixCls}-sider`;
@@ -115,7 +114,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     [`${baseClassName}-light`]: theme === 'light',
   });
   const headerDom = defaultRenderLogoAndTitle(props);
-
   const extraDom = menuExtraRender && menuExtraRender(props);
   const menuDom = menuContentRender !== false && flatMenuKeys && (
     <BaseMenu
@@ -234,7 +232,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     </>
   );
 };
-
 export default SiderMenu;
 
 const styleSheet: any = {
@@ -376,7 +373,6 @@ const styleSheet: any = {
       width: '100%',
     },
     '& .ant-pro-sider-light': {
-      //  backgroundColor: ;
       boxShadow: '2px 0 8px 0 rgba(29,35,41,0.05)',
     },
     '& .ant-pro-sider-light .ant-layout-sider-children ::-webkit-scrollbar-track': {
@@ -394,9 +390,6 @@ const styleSheet: any = {
     },
     '& .ant-pro-sider-light .ant-menu-light': {
       borderRightColor: 'transparent',
-    },
-    '& .ant-pro-sider-light .ant-pro-sider-collapsed-button': {
-      //  borderTop: ;
     },
     '& .ant-pro-sider-icon': {
       width: '14px',
