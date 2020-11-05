@@ -118,6 +118,16 @@ function SelectableCalendar({ localizer }: Props) {
       startDate: startDate,
       endDate: endDate
     }
+    const title = "New event added"
+    if (title) {
+      let newEvent = {} as CalendarEvent;
+      newEvent.start = moment(startDate).toDate();
+      newEvent.end = moment(endDate).toDate();
+      newEvent.title = title;
+      setEvents([...events, newEvent ])
+    }
+    
+    
     setIsShowing(!isShowing);
     console.log(submitValue, "submitValue");
   };
@@ -148,7 +158,7 @@ function SelectableCalendar({ localizer }: Props) {
             </Select>
           </Form.Item>
           <Form.Item label="DatePicker">
-            <DatePicker onChange={(e) => { setStartDate(startDate) }} value={startDate as any} />{" "}
+            <DatePicker onChange={(date) => { setStartDate(date as any) }} value={startDate as any} />{" "}
             &nbsp;
             <TimePicker
               use12Hours
@@ -164,7 +174,7 @@ function SelectableCalendar({ localizer }: Props) {
               value={endTime as any}
             />
             &nbsp;
-            <DatePicker onChange={(e) => { setEndDate(endDate) }} value={endDate as any} />
+            <DatePicker onChange={(date) => { setEndDate(date as any) }} value={endDate as any} />
           </Form.Item>
           <Form.Item label="Minimum Hours">
             <Input
@@ -273,7 +283,7 @@ function SelectableCalendar({ localizer }: Props) {
         events={events}
         defaultView="month"
         views={allViews}
-        defaultDate={new Date(2020, 4, 21)}
+        defaultDate={new Date()}
         onSelectEvent={(event) => alert(event.title)}
         onSelectSlot={handleSelect}
         startAccessor="start"
