@@ -118,11 +118,19 @@ function SelectableCalendar({ localizer }: Props) {
       startDate: startDate,
       endDate: endDate
     }
+    setIsShowing(!isShowing);
     console.log(submitValue, "submitValue");
   };
-
+  
   const resetModal = (e: any) => {
-    console.log(e, "reset modal");
+    e.preventDefault();
+    setRepeat(null);
+    setStartDate(null);
+    setStartTime(null);
+    setEndTime(null);
+    setEndDate(null);
+    values.selectuser = '';
+    values.minhours = '';
   };
 
   const renderModalBody = (): JSX.Element => {
@@ -176,8 +184,8 @@ function SelectableCalendar({ localizer }: Props) {
           </Form.Item>
 
           <Form.Item>
-            <Button htmlType="button" onSubmit={resetModal}>
-              Cancel
+            <Button htmlType="button" onClick={resetModal}>
+              Reset
             </Button>
             &nbsp;
             <Button type="primary" htmlType="submit" onClick={handleSubmit}>
