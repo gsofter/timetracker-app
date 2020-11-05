@@ -1,9 +1,23 @@
 import React, { useState } from "react";
 import { Calendar, View, DateLocalizer } from "react-big-calendar";
 import moment from "moment";
+import { ScheduleOutlined } from "@ant-design/icons";
 
 import { momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import {
+  Row,
+  Col,
+  Form,
+  Input,
+  Button,
+  Select,
+  DatePicker,
+  TimePicker,
+} from "antd";
+import { Modal } from "./Modal";
+import { useFela } from "react-fela";
+import { values } from "lodash";
 
 const localizer = momentLocalizer(moment);
 
@@ -40,8 +54,27 @@ class CalendarEvent {
 }
 
 function SelectableCalendar({ localizer }: Props) {
+  const [isShowing, setIsShowing] = useState(false);
+  const [repeat, setRepeat] = useState();
+  const [startTime, setStartTime] = useState();
+  const [endTime, setEndTime] = useState();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+
+  const [values, setValues] = useState({
+    selectuser: "",
+    minhours: "",
+  });
+
   const [events, setEvents] = useState([
-    // { start: moment(), end: moment().add(1, "hours"), title: "test" }
+    {
+      title: "My event",
+      allDay: true,
+      start: moment().toDate(),
+      end: moment()
+        .add(4, "hours")
+        .toDate(),
+    },
   ] as CalendarEvent[]);
 
   const handleSelect = ({ start, end }) => {
@@ -60,32 +93,208 @@ function SelectableCalendar({ localizer }: Props) {
     }
   };
 
+  const openModal = () => {
+    setIsShowing(!isShowing);
+  };
+  
+  const handleChange = (e: any) => {
+    if(!e.target){
+      setValues({...values, selectuser: e })
+    }
+    else{
+      const {name, value} = e && e.target
+      setValues({...values, [name]:value })
+    }
+  };
+
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    const submitValue ={
+      selectUser: values.selectuser,
+      minhours: values.minhours,
+      repeat: repeat,
+      startTime: startTime,
+      endTime: endTime,
+      startDate: startDate,
+      endDate: endDate
+    }
+    console.log(submitValue, "submitValue");
+  };
+
+  const resetModal = (e: any) => {
+    console.log(e, "reset modal");
+  };
+
+  const renderModalBody = (): JSX.Element => {
+    return (
+      <>
+        <Form
+          labelCol={{ span: 21 }}
+          wrapperCol={{ span: 21 }}
+          layout="vertical"
+        >
+          <Form.Item label="User">
+            <Select onChange={handleChange} value={values.selectuser}>
+              <Select.Option value="user1">User1</Select.Option>
+              <Select.Option value="user2">User2</Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="DatePicker">
+            <DatePicker onChange={(e) => { setStartDate(startDate) }} value={startDate as any} />{" "}
+            &nbsp;
+            <TimePicker
+              use12Hours
+              format="h:mm a"
+              onChange={(time, timeString) => { setStartTime( time as any ) }}
+              value={startTime as any}
+            />
+            &nbsp;TO &nbsp;
+            <TimePicker
+              use12Hours
+              format="h:mm a"
+              onChange={(time, timeString) => { setEndTime( time as any ) }}
+              value={endTime as any}
+            />
+            &nbsp;
+            <DatePicker onChange={(e) => { setEndDate(endDate) }} value={endDate as any} />
+          </Form.Item>
+          <Form.Item label="Minimum Hours">
+            <Input
+              name='minhours'
+              placeholder="5"
+              onChange={handleChange}
+              value={values.minhours as any}
+            />
+          </Form.Item>
+          <Form.Item label="Repeats">
+            <Select onChange={(e)=> {
+              setRepeat(e)
+            }} value={repeat}>
+              <Select.Option value="never">Never</Select.Option>
+              <Select.Option value="yes">Yes</Select.Option>
+            </Select>
+          </Form.Item>
+
+          <Form.Item>
+            <Button htmlType="button" onSubmit={resetModal}>
+              Cancel
+            </Button>
+            &nbsp;
+            <Button type="primary" htmlType="submit" onClick={handleSubmit}>
+              Submit
+            </Button>
+          </Form.Item>
+        </Form>
+      </>
+    );
+  };
+
   return (
     <>
+      <Row
+        align="middle"
+        justify="space-between"
+        style={{ marginBottom: "15px" }}
+      >
+        <Col>
+          <div style={{ textAlign: "center" }}>
+            <h3>Attendance schedules</h3>
+          </div>
+        </Col>
+      </Row>
+      <Row align="middle" justify="space-between">
+        <Col>
+          <div>
+            <Form
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              layout="vertical"
+              style={{ width: "150px" }}
+            >
+              <Form.Item label="My time zone">
+                <Select>
+                  <Select.Option value="user1">User1</Select.Option>
+                  <Select.Option value="user2">User2</Select.Option>
+                </Select>
+              </Form.Item>
+            </Form>
+          </div>
+        </Col>
+        <Col>
+          <div>
+            <Form
+              labelCol={{ span: 24 }}
+              wrapperCol={{ span: 24 }}
+              layout="vertical"
+              style={{ width: "150px" }}
+            >
+              <Form.Item label="Members">
+                <Select>
+                  <Select.Option value="user1">User1</Select.Option>
+                  <Select.Option value="user2">User2</Select.Option>
+                </Select>
+              </Form.Item>
+            </Form>
+          </div>
+        </Col>
+        <Col>
+          <a href="#">
+            <span>
+              <ScheduleOutlined />
+            </span>{" "}
+            schedule settings
+          </a>
+        </Col>
+        <Col>
+          <div>
+            <span style={{ fontWeight: "bold" }}>
+              <a onClick={openModal}>Add Schedule</a>
+            </span>
+            <Modal
+              modalTitle="Create Schedule"
+              showModal={isShowing}
+              handleClose={() => setIsShowing(false)}
+              modalBody={renderModalBody()}
+            />
+          </div>
+        </Col>
+      </Row>
       <Calendar
         selectable
         localizer={localizer}
         events={events}
-        defaultView='month'
+        defaultView="month"
         views={allViews}
-        scrollToTime={new Date(1970, 1, 1, 6)}
         defaultDate={new Date(2020, 4, 21)}
         onSelectEvent={(event) => alert(event.title)}
         onSelectSlot={handleSelect}
         startAccessor="start"
         endAccessor="end"
         titleAccessor="title"
-        step={10}
-        showMultiDayTimes
+        // components={{
+        //   day: { header: MyCustomHeader }
+        // }}
       />
     </>
   );
 }
 
 export default (props) => {
+  const { css } = useFela();
   return (
-    <div style={{ height: "70vh", width: "1030px" }}>
-      <SelectableCalendar localizer={localizer} />
+    <div className={css(stylesheet.styles)}>
+      <div style={{ height: "70vh", width: "1030px" }}>
+        <SelectableCalendar localizer={localizer} />
+      </div>
     </div>
   );
+};
+
+const stylesheet: any = {
+  styles: (theme) => ({
+    position: "relative",
+    "& .ant-select-single:not(.ant-select-customize-input) .ant-select-selector": {
+      // width: '150px !important'
+    },
+  }),
 };
