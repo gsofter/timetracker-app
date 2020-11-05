@@ -66,16 +66,19 @@
     "zen:watch:debug": "npm run zen:watch -- -v"
   },
   "dependencies": {
-    "@admin-layout/platform-browser": "file:packages/admin-platform/browser",
     "@admin-layout/core": "file:packages/admin-core",
     "@admin-layout/counter-module-browser": "file:packages-modules/counter/browser",
     "@admin-layout/counter-module-server": "file:packages-modules/counter/server",
+    "@admin-layout/platform-browser": "file:packages/admin-platform/browser",
     "@admin-layout/platform-server": "file:packages/admin-platform/server",
     "@admin-layout/react-shared-components": "file:packages/react-shared-components",
-    "dataloader": "^2.0.0",
+    "@apollo/react-hooks": "^4.0.0",
     "admin-layout-backend-server": "file:servers/backend-server",
     "admin-layout-frontend-server": "file:servers/frontend-server",
-    "admin-layout-moleculer-server": "file:servers/moleculer-server"
+    "admin-layout-moleculer-server": "file:servers/moleculer-server",
+    "apollo-boost": "^0.4.9",
+    "apollo-cache-persist": "^0.1.1",
+    "dataloader": "^2.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",

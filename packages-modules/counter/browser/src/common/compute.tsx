@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IMenuPosition } from '@common-stack/client-react';
 
 import { Home } from '../common/components/Home';
+import { TimeTracker }  from '../common/components/TimeTracker';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 import {
     MenuUnfoldOutlined,
@@ -19,9 +20,18 @@ export const commonPageStore: any[] = [
         position: IMenuPosition.MIDDLE,
         icon: <FileOutlined/>,
     },
+    {
+        path: '/time-tracker',
+        key: 'time-tracker',
+        exact: true,
+        name: 'Time Tracker',
+        component: TimeTracker,
+        position: IMenuPosition.MIDDLE,
+        icon: <FileOutlined/>,
+    },
 ];
 
-const selectedRoutesAndMenus = ['home'];
+const selectedRoutesAndMenus = ['home', 'time-tracker'];
 
 // get menus
 const filteredMenus = getFilteredMenus(commonPageStore, selectedRoutesAndMenus);

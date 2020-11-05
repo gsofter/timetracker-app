@@ -1,0 +1,48 @@
+.wrapper-spinner {
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    align-items: center;
+    padding: 1rem;
+  
+    &--full-screen {
+      height: 100vh;
+      width: 100vw;
+    }
+  
+    &--parent-size {
+      height: 100%;
+      width: 100%;
+    }
+  
+    &--inline {
+      height: auto;
+      width: auto;
+    }
+  
+    &--overlay {
+      border-radius: 0.4rem;
+      position: absolute;
+      z-index: 1;
+      top: 0;
+      right: 0;
+      bottom: 0;
+      left: 0;
+      background-color: rgba(51, 51, 51, 0.7);
+    }
+  
+    &--circle {
+      border-radius: 50%;
+    }
+  
+    .wobbly-logo-icon {
+      width: 125px;
+      height: 30px;
+      margin-bottom: 5px;
+    }
+  
+    .spinner-icon {
+      width: 25px;
+      height: 25px;
+    }
+  }

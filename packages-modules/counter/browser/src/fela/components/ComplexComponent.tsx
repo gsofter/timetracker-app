@@ -27,7 +27,7 @@ const ComplexComponent: React.FunctionComponent<Props> = props => {
             <div className={styles.thirdSection}>Third Section</div>
             </div>
             <div>
-                <h3>Rules</h3>
+                <h3>Rulesassas</h3>
                 {Object.entries(rules)
                 .map(([key, rule]) => (
                     <div key={key}>
