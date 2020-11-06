@@ -232,20 +232,22 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
     });
   }
 
-  const props = { ...main_props, route: routesHandler(main_props.route, main_props.params), ...settings };
-
-  // const [ props, setUserRoutes ] = useState({ ...main_props, ...settings });
-  // const { params, userRoute } = {...props, userRoute: props.route};
-  // const prevRoute = useRef({ params, userRoute }).current;
-  // useEffect(() => {
-  //   if (prevRoute.params !== params || prevRoute.userRoute !== userRoute) {
-  //     setUserRoutes({ ...main_props, route: routesHandler(main_props.route, main_props.params), ...settings });
-  //   }
-  //   return () => { 
-  //     prevRoute.params = params;
-  //     prevRoute.userRoute = userRoute;
-  //   };
-  // }, [params, userRoute]);
+  const [ props, setUserRoutes ] = useState({ ...main_props, ...settings });
+  const prevRoute = useRef(null);
+  const prevSetting = useRef(null)
+  useEffect(() => {
+    prevSetting.current = settings;
+    prevRoute.current = props;
+  });
+  const prevSettingData = prevSetting.current;
+  const prevRouteData = prevRoute.current;
+  useEffect(() => {
+    if (!prevRouteData || prevRouteData.params !== props.params && prevRouteData.route !== props.route) {
+      setUserRoutes({ ...props, route: routesHandler(main_props.route, main_props.params), ...settings });
+    } else if(prevSettingData !== settings) {
+      setUserRoutes({ ...props, ...settings })
+    }
+  });
 
   const { css, theme } = useFela(props);
   const {
