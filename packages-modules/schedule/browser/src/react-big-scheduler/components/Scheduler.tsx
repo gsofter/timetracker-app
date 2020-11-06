@@ -17,6 +17,7 @@ import {
 } from "antd";
 import { Modal } from "./Modal";
 import { useFela } from "react-fela";
+import { values } from "lodash";
 
 const localizer = momentLocalizer(moment);
 
@@ -54,6 +55,17 @@ class CalendarEvent {
 
 function SelectableCalendar({ localizer }: Props) {
   const [isShowing, setIsShowing] = useState(false);
+  const [repeat, setRepeat] = useState();
+  const [startTime, setStartTime] = useState();
+  const [endTime, setEndTime] = useState();
+  const [startDate, setStartDate] = useState();
+  const [endDate, setEndDate] = useState();
+
+  const [values, setValues] = useState({
+    selectuser: "",
+    minhours: "",
+  });
+
   const [events, setEvents] = useState([
     {
       title: "My event",
@@ -84,9 +96,51 @@ function SelectableCalendar({ localizer }: Props) {
   const openModal = () => {
     setIsShowing(!isShowing);
   };
+  
+  const handleChange = (e: any) => {
+    if(!e.target){
+      setValues({...values, selectuser: e })
+    }
+    else{
+      const {name, value} = e && e.target
+      setValues({...values, [name]:value })
+    }
+  };
 
-  const onChangeTime = (time, timeString) => {
-    console.log(time, timeString);
+  const handleSubmit = (e: any) => {
+    e.preventDefault();
+    const submitValue ={
+      selectUser: values.selectuser,
+      minhours: values.minhours,
+      repeat: repeat,
+      startTime: startTime,
+      endTime: endTime,
+      startDate: startDate,
+      endDate: endDate
+    }
+    const title = "New event added"
+    if (title) {
+      let newEvent = {} as CalendarEvent;
+      newEvent.start = moment(startDate).toDate();
+      newEvent.end = moment(endDate).toDate();
+      newEvent.title = title;
+      setEvents([...events, newEvent ])
+    }
+    
+    
+    setIsShowing(!isShowing);
+    console.log(submitValue, "submitValue");
+  };
+  
+  const resetModal = (e: any) => {
+    e.preventDefault();
+    setRepeat(null);
+    setStartDate(null);
+    setStartTime(null);
+    setEndTime(null);
+    setEndDate(null);
+    values.selectuser = '';
+    values.minhours = '';
   };
 
   const renderModalBody = (): JSX.Element => {
@@ -98,33 +152,53 @@ function SelectableCalendar({ localizer }: Props) {
           layout="vertical"
         >
           <Form.Item label="User">
-            <Select>
+            <Select onChange={handleChange} value={values.selectuser}>
               <Select.Option value="user1">User1</Select.Option>
               <Select.Option value="user2">User2</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="DatePicker">
-            <DatePicker /> &nbsp;
-            <TimePicker use12Hours format="h:mm a" onChange={onChangeTime} />
-            &nbsp;TO &nbsp;
-            <TimePicker use12Hours format="h:mm a" onChange={onChangeTime} />
+            <DatePicker onChange={(date) => { setStartDate(date as any) }} value={startDate as any} />{" "}
             &nbsp;
-            <DatePicker />
+            <TimePicker
+              use12Hours
+              format="h:mm a"
+              onChange={(time, timeString) => { setStartTime( time as any ) }}
+              value={startTime as any}
+            />
+            &nbsp;TO &nbsp;
+            <TimePicker
+              use12Hours
+              format="h:mm a"
+              onChange={(time, timeString) => { setEndTime( time as any ) }}
+              value={endTime as any}
+            />
+            &nbsp;
+            <DatePicker onChange={(date) => { setEndDate(date as any) }} value={endDate as any} />
           </Form.Item>
           <Form.Item label="Minimum Hours">
-            <Input placeholder="5" />
+            <Input
+              name='minhours'
+              placeholder="5"
+              onChange={handleChange}
+              value={values.minhours as any}
+            />
           </Form.Item>
           <Form.Item label="Repeats">
-            <Select>
-              <Select.Option value="Never">Never</Select.Option>
-              <Select.Option value="Yes">Yes</Select.Option>
+            <Select onChange={(e)=> {
+              setRepeat(e)
+            }} value={repeat}>
+              <Select.Option value="never">Never</Select.Option>
+              <Select.Option value="yes">Yes</Select.Option>
             </Select>
           </Form.Item>
 
           <Form.Item>
-            <Button htmlType="button">Cancel</Button>
+            <Button htmlType="button" onClick={resetModal}>
+              Reset
+            </Button>
             &nbsp;
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" onClick={handleSubmit}>
               Submit
             </Button>
           </Form.Item>
@@ -209,7 +283,7 @@ function SelectableCalendar({ localizer }: Props) {
         events={events}
         defaultView="month"
         views={allViews}
-        defaultDate={new Date(2020, 4, 21)}
+        defaultDate={new Date()}
         onSelectEvent={(event) => alert(event.title)}
         onSelectSlot={handleSelect}
         startAccessor="start"
