@@ -46,6 +46,7 @@ import GridContent from '../components/GridContent/index';
 // @ts-ignore
 import favicon from '../../../../favicon.ico';
 import { useGetOrgNameFromContextQuery } from '../../generated';
+import * as _ from 'lodash';
 
 export type BasicLayoutProps = Partial<RouterTypes<Route>> &
   SiderMenuProps &
@@ -234,18 +235,21 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
 
   const [ props, setUserRoutes ] = useState({ ...main_props, ...settings });
   const prevRoute = useRef(null);
-  const prevSetting = useRef(null)
+  const prevSetting = useRef(null);
+  const prevParams =  useRef(null);
   useEffect(() => {
     prevSetting.current = settings;
-    prevRoute.current = props;
+    prevRoute.current = props.route;
+    prevParams.current = props.params;
   });
   const prevSettingData = prevSetting.current;
   const prevRouteData = prevRoute.current;
+  const prevParamsData = prevParams.current;
   useEffect(() => {
-    if (!prevRouteData || prevRouteData.params !== props.params && prevRouteData.route !== props.route) {
+    if (!_.isEqual(prevParamsData, props.params) || !_.isEqual(prevRouteData, props.route)) {
       setUserRoutes({ ...props, route: routesHandler(main_props.route, main_props.params), ...settings });
-    } else if(prevSettingData !== settings) {
-      setUserRoutes({ ...props, ...settings })
+    } else if(!_.isEqual(prevSettingData, settings)) {
+      setUserRoutes({ ...props, ...settings });
     }
   });
 
