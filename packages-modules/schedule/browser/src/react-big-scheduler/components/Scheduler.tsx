@@ -220,14 +220,13 @@ function SelectableCalendar({ localizer }: Props) {
           </div>
         </Col>
       </Row>
-      <Row align="middle" justify="space-between">
-        <Col>
-          <div>
+      <Row align="middle" gutter={[24, 16]}>
+        <Col md={6} xs={{ span: 16 }} >
             <Form
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
+              labelCol={{ span: 20 }}
+              wrapperCol={{ span: 20 }}
               layout="vertical"
-              style={{ width: "150px" }}
+              className="sm-screen-size"
             >
               <Form.Item label="My time zone">
                 <Select>
@@ -236,15 +235,13 @@ function SelectableCalendar({ localizer }: Props) {
                 </Select>
               </Form.Item>
             </Form>
-          </div>
         </Col>
-        <Col>
-          <div>
+        <Col md={6} xs={16} >
             <Form
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
+              labelCol={{ span: 20 }}
+              wrapperCol={{ span: 20 }}
               layout="vertical"
-              style={{ width: "150px" }}
+              className="sm-screen-size"
             >
               <Form.Item label="Members">
                 <Select>
@@ -253,17 +250,18 @@ function SelectableCalendar({ localizer }: Props) {
                 </Select>
               </Form.Item>
             </Form>
+        </Col>
+        <Col md={6} xs={16} >
+          <div className="vertical-">
+            <a href="#">
+              <span>
+                <ScheduleOutlined />
+              </span>{" "}
+              schedule settings
+            </a>
           </div>
         </Col>
-        <Col>
-          <a href="#">
-            <span>
-              <ScheduleOutlined />
-            </span>{" "}
-            schedule settings
-          </a>
-        </Col>
-        <Col>
+        <Col md={6} xs={16}>
           <div>
             <span style={{ fontWeight: "bold" }}>
               <a onClick={openModal}>Add Schedule</a>
@@ -301,7 +299,7 @@ export default (props) => {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>
-      <div style={{ height: "70vh", width: "1030px" }}>
+      <div style={{ height: "100vh" }} className="calender-width">
         <SelectableCalendar localizer={localizer} />
       </div>
     </div>
@@ -311,8 +309,11 @@ export default (props) => {
 const stylesheet: any = {
   styles: (theme) => ({
     position: "relative",
-    "& .ant-select-single:not(.ant-select-customize-input) .ant-select-selector": {
-      // width: '150px !important'
+    width: "100%",
+    "& .sm-screen-size": {
+      '@media (max-width: 768px)': {
+        width: '100% !important'
+      },
     },
   }),
 };
