@@ -626,6 +626,7 @@ const styleSheet: any = {
       top: 0,
     },
     '& .ant-pro-basicLayout-content': {
+      zIndex: 111,
       position: 'relative',
       margin: '24px',
     },
