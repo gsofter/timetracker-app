@@ -53,32 +53,6 @@ const AvatarDropdown: React.FC<GlobalHeaderRightProps> = (props) => {
           <LogoutOutlined />
           sign out
         </Menu.Item>
-
-        {menu && <Menu.Divider />}
-        <Menu.SubMenu
-          title={'Organizations menu'}
-          key="orgMenu"
-          className="ant-dropdown-menu-item"
-        >
-          <Menu.Item
-            title={'sample'}
-            key="sample"
-          >
-            sample
-          </Menu.Item>
-          <Menu.Item
-            title={'sample1'}
-            key="sample1"
-          >
-            sample1
-          </Menu.Item>
-          <Menu.Item
-            title={'sample2'}
-            key="sample2"
-          >
-            sample2
-          </Menu.Item>
-        </Menu.SubMenu>
       </Menu>
     </div>
   );
