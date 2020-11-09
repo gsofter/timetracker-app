@@ -20,6 +20,7 @@ export const accountPageStore: any[] = [
         component: Dashboard,
         position: IMenuPosition.MIDDLE,
         icon: <UserOutlined/>,
+        priority: 1
     },
     {
         path: '/:orgName/usermenu/account/profile',
@@ -28,6 +29,7 @@ export const accountPageStore: any[] = [
         component: Account,
         position: IMenuPosition.BOTTOM,
         exact: true,
+        priority: 2
     },
     {
         path: '/:orgName/usermenu/billing',
@@ -36,13 +38,15 @@ export const accountPageStore: any[] = [
         name: 'Billing Setting',
         component: Billing,
         position: IMenuPosition.BOTTOM,
+        priority: 3,
         children: [
             {
                 exact: true,
                 key: '/:orgName/usermenu/billing/home',
                 name: 'Home',
                 path: '/:orgName/usermenu/billing/home',
-                component: Billing
+                component: Billing,
+                priority: 1
             }
         ]
     },
@@ -50,9 +54,11 @@ export const accountPageStore: any[] = [
         path: '/:orgName/usermenu/account',
         key: '/:orgName/usermenu/account',
         tab: 'Accounts',
+        name: 'Account',
         component: AccountSetting,
         position: IMenuPosition.BOTTOM,
         exact: false,
+        priority: 4,
         children: [
             {
                 path: '/:orgName/usermenu/account/collaborators',
@@ -62,6 +68,7 @@ export const accountPageStore: any[] = [
                 position: IMenuPosition.BOTTOM,
                 component: AccountSetting,
                 exact: true,
+                priority: 1,
             },
             {
                 path: '/:orgName/usermenu/account/git-integration',
@@ -71,6 +78,7 @@ export const accountPageStore: any[] = [
                 position: IMenuPosition.BOTTOM,
                 component: AccountSetting,
                 exact: true,
+                priority: 2,
             },
             {
                 path: '/:orgName/usermenu/account/tokens',
@@ -80,6 +88,7 @@ export const accountPageStore: any[] = [
                 position: IMenuPosition.BOTTOM,
                 component: AccountSetting,
                 exact: true,
+                priority: 4,
             },
             {
                 path: '/:orgName/usermenu/account/referrals',
@@ -89,6 +98,7 @@ export const accountPageStore: any[] = [
                 position: IMenuPosition.BOTTOM,
                 component: AccountSetting,
                 exact: true,
+                priority: 3,
             }
         ]
     },
@@ -99,6 +109,7 @@ export const accountPageStore: any[] = [
         component: Organization,
         position: IMenuPosition.BOTTOM,
         exact: true,
+        priority: 6,
     },
     {
         path: '/:orgName/usermenu/switch-organization',
@@ -107,6 +118,7 @@ export const accountPageStore: any[] = [
         component: OrganizationSwitch,
         position: IMenuPosition.BOTTOM,
         exact: true,
+        priority: 5,
     },
 
 ];
