@@ -43,6 +43,19 @@ var webpack_opts = {
       }
     },
     {
+      test: /\.jsx?$/,
+      loader: 'babel-loader',
+      exclude: /node_modules/,
+      query: {
+        cacheDirectory: true,
+        presets: [
+          require.resolve('@babel/preset-env'),
+          require.resolve('@babel/preset-react'),          
+        ],
+        plugins: [require.resolve('@babel/plugin-proposal-class-properties')],
+      },
+    },
+    {
       test: /\.(gql)$/,
       exclude: /node_modules/,
       use: ['graphql-tag/loader']
