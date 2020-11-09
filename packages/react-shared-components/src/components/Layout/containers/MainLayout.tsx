@@ -1,8 +1,8 @@
-import React, { CSSProperties, useContext, useEffect, useState } from 'react';
+import React, { CSSProperties, useContext, useEffect, useState, useRef } from 'react';
 import { Layout, Breadcrumb } from 'antd';
 import { useFela } from 'react-fela';
 import SiderMenu from '../components/SubMenu3/index';
-import { useRouteMatch } from 'react-router-dom';
+import { useRouteMatch, generatePath } from 'react-router-dom';
 import { Helmet } from 'react-helmet';
 
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
@@ -45,6 +45,8 @@ import SettingDrawer, {
 import GridContent from '../components/GridContent/index';
 // @ts-ignore
 import favicon from '../../../../favicon.ico';
+import { useGetOrgNameFromContextQuery } from '../../generated';
+import * as _ from 'lodash';
 
 export type BasicLayoutProps = Partial<RouterTypes<Route>> &
   SiderMenuProps &
@@ -55,6 +57,8 @@ export type BasicLayoutProps = Partial<RouterTypes<Route>> &
      * logo url
      */
     logo?: React.ReactNode | WithFalse<() => React.ReactNode>;
+    // params
+    params?: any;
     /**
      * 页面切换的时候触发
      */
@@ -198,10 +202,56 @@ const getPaddingLeft = (
   return 0;
 };
 
-export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
-  const [settings, setSettings] = useState({});
+const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
+  const [settings, setSettings] = useState({}); 
+  const fillParms = (path, params) => {
+    try {
+      const generatedPath = generatePath(path, params);
+      return generatedPath;
+    } catch (err) {
+      console.log('--fillParams.path', path)
+      console.log('--fillParams.params', params)
+      console.log('generatePath is errored due to missing orgId');
+    }
+    return '/';
+  }
 
-  const props = { ...main_props, ...settings };
+  const routesHandler = (routes, params) => {
+    return routes.map(route => {
+        const path =  fillParms(route.path, params);
+        console.log('---pathas', path);
+        return {
+          path,
+          children: route.children && routesHandler(route.children, params),
+          exact: route.exact,
+          icon: route.icon,
+          key: path,
+          name: route.name,
+          position: route.position,
+          tab: route.tab
+        }
+    });
+  }
+
+  const [ props, setUserRoutes ] = useState({ ...main_props, ...settings });
+  const prevRoute = useRef(null);
+  const prevSetting = useRef(null);
+  const prevParams =  useRef(null);
+  useEffect(() => {
+    prevSetting.current = settings;
+    prevRoute.current = props.route;
+    prevParams.current = props.params;
+  });
+  const prevSettingData = prevSetting.current;
+  const prevRouteData = prevRoute.current;
+  const prevParamsData = prevParams.current;
+  useEffect(() => {
+    if (!_.isEqual(prevParamsData, props.params) || !_.isEqual(prevRouteData, props.route)) {
+      setUserRoutes({ ...props, route: routesHandler(main_props.route, main_props.params), ...settings });
+    } else if(!_.isEqual(prevSettingData, settings)) {
+      setUserRoutes({ ...props, ...settings });
+    }
+  });
 
   const { css, theme } = useFela(props);
   const {
@@ -223,13 +273,8 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
     loading,
     ...rest
   } = props;
-  const [route, setRoute] = useState({ routes: rs });
 
-  useEffect(() => {
-    if (route.routes.toString() !== rs.toString()) {
-      setRoute({ routes: rs });
-    }
-  }, [route]);
+  const route = { routes: rs };
 
   const propsLayout = compatibleLayout(defaultPropsLayout);
   const { prefixCls } = rest;
@@ -544,7 +589,20 @@ export const MainLayout: React.FC<BasicLayoutProps> = (main_props) => {
   );
 };
 
-MainLayout.defaultProps = {
+export const MainLayout: React.SFC<BasicLayoutProps> = (props) => {
+  const { data, loading} = useGetOrgNameFromContextQuery();
+  if(loading) {
+      return (<div>Loading</div>)
+  }
+
+  const params = { ...data.getOrgNameFromContext}
+  return (
+      <MainLayoutSection params={params} {...props}/>
+  )    
+}
+
+
+MainLayoutSection.defaultProps = {
   logo: 'https://gw.alipayobjects.com/zos/antfincdn/PmY%24TNNDBI/logo.svg',
   ...defaultSettings,
   prefixCls: 'ant-pro',
@@ -576,6 +634,7 @@ const styleSheet: any = {
       top: 0,
     },
     '& .ant-pro-basicLayout-content': {
+      zIndex: 111,
       position: 'relative',
       margin: '24px',
     },
@@ -634,9 +693,6 @@ const styleSheet: any = {
     '& .ant-pro-page-container-warp .ant-tabs-nav': {
       margin: 0,
     },
-    '& .ant-pro-page-container-ghost .ant-pro-page-container-warp': {
-      // backgroundColor: 'transparent'
-    },
     '& .ant-pro-page-container-main .ant-pro-page-container-detail': {
       display: 'flex',
     },
@@ -673,6 +729,5 @@ const styleSheet: any = {
     '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': {
       backgroundColor: primaryColor
     },
-    
   })
 };

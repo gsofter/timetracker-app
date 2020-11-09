@@ -1,7 +1,4 @@
 import PlatformModule from './module';
-export * from './graphql';
-export * from './components';
-export * from './containers';
 
-
+export * from './common/generated-model';
 export default PlatformModule;

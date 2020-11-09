@@ -3,7 +3,6 @@ import { Menu } from 'antd';
 import React, { useEffect, useState, useRef, useMemo } from 'react';
 import classNames from 'classnames';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
-
 import { MenuMode, MenuProps } from 'antd/lib/menu';
 import { MenuTheme } from 'antd/lib/menu/MenuContext';
 import defaultSettings, { PureSettings } from '../defaultSettings';
@@ -40,6 +39,7 @@ export interface BaseMenuProps
   menuProps?: MenuProps;
   style?: any;
   theme?: MenuTheme;
+  params?: any; // @sri added params for additional data.
   formatMessage?: (message: MessageDescriptor) => string;
   subMenuItemRender?: WithFalse<
     (
@@ -101,11 +101,12 @@ class MenuUtil {
   public getNavMenuItems = (
     menusData: MenuDataItem[] = [],
     isChildren: boolean,
-  ): React.ReactNode[] =>
-    menusData
+  ): React.ReactNode[] => {
+    return menusData
       .filter((item) => item.name && !item.hideInMenu)
       .map((item) => this.getSubMenuOrItem(item, isChildren))
       .filter((item) => item)
+  }
 
   public hasChildren = (item: MenuDataItem) => {
     return (
@@ -140,7 +141,6 @@ class MenuUtil {
       const title = subMenuItemRender
         ? subMenuItemRender({ ...item, isUrl: false }, defaultTitle)
         : defaultTitle;
-
       return (
         <SubMenu
           title={title}
@@ -227,6 +227,7 @@ class MenuUtil {
       }
       return menuItemRender(renderItemProps, defaultItem);
     }
+    console.log('---defaultItem', defaultItem)
     return defaultItem;
   }
 

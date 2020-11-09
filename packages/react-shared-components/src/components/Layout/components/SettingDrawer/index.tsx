@@ -35,7 +35,7 @@ type MergerSettingsType<T> = Partial<T> & {
 };
 const Body: React.FC<BodyProps> = ({ children, prefixCls, title }) => (
   <div>
-    <h3 className={(styleSheet.settingDrawerTitle)}>{title}</h3>
+    <h3 className={`${(styleSheet.settingDrawerTitle)}`}>{title}</h3>
     {children}
   </div>
 );

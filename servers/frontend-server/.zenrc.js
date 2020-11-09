@@ -34,7 +34,8 @@ const config = {
                 plugins: [
                     new LodashModuleReplacementPlugin({
                         // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
-                        flattening: true
+                        flattening: true,
+                        shorthands: true
                       }),
                 ],
                 // for additional webpack configuration.
@@ -68,7 +69,8 @@ const config = {
                     }]),
                     new LodashModuleReplacementPlugin({
                         // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
-                        flattening: true
+                        flattening: true,
+                        shorthands: true
                       }),
                 ],
                 externals: [

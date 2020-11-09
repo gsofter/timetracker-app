@@ -1,4 +1,4 @@
-import React, { CSSProperties } from 'react';
+import React from 'react';
 import { Layout, Menu } from 'antd';
 import classNames from 'classnames';
 import { SiderProps } from 'antd/lib/layout/Sider';
@@ -104,7 +104,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     onOpenChange,
     headerHeight,
   } = props;
-
   const { css } = useFela(props);
 
   const baseClassName = `${prefixCls}-sider`;
@@ -115,7 +114,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     [`${baseClassName}-light`]: theme === 'light',
   });
   const headerDom = defaultRenderLogoAndTitle(props);
-
   const extraDom = menuExtraRender && menuExtraRender(props);
   const menuDom = menuContentRender !== false && flatMenuKeys && (
     <BaseMenu
@@ -234,7 +232,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
     </>
   );
 };
-
 export default SiderMenu;
 
 const styleSheet: any = {
@@ -245,13 +242,16 @@ const styleSheet: any = {
     '& .ant-pro-sider.ant-menu-vertical .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-vertical-left .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-vertical-right .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-inline .ant-menu-item:not(:last-child)': {
       marginBottom: '4px',
     },
-    '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item a': {
+    '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item a, .ant-menu-submenu-selected, .ant-menu-submenu-title:hover, .ant-menu-submenu-title i:hover ': {
       color: primaryColor ? primaryColor : '#1890ff',
     },
-    '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item-selected a, .ant-pro-sider.ant-layout-sider-light .ant-menu-item a:hover': {
+    '& .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::before, .ant-menu-submenu-inline > .ant-menu-submenu-title:hover .ant-menu-submenu-arrow::after': {
+      background: `linear-gradient(to right, ${primaryColor ? primaryColor : '#1890ff'}, ${primaryColor ? primaryColor : '#1890ff'})`
+    },
+    '& .ant-pro-sider.ant-layout-sider-light, .ant-pro-sider.ant-layout-sider-light .ant-menu-item:not(.ant-menu-item-selected) a:hover, .ant-menu-item:hover': {
       color: primaryColor ? primaryColor : '#1890ff',
     },
-    '& .ant-menu-item-selected a, .ant-menu-item-selected a:hover': {
+    '& .ant-menu-item-selected a, .ant-menu-item-selected a:hover, .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected a:hover': {
       color: '#fff',
     },
     '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': {
@@ -373,7 +373,6 @@ const styleSheet: any = {
       width: '100%',
     },
     '& .ant-pro-sider-light': {
-      //  backgroundColor: ;
       boxShadow: '2px 0 8px 0 rgba(29,35,41,0.05)',
     },
     '& .ant-pro-sider-light .ant-layout-sider-children ::-webkit-scrollbar-track': {
@@ -391,9 +390,6 @@ const styleSheet: any = {
     },
     '& .ant-pro-sider-light .ant-menu-light': {
       borderRightColor: 'transparent',
-    },
-    '& .ant-pro-sider-light .ant-pro-sider-collapsed-button': {
-      //  borderTop: ;
     },
     '& .ant-pro-sider-icon': {
       width: '14px',
