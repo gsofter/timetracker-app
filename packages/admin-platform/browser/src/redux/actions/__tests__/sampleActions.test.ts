@@ -1,9 +1,9 @@
 import 'jest';
 
-jest.mock('../../api');
+jest.mock('../../../api');
 
 import { createStore } from 'redux';
-import * as apiExports from '../../api';
+import * as apiExports from '../../../api';
 import * as actions from '../sampleActions';
 
 const api: jest.Mocked<apiExports.Api> = apiExports.api as any;

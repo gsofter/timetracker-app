@@ -22,7 +22,7 @@ export interface MenuDataItem {
   path?: string;
   [key: string]: any;
   parentKeys?: string[];
-  
+  priority?: any;
 }
 
 export interface Route extends MenuDataItem {

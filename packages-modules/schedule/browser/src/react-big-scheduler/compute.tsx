@@ -1,18 +1,18 @@
 import * as React from 'react';
 import { IMenuPosition } from '@common-stack/client-react';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
-// import { Home, Demo1, Demo2 } from './components/index';
 import { ScheduleOutlined } from '@ant-design/icons';
 
 
 const SchedulerHome = React.lazy(() => import('./components/Home'));
 
+const CalenderSchemder = React.lazy(() => import('./components/Scheduler'));
 export const schedulerPage: any[] = [
     {
         exact: false,
         icon: <ScheduleOutlined />,
         key: 'scheduler',
-        component: SchedulerHome,
+        component: CalenderSchemder,
         position: IMenuPosition.MIDDLE,
         name: 'React Big Scheduler',
         path: '/react-big-scheduler',

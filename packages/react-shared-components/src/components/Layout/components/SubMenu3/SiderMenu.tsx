@@ -183,15 +183,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
               {extraDom}
             </div>
           )}
-          <div
-            style={{
-              flex: 1,
-              overflowY: 'auto',
-              overflowX: 'hidden',
-            }}
-          >
-            {menuContentRender ? menuContentRender(props, menuDom) : menuDom}
-          </div>
           <div className={`${baseClassName}-links`}>
             <Menu
               theme={theme}
@@ -221,6 +212,15 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
                 </Menu.Item>
               )}
             </Menu>
+          </div>
+          <div
+            style={{
+              flex: 1,
+              overflowY: 'auto',
+              overflowX: 'hidden',
+            }}
+          >
+            {menuContentRender ? menuContentRender(props, menuDom) : menuDom}
           </div>
           {menuFooterRender && (
             <div className={`${baseClassName}-footer`}>
