@@ -4,26 +4,16 @@ import { connect } from 'react-redux';
 import _ from 'lodash';
 
 import classNames from 'classnames';
-import { gql } from 'apollo-boost'
-import { useQuery } from '@apollo/react-hooks'
 
-import { Loading } from './Loading/Loading';
+import { Loading } from '../Loading';
 
+// Actions
+import { showNotificationAction } from '../actions/NotificationActions';
 
 // Styles
 import './style.scss';
-import { stopTimerSocket, startTimerSocket, updateTimerSocket } from '../../configSocket';
+import { stopTimerSocket, startTimerSocket, updateTimerSocket } from '../configSocket';
 import ProjectsListPopup from '../ProjectsListPopup';
-
-
-export const QUERY_CURRENT_TIMER = gql`
-  query {
-    timer @client {
-        currentTimer
-    }
-    currency @client
-  }
-`
 
 const PlayIcon = props => {
     const { className, onClick } = props;
@@ -103,14 +93,13 @@ class AddTask extends Component {
     }, 1000);
 
     static getDerivedStateFromProps(props, state) {
-        const { timeEntriesList, projectsList } = props;
-        const { data } = useQuery(QUERY_CURRENT_TIMER)
+        const { timeEntriesList, currentTimer, projectsList } = props;
         // check first render
         if (state.projectId === null) {
-            if (data.timer.currentTimer) {
+            if (currentTimer) {
                 return {
-                    issue: data.timer.currentTimer.issue,
-                    projectId: data.timer.currentTimer.project.id,
+                    issue: currentTimer.issue,
+                    projectId: currentTimer.project.id,
                 };
             } else {
                 const projectId = timeEntriesList[0] ? timeEntriesList[0].project.id : projectsList[0].id;
@@ -123,10 +112,10 @@ class AddTask extends Component {
     }
 
     setStateByCurrentTimer = () => {
-        const { data } = useQuery(QUERY_CURRENT_TIMER)
+        const { currentTimer } = this.props;
         this.setState({
-            issue: data.timer.currentTimer.issue,
-            projectId: data.timer.currentTimer.project.id,
+            issue: currentTimer.issue,
+            projectId: currentTimer.project.id,
         });
     };
 
@@ -180,22 +169,22 @@ class AddTask extends Component {
     };
 
     onChangeInput = event => {
-        const { data } = useQuery(QUERY_CURRENT_TIMER)
+        const { currentTimer } = this.props;
         const value = event.target.value;
 
         this.setState({
             issue: value,
         });
 
-        if (data.time.currentTimer && value.trim() && data.time.currentTimer.issue !== value.trim()) {
+        if (currentTimer && value.trim() && currentTimer.issue !== value.trim()) {
             this.setState({ isUpdating: true }, () => this.updateTaskIssueDebounced());
         }
     };
 
     onChangeProject = id => {
-        const { data } = useQuery(QUERY_CURRENT_TIMER)
+        const { currentTimer } = this.props;
         const { issue } = this.state;
-        if (data.timer.currentTimer) {
+        if (currentTimer) {
             this.setState({
                 isUpdating: true,
             });
@@ -212,7 +201,7 @@ class AddTask extends Component {
 
     componentDidUpdate(prevProps, prevState) {
         const { isUpdating, issue } = this.state;
-        const { data : { currentTimer: curr } } = useQuery(QUERY_CURRENT_TIMER)
+        const { currentTimer: curr } = this.props;
         const prev = prevProps.currentTimer;
         if (!_.isEqual(prev, curr)) {
             // Start timer
@@ -260,8 +249,7 @@ class AddTask extends Component {
 
     render() {
         const { issue, projectId, isUpdating } = this.state;
-        const { data : currentTimer } = useQuery(QUERY_CURRENT_TIMER)
-        const {  vocabulary, timerTick, isMobile, handleJiraSync, user } = this.props;
+        const { currentTimer, vocabulary, timerTick, isMobile, handleJiraSync, user } = this.props;
         const { v_add_your_task_name, v_jira_synchronization } = vocabulary;
         return (
             !isMobile && (
@@ -303,18 +291,21 @@ class AddTask extends Component {
     }
 }
 
-// const mapStateToProps = state => ({
-//     currentTimer: state.mainPageReducer.currentTimer,
-//     vocabulary: state.languageReducer.vocabulary,
-//     projectsList: state.projectReducer.projectsList,
-//     timeEntriesList: state.mainPageReducer.timeEntriesList,
-//     timerTick: state.mainPageReducer.timerTick,
-//     user: state.userReducer.user,
-//     isMobile: state.responsiveReducer.isMobile,
-// });
+const mapStateToProps = state => ({
+    currentTimer: state.mainPageReducer.currentTimer,
+    vocabulary: state.languageReducer.vocabulary,
+    projectsList: state.projectReducer.projectsList,
+    timeEntriesList: state.mainPageReducer.timeEntriesList,
+    timerTick: state.mainPageReducer.timerTick,
+    user: state.userReducer.user,
+    isMobile: state.responsiveReducer.isMobile,
+});
 
-// const mapDispatchToProps = {
-//     showNotificationAction,
-// };
+const mapDispatchToProps = {
+    showNotificationAction,
+};
 
-export { AddTask }
+export default connect(
+    mapStateToProps,
+    mapDispatchToProps
+)(AddTask);

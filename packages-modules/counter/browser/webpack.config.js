@@ -14,7 +14,7 @@ var webpack_opts = {
     libraryTarget: "commonjs2",
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.graphql', '.graphqls', '.gql']
+    extensions: ['.ts', '.tsx', '.jsx', '.js','.graphql', '.graphqls', '.gql']
   },
   plugins: [
     new webpack.LoaderOptionsPlugin({

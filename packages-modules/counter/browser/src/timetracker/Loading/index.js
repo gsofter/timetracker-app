@@ -1,6 +1,6 @@
 import React from 'react';
 
-import Spinner from './Spinner';
+import Spinner from '../Spinner';
 
 export const Loading = ({ flag, children, mode, withLogo, width, height, circle }) => {
     if (mode === 'overlay' && width && height) {
@@ -17,13 +17,13 @@ export const Loading = ({ flag, children, mode, withLogo, width, height, circle 
     } else if (mode === 'overlay') {
         return flag ? (
             <>
-                <Spinner mode={mode} withLogo={withLogo} circle={circle} />
+                <Spinner mode= {mode} withLogo={withLogo} />
                 {children}
             </>
         ) : (
             children
         );
     } else {
-        return flag ? <Spinner mode={mode} withLogo={withLogo} circle={circle} /> : children;
+        return flag ? <Spinner mode={mode} withLogo={withLogo} /> : children;
     }
 };

@@ -4,6 +4,7 @@ import Common from './common';
 import ApolloCounter from './apollo-server-n-client';
 import ConnectedReactRouter from './connected-react-router';
 import Fela from './fela';
+import timetracker from './timetracker';
 
-export default new Feature(Common, ConnectedReactRouter, ApolloCounter, Fela);
+export default new Feature(Common, ConnectedReactRouter, ApolloCounter, Fela, timetracker);
 

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IMenuPosition } from '@common-stack/client-react';
 
-import { Home } from '../common/components/Home';
+import TimeTracker from './TimeTracker';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 import {
     MenuUnfoldOutlined,
@@ -9,24 +9,26 @@ import {
     FileOutlined
   } from '@ant-design/icons';
 
-export const commonPageStore: any[] = [
+export const timePageStore = [
     {
-        path: '/',
-        key: 'home',
+        path: '/time-tracker',
+        key: 'time-tracker',
         exact: true,
-        name: 'Home',
-        component: Home,
+        name: 'Time Tracker',
+        tab: 'Time Tracker',
+        component: TimeTracker,
         position: IMenuPosition.MIDDLE,
         icon: <FileOutlined/>,
     },
 ];
 
-const selectedRoutesAndMenus = ['home'];
+const selectedRoutesAndMenus = ['time-tracker'];
 
 // get menus
-const filteredMenus = getFilteredMenus(commonPageStore, selectedRoutesAndMenus);
+const filteredMenus = getFilteredMenus(timePageStore, selectedRoutesAndMenus);
 
 // get routes
-const filteredRoutes = getFilteredRoutes(commonPageStore, selectedRoutesAndMenus);
+const filteredRoutes = getFilteredRoutes(timePageStore, selectedRoutesAndMenus);
 
 export { filteredMenus, filteredRoutes };
+

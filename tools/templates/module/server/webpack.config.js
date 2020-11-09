@@ -19,7 +19,7 @@ var webpack_opts = {
     __dirname: false
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.graphql', '.gql'],
+    extensions: ['.ts', '.tsx','.js', '.jsx','.graphql', '.gql'],
   },
   plugins: [
     new webpack.LoaderOptionsPlugin({

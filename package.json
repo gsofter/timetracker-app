@@ -78,7 +78,9 @@
     "admin-layout-moleculer-server": "file:servers/moleculer-server",
     "apollo-boost": "^0.4.9",
     "apollo-cache-persist": "^0.1.1",
-    "dataloader": "^2.0.0"
+    "dataloader": "^2.0.0",
+    "react-custom-scrollbars": "^4.2.1",
+    "react-easy-swipe": "0.0.21"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",
