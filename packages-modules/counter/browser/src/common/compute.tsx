@@ -15,6 +15,7 @@ export const commonPageStore: any[] = [
         component: Home,
         position: IMenuPosition.MIDDLE,
         icon: <HomeOutlined/>,
+        priority: 1
     },
 ];
 
