@@ -10,7 +10,7 @@ var webpack_opts = {
   mode: "development",
   entry: {
     index: './src/index.ts',
-    big_scheduler: './src/big-scheduler/index.js'
+    // big_scheduler: './src/big-scheduler/index.js'
   },
   target: "node",
   output: {
