@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { IMenuPosition } from '@common-stack/client-react';
 
-import TimeTracker from './TimeTracker';
+// import TimeTracker from './TimeTracker';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 import {
     MenuUnfoldOutlined,
@@ -9,6 +9,8 @@ import {
     FileOutlined
   } from '@ant-design/icons';
 
+
+const TimeTracker = () => <div>Timetracker demo</div>
 export const timePageStore = [
     {
         path: '/time-tracker',

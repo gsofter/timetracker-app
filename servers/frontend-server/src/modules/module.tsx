@@ -4,12 +4,14 @@ import { MainLayout, WorkbenchTheme } from '@admin-layout/react-shared-component
 import CounterModule from '@admin-layout/counter-module-browser';
 import PlatformModule from '@admin-layout/platform-browser';
 import ScheduleModule from '@admin-layout/schedule-module-browser';
+import TimeTrackerModule from '@admin-layout/timetracker-module-browser';
 
 const features = new Feature(
         FeatureWithRouterFactory,
         PlatformModule,
         CounterModule,
-        ScheduleModule
+        ScheduleModule,
+        TimeTrackerModule,
 );
 
 // console.log(sharedModule);
