@@ -1,5 +1,3 @@
-import * as _ from 'lodash';
-
 export const getFilteredMenus = (accountPageStore, selectedMenu) =>
     accountPageStore.map(item => {
         if (selectedMenu.indexOf(item.key) !== -1) {
