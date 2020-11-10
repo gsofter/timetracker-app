@@ -14,7 +14,7 @@ export const counterPageStore: any[] = [
     {
         exact: false,
         icon: <MenuUnfoldOutlined/>,
-        key: '/apollo-server-n-client',
+        key: 'apolloServerClient',
         component: Dashboard,
         tab: 'Apollo Server & Client',
         position: IMenuPosition.MIDDLE,
@@ -24,7 +24,7 @@ export const counterPageStore: any[] = [
     },
     {
         exact: false,
-        key: '/apollo-server-n-client/counter',
+        key: 'apolloServerClient.counter',
         name: 'Counter',
         component: Counter,
         position: IMenuPosition.MIDDLE,
@@ -33,7 +33,7 @@ export const counterPageStore: any[] = [
     },
 ];
 
-const selectedRoutesAndMenus = ['/apollo-server-n-client', '/apollo-server-n-client/counter'];
+const selectedRoutesAndMenus = ['apolloServerClient', 'apolloServerClient.counter'];
 
 // get menus
 const filteredMenus = getFilteredMenus(counterPageStore, selectedRoutesAndMenus);

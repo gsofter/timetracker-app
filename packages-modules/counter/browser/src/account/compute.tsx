@@ -14,7 +14,8 @@ import {
 export const accountPageStore: any[] = [
     {
         path: '/:orgName/usermenu',
-        key: '/:orgName/usermenu',
+        key: 'userMenu',
+        tab: 'User Account',
         exact: false,
         name: 'User',
         component: Dashboard,
@@ -24,7 +25,7 @@ export const accountPageStore: any[] = [
     },
     {
         path: '/:orgName/usermenu/account/profile',
-        key: '/:orgName/usermenu/account/profile',
+        key: 'userMenu.account.profile',
         tab: 'Profile Setting',
         component: Account,
         position: IMenuPosition.BOTTOM,
@@ -33,8 +34,8 @@ export const accountPageStore: any[] = [
     },
     {
         path: '/:orgName/usermenu/billing',
-        key: '/:orgName/usermenu/billing',
-        exact: false,
+        key: 'userMenu.billing',
+        exact: true,
         name: 'Billing Setting',
         component: Billing,
         position: IMenuPosition.BOTTOM,
@@ -42,7 +43,7 @@ export const accountPageStore: any[] = [
         children: [
             {
                 exact: true,
-                key: '/:orgName/usermenu/billing/home',
+                key: 'userMenu.billing.home',
                 name: 'Home',
                 path: '/:orgName/usermenu/billing/home',
                 component: Billing,
@@ -52,17 +53,17 @@ export const accountPageStore: any[] = [
     },
     {
         path: '/:orgName/usermenu/account',
-        key: '/:orgName/usermenu/account',
+        key: 'userMenu.account',
         tab: 'Accounts',
         name: 'Account',
         component: AccountSetting,
         position: IMenuPosition.BOTTOM,
-        exact: false,
+        exact: true,
         priority: 4,
         children: [
             {
                 path: '/:orgName/usermenu/account/collaborators',
-                key: '/:orgName/usermenu/account/collaborators',
+                key: 'userMenu.account.collaborators',
                 tab: 'Collaborators',
                 name: 'Collaborators',
                 position: IMenuPosition.BOTTOM,
@@ -72,7 +73,7 @@ export const accountPageStore: any[] = [
             },
             {
                 path: '/:orgName/usermenu/account/git-integration',
-                key: '/:orgName/usermenu/account/git-integration',
+                key: 'userMenu.account.git-integration',
                 tab: 'Integration',
                 name: 'Integration',
                 position: IMenuPosition.BOTTOM,
@@ -82,7 +83,7 @@ export const accountPageStore: any[] = [
             },
             {
                 path: '/:orgName/usermenu/account/tokens',
-                key: '/:orgName/usermenu/account/tokens',
+                key: 'userMenu.account.tokens',
                 tab: 'Tokens',
                 name: 'Tokens',
                 position: IMenuPosition.BOTTOM,
@@ -92,7 +93,7 @@ export const accountPageStore: any[] = [
             },
             {
                 path: '/:orgName/usermenu/account/referrals',
-                key: '/:orgName/usermenu/account/referrals',
+                key: 'userMenu.account.referrals',
                 tab: 'Referrals',
                 name: 'Referrals',
                 position: IMenuPosition.BOTTOM,
@@ -104,7 +105,7 @@ export const accountPageStore: any[] = [
     },
     {
         path: '/:orgName/usermenu/organization',
-        key: '/:orgName/usermenu/organization',
+        key: 'userMenu.organization',
         tab: 'Create Organization',
         component: Organization,
         position: IMenuPosition.BOTTOM,
@@ -113,7 +114,7 @@ export const accountPageStore: any[] = [
     },
     {
         path: '/:orgName/usermenu/switch-organization',
-        key: '/:orgName/usermenu/switch-organization',
+        key: 'userMenu.switch-organization',
         tab: 'Select Organization',
         component: OrganizationSwitch,
         position: IMenuPosition.BOTTOM,
@@ -123,7 +124,7 @@ export const accountPageStore: any[] = [
 
 ];
 
-const selectedRoutesAndMenus = ['/:orgName/usermenu', '/:orgName/usermenu/account/profile' , '/:orgName/usermenu/billing', '/:orgName/usermenu/account', '/:orgName/usermenu/organization', '/:orgName/usermenu/switch-organization'];
+const selectedRoutesAndMenus = ['userMenu', 'userMenu.account.profile' , 'userMenu.billing', 'userMenu.account', 'userMenu.organization', 'userMenu.switch-organization'];
 
 // get menus
 const filteredMenus = getFilteredMenus(accountPageStore, selectedRoutesAndMenus);
