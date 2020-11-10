@@ -81,7 +81,8 @@
     "admin-layout-frontend-server": "file:servers/frontend-server",
     "admin-layout-moleculer-server": "file:servers/moleculer-server",
     "apollo-link-state": "^0.4.2",
-    "dataloader": "^2.0.0"
+    "dataloader": "^2.0.0",
+    "react-timezone": "^2.4.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",
