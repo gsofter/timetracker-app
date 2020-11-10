@@ -19,6 +19,7 @@ export const counterPageStore: any[] = [
         name: 'Connected React Router',
         key: CONNECTED_REACT_ROUTER_ROUTES_TYPES.HOME,
         path: CONNECTED_REACT_ROUTER_ROUTES_TYPES.HOME,
+        priority: 1
     },
     {
         exact: true,
@@ -27,6 +28,7 @@ export const counterPageStore: any[] = [
         position: IMenuPosition.MIDDLE,
         key: CONNECTED_REACT_ROUTER_ROUTES_TYPES.HELLO,
         path: CONNECTED_REACT_ROUTER_ROUTES_TYPES.HELLO,
+        priority: 2
     },
     {
         exact: true,
@@ -35,6 +37,7 @@ export const counterPageStore: any[] = [
         position: IMenuPosition.MIDDLE,
         key: CONNECTED_REACT_ROUTER_ROUTES_TYPES.COUNTER,
         path: CONNECTED_REACT_ROUTER_ROUTES_TYPES.COUNTER,
+        priority: 3
     },
 ];
 
