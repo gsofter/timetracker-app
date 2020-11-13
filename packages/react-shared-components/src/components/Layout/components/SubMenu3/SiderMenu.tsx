@@ -24,8 +24,8 @@ export const defaultRenderLogo = (logo: React.ReactNode): React.ReactNode => {
 export const menuSeparation = (props, position) => {
   if(props.separateMenus) {
     switch (position) {
-      case 'TOP':
-        return {...props, menuData: props.separateMenus.topMenus}
+      case 'UPPER':
+        return {...props, menuData: props.separateMenus.upperMenus}
       case 'MIDDLE':
         return {...props, menuData: props.separateMenus.middleMenus}
       case 'LOWER':
@@ -74,7 +74,7 @@ export const defaultRenderLogoAndTitle = (
 };
 
 export type SeparateMenusTypes = {
-  topMenus?: Object,
+  upperMenus?: Object,
   middleMenus?: Object,
   lowerMenus?: Object,
   bottomMenus?: Object,

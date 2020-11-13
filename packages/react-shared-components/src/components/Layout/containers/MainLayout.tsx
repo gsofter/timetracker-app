@@ -236,12 +236,12 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
   }
 
   const menuSeparation = (menus) => {
-    const topMenus = menus.filter(menu => menu.position === 'TOP');
-    const middleMenus = menus.filter(menu => ((menu.position === 'MIDDLE') || (menu.position !== 'TOP' && menu.position !== 'LOWER' && menu.position !== 'BOTTOM')));
+    const upperMenus = menus.filter(menu => menu.position === 'UPPER');
+    const middleMenus = menus.filter(menu => ((menu.position === 'MIDDLE') || (menu.position !== 'UPPER' && menu.position !== 'LOWER' && menu.position !== 'BOTTOM')));
     const lowerMenus = menus.filter(menu => menu.position === 'LOWER');
     const bottomMenus = menus.filter(menu => menu.position === 'BOTTOM');
     return {
-      topMenus,
+      upperMenus,
       middleMenus,
       lowerMenus,
       bottomMenus
