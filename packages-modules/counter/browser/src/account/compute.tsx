@@ -19,7 +19,7 @@ export const accountPageStore: any[] = [
         exact: false,
         name: 'User',
         component: Dashboard,
-        position: IMenuPosition.MIDDLE,
+        position: IMenuPosition.BOTTOM,
         icon: <UserOutlined/>,
         priority: 1
     },
