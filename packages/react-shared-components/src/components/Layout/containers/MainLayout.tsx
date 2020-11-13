@@ -59,6 +59,8 @@ export type BasicLayoutProps = Partial<RouterTypes<Route>> &
     logo?: React.ReactNode | WithFalse<() => React.ReactNode>;
     // params
     params?: any;
+
+    separateMenus?: Object;
     /**
      * 页面切换的时候触发
      */
@@ -218,19 +220,32 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
 
   const routesHandler = (routes, params) => {
     return routes.map(route => {
-        const path =  fillParms(route.path, params);
-        console.log('---pathas', path);
-        return {
-          path,
-          children: route.children && routesHandler(route.children, params),
-          exact: route.exact,
-          icon: route.icon,
-          key: path,
-          name: route.name,
-          position: route.position,
-          tab: route.tab
-        }
+      const path =  fillParms(route.path, params);
+      console.log('---pathas', path);
+      return {
+        path,
+        children: route.children && routesHandler(route.children, params),
+        exact: route.exact,
+        icon: route.icon,
+        key: path,
+        name: route.name,
+        position: route.position,
+        tab: route.tab
+      }
     });
+  }
+
+  const menuSeparation = (menus) => {
+    const upperMenus = menus.filter(menu => menu.position === 'UPPER');
+    const middleMenus = menus.filter(menu => ((menu.position === 'MIDDLE') || (menu.position !== 'UPPER' && menu.position !== 'LOWER' && menu.position !== 'BOTTOM')));
+    const lowerMenus = menus.filter(menu => menu.position === 'LOWER');
+    const bottomMenus = menus.filter(menu => menu.position === 'BOTTOM');
+    return {
+      upperMenus,
+      middleMenus,
+      lowerMenus,
+      bottomMenus
+    }
   }
 
   const [ props, setUserRoutes ] = useState({ ...main_props, ...settings });
@@ -247,7 +262,7 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
   const prevParamsData = prevParams.current;
   useEffect(() => {
     if (!_.isEqual(prevParamsData, props.params) || !_.isEqual(prevRouteData, props.route)) {
-      setUserRoutes({ ...props, route: routesHandler(main_props.route, main_props.params), ...settings });
+      setUserRoutes({ ...props, route: routesHandler(main_props.route, main_props.params), separateMenus: menuSeparation(props.route), ...settings });
     } else if(!_.isEqual(prevSettingData, settings)) {
       setUserRoutes({ ...props, ...settings });
     }
