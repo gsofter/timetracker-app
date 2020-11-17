@@ -2,7 +2,7 @@ import React, { useState } from "react";
 import { Calendar, View, DateLocalizer } from "react-big-calendar";
 import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
-import { ScheduleOutlined } from "@ant-design/icons";
+import { UserOutlined, ScheduleOutlined } from "@ant-design/icons";
 import TimezonePicker from "react-timezone";
 import { momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
@@ -16,10 +16,13 @@ import {
   Select,
   DatePicker,
   TimePicker,
+  Checkbox,
+  Avatar,
 } from "antd";
 import { Modal } from "./Modal";
 import { useFela } from "react-fela";
 
+const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 
@@ -27,41 +30,41 @@ const allViews: View[] = ["agenda", "day", "week", "month"];
 
 const initialEvents = [
   {
-    id: 0,
-    title: "All Day Event very long title",
-    allDay: true,
-    start: new Date(2020, 3, 0),
-    end: new Date(2020, 3, 1),
-  },
-  {
     id: 1,
-    title: "Long Event",
-    start: new Date(2020, 3, 7),
-    end: new Date(2020, 3, 10),
+    title: "Board meeting",
+    start: new Date("Fri Nov 14 2020 04:00:00"),
+    end: new Date("Fri Nov 14 2020 07:00:00"),
+    resourceId: 1,
+    totalHours: "3:00:00",
   },
-
   {
     id: 2,
-    title: "DTS STARTS",
-    start: new Date(2020, 2, 13, 0, 0, 0),
-    end: new Date(2020, 2, 20, 0, 0, 0),
+    title: "MS training Task",
+    start: new Date("Fri Nov 13 2020 15:00:00"),
+    end: new Date("Fri Nov 13 2020 17:00:00"),
+    resourceId: 2,
+    totalHours: "2:00:00",
   },
-
   {
     id: 3,
-    title: "DTS ENDS",
-    start: new Date(2020, 10, 6, 0, 0, 0),
-    end: new Date(2020, 10, 13, 0, 0, 0),
-    desc: "Description is shown here",
+    title: "Team lead meeting",
+    start: new Date("Fri Nov 15 2020 18:00:00"),
+    end: new Date("Fri Nov 15 2020 19:00:00"),
+    resourceId: 1,
+    totalHours: "1:00:00",
   },
-
   {
     id: 4,
-    title: "Leave",
-    start: new Date(new Date().setHours(new Date().getHours() - 3)),
-    end: new Date(new Date().setHours(new Date().getHours() + 3)),
-    desc: "Description is shown here",
+    title: "Birthday Party",
+    start: new Date("Fri Nov 17 2020 15:00:00"),
+    end: new Date("Fri Nov 17 2020 16:00:00"),
+    resourceId: 2,
+    totalHours: "1:00:00",
   },
+];
+const resourceMap = [
+  { resourceId: 1, resourceTitle: "Board room" },
+  { resourceId: 2, resourceTitle: "Training room" },
 ];
 
 interface Props {
@@ -96,22 +99,20 @@ class CalendarEvent {
 
 function SelectableCalendar({ localizer }: Props) {
   const [isShowing, setIsShowing] = useState(false);
-  const [repeat, setRepeat] = useState();
+  const [selectproject, setSelectproject] = useState();
+  const [selecttask, setSelecttask] = useState();
   const [startTime, setStartTime] = useState();
   const [endTime, setEndTime] = useState();
   const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-
-  const [values, setValues] = useState({
-    selectuser: "",
-    minhours: "",
-  });
-
+  const [checked, setChecked] = useState(false);
+  const [reason, setReason] = useState();
+  const [note, setNote] = useState();
+  const [resource, setResourceMap] = useState(resourceMap);
   const [events, setEvents] = React.useState(initialEvents);
 
   const handleSelect = ({ start, end }) => {
     const title = window.prompt("New Event name");
-
+    console.log(title, "here is");
     if (title) {
       let newEvent = {} as CalendarEvent;
       newEvent.start = moment(start).toDate();
@@ -129,33 +130,47 @@ function SelectableCalendar({ localizer }: Props) {
     setIsShowing(!isShowing);
   };
 
-  const handleChange = (e: any) => {
-    if (!e.target) {
-      setValues({ ...values, selectuser: e });
-    } else {
-      const { name, value } = e && e.target;
-      setValues({ ...values, [name]: value });
-    }
+  const onChange = (e) => {
+    setChecked(e);
   };
-
   const handleSubmit = (e: any) => {
     e.preventDefault();
     const submitValue = {
-      selectUser: values.selectuser,
-      minhours: values.minhours,
-      repeat: repeat,
+      selecttask: selecttask,
+      selectproject: selectproject,
+      checked: checked,
+      // minhours: values.minhours,
       startTime: startTime,
       endTime: endTime,
       startDate: startDate,
-      endDate: endDate,
+      reason: reason,
+      note: note,
     };
     const title = "New event added";
     if (title) {
-      let newEvent = {} as CalendarEvent;
+      let newEvent = ({} as CalendarEvent) as any;
       newEvent.start = moment(startDate).toDate();
-      newEvent.end = moment(endDate).toDate();
-      newEvent.title = title;
+      newEvent.end = moment(endTime).toDate();
+      newEvent.resourceId = Math.floor(Math.random() * 10000);
+      newEvent.id = 10;
+      // newEvent.id = Math.floor(Math.random() * 10000);
+
+      let now = moment(startTime).format("HH:mm:ss");
+      let then = moment(endTime).format("HH:mm:ss");
+      let calculateTime = moment
+        .utc(then, "HH:mm:ss")
+        .diff(moment.utc(now, "HH:mm:ss"), "m");
+
+      newEvent.title = selecttask;
       setEvents([...(events as any), newEvent]);
+      setResourceMap([
+        ...resource,
+        {
+          resourceTitle: selectproject,
+          resourceId: 10,
+          // resourceId: Math.floor(Math.random() * 10000),
+        },
+      ]);
     }
 
     setIsShowing(!isShowing);
@@ -164,13 +179,14 @@ function SelectableCalendar({ localizer }: Props) {
 
   const resetModal = (e: any) => {
     e.preventDefault();
-    setRepeat(null);
+    setSelectproject(null);
+    setSelecttask(null);
     setStartDate(null);
     setStartTime(null);
     setEndTime(null);
-    setEndDate(null);
-    values.selectuser = "";
-    values.minhours = "";
+    setChecked(false);
+    setReason(null);
+    setNote(null);
   };
 
   const onEventDrop = ({ event, start, end, allDay }) => {
@@ -195,10 +211,12 @@ function SelectableCalendar({ localizer }: Props) {
 
   const EventAgenda = ({ event }) => {
     return (
-      <span>
-        <em style={{ color: "magenta" }}>{event.title}</em>
-        <p>{event.desc}</p>
-      </span>
+      <>
+        <span>
+          <em style={{ color: "magenta" }}>{event.title}</em>
+          <p>{event.desc}</p>
+        </span>
+      </>
     );
   };
 
@@ -210,10 +228,38 @@ function SelectableCalendar({ localizer }: Props) {
           wrapperCol={{ span: 24 }}
           layout="vertical"
         >
-          <Form.Item label="User">
-            <Select onChange={handleChange} value={values.selectuser}>
-              <Select.Option value="user1">User1</Select.Option>
-              <Select.Option value="user2">User2</Select.Option>
+          <div style={{ margin: "15px 0px" }}>
+            <Avatar
+              style={{ backgroundColor: "#3174ad" }}
+              icon={<UserOutlined />}
+            />
+            <span style={{ marginLeft: "10px" }}>Cdmbase</span>
+          </div>
+          <Form.Item label="Projects">
+            <Select
+              onChange={(e) => {
+                setSelectproject(e);
+              }}
+              value={selectproject}
+            >
+              <Select.Option value="Admin-project1">
+                Admin-project1
+              </Select.Option>
+              <Select.Option value="Admin-project2">
+                Admin-project2
+              </Select.Option>
+            </Select>
+          </Form.Item>
+          <Form.Item label="TO DO">
+            <Select
+              onChange={(e) => {
+                setSelecttask(e);
+              }}
+              value={selecttask}
+            >
+              <Select.Option value="task1">Task1</Select.Option>
+              <Select.Option value="task2">Task2</Select.Option>
+              <Select.Option value="task3">Task3</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="DatePicker">
@@ -224,6 +270,7 @@ function SelectableCalendar({ localizer }: Props) {
               value={startDate as any}
             />{" "}
             &nbsp;
+            <span>From </span>
             <TimePicker
               use12Hours
               format="h:mm a"
@@ -241,32 +288,33 @@ function SelectableCalendar({ localizer }: Props) {
               }}
               value={endTime as any}
             />
-            &nbsp;
-            <DatePicker
-              onChange={(date) => {
-                setEndDate(date as any);
-              }}
-              value={endDate as any}
-            />
           </Form.Item>
-          <Form.Item label="Minimum Hours">
-            <Input
-              name="minhours"
-              placeholder="5"
-              onChange={handleChange}
-              value={values.minhours as any}
-            />
-          </Form.Item>
-          <Form.Item label="Repeats">
-            <Select
+          <Form.Item>
+            <Checkbox
               onChange={(e) => {
-                setRepeat(e);
+                onChange(e.target.checked);
               }}
-              value={repeat}
             >
-              <Select.Option value="never">Never</Select.Option>
-              <Select.Option value="yes">Yes</Select.Option>
-            </Select>
+              Checkbox
+            </Checkbox>
+          </Form.Item>
+          <Form.Item label="REASON *">
+            <TextArea
+              rows={3}
+              onChange={(e) => {
+                setReason(e.target.value as any);
+              }}
+              value={reason}
+              placeholder="Reason for time"
+            />
+          </Form.Item>
+          <Form.Item label="Note">
+            <TextArea
+              onChange={(e) => setNote(e.target.value as any)}
+              rows={3}
+              value={note}
+              placeholder="Notes for time"
+            />
           </Form.Item>
 
           <Form.Item>
@@ -292,7 +340,7 @@ function SelectableCalendar({ localizer }: Props) {
       >
         <Col>
           <div style={{ textAlign: "center" }}>
-            <h3>Attendance schedules</h3>
+            <h3>View & edit timesheets</h3>
           </div>
         </Col>
       </Row>
@@ -331,17 +379,17 @@ function SelectableCalendar({ localizer }: Props) {
               <span>
                 <ScheduleOutlined />
               </span>{" "}
-              schedule settings
+              Timesheet settings
             </a>
           </div>
         </Col>
         <Col md={6} xs={16}>
           <div>
             <span style={{ fontWeight: "bold" }}>
-              <a onClick={openModal}>Add Schedule</a>
+              <a onClick={openModal}>Add Time</a>
             </span>
             <Modal
-              modalTitle="Create Schedule"
+              modalTitle="Add Time"
               showModal={isShowing}
               handleClose={() => setIsShowing(false)}
               modalBody={renderModalBody()}
@@ -353,9 +401,9 @@ function SelectableCalendar({ localizer }: Props) {
         selectable
         localizer={localizer}
         events={events}
-        defaultView="month"
+        defaultView="week"
         views={allViews}
-        defaultDate={new Date()}
+        defaultDate={new Date("Fri Nov 13 2020")}
         onSelectEvent={(event) => alert(event.title)}
         onSelectSlot={handleSelect}
         startAccessor="start"
@@ -370,6 +418,9 @@ function SelectableCalendar({ localizer }: Props) {
             event: EventAgenda,
           },
         }}
+        resources={resource}
+        resourceIdAccessor="resourceId"
+        resourceTitleAccessor="resourceTitle"
       />
     </>
   );
@@ -414,6 +465,43 @@ const stylesheet: any = {
     "& div.jsx-4179805763": {
       marginTop: "8px",
       width: "100%",
+    },
+    "& .rbc-day-slot": {
+      position: "relative",
+    },
+    "& .rbc-day-slot .rbc-events-container": {
+      bottom: 0,
+      left: 0,
+      position: "absolute",
+      right: 0,
+      marginRight: "10px",
+      top: 0,
+    },
+    "& .rbc-day-slot .rbc-events-container.rbc-rtl": {
+      left: "10px",
+      right: 0,
+    },
+    "& .rbc-day-slot .rbc-event": {
+      border: "1px solid #265985",
+      display: "flex",
+      maxHeight: "100%",
+      minHeight: "20px",
+      flexFlow: "column wrap",
+      alignItems: "flex-start",
+      overflow: "hidden",
+      position: "absolute",
+    },
+    "& .rbc-event": {
+      border: "none",
+      boxShadow: "none",
+      margin: 0,
+      padding: "2px 5px",
+      backgroundColor: "#3174ad",
+      borderRadius: "5px",
+      color: "#fff",
+      cursor: "pointer",
+      width: "100%",
+      textAlign: "left",
     },
   }),
 };
