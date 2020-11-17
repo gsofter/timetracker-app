@@ -42,7 +42,10 @@
   "author": "CDMBase LLC",
   "license": "ISC",
   "dependencies": {
-    "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser"
+    "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser",
+    "@common-stack/client-core": "0.0.244",
+    "@common-stack/client-react": "0.0.244",
+    "@common-stack/core": "0.0.244"
   },
   "peerDependencies": {
     "@common-stack/client-react": ">=0.0.244",
