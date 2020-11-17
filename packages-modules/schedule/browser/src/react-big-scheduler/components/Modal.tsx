@@ -23,7 +23,7 @@ export const Modal: React.SFC<IProps> = ({
         className="modalDialog"
         style={{ display: `${showModal ? "block" : "none"}` }}
       >
-        <div>
+        <div style={{ overflowY: "scroll", overflowX: "hidden" }}>
           <a
             href="#close"
             title="Close"
@@ -59,14 +59,14 @@ const stylesheet: any = {
     },
     "& .modalDialog > div": {
       maxWidth: "800px",
-      width: "90%",
+      width: "70%",
       position: "relative",
-      margin: "5% auto",
+      margin: "2% auto",
       padding: "20px",
       borderRadius: "3px",
       background: "#fff",
       zIndex: "10000",
-      height: "80%",
+      height: "90%",
     },
     "& .close": {
       background: "#1890ff",
