@@ -262,7 +262,7 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
   const prevParamsData = prevParams.current;
   useEffect(() => {
     if (!_.isEqual(prevParamsData, props.params) || !_.isEqual(prevRouteData, props.route)) {
-      setUserRoutes({ ...props, route: routesHandler(main_props.route, main_props.params), separateMenus: menuSeparation(props.route), ...settings });
+      setUserRoutes({ ...props, route: routesHandler(main_props.route, main_props.params), ...settings });
     } else if(!_.isEqual(prevSettingData, settings)) {
       setUserRoutes({ ...props, ...settings });
     }
@@ -290,7 +290,6 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
   } = props;
 
   const route = { routes: rs };
-
   const propsLayout = compatibleLayout(defaultPropsLayout);
   const { prefixCls } = rest;
   const value = useContext(RouteContext);
@@ -416,6 +415,7 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
   // render sider dom
   const siderMenuDom = renderSiderMenu({
     ...defaultProps,
+    separateMenus: menuSeparation(menuData),
     menuData,
     onCollapse,
     isMobile,
