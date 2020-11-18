@@ -19,7 +19,7 @@ export const counterPageStore: any[] = [
         tab: 'Apollo Server & Client',
         position: IMenuPosition.MIDDLE,
         name: 'Apollo Server & Client',
-        path: '/apollo-server-n-client',
+        path: '/:orgName/apollo-server-n-client',
         priority: 1
     },
     {
@@ -28,7 +28,7 @@ export const counterPageStore: any[] = [
         name: 'Counter',
         component: Counter,
         position: IMenuPosition.MIDDLE,
-        path: '/apollo-server-n-client/counter',
+        path: '/:orgName/apollo-server-n-client/counter',
         priority: 2
     },
 ];
