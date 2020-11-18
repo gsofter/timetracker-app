@@ -3,6 +3,8 @@ import { IMenuPosition } from '@common-stack/client-react';
 import { Dashboard } from '../common/components/Dashboard';
 import { Account } from './components/Account';
 import { AccountSetting } from './components/AccountSetting';
+import { Billing } from './components/Billing';
+import { Organization } from './components/Organization'
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 import {
     UserOutlined
@@ -19,6 +21,25 @@ export const accountPageStore: any[] = [
         position: IMenuPosition.BOTTOM,
         icon: <UserOutlined/>,
         priority: 1
+    },
+    {
+        path: '/:orgName/usermenu/billing',
+        key: 'userMenu.billing',
+        exact: true,
+        name: 'Billing Setting',
+        component: Billing,
+        position: IMenuPosition.BOTTOM,
+        priority: 3,
+        children: [
+            {
+                exact: true,
+                key: 'userMenu.billing.home',
+                name: 'Home',
+                path: '/:orgName/usermenu/billing/home',
+                component: Billing,
+                priority: 1
+            }
+        ]
     },
     {
         path: '/:orgName/usermenu/profile',
@@ -38,11 +59,62 @@ export const accountPageStore: any[] = [
         position: IMenuPosition.BOTTOM,
         exact: true,
         priority: 4,
+        children: [
+            {
+                path: '/:orgName/usermenu/account/collaborators',
+                key: 'userMenu.account.collaborators',
+                tab: 'Collaborators',
+                name: 'Collaborators',
+                position: IMenuPosition.BOTTOM,
+                component: AccountSetting,
+                exact: true,
+                priority: 1,
+            },
+            {
+                path: '/:orgName/usermenu/account/git-integration',
+                key: 'userMenu.account.git-integration',
+                tab: 'Integration',
+                name: 'Integration',
+                position: IMenuPosition.BOTTOM,
+                component: AccountSetting,
+                exact: true,
+                priority: 2,
+            },
+            {
+                path: '/:orgName/usermenu/account/tokens',
+                key: 'userMenu.account.tokens',
+                tab: 'Tokens',
+                name: 'Tokens',
+                position: IMenuPosition.BOTTOM,
+                component: AccountSetting,
+                exact: true,
+                priority: 4,
+            },
+            {
+                path: '/:orgName/usermenu/account/referrals',
+                key: 'userMenu.account.referrals',
+                tab: 'Referrals',
+                name: 'Referrals',
+                position: IMenuPosition.BOTTOM,
+                component: AccountSetting,
+                exact: true,
+                priority: 3,
+            }
+        ]
+    },
+    {
+        path: '/:orgName/usermenu/organization',
+        key: 'userMenu.organization',
+        tab: 'Create Organization',
+        component: Organization,
+        position: IMenuPosition.BOTTOM,
+        exact: true,
+        priority: 6,
     }
 
 ];
 
-const selectedRoutesAndMenus = ['userMenu', 'userMenu.account', 'userMenu.account.profile'];
+const selectedRoutesAndMenus = ['userMenu', 'userMenu.billing', 'userMenu.account',  'userMenu.account.profile', 'userMenu.organization'];
 
 // get menus
 const filteredMenus = getFilteredMenus(accountPageStore, selectedRoutesAndMenus);

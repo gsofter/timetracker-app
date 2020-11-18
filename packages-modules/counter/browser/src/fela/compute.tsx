@@ -16,7 +16,7 @@ export const felaPageStore: any[] = [
         key: 'fela',
         position: IMenuPosition.LOWER,
         name: 'Fela Styling',
-        path: '/fela',
+        path: '/:orgName/fela',
         icon: <MenuFoldOutlined/>
     },
 ];

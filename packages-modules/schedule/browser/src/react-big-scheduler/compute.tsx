@@ -17,7 +17,7 @@ export const schedulerPage: any[] = [
         position: IMenuPosition.MIDDLE,
         tab: 'React Big Scheduler',
         name: 'React Big Scheduler',
-        path: '/react-big-scheduler',
+        path: '/:orgName/react-big-scheduler',
         priority: 1
         
     },
@@ -27,7 +27,7 @@ export const schedulerPage: any[] = [
         name: 'Scheduler',
         component: CalenderSchemder,
         position: IMenuPosition.MIDDLE,
-        path: '/react-big-scheduler/scheduler',
+        path: '/:orgName/react-big-scheduler/scheduler',
         priority: 2
     },
     {
@@ -36,7 +36,7 @@ export const schedulerPage: any[] = [
         name: 'Timesheet',
         component: Timesheet,
         position: IMenuPosition.MIDDLE,
-        path: '/react-big-scheduler/timesheet',
+        path: '/:orgName/react-big-scheduler/timesheet',
         priority: 3
     },
 ];
