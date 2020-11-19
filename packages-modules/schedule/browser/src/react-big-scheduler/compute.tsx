@@ -5,6 +5,7 @@ import { ScheduleOutlined } from '@ant-design/icons';
 
 
 const Timesheet = React.lazy(() => import('./components/Timesheet'));
+const Timeline = React.lazy(() => import('./components/Timeline'));
 const Home = React.lazy(() => import('./components/Home'));
 
 const CalenderSchemder = React.lazy(() => import('./components/Scheduler'));
@@ -39,9 +40,18 @@ export const schedulerPage: any[] = [
         path: '/:orgName/react-big-scheduler/timesheet',
         priority: 3
     },
+    {
+        exact: true,
+        key: 'reactBigScheduler.timeline',
+        name: 'TImeline',
+        component: Timeline,
+        position: IMenuPosition.MIDDLE,
+        path: '/react-big-scheduler/timeline',
+        priority: 4
+    },
 ];
 
-const selectedRoutesAndMenus = ['reactBigScheduler', 'reactBigScheduler.scheduler', 'reactBigScheduler.timesheet'];
+const selectedRoutesAndMenus = ['reactBigScheduler', 'reactBigScheduler.scheduler', 'reactBigScheduler.timesheet', 'reactBigScheduler.timeline'];
 
 // get menus
 const filteredMenus = getFilteredMenus(schedulerPage, selectedRoutesAndMenus);
