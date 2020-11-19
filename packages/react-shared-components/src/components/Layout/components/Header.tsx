@@ -1,6 +1,7 @@
-import React, { Component } from 'react';
+import React, { useRef, Component } from 'react';
 import classNames from 'classnames';
 import { Layout } from 'antd';
+import { useFela } from "react-fela";
 import GlobalHeader, { GlobalHeaderProps } from './GlobalHeader/index';
 import { PureSettings } from './defaultSettings';
 import TopNavHeader from './TopNavHeader';
@@ -38,82 +39,74 @@ interface HeaderViewState {
   visible: boolean;
 }
 
-class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
-  renderContent = () => {
-    const {
-      isMobile,
-      onCollapse,
-      navTheme,
-      layout,
-      headerRender,
-      headerContentRender,
-      menuContentRender,
-      onOpenChange,
-      ...rest
-    } = this.props;
+export const renderContent = (props) => {
+  const {
+    isMobile,
+    onCollapse,
+    navTheme,
+    layout,
+    headerRender,
+    contentWidth,
+    headerContentRender,
+    primaryColor
+  } = props;
 
-    const { prefixCls } = rest;
+  // const ref = useRef(null);
 
-    const baseClassName = `${prefixCls}-basicLayout`;
-    console.log(baseClassName);
+  const baseClassName = "ant-pro-top-nav-header";
 
-    const menuDom = (props, divider, mode) => menuContentRender !== false && (
-      <BaseMenu
-        {...props}
-        mode={mode}
-        handleOpenChange={onOpenChange}
+  const isTop = layout === 'top';
+  // const { css } = useFela({...props, primaryColor});
+
+  let defaultDom = (
+    <GlobalHeader onCollapse={onCollapse} {...props}>
+      <div
         style={{
-          width: '100%',
+          float: 'right'
         }}
-        className={`${baseClassName}-menu`}
-      />
-    );
-
-    const isTop = layout === 'top';
-    console.log(this.props  )
-    let defaultDom = (
-      <GlobalHeader onCollapse={onCollapse} {...this.props}>
+      >
+        {!isTop && <AvatarDropdown />}
+      </div>
+      <div
+        style={{
+          float: 'right'
+        }}
+      >
         <div
-          style={{
-            float: 'right'
-          }}
+          // className={css(styleSheet.topHeaderStyle)}
         >
-          {!isTop && <AvatarDropdown />}
-        </div>
-        <div
-          style={{
-            float: 'right'
-          }}
-        >
-          <div
-            style={{
-              flex: 1,
-              overflowY: 'auto',
-              overflowX: 'hidden'
-            }}
-            className='removeBoxShadow'
-          >
-            {menuContentRender ? menuContentRender(this.props, menuDom(menuSeparation(this.props, 'UPPER'), 'admin', 'inline')) : menuDom(menuSeparation(this.props, 'UPPER'), 'admin', 'inline')}
+          <div>
+            <div
+              // ref={ref}
+              className={`${baseClassName}-main ${
+                contentWidth === "Fixed" ? "wide" : ""
+              }`}
+            >
+              <BaseMenu {...menuSeparation(props, 'UPPER')} {...menuSeparation(props, 'UPPER').menuProps} />
+            </div>
           </div>
         </div>
-        {headerContentRender && headerContentRender(this.props)}
-      </GlobalHeader>
+      </div>
+      {headerContentRender && headerContentRender(props)}
+    </GlobalHeader>
+  );
+  if (isTop && !isMobile) {
+    defaultDom = (
+      <TopNavHeader
+        theme={navTheme as 'light' | 'dark'}
+        mode='horizontal'
+        onCollapse={onCollapse}
+        {...props}
+      />
     );
-    if (isTop && !isMobile) {
-      defaultDom = (
-        <TopNavHeader
-          theme={navTheme as 'light' | 'dark'}
-          mode='horizontal'
-          onCollapse={onCollapse}
-          {...this.props}
-        />
-      );
-    }
-    if (headerRender && typeof headerRender === 'function') {
-      return headerRender(this.props, defaultDom);
-    }
-    return defaultDom;
-  };
+  }
+  if (headerRender && typeof headerRender === 'function') {
+    return headerRender(props, defaultDom);
+  }
+  return defaultDom;
+};
+
+class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
 
   render(): React.ReactNode {
     const {
@@ -173,7 +166,7 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
           }}
           className={className}
         >
-          {this.renderContent()}
+          {renderContent(this.props)}
         </Header>
       </div>
     );
@@ -181,45 +174,81 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
 }
 
 const styleSheet: any = {
-  proFixedHeader: () => ({
-    zIndex: '9',
-    width: '100%',
-    '& .ant-pro-basicLayout .ant-layout-header .ant-pro-fixed-header': {
-      position: 'fixed',
-      top: 0,
+  topHeaderStyle: ({theme, primaryColor}) => ({
+    "& .ant-pro-top-nav-header": {
+      position: "relative",
+      width: "100%",
+      height: "100%",
+      boxShadow: "0 1px 4px 0 rgba(0,21,41,0.12)",
+      transition: "background 0.3s, width 0.2s",
     },
-    '& .ant-pro-basicLayout-content': {
-      zIndex: 111,
-      position: 'relative',
-      margin: '24px',
+    "& .ant-menu-dark.ant-menu-horizontal > .ant-menu-item:hover, .ant-menu.ant-menu-dark .ant-menu-item-selected": {
+      background: primaryColor ? primaryColor : '#1890ff'
     },
-    '& .ant-pro-basicLayout-content .ant-pro-page-container': {
-      margin: '-24px -24px 0',
+    "& .ant-pro-top-nav-header .ant-menu-submenu.ant-menu-submenu-horizontal": {
+      height: "100%",
     },
-    '& .ant-pro-basicLayout-content-disable-margin': {
-      margin: 0,
+    "& .ant-pro-top-nav-header .ant-menu-submenu.ant-menu-submenu-horizontal .ant-menu-submenu-title": {
+      height: "100%",
     },
-    '& .ant-pro-basicLayout-content-disable-margin .ant-pro-page-container': {
-      margin: 0,
+    "& .ant-pro-top-nav-header.light": {
+      backgroundColor: "#fff",
     },
-    '& .ant-pro-basicLayout-content > .ant-layout': {
-      maxHeight: '100%',
+    "& .ant-menu-submenu .ant-menu-submenu-horizontal .ant-menu-submenu-selected": {
+      backgroundColor: primaryColor ? primaryColor : '#1890ff'
     },
-    '& .ant-pro-basicLayout .ant-pro-basicLayout-is-children .ant-pro-basicLayout-fix-siderbar': {
-      height: '100vh',
-      overflow: 'hidden',
-      transform: 'rotate(0)',
+    "& .ant-menu-submenu .ant-menu-submenu-horizontal .ant-menu-submenu-open .ant-menu-submenu-active, .ant-menu-item:hover, .ant-menu-item-active, .ant-menu:not(.ant-menu-inline) .ant-menu-submenu-open, .ant-menu-submenu-active, .ant-menu-submenu-title:hover, .ant-menu-submenu-selected, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item:hover, ant-menu-item a:hover, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu:hover, .ant-menu-light .ant-menu-item:hover > a, .ant-menu-light .ant-menu-item-active > a, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item-selected a, .ant-menu-item-selected a, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-item a:hover, .ant-menu-horizontal:not(.ant-menu-dark) > .ant-menu-submenu-selected": {
+      color: primaryColor ? primaryColor : '#1890ff'
     },
-    '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .tech-page-container': {
-      height: 'calc(52vh)',
+    "& .ant-pro-top-nav-header.light .anticon": {
+      color: 'inherit',
     },
-    '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children': {
-      minHeight: 'calc(52vh)',
+    "& .ant-pro-top-nav-header-main": {
+      display: "flex",
+      height: "100%",
+      paddingLeft: "16px",
     },
-    '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar': {
-      height: 'calc(52vh)',
-    }
-  })
+    "& .ant-pro-top-nav-header-main-left": {
+      display: "flex",
+      minWidth: "192px",
+    },
+    "& .ant-pro-top-nav-header .anticon": {
+      color: 'inherit',
+    },
+    "& .ant-pro-top-nav-header-logo": {
+      position: "relative",
+      minWidth: "165px",
+      height: "100%",
+      overflow: "hidden",
+      transition: "all 0.3s",
+    },
+    "& .ant-pro-top-nav-header-logo img": {
+      display: "inline-block",
+      height: "32px",
+      verticalAlign: "middle",
+    },
+    "& .ant-pro-top-nav-header-logo h1": {
+      display: "inline-block",
+      margin: "0 0 0 12px",
+      color: theme === "light" ? primaryColor : '#fff',
+      fontWeight: "400",
+      fontSize: "16px",
+    },
+    "& .ant-pro-top-nav-header-menu": {
+      minWidth: 0,
+    },
+    "& .ant-pro-top-nav-header-menu .ant-menu.ant-menu-horizontal": {
+      height: "100%",
+      border: "none",
+    },
+  }),
+  widthRightSize: (rightSize) => ({
+    minWidth: rightSize,
+  }),
+
+  displayFlex: (props) => ({
+    flex: "1",
+  }),
 };
 
 export default HeaderView;
