@@ -429,6 +429,7 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
   const headerDom = headerRender({
     ...defaultProps,
     hasSiderMenu: !!siderMenuDom,
+    separateMenus: menuSeparation(menuData),
     menuData,
     isMobile,
     collapsed,
