@@ -30,7 +30,7 @@ const items = [
   }
 ]
 
-const Timeline = (any) => {
+export default (props) => {
     return(
         <div>
           <TimelineComponent
@@ -43,4 +43,3 @@ const Timeline = (any) => {
     )
 }
 
-export default Timeline
