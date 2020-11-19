@@ -6,6 +6,8 @@ import { PureSettings } from './defaultSettings';
 import TopNavHeader from './TopNavHeader';
 import { WithFalse } from './typings';
 import AvatarDropdown from '../components/GlobalHeader/AvatarDropdown';
+import BaseMenu from './SubMenu3/BaseMenu';
+import { menuSeparation } from './SubMenu3/SiderMenu';
 
 const { Header } = Layout;
 
@@ -14,7 +16,9 @@ export type HeaderViewProps = Partial<PureSettings> &
     isMobile?: boolean;
     collapsed?: boolean;
     logo?: React.ReactNode;
-
+    menuContentRender?: WithFalse<
+    (props: HeaderViewProps, defaultDom: React.ReactNode) => React.ReactNode
+    >;
     headerRender?: WithFalse<
       (props: HeaderViewProps, defaultDom: React.ReactNode) => React.ReactNode
     >;
@@ -27,6 +31,7 @@ export type HeaderViewProps = Partial<PureSettings> &
     siderWidth?: number;
     hasSiderMenu?: boolean;
     style?: any;
+    onOpenChange?: (openKeys: WithFalse<string[]>) => void;
   };
 
 interface HeaderViewState {
@@ -41,10 +46,31 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
       navTheme,
       layout,
       headerRender,
-      headerContentRender
+      headerContentRender,
+      menuContentRender,
+      onOpenChange,
+      ...rest
     } = this.props;
 
+    const { prefixCls } = rest;
+
+    const baseClassName = `${prefixCls}-basicLayout`;
+    console.log(baseClassName);
+
+    const menuDom = (props, divider, mode) => menuContentRender !== false && (
+      <BaseMenu
+        {...props}
+        mode={mode}
+        handleOpenChange={onOpenChange}
+        style={{
+          width: '100%',
+        }}
+        className={`${baseClassName}-menu`}
+      />
+    );
+
     const isTop = layout === 'top';
+    console.log(this.props  )
     let defaultDom = (
       <GlobalHeader onCollapse={onCollapse} {...this.props}>
         <div
@@ -53,6 +79,22 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
           }}
         >
           {!isTop && <AvatarDropdown />}
+        </div>
+        <div
+          style={{
+            float: 'right'
+          }}
+        >
+          <div
+            style={{
+              flex: 1,
+              overflowY: 'auto',
+              overflowX: 'hidden'
+            }}
+            className='removeBoxShadow'
+          >
+            {menuContentRender ? menuContentRender(this.props, menuDom(menuSeparation(this.props, 'UPPER'), 'admin', 'inline')) : menuDom(menuSeparation(this.props, 'UPPER'), 'admin', 'inline')}
+          </div>
         </div>
         {headerContentRender && headerContentRender(this.props)}
       </GlobalHeader>
@@ -108,7 +150,6 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
         : '100%';
 
     const right = needFixedHeader ? 0 : undefined;
-
     return (
       <div>
         {needFixedHeader && (
@@ -142,7 +183,42 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
 const styleSheet: any = {
   proFixedHeader: () => ({
     zIndex: '9',
-    width: '100%'
+    width: '100%',
+    '& .ant-pro-basicLayout .ant-layout-header .ant-pro-fixed-header': {
+      position: 'fixed',
+      top: 0,
+    },
+    '& .ant-pro-basicLayout-content': {
+      zIndex: 111,
+      position: 'relative',
+      margin: '24px',
+    },
+    '& .ant-pro-basicLayout-content .ant-pro-page-container': {
+      margin: '-24px -24px 0',
+    },
+    '& .ant-pro-basicLayout-content-disable-margin': {
+      margin: 0,
+    },
+    '& .ant-pro-basicLayout-content-disable-margin .ant-pro-page-container': {
+      margin: 0,
+    },
+    '& .ant-pro-basicLayout-content > .ant-layout': {
+      maxHeight: '100%',
+    },
+    '& .ant-pro-basicLayout .ant-pro-basicLayout-is-children .ant-pro-basicLayout-fix-siderbar': {
+      height: '100vh',
+      overflow: 'hidden',
+      transform: 'rotate(0)',
+    },
+    '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .tech-page-container': {
+      height: 'calc(52vh)',
+    },
+    '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children': {
+      minHeight: 'calc(52vh)',
+    },
+    '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar': {
+      height: 'calc(52vh)',
+    }
   })
 };
 
