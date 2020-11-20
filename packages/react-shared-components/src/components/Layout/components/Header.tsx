@@ -1,14 +1,17 @@
-import React, { useRef, Component } from 'react';
+import React, { Component } from 'react';
 import classNames from 'classnames';
 import { Layout } from 'antd';
-import { useFela } from "react-fela";
 import GlobalHeader, { GlobalHeaderProps } from './GlobalHeader/index';
 import { PureSettings } from './defaultSettings';
 import TopNavHeader from './TopNavHeader';
 import { WithFalse } from './typings';
-import AvatarDropdown from '../components/GlobalHeader/AvatarDropdown';
 import BaseMenu from './SubMenu3/BaseMenu';
 import { menuSeparation } from './SubMenu3/SiderMenu';
+import HeaderDropdown from './HeaderDropdown'
+import { Avatar, Menu} from "antd";
+import {
+  BorderOutlined,
+} from "@ant-design/icons";
 
 const { Header } = Layout;
 
@@ -48,15 +51,58 @@ export const renderContent = (props) => {
     headerRender,
     contentWidth,
     headerContentRender,
-    primaryColor
+    params
   } = props;
 
-  // const ref = useRef(null);
-
   const baseClassName = "ant-pro-top-nav-header";
-
+  
   const isTop = layout === 'top';
-  // const { css } = useFela({...props, primaryColor});
+  
+  const onMenuClick = (event: {
+    key: React.Key;
+    keyPath: React.Key[];
+    item: React.ReactInstance;
+    domEvent: React.MouseEvent<HTMLElement>;
+  }) => {
+    const { key } = event;
+    console.log(key);
+  };
+
+  const menuHeaderDropdown = (orgNames) => (
+    <div>
+      <Menu
+        selectedKeys={[]}
+        className="ant-dropdown-menu ant-dropdown-menu-light antd-pro-components-global-header-index-menu ant-dropdown-menu-root ant-dropdown-menu-vertical"
+        onClick={onMenuClick}
+      >
+        {orgNames.map(orgName =>
+          <Menu.Item key={orgName.value} className="ant-dropdown-menu-item">
+            <BorderOutlined />
+            {orgName.value}
+          </Menu.Item>
+        )}
+        <div
+          className={`${baseClassName}-main ${
+            contentWidth === "Fixed" ? "wide" : ""
+          }`}
+        >
+          <BaseMenu {...menuSeparation(props, 'UPPER')} {...menuSeparation(props, 'UPPER').menuProps} />
+        </div>
+      </Menu>
+    </div>
+  );
+
+  const userMenus = [
+    {
+      value: 'sample'
+    },
+    {
+      value: 'sample2'
+    },
+    {
+      value: 'sample3'
+    }
+  ];
 
   let defaultDom = (
     <GlobalHeader onCollapse={onCollapse} {...props}>
@@ -65,27 +111,23 @@ export const renderContent = (props) => {
           float: 'right'
         }}
       >
-        {!isTop && <AvatarDropdown />}
-      </div>
-      <div
-        style={{
-          float: 'right'
-        }}
-      >
-        <div
-          // className={css(styleSheet.topHeaderStyle)}
-        >
-          <div>
-            <div
-              // ref={ref}
-              className={`${baseClassName}-main ${
-                contentWidth === "Fixed" ? "wide" : ""
-              }`}
+        {!isTop &&
+          <HeaderDropdown overlay={menuHeaderDropdown(userMenus)}>
+            <span
+              className="antd-pro-components-global-header-index-action antd-pro-components-global-header-index-account"
+              style={{ padding: "18px 0px" }}
             >
-              <BaseMenu {...menuSeparation(props, 'UPPER')} {...menuSeparation(props, 'UPPER').menuProps} />
-            </div>
-          </div>
-        </div>
+              <Avatar
+                size="small"
+                alt="avatar"
+                style={{ color: '#f56a00', backgroundColor: '#fde3cf', margin: '5px' }}
+              >
+                {params.orgName.substring(0, 2)}
+              </Avatar>
+              <span className="name anticon anticon-icon">{params.orgName}</span>
+            </span>
+          </HeaderDropdown>
+        } 
       </div>
       {headerContentRender && headerContentRender(props)}
     </GlobalHeader>
@@ -120,8 +162,9 @@ class HeaderView extends Component<HeaderViewProps, HeaderViewState> {
       headerRender,
       isMobile,
       prefixCls,
-      headerHeight
+      headerHeight,
     } = this.props;
+  
     const needFixedHeader = fixedHeader || layout === 'mix';
     const isTop = layout === 'top';
 
