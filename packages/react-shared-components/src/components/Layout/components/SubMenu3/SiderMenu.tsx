@@ -465,6 +465,7 @@ const styleSheet: any = {
     },
     '& .ant-divider': {
       color: theme === 'light' ? 'rgba(0, 0, 0, 0.50)' :'rgba(255, 255, 255, 0.65)',
+      borderTopColor: theme === 'light' ? 'rgba(0, 0, 0, 0.50)' :'rgba(255, 255, 255, 0.65)'
     },
     '& .ant-pro-sider-collapsed-button .anticon': {
       fontSize: '16px',
