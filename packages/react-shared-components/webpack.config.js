@@ -9,8 +9,7 @@ const lessToJs = require('less-vars-to-js');
 var webpack_opts = {
   mode: "development",
   entry: {
-    index: './src/index.ts',
-    big_scheduler: './src/big-scheduler/index.js'
+    index: './src/index.ts'
   },
   target: "node",
   output: {
