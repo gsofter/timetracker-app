@@ -1,12 +1,12 @@
-import React, { useState } from "react";
-import { Calendar, View, DateLocalizer } from "react-big-calendar";
-import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
-import moment from "moment";
-import { UserOutlined, ScheduleOutlined } from "@ant-design/icons";
-import TimezonePicker from "react-timezone";
-import { momentLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
+import React, { useState } from 'react';
+import { Calendar, View, DateLocalizer } from 'react-big-calendar';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import moment from 'moment';
+import { UserOutlined, ScheduleOutlined } from '@ant-design/icons';
+import TimezonePicker from 'react-timezone';
+import { momentLocalizer } from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import {
   Row,
   Col,
@@ -18,53 +18,53 @@ import {
   TimePicker,
   Checkbox,
   Avatar,
-} from "antd";
-import { Modal } from "./Modal";
-import { useFela } from "react-fela";
+} from 'antd';
+import { Modal } from './Modal';
+import { useFela } from 'react-fela';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
-const localizer = momentLocalizer(moment);
+const localizerM = momentLocalizer(moment);
 
-const allViews: View[] = ["agenda", "day", "week", "month"];
+const allViews: View[] = ['agenda', 'day', 'week', 'month'];
 
 const initialEvents = [
   {
     id: 1,
-    title: "Board meeting",
-    start: new Date("Fri Nov 14 2020 04:00:00"),
-    end: new Date("Fri Nov 14 2020 07:00:00"),
+    title: 'Board meeting',
+    start: new Date('Fri Nov 14 2020 04:00:00'),
+    end: new Date('Fri Nov 14 2020 07:00:00'),
     resourceId: 1,
-    totalHours: "3:00:00",
+    totalHours: '3:00:00',
   },
   {
     id: 2,
-    title: "MS training Task",
-    start: new Date("Fri Nov 13 2020 15:00:00"),
-    end: new Date("Fri Nov 13 2020 17:00:00"),
+    title: 'MS training Task',
+    start: new Date('Fri Nov 13 2020 15:00:00'),
+    end: new Date('Fri Nov 13 2020 17:00:00'),
     resourceId: 2,
-    totalHours: "2:00:00",
+    totalHours: '2:00:00',
   },
   {
     id: 3,
-    title: "Team lead meeting",
-    start: new Date("Fri Nov 15 2020 18:00:00"),
-    end: new Date("Fri Nov 15 2020 19:00:00"),
+    title: 'Team lead meeting',
+    start: new Date('Fri Nov 15 2020 18:00:00'),
+    end: new Date('Fri Nov 15 2020 19:00:00'),
     resourceId: 1,
-    totalHours: "1:00:00",
+    totalHours: '1:00:00',
   },
   {
     id: 4,
-    title: "Birthday Party",
-    start: new Date("Fri Nov 17 2020 15:00:00"),
-    end: new Date("Fri Nov 17 2020 16:00:00"),
+    title: 'Birthday Party',
+    start: new Date('Fri Nov 17 2020 15:00:00'),
+    end: new Date('Fri Nov 17 2020 16:00:00'),
     resourceId: 2,
-    totalHours: "1:00:00",
+    totalHours: '1:00:00',
   },
 ];
 const resourceMap = [
-  { resourceId: 1, resourceTitle: "Board room" },
-  { resourceId: 2, resourceTitle: "Training room" },
+  { resourceId: 1, resourceTitle: 'Board room' },
+  { resourceId: 2, resourceTitle: 'Training room' },
 ];
 
 interface Props {
@@ -86,13 +86,13 @@ class CalendarEvent {
     _endDate: Date,
     _allDay?: boolean,
     _desc?: string,
-    _resourceId?: string
+    _resourceId?: string,
   ) {
     this.title = _title;
     this.allDay = _allDay || false;
     this.start = _start;
     this.end = _endDate;
-    this.desc = _desc || "";
+    this.desc = _desc || '';
     this.resourceId = _resourceId;
   }
 }
@@ -111,8 +111,7 @@ function SelectableCalendar({ localizer }: Props) {
   const [events, setEvents] = React.useState(initialEvents);
 
   const handleSelect = ({ start, end }) => {
-    const title = window.prompt("New Event name");
-    console.log(title, "here is");
+    const title = window.prompt('New Event name');
     if (title) {
       let newEvent = {} as CalendarEvent;
       newEvent.start = moment(start).toDate();
@@ -146,7 +145,7 @@ function SelectableCalendar({ localizer }: Props) {
       reason: reason,
       note: note,
     };
-    const title = "New event added";
+    const title = 'New event added';
     if (title) {
       let newEvent = ({} as CalendarEvent) as any;
       newEvent.start = moment(startDate).toDate();
@@ -155,11 +154,11 @@ function SelectableCalendar({ localizer }: Props) {
       newEvent.id = 10;
       // newEvent.id = Math.floor(Math.random() * 10000);
 
-      let now = moment(startTime).format("HH:mm:ss");
-      let then = moment(endTime).format("HH:mm:ss");
+      let now = moment(startTime).format('HH:mm:ss');
+      let then = moment(endTime).format('HH:mm:ss');
       let calculateTime = moment
-        .utc(then, "HH:mm:ss")
-        .diff(moment.utc(now, "HH:mm:ss"), "m");
+        .utc(then, 'HH:mm:ss')
+        .diff(moment.utc(now, 'HH:mm:ss'), 'm');
 
       newEvent.title = selecttask;
       setEvents([...(events as any), newEvent]);
@@ -174,7 +173,8 @@ function SelectableCalendar({ localizer }: Props) {
     }
 
     setIsShowing(!isShowing);
-    console.log(submitValue, "submitValue");
+    // tslint:disable-next-line
+    console.log(submitValue, 'submitValue');
   };
 
   const resetModal = (e: any) => {
@@ -213,11 +213,47 @@ function SelectableCalendar({ localizer }: Props) {
     return (
       <>
         <span>
-          <em style={{ color: "magenta" }}>{event.title}</em>
+          <em style={{ color: 'magenta' }}>{event.title}</em>
           <p>{event.desc}</p>
         </span>
       </>
     );
+  };
+
+  const handleSelectEvent = (event) => {
+    alert(event.title);
+  };
+  const handleReason = (e) => {
+    setReason(e.target.value as any);
+  };
+  const handleNote = (e) => {
+    setNote(e.target.value as any);
+  };
+  const handleSelectProject = (e) => {
+    setSelectproject(e);
+  };
+  const handleTask = (e) => {
+    setSelecttask(e);
+  };
+  const handleClose = () => {
+    setIsShowing(false);
+  };
+  const handleChecked = (e) => {
+    // tslint:disable-next-line
+    console.log(e.target.checked);
+  };
+  const handleStartDate = (date) => {
+    setStartDate(date as any);
+  };
+  const handleStartTime = (time, timeString) => {
+    setStartTime(time as any);
+  };
+  const handleEndTime = (time, timeString) => {
+    setEndTime(time as any);
+  };
+  const handleSelectTimezone = (timezone) => {
+    // tslint:disable-next-line
+    console.log('New Timezone Selected:', timezone);
   };
 
   const renderModalBody = (): JSX.Element => {
@@ -228,20 +264,15 @@ function SelectableCalendar({ localizer }: Props) {
           wrapperCol={{ span: 24 }}
           layout="vertical"
         >
-          <div style={{ margin: "15px 0px" }}>
+          <div style={{ margin: '15px 0px' }}>
             <Avatar
-              style={{ backgroundColor: "#3174ad" }}
+              style={{ backgroundColor: '#3174ad' }}
               icon={<UserOutlined />}
             />
-            <span style={{ marginLeft: "10px" }}>Cdmbase</span>
+            <span style={{ marginLeft: '10px' }}>Cdmbase</span>
           </div>
           <Form.Item label="Projects">
-            <Select
-              onChange={(e) => {
-                setSelectproject(e);
-              }}
-              value={selectproject}
-            >
+            <Select onChange={handleSelectProject} value={selectproject}>
               <Select.Option value="Admin-project1">
                 Admin-project1
               </Select.Option>
@@ -251,66 +282,44 @@ function SelectableCalendar({ localizer }: Props) {
             </Select>
           </Form.Item>
           <Form.Item label="TO DO">
-            <Select
-              onChange={(e) => {
-                setSelecttask(e);
-              }}
-              value={selecttask}
-            >
+            <Select onChange={handleTask} value={selecttask}>
               <Select.Option value="task1">Task1</Select.Option>
               <Select.Option value="task2">Task2</Select.Option>
               <Select.Option value="task3">Task3</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="DatePicker">
-            <DatePicker
-              onChange={(date) => {
-                setStartDate(date as any);
-              }}
-              value={startDate as any}
-            />{" "}
+            <DatePicker onChange={handleStartDate} value={startDate as any} />{' '}
             &nbsp;
             <span>From </span>
             <TimePicker
-              use12Hours
+              use12Hours={true}
               format="h:mm a"
-              onChange={(time, timeString) => {
-                setStartTime(time as any);
-              }}
+              onChange={handleStartTime}
               value={startTime as any}
             />
             &nbsp;TO &nbsp;
             <TimePicker
-              use12Hours
+              use12Hours={true}
               format="h:mm a"
-              onChange={(time, timeString) => {
-                setEndTime(time as any);
-              }}
+              onChange={handleEndTime}
               value={endTime as any}
             />
           </Form.Item>
           <Form.Item>
-            <Checkbox
-              onChange={(e) => {
-                onChange(e.target.checked);
-              }}
-            >
-              Checkbox
-            </Checkbox>
+            <Checkbox onChange={handleChecked}>Checkbox</Checkbox>
           </Form.Item>
           <Form.Item label="REASON *">
             <TextArea
               rows={3}
-              onChange={(e) => {
-                setReason(e.target.value as any);
-              }}
+              onChange={handleReason}
               value={reason}
               placeholder="Reason for time"
             />
           </Form.Item>
           <Form.Item label="Note">
             <TextArea
-              onChange={(e) => setNote(e.target.value as any)}
+              onChange={handleNote}
               rows={3}
               value={note}
               placeholder="Notes for time"
@@ -336,25 +345,23 @@ function SelectableCalendar({ localizer }: Props) {
       <Row
         align="middle"
         justify="space-between"
-        style={{ marginBottom: "15px" }}
+        style={{ marginBottom: '15px' }}
       >
         <Col>
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: 'center' }}>
             <h3>View & edit timesheets</h3>
           </div>
         </Col>
       </Row>
       <Row align="middle" gutter={[24, 16]}>
-        <Col md={6} xs={16} style={{ top: "-10px" }}>
+        <Col md={6} xs={16} style={{ top: '-10px' }}>
           <span>Select Timezone</span>
           <TimezonePicker
             value="Asia/Yerevan"
-            onChange={(timezone) =>
-              console.log("New Timezone Selected:", timezone)
-            }
+            onChange={handleSelectTimezone}
             inputProps={{
-              placeholder: "Select Timezone...",
-              name: "timezone",
+              placeholder: 'Select Timezone...',
+              name: 'timezone',
             }}
           />
         </Col>
@@ -378,39 +385,39 @@ function SelectableCalendar({ localizer }: Props) {
             <a href="#">
               <span>
                 <ScheduleOutlined />
-              </span>{" "}
+              </span>{' '}
               Timesheet settings
             </a>
           </div>
         </Col>
         <Col md={6} xs={16}>
           <div>
-            <span style={{ fontWeight: "bold" }}>
+            <span style={{ fontWeight: 'bold' }}>
               <a onClick={openModal}>Add Time</a>
             </span>
             <Modal
               modalTitle="Add Time"
               showModal={isShowing}
-              handleClose={() => setIsShowing(false)}
+              handleClose={handleClose}
               modalBody={renderModalBody()}
             />
           </div>
         </Col>
       </Row>
       <DnDCalendar
-        selectable
+        selectable={true}
         localizer={localizer}
         events={events}
         defaultView="week"
         views={allViews}
-        defaultDate={new Date("Fri Nov 13 2020")}
-        onSelectEvent={(event) => alert(event.title)}
+        defaultDate={new Date('Fri Nov 13 2020')}
+        onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelect}
         startAccessor="start"
         endAccessor="end"
         titleAccessor="title"
-        toolbar
-        resizable
+        toolbar={true}
+        resizable={true}
         onEventDrop={onEventDrop}
         components={{
           event: EventComponent,
@@ -426,82 +433,82 @@ function SelectableCalendar({ localizer }: Props) {
   );
 }
 
+const stylesheet: any = {
+  styles: (theme) => ({
+    position: 'relative',
+    width: '100%',
+    '& .sm-screen-size': {
+      '@media (max-width: 768px)': {
+        width: '100% !important',
+      },
+    },
+    '& ul.jsx-4179805763': {
+      zIndex: 1050,
+      webkitBoxSizing: 'border-box',
+      boxSizing: 'border-box',
+      padding: '4px 0',
+      fontSize: '13px',
+      maxHeight: '100px',
+      fontVariant: 'initial',
+      backgroundColor: '#fff',
+      borderRadius: '2px',
+      outline: 'none',
+      webkitBoxShadow:
+        '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
+      boxShadow:
+        '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
+    },
+    '& div.jsx-4179805763': {
+      marginTop: '8px',
+      width: '100%',
+    },
+    '& .rbc-day-slot': {
+      position: 'relative',
+    },
+    '& .rbc-day-slot .rbc-events-container': {
+      bottom: 0,
+      left: 0,
+      position: 'absolute',
+      right: 0,
+      marginRight: '10px',
+      top: 0,
+    },
+    '& .rbc-day-slot .rbc-events-container.rbc-rtl': {
+      left: '10px',
+      right: 0,
+    },
+    '& .rbc-day-slot .rbc-event': {
+      border: '1px solid #265985',
+      display: 'flex',
+      maxHeight: '100%',
+      minHeight: '20px',
+      flexFlow: 'column wrap',
+      alignItems: 'flex-start',
+      overflow: 'hidden',
+      position: 'absolute',
+    },
+    '& .rbc-event': {
+      border: 'none',
+      boxShadow: 'none',
+      margin: 0,
+      padding: '2px 5px',
+      backgroundColor: '#3174ad',
+      borderRadius: '5px',
+      color: '#fff',
+      cursor: 'pointer',
+      width: '100%',
+      textAlign: 'left',
+    },
+  }),
+};
+
 export default (props) => {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>
-      <div style={{ height: "100vh" }} className="calender-width">
-        <SelectableCalendar localizer={localizer} />
+      <div style={{ height: '100vh' }} className="calender-width">
+        <SelectableCalendar localizer={localizerM} />
       </div>
     </div>
   );
-};
-
-const stylesheet: any = {
-  styles: (theme) => ({
-    position: "relative",
-    width: "100%",
-    "& .sm-screen-size": {
-      "@media (max-width: 768px)": {
-        width: "100% !important",
-      },
-    },
-    "& ul.jsx-4179805763": {
-      zIndex: 1050,
-      webkitBoxSizing: "border-box",
-      boxSizing: "border-box",
-      padding: "4px 0",
-      fontSize: "13px",
-      maxHeight: "100px",
-      fontVariant: "initial",
-      backgroundColor: "#fff",
-      borderRadius: "2px",
-      outline: "none",
-      webkitBoxShadow:
-        "0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
-      boxShadow:
-        "0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
-    },
-    "& div.jsx-4179805763": {
-      marginTop: "8px",
-      width: "100%",
-    },
-    "& .rbc-day-slot": {
-      position: "relative",
-    },
-    "& .rbc-day-slot .rbc-events-container": {
-      bottom: 0,
-      left: 0,
-      position: "absolute",
-      right: 0,
-      marginRight: "10px",
-      top: 0,
-    },
-    "& .rbc-day-slot .rbc-events-container.rbc-rtl": {
-      left: "10px",
-      right: 0,
-    },
-    "& .rbc-day-slot .rbc-event": {
-      border: "1px solid #265985",
-      display: "flex",
-      maxHeight: "100%",
-      minHeight: "20px",
-      flexFlow: "column wrap",
-      alignItems: "flex-start",
-      overflow: "hidden",
-      position: "absolute",
-    },
-    "& .rbc-event": {
-      border: "none",
-      boxShadow: "none",
-      margin: 0,
-      padding: "2px 5px",
-      backgroundColor: "#3174ad",
-      borderRadius: "5px",
-      color: "#fff",
-      cursor: "pointer",
-      width: "100%",
-      textAlign: "left",
-    },
-  }),
 };

@@ -1,5 +1,5 @@
-import * as React from "react";
-import { useFela } from "react-fela";
+import * as React from 'react';
+import { useFela } from 'react-fela';
 
 export interface IProps {
   showModal?: boolean;
@@ -21,9 +21,9 @@ export const Modal: React.SFC<IProps> = ({
     <div className={css(stylesheet.styles)}>
       <div
         className="modalDialog"
-        style={{ display: `${showModal ? "block" : "none"}` }}
+        style={{ display: `${showModal ? 'block' : 'none'}` }}
       >
-        <div style={{ overflowY: "scroll", overflowX: "hidden" }}>
+        <div style={{ overflowY: 'scroll', overflowX: 'hidden' }}>
           <a
             href="#close"
             title="Close"
@@ -43,50 +43,50 @@ export const Modal: React.SFC<IProps> = ({
 
 const stylesheet: any = {
   styles: (theme) => ({
-    position: "relative",
+    position: 'relative',
     zIndex: 1111,
-    "& .modalDialog": {
-      position: "fixed",
-      height: "100%",
-      width: "100%",
+    '& .modalDialog': {
+      position: 'fixed',
+      height: '100%',
+      width: '100%',
       top: 0,
       right: 0,
       bottom: 0,
       left: 0,
-      background: "rgba(0, 0, 0, 0.8)",
+      background: 'rgba(0, 0, 0, 0.8)',
       zIndex: 1,
-      transition: "opacity 100ms ease-in",
+      transition: 'opacity 100ms ease-in',
     },
-    "& .modalDialog > div": {
-      maxWidth: "800px",
-      width: "70%",
-      position: "relative",
-      margin: "2% auto",
-      padding: "20px",
-      borderRadius: "3px",
-      background: "#fff",
-      zIndex: "10000",
-      height: "90%",
+    '& .modalDialog > div': {
+      maxWidth: '800px',
+      width: '70%',
+      position: 'relative',
+      margin: '2% auto',
+      padding: '20px',
+      borderRadius: '3px',
+      background: '#fff',
+      zIndex: '10000',
+      height: '90%',
     },
-    "& .close": {
-      background: "#1890ff",
-      color: "#fff",
-      lineHeight: "25px",
-      position: "absolute",
-      right: "-12px",
-      textAlign: "center",
-      top: "-10px",
-      width: "34px",
-      height: "34px",
-      textDecoration: "none",
-      fontWeight: "bold",
-      borderRadius: "50%",
-      boxShadow: "1px 1px 3px #000",
-      paddingTop: "5px",
+    '& .close': {
+      background: '#1890ff',
+      color: '#fff',
+      lineHeight: '25px',
+      position: 'absolute',
+      right: '-12px',
+      textAlign: 'center',
+      top: '-10px',
+      width: '34px',
+      height: '34px',
+      textDecoration: 'none',
+      fontWeight: 'bold',
+      borderRadius: '50%',
+      boxShadow: '1px 1px 3px #000',
+      paddingTop: '5px',
       zIndex: 11111,
     },
-    "& .close:hover": {
-      background: "#1890ff",
+    '& .close:hover': {
+      background: '#1890ff',
     },
   }),
 };
