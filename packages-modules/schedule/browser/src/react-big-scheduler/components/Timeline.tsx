@@ -18,38 +18,9 @@ import {
 } from 'antd';
 import { Modal } from './Modal';
 import { useFela } from 'react-fela';
+import DemoData  from './DemoData';
 
 const { TextArea } = Input;
-
-const resourceMap = [
-  { id: 1, title: 'group 1' },
-  { id: 2, title: 'group 2' },
-  { id: 3, title: 'group 3' },
-];
-
-const items = [
-  {
-    id: 1,
-    group: 1,
-    title: 'item 1',
-    start_time: moment(),
-    end_time: moment().add(1, 'hour'),
-  },
-  {
-    id: 2,
-    group: 2,
-    title: 'item 2',
-    start_time: moment().add(5, 'hour'),
-    end_time: moment().add(10, 'hour'),
-  },
-  {
-    id: 3,
-    group: 1,
-    title: 'item 3',
-    start_time: moment().add(2, 'hour'),
-    end_time: moment().add(3, 'hour'),
-  },
-];
 
 function TimelineCalendar(Props) {
   const [isShowing, setIsShowing] = useState(false);
@@ -61,8 +32,8 @@ function TimelineCalendar(Props) {
   const [checked, setChecked] = useState(false);
   const [reason, setReason] = useState();
   const [note, setNote] = useState();
-  const [resource, setResourceMap] = useState(resourceMap);
-  const [events, setEvents] = React.useState(items);
+  const [resource, setResourceMap] = useState(DemoData.resourceMap);
+  const [events, setEvents] = React.useState(DemoData.items);
 
   const openModal = () => {
     setIsShowing(!isShowing);
@@ -94,8 +65,8 @@ function TimelineCalendar(Props) {
           id: Math.floor(Math.random() * 10000),
           group: 2,
           title: selecttask,
-          start_time: moment(),
-          end_time: moment().add(calculateTime, 'hour'),
+          start_time: new Date(),
+          end_time: new Date(calculateTime),
         },
       ]);
       setResourceMap([
@@ -141,10 +112,6 @@ function TimelineCalendar(Props) {
   const handleItemResize = (itemId, time, edge) => {
     // tslint:disable-next-line
     console.log('Resized', itemId, time, edge);
-  };
-
-  const handleSelectEvent = (event) => {
-    alert(event.title);
   };
   const handleReason = (e) => {
     setReason(e.target.value as any);

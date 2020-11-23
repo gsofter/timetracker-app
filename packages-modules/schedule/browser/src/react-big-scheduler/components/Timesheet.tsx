@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
@@ -21,51 +21,13 @@ import {
 } from 'antd';
 import { Modal } from './Modal';
 import { useFela } from 'react-fela';
+import DemoData from './DemoData';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizerM = momentLocalizer(moment);
 
 const allViews: View[] = ['agenda', 'day', 'week', 'month'];
-
-const initialEvents = [
-  {
-    id: 1,
-    title: 'Board meeting',
-    start: new Date('Fri Nov 14 2020 04:00:00'),
-    end: new Date('Fri Nov 14 2020 07:00:00'),
-    resourceId: 1,
-    totalHours: '3:00:00',
-  },
-  {
-    id: 2,
-    title: 'MS training Task',
-    start: new Date('Fri Nov 13 2020 15:00:00'),
-    end: new Date('Fri Nov 13 2020 17:00:00'),
-    resourceId: 2,
-    totalHours: '2:00:00',
-  },
-  {
-    id: 3,
-    title: 'Team lead meeting',
-    start: new Date('Fri Nov 15 2020 18:00:00'),
-    end: new Date('Fri Nov 15 2020 19:00:00'),
-    resourceId: 1,
-    totalHours: '1:00:00',
-  },
-  {
-    id: 4,
-    title: 'Birthday Party',
-    start: new Date('Fri Nov 17 2020 15:00:00'),
-    end: new Date('Fri Nov 17 2020 16:00:00'),
-    resourceId: 2,
-    totalHours: '1:00:00',
-  },
-];
-const resourceMap = [
-  { resourceId: 1, resourceTitle: 'Board room' },
-  { resourceId: 2, resourceTitle: 'Training room' },
-];
 
 interface Props {
   localizer: DateLocalizer;
@@ -107,8 +69,30 @@ function SelectableCalendar({ localizer }: Props) {
   const [checked, setChecked] = useState(false);
   const [reason, setReason] = useState();
   const [note, setNote] = useState();
-  const [resource, setResourceMap] = useState(resourceMap);
-  const [events, setEvents] = React.useState(initialEvents);
+  const [resource, setResourceMap] = useState([]);
+  const [events, setEvents] = React.useState([]);
+
+  useEffect(() => {
+    let res = [];
+    DemoData.resourceMap.forEach((item) => {
+      res.push({ resourceId: item.id, resourceTitle: item.title });
+    });
+    setResourceMap(res);
+  }, []);
+
+  useEffect(() => {
+    let data = [];
+    DemoData.items.forEach((item) => {
+      data.push({
+        id: item.id,
+        resourceId: item.group,
+        start: item.start_time,
+        end: item.end_time,
+        title: item.title,
+      });
+    });
+    setEvents(data);
+  }, []);
 
   const handleSelect = ({ start, end }) => {
     const title = window.prompt('New Event name');
@@ -173,8 +157,7 @@ function SelectableCalendar({ localizer }: Props) {
     }
 
     setIsShowing(!isShowing);
-    // tslint:disable-next-line
-    console.log(submitValue, 'submitValue');
+    // console.log(submitValue, 'submitValue');
   };
 
   const resetModal = (e: any) => {
@@ -410,7 +393,7 @@ function SelectableCalendar({ localizer }: Props) {
         events={events}
         defaultView="week"
         views={allViews}
-        defaultDate={new Date('Fri Nov 13 2020')}
+        defaultDate={new Date('Fri Nov 22 2020')}
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelect}
         startAccessor="start"
