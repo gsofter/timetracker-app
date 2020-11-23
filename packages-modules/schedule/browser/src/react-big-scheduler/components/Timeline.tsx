@@ -1,9 +1,9 @@
-import React, { useState } from "react";
-import TimelineComponent from "react-calendar-timeline";
-import moment from "moment";
-import { UserOutlined, ScheduleOutlined } from "@ant-design/icons";
-import TimezonePicker from "react-timezone";
-import "react-calendar-timeline/lib/Timeline.css";
+import React, { useState } from 'react';
+import TimelineComponent from 'react-calendar-timeline';
+import moment from 'moment';
+import { UserOutlined, ScheduleOutlined } from '@ant-design/icons';
+import TimezonePicker from 'react-timezone';
+import 'react-calendar-timeline/lib/Timeline.css';
 import {
   Row,
   Col,
@@ -15,41 +15,12 @@ import {
   TimePicker,
   Checkbox,
   Avatar,
-} from "antd";
-import { Modal } from "./Modal";
-import { useFela } from "react-fela";
+} from 'antd';
+import { Modal } from './Modal';
+import { useFela } from 'react-fela';
+import DemoData  from './DemoData';
 
 const { TextArea } = Input;
-
-const resourceMap = [
-  { id: 1, title: "group 1" },
-  { id: 2, title: "group 2" },
-  { id: 3, title: "group 3" },
-];
-
-const items = [
-  {
-    id: 1,
-    group: 1,
-    title: "item 1",
-    start_time: moment(),
-    end_time: moment().add(1, "hour"),
-  },
-  {
-    id: 2,
-    group: 2,
-    title: "item 2",
-    start_time: moment().add(5, "hour"),
-    end_time: moment().add(10, "hour"),
-  },
-  {
-    id: 3,
-    group: 1,
-    title: "item 3",
-    start_time: moment().add(2, "hour"),
-    end_time: moment().add(3, "hour"),
-  },
-];
 
 function TimelineCalendar(Props) {
   const [isShowing, setIsShowing] = useState(false);
@@ -61,15 +32,11 @@ function TimelineCalendar(Props) {
   const [checked, setChecked] = useState(false);
   const [reason, setReason] = useState();
   const [note, setNote] = useState();
-  const [resource, setResourceMap] = useState(resourceMap);
-  const [events, setEvents] = React.useState(items);
+  const [resource, setResourceMap] = useState(DemoData.resourceMap);
+  const [events, setEvents] = React.useState(DemoData.items);
 
   const openModal = () => {
     setIsShowing(!isShowing);
-  };
-
-  const onChange = (e) => {
-    setChecked(e);
   };
   const handleSubmit = (e: any) => {
     e.preventDefault();
@@ -84,13 +51,13 @@ function TimelineCalendar(Props) {
       reason: reason,
       note: note,
     };
-    const title = "New event added";
+    const title = 'New event added';
     if (title) {
-      let now = moment(startTime).format("HH:mm:ss");
-      let then = moment(endTime).format("HH:mm:ss");
+      let now = moment(startTime).format('HH:mm:ss');
+      let then = moment(endTime).format('HH:mm:ss');
       let calculateTime = moment
-        .utc(then, "HH:mm:ss")
-        .diff(moment.utc(now, "HH:mm:ss"), "h");
+        .utc(then, 'HH:mm:ss')
+        .diff(moment.utc(now, 'HH:mm:ss'), 'h');
 
       setEvents([
         ...events,
@@ -98,8 +65,8 @@ function TimelineCalendar(Props) {
           id: Math.floor(Math.random() * 10000),
           group: 2,
           title: selecttask,
-          start_time: moment(),
-          end_time: moment().add(calculateTime, "hour"),
+          start_time: new Date(),
+          end_time: new Date(calculateTime),
         },
       ]);
       setResourceMap([
@@ -112,7 +79,7 @@ function TimelineCalendar(Props) {
     }
 
     setIsShowing(!isShowing);
-    console.log(submitValue, "submitValue");
+    // console.log(submitValue, 'submitValue');
   };
 
   const resetModal = (e: any) => {
@@ -138,11 +105,45 @@ function TimelineCalendar(Props) {
   };
 
   const handleItemMove = (itemId, dragTime, newGroupOrder) => {
-    console.log("Moved", itemId, dragTime, newGroupOrder);
+    // tslint:disable-next-line
+    console.log('Moved', itemId, dragTime, newGroupOrder);
   };
 
   const handleItemResize = (itemId, time, edge) => {
-    console.log("Resized", itemId, time, edge);
+    // tslint:disable-next-line
+    console.log('Resized', itemId, time, edge);
+  };
+  const handleReason = (e) => {
+    setReason(e.target.value as any);
+  };
+  const handleNote = (e) => {
+    setNote(e.target.value as any);
+  };
+  const handleSelectProject = (e) => {
+    setSelectproject(e);
+  };
+  const handleTask = (e) => {
+    setSelecttask(e);
+  };
+  const handleClose = () => {
+    setIsShowing(false);
+  };
+  const handleChecked = (e) => {
+    // tslint:disable-next-line
+      setChecked(e);
+  };
+  const handleStartDate = (date) => {
+    setStartDate(date as any);
+  };
+  const handleStartTime = (time, timeString) => {
+    setStartTime(time as any);
+  };
+  const handleEndTime = (time, timeString) => {
+    setEndTime(time as any);
+  };
+  const handleSelectTimezone = (timezone) => {
+    // tslint:disable-next-line
+    console.log('New Timezone Selected:', timezone);
   };
 
   const renderModalBody = (): JSX.Element => {
@@ -153,18 +154,16 @@ function TimelineCalendar(Props) {
           wrapperCol={{ span: 24 }}
           layout="vertical"
         >
-          <div style={{ margin: "15px 0px" }}>
+          <div style={{ margin: '15px 0px' }}>
             <Avatar
-              style={{ backgroundColor: "#3174ad" }}
+              style={{ backgroundColor: '#3174ad' }}
               icon={<UserOutlined />}
             />
-            <span style={{ marginLeft: "10px" }}>Cdmbase</span>
+            <span style={{ marginLeft: '10px' }}>Cdmbase</span>
           </div>
           <Form.Item label="Projects">
             <Select
-              onChange={(e) => {
-                setSelectproject(e);
-              }}
+              onChange={handleSelectProject}
               value={selectproject}
             >
               <Select.Option value="Admin-project1">
@@ -177,9 +176,7 @@ function TimelineCalendar(Props) {
           </Form.Item>
           <Form.Item label="TO DO">
             <Select
-              onChange={(e) => {
-                setSelecttask(e);
-              }}
+              onChange={handleTask}
               value={selecttask}
             >
               <Select.Option value="task1">Task1</Select.Option>
@@ -189,36 +186,28 @@ function TimelineCalendar(Props) {
           </Form.Item>
           <Form.Item label="DatePicker">
             <DatePicker
-              onChange={(date) => {
-                setStartDate(date as any);
-              }}
+              onChange={handleStartDate}
               value={startDate as any}
-            />{" "}
+            />{' '}
             &nbsp;
             <span>From </span>
             <TimePicker
-              use12Hours
+              use12Hours={true}
               format="h:mm a"
-              onChange={(time, timeString) => {
-                setStartTime(time as any);
-              }}
+              onChange={handleStartTime}
               value={startTime as any}
             />
             &nbsp;TO &nbsp;
             <TimePicker
-              use12Hours
+              use12Hours={true}
               format="h:mm a"
-              onChange={(time, timeString) => {
-                setEndTime(time as any);
-              }}
+              onChange={handleEndTime}
               value={endTime as any}
             />
           </Form.Item>
           <Form.Item>
             <Checkbox
-              onChange={(e) => {
-                onChange(e.target.checked);
-              }}
+              onChange={handleChecked}
             >
               Checkbox
             </Checkbox>
@@ -226,16 +215,14 @@ function TimelineCalendar(Props) {
           <Form.Item label="REASON *">
             <TextArea
               rows={3}
-              onChange={(e) => {
-                setReason(e.target.value as any);
-              }}
+              onChange={handleReason}
               value={reason}
               placeholder="Reason for time"
             />
           </Form.Item>
           <Form.Item label="Note">
             <TextArea
-              onChange={(e) => setNote(e.target.value as any)}
+              onChange={handleNote}
               rows={3}
               value={note}
               placeholder="Notes for time"
@@ -261,25 +248,23 @@ function TimelineCalendar(Props) {
       <Row
         align="middle"
         justify="space-between"
-        style={{ marginBottom: "15px" }}
+        style={{ marginBottom: '15px' }}
       >
         <Col>
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: 'center' }}>
             <h3>View & edit timesheets</h3>
           </div>
         </Col>
       </Row>
       <Row align="middle" gutter={[24, 16]}>
-        <Col md={6} xs={16} style={{ top: "-10px" }}>
+        <Col md={6} xs={16} style={{ top: '-10px' }}>
           <span>Select Timezone</span>
           <TimezonePicker
             value="Asia/Yerevan"
-            onChange={(timezone) =>
-              console.log("New Timezone Selected:", timezone)
-            }
+            onChange={handleSelectTimezone}
             inputProps={{
-              placeholder: "Select Timezone...",
-              name: "timezone",
+              placeholder: 'Select Timezone...',
+              name: 'timezone',
             }}
           />
         </Col>
@@ -303,20 +288,20 @@ function TimelineCalendar(Props) {
             <a href="#">
               <span>
                 <ScheduleOutlined />
-              </span>{" "}
+              </span>{' '}
               Timesheet settings
             </a>
           </div>
         </Col>
         <Col md={6} xs={16}>
           <div>
-            <span style={{ fontWeight: "bold" }}>
+            <span style={{ fontWeight: 'bold' }}>
               <a onClick={openModal}>Add Time</a>
             </span>
             <Modal
               modalTitle="Add Time"
               showModal={isShowing}
-              handleClose={() => setIsShowing(false)}
+              handleClose={handleClose}
               modalBody={renderModalBody()}
             />
           </div>
@@ -325,20 +310,92 @@ function TimelineCalendar(Props) {
       <TimelineComponent
         groups={resource}
         items={events}
-        defaultTimeStart={moment().add(-12, "hour")}
-        defaultTimeEnd={moment().add(12, "hour")}
+        defaultTimeStart={moment().add(-12, 'hour')}
+        defaultTimeEnd={moment().add(12, 'hour')}
         canMove={true}
-        canResize={"both"}
+        canResize={'both'}
         onItemMove={handleItemMove}
         onItemResize={handleItemResize}
         itemHeightRatio={0.75}
-        fullUpdate
+        fullUpdate={true}
         itemTouchSendsClick={false}
-        stackItems
+        stackItems={true}
       />
     </>
   );
 }
+
+const stylesheet: any = {
+  styles: (theme) => ({
+    position: 'relative',
+    width: '100%',
+    '& .sm-screen-size': {
+      '@media (max-width: 768px)': {
+        width: '100% !important',
+      },
+    },
+    '& ul.jsx-4179805763': {
+      zIndex: 1050,
+      webkitBoxSizing: 'border-box',
+      boxSizing: 'border-box',
+      padding: '4px 0',
+      fontSize: '13px',
+      maxHeight: '100px',
+      fontVariant: 'initial',
+      backgroundColor: '#fff',
+      borderRadius: '2px',
+      outline: 'none',
+      webkitBoxShadow:
+        '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
+      boxShadow:
+        '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
+    },
+    '& div.jsx-4179805763': {
+      marginTop: '8px',
+      width: '100%',
+    },
+    '& .rbc-day-slot': {
+      position: 'relative',
+    },
+    '& .rbc-day-slot .rbc-events-container': {
+      bottom: 0,
+      left: 0,
+      position: 'absolute',
+      right: 0,
+      marginRight: '10px',
+      top: 0,
+    },
+    '& .rbc-day-slot .rbc-events-container.rbc-rtl': {
+      left: '10px',
+      right: 0,
+    },
+    '& .rbc-day-slot .rbc-event': {
+      border: '1px solid #265985',
+      display: 'flex',
+      maxHeight: '100%',
+      minHeight: '20px',
+      flexFlow: 'column wrap',
+      alignItems: 'flex-start',
+      overflow: 'hidden',
+      position: 'absolute',
+    },
+    '& .rbc-event': {
+      border: 'none',
+      boxShadow: 'none',
+      margin: 0,
+      padding: '2px 5px',
+      backgroundColor: '#3174ad',
+      borderRadius: '5px',
+      color: '#fff',
+      cursor: 'pointer',
+      width: '100%',
+      textAlign: 'left',
+    },
+    '& .react-calendar-timeline .rct-header-root': {
+      backgroundColor: '#087acc',
+    },
+  }),
+};
 
 export default (props) => {
   const { css } = useFela();
@@ -349,76 +406,4 @@ export default (props) => {
       </div>
     </div>
   );
-};
-
-const stylesheet: any = {
-  styles: (theme) => ({
-    position: "relative",
-    width: "100%",
-    "& .sm-screen-size": {
-      "@media (max-width: 768px)": {
-        width: "100% !important",
-      },
-    },
-    "& ul.jsx-4179805763": {
-      zIndex: 1050,
-      webkitBoxSizing: "border-box",
-      boxSizing: "border-box",
-      padding: "4px 0",
-      fontSize: "13px",
-      maxHeight: "100px",
-      fontVariant: "initial",
-      backgroundColor: "#fff",
-      borderRadius: "2px",
-      outline: "none",
-      webkitBoxShadow:
-        "0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
-      boxShadow:
-        "0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
-    },
-    "& div.jsx-4179805763": {
-      marginTop: "8px",
-      width: "100%",
-    },
-    "& .rbc-day-slot": {
-      position: "relative",
-    },
-    "& .rbc-day-slot .rbc-events-container": {
-      bottom: 0,
-      left: 0,
-      position: "absolute",
-      right: 0,
-      marginRight: "10px",
-      top: 0,
-    },
-    "& .rbc-day-slot .rbc-events-container.rbc-rtl": {
-      left: "10px",
-      right: 0,
-    },
-    "& .rbc-day-slot .rbc-event": {
-      border: "1px solid #265985",
-      display: "flex",
-      maxHeight: "100%",
-      minHeight: "20px",
-      flexFlow: "column wrap",
-      alignItems: "flex-start",
-      overflow: "hidden",
-      position: "absolute",
-    },
-    "& .rbc-event": {
-      border: "none",
-      boxShadow: "none",
-      margin: 0,
-      padding: "2px 5px",
-      backgroundColor: "#3174ad",
-      borderRadius: "5px",
-      color: "#fff",
-      cursor: "pointer",
-      width: "100%",
-      textAlign: "left",
-    },
-    "& .react-calendar-timeline .rct-header-root": {
-      backgroundColor: "#087acc",
-    },
-  }),
 };
