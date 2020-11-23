@@ -13,7 +13,7 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { createEpicMiddleware } from 'redux-observable';
 import { createApolloClient } from './apollo-client';
 import { rootEpic } from '../config/epic-config';
-import { themeReducer } from '@admin-layout/react-shared-components';
+import { themeReducer } from '@admin-layout/components';
 
 export const history = require('./router-history');
 

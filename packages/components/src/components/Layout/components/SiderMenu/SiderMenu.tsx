@@ -226,7 +226,9 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (props) => {
               {extraDom}
             </div>
           )}
-          // @sri modified below section to group menus as `MIDDLE`, `LOWER`, `Buttom`
+          {
+            //@sri modified below section to group menus as `MIDDLE`, `LOWER`, `Buttom`
+          }
           <div
             style={{
               flex: 1,
