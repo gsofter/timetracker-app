@@ -1,0 +1,18 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "allowSyntheticDefaultImports": true,
+    "rootDir": "./src",
+    "esModuleInterop": true,
+    "outDir": "../lib",
+    "declarationDir": "lib",
+    "jsx": "react",
+    "skipLibCheck": true
+  },
+  "exclude": [
+    "node_modules",
+    "lib",
+    "dist",
+    "webpack.config.js"
+  ]
+}
