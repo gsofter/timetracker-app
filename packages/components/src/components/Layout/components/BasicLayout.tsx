@@ -253,14 +253,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const context = useContext(ConfigProvider.ConfigContext);
   const prefixCls = props.prefixCls ?? context.getPrefixCls('pro');
 
-  //@sri need to check
-  const value = useContext(RouteContext);
-  const prefixedClassName = `${prefixCls}-page-container`;
-
-  const classNameLayout = classNames(prefixedClassName, props.className, {
-    // [`${prefixCls}-page-container-ghost`]: ghost,
-  });
-
   const formatMessage = ({
     id,
     defaultMessage,
@@ -411,7 +403,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const className = classNames(
     props.className,
     'ant-design-pro',
-    baseClassName,
+    // baseClassName,
+    css(styleSheet.basicLayout),
     {
       [`screen-${colSize}`]: colSize,
       [`${baseClassName}-top-menu`]: propsLayout === 'top',
@@ -460,59 +453,57 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
 
   return (
-    <div id="test-pro-layout">
-      <MenuCounter.Provider>
-        <RouteContext.Provider
-          value={{
-            ...defaultProps,
-            breadcrumb: breadcrumbProps,
-            menuData,
-            isMobile,
-            collapsed,
-            isChildrenLayout: true,
-            title: pageTitleInfo.pageName,
-            hasSiderMenu: !!siderMenuDom,
-            hasHeader: !!headerDom,
-            siderWidth: leftSiderWidth,
-            hasFooter: !!footerDom,
-            hasFooterToolbar,
-            setHasFooterToolbar,
-            pageTitleInfo,
-            matchMenus,
-            matchMenuKeys,
-            currentMenu,
-          }}
-        >
-          {props.pure ? (
-            children
-          ) : (
-              <div className={className}>
-                <Layout
-                  className={css(styleSheet.layoutCss)}
-                  style={{
-                    minHeight: '100%',
-                    ...style,
-                  }}
-                  hasSider={true}>
-                  {siderMenuDom}
-                  <Layout className={css(styleSheet.genLayoutStyle)}>
-                    {headerDom}
-                    <WrapContent
-                      isChildrenLayout={isChildrenLayout}
-                      {...rest}
-                      className={contentClassName}
-                      style={contentStyle}
-                    >
-                      {loading ? <PageLoading /> : children}
-                    </WrapContent>
-                    {/* {footerDom} */}
-                  </Layout>
+    <MenuCounter.Provider>
+      <RouteContext.Provider
+        value={{
+          ...defaultProps,
+          breadcrumb: breadcrumbProps,
+          menuData,
+          isMobile,
+          collapsed,
+          isChildrenLayout: true,
+          title: pageTitleInfo.pageName,
+          hasSiderMenu: !!siderMenuDom,
+          hasHeader: !!headerDom,
+          siderWidth: leftSiderWidth,
+          hasFooter: !!footerDom,
+          hasFooterToolbar,
+          setHasFooterToolbar,
+          pageTitleInfo,
+          matchMenus,
+          matchMenuKeys,
+          currentMenu,
+        }}
+      >
+        {props.pure ? (
+          children
+        ) : (
+            <div className={className}>
+              <Layout
+                className={css(styleSheet.layoutCss)}
+                style={{
+                  minHeight: '100%',
+                  ...style,
+                }}
+                hasSider={true}>
+                {siderMenuDom}
+                <Layout className={css(styleSheet.genLayoutStyle)}>
+                  {headerDom}
+                  <WrapContent
+                    isChildrenLayout={isChildrenLayout}
+                    {...rest}
+                    className={contentClassName}
+                    style={contentStyle}
+                  >
+                    {loading ? <PageLoading /> : children}
+                  </WrapContent>
+                  {/* {footerDom} */}
                 </Layout>
-              </div>
-            )}
-        </RouteContext.Provider>
-      </MenuCounter.Provider>
-    </div>
+              </Layout>
+            </div>
+          )}
+      </RouteContext.Provider>
+    </MenuCounter.Provider>
   );
 };
 
@@ -530,6 +521,12 @@ const styleSheet: any = {
   }),
   genLayoutStyle: (props) => ({
     position: 'relative',
+  }),
+  basicLayout: () => ({
+    display: 'flex',
+    'flex-direction': 'column',
+    width: '100%',
+    'min-height': '100%',
   }),
   layoutCss: ({ theme, primaryColor, layout }) => ({
     display: 'flex',

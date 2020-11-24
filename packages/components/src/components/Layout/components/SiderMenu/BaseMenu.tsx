@@ -15,9 +15,6 @@ import MenuCounter from './Counter';
 import { PrivateSiderMenuProps } from './SiderMenu';
 import PageLoading from '../PageLoading';
 
-import { Link } from 'react-router-dom';
-
-
 export interface BaseMenuProps
   extends Partial<RouterTypes<Route>>,
   Omit<MenuProps, 'openKeys' | 'onOpenChange' | 'title'>,
@@ -141,7 +138,7 @@ class MenuUtil {
 
     return (
       <Menu.Item inlineIndent={24} disabled={item.disabled} key={item.key || item.path}>
-        <Link to={item.path}>{this.getMenuItemPath(item, isChildren)}</Link>
+        {this.getMenuItemPath(item, isChildren)}
       </Menu.Item>
     );
   }

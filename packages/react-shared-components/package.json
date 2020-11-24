@@ -47,6 +47,7 @@
     "base-64": "^0.1.0",
     "identicon.js": "^2.3.1",
     "react-fontawesome": "^1.6.1",
+    "react-intl": "^5.10.4",
     "unstated-next": "^1.1.0",
     "use-json-comparison": "^1.0.5",
     "use-media-antd-query": "^1.0.2", 
