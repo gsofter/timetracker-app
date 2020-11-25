@@ -7,20 +7,35 @@ import {
     DefaultFooter,
 } from '@admin-layout/components';
 import React, { useEffect, useMemo, useRef } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, generatePath } from 'react-router-dom';
 import { GithubOutlined } from '@ant-design/icons';
 import { Result, Button } from 'antd';
-// import { useIntl } from 'react-intl';
+import { useIntl } from 'react-intl';
 
 // import Authorized from '@/utils/Authorized';
 // import RightContent from '@/components/GlobalHeader/RightContent';
 import { getMatchMenu } from '@umijs/route-utils';
-import { useHistory } from 'react-router-dom'
+import { useHistory } from 'react-router-dom';
+import { IOrgNameInContextFragment } from '@admin-layout/core';
 // import logo from '../assets/'
 
-
-
+const noMatch = (
+    <Result
+        status={403}
+        title="403"
+        subTitle="Sorry, you are not authorized to access this page."
+        extra={
+            <Button type="primary">
+                <Link to="/user/login">Go Login</Link>
+            </Button>
+        }
+    />
+);
+export interface RouteParams {
+    routeParams: IOrgNameInContextFragment
+}
 export interface BasicLayoutProps extends ProLayoutProps {
+
     breadcrumbNameMap: {
         [path: string]: MenuDataItem;
     };
@@ -29,6 +44,8 @@ export interface BasicLayoutProps extends ProLayoutProps {
     };
     settings: Settings;
 }
+
+
 export type BasicLayoutContent = { [K in 'location']: BasicLayoutProps[K] } & {
     breadcrumbNameMap: {
         [path: string]: MenuDataItem;
@@ -45,7 +62,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
             children: item.children ? menuDataRender(item.children) : undefined,
         };
         // return Authorized.check(item.authority, localItem, null) as MenuDataItem;
-        return null;
+        return localItem;
     });
 
 const defaultFooterDom = (
@@ -67,8 +84,18 @@ const defaultFooterDom = (
         ]}
     />
 );
-
-const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
+const generateMenuPath = (path, params) => {
+    try {
+        const generatedPath = generatePath(path, params);
+        return generatedPath;
+    } catch (err) {
+        console.log('--fillParams.path', path)
+        console.log('--fillParams.params', params)
+        console.log('generatePath is errored due to missing orgId');
+    }
+    return null;
+}
+const BasicLayout: React.FC<BasicLayoutProps & RouteParams> = (props) => {
     const {
         children,
         settings,
@@ -94,13 +121,10 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
     );
 
     // const { formatMessage } = useIntl();
-    const formatMessage = (props) => props;
     const history = useHistory();
-
 
     return (
         <ProLayout
-            formatMessage={formatMessage}
             {...props}
             {...settings}
             onMenuHeaderClick={() => history.push('/')}
@@ -108,15 +132,9 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
                 if (menuItemProps.isUrl || !menuItemProps.path) {
                     return defaultDom;
                 }
-                return <Link to={menuItemProps.path}>{defaultDom}</Link>
+                return <Link to={generateMenuPath(menuItemProps.path, props.routeParams)}>{defaultDom}</Link>
             }}
-            breadcrumbRender={(routers = []) => [
-                {
-                    path: '/',
-                    breadcrumbName: formatMessage({ id: 'menu.home' }),
-                },
-                ...routers,
-            ]}
+
             itemRender={(route, params, routes, paths) => {
                 const first = routes.indexOf(route) === 0;
                 return first ? (
@@ -128,6 +146,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
             footerRender={() => defaultFooterDom}
             menuDataRender={menuDataRender}
             postMenuData={(menuData) => {
+                console.log('---POSTMENU DATA', menuData)
                 menuDataRef.current = menuData || [];
                 return menuData || [];
             }}

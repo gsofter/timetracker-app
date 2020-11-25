@@ -20,7 +20,8 @@ export const accountPageStore: any[] = [
         component: Dashboard,
         position: IMenuPosition.BOTTOM,
         icon: <UserOutlined/>,
-        priority: 1
+        priority: 1,
+        authority: ['admin', 'user'],
     },
     {
         path: '/:orgName/usermenu/billing',
@@ -30,16 +31,16 @@ export const accountPageStore: any[] = [
         component: Billing,
         position: IMenuPosition.BOTTOM,
         priority: 3,
-        children: [
-            {
-                exact: true,
-                key: 'userMenu.billing.home',
-                name: 'Home',
-                path: '/:orgName/usermenu/billing/home',
-                component: Billing,
-                priority: 1
-            }
-        ]
+        authority: ['admin', 'user'],
+    },
+    {
+        exact: true,
+        key: 'userMenu.billing.home',
+        name: 'Home',
+        path: '/:orgName/usermenu/billing/home',
+        component: Billing,
+        priority: 1,
+        authority: ['admin', 'user'],
     },
     {
         path: '/:orgName/usermenu/profile',
@@ -48,7 +49,8 @@ export const accountPageStore: any[] = [
         component: Account,
         position: IMenuPosition.BOTTOM,
         exact: true,
-        priority: 2
+        priority: 2,
+        authority: ['admin', 'user'],
     },
     {
         path: '/:orgName/usermenu/account',
@@ -59,48 +61,51 @@ export const accountPageStore: any[] = [
         position: IMenuPosition.BOTTOM,
         exact: true,
         priority: 4,
-        children: [
-            {
-                path: '/:orgName/usermenu/account/collaborators',
-                key: 'userMenu.account.collaborators',
-                tab: 'Collaborators',
-                name: 'Collaborators',
-                position: IMenuPosition.BOTTOM,
-                component: AccountSetting,
-                exact: true,
-                priority: 1,
-            },
-            {
-                path: '/:orgName/usermenu/account/git-integration',
-                key: 'userMenu.account.git-integration',
-                tab: 'Integration',
-                name: 'Integration',
-                position: IMenuPosition.BOTTOM,
-                component: AccountSetting,
-                exact: true,
-                priority: 2,
-            },
-            {
-                path: '/:orgName/usermenu/account/tokens',
-                key: 'userMenu.account.tokens',
-                tab: 'Tokens',
-                name: 'Tokens',
-                position: IMenuPosition.BOTTOM,
-                component: AccountSetting,
-                exact: true,
-                priority: 4,
-            },
-            {
-                path: '/:orgName/usermenu/account/referrals',
-                key: 'userMenu.account.referrals',
-                tab: 'Referrals',
-                name: 'Referrals',
-                position: IMenuPosition.BOTTOM,
-                component: AccountSetting,
-                exact: true,
-                priority: 3,
-            }
-        ]
+        authority: ['admin', 'user'],
+    },
+    {
+        path: '/:orgName/usermenu/account/collaborators',
+        key: 'userMenu.account.collaborators',
+        tab: 'Collaborators',
+        name: 'Collaborators',
+        position: IMenuPosition.BOTTOM,
+        component: AccountSetting,
+        exact: true,
+        priority: 1,
+        authority: ['admin', 'user'],
+    },
+    {
+        path: '/:orgName/usermenu/account/git-integration',
+        key: 'userMenu.account.git-integration',
+        tab: 'Integration',
+        name: 'Integration',
+        position: IMenuPosition.BOTTOM,
+        component: AccountSetting,
+        exact: true,
+        priority: 2,
+        authority: ['admin', 'user'],
+    },
+    {
+        path: '/:orgName/usermenu/account/tokens',
+        key: 'userMenu.account.tokens',
+        tab: 'Tokens',
+        name: 'Tokens',
+        position: IMenuPosition.BOTTOM,
+        component: AccountSetting,
+        exact: true,
+        priority: 4,
+        authority: ['admin', 'user'],
+    },
+    {
+        path: '/:orgName/usermenu/account/referrals',
+        key: 'userMenu.account.referrals',
+        tab: 'Referrals',
+        name: 'Referrals',
+        position: IMenuPosition.BOTTOM,
+        component: AccountSetting,
+        exact: true,
+        priority: 3,
+        authority: ['admin', 'user'],
     },
     {
         path: '/:orgName/usermenu/organization',
@@ -110,11 +115,12 @@ export const accountPageStore: any[] = [
         position: IMenuPosition.BOTTOM,
         exact: true,
         priority: 6,
+        authority: ['admin', 'user'],
     }
 
 ];
 
-const selectedRoutesAndMenus = ['userMenu', 'userMenu.billing', 'userMenu.account',  'userMenu.account.profile', 'userMenu.organization'];
+const selectedRoutesAndMenus = ['userMenu', 'userMenu.billing', 'userMenu.billing.home', 'userMenu.account', 'userMenu.account.referrals', 'userMenu.account.tokens', 'userMenu.account.git-integration', 'userMenu.account.collaborators', 'userMenu.account.profile', 'userMenu.organization'];
 
 // get menus
 const filteredMenus = getFilteredMenus(accountPageStore, selectedRoutesAndMenus);

@@ -53,7 +53,6 @@ export type IMutation = {
   dummy?: Maybe<Scalars['Int']>;
   /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
-  toggleSidebar?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -64,11 +63,6 @@ export type IMutationaddCounterArgs = {
 
 export type IMutationaddMoleculerCounterArgs = {
   amount?: Maybe<Scalars['Int']>;
-};
-
-
-export type IMutationtoggleSidebarArgs = {
-  state: Scalars['Boolean'];
 };
 
 export type IQuery = {
@@ -82,7 +76,6 @@ export type IQuery = {
   getOrgNameFromContext?: Maybe<IContext>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
-  sidebarState?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -103,16 +96,6 @@ export type IOrgNameInContextFragment = (
   & Pick<IContext, 'orgName'>
 );
 
-export type ItoggleSidebarMutationVariables = {
-  state: Scalars['Boolean'];
-};
-
-
-export type ItoggleSidebarMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<IMutation, 'toggleSidebar'>
-);
-
 export type IGetOrgNameFromContextQueryVariables = {};
 
 
@@ -124,26 +107,11 @@ export type IGetOrgNameFromContextQuery = (
   )> }
 );
 
-export type IsidebarStateQueryVariables = {};
-
-
-export type IsidebarStateQuery = (
-  { __typename?: 'Query' }
-  & Pick<IQuery, 'sidebarState'>
-);
-
 export const OrgNameInContextFragmentDoc = gql`
     fragment OrgNameInContext on Context {
   orgName
 }
     `;
-export const toggleSidebarDocument = gql`
-    mutation toggleSidebar($state: Boolean!) {
-  toggleSidebar(state: $state) @client
-}
-    `;
-export type toggleSidebarMutationResult = ApolloReactCommon.MutationResult<ItoggleSidebarMutation>;
-export type toggleSidebarMutationOptions = ApolloReactCommon.BaseMutationOptions<ItoggleSidebarMutation, ItoggleSidebarMutationVariables>;
 export const GetOrgNameFromContextDocument = gql`
     query GetOrgNameFromContext {
   getOrgNameFromContext @client {
@@ -152,12 +120,6 @@ export const GetOrgNameFromContextDocument = gql`
 }
     ${OrgNameInContextFragmentDoc}`;
 export type GetOrgNameFromContextQueryResult = ApolloReactCommon.QueryResult<IGetOrgNameFromContextQuery, IGetOrgNameFromContextQueryVariables>;
-export const sidebarStateDocument = gql`
-    query sidebarState {
-  sidebarState @client
-}
-    `;
-export type sidebarStateQueryResult = ApolloReactCommon.QueryResult<IsidebarStateQuery, IsidebarStateQueryVariables>;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -237,8 +199,8 @@ export type IResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
   Context: ResolverTypeWrapper<IContext>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Mutation: ResolverTypeWrapper<{}>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Subscription: ResolverTypeWrapper<{}>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
@@ -255,8 +217,8 @@ export type IResolversParentTypes = {
   String: Scalars['String'],
   AnyObject: Scalars['AnyObject'],
   Context: IContext,
-  Boolean: Scalars['Boolean'],
   Mutation: {},
+  Boolean: Scalars['Boolean'],
   Subscription: {},
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
@@ -298,7 +260,6 @@ export type IMutationResolvers<ContextType = MyContext, ParentType extends IReso
   addMoleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddMoleculerCounterArgs, never>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   syncCachedCounter?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  toggleSidebar?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationtoggleSidebarArgs, 'state'>>,
 };
 
 export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
@@ -308,7 +269,6 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   getContextProperty?: Resolver<Maybe<IResolversTypes['AnyObject']>, ParentType, ContextType, RequireFields<IQuerygetContextPropertyArgs, never>>,
   getOrgNameFromContext?: Resolver<Maybe<IResolversTypes['Context']>, ParentType, ContextType>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
-  sidebarState?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
 };
 
 export type ISubscriptionResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Subscription'] = IResolversParentTypes['Subscription']> = {
