@@ -11,7 +11,8 @@ import { Link, generatePath } from 'react-router-dom';
 import { GithubOutlined } from '@ant-design/icons';
 import { Result, Button } from 'antd';
 import { useIntl } from 'react-intl';
-
+import { connect } from 'react-redux';
+import { ConnectState } from '../../redux/connect';
 // import Authorized from '@/utils/Authorized';
 // import RightContent from '@/components/GlobalHeader/RightContent';
 import { getMatchMenu } from '@umijs/route-utils';
@@ -34,6 +35,10 @@ const noMatch = (
 export interface RouteParams {
     routeParams: IOrgNameInContextFragment
 }
+
+export interface ReduxState {
+    settings: Settings;
+}
 export interface BasicLayoutProps extends ProLayoutProps {
 
     breadcrumbNameMap: {
@@ -42,7 +47,6 @@ export interface BasicLayoutProps extends ProLayoutProps {
     route: ProLayoutProps['route'] & {
         authority: string[];
     };
-    settings: Settings;
 }
 
 
@@ -95,7 +99,7 @@ const generateMenuPath = (path, params) => {
     }
     return null;
 }
-const BasicLayout: React.FC<BasicLayoutProps & RouteParams> = (props) => {
+const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = (props) => {
     const {
         children,
         settings,
@@ -156,4 +160,6 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams> = (props) => {
     )
 }
 
-export default BasicLayout;
+export default connect(({ settings }: ConnectState) => ({
+    settings,
+  }))(BasicLayout);

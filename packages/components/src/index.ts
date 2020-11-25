@@ -1,3 +1,8 @@
+import theme from './components/Themes';
+import { Feature } from '@common-stack/client-react';
+
 export * from './context';
 export * from './components';
-// export * from './interfaces';
+
+
+export default new Feature(theme);
