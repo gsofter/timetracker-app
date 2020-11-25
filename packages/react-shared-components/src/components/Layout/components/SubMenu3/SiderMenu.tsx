@@ -1,5 +1,5 @@
 import React from 'react';
-import { Layout, Menu } from 'antd';
+import { Layout, Menu, Divider } from 'antd';
 import classNames from 'classnames';
 import { SiderProps } from 'antd/lib/layout/Sider';
 import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
@@ -20,6 +20,25 @@ export const defaultRenderLogo = (logo: React.ReactNode): React.ReactNode => {
   }
   return logo;
 };
+
+export const menuSeparation = (props, position) => {
+  if(props.separateMenus) {
+    switch (position) {
+      case 'UPPER':
+        return {...props, menuData: props.separateMenus.upperMenus}
+      case 'MIDDLE':
+        return {...props, menuData: props.separateMenus.middleMenus}
+      case 'LOWER':
+        return {...props, menuData: props.separateMenus.lowerMenus}
+      case 'BOTTOM':
+        return {...props, menuData: props.separateMenus.bottomMenus}
+      default:
+        break;
+    }
+  } else {
+    return null;
+  }
+}
 
 export const defaultRenderLogoAndTitle = (
   props: SiderMenuProps,
@@ -54,6 +73,13 @@ export const defaultRenderLogoAndTitle = (
   );
 };
 
+export type SeparateMenusTypes = {
+  upperMenus?: Object,
+  middleMenus?: Object,
+  lowerMenus?: Object,
+  bottomMenus?: Object,
+}
+
 export interface SiderMenuProps
   extends Pick<BaseMenuProps, Exclude<keyof BaseMenuProps, ['onCollapse']>> {
   logo?: React.ReactNode;
@@ -77,6 +103,7 @@ export interface SiderMenuProps
   className?: string;
   style?: any;
   links?: React.ReactNode[];
+  separateMenus?: SeparateMenusTypes;
   onOpenChange?: (openKeys: WithFalse<string[]>) => void;
 }
 
@@ -115,16 +142,19 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
   });
   const headerDom = defaultRenderLogoAndTitle(props);
   const extraDom = menuExtraRender && menuExtraRender(props);
-  const menuDom = menuContentRender !== false && flatMenuKeys && (
-    <BaseMenu
-      {...props}
-      mode="inline"
-      handleOpenChange={onOpenChange}
-      style={{
-        width: '100%',
-      }}
-      className={`${baseClassName}-menu`}
-    />
+  const menuDom = (props, divider, mode) => menuContentRender !== false && flatMenuKeys && (
+    <>
+      {Boolean(divider) && props && props.menuData && props.menuData.length > 0 ? <Divider plain>{divider}</Divider> : null}
+      <BaseMenu
+        {...props}
+        mode={mode}
+        handleOpenChange={onOpenChange}
+        style={{
+          width: '100%',
+        }}
+        className={`${baseClassName}-menu`}
+      />
+    </>
   );
 
   return (
@@ -183,15 +213,6 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
               {extraDom}
             </div>
           )}
-          <div
-            style={{
-              flex: 1,
-              overflowY: 'auto',
-              overflowX: 'hidden',
-            }}
-          >
-            {menuContentRender ? menuContentRender(props, menuDom) : menuDom}
-          </div>
           <div className={`${baseClassName}-links`}>
             <Menu
               theme={theme}
@@ -222,11 +243,43 @@ const SiderMenu: React.FC<SiderMenuProps> = (props) => {
               )}
             </Menu>
           </div>
+          <div
+            style={{
+              flex: 1,
+              overflowY: 'auto',
+              overflowX: 'hidden',
+            }}
+            className='removeBoxShadow'
+          >
+            {menuContentRender ? menuContentRender(props, menuDom(menuSeparation(props, 'MIDDLE'), null, 'inline')) : menuDom(menuSeparation(props, 'MIDDLE'), null, 'inline')}
+          </div>
+          <div
+            style={{
+              flex: 1,
+              overflowY: 'auto',
+              overflowX: 'hidden'
+            }}
+            className='removeBoxShadow'
+          >
+            {menuContentRender ? menuContentRender(props, menuDom(menuSeparation(props, 'LOWER'), 'admin', 'inline')) : menuDom(menuSeparation(props, 'LOWER'), 'admin', 'inline')}
+          </div>
           {menuFooterRender && (
             <div className={`${baseClassName}-footer`}>
               {menuFooterRender(props)}
             </div>
           )}
+          <div
+            style={{
+              flex: 1,
+              overflowY: 'auto',
+              overflowX: 'hidden',
+              position: 'fixed',
+              bottom: '20px'
+            }}
+            className='removeBoxShadow'
+          >
+            {menuContentRender ? menuContentRender(props, menuDom(menuSeparation(props, 'BOTTOM'), null, 'vertical')) : menuDom(menuSeparation(props, 'BOTTOM'), null, 'vertical')}
+          </div>
         </div>
       </Sider>
     </>
@@ -257,6 +310,9 @@ const styleSheet: any = {
     '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': {
       background: primaryColor ? primaryColor : '#1890ff',
     },
+    '& .removeBoxShadow ul': {
+      boxShadow: 'none'
+    },
     '& .ant-menu-inline .ant-menu-item::after': {
       borderRight: 'none',
     },
@@ -273,6 +329,9 @@ const styleSheet: any = {
       padding: '16px 16px',
       lineHeight: '32px',
       cursor: 'pointer',
+    },
+    '& .cu .ant-pro-sider-menu': {
+      boxShadow: 'none'
     },
     '& .ant-pro-sider-logo > a': {
       display: 'flex',
@@ -403,6 +462,10 @@ const styleSheet: any = {
     },
     '& .ant-pro-sider-collapsed-button': {
       borderTop: 'rgba(0,0,0,0.25)',
+    },
+    '& .ant-divider': {
+      color: theme === 'light' ? 'rgba(0, 0, 0, 0.50)' :'rgba(255, 255, 255, 0.65)',
+      borderTopColor: theme === 'light' ? 'rgba(0, 0, 0, 0.50)' :'rgba(255, 255, 255, 0.65)'
     },
     '& .ant-pro-sider-collapsed-button .anticon': {
       fontSize: '16px',

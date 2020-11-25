@@ -1,10 +1,12 @@
 import React, { useState } from "react";
 import { Calendar, View, DateLocalizer } from "react-big-calendar";
+import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
 import moment from "moment";
 import { ScheduleOutlined } from "@ant-design/icons";
-
+import TimezonePicker from "react-timezone";
 import { momentLocalizer } from "react-big-calendar";
 import "react-big-calendar/lib/css/react-big-calendar.css";
+import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
 import {
   Row,
   Col,
@@ -17,11 +19,50 @@ import {
 } from "antd";
 import { Modal } from "./Modal";
 import { useFela } from "react-fela";
-import { values } from "lodash";
 
+const DnDCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 
 const allViews: View[] = ["agenda", "day", "week", "month"];
+
+const initialEvents = [
+  {
+    id: 0,
+    title: "All Day Event very long title",
+    allDay: true,
+    start: new Date(2020, 3, 0),
+    end: new Date(2020, 3, 1),
+  },
+  {
+    id: 1,
+    title: "Long Event",
+    start: new Date(2020, 3, 7),
+    end: new Date(2020, 3, 10),
+  },
+
+  {
+    id: 2,
+    title: "DTS STARTS",
+    start: new Date(2020, 2, 13, 0, 0, 0),
+    end: new Date(2020, 2, 20, 0, 0, 0),
+  },
+
+  {
+    id: 3,
+    title: "DTS ENDS",
+    start: new Date(2020, 10, 6, 0, 0, 0),
+    end: new Date(2020, 10, 13, 0, 0, 0),
+    desc: "Description is shown here",
+  },
+
+  {
+    id: 4,
+    title: "Leave",
+    start: new Date(new Date().setHours(new Date().getHours() - 3)),
+    end: new Date(new Date().setHours(new Date().getHours() + 3)),
+    desc: "Description is shown here",
+  },
+];
 
 interface Props {
   localizer: DateLocalizer;
@@ -66,16 +107,7 @@ function SelectableCalendar({ localizer }: Props) {
     minhours: "",
   });
 
-  const [events, setEvents] = useState([
-    {
-      title: "My event",
-      allDay: true,
-      start: moment().toDate(),
-      end: moment()
-        .add(4, "hours")
-        .toDate(),
-    },
-  ] as CalendarEvent[]);
+  const [events, setEvents] = React.useState(initialEvents);
 
   const handleSelect = ({ start, end }) => {
     const title = window.prompt("New Event name");
@@ -89,49 +121,47 @@ function SelectableCalendar({ localizer }: Props) {
       // Erroneous code
       // events.push(newEvent)
       // setEvents(events)
-      setEvents([...events, newEvent]);
+      setEvents([...(events as any), newEvent]);
     }
   };
 
   const openModal = () => {
     setIsShowing(!isShowing);
   };
-  
+
   const handleChange = (e: any) => {
-    if(!e.target){
-      setValues({...values, selectuser: e })
-    }
-    else{
-      const {name, value} = e && e.target
-      setValues({...values, [name]:value })
+    if (!e.target) {
+      setValues({ ...values, selectuser: e });
+    } else {
+      const { name, value } = e && e.target;
+      setValues({ ...values, [name]: value });
     }
   };
 
   const handleSubmit = (e: any) => {
     e.preventDefault();
-    const submitValue ={
+    const submitValue = {
       selectUser: values.selectuser,
       minhours: values.minhours,
       repeat: repeat,
       startTime: startTime,
       endTime: endTime,
       startDate: startDate,
-      endDate: endDate
-    }
-    const title = "New event added"
+      endDate: endDate,
+    };
+    const title = "New event added";
     if (title) {
       let newEvent = {} as CalendarEvent;
       newEvent.start = moment(startDate).toDate();
       newEvent.end = moment(endDate).toDate();
       newEvent.title = title;
-      setEvents([...events, newEvent ])
+      setEvents([...(events as any), newEvent]);
     }
-    
-    
+
     setIsShowing(!isShowing);
     console.log(submitValue, "submitValue");
   };
-  
+
   const resetModal = (e: any) => {
     e.preventDefault();
     setRepeat(null);
@@ -139,16 +169,45 @@ function SelectableCalendar({ localizer }: Props) {
     setStartTime(null);
     setEndTime(null);
     setEndDate(null);
-    values.selectuser = '';
-    values.minhours = '';
+    values.selectuser = "";
+    values.minhours = "";
+  };
+
+  const onEventDrop = ({ event, start, end, allDay }) => {
+    const idx = events.indexOf(event);
+    const updatedEvent = { ...event, start, end };
+
+    const nextEvents = [...events];
+    nextEvents.splice(idx, 1, updatedEvent);
+    setEvents(nextEvents);
+    alert(`${event.title} was dropped onto ${event.start}`);
+  };
+
+  const EventComponent = ({ start, end, title }) => {
+    return (
+      <>
+        <p>{title}</p>
+        <p>{start}</p>
+        <p>{end}</p>
+      </>
+    );
+  };
+
+  const EventAgenda = ({ event }) => {
+    return (
+      <span>
+        <em style={{ color: "magenta" }}>{event.title}</em>
+        <p>{event.desc}</p>
+      </span>
+    );
   };
 
   const renderModalBody = (): JSX.Element => {
     return (
       <>
         <Form
-          labelCol={{ span: 21 }}
-          wrapperCol={{ span: 21 }}
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
           layout="vertical"
         >
           <Form.Item label="User">
@@ -158,36 +217,53 @@ function SelectableCalendar({ localizer }: Props) {
             </Select>
           </Form.Item>
           <Form.Item label="DatePicker">
-            <DatePicker onChange={(date) => { setStartDate(date as any) }} value={startDate as any} />{" "}
+            <DatePicker
+              onChange={(date) => {
+                setStartDate(date as any);
+              }}
+              value={startDate as any}
+            />{" "}
             &nbsp;
             <TimePicker
               use12Hours
               format="h:mm a"
-              onChange={(time, timeString) => { setStartTime( time as any ) }}
+              onChange={(time, timeString) => {
+                setStartTime(time as any);
+              }}
               value={startTime as any}
             />
             &nbsp;TO &nbsp;
             <TimePicker
               use12Hours
               format="h:mm a"
-              onChange={(time, timeString) => { setEndTime( time as any ) }}
+              onChange={(time, timeString) => {
+                setEndTime(time as any);
+              }}
               value={endTime as any}
             />
             &nbsp;
-            <DatePicker onChange={(date) => { setEndDate(date as any) }} value={endDate as any} />
+            <DatePicker
+              onChange={(date) => {
+                setEndDate(date as any);
+              }}
+              value={endDate as any}
+            />
           </Form.Item>
           <Form.Item label="Minimum Hours">
             <Input
-              name='minhours'
+              name="minhours"
               placeholder="5"
               onChange={handleChange}
               value={values.minhours as any}
             />
           </Form.Item>
           <Form.Item label="Repeats">
-            <Select onChange={(e)=> {
-              setRepeat(e)
-            }} value={repeat}>
+            <Select
+              onChange={(e) => {
+                setRepeat(e);
+              }}
+              value={repeat}
+            >
               <Select.Option value="never">Never</Select.Option>
               <Select.Option value="yes">Yes</Select.Option>
             </Select>
@@ -220,50 +296,46 @@ function SelectableCalendar({ localizer }: Props) {
           </div>
         </Col>
       </Row>
-      <Row align="middle" justify="space-between">
-        <Col>
-          <div>
-            <Form
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
-              layout="vertical"
-              style={{ width: "150px" }}
-            >
-              <Form.Item label="My time zone">
-                <Select>
-                  <Select.Option value="user1">User1</Select.Option>
-                  <Select.Option value="user2">User2</Select.Option>
-                </Select>
-              </Form.Item>
-            </Form>
+      <Row align="middle" gutter={[24, 16]}>
+        <Col md={6} xs={16} style={{ top: "-10px" }}>
+          <span>Select Timezone</span>
+          <TimezonePicker
+            value="Asia/Yerevan"
+            onChange={(timezone) =>
+              console.log("New Timezone Selected:", timezone)
+            }
+            inputProps={{
+              placeholder: "Select Timezone...",
+              name: "timezone",
+            }}
+          />
+        </Col>
+        <Col md={6} xs={16}>
+          <Form
+            labelCol={{ span: 20 }}
+            wrapperCol={{ span: 20 }}
+            layout="vertical"
+            className="sm-screen-size"
+          >
+            <Form.Item label="Members">
+              <Select>
+                <Select.Option value="user1">User1</Select.Option>
+                <Select.Option value="user2">User2</Select.Option>
+              </Select>
+            </Form.Item>
+          </Form>
+        </Col>
+        <Col md={6} xs={16}>
+          <div className="vertical-">
+            <a href="#">
+              <span>
+                <ScheduleOutlined />
+              </span>{" "}
+              schedule settings
+            </a>
           </div>
         </Col>
-        <Col>
-          <div>
-            <Form
-              labelCol={{ span: 24 }}
-              wrapperCol={{ span: 24 }}
-              layout="vertical"
-              style={{ width: "150px" }}
-            >
-              <Form.Item label="Members">
-                <Select>
-                  <Select.Option value="user1">User1</Select.Option>
-                  <Select.Option value="user2">User2</Select.Option>
-                </Select>
-              </Form.Item>
-            </Form>
-          </div>
-        </Col>
-        <Col>
-          <a href="#">
-            <span>
-              <ScheduleOutlined />
-            </span>{" "}
-            schedule settings
-          </a>
-        </Col>
-        <Col>
+        <Col md={6} xs={16}>
           <div>
             <span style={{ fontWeight: "bold" }}>
               <a onClick={openModal}>Add Schedule</a>
@@ -277,7 +349,7 @@ function SelectableCalendar({ localizer }: Props) {
           </div>
         </Col>
       </Row>
-      <Calendar
+      <DnDCalendar
         selectable
         localizer={localizer}
         events={events}
@@ -289,9 +361,15 @@ function SelectableCalendar({ localizer }: Props) {
         startAccessor="start"
         endAccessor="end"
         titleAccessor="title"
-        // components={{
-        //   day: { header: MyCustomHeader }
-        // }}
+        toolbar
+        resizable
+        onEventDrop={onEventDrop}
+        components={{
+          event: EventComponent,
+          agenda: {
+            event: EventAgenda,
+          },
+        }}
       />
     </>
   );
@@ -301,7 +379,7 @@ export default (props) => {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>
-      <div style={{ height: "70vh", width: "1030px" }}>
+      <div style={{ height: "100vh" }} className="calender-width">
         <SelectableCalendar localizer={localizer} />
       </div>
     </div>
@@ -311,8 +389,31 @@ export default (props) => {
 const stylesheet: any = {
   styles: (theme) => ({
     position: "relative",
-    "& .ant-select-single:not(.ant-select-customize-input) .ant-select-selector": {
-      // width: '150px !important'
+    width: "100%",
+    "& .sm-screen-size": {
+      "@media (max-width: 768px)": {
+        width: "100% !important",
+      },
+    },
+    "& ul.jsx-4179805763": {
+      zIndex: 1050,
+      webkitBoxSizing: "border-box",
+      boxSizing: "border-box",
+      padding: "4px 0",
+      fontSize: "13px",
+      maxHeight: "100px",
+      fontVariant: "initial",
+      backgroundColor: "#fff",
+      borderRadius: "2px",
+      outline: "none",
+      webkitBoxShadow:
+        "0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
+      boxShadow:
+        "0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
+    },
+    "& div.jsx-4179805763": {
+      marginTop: "8px",
+      width: "100%",
     },
   }),
 };

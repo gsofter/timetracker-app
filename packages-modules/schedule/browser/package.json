@@ -48,14 +48,19 @@
     "moment": "^2.29.1",
     "react-dnd": "^11.1.3",
     "react-dnd-html5-backend": "^11.1.3",
-    "react-big-calendar": "0.24.6"
+    "react-big-calendar": "0.28.6",
+    "react-timezone": "^2.4.0",
+    "interactjs": "1.3.4",
+    "react-calendar-timeline": "^0.27.0"
+    
   },
   "devDependencies": {
+    "@types/react-calendar-timeline": "^0.26.2",
     "@types/react-big-calendar": "^0.24.8"
   },
   "peerDependencies": {
-    "@common-stack/client-react": ">=0.0.234",
-    "@common-stack/core": ">=0.0.234",
+    "@common-stack/client-react": ">=0.0.244",
+    "@common-stack/core": ">=0.0.244",
     "antd": "^4.5.2"
   },
   "typings": "lib/index.d.ts",
