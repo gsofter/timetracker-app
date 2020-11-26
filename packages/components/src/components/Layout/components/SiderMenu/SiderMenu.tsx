@@ -202,6 +202,7 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (props) => {
           overflow: 'hidden',
           paddingTop:
             layout === 'mix' && !isMobile ? headerHeight : undefined,
+          position: 'absolute', //sider menu posion fixes for mobile view
           ...style,
         }}
         width={siderWidth}
@@ -313,6 +314,14 @@ const styleSheet: any = {
     transition: 'background-color 0.3s',
     '& .ant-pro-sider.ant-menu-vertical .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-vertical-left .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-vertical-right .ant-menu-item:not(:last-child), .ant-pro-sider.ant-menu-inline .ant-menu-item:not(:last-child)': {
       marginBottom: '4px',
+    },
+    '& .ant-drawer-close': {
+      top: '-13px',
+      right: '-17px',
+      color: theme === 'light' ? primaryColor : '#fff'
+    },
+    '& .ant-drawer-content': {
+      backgroundColor: theme === 'light' ? '#000' : '#fff'
     },
     '& .ant-pro-sider.ant-layout-sider-light .ant-menu-item a, .ant-menu-submenu-selected, .ant-menu-submenu-title:hover, .ant-menu-submenu-title i:hover ': {
       color: primaryColor ? primaryColor : '#1890ff',
