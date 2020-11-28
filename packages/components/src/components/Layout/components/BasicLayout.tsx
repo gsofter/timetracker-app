@@ -30,6 +30,7 @@ import useCurrentMenuLayoutProps from './utils/useCurrentMenuLayoutProps';
 import { clearMenuItem } from './utils/utils';
 
 import { useFela } from "react-fela";
+import { Property, Properties } from 'csstype';
 
 export type BasicLayoutProps = Partial<RouterTypes<Route>> &
   SiderMenuProps &
@@ -394,17 +395,19 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
   const { isChildrenLayout: contextIsChildrenLayout } = useContext(RouteContext);
 
+
   // 如果 props 中定义，以 props 为准
   const isChildrenLayout =
     propsIsChildrenLayout !== undefined ? propsIsChildrenLayout : contextIsChildrenLayout;
 
   const baseClassName = `${prefixCls}-basicLayout`;
+
+
   // gen className
   const className = classNames(
     props.className,
     'ant-design-pro',
-    // baseClassName,
-    css(styleSheet.basicLayout),
+    baseClassName,
     {
       [`screen-${colSize}`]: colSize,
       [`${baseClassName}-top-menu`]: propsLayout === 'top',
@@ -451,6 +454,8 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const [hasFooterToolbar, setHasFooterToolbar] = useState(false);
   useDocumentTitle(pageTitleInfo, props.title || defaultSettings.title);
 
+  // @sri for styles to generated
+  const styleSheet = genStyleSheet(prefixCls);
 
   return (
     <MenuCounter.Provider>
@@ -480,14 +485,14 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         ) : (
             <div className={className}>
               <Layout
-                className={css(styleSheet.layoutCss)}
+                className={css(styleSheet.basicLayout)}
                 style={{
                   minHeight: '100%',
                   ...style,
                 }}
                 hasSider={true}>
                 {siderMenuDom}
-                <Layout className={css(styleSheet.genLayoutStyle)}>
+                <Layout style={genLayoutStyle}>
                   {headerDom}
                   <WrapContent
                     isChildrenLayout={isChildrenLayout}
@@ -515,131 +520,74 @@ BasicLayout.defaultProps = {
 
 export default BasicLayout;
 
-const styleSheet: any = {
-  minHeight: (props) => ({
-    minHeight: '100vh',
-  }),
-  genLayoutStyle: (props) => ({
-    position: 'relative',
-  }),
-  basicLayout: () => ({
-    display: 'flex',
-    'flex-direction': 'column',
-    width: '100%',
-    'min-height': '100%',
-  }),
-  layoutCss: ({ theme, primaryColor, layout }) => ({
-    display: 'flex',
-    flexDirection: 'column',
-    width: '100%',
-    minHeight: '100vh',
-    '& .ant-pro-fixed-header': {
-      position: layout === 'top' || 'mix' ? 'fixed' : 'relative',
-      top: 0,
-    },
-    '& .ant-pro-sider-fixed': {
-      position: layout === 'top' || 'mix' ? 'fixed' : 'relative',
-      height: '100vh',
-    },
-    '& .ant-pro-basicLayout .ant-layout-header .ant-pro-fixed-header': {
-      position: 'fixed',
-      top: 0,
-    },
-    '& .ant-pro-basicLayout-content': {
-      zIndex: 111,
-      position: 'relative',
-      margin: '24px',
-    },
-    '& .ant-pro-basicLayout-content .ant-pro-page-container': {
-      margin: '-24px -24px 0',
-    },
-    '& .ant-pro-basicLayout-content-disable-margin': {
-      margin: 0,
-    },
-    '& .ant-pro-basicLayout-content-disable-margin .ant-pro-page-container': {
-      margin: 0,
-    },
-    '& .ant-pro-basicLayout-content > .ant-layout': {
-      maxHeight: '100%',
-    },
-    '& .ant-pro-basicLayout .ant-pro-basicLayout-is-children .ant-pro-basicLayout-fix-siderbar': {
-      height: '100vh',
-      overflow: 'hidden',
-      transform: 'rotate(0)',
-    },
-    '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .tech-page-container': {
-      height: 'calc(52vh)',
-    },
-    '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children': {
-      minHeight: 'calc(52vh)',
-    },
-    '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar': {
-      height: 'calc(52vh)',
-    },
-    '& .ant-pro-page-container-warp': {
-      backgroundColor: '#fff',
-      padding: '16px',
-    },
-    '& .ant-page-header': {
-      boxSizing: 'border-box',
-      margin: '0',
-      color: 'rgba(0,0,0,.85)',
-      fontSize: '14px',
-      fontVariant: 'tabular-nums',
-      lineHeight: '1.5715',
-      listStyle: 'none',
-      fontFeatureSettings: 'tnum , tnum',
-      position: 'relative',
-      padding: '18px 24px',
-      backgroundColor: '#fff',
-    },
-    '& .ant-page-header.has-breadcrumb': {
-      paddingTop: '12px',
-    },
-    '& .ant-pro-page-container-children-content': {
-      margin: '16px 16px 0',
-    },
-    '&.ant-pro-page-container-warp': {
-      backgroundColor: '#fff',
-    },
-    '& .ant-pro-page-container-warp .ant-tabs-nav': {
-      margin: 0,
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-detail': {
-      display: 'flex',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-row': {
-      display: 'flex',
+const genStyleSheet: (baseClassName: string, antPrefix: string) => { [key: string]: (obj) => Properties } = (baseLayoutPrefixCls, antPrefix = '', ) => {
+
+  const proLayoutHeaderHeight = '48px';
+
+  return ({
+    basicLayout: ({ theme, primaryColor, layout }) => ({
+      // BFC
+      'display': 'flex',
+      'flex-direction': 'column',
       width: '100%',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-title-content': {
-      marginBottom: '16px',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-title, .ant-pro-page-container-main .ant-pro-page-container-content': {
-      flex: 'auto',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-extraContent, .ant-pro-page-container-main .-pro-page-container-main': {
-      flex: '0 1 auto',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-main': {
-      width: '100%',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-title': {
-      marginBottom: '16px',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-logo': {
-      marginBottom: '16px',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
-      minWidth: '242px',
-      marginLeft: '88px',
-      textAlign: 'right',
-    },
-    '& .ant-card-spacing': {
-      padding: '16px',
-    },
-    '& .ant-menu:not(.ant-menu-horizontal) .ant-menu-item-selected': {
-      backgroundColor: primaryColor
-    },
-  })
+      minHeight: '100%',
+
+      [`& .${antPrefix}-layout-header`]: {
+        position: layout === 'top' || 'mix' ? 'fixed' : 'relative',
+        top: 0,
+      },
+      [`& .${baseLayoutPrefixCls}-sider-fixed`]: {
+        position: layout === 'top' || 'mix' ? 'fixed' : 'relative',
+        height: '100vh',
+      },
+      [`& .${baseLayoutPrefixCls} .ant-layout-header .ant-pro-fixed-header`]: {
+        position: 'fixed',
+        top: 0,
+      },
+      [`& .${baseLayoutPrefixCls}-content`]: {
+        position: 'relative',
+        margin: '24px',
+
+        [`& .${antPrefix}-page-container`]: {
+          margin: '-24px -24px 0',
+        },
+
+        [`& .${baseLayoutPrefixCls}-disable-margin`]: {
+          margin: 0,
+
+          [`& .${antPrefix}-page-container`]: {
+            margin: 0,
+          },
+        },
+        [`> .${antPrefix}-layout`]: {
+          'max-height': '100%',
+        }
+      },
+
+      // children should support fixed
+      [`& .${baseLayoutPrefixCls} .${baseLayoutPrefixCls}-is-children.${baseLayoutPrefixCls}-fix-siderbar`]: {
+        height: '100vh',
+        overflow: 'hidden',
+        transform: 'rotate(0)',
+      },
+
+      [`& .${baseLayoutPrefixCls} .${baseLayoutPrefixCls}-has-header`]: {
+        // tech-page-container
+        '&.tech-page-container': {
+          height: `calc(100vh - ${proLayoutHeaderHeight})`,
+        },
+        [`& .${baseLayoutPrefixCls}-is-children.${baseLayoutPrefixCls}-has-header`]: {
+          '& .tech-page-container': {
+            height: [`calc(100vh - ${proLayoutHeaderHeight} - ${proLayoutHeaderHeight};)`],
+          },
+          [`& .${baseLayoutPrefixCls}-is-children`]: {
+            'min-height': [`calc(100vh - ${proLayoutHeaderHeight})`],
+            [`&.${baseLayoutPrefixCls}-fix-siderbar`]: {
+              height: `calc(100vh - ${proLayoutHeaderHeight})`,
+            }
+          }
+        }
+      }
+    })
+  });
 };
