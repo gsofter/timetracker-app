@@ -53,6 +53,9 @@
     "use-media-antd-query": "^1.0.2", 
     "react-copy-to-clipboard": "^5.0.2"
   },
+  "devDependencies": {
+    "react-test-renderer": "^17.0.1"
+  },
   "typings": "lib/index.d.ts",
   "typescript": {
     "definition": "lib/index.d.ts"

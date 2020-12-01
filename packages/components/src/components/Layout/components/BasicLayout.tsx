@@ -454,9 +454,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const [hasFooterToolbar, setHasFooterToolbar] = useState(false);
   useDocumentTitle(pageTitleInfo, props.title || defaultSettings.title);
 
-  // @sri for styles to generated
-  const styleSheet = genStyleSheet(prefixCls);
-
   return (
     <MenuCounter.Provider>
       <RouteContext.Provider
@@ -485,7 +482,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
         ) : (
             <div className={className}>
               <Layout
-                className={css(styleSheet.basicLayout)}
+                className={css(styleSheet().basicLayout)}
                 style={{
                   minHeight: '100%',
                   ...style,
@@ -520,9 +517,10 @@ BasicLayout.defaultProps = {
 
 export default BasicLayout;
 
-const genStyleSheet: (baseClassName: string, antPrefix: string) => { [key: string]: (obj) => Properties } = (baseLayoutPrefixCls, antPrefix = '', ) => {
+const styleSheet: (antPrefix?: string) => { [key: string]: (obj) => Properties } = (antPrefix = 'ant',) => {
 
   const proLayoutHeaderHeight = '48px';
+  const baseLayoutPrefixCls = `${antPrefix}-pro-basicLayout`;
 
   return ({
     basicLayout: ({ theme, primaryColor, layout }) => ({
@@ -531,37 +529,36 @@ const genStyleSheet: (baseClassName: string, antPrefix: string) => { [key: strin
       'flex-direction': 'column',
       width: '100%',
       minHeight: '100%',
-
-      [`& .${antPrefix}-layout-header`]: {
-        position: layout === 'top' || 'mix' ? 'fixed' : 'relative',
-        top: 0,
-      },
-      [`& .${baseLayoutPrefixCls}-sider-fixed`]: {
-        position: layout === 'top' || 'mix' ? 'fixed' : 'relative',
-        height: '100vh',
-      },
-      [`& .${baseLayoutPrefixCls} .ant-layout-header .ant-pro-fixed-header`]: {
+      // @sri added
+      // [`& .${antPrefix}-layout-header`]: {
+      //   position: layout === 'top' || 'mix' ? 'fixed' : 'relative',
+      //   top: 0,
+      // },
+      // [`& .${baseLayoutPrefixCls}-sider-fixed`]: {
+      //   position: layout === 'top' || 'mix' ? 'fixed' : 'relative',
+      //   height: '100vh',
+      // },
+      [`& .${baseLayoutPrefixCls} .${antPrefix}-layout-header .${antPrefix}-pro-fixed-header`]: {
         position: 'fixed',
         top: 0,
       },
       [`& .${baseLayoutPrefixCls}-content`]: {
         position: 'relative',
         margin: '24px',
+      },
 
-        [`& .${antPrefix}-page-container`]: {
-          margin: '-24px -24px 0',
-        },
+      [`& .${baseLayoutPrefixCls}-content .${antPrefix}-pro-page-container`]: {
+        margin: '-24px -24px 0',
+      },
 
-        [`& .${baseLayoutPrefixCls}-disable-margin`]: {
-          margin: 0,
-
-          [`& .${antPrefix}-page-container`]: {
-            margin: 0,
-          },
-        },
-        [`> .${antPrefix}-layout`]: {
-          'max-height': '100%',
-        }
+      [`& .${baseLayoutPrefixCls}-content-disable-margin`]: {
+        margin: 0,
+      },
+      [`& .${baseLayoutPrefixCls}-content-disable-margin .${antPrefix}-pro-page-container`]: {
+        margin: 0,
+      },
+      [`.${baseLayoutPrefixCls}-content > .${antPrefix}-layout`]: {
+        'max-height': '100%',
       },
 
       // children should support fixed
@@ -571,23 +568,19 @@ const genStyleSheet: (baseClassName: string, antPrefix: string) => { [key: strin
         transform: 'rotate(0)',
       },
 
-      [`& .${baseLayoutPrefixCls} .${baseLayoutPrefixCls}-has-header`]: {
-        // tech-page-container
-        '&.tech-page-container': {
-          height: `calc(100vh - ${proLayoutHeaderHeight})`,
-        },
-        [`& .${baseLayoutPrefixCls}-is-children.${baseLayoutPrefixCls}-has-header`]: {
-          '& .tech-page-container': {
-            height: [`calc(100vh - ${proLayoutHeaderHeight} - ${proLayoutHeaderHeight};)`],
-          },
-          [`& .${baseLayoutPrefixCls}-is-children`]: {
-            'min-height': [`calc(100vh - ${proLayoutHeaderHeight})`],
-            [`&.${baseLayoutPrefixCls}-fix-siderbar`]: {
-              height: `calc(100vh - ${proLayoutHeaderHeight})`,
-            }
-          }
-        }
-      }
+      [`& .${baseLayoutPrefixCls} .${baseLayoutPrefixCls}-has-header .tech-page-container`]: {
+        height: `calc(100vh - ${proLayoutHeaderHeight})`,
+      },
+      [`& .${baseLayoutPrefixCls} .${baseLayoutPrefixCls}-has-header .${baseLayoutPrefixCls}-is-children.${baseLayoutPrefixCls}-has-header .tech-page-container`]: {
+        height: `calc(100vh - ${proLayoutHeaderHeight} - ${proLayoutHeaderHeight};)`,
+      },
+
+      [`& .${baseLayoutPrefixCls} .${baseLayoutPrefixCls}-has-header .${baseLayoutPrefixCls}-is-children.${baseLayoutPrefixCls}-has-header .${baseLayoutPrefixCls}-is-children`]: {
+        'min-height': `calc(100vh - ${proLayoutHeaderHeight})`,
+      },
+      [`& .${baseLayoutPrefixCls} .${baseLayoutPrefixCls}-has-header .${baseLayoutPrefixCls}-is-children.${baseLayoutPrefixCls}-has-header .${baseLayoutPrefixCls}-is-children.${baseLayoutPrefixCls}-fix-siderbar`]: {
+        height: `calc(100vh - ${proLayoutHeaderHeight})`,
+      },
     })
   });
 };
