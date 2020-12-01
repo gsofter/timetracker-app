@@ -180,6 +180,7 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (props) => {
             flex: `0 0 ${collapsed ? 48 : siderWidth}px`,
             maxWidth: collapsed ? 48 : siderWidth,
             minWidth: collapsed ? 48 : siderWidth,
+            background: '#001529', //@sri, for sider menu background colorfixes
             ...style,
           }}
           className={css(styleSheet.siderMenuStyles)} //@sri custom
