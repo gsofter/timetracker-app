@@ -81,8 +81,7 @@
     "admin-layout-backend-server": "file:servers/backend-server",
     "admin-layout-frontend-server": "file:servers/frontend-server",
     "admin-layout-moleculer-server": "file:servers/moleculer-server",
-    "dataloader": "^2.0.0",
-    "use-merge-value": "^1.0.2"
+    "dataloader": "^2.0.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",
