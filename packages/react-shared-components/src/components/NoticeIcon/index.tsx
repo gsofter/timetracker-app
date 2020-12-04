@@ -4,9 +4,8 @@ import useMergeValue from 'use-merge-value';
 import React from 'react';
 import classNames from 'classnames';
 import NoticeList, { NoticeIconTabProps } from './NoticeList';
-
+import { useFela } from "react-fela";
 import HeaderDropdown from '../HeaderDropdown';
-import styles from './index.less';
 
 const { TabPane } = Tabs;
 
@@ -43,6 +42,7 @@ export interface NoticeIconProps {
 const NoticeIcon: React.FC<NoticeIconProps> & {
   Tab: typeof NoticeList;
 } = (props) => {
+  const { css, theme } = useFela();
   const getNotificationBox = (): React.ReactNode => {
     const {
       children,
@@ -67,7 +67,7 @@ const NoticeIcon: React.FC<NoticeIconProps> & {
       const msgCount = count || count === 0 ? count : len;
       const tabTitle: string = msgCount > 0 ? `${title} (${msgCount})` : title;
       panes.push(
-        <TabPane tab={tabTitle} key={tabKey}>
+        <TabPane className={css(styleSheet.heaaderStyles)} tab={tabTitle} key={tabKey}>
           <NoticeList
             {...child.props}
             clearText={clearText}
@@ -84,8 +84,8 @@ const NoticeIcon: React.FC<NoticeIconProps> & {
       );
     });
     return (
-      <Spin spinning={loading} delay={300}>
-        <Tabs className={styles.tabs} onChange={onTabChange}>
+      <Spin className={css(styleSheet.heaaderStyles)} spinning={loading} delay={300}>
+        <Tabs className={'tabs'} onChange={onTabChange}>
           {panes}
         </Tabs>
       </Spin>
@@ -98,15 +98,17 @@ const NoticeIcon: React.FC<NoticeIconProps> & {
     value: props.popupVisible,
     onChange: props.onPopupVisibleChange,
   });
-  const noticeButtonClass = classNames(className, styles.noticeButton);
+  const noticeButtonClass = classNames(className, 'noticeButton');
   const notificationBox = getNotificationBox();
-  const NoticeBellIcon = bell || <BellOutlined className={styles.icon} />;
+  const NoticeBellIcon = bell || <BellOutlined className={'icon'} />;
   const trigger = (
-    <span className={classNames(noticeButtonClass, { opened: visible })}>
-      <Badge count={count} style={{ boxShadow: 'none' }} className={styles.badge}>
-        {NoticeBellIcon}
-      </Badge>
-    </span>
+    <div className={css(styleSheet.heaaderStyles)}>
+      <span className={classNames(noticeButtonClass, { opened: visible })}>
+        <Badge count={count} style={{ boxShadow: 'none' }} className={'badge'}>
+          {NoticeBellIcon}
+        </Badge>
+      </span>
+    </div>
   );
   if (!notificationBox) {
     return trigger;
@@ -116,7 +118,7 @@ const NoticeIcon: React.FC<NoticeIconProps> & {
     <HeaderDropdown
       placement="bottomRight"
       overlay={notificationBox}
-      overlayClassName={styles.popover}
+      overlayClassName={'popover'}
       trigger={['click']}
       visible={visible}
       onVisibleChange={setVisible}
@@ -133,3 +135,37 @@ NoticeIcon.defaultProps = {
 NoticeIcon.Tab = NoticeList;
 
 export default NoticeIcon;
+
+const styleSheet: any = {
+  heaaderStyles: ({theme, layout}) => ({
+    '& .popover': {
+      'position': 'relative',
+      'width': '336px'
+    },
+    '& .noticeButton': {
+      'display': 'inline-block',
+      'cursor': 'pointer',
+      'transition': 'all 0.3s'
+    },
+    '& .icon': {
+      'padding': '4px',
+      'vertical-align': 'middle'
+    },
+    '& .badge': {
+      'font-size': '16px'
+    },
+    '& .tabs': {
+      ':global': {
+        '& .ant-tabs-nav-list': {
+          'margin': 'auto'
+        },
+        '& .ant-tabs-nav-scroll': {
+          'text-align': 'center'
+        },
+        '& .ant-tabs-bar': {
+          'margin-bottom': '0'
+        }
+      }
+    }    
+  })
+};
