@@ -66,8 +66,8 @@
     "zen:watch:debug": "npm run zen:watch -- -v"
   },
   "dependencies": {
-    "@admin-layout/core": "file:packages/admin-core",
     "@admin-layout/components": "file:packages/components",
+    "@admin-layout/core": "file:packages/admin-core",
     "@admin-layout/counter-module-browser": "file:packages-modules/counter/browser",
     "@admin-layout/counter-module-server": "file:packages-modules/counter/server",
     "@admin-layout/platform-browser": "file:packages/admin-platform/browser",
@@ -81,7 +81,8 @@
     "admin-layout-backend-server": "file:servers/backend-server",
     "admin-layout-frontend-server": "file:servers/frontend-server",
     "admin-layout-moleculer-server": "file:servers/moleculer-server",
-    "dataloader": "^2.0.0"
+    "dataloader": "^2.0.0",
+    "use-merge-value": "^1.0.2"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",
