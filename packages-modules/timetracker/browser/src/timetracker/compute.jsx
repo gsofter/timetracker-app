@@ -9,8 +9,8 @@ import {
     FileOutlined
   } from '@ant-design/icons';
 
+import { TimeTracker } from './containers/MainPage/index';
 
-const TimeTracker = () => <div>Timetracker demo</div>
 export const timePageStore = [
     {
         path: '/time-tracker',

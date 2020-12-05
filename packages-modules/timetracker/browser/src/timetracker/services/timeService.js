@@ -1,5 +1,5 @@
 import * as moment from 'moment';
-import { store } from '../store/configureStore';
+// import { store } from '../store/configureStore';
 
 export function getDateInString(seconds, durationTimeFormat) {
     if (!seconds) {
