@@ -99,7 +99,6 @@ export const TimeTracker = (props) => {
                   props.vocabulary.v_no_entries_sub,
                   { bottom: '-175px' }
                 )}
-
                 {splitTimersByDay(timeEntriesList).map((day, index, arr) => (
                   <div
                     className={classNames('main-page__day', {

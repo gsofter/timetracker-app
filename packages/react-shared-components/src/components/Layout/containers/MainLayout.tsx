@@ -221,7 +221,7 @@ const MainLayoutSection: React.FC<BasicLayoutProps> = (main_props) => {
   const routesHandler = (routes, params) => {
     return routes.map(route => {
       const path =  fillParms(route.path, params);
-      console.log('---pathas', path);
+      // console.log('---pathas', path);
       return {
         path,
         children: route.children && routesHandler(route.children, params),

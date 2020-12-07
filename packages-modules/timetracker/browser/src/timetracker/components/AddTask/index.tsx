@@ -236,7 +236,7 @@ const styleSheet: any = {
       height: '3.6rem',
       boxShadow: '0 0.4rem 0.4rem rgba(0, 0, 0, 0.25)',
       '&--disabled': {
-        '.add-task__play-icon-circle': {
+        '& .add-task__play-icon-circle': {
           fill: '#0a7b3e',
         },
       },

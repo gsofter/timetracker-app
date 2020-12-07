@@ -20,7 +20,17 @@ const localeMap = {
   uk: ua,
 };
 
-export const TimerSearchComponent = ({
+export interface ITimerSearchComponent {
+  vocabulary?: any;
+  firstDayOfWeek?: any;
+  dateFormat?: any;
+  startSearchMode?: any;
+  getTimeEntriesListAction?: any;
+  endSearchMode?: any;
+  isSearchMode?: any;
+}
+
+export const TimerSearchComponent: React.FC<ITimerSearchComponent> = ({
   vocabulary,
   firstDayOfWeek,
   dateFormat,
@@ -146,7 +156,15 @@ export const TimerSearchComponent = ({
                     key: 'selection',
                   },
                 ]}
-                staticRanges={staticRanges(
+                staticRanges={staticRanges({
+                  today: 'today',
+                  yesterday: 'Yesterday',
+                  thisWeek: 'this week',
+                  lastWeek: 'last week',
+                  thisMonth: 'this month',
+                  lastMonth: 'last month',
+                  thisYear: 'this Year',
+                  weekStartsOn: 'first week starts',
                   // v_today,
                   // v_yesterday,
                   // v_thisWeek,
@@ -154,12 +172,12 @@ export const TimerSearchComponent = ({
                   // v_thisMonth,
                   // v_lastMonth,
                   // v_this_year,
-                  'today',
-                  'yesterday'
-                  // firstDayOfWeek
+                  // 'yesterday',
+                  firstDayOfWeek: 'first day of the week',
+                },
                 )}
                 // inputRanges={inputRanges(v_days_up_to_today, v_days_starting_today, firstDayOfWeek)}
-                inputRanges={inputRanges('today', firstDayOfWeek)}
+                inputRanges={inputRanges({firstDayOfWeek})}
                 onChange={handleSelect}
               />
             </div>
