@@ -47,18 +47,17 @@ function createStaticRanges(ranges) {
 }
 
 export interface IstaticRanges {
-  today: any;
-  yesterday: any;
-  thisWeek: any;
-  lastWeek: any;
-  thisMonth: any;
-  lastMonth: any;
-  thisYear: any;
-  weekStartsOn: any;
-  firstDayOfWeek: any;
+  today?: any;
+  yesterday?: any;
+  thisWeek?: any;
+  lastWeek?: any;
+  thisMonth?: any;
+  lastMonth?: any;
+  thisYear?: any;
+  weekStartsOn?: any;
 }
 
-export const staticRanges = ({
+export const staticRanges: React.FC<IstaticRanges> = ({
   today,
   yesterday,
   thisWeek,
@@ -67,7 +66,7 @@ export const staticRanges = ({
   lastMonth,
   thisYear,
   weekStartsOn,
-}: IstaticRanges) =>
+}) =>
   createStaticRanges([
     {
       label: today,
@@ -127,11 +126,10 @@ export interface IinputRnges {
   weekStartsOn?: any;
   firstDayOfWeek?: any;
 }
-export const inputRanges = ({
+export const inputRanges = (
   daysUpToToday,
   daysStartingToday,
-  weekStartsOn,
-}: IinputRnges) => [
+  weekStartsOn) => [
   {
     label: daysUpToToday,
     range(value) {

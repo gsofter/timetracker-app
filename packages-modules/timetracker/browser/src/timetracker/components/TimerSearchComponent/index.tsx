@@ -157,14 +157,13 @@ export const TimerSearchComponent: React.FC<ITimerSearchComponent> = ({
                   },
                 ]}
                 staticRanges={staticRanges({
-                  today: 'today',
+                  today: 'Today',
                   yesterday: 'Yesterday',
-                  thisWeek: 'this week',
-                  lastWeek: 'last week',
-                  thisMonth: 'this month',
-                  lastMonth: 'last month',
-                  thisYear: 'this Year',
-                  weekStartsOn: 'first week starts',
+                  thisWeek: 'This week',
+                  lastWeek: 'Last week',
+                  thisMonth: 'This month',
+                  lastMonth: 'Last month',
+                  thisYear: 'This year',
                   // v_today,
                   // v_yesterday,
                   // v_thisWeek,
@@ -172,12 +171,11 @@ export const TimerSearchComponent: React.FC<ITimerSearchComponent> = ({
                   // v_thisMonth,
                   // v_lastMonth,
                   // v_this_year,
-                  // 'yesterday',
-                  firstDayOfWeek: 'first day of the week',
+                  // firstDayOfWeek,
                 },
-                )}
+                  )}
                 // inputRanges={inputRanges(v_days_up_to_today, v_days_starting_today, firstDayOfWeek)}
-                inputRanges={inputRanges({firstDayOfWeek})}
+                inputRanges={inputRanges('days until today', 'days starting today', firstDayOfWeek)}
                 onChange={handleSelect}
               />
             </div>
