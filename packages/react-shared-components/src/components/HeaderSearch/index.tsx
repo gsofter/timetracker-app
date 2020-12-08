@@ -3,9 +3,8 @@ import { AutoComplete, Input } from 'antd';
 import useMergeValue from 'use-merge-value';
 import { AutoCompleteProps } from 'antd/es/auto-complete';
 import React, { useRef } from 'react';
-
 import classNames from 'classnames';
-import styles from './index.less';
+import { useFela } from "react-fela";
 
 export interface HeaderSearchProps {
   onSearch?: (value?: string) => void;
@@ -32,7 +31,7 @@ const HeaderSearch: React.FC<HeaderSearchProps> = (props) => {
   } = props;
 
   const inputRef = useRef<Input | null>(null);
-
+  const { css, theme } = useFela();
   const [value, setValue] = useMergeValue<string | undefined>(defaultValue, {
     value: props.value,
     onChange: props.onChange,
@@ -43,13 +42,13 @@ const HeaderSearch: React.FC<HeaderSearchProps> = (props) => {
     onChange: onVisibleChange,
   });
 
-  const inputClass = classNames(styles.input, {
-    [styles.show]: searchMode,
+  const inputClass = classNames('input', {
+    ['show']: searchMode,
   });
 
   return (
     <div
-      className={classNames(className, styles.headerSearch)}
+      className={css(styleSheet.heaaderStyles)}
       onClick={() => {
         setSearchMode(true);
         if (searchMode && inputRef.current) {
@@ -103,3 +102,32 @@ const HeaderSearch: React.FC<HeaderSearchProps> = (props) => {
 };
 
 export default HeaderSearch;
+const styleSheet: any = {
+  heaaderStyles: ({theme, layout}) => ({
+    "& .headerSearch": {
+      '& .input': {
+        'width': 0,
+        'min-width': 0,
+        'overflow': 'hidden',
+        'background': 'transparent',
+        'border-radius': 0,
+        '& :global(.ant-select-selection)': {
+          'background': 'transparent'
+        }
+      }
+    },
+    '& input': {
+      'padding-right': 0,
+     'padding-left': 0,
+      'border': 0,
+      'box-shadow': 'none !important'
+    },
+    '&, &:hover, &:focus': {
+      'border-bottom': '1px solid @border-color-base'
+    },
+    '&.show': {
+      'width': '210px',
+      'margin-left': '8px'
+    }
+  })
+};
