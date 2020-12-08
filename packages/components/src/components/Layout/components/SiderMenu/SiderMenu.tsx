@@ -203,7 +203,7 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (props) => {
           overflow: 'hidden',
           paddingTop:
             layout === 'mix' && !isMobile ? headerHeight : undefined,
-          position: 'absolute', //sider menu posion fixes for mobile view
+          position: 'absolute', //@sri sider menu posion fixes for mobile view
           ...style,
         }}
         width={siderWidth}

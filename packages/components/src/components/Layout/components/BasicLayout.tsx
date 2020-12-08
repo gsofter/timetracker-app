@@ -395,7 +395,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
 
   const { isChildrenLayout: contextIsChildrenLayout } = useContext(RouteContext);
 
-
   // 如果 props 中定义，以 props 为准
   const isChildrenLayout =
     propsIsChildrenLayout !== undefined ? propsIsChildrenLayout : contextIsChildrenLayout;

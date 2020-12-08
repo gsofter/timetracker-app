@@ -14,7 +14,7 @@ var webpack_opts = {
     libraryTarget: "commonjs2",
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.graphql', '.graphqls', '.gql']
+    extensions: ['.ts', '.tsx', '.jsx', '.js','.graphql', '.graphqls', '.gql']
   },
   plugins: [
     new webpack.LoaderOptionsPlugin({
@@ -41,6 +41,19 @@ var webpack_opts = {
           outDir: path.join()
         }
       }
+    },
+    {
+      test: /\.jsx?$/,
+      loader: 'babel-loader',
+      exclude: /node_modules/,
+      query: {
+        cacheDirectory: true,
+        presets: [
+          require.resolve('@babel/preset-env'),
+          require.resolve('@babel/preset-react'),          
+        ],
+        plugins: [require.resolve('@babel/plugin-proposal-class-properties')],
+      },
     },
     {
       test: /\.(gql)$/,

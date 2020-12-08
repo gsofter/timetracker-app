@@ -207,7 +207,6 @@ class MenuUtil {
       };
       return menuItemRender(renderItemProps, defaultItem);
     }
-    console.log('---defaultItem', defaultItem)
     return defaultItem;
   }
 

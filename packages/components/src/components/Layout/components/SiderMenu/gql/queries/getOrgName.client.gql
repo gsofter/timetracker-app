@@ -1,0 +1,5 @@
+query GetOrgNameFromContext {
+    getOrgNameFromContext @client {
+        ...OrgNameInContext
+    }
+}

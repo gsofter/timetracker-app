@@ -5,13 +5,15 @@ import UISettingsModule, { ProLayout } from '@admin-layout/react-shared-componen
 import CounterModule from '@admin-layout/counter-module-browser';
 import PlatformModule from '@admin-layout/platform-browser';
 import ScheduleModule from '@admin-layout/schedule-module-browser';
+import TimeTrackerModule from '@admin-layout/timetracker-module-browser';
 
 const features = new Feature(
         FeatureWithRouterFactory,
         UISettingsModule,
         PlatformModule,
         CounterModule,
-        ScheduleModule
+        ScheduleModule,
+        TimeTrackerModule,
 );
 
 // console.log(sharedModule);
