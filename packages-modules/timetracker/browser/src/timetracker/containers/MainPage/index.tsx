@@ -16,7 +16,7 @@ import { TimerSearchComponent } from '../../components/TimerSearchComponent';
 import PageHeader from '../../components/PageHeader';
 import en from '../../locales/en';
 
-export const TimeTracker = (props) => {
+const TimeTracker = (props) => {
   const { css } = useFela(props);
   const isInitialFetching = true;
   const {
@@ -212,3 +212,5 @@ const styleSheet: any = {
     },
   }),
 };
+
+export default TimeTracker;
