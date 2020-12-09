@@ -1,11 +1,15 @@
 # React Shared Components
 
 
-This package is to provide components which are
+This package is suppose to have customized components for this App
 
-1. Uses multiple packages from `packages-module` to form a composite compoennt. For example, if we write a component that is dependent on `account-api` and `git-api`, since it depends on two package's graphql generated code, we can add that component here.
+It has layout components similar to `ant-design/ant-design-pro/tree/master/src/layouts`. 
 
-2. Components that are used multiple times between `packages-modules` and which are generic and don't belong to any of the module can be placed here.
+1. We can track the new changes from `ant-desig/ant-design-pro` by create a PR agains the cloned repository `reboxjs/ant-design-pro` like below. 
+
+https://github.com/reboxjs/ant-design-pro/pull/1
+
+We create the PR with name as the date (of last snap clone) when it was created so we can see if any layout components changes has happen then we sync those change mannually in this package.
 
 
-
+2. We don't use some of the ant related packages for `routes`, `history` or anything starts in their `imports {...} from '@/....'` we use natively. 
