@@ -5,11 +5,11 @@ It has `layout` component which is sync with https://github.com/reboxjs/pro-comp
 
 
 
-1. We can track the new changes from `ant-desig/pro-components` by create a PR agains the cloned repository `reboxjs/pro-components` like below. 
+1. We can track the new changes from `ant-desig/pro-components` by create a PR against the cloned repository `reboxjs/pro-components` like below. 
 
 https://github.com/reboxjs/pro-components/pull/1
 
-We create the PR with name as the date when it was created so we can see if any layout components changes has happen then we sync those change mannually in this package.
+We create the PR with name as the date when it was created so we can see if any layout components changes has happen since then and we sync those change mannually in this package.
 
 
 2. We don't use `less` styles as in `ant-design/pro-components`. Instead we convert them to `css` and add into the stylesheet object so `Fela` package can absorb them. 
