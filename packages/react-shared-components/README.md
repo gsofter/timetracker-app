@@ -11,5 +11,6 @@ https://github.com/reboxjs/ant-design-pro/pull/1
 
 We create the PR with name as the date (of last snap clone) when it was created so we can see if any layout components changes has happen then we sync those change mannually in this package.
 
+2. We use `less` as in `ant-design-pro` and they need to be converted to `fela` styles. 
 
-2. We don't use some of the ant related packages for `routes`, `history` or anything starts in their `imports {...} from '@/....'` we use natively. 
+3. We don't use some of the ant related packages for `routes`, `history` or anything starts in their `imports {...} from '@/....'` we use natively. 
