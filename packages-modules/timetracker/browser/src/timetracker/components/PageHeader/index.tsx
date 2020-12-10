@@ -62,7 +62,12 @@ const styleSheet: any = {
   }),
 };
 
-const PageHeader = ({ title, children, disabledTitle }) => {
+export interface IPageHeader {
+  title?: any;
+  disabledTitle?: any;
+}
+
+const PageHeader: React.FC<IPageHeader> = ({ title, children, disabledTitle }) => {
   const { css } = useFela();
   return (
     <div className={css(styleSheet.pageHeaderStyle)}>
