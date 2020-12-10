@@ -10,7 +10,8 @@ import GridContent from '../GridContent';
 import FooterToolbar from '../FooterToolbar';
 import PageLoading from '../PageLoading';
 import { WithFalse } from '../typings';
-
+import { Properties } from 'csstype';
+import { useFela } from 'react-fela'
 
 export interface PageHeaderTabConfig {
   /**
@@ -223,23 +224,105 @@ const PageContainer: React.FC<PageContainerProps> = (props) => {
     <div className={`${prefixedClassName}-warp`}>{pageHeaderDom}</div>
   ) : null;
 
+  const { css } = useFela(props);
   return (
-    <div style={style} className={className}>
-      {fixedHeader && headerDom ? (
-        // 在 hasHeader 且 fixedHeader 的情况下，才需要设置高度
-        <Affix
-          offsetTop={value.hasHeader && value.fixedHeader ? value.headerHeight : 0}
-          {...affixProps}
-        >
-          {headerDom}
-        </Affix>
-      ) : (
-        headerDom
-      )}
-      <GridContent>{loading ? <PageLoading /> : content}</GridContent>
-      {footer && <FooterToolbar prefixCls={prefixCls}>{footer}</FooterToolbar>}
+    <div className={css(styleSheet.containerStyle)}>
+      <div style={style} className={className}>
+        {fixedHeader && headerDom ? (
+          // 在 hasHeader 且 fixedHeader 的情况下，才需要设置高度
+          <Affix
+            offsetTop={value.hasHeader && value.fixedHeader ? value.headerHeight : 0}
+            {...affixProps}
+          >
+            {headerDom}
+          </Affix>
+        ) : (
+            headerDom
+          )}
+        <GridContent>{loading ? <PageLoading /> : content}</GridContent>
+        {footer && <FooterToolbar prefixCls={prefixCls}>{footer}</FooterToolbar>}
+      </div>
     </div>
   );
 };
 
+const styleSheet: { [key: string]: (obj) => Properties } = {
+  containerStyle: ({ theme, primaryColor, layout, backgroundColor }) => ({
+    display: 'inherit',
+    '& .ant-pro-page-container-children-content': {
+      margin: '24px 24px 0',
+    },
+    '& .ant-pro-page-container-warp': {
+      backgroundColor: `${backgroundColor}`,
+    },
+    '& .ant-pro-page-container-warp .ant-prefix-tabs-nav': {
+      margin: 0,
+    },
+    '& .ant-pro-page-container-ghost .ant-pro-page-container-warp': {
+      backgroundColor: 'transparent',
+    },
+    '& .ant-pro-page-container-ghost .ant-pro-page-container-children-content': {
+      marginTop: 0,
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-detail': {
+      display: 'flex',
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-row': {
+      display: 'flex',
+      width: '100%',
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-title-content': {
+      marginBottom: '16px',
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-title, .ant-pro-page-container-main .ant-pro-page-container-content': {
+      flex: 'auto',
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-extraContent, .ant-pro-page-container-main .ant-pro-page-container-main': {
+      flex: '0 1 auto',
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-main': {
+      width: '100%',
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-title': {
+      marginBottom: '16px',
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-logo': {
+      marginBottom: '16px',
+    },
+    '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
+      minWidth: '242px',
+      marginLeft: '88px',
+      textAlign: 'right',
+    },
+    '@media screen and (max-width: 1200px)': {
+      '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
+        marginLeft: '44px',
+      }
+    },
+    '& @media screen and (max-width: 992px)': {
+      '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
+        marginLeft: '20px',
+      }
+    },
+    '& @media screen and (max-width: 768px)': {
+      '& .ant-pro-page-container-main .ant-pro-page-container-row': {
+        display: 'block',
+      },
+      '& .ant-pro-page-container-main .ant-pro-page-container-action, .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
+        marginLeft: 0,
+        textAlign: 'left',
+      }
+    },
+    '& @media screen and (max-width: 576px)': {
+      '& .ant-pro-page-container-detail': {
+        display: 'block',
+      },
+      '& .ant-pro-page-container-extraContent': {
+        marginLeft: 0,
+      }
+    }
+
+  })
+
+}
 export default PageContainer;
