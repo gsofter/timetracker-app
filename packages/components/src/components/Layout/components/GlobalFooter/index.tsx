@@ -2,7 +2,8 @@
 import React from 'react';
 import classNames from 'classnames';
 import { WithFalse } from '../typings';
-
+import { useFela } from 'react-fela'
+import { styleSheet } from './styles'
 export interface GlobalFooterProps {
     links?: WithFalse<
         {
@@ -31,10 +32,11 @@ export default ({
     ) {
         return null;
     }
+    const { css, theme } = useFela();
     const baseClassName = `${prefixCls}-global-footer`;
     const clsString = classNames(baseClassName, className);
     return (
-        <footer className={clsString} style={style}>
+        <footer className={classNames(clsString, css(styleSheet.footerLayout))} style={style}>
             {links && (
                 <div className={`${baseClassName}-links`}>
                     {links.map((link) => (
