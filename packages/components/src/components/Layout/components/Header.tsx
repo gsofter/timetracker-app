@@ -6,8 +6,8 @@ import TopNavHeader from './TopNavHeader';
 import { WithFalse } from './typings';
 import { PrivateSiderMenuProps } from './SiderMenu/SiderMenu';
 import { clearMenuItem } from './utils/utils';
-
-import { useFela } from "react-fela";
+import { useFela, connect } from "react-fela";
+import { Property, Properties } from 'csstype'
 
 const { Header } = Layout;
 
@@ -33,8 +33,8 @@ interface HeaderViewState {
   visible: boolean;
 }
 
-class HeaderView extends Component<HeaderViewProps & PrivateSiderMenuProps, HeaderViewState> {
-  renderContent = () => {
+const HeaderView= (props: HeaderViewProps & PrivateSiderMenuProps) => {
+  const renderContent = () => {
     const {
       isMobile,
       onCollapse,
@@ -42,13 +42,13 @@ class HeaderView extends Component<HeaderViewProps & PrivateSiderMenuProps, Head
       layout,
       headerRender,
       headerContentRender
-    } = this.props;
+    } = props;
     const isTop = layout === 'top';
     // const { css } = useFela({...props, primaryColor});
-    const clearMenuData = clearMenuItem(this.props.menuData || []);
+    const clearMenuData = clearMenuItem(props.menuData || []);
     let defaultDom = (
-      <GlobalHeader onCollapse={onCollapse} {...this.props} menuData={clearMenuData}>
-        {headerContentRender && headerContentRender(this.props)}
+      <GlobalHeader onCollapse={onCollapse} {...props} menuData={clearMenuData}>
+        {headerContentRender && headerContentRender(props)}
       </GlobalHeader>
     );
     if (isTop && !isMobile) {
@@ -57,77 +57,86 @@ class HeaderView extends Component<HeaderViewProps & PrivateSiderMenuProps, Head
           theme={navTheme as 'light' | 'dark'}
           mode='horizontal'
           onCollapse={onCollapse}
-          {...this.props}
+          {...props}
           menuData={clearMenuData}
         />
       );
     }
     if (headerRender && typeof headerRender === 'function') {
-      return headerRender(this.props, defaultDom);
+      return headerRender(props, defaultDom);
     }
     return defaultDom;
   };
-  
-  render(): React.ReactNode {
-    const {
-      fixedHeader,
-      layout,
-      className: propsClassName,
-      style,
-      collapsed,
-      siderWidth,
-      hasSiderMenu,
-      isMobile,
-      prefixCls,
-      headerHeight
-    } = this.props;
-    const needFixedHeader = fixedHeader || layout === 'mix';
-    const isTop = layout === 'top';
 
-    const needSettingWidth = needFixedHeader && hasSiderMenu && !isTop && !isMobile;
 
-    const className = classNames(propsClassName, {
-      [`${prefixCls}-fixed-header`]: needFixedHeader,
-      [`${prefixCls}-top-menu`]: isTop
-    });
+  const {
+    fixedHeader,
+    layout,
+    className: propsClassName,
+    style,
+    collapsed,
+    siderWidth,
+    hasSiderMenu,
+    isMobile,
+    prefixCls,
+    headerHeight
+  } = props;
+  const needFixedHeader = fixedHeader || layout === 'mix';
+  const isTop = layout === 'top';
 
-    /**
-     * 计算侧边栏的宽度，不然导致左边的样式会出问题
-     */
-    const width =
-      layout !== 'mix' && needSettingWidth
-        ? `calc(100% - ${collapsed ? 48 : siderWidth}px)`
-        : '100%';
+  const needSettingWidth = needFixedHeader && hasSiderMenu && !isTop && !isMobile;
 
-    const right = needFixedHeader ? 0 : undefined;
-    return (
-      <div>
-        {needFixedHeader && (
-          <Header
-            style={{
-              height: headerHeight,
-              lineHeight: `${headerHeight}px`,
-              background: 'transparent'
-            }}
-          />
-        )}
+  const className = classNames(propsClassName, {
+    [`${prefixCls}-fixed-header`]: needFixedHeader,
+    [`${prefixCls}-top-menu`]: isTop
+  });
+
+  /**
+   * 计算侧边栏的宽度，不然导致左边的样式会出问题
+   */
+  const width =
+    layout !== 'mix' && needSettingWidth
+      ? `calc(100% - ${collapsed ? 48 : siderWidth}px)`
+      : '100%';
+
+  const right = needFixedHeader ? 0 : undefined;
+  const { css, theme } = useFela(props);
+  return (
+    <div>
+      {needFixedHeader && (
         <Header
           style={{
-            padding: 0,
             height: headerHeight,
             lineHeight: `${headerHeight}px`,
-            width,
-            zIndex: layout === 'mix' ? 100 : 19,
-            right,
-            ...style
+            background: 'transparent'
           }}
-          className={className}
-        >
-          {this.renderContent()}
-        </Header>
-      </div>
-    );
-  }
+        />
+      )}
+      <Header
+        style={{
+          padding: 0,
+          height: headerHeight,
+          lineHeight: `${headerHeight}px`,
+          width,
+          zIndex: layout === 'mix' ? 100 : 19,
+          right,
+          ...style
+        }}
+        className={classNames(className, css(styleSheet.header))}
+      >
+        {renderContent()}
+      </Header>
+    </div>
+  );
 }
 
+
+const styleSheet: { [key: string]: (obj) => Properties } = {
+  header: ({ theme, primaryColor, layout }) => ({
+    'z-index': 9,
+    width: '100%',
+  })
+}
+
+// const StyleWrappedHeaderView = connect({ header: styleSheet.header })(HeaderView)
 export default HeaderView;
