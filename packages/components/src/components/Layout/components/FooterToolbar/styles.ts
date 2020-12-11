@@ -1,7 +1,7 @@
 import { Property, Properties } from 'csstype';
 
 export const styleSheet: { [key: string]: (obj) => Properties } = {
-    footerToolbar: ({ theme, primaryColor, layout }) => ({
+    footerToolbarStyle: ({ theme, primaryColor, layout }) => ({
         display: 'inherit',
         '.ant-prefix-pro-footer-bar': {
             position: 'fixed',

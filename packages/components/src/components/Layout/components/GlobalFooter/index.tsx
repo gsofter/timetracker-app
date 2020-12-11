@@ -36,22 +36,24 @@ export default ({
     const baseClassName = `${prefixCls}-global-footer`;
     const clsString = classNames(baseClassName, className);
     return (
-        <footer className={classNames(clsString, css(styleSheet.footerLayout))} style={style}>
-            {links && (
-                <div className={`${baseClassName}-links`}>
-                    {links.map((link) => (
-                        <a
-                            key={link.key}
-                            title={link.key}
-                            target={link.blankTarget ? '_blank' : '_self'}
-                            href={link.href}
-                        >
-                            {link.title}
-                        </a>
-                    ))}
-                </div>
-            )}
-            {copyright && <div className={`${baseClassName}-copyright`}>{copyright}</div>}
-        </footer>
+        <div className={css(styleSheet.footerLayout)}>
+            <footer className={clsString} style={style}>
+                {links && (
+                    <div className={`${baseClassName}-links`}>
+                        {links.map((link) => (
+                            <a
+                                key={link.key}
+                                title={link.key}
+                                target={link.blankTarget ? '_blank' : '_self'}
+                                href={link.href}
+                            >
+                                {link.title}
+                            </a>
+                        ))}
+                    </div>
+                )}
+                {copyright && <div className={`${baseClassName}-copyright`}>{copyright}</div>}
+            </footer>
+        </div>
     );
 };

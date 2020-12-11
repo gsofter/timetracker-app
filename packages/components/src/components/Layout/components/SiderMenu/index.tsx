@@ -6,6 +6,8 @@ import { getFlatMenus } from "@umijs/route-utils";
 
 import SiderMenu, { PrivateSiderMenuProps, SiderMenuProps } from './SiderMenu';
 import MenuCounter from "./Counter";
+import { styleSheet } from './styles'
+import { useFela } from 'react-fela'
 
 const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (props) => {
   const {
@@ -45,7 +47,7 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (prop
   }, [isMobile]);
 
   const omitProps = Omit(props, ["className", "style"]);
-
+  const { css } = useFela();
   if (hide) {
     return null;
   }
@@ -65,19 +67,23 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (prop
       width={siderWidth}
       bodyStyle={{ height: '100vh', padding: 0, display: 'flex', flexDirection: 'row' }}
     >
-      <SiderMenu
-        {...omitProps}
-        className={classNames(`${prefixCls}-sider`, className)}
-        collapsed={isMobile ? false : collapsed}
-        splitMenus={false}
-      />
+      <div className={css(styleSheet.siderMenuStyles)}>
+        <SiderMenu
+          {...omitProps}
+          className={classNames(`${prefixCls}-sider`, className)}
+          collapsed={isMobile ? false : collapsed}
+          splitMenus={false}
+        />
+      </div>
     </Drawer>
   ) : (
-      <SiderMenu
-        className={classNames(`${prefixCls}-sider`, className)}
-        {...omitProps}
-        style={style}
-      />
+      <div className={css(styleSheet.siderMenuStyles)}>
+        <SiderMenu
+          className={classNames(`${prefixCls}-sider`, className)}
+          {...omitProps}
+          style={style}
+        />
+      </div>
     );
 };
 

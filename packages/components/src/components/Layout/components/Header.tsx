@@ -33,7 +33,7 @@ interface HeaderViewState {
   visible: boolean;
 }
 
-const HeaderView= (props: HeaderViewProps & PrivateSiderMenuProps) => {
+const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
   const renderContent = () => {
     const {
       isMobile,
@@ -102,7 +102,7 @@ const HeaderView= (props: HeaderViewProps & PrivateSiderMenuProps) => {
   const right = needFixedHeader ? 0 : undefined;
   const { css, theme } = useFela(props);
   return (
-    <div>
+    <div className={css(styleSheet.header)}>
       {needFixedHeader && (
         <Header
           style={{
@@ -122,7 +122,7 @@ const HeaderView= (props: HeaderViewProps & PrivateSiderMenuProps) => {
           right,
           ...style
         }}
-        className={classNames(className, css(styleSheet.header))}
+        className={className}
       >
         {renderContent()}
       </Header>

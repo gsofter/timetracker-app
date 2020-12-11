@@ -469,29 +469,30 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         {props.pure ? (
           children
         ) : (
-            <div className={className}>
-              <Layout
-                className={css(styleSheet().basicLayout)}
-                style={{
-                  minHeight: '100%',
-                  ...style,
-                }}
-                hasSider={true}
-              >
-                {siderMenuDom}
-                <Layout style={genLayoutStyle}>
-                  {headerDom}
-                  <WrapContent
-                    isChildrenLayout={isChildrenLayout}
-                    {...rest}
-                    className={contentClassName}
-                    style={contentStyle}
-                  >
-                    {loading ? <PageLoading /> : children}
-                  </WrapContent>
-                  {/* {footerDom} */}
+            <div className={css(styleSheet().basicLayout)}>
+              <div className={className}>
+                <Layout
+                  style={{
+                    minHeight: '100%',
+                    ...style,
+                  }}
+                  hasSider={true}
+                >
+                  {siderMenuDom}
+                  <Layout style={genLayoutStyle}>
+                    {headerDom}
+                    <WrapContent
+                      isChildrenLayout={isChildrenLayout}
+                      {...rest}
+                      className={contentClassName}
+                      style={contentStyle}
+                    >
+                      {loading ? <PageLoading /> : children}
+                    </WrapContent>
+                    {/* {footerDom} */}
+                  </Layout>
                 </Layout>
-              </Layout>
+              </div>
             </div>
           )}
       </RouteContext.Provider>
@@ -515,11 +516,14 @@ const styleSheet: (antPrefix?: string) => { [key: string]: (obj) => Properties }
 
   return {
     basicLayout: ({ theme, primaryColor, layout }) => ({
-      display: 'flex',
-      flexDirection: 'column',
-      width: '100%',
-      minHeight: '100%',
-
+      display: 'inherit',
+      height: '100%',
+      '& .ant-pro-basicLayout': {
+        display: 'flex',
+        flexDirection: 'column',
+        width: '100%',
+        minHeight: '100%',
+      },
       '& .ant-pro-basicLayout .ant-layout-header.ant-pro-fixed-header': {
         position: 'fixed',
         top: 0,
