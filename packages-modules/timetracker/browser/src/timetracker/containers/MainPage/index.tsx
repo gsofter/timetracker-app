@@ -177,7 +177,7 @@ const styleSheet: any = {
   mainPage: (props) => ({
     position: 'relative',
     width: '100%',
-    background: '#333333',
+    backgroundColor: '#333',
     '& .main-page': {
       display: 'flex',
       flexDirection: 'column',
