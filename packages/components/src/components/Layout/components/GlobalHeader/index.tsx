@@ -15,6 +15,7 @@ import { MenuDataItem } from "../index";
 import { WithFalse } from "../typings";
 import { clearMenuItem } from '../utils/utils';
 import { useFela } from "react-fela";
+import { styleSheet } from './styles'
 
 export interface GlobalHeaderProps extends Partial<PureSettings> {
   collapsed?: boolean;
@@ -99,7 +100,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps & PrivateSiderMenuProps> = (props
   const { css, theme } = useFela(props);
 
   return (
-    <div className={css(styleSheet.heaaderStyles)}>
+    <div className={css(styleSheet.globalHeaderStyle)}>
       <div className={className} style={{ ...style }}>
         {isMobile && renderLogo(menuHeaderRender, logoDom)}
         {isMobile && collapsedButtonRender && (
@@ -131,80 +132,80 @@ const GlobalHeader: React.FC<GlobalHeaderProps & PrivateSiderMenuProps> = (props
 
 export default GlobalHeader;
 
-const styleSheet: any = {
-  heaaderStyles: ({theme, layout}) => ({
-    "& .ant-pro-global-header": {
-      position: "relative",
-      display: "flex",
-      alignItems: "center",
-      height: "100%",
-      padding: "0 16px",
-    }, 
-    '@media (max-width: 768px)': {
-      padding:  layout === "top" ? "10px 0px" : ''
-    },
-    boxShadow: "0 1px 4px rgba(0,21,41,0.08)",
-    backgroundColor: theme === "light" ? '#fff' : '#011529',
+// const styleSheet: any = {
+//   heaaderStyles: ({theme, layout}) => ({
+//     "& .ant-pro-global-header": {
+//       position: "relative",
+//       display: "flex",
+//       alignItems: "center",
+//       height: "100%",
+//       padding: "0 16px",
+//     }, 
+//     '@media (max-width: 768px)': {
+//       padding:  layout === "top" ? "10px 0px" : ''
+//     },
+//     boxShadow: "0 1px 4px rgba(0,21,41,0.08)",
+//     backgroundColor: theme === "light" ? '#fff' : '#011529',
 
-    "& .ant-pro-global-header > *": {
-      height: "100%",
-    },
-    "& .ant-pro-global-header-collapsed-button": {
-      display: "flex",
-      alignItems: "center",
-      marginLeft: "16px",
-      fontSize: "20px",
-      color: theme === "light" ? '#000' : '#fff',
-    },
-    "& .ant-pro-global-header-layout-mix": {
-      color: '#fff',
-      backgroundColor: "#011529",
-    },
-    "& .ant-pro-global-header-layout-mix .ant-pro-global-header-collapsed-button": {
-      color: '#fff',
-    },
-    "& .ant-pro-global-header-layout-mix .ant-pro-global-header-logo h1": {
-      color: "#fff",
-    },
-    "& .ant-pro-global-header-logo": {
-      position: "relative",
-      overflow: "hidden",
-    },
-    "& .ant-pro-global-header-logo a": {
-      display: "flex",
-      alignItems: "center",
-      height: "100%",
-    },
-    "& .ant-pro-global-header-logo a img": {
-      height: "28px",
-    },
-    "& .ant-pro-global-header-logo a h1": {
-      height: "32px",
-      margin: "0 0 0 8px",
-      // margin: '0 0 0 12px',
-      // color: ;
-      fontWeight: 600,
-      fontSize: "18px",
-      lineHeight: "32px",
-    },
-    "& .ant-pro-global-header-menu .anticon": {
-      marginRight: "8px",
-    },
-    "& .anticon":
-    {
-      color: theme === "light" && layout === "side" ? "#000" : ""
-    },
-    "& .ant-pro-global-header-menu .ant-dropdown-menu-item": {
-      minWidth: "160px",
-    },
-    "& .ant-pro-global-header .dark .action": {
-      color: "rgba(255,255,255,0.85)",
-    },
-    "& .ant-pro-global-header .dark .action > i": {
-      color: "rgba(255,255,255,0.85)",
-    },
-    "& .ant-pro-global-header .dark .action .ant-badge": {
-      color: "rgba(255,255,255,0.85)",
-    },
-  }),
-};
+//     "& .ant-pro-global-header > *": {
+//       height: "100%",
+//     },
+//     "& .ant-pro-global-header-collapsed-button": {
+//       display: "flex",
+//       alignItems: "center",
+//       marginLeft: "16px",
+//       fontSize: "20px",
+//       color: theme === "light" ? '#000' : '#fff',
+//     },
+//     "& .ant-pro-global-header-layout-mix": {
+//       color: '#fff',
+//       backgroundColor: "#011529",
+//     },
+//     "& .ant-pro-global-header-layout-mix .ant-pro-global-header-collapsed-button": {
+//       color: '#fff',
+//     },
+//     "& .ant-pro-global-header-layout-mix .ant-pro-global-header-logo h1": {
+//       color: "#fff",
+//     },
+//     "& .ant-pro-global-header-logo": {
+//       position: "relative",
+//       overflow: "hidden",
+//     },
+//     "& .ant-pro-global-header-logo a": {
+//       display: "flex",
+//       alignItems: "center",
+//       height: "100%",
+//     },
+//     "& .ant-pro-global-header-logo a img": {
+//       height: "28px",
+//     },
+//     "& .ant-pro-global-header-logo a h1": {
+//       height: "32px",
+//       margin: "0 0 0 8px",
+//       // margin: '0 0 0 12px',
+//       // color: ;
+//       fontWeight: 600,
+//       fontSize: "18px",
+//       lineHeight: "32px",
+//     },
+//     "& .ant-pro-global-header-menu .anticon": {
+//       marginRight: "8px",
+//     },
+//     "& .anticon":
+//     {
+//       color: theme === "light" && layout === "side" ? "#000" : ""
+//     },
+//     "& .ant-pro-global-header-menu .ant-dropdown-menu-item": {
+//       minWidth: "160px",
+//     },
+//     "& .ant-pro-global-header .dark .action": {
+//       color: "rgba(255,255,255,0.85)",
+//     },
+//     "& .ant-pro-global-header .dark .action > i": {
+//       color: "rgba(255,255,255,0.85)",
+//     },
+//     "& .ant-pro-global-header .dark .action .ant-badge": {
+//       color: "rgba(255,255,255,0.85)",
+//     },
+//   }),
+// };

@@ -2,9 +2,9 @@ import React, { useContext, useEffect, useMemo, ReactNode } from 'react';
 import { ConfigProvider } from 'antd';
 import classNames from 'classnames';
 import omit from 'omit.js';
-
+import { styleSheet } from './styles'
 import { RouteContext, RouteContextType } from '../index';
-
+import { useFela } from 'react-fela'
 export interface FooterToolbarProps {
   extra?: React.ReactNode;
   style?: React.CSSProperties;
@@ -46,7 +46,7 @@ const FooterToolbar: React.FC<FooterToolbarProps> = (props) => {
    */
   useEffect(() => {
     if (!value || !value?.setHasFooterToolbar) {
-      return () => {};
+      return () => { };
     }
     value?.setHasFooterToolbar(true);
     return () => {
@@ -57,14 +57,16 @@ const FooterToolbar: React.FC<FooterToolbarProps> = (props) => {
     };
   }, []);
 
+  const { css } = useFela();
   return (
-    <div
-      className={classNames(className, `${baseClassName}`)}
-      style={{ width, ...style }}
-      {...omit(restProps, ['prefixCls'])}
-    >
-      {renderContent
-        ? renderContent(
+    <div className={css(styleSheet.footerToolbarStyle)}>
+      <div
+        className={classNames(className, `${baseClassName}`)}
+        style={{ width, ...style }}
+        {...omit(restProps, ['prefixCls'])}
+      >
+        {renderContent
+          ? renderContent(
             {
               ...props,
               ...value,
@@ -72,7 +74,8 @@ const FooterToolbar: React.FC<FooterToolbarProps> = (props) => {
             },
             dom,
           )
-        : dom}
+          : dom}
+      </div>
     </div>
   );
 };
