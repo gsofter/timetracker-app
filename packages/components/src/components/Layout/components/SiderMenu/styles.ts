@@ -2,9 +2,12 @@ import { Property, Properties } from 'csstype'
 
 export const styleSheet: { [key: string]: (obj) => Properties } = {
     siderMenuStyles: ({ theme, primaryColor }) => ({
-        position: 'relative',
-        borderRight: '0',
-        transition: 'background-color 0.3s',
+        display: 'inherit',
+        '& .ant-pro-sider': {
+            position: 'relative',
+            borderRight: '0',
+            transition: 'background-color 0.3s',
+        },
         '& .ant-layout-sider': {
             height: '100%',
         },
