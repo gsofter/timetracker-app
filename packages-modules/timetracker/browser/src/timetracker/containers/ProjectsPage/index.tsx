@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 import PageHeader from '../../components/PageHeader';
 import { ProjectData } from '../../components/ProjectsData';
+import { ProjectSearchBar } from '../../components/projectSearchBar';
 import { useFela } from 'react-fela';
 
 const ProjectsPage = (props) => {
@@ -39,13 +40,13 @@ const ProjectsPage = (props) => {
               Create new project
             </button>
           </PageHeader>
-          {/* <div className="project_page_filters">
+          <div className="project_page_filters">
                     <ProjectSearchBar
-                        tableInfo={this.props.tableData}
-                        etalonArr={this.state.etalonArr}
-                        projectsPageAction={projectsPageAction}
+                        // tableInfo={this.props.tableData}
+                        // etalonArr={this.state.etalonArr}
+                        // projectsPageAction={projectsPageAction}
                     />
-                </div> */}
+                </div>
           <div className="project_data_wrapper">
             <ProjectData
               tableInfo={tableData}

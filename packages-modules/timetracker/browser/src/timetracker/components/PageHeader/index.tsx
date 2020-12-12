@@ -60,7 +60,7 @@ const styleSheet: any = {
     '& .header-wrapper__child-button:nth-child(2)': {
       marginLeft: '10px',
     },
-    button: {
+    '& button': {
       cursor: 'pointer',
       border: 'none',
       outline: 'none',

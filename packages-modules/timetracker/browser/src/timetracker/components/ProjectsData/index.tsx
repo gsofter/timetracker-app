@@ -195,7 +195,7 @@ const styleSheet: any = {
       width: '15px',
       height: '15px',
       background:
-        'url("../../images/icons/baseline-create-24px.svg") no-repeat center',
+        'url("https://time.wobbly.me/static/media/baseline-create-24px.e1cdd046.svg") no-repeat center',
       cursor: 'pointer',
       backgroundSize: '20px',
     },
