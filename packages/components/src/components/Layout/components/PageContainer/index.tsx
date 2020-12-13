@@ -11,7 +11,7 @@ import FooterToolbar from '../FooterToolbar';
 import PageLoading from '../PageLoading';
 import { WithFalse } from '../typings';
 import { Properties } from 'csstype';
-import { useFela } from 'react-fela'
+import { useFela } from 'react-fela';
 
 export interface PageHeaderTabConfig {
   /**
@@ -105,7 +105,7 @@ const renderFooter: React.SFC<Omit<
       <Tabs
         className={`${prefixedClassName}-tabs`}
         activeKey={tabActiveKey}
-        onChange={(key) => {
+        onChange={key => {
           if (onTabChange) {
             onTabChange(key);
           }
@@ -187,7 +187,7 @@ const defaultPageHeaderRender = (
   );
 };
 
-const PageContainer: React.FC<PageContainerProps> = (props) => {
+const PageContainer: React.FC<PageContainerProps> = props => {
   const { children, loading, style, footer, affixProps, ghost, fixedHeader } = props;
   const value = useContext(RouteContext);
 
@@ -237,8 +237,8 @@ const PageContainer: React.FC<PageContainerProps> = (props) => {
             {headerDom}
           </Affix>
         ) : (
-            headerDom
-          )}
+          headerDom
+        )}
         <GridContent>{loading ? <PageLoading /> : content}</GridContent>
         {footer && <FooterToolbar prefixCls={prefixCls}>{footer}</FooterToolbar>}
       </div>
@@ -297,12 +297,12 @@ const styleSheet: { [key: string]: (obj) => Properties } = {
     '@media screen and (max-width: 1200px)': {
       '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
         marginLeft: '44px',
-      }
+      },
     },
     '& @media screen and (max-width: 992px)': {
       '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
         marginLeft: '20px',
-      }
+      },
     },
     '& @media screen and (max-width: 768px)': {
       '& .ant-pro-page-container-main .ant-pro-page-container-row': {
@@ -311,7 +311,7 @@ const styleSheet: { [key: string]: (obj) => Properties } = {
       '& .ant-pro-page-container-main .ant-pro-page-container-action, .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
         marginLeft: 0,
         textAlign: 'left',
-      }
+      },
     },
     '& @media screen and (max-width: 576px)': {
       '& .ant-pro-page-container-detail': {
@@ -319,10 +319,8 @@ const styleSheet: { [key: string]: (obj) => Properties } = {
       },
       '& .ant-pro-page-container-extraContent': {
         marginLeft: 0,
-      }
-    }
-
-  })
-
-}
+      },
+    },
+  }),
+};
 export default PageContainer;

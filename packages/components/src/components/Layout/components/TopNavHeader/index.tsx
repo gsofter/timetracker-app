@@ -27,7 +27,7 @@ const RightContent: React.FC<TopNavHeaderProps> = ({
   const { css } = useFela(props);
 
   return (
-    <div className={css(styleSheet.widthRightSize)}> 
+    <div className={css(styleSheet.widthRightSize)}>
       <div className={css(styleSheet.displayFlex)}>
         <ResizeObserver
           onResize={({ width }: { width: number }) => {
@@ -60,7 +60,7 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
     primaryColor,
   } = props;
 
-  
+
   const prefixCls = `${props.prefixCls || 'ant-pro'}-top-nav-header`;
   const headerDom = defaultRenderLogoAndTitle(
     { ...props, collapsed: false },
@@ -71,7 +71,7 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
     light: theme === 'light',
   });
   // @sri custom addition
-  const { css } = useFela({...props, primaryColor});
+  const { css } = useFela({ ...props, primaryColor });
 
   return (
     <div className={css(styleSheet.topHeaderStyle)}>
@@ -99,7 +99,8 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
 export default TopNavHeader;
 
 const styleSheet: any = {
-  topHeaderStyle: ({theme, primaryColor}) => ({
+  // TODO: define `ant-` as prefix
+  topHeaderStyle: ({ theme, primaryColor }) => ({
     '& .ant-pro-top-nav-header': {
       position: 'relative',
       width: '100%',

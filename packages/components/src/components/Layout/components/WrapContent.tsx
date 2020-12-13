@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { Layout } from 'antd';
+import { Layout, Breadcrumb } from 'antd';
 import { ConfigProviderWarp } from '@ant-design/pro-provider';
 
 const WrapContent: React.FC<{
@@ -8,14 +8,12 @@ const WrapContent: React.FC<{
   style?: CSSProperties;
   location?: any;
   contentHeight?: number | string;
-}> = (props) => {
+}> = props => {
   const { style, className, children } = props;
 
   return (
     <ConfigProviderWarp>
-      <Layout.Content className={className} 
-      style={style}
-      >
+      <Layout.Content className={className} style={style}>
         {children}
       </Layout.Content>
     </ConfigProviderWarp>
