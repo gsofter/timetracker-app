@@ -1,5 +1,5 @@
 import React, { CSSProperties } from 'react';
-import { Layout, Breadcrumb } from 'antd';
+import { Layout } from 'antd';
 import { ConfigProviderWarp } from '@ant-design/pro-provider';
 
 const WrapContent: React.FC<{

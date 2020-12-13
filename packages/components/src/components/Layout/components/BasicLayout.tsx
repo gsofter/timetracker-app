@@ -28,7 +28,6 @@ import WrapContent from './WrapContent';
 import compatibleLayout from './utils/compatibleLayout';
 import useCurrentMenuLayoutProps from './utils/useCurrentMenuLayoutProps';
 import { clearMenuItem } from './utils/utils';
-
 import { useFela } from 'react-fela';
 import { Property, Properties } from 'csstype';
 
@@ -481,28 +480,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
                 {siderMenuDom}
                 <Layout style={genLayoutStyle}>
                   {headerDom}
-                  <div className="ant-pro-page-container-warp">
-                    <Breadcrumb>
-                      <Breadcrumb.Item>
-                        <a href="/">Home</a>
-                      </Breadcrumb.Item>
-                      {pageTitleInfo.id.split('.')[1] !== 'Home' && (
-                        <>
-                          <Breadcrumb.Item>{pageTitleInfo.id.split('.')[1]}</Breadcrumb.Item>
-                          <Breadcrumb.Item>
-                            <a href={location.pathname}> {pageTitleInfo.pageName}</a>
-                          </Breadcrumb.Item>
-                        </>
-                      )}
-                    </Breadcrumb>
-                    <div className="ant-page-header-heading">
-                      <div className="ant-page-header-heading-left">
-                        <span className="ant-page-header-heading-title">
-                          {pageTitleInfo.pageName}
-                        </span>
-                      </div>
-                    </div>
-                  </div>
                   <WrapContent
                     isChildrenLayout={isChildrenLayout}
                     {...rest}
