@@ -14,9 +14,10 @@ import { GlobalState } from '../../contexts/GlobalState';
 import { StartTaskMobile } from '../../components/StartTaskMobile';
 import { TimerSearchComponent } from '../../components/TimerSearchComponent';
 import PageHeader from '../../components/PageHeader';
+import { PageContainer } from '@admin-layout/components';
 import en from '../../locales/en';
 
-export const TimeTracker = (props) => {
+export const TimeTracker = props => {
   const { css } = useFela(props);
   const isInitialFetching = true;
   const {
@@ -28,7 +29,7 @@ export const TimeTracker = (props) => {
     pagination,
     isFetchingSearch,
     isSearchMode,
-} = props;
+  } = props;
 
   const splitTimersByDay = (timers = []) => {
     const formattedLogsDates = [];
@@ -51,101 +52,103 @@ export const TimeTracker = (props) => {
     return formattedLogsDatesValues;
   };
 
-  const renderDayDateString = (date) => {
+  const renderDayDateString = date => {
     const { dateFormat, vocabulary } = props;
     const { lang } = vocabulary;
-    const toUpperCaseFirstLetter = (date) => {
+    const toUpperCaseFirstLetter = date => {
       const day = moment(date)
         .locale(lang.short)
         .format('dddd');
       return day[0].toUpperCase() + day.slice(1);
     };
-    return `${toUpperCaseFirstLetter(date)}, ${moment(date).format(
-      dateFormat,
-    )}`;
+    return `${toUpperCaseFirstLetter(date)}, ${moment(date).format(dateFormat)}`;
   };
 
-  const renderTotalTimeByDay = (timers) => {
+  const renderTotalTimeByDay = timers => {
     const { durationTimeFormat } = props;
     let totalTime = 0;
     for (let i = 0; i < timers.length; i++) {
-      totalTime +=
-        +moment(timers[i].endDatetime) - +moment(timers[i].startDatetime);
+      totalTime += +moment(timers[i].endDatetime) - +moment(timers[i].startDatetime);
     }
 
     return getDateInString(totalTime, durationTimeFormat);
   };
 
   return (
-    <GlobalState.Provider value={'dark'}>
-      <div className={css(styleSheet.mainPage)}>
-        {/* <Loading flag={isInitialFetching} mode="parentSize" withLogo={true}> */}
-        <TutorialComponent>
-          <div
-            className={classNames('main-page', {
-              'main-page--mobile': isMobile,
-            })}>
+    <PageContainer>
+      <GlobalState.Provider value={'dark'}>
+        <div className={css(styleSheet.mainPage)}>
+          {/* <Loading flag={isInitialFetching} mode="parentSize" withLogo={true}> */}
+          <TutorialComponent>
+            <div
+              className={classNames('main-page', {
+                'main-page--mobile': isMobile,
+              })}
+            >
               {/* <PageHeader title={v_timer} disabledTitle={isMobile}> */}
               <PageHeader title="Timer" disabledTitle={isMobile}>
-                  <TimerSearchComponent />
+                <TimerSearchComponent />
               </PageHeader>
-            <AddTask />
-            <CustomScrollbar>
-              <div className="main-page__list">
-                {timeEntriesList &&
-                timeEntriesList.length === 0 &&
-                BlankListComponent(
-                  props.vocabulary.v_no_entries,
-                  props.vocabulary.v_no_entries_sub,
-                  { bottom: '-175px' }
-                )}
-                {splitTimersByDay(timeEntriesList).map((day, index, arr) => (
-                  <div
-                    className={classNames('main-page__day', {
-                      'main-page__day--last-child': index === arr.length - 1,
-                    })}
-                    key={index}>
-                    <div className="main-page__day-header">
-                      <div className="main-page__day-date">
-                        {renderDayDateString(day[0].startDatetime)}
+              <AddTask />
+              <CustomScrollbar>
+                <div className="main-page__list">
+                  {timeEntriesList &&
+                    timeEntriesList.length === 0 &&
+                    BlankListComponent(
+                      props.vocabulary.v_no_entries,
+                      props.vocabulary.v_no_entries_sub,
+                      { bottom: '-175px' },
+                    )}
+                  {splitTimersByDay(timeEntriesList).map((day, index, arr) => (
+                    <div
+                      className={classNames('main-page__day', {
+                        'main-page__day--last-child': index === arr.length - 1,
+                      })}
+                      key={index}
+                    >
+                      <div className="main-page__day-header">
+                        <div className="main-page__day-date">
+                          {renderDayDateString(day[0].startDatetime)}
+                        </div>
+                        <div className="main-page__day-date-all-time">
+                          {/* {v_total_time}: {renderTotalTimeByDay(day)} */}
+                        </div>
                       </div>
-                      <div className="main-page__day-date-all-time">
-                        {/* {v_total_time}: {renderTotalTimeByDay(day)} */}
-                      </div>
+                      {day.map(task => (
+                        <TaskListItem key={task.id} task={task} />
+                      ))}
                     </div>
-                    {day.map((task) => (
-                    <TaskListItem key={task.id} task={task} />
                   ))}
-                  </div>
-                ))}
-                {isFetchingTimeEntriesList && (
-                <Loading
-                  mode="overlay"
-                  withLogo={false}
-                  flag={isFetchingTimeEntriesList}
-                  width="100%"
-                  circle={true}
-                  height="100%">
-                  <div className="main-page__lazy-load-spinner" />
-                </Loading>
-              )}
-              {isMobile && !currentTimer && pagination.disabled && (
-                <div className="main-page__empty-block" />
-              )} 
-              </div>
-            </CustomScrollbar>
-            <StartTaskMobile /> 
-          </div>
-        </TutorialComponent>
-        {/* </Loading> */}
-      </div>
-      {props.children}
-    </GlobalState.Provider>
+                  {isFetchingTimeEntriesList && (
+                    <Loading
+                      mode="overlay"
+                      withLogo={false}
+                      flag={isFetchingTimeEntriesList}
+                      width="100%"
+                      circle={true}
+                      height="100%"
+                    >
+                      <div className="main-page__lazy-load-spinner" />
+                    </Loading>
+                  )}
+                  {isMobile && !currentTimer && pagination.disabled && (
+                    <div className="main-page__empty-block" />
+                  )}
+                </div>
+              </CustomScrollbar>
+              <StartTaskMobile />
+            </div>
+          </TutorialComponent>
+          {/* </Loading> */}
+        </div>
+        {props.children}
+      </GlobalState.Provider>
+    </PageContainer>
   );
 };
 
 const styleSheet: any = {
-  mainPage: (props) => ({
+  mainPage: props => ({
     position: 'relative',
     width: '100%',
     background: '#333333',

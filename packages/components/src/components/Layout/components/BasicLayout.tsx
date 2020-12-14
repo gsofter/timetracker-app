@@ -355,6 +355,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     ...defaultProps,
     breadcrumbMap,
   });
+  console.log('breadcrumbProps =>', breadcrumbProps);
 
   // render sider dom
   const siderMenuDom = renderSiderMenu(
@@ -442,6 +443,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const [hasFooterToolbar, setHasFooterToolbar] = useState(false);
   useDocumentTitle(pageTitleInfo, props.title || defaultSettings.title);
 
+  console.log('rest => ', rest);
   return (
     <MenuCounter.Provider>
       <RouteContext.Provider

@@ -7,6 +7,7 @@ import { isBrowser } from './../../../../utils';
 import { ProSettings } from '../defaultSettings';
 import { MenuDataItem, MessageDescriptor } from '../typings';
 import { urlToList } from './pathTools';
+import { connect } from 'http2';
 
 export interface BreadcrumbProps {
   breadcrumbList?: { title: string; href: string }[];
@@ -55,7 +56,7 @@ export const getBreadcrumb = (
   if (!breadcrumbItem) {
     // Find the first matching path in the order defined by route config
     // 按照 route config 定义的顺序找到第一个匹配的路径
-    const targetPath = [...breadcrumbMap.keys()].find((path) =>
+    const targetPath = [...breadcrumbMap.keys()].find(path =>
       // remove ? ,不然会重复
       pathToRegexp(path.replace('?', '')).test(url),
     );
@@ -84,7 +85,7 @@ export const getBreadcrumbFromProps = (
 const conversionFromProps = (props: BreadcrumbProps): AntdBreadcrumbProps['routes'] => {
   const { breadcrumbList = [] } = props;
   return breadcrumbList
-    .map((item) => {
+    .map(item => {
       const { title, href } = item;
       // For application that has configured router base
       // @ts-ignore
@@ -95,7 +96,7 @@ const conversionFromProps = (props: BreadcrumbProps): AntdBreadcrumbProps['route
         breadcrumbName: title,
       };
     })
-    .filter((item) => item.path);
+    .filter(item => item.path);
 };
 
 const conversionFromLocation = (
@@ -108,9 +109,10 @@ const conversionFromLocation = (
   }
   // Convertor the url to an array
   const pathSnippets = urlToList(routerLocation.pathname);
+  console.log('pathSnippets =>', pathSnippets);
   // Loop data mosaic routing
   const extraBreadcrumbItems: AntdBreadcrumbProps['routes'] = pathSnippets
-    .map((url) => {
+    .map(url => {
       // For application that has configured router base
       // @ts-ignore
       const { routerBase = '/' } = isBrowser() ? window : {};
@@ -129,7 +131,7 @@ const conversionFromLocation = (
           }
         : { path: '', breadcrumbName: '' };
     })
-    .filter((item) => item && item.path);
+    .filter(item => item && item.path);
 
   return extraBreadcrumbItems;
 };
@@ -152,7 +154,13 @@ export const genBreadcrumbProps = (props: BreadcrumbProps): AntdBreadcrumbProps[
 
   // 根据 location 生成 面包屑
   // Generate breadcrumbs based on location
+  console.log('breadcrumbMap =>', breadcrumbMap);
   if (location && location.pathname && breadcrumbMap) {
+    console.log('Generate breadcrumbs based on location =>', breadcrumbMap);
+    console.log(
+      'conversionFromLocation =>',
+      conversionFromLocation(location, breadcrumbMap, props),
+    );
     return conversionFromLocation(location, breadcrumbMap, props);
   }
   return [];
@@ -168,6 +176,7 @@ export const getBreadcrumbProps = (props: BreadcrumbProps): BreadcrumbListReturn
   if (breadcrumbRender) {
     routes = breadcrumbRender(routes) || [];
   }
+  console.log('routes =>', routes);
   if (routes && routes.length < 2) {
     routes = undefined;
   }

@@ -4,32 +4,35 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { increment, decrement } from '../redux';
 import { State } from '../interfaces';
+import { PageContainer } from '@admin-layout/components';
 
 const CounterComponent = (props: RouteComponentProps<any> & StateProps & DispatchProps) => (
-    <div>
-        Counter: {props.count}
-        <button onClick={props.increment}>+</button>
-        <button onClick={props.decrement}>-</button>
-    </div>
+  <PageContainer>
+    Counter: {props.count}
+    <button onClick={props.increment}>+</button>
+    <button onClick={props.decrement}>-</button>
+  </PageContainer>
 );
 
 interface StateProps {
-    count: number;
+  count: number;
 }
 
 interface DispatchProps {
-    increment: () => void;
-    decrement: () => void;
+  increment: () => void;
+  decrement: () => void;
 }
 
 const mapStateToProps = (state: State) => ({
-    count: state.connectedReactRouter_counter,
+  count: state.connectedReactRouter_counter,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
-    increment: () => dispatch(increment()),
-    decrement: () => dispatch(decrement()),
+  increment: () => dispatch(increment()),
+  decrement: () => dispatch(decrement()),
 });
 
-export const Counter =  connect<StateProps, DispatchProps, RouteComponentProps<any>>(mapStateToProps, mapDispatchToProps)(CounterComponent);
-
+export const Counter = connect<StateProps, DispatchProps, RouteComponentProps<any>>(
+  mapStateToProps,
+  mapDispatchToProps,
+)(CounterComponent);

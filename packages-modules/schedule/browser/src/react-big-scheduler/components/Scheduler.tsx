@@ -1,66 +1,58 @@
-import React, { useState } from "react";
-import { Calendar, View, DateLocalizer } from "react-big-calendar";
-import withDragAndDrop from "react-big-calendar/lib/addons/dragAndDrop";
-import moment from "moment";
-import { ScheduleOutlined } from "@ant-design/icons";
-import TimezonePicker from "react-timezone";
-import { momentLocalizer } from "react-big-calendar";
-import "react-big-calendar/lib/css/react-big-calendar.css";
-import "react-big-calendar/lib/addons/dragAndDrop/styles.css";
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  Button,
-  Select,
-  DatePicker,
-  TimePicker,
-} from "antd";
-import { Modal } from "./Modal";
-import { useFela } from "react-fela";
+import React, { useState } from 'react';
+import { Calendar, View, DateLocalizer } from 'react-big-calendar';
+import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
+import moment from 'moment';
+import { ScheduleOutlined } from '@ant-design/icons';
+import TimezonePicker from 'react-timezone';
+import { momentLocalizer } from 'react-big-calendar';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
+import { Row, Col, Form, Input, Button, Select, DatePicker, TimePicker } from 'antd';
+import { Modal } from './Modal';
+import { useFela } from 'react-fela';
+import { PageContainer } from '@admin-layout/components';
 
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 
-const allViews: View[] = ["agenda", "day", "week", "month"];
+const allViews: View[] = ['agenda', 'day', 'week', 'month'];
 
 const initialEvents = [
   {
     id: 0,
-    title: "All Day Event very long title",
+    title: 'All Day Event very long title',
     allDay: true,
     start: new Date(2020, 3, 0),
     end: new Date(2020, 3, 1),
   },
   {
     id: 1,
-    title: "Long Event",
+    title: 'Long Event',
     start: new Date(2020, 3, 7),
     end: new Date(2020, 3, 10),
   },
 
   {
     id: 2,
-    title: "DTS STARTS",
+    title: 'DTS STARTS',
     start: new Date(2020, 2, 13, 0, 0, 0),
     end: new Date(2020, 2, 20, 0, 0, 0),
   },
 
   {
     id: 3,
-    title: "DTS ENDS",
+    title: 'DTS ENDS',
     start: new Date(2020, 10, 6, 0, 0, 0),
     end: new Date(2020, 10, 13, 0, 0, 0),
-    desc: "Description is shown here",
+    desc: 'Description is shown here',
   },
 
   {
     id: 4,
-    title: "Leave",
+    title: 'Leave',
     start: new Date(new Date().setHours(new Date().getHours() - 3)),
     end: new Date(new Date().setHours(new Date().getHours() + 3)),
-    desc: "Description is shown here",
+    desc: 'Description is shown here',
   },
 ];
 
@@ -83,13 +75,13 @@ class CalendarEvent {
     _endDate: Date,
     _allDay?: boolean,
     _desc?: string,
-    _resourceId?: string
+    _resourceId?: string,
   ) {
     this.title = _title;
     this.allDay = _allDay || false;
     this.start = _start;
     this.end = _endDate;
-    this.desc = _desc || "";
+    this.desc = _desc || '';
     this.resourceId = _resourceId;
   }
 }
@@ -103,14 +95,14 @@ function SelectableCalendar({ localizer }: Props) {
   const [endDate, setEndDate] = useState();
 
   const [values, setValues] = useState({
-    selectuser: "",
-    minhours: "",
+    selectuser: '',
+    minhours: '',
   });
 
   const [events, setEvents] = React.useState(initialEvents);
 
   const handleSelect = ({ start, end }) => {
-    const title = window.prompt("New Event name");
+    const title = window.prompt('New Event name');
 
     if (title) {
       let newEvent = {} as CalendarEvent;
@@ -149,7 +141,7 @@ function SelectableCalendar({ localizer }: Props) {
       startDate: startDate,
       endDate: endDate,
     };
-    const title = "New event added";
+    const title = 'New event added';
     if (title) {
       let newEvent = {} as CalendarEvent;
       newEvent.start = moment(startDate).toDate();
@@ -159,7 +151,7 @@ function SelectableCalendar({ localizer }: Props) {
     }
 
     setIsShowing(!isShowing);
-    console.log(submitValue, "submitValue");
+    console.log(submitValue, 'submitValue');
   };
 
   const resetModal = (e: any) => {
@@ -169,8 +161,8 @@ function SelectableCalendar({ localizer }: Props) {
     setStartTime(null);
     setEndTime(null);
     setEndDate(null);
-    values.selectuser = "";
-    values.minhours = "";
+    values.selectuser = '';
+    values.minhours = '';
   };
 
   const onEventDrop = ({ event, start, end, allDay }) => {
@@ -196,7 +188,7 @@ function SelectableCalendar({ localizer }: Props) {
   const EventAgenda = ({ event }) => {
     return (
       <span>
-        <em style={{ color: "magenta" }}>{event.title}</em>
+        <em style={{ color: 'magenta' }}>{event.title}</em>
         <p>{event.desc}</p>
       </span>
     );
@@ -205,11 +197,7 @@ function SelectableCalendar({ localizer }: Props) {
   const renderModalBody = (): JSX.Element => {
     return (
       <>
-        <Form
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          layout="vertical"
-        >
+        <Form labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} layout="vertical">
           <Form.Item label="User">
             <Select onChange={handleChange} value={values.selectuser}>
               <Select.Option value="user1">User1</Select.Option>
@@ -218,11 +206,11 @@ function SelectableCalendar({ localizer }: Props) {
           </Form.Item>
           <Form.Item label="DatePicker">
             <DatePicker
-              onChange={(date) => {
+              onChange={date => {
                 setStartDate(date as any);
               }}
               value={startDate as any}
-            />{" "}
+            />{' '}
             &nbsp;
             <TimePicker
               use12Hours
@@ -243,7 +231,7 @@ function SelectableCalendar({ localizer }: Props) {
             />
             &nbsp;
             <DatePicker
-              onChange={(date) => {
+              onChange={date => {
                 setEndDate(date as any);
               }}
               value={endDate as any}
@@ -259,7 +247,7 @@ function SelectableCalendar({ localizer }: Props) {
           </Form.Item>
           <Form.Item label="Repeats">
             <Select
-              onChange={(e) => {
+              onChange={e => {
                 setRepeat(e);
               }}
               value={repeat}
@@ -284,29 +272,23 @@ function SelectableCalendar({ localizer }: Props) {
   };
 
   return (
-    <>
-      <Row
-        align="middle"
-        justify="space-between"
-        style={{ marginBottom: "15px" }}
-      >
+    <PageContainer>
+      <Row align="middle" justify="space-between" style={{ marginBottom: '15px' }}>
         <Col>
-          <div style={{ textAlign: "center" }}>
+          <div style={{ textAlign: 'center' }}>
             <h3>Attendance schedules</h3>
           </div>
         </Col>
       </Row>
       <Row align="middle" gutter={[24, 16]}>
-        <Col md={6} xs={16} style={{ top: "-10px" }}>
+        <Col md={6} xs={16} style={{ top: '-10px' }}>
           <span>Select Timezone</span>
           <TimezonePicker
             value="Asia/Yerevan"
-            onChange={(timezone) =>
-              console.log("New Timezone Selected:", timezone)
-            }
+            onChange={timezone => console.log('New Timezone Selected:', timezone)}
             inputProps={{
-              placeholder: "Select Timezone...",
-              name: "timezone",
+              placeholder: 'Select Timezone...',
+              name: 'timezone',
             }}
           />
         </Col>
@@ -330,14 +312,14 @@ function SelectableCalendar({ localizer }: Props) {
             <a href="#">
               <span>
                 <ScheduleOutlined />
-              </span>{" "}
+              </span>{' '}
               schedule settings
             </a>
           </div>
         </Col>
         <Col md={6} xs={16}>
           <div>
-            <span style={{ fontWeight: "bold" }}>
+            <span style={{ fontWeight: 'bold' }}>
               <a onClick={openModal}>Add Schedule</a>
             </span>
             <Modal
@@ -356,7 +338,7 @@ function SelectableCalendar({ localizer }: Props) {
         defaultView="month"
         views={allViews}
         defaultDate={new Date()}
-        onSelectEvent={(event) => alert(event.title)}
+        onSelectEvent={event => alert(event.title)}
         onSelectSlot={handleSelect}
         startAccessor="start"
         endAccessor="end"
@@ -371,15 +353,15 @@ function SelectableCalendar({ localizer }: Props) {
           },
         }}
       />
-    </>
+    </PageContainer>
   );
 }
 
-export default (props) => {
+export default props => {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>
-      <div style={{ height: "100vh" }} className="calender-width">
+      <div style={{ height: '100vh' }} className="calender-width">
         <SelectableCalendar localizer={localizer} />
       </div>
     </div>
@@ -387,33 +369,33 @@ export default (props) => {
 };
 
 const stylesheet: any = {
-  styles: (theme) => ({
-    position: "relative",
-    width: "100%",
-    "& .sm-screen-size": {
-      "@media (max-width: 768px)": {
-        width: "100% !important",
+  styles: theme => ({
+    position: 'relative',
+    width: '100%',
+    '& .sm-screen-size': {
+      '@media (max-width: 768px)': {
+        width: '100% !important',
       },
     },
-    "& ul.jsx-4179805763": {
+    '& ul.jsx-4179805763': {
       zIndex: 1050,
-      webkitBoxSizing: "border-box",
-      boxSizing: "border-box",
-      padding: "4px 0",
-      fontSize: "13px",
-      maxHeight: "100px",
-      fontVariant: "initial",
-      backgroundColor: "#fff",
-      borderRadius: "2px",
-      outline: "none",
+      webkitBoxSizing: 'border-box',
+      boxSizing: 'border-box',
+      padding: '4px 0',
+      fontSize: '13px',
+      maxHeight: '100px',
+      fontVariant: 'initial',
+      backgroundColor: '#fff',
+      borderRadius: '2px',
+      outline: 'none',
       webkitBoxShadow:
-        "0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
+        '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
       boxShadow:
-        "0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)",
+        '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
     },
-    "& div.jsx-4179805763": {
-      marginTop: "8px",
-      width: "100%",
+    '& div.jsx-4179805763': {
+      marginTop: '8px',
+      width: '100%',
     },
   }),
 };
