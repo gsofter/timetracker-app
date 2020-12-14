@@ -1,46 +1,17 @@
 import React, { Component, useState } from 'react';
 import { useFela } from 'react-fela';
+import DemoData from '../../demoData';
 
 // Services
 import { getTimeDurationByGivenTimestamp } from '../../services/timeService';
 // Components
 // import EditProjectModal from '../EditProjectModal/index';
 
-const tableInfo = [
-  {
-    totalTime: '4',
-    projects: {
-      id: 'e3180114-d88f-40fc-a4fb-3c6a8e4a0dc8',
-      name: 'any',
-      project_color: {
-        name: 'green',
-      },
-    },
-    clients: {
-      client: {
-        name: 'test',
-      },
-    },
-  },
-  {
-    totalTime: '7',
-    projects: {
-      id: 'e3180114-d88f-40fc-a4fb-3c6a8e4a0d78',
-      name: 'repo',
-      project_color: {
-        name: 'green',
-      },
-    },
-    clients: {
-      client: {
-        name: 'test client',
-      },
-    },
-  },
-];
 export const ProjectData = (props) => {
   const { css } = useFela(props);
   const { currentTeam, durationTimeFormat } = props;
+  const { timeEntriesList } = DemoData;
+  const tableInfo = timeEntriesList;
   const tableHeader = [
     {
       key: 1,
@@ -66,10 +37,8 @@ export const ProjectData = (props) => {
 
   const tableInfoElements = tableInfo.map((item, index) => (
     <tr key={'table-header_' + index}>
-      <td data-label="Project name:">{item.projects.name}</td>
-      <td data-label="Client">
-        {item.clients.client ? item.clients.client.name : '-'}
-      </td>
+      <td data-label="Project name:">{item.project.name}</td>
+      <td data-label="Client">{item.client ? item.client.name : '-'}</td>
       <td data-label="Time">
         {getTimeDurationByGivenTimestamp(item.totalTime, durationTimeFormat)}
         {/* {checkIsAdminByRole(currentTeam.data.role) && ( */}
@@ -107,7 +76,7 @@ export const ProjectData = (props) => {
 
 const styleSheet: any = {
   projectDataStyle: (props) => ({
-      width: '100%',
+    width: '100%',
     '& .project_data_wrapper': {
       width: '100%',
     },
