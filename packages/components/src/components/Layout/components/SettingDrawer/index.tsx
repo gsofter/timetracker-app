@@ -23,7 +23,6 @@ import LayoutSetting, { renderLayoutSettingItem } from './LayoutChange';
 import RegionalSetting from './RegionalChange';
 import { useFela } from 'react-fela';
 
-
 interface BodyProps {
   title: string;
   prefixCls: string;
@@ -35,7 +34,7 @@ type MergerSettingsType<T> = Partial<T> & {
 };
 const Body: React.FC<BodyProps> = ({ children, prefixCls, title }) => (
   <div>
-    <h3 className={`${(styleSheet.settingDrawerTitle)}`}>{title}</h3>
+    <h3 className={`${styleSheet.settingDrawerTitle}`}>{title}</h3>
     {children}
   </div>
 );
@@ -70,7 +69,7 @@ let oldSetting: MergerSettingsType<ProSettings> = {};
 
 const getDifferentSetting = (state: Partial<ProSettings>) => {
   const stateObj: Partial<ProSettings> = {};
-  Object.keys(state).forEach((key) => {
+  Object.keys(state).forEach(key => {
     if (state[key] !== oldSetting[key] && key !== 'collapse') {
       stateObj[key] = state[key];
     }
@@ -187,51 +186,51 @@ const getThemeList = (settings: Partial<ProSettings>) => {
       key: 'dust',
       fileName: 'dust.css',
       modifyVars: {
-        '@primary-color': '#F5222D'
-      }
+        '@primary-color': '#F5222D',
+      },
     },
     {
       key: 'volcano',
       fileName: 'volcano.css',
       modifyVars: {
-        '@primary-color': '#FA541C'
-      }
+        '@primary-color': '#FA541C',
+      },
     },
     {
       key: 'sunset',
       fileName: 'sunset.css',
-      'modifyVars': {
-        '@primary-color': '#FAAD14'
-      }
+      modifyVars: {
+        '@primary-color': '#FAAD14',
+      },
     },
     {
       key: 'cyan',
       fileName: 'cyan.css',
       modifyVars: {
-        '@primary-color': '#13C2C2'
-      }
+        '@primary-color': '#13C2C2',
+      },
     },
     {
       key: 'green',
       fileName: 'green.css',
       modifyVars: {
-        '@primary-color': '#52C41A'
-      }
+        '@primary-color': '#52C41A',
+      },
     },
     {
       key: 'geekblue',
       fileName: 'geekblue.css',
       modifyVars: {
-        '@primary-color': '#2F54EB'
-      }
+        '@primary-color': '#2F54EB',
+      },
     },
     {
       key: 'purple',
       fileName: 'purple.css',
       modifyVars: {
-        '@primary-color': '#722ED1'
-      }
-    }
+        '@primary-color': '#722ED1',
+      },
+    },
   ];
   const themeList = [
     {
@@ -246,24 +245,24 @@ const getThemeList = (settings: Partial<ProSettings>) => {
     color: string;
     theme: 'dark' | 'light';
   }[] = [
-      {
-        key: 'daybreak',
-        color: '#1890ff',
-        theme: 'dark',
-      },
-    ];
+    {
+      key: 'daybreak',
+      color: '#1890ff',
+      theme: 'dark',
+    },
+  ];
 
   const lightColorList: {
     key: string;
     color: string;
     theme: 'dark' | 'light';
   }[] = [
-      {
-        key: 'daybreak',
-        color: '#1890ff',
-        theme: 'dark',
-      },
-    ];
+    {
+      key: 'daybreak',
+      color: '#1890ff',
+      theme: 'dark',
+    },
+  ];
   if (settings.layout !== 'mix') {
     themeList.push({
       key: 'dark',
@@ -275,7 +274,7 @@ const getThemeList = (settings: Partial<ProSettings>) => {
     });
   }
 
-  if (list.find((item) => item.theme === 'dark')) {
+  if (list.find(item => item.theme === 'dark')) {
     themeList.push({
       key: 'dark',
       url: 'https://gw.alipayobjects.com/zos/antfincdn/hmKaLQvmY2/LCkqqYNmvBEbokSDscrm.svg',
@@ -287,7 +286,7 @@ const getThemeList = (settings: Partial<ProSettings>) => {
   }
 
   // insert  theme color List
-  list.forEach((item) => {
+  list.forEach(item => {
     const color = (item.modifyVars || {})['@primary-color'];
     if (item.theme === 'dark' || color) {
       darkColorList.push({
@@ -332,9 +331,9 @@ const initState = (
       primaryColor: string;
       navTheme: string;
     };
-    
+
     const replaceSetting = {};
-    Object.keys(params).forEach((key) => {
+    Object.keys(params).forEach(key => {
       if (defaultSettings[key] || defaultSettings[key] === undefined) {
         replaceSetting[key] = params[key];
         if (key.includes('Render')) {
@@ -382,7 +381,7 @@ const getParamsFromUrl = (settings?: MergerSettingsType<ProSettings>) => {
     params = parse(window.location.search.replace('?', ''));
   }
 
-  Object.keys(params).forEach((key) => {
+  Object.keys(params).forEach(key => {
     if (params[key] === 'true') {
       params[key] = true;
     }
@@ -412,7 +411,7 @@ const genCopySettingJson = (settingState: MergerSettingsType<ProSettings>) =>
  * 可视化配置组件
  * @param props
  */
-const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
+const SettingDrawer: React.FC<SettingDrawerProps> = props => {
   const {
     settings: propsSettings = undefined,
     hideLoading = false,
@@ -423,7 +422,6 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
     onSettingChange,
     prefixCls = 'ant-pro',
   } = props;
-
 
   const firstRender = useRef<boolean>(true);
 
@@ -529,7 +527,6 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
   const formatMessage = getFormatMessage();
   const themeList = getThemeList(settingState);
 
-
   useEffect(() => {
     /**
      * 如果不是浏览器 都没有必要做了
@@ -567,6 +564,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
       placement="right"
       getContainer={getContainer}
       handler={
+        // tslint:disable-next-line: jsx-wrap-multiline
         <div className={css(styleSheet.settingDrawerHandle)} onClick={() => setShow(!show)}>
           {show ? (
             <CloseOutlined
@@ -576,13 +574,13 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
               }}
             />
           ) : (
-              <SettingOutlined
-                style={{
-                  color: '#fff',
-                  fontSize: 20,
-                }}
-              />
-            )}
+            <SettingOutlined
+              style={{
+                color: '#fff',
+                fontSize: 20,
+              }}
+            />
+          )}
         </div>
       }
       style={{
@@ -603,7 +601,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
             value={navTheme}
             configType="theme"
             key="navTheme"
-            onChange={(value) => changeSetting('navTheme', value, hideLoading)}
+            onChange={value => changeSetting('navTheme', value, hideLoading)}
           />
         </Body>
         <Body
@@ -615,11 +613,9 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
         >
           <ThemeColor
             value={primaryColor}
-            colors={
-              hideColors ? [] : themeList.colorList[navTheme === 'dark' ? 'dark' : 'light']
-            }
+            colors={hideColors ? [] : themeList.colorList[navTheme === 'dark' ? 'dark' : 'light']}
             formatMessage={formatMessage}
-            onChange={(color) => changeSetting('primaryColor', color, hideLoading)}
+            onChange={color => changeSetting('primaryColor', color, hideLoading)}
           />
         </Body>
 
@@ -634,24 +630,18 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
             list={[
               {
                 key: 'side',
-                url:
-                  'https://gw.alipayobjects.com/zos/antfincdn/XwFOFbLkSM/LCkqqYNmvBEbokSDscrm.svg',
                 title: formatMessage({ id: 'app.setting.sidemenu' }),
               },
               {
                 key: 'top',
-                url:
-                  'https://gw.alipayobjects.com/zos/antfincdn/URETY8%24STp/KDNDBbriJhLwuqMoxcAr.svg',
                 title: formatMessage({ id: 'app.setting.topmenu' }),
               },
               {
                 key: 'mix',
-                url:
-                  'https://gw.alipayobjects.com/zos/antfincdn/x8Ob%26B8cy8/LCkqqYNmvBEbokSDscrm.svg',
                 title: formatMessage({ id: 'app.setting.mixmenu' }),
               },
             ]}
-            onChange={(value) => changeSetting('layout', value, hideLoading)}
+            onChange={value => changeSetting('layout', value, hideLoading)}
           />
         </Body>
         <LayoutSetting settings={settingState} changeSetting={changeSetting} />
@@ -678,7 +668,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
                     className="color-weak"
                     size="small"
                     checked={!!colorWeak}
-                    onChange={(checked) => changeSetting('colorWeak', checked)}
+                    onChange={checked => changeSetting('colorWeak', checked)}
                   />
                 ),
               },
@@ -704,7 +694,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
             text={genCopySettingJson(settingState)}
             onCopy={() => message.success(formatMessage({ id: 'app.setting.copyinfo' }))}
           >
-            <Button block icon={<CopyOutlined />} style={{ marginBottom: 24 }}>
+            <Button block style={{ marginBottom: 24 }}>
               <CopyOutlined /> {formatMessage({ id: 'app.setting.copy' })}
             </Button>
           </CopyToClipboard>
@@ -717,131 +707,162 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
 export default SettingDrawer;
 
 const styleSheet: any = {
-  settingDrawerTitle: ({ primaryColor }) => (
-    {
+  settingDrawerTitle: ({ primaryColor }) => ({
+    marginBottom: '12px',
+    color: primaryColor,
+    fontSize: '14px',
+    lineHeight: '22px',
+  }),
+  settingDrawerHandle: ({ primaryColor }) => ({
+    position: 'absolute',
+    top: '240px',
+    right: '300px',
+    zIndex: 0,
+    display: 'flex',
+    alignItems: 'center',
+    justifyContent: 'center',
+    width: '48px',
+    height: '48px',
+    fontSize: '16px',
+    textAlign: 'center',
+    background: primaryColor,
+    borderRadius: '4px 0 0 4px',
+    cursor: 'pointer',
+    pointerEvents: 'auto',
+  }),
+  proSettingDrawerContent: ({ primaryColor }) => ({
+    position: 'relative',
+    minHeight: '100%',
+    '& .ant-pro-setting-drawer-content .ant-list-item span': {
+      flex: 1,
+    },
+    '& .ant-pro-setting-drawer-block-checkbox': {
+      display: 'flex',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item': {
+      position: 'relative',
+      marginRight: '16px',
+      boxShadow: '0 1px 2.5px 0 rgba(0,0,0,0.18)',
+      borderRadius: '4px',
+      overflow: 'hidden',
+      cursor: 'pointer',
+      width: '44px',
+      height: '36px',
+      backgroundColor: '#f0f2f5',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item::before': {
+      position: 'absolute',
+      top: '0',
+      left: '0',
+      width: '33%',
+      height: '100%',
+      backgroundColor: '#001529',
+      content: '""',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item::after': {
+      position: 'absolute',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '25%',
+      backgroundColor: '#fff',
+      content: '""',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item-light::before': {
+      backgroundColor: '#fff',
+      content: '""',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item-light::after': {
+      backgroundColor: '#fff',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item-dark::before, .ant-pro-setting-drawer-block-checkbox-item-side::before': {
+      backgroundColor: '#011529',
+      content: '""',
+      zIndex: '1',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item-dark::after, .ant-pro-setting-drawer-block-checkbox-item-side::after': {
+      backgroundColor: '#fff',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item-top::before': {
+      backgroundColor: 'transparent',
+      content: '""',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item-top::after': {
+      backgroundColor: '#011529',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item-mix::before': {
+      backgroundColor: '#fff',
+      content: '""',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item-mix::after': {
+      backgroundColor: '#011529',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item-light:after': {
+      backgroundColor: '#fff',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item:after': {
+      position: 'absolute',
+      top: '0',
+      left: '0',
+      width: '100%',
+      height: '25%',
+      content: '""',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-selectIcon': {
+      position: 'absolute',
+      bottom: '4px',
+      right: '6px',
+      color: primaryColor,
+      fontWeight: 'bold',
+      fontSize: '14px',
+      pointerEvents: 'none',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-selectIcon .action': {
+      color: primaryColor,
+    },
+    '& .ant-pro-setting-drawer-color_block': {
+      display: 'inline-block',
+      width: '38px',
+      height: '22px',
+      margin: '4px',
+      marginRight: '12px',
+      verticalAlign: 'middle',
+      borderRadius: '4px',
+      cursor: 'pointer',
+    },
+    '& .ant-pro-setting-drawer-title': {
       marginBottom: '12px',
       color: primaryColor,
       fontSize: '14px',
-      lineHeight: '22px'
-    }
-  ),
-  settingDrawerHandle: ({ primaryColor }) => (
-    {
-      position: 'absolute',
-      top: '240px',
-      right: '300px',
-      zIndex: 0,
-      display: 'flex',
-      alignItems: 'center',
-      justifyContent: 'center',
+      lineHeight: '22px',
+    },
+    '& .ant-pro-setting-drawer-production-hint': {
+      marginTop: '16px',
+      fontSize: '12px',
+    },
+    '& .ant-pro-setting-drawer-block-checkbox-item img': {
       width: '48px',
-      height: '48px',
-      fontSize: '16px',
-      textAlign: 'center',
-      background: primaryColor,
-      borderRadius: '4px 0 0 4px',
+    },
+    '& .theme-color-block': {
+      display: 'inline-block',
+      width: '22px',
+      height: '22px',
+      margin: '4px',
+      marginRight: '12px',
+      verticalAlign: 'middle',
+      borderRadius: '4px',
       cursor: 'pointer',
-      pointerEvents: 'auto',
-    }
-  ),
-  proSettingDrawerContent: ({ primaryColor }) => (
-    {
-      position: "relative",
-      minHeight: "100%",
-      '& .list-item span':
-      {
-        flex: 1,
-      },
-      '& h3': {
-        marginBottom: '12px',
-        color: primaryColor,
-        fontSize: '14px',
-        lineHeight: '22px'
-      },
-      '& .ant-pro-setting-drawer-block-checkbox':
-      {
-        display: 'flex'
-      },
-      '& .ant-pro-setting-drawer-block-checkbox-item':
-      {
-        position: 'relative',
-        marginRight: '16px',
-        // borderRadius: ,
-        cursor: 'pointer',
-      },
-      "& .ant-pro-setting-drawer-block-checkbox-item img":
-      {
-        width: "48px",
-      },
-      "& .ant-pro-setting-drawer-block-checkbox-selectIcon":
-      {
-        position: 'absolute',
-        top: 0,
-        right: 0,
-        width: '100%',
-        height: '100%',
-        paddingTop: '15px',
-        paddingLeft: '24px',
-        color: primaryColor,
-        fontWeight: 'bold',
-        fontSize: '14px',
-      },
-
-
-      ".anticon":
-      {
-        display: 'inline-block',
-        color: 'inherit',
-        fontStyle: 'normal',
-        lineHeight: '0',
-        textAlign: 'center',
-        textTransform: 'none',
-        verticalAlign: '-0.125em',
-        textRendering: 'optimizeLegibility',
-      },
-
-      "& .ant-pro-setting-drawer-block-checkbox-selectIcon .action":
-      {
-        color: primaryColor,
-      },
-      "& .ant-pro-setting-drawer-color_block":
-      {
-        display: 'inline-block',
-        width: '38px',
-        height: '22px',
-        margin: '4px',
-        marginRight: '12px',
-        verticalAlign: "middle",
-        borderRadius: '4px',
-        cursor: 'pointer',
-      },
-      '& .theme-color-block':
-      {
-        display: 'inline-block',
-        width: '22px',
-        height: '22px',
-        margin: '4px',
-        marginRight: '12px',
-        verticalAlign: 'middle',
-        borderRadius: '4px',
-        cursor: 'pointer'
-      },
-      "& .ant-pro-setting-drawer-production-hint":
-      {
-        marginTop: '16px',
-        fontSize: '12px'
-      },
-      "& .ant-pro-setting-drawer-content .theme-color .theme-color-block": {
-        float: 'left',
-        width: '20px',
-        height: '20px',
-        marginRight: '8px',
-        color: '#fff',
-        fontWeight: '700',
-        textAlign: 'center',
-        borderRadius: '2px',
-        cursor: 'pointer'
-      }
-    }
-  )
-}
+    },
+    '& .ant-pro-setting-drawer-content .theme-color .theme-color-block': {
+      float: 'left',
+      width: '20px',
+      height: '20px',
+      marginRight: '8px',
+      color: '#fff',
+      fontWeight: '700',
+      textAlign: 'center',
+      borderRadius: '2px',
+      cursor: 'pointer',
+    },
+  }),
+};
