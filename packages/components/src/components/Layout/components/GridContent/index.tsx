@@ -4,8 +4,8 @@ import { ConfigProvider } from 'antd';
 
 import RouteContext from '../RouteContext';
 import { PureSettings } from '../defaultSettings';
-import { Properties } from 'csstype'
-import { useFela } from 'react-fela'
+import { Properties } from 'csstype';
+import { useFela } from 'react-fela';
 interface GridContentProps {
   contentWidth?: PureSettings['contentWidth'];
   children: React.ReactNode;
@@ -19,7 +19,7 @@ interface GridContentProps {
  * contentWidth=Fixed, width will is 1200
  * @param props
  */
-const GridContent: React.FC<GridContentProps> = (props) => {
+const GridContent: React.FC<GridContentProps> = props => {
   const value = useContext(RouteContext);
   const { children, contentWidth: propsContentWidth, className: propsClassName, style } = props;
 
@@ -45,13 +45,13 @@ const GridContent: React.FC<GridContentProps> = (props) => {
 const styleSheet: { [key: string]: (obj) => Properties } = {
   gridContentStyle: ({ theme, primaryColor, layout }) => ({
     display: 'inherit',
-    '& .ant-prefix-pro-grid-content': {
+    '& .ant-pro-grid-content': {
       width: '100%',
       '&.wide': {
         maxWidth: '1200px',
         margin: '0 auto',
-      }
-    }
-  })
-}
+      },
+    },
+  }),
+};
 export default GridContent;

@@ -198,7 +198,7 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props => {
             }
           }
         }}
-        collapsedWidth={65}
+        collapsedWidth={48} // Sidebar width when it is collapsed
         style={{
           overflow: 'hidden',
           paddingTop: layout === 'mix' && !isMobile ? headerHeight : undefined,

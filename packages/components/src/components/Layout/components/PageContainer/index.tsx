@@ -226,7 +226,7 @@ const PageContainer: React.FC<PageContainerProps> = props => {
 
   const { css } = useFela(props);
   return (
-    <div className={css(styleSheet.containerStyle)}>
+    <div className={classNames('PageContainer-Wrapper', css(styleSheet.containerStyle))}>
       <div style={style} className={className}>
         {fixedHeader && headerDom ? (
           // 在 hasHeader 且 fixedHeader 的情况下，才需要设置高度
@@ -249,13 +249,17 @@ const PageContainer: React.FC<PageContainerProps> = props => {
 const styleSheet: { [key: string]: (obj) => Properties } = {
   containerStyle: ({ theme, primaryColor, layout, backgroundColor }) => ({
     display: 'inherit',
+    margin: 'margin: -24px -24px 0',
     '& .ant-pro-page-container-children-content': {
       margin: '24px 24px 0',
+      padding: '24px',
+      color: `${primaryColor}`,
+      backgroundColor: `${backgroundColor}`,
     },
     '& .ant-pro-page-container-warp': {
       backgroundColor: `${backgroundColor}`,
     },
-    '& .ant-pro-page-container-warp .ant-prefix-tabs-nav': {
+    '& .ant-pro-page-container-warp .ant-tabs-nav': {
       margin: 0,
     },
     '& .ant-pro-page-container-ghost .ant-pro-page-container-warp': {

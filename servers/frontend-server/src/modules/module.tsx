@@ -18,15 +18,16 @@ const features = new Feature(
 
 // console.log(sharedModule);
 export const MainRoute = props => {
-  console.log('getMenus', features.getMenus());
   return (
     <React.Suspense fallback={<span>Loading....</span>}>
-      <ProLayout
-        route={{ routes: features.getMenus(), authority: ['admin', 'user'] }}
-        breadcrumbNameMap={{}}
-      >
-        <WorkbenchTheme children={features.getRoutes()} />
-      </ProLayout>
+      <WorkbenchTheme>
+        <ProLayout
+          route={{ routes: features.getMenus(), authority: ['admin', 'user'] }}
+          breadcrumbNameMap={{}}
+        >
+          {features.getRoutes()}
+        </ProLayout>
+      </WorkbenchTheme>
     </React.Suspense>
   );
 };

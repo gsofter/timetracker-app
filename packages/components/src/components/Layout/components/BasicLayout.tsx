@@ -470,7 +470,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         {props.pure ? (
           children
         ) : (
-          <div className={css(styleSheet().basicLayout)}>
+          <div className={classNames(css(styleSheet().basicLayout), 'BasicLayout-Wrapper')}>
             <div className={className}>
               <Layout
                 style={{
@@ -517,7 +517,9 @@ const styleSheet: (antPrefix?: string) => { [key: string]: (obj) => Properties }
 
   return {
     basicLayout: ({ theme, primaryColor, layout }) => ({
-      display: 'inherit',
+      display: 'flex',
+      width: '100%',
+      minHeight: '100%',
       '& .ant-pro-basicLayout': {
         display: 'flex',
         flexDirection: 'column',
@@ -563,8 +565,6 @@ const styleSheet: (antPrefix?: string) => { [key: string]: (obj) => Properties }
       },
       '& .ant-pro-basicLayout .ant-pro-page-container-warp': {
         backgroundColor: '#fff',
-        padding: '16px',
-        marginBottom: '10px',
       },
 
       '& .ant-pro-basicLayout .ant-pro-page-container-warp .ant-tabs-nav': {

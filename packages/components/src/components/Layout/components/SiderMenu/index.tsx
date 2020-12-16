@@ -1,15 +1,15 @@
-import React, { useEffect } from "react";
-import { Drawer } from "antd";
-import classNames from "classnames";
-import Omit from "omit.js";
-import { getFlatMenus } from "@umijs/route-utils";
+import React, { useEffect } from 'react';
+import { Drawer } from 'antd';
+import classNames from 'classnames';
+import Omit from 'omit.js';
+import { getFlatMenus } from '@umijs/route-utils';
 
 import SiderMenu, { PrivateSiderMenuProps, SiderMenuProps } from './SiderMenu';
-import MenuCounter from "./Counter";
-import { styleSheet } from './styles'
-import { useFela } from 'react-fela'
+import MenuCounter from './Counter';
+import { styleSheet } from './styles';
+import { useFela } from 'react-fela';
 
-const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (props) => {
+const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props => {
   const {
     isMobile,
     menuData,
@@ -46,7 +46,7 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (prop
     }
   }, [isMobile]);
 
-  const omitProps = Omit(props, ["className", "style"]);
+  const omitProps = Omit(props, ['className', 'style']);
   const { css } = useFela();
   if (hide) {
     return null;
@@ -60,14 +60,15 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (prop
       onClose={() => onCollapse && onCollapse(true)}
       style={{
         padding: 0,
-        height: "100vh",
+        height: '100vh',
         ...style,
       }}
       getContainer={getContainer}
       width={siderWidth}
       bodyStyle={{ height: '100vh', padding: 0, display: 'flex', flexDirection: 'row' }}
     >
-      <div className={css(styleSheet.siderMenuStyles)}>
+      {/* SideMenu-Wrapper: For inspecting element to adjust css, it will be removed for at version */}
+      <div className={classNames('SideMenu-Wrapper-Mobile', css(styleSheet.siderMenuStyles))}>
         <SiderMenu
           {...omitProps}
           className={classNames(`${prefixCls}-sider`, className)}
@@ -77,14 +78,14 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = (prop
       </div>
     </Drawer>
   ) : (
-      <div className={css(styleSheet.siderMenuStyles)}>
-        <SiderMenu
-          className={classNames(`${prefixCls}-sider`, className)}
-          {...omitProps}
-          style={style}
-        />
-      </div>
-    );
+    <div className={classNames('SideMenu-Wrapper', css(styleSheet.siderMenuStyles))}>
+      <SiderMenu
+        className={classNames(`${prefixCls}-sider`, className)}
+        {...omitProps}
+        style={style}
+      />
+    </div>
+  );
 };
 
 SiderMenuWrapper.defaultProps = {

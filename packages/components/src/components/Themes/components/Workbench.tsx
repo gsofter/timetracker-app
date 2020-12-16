@@ -3,30 +3,28 @@ import cx from 'classnames';
 import { useFela } from 'react-fela';
 import { getWorkbenchColors } from './colors';
 
-export interface IProps {
-}
+export interface IProps {}
 
-export const Workbench: React.SFC<IProps> = ({ children}) =>  {
-    const { css, theme } = useFela();
+export const Workbench: React.SFC<IProps> = ({ children }) => {
+  const { css, theme } = useFela();
 
-    return (
-      <div className={cx(css(stylesSheet.container))}>
-        <div className={cx('monaco-workbench', css(stylesSheet.child))}>{children}</div>
-      </div>
-    );
+  return (
+    <div className={css(stylesSheet.container)}>
+      <div className={cx('monaco-workbench', css(stylesSheet.child))}>{children}</div>
+    </div>
+  );
 };
-
 
 const stylesSheet: any = {
   container: () => ({
-    display: 'flex',
+    // display: 'flex',
     height: '100%',
-    position: 'relative'
+    position: 'relative',
   }),
   child: ({ theme }) => ({
     width: '100%',
     height: '100%',
-    display: 'flex',
+    // display: 'flex',
     fontSize: '13px',
     lineHeight: 1.4,
     position: 'relative',
@@ -35,4 +33,3 @@ const stylesSheet: any = {
     ...getWorkbenchColors(theme),
   }),
 };
-

@@ -6,8 +6,8 @@ import TopNavHeader from './TopNavHeader';
 import { WithFalse } from './typings';
 import { PrivateSiderMenuProps } from './SiderMenu/SiderMenu';
 import { clearMenuItem } from './utils/utils';
-import { useFela, connect } from "react-fela";
-import { Property, Properties } from 'csstype'
+import { useFela, connect } from 'react-fela';
+import { Property, Properties } from 'csstype';
 
 const { Header } = Layout;
 
@@ -35,14 +35,7 @@ interface HeaderViewState {
 
 const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
   const renderContent = () => {
-    const {
-      isMobile,
-      onCollapse,
-      navTheme,
-      layout,
-      headerRender,
-      headerContentRender
-    } = props;
+    const { isMobile, onCollapse, navTheme, layout, headerRender, headerContentRender } = props;
     const isTop = layout === 'top';
     // const { css } = useFela({...props, primaryColor});
     const clearMenuData = clearMenuItem(props.menuData || []);
@@ -55,7 +48,7 @@ const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
       defaultDom = (
         <TopNavHeader
           theme={navTheme as 'light' | 'dark'}
-          mode='horizontal'
+          mode="horizontal"
           onCollapse={onCollapse}
           {...props}
           menuData={clearMenuData}
@@ -68,7 +61,6 @@ const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
     return defaultDom;
   };
 
-
   const {
     fixedHeader,
     layout,
@@ -79,7 +71,7 @@ const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
     hasSiderMenu,
     isMobile,
     prefixCls,
-    headerHeight
+    headerHeight,
   } = props;
   const needFixedHeader = fixedHeader || layout === 'mix';
   const isTop = layout === 'top';
@@ -88,27 +80,25 @@ const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
 
   const className = classNames(propsClassName, {
     [`${prefixCls}-fixed-header`]: needFixedHeader,
-    [`${prefixCls}-top-menu`]: isTop
+    [`${prefixCls}-top-menu`]: isTop,
   });
 
   /**
    * 计算侧边栏的宽度，不然导致左边的样式会出问题
    */
   const width =
-    layout !== 'mix' && needSettingWidth
-      ? `calc(100% - ${collapsed ? 48 : siderWidth}px)`
-      : '100%';
+    layout !== 'mix' && needSettingWidth ? `calc(100% - ${collapsed ? 48 : siderWidth}px)` : '100%';
 
   const right = needFixedHeader ? 0 : undefined;
   const { css, theme } = useFela(props);
   return (
-    <div className={css(styleSheet.header)}>
+    <div className={classNames('Header-Wrapper', css(styleSheet.header))}>
       {needFixedHeader && (
         <Header
           style={{
             height: headerHeight,
             lineHeight: `${headerHeight}px`,
-            background: 'transparent'
+            background: 'transparent',
           }}
         />
       )}
@@ -120,7 +110,7 @@ const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
           width,
           zIndex: layout === 'mix' ? 100 : 19,
           right,
-          ...style
+          ...style,
         }}
         className={className}
       >
@@ -128,15 +118,14 @@ const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
       </Header>
     </div>
   );
-}
-
+};
 
 const styleSheet: { [key: string]: (obj) => Properties } = {
   header: ({ theme, primaryColor, layout }) => ({
     'z-index': 9,
     width: '100%',
-  })
-}
+  }),
+};
 
 // const StyleWrappedHeaderView = connect({ header: styleSheet.header })(HeaderView)
 export default HeaderView;

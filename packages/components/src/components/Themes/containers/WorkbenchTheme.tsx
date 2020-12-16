@@ -35,4 +35,5 @@ export default compose(
         loadTheme: () => dispatch(loadTheme()),
       }),
     ),
-  ])(WorkbenchTheme);
+  ],
+)(WorkbenchTheme);
