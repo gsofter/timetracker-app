@@ -109,7 +109,6 @@ const conversionFromLocation = (
   }
   // Convertor the url to an array
   const pathSnippets = urlToList(routerLocation.pathname);
-  console.log('pathSnippets =>', pathSnippets);
   // Loop data mosaic routing
   const extraBreadcrumbItems: AntdBreadcrumbProps['routes'] = pathSnippets
     .map(url => {
@@ -154,13 +153,7 @@ export const genBreadcrumbProps = (props: BreadcrumbProps): AntdBreadcrumbProps[
 
   // 根据 location 生成 面包屑
   // Generate breadcrumbs based on location
-  console.log('breadcrumbMap =>', breadcrumbMap);
   if (location && location.pathname && breadcrumbMap) {
-    console.log('Generate breadcrumbs based on location =>', breadcrumbMap);
-    console.log(
-      'conversionFromLocation =>',
-      conversionFromLocation(location, breadcrumbMap, props),
-    );
     return conversionFromLocation(location, breadcrumbMap, props);
   }
   return [];
@@ -176,7 +169,6 @@ export const getBreadcrumbProps = (props: BreadcrumbProps): BreadcrumbListReturn
   if (breadcrumbRender) {
     routes = breadcrumbRender(routes) || [];
   }
-  console.log('routes =>', routes);
   if (routes && routes.length < 2) {
     routes = undefined;
   }

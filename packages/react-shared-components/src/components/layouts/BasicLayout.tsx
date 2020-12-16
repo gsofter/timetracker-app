@@ -122,7 +122,6 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
   // const { formatMessage } = useIntl();
   const history = useHistory();
 
-  console.log('PROPS => ', props);
   const dispatch = useDispatch();
   return (
     <>
@@ -156,7 +155,6 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
         footerRender={() => defaultFooterDom}
         menuDataRender={menuDataRender}
         postMenuData={menuData => {
-          console.log('---POSTMENU DATA', menuData);
           menuDataRef.current = menuData || [];
           return menuData || [];
         }}

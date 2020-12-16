@@ -355,7 +355,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     ...defaultProps,
     breadcrumbMap,
   });
-  console.log('breadcrumbProps =>', breadcrumbProps);
 
   // render sider dom
   const siderMenuDom = renderSiderMenu(
