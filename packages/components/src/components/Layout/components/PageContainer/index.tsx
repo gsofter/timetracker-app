@@ -254,7 +254,7 @@ const styleSheet: { [key: string]: (obj) => Properties } = {
       margin: '24px 24px 0',
       padding: '24px',
       color: `${primaryColor}`,
-      backgroundColor: `${backgroundColor}`,
+      backgroundColor: '#fff',
     },
     '& .ant-pro-page-container-warp': {
       backgroundColor: `${backgroundColor}`,
