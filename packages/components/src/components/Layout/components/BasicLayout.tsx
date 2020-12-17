@@ -519,54 +519,54 @@ const styleSheet: (antPrefix?: string) => { [key: string]: (obj) => Properties }
       display: 'flex',
       width: '100%',
       minHeight: '100%',
-      '& .ant-pro-basicLayout': {
+      [`& .${basicLayoutPrefixCls}`]: {
         display: 'flex',
         flexDirection: 'column',
         width: '100%',
         minHeight: '100%',
       },
-      '& .ant-pro-basicLayout .ant-layout-header.ant-pro-fixed-header': {
+      [`& .${basicLayoutPrefixCls} .ant-layout-header.ant-pro-fixed-header`]: {
         position: 'fixed',
         top: 0,
       },
-      '& .ant-pro-basicLayout-content': {
+      [`& .${basicLayoutPrefixCls}-content`]: {
         position: 'relative',
         margin: '24px',
       },
-      '& .ant-pro-basicLayout-content .ant-pro-page-container': {
+      [`& .${basicLayoutPrefixCls}-content .ant-pro-page-container`]: {
         margin: '-24px -24px 0',
       },
-      '& .ant-pro-basicLayout-content-disable-margin': {
+      [`& .${basicLayoutPrefixCls}-content-disable-margin`]: {
         margin: 0,
       },
-      '& .ant-pro-basicLayout-content-disable-margin .ant-pro-page-container': {
+      [`& .${basicLayoutPrefixCls}-content-disable-margin .ant-pro-page-container`]: {
         margin: 0,
       },
-      '& .ant-pro-basicLayout-content > .ant-layout': {
+      [`& .${basicLayoutPrefixCls}-content > .ant-layout`]: {
         maxHeight: '100%',
       },
-      '& .ant-pro-basicLayout .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar': {
+      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
         height: '100vh',
         overflow: 'hidden',
         transform: 'rotate(0)',
       },
-      '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .tech-page-container': {
-        height: 'calc(52vh)',
+      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
+        height: `calc(100vh - ${proLayoutHeaderHeight})`,
       },
-      '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .tech-page-container': {
+      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
         height: 'calc(4vh)',
       },
-      '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children': {
+      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children`]: {
         minHeight: 'calc(52vh)',
       },
-      '& .ant-pro-basicLayout .ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar': {
+      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
         height: 'calc(52vh);',
       },
-      '& .ant-pro-basicLayout .ant-pro-page-container-warp': {
+      [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp`]: {
         backgroundColor: '#fff',
       },
 
-      '& .ant-pro-basicLayout .ant-pro-page-container-warp .ant-tabs-nav': {
+      [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp .ant-tabs-nav`]: {
         margin: 0,
       },
     }),
