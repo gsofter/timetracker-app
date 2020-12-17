@@ -227,20 +227,20 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
             '& .ant-pro-sider-menu.mobile-base-menu .ant-menu-submenu-title .ant-pro-menu-item .anticon': {
                 paddingTop: '5px',
             },
-            '@keyframes fade-in': {
-                '0%': {
-                    display: 'none',
-                    opacity: 0,
-                },
-                '99%': {
-                    display: 'none',
-                    opacity: 0,
-                },
-                '100%': {
-                    display: 'block',
-                    opacity: 1,
-                },
-            }
+            // '@keyframes fade-in': {
+            //     '0%': {
+            //         display: 'none',
+            //         opacity: 0,
+            //     },
+            //     '99%': {
+            //         display: 'none',
+            //         opacity: 0,
+            //     },
+            //     '100%': {
+            //         display: 'block',
+            //         opacity: 1,
+            //     },
+            // }
         }
     }
 }
