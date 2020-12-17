@@ -18,7 +18,9 @@ export const Workbench: React.SFC<IProps> = ({ children }) => {
 const stylesSheet: any = {
   container: () => ({
     // display: 'flex',
-    height: '100%',
+    //commented this line due to this height affect
+    // on the whole layout scroll screen.
+    // height: '100%',
     position: 'relative',
   }),
   child: ({ theme }) => ({
