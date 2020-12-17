@@ -71,6 +71,8 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
         '& .ant-pro-global-header .dark .action .ant-badge': {
             color: 'rgba(255,255,255,0.85)',
         },
+        // We need these lines on the mobile size
+        // Newely added these lines
         '@media screen and (max-width: 992px)': {
             '& .ant-pro-global-header': { 
                 padding: '10px 16px',

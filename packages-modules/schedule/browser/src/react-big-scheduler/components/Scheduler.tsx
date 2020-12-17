@@ -361,7 +361,7 @@ export default props => {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>
-      <div style={{ height: '100vh' }} className="calender-width">
+      <div className="calender-width">
         <SelectableCalendar localizer={localizer} />
       </div>
     </div>
@@ -372,6 +372,10 @@ const stylesheet: any = {
   styles: theme => ({
     position: 'relative',
     width: '100%',
+    // Default height for the Calender Scheduler view
+    '& .rbc-calendar': {
+      height: '100vh',
+    },
     '& .sm-screen-size': {
       '@media (max-width: 768px)': {
         width: '100% !important',
