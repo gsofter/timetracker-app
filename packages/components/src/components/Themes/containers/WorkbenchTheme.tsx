@@ -6,7 +6,8 @@ import { loadTheme } from '../redux';
 import { WorkbenchComponent } from '../components';
 
 export interface IProps {
-  currentTheme?: any;
+  themeReducer?: any;
+  settings?: any;
   loadTheme?: Function;
 }
 
@@ -16,9 +17,10 @@ export class WorkbenchTheme extends React.Component<IProps, {}> {
   }
 
   public render() {
-    const { currentTheme, children } = this.props;
+    const { themeReducer, children, settings } = this.props;
+    const theme = { ...themeReducer, primaryColor: settings.primaryColor };
     return (
-      <ThemeProvider theme={currentTheme}>
+      <ThemeProvider theme={theme}>
         <WorkbenchComponent>{children}</WorkbenchComponent>
       </ThemeProvider>
     );
@@ -29,7 +31,8 @@ export default compose(
   ...[
     connect(
       (state: any) => ({
-        currentTheme: state.themeReducer,
+        themeReducer: state.themeReducer,
+        settings: state.settings, //@sri modified ...
       }),
       dispatch => ({
         loadTheme: () => dispatch(loadTheme()),
