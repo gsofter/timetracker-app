@@ -228,6 +228,36 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props => {
           {
             //@sri modified below section to group menus as `MIDDLE`, `LOWER`, `Buttom`
           }
+          <div className={`${baseClassName}-links`}>
+            <Menu
+              theme={theme}
+              inlineIndent={16}
+              className={`${baseClassName}-link-menu`}
+              selectedKeys={[]}
+              openKeys={[]}
+              mode="inline"
+            >
+              {(links || []).map((node, index) => (
+                // eslint-disable-next-line react/no-array-index-key
+                <Menu.Item className={`${baseClassName}-link`} key={index}>
+                  {node}
+                </Menu.Item>
+              ))}
+              {collapsedButtonRender && !isMobile && (
+                <Menu.Item
+                  className={`${baseClassName}-collapsed-button`}
+                  title={false}
+                  onClick={() => {
+                    if (onCollapse) {
+                      onCollapse(!collapsed);
+                    }
+                  }}
+                >
+                  {collapsedButtonRender(collapsed)}
+                </Menu.Item>
+              )}
+            </Menu>
+          </div>
           <div
             style={{
               flex: 1,
@@ -269,36 +299,6 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props => {
               ? menuContentRender(props, menuDom(menuSeparation(props, 'BOTTOM'), null, 'vertical'))
               : menuDom(menuSeparation(props, 'BOTTOM'), null, 'vertical')}
           </div>
-        </div>
-        <div className={`${baseClassName}-links`}>
-          <Menu
-            theme={theme}
-            inlineIndent={16}
-            className={`${baseClassName}-link-menu`}
-            selectedKeys={[]}
-            openKeys={[]}
-            mode="inline"
-          >
-            {(links || []).map((node, index) => (
-              // eslint-disable-next-line react/no-array-index-key
-              <Menu.Item className={`${baseClassName}-link`} key={index}>
-                {node}
-              </Menu.Item>
-            ))}
-            {collapsedButtonRender && !isMobile && (
-              <Menu.Item
-                className={`${baseClassName}-collapsed-button`}
-                title={false}
-                onClick={() => {
-                  if (onCollapse) {
-                    onCollapse(!collapsed);
-                  }
-                }}
-              >
-                {collapsedButtonRender(collapsed)}
-              </Menu.Item>
-            )}
-          </Menu>
         </div>
         {menuFooterRender && (
           <div className={`${baseClassName}-footer`}>{menuFooterRender(props)}</div>

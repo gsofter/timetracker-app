@@ -375,6 +375,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     {
       ...defaultProps,
       hasSiderMenu: !!siderMenuDom,
+      separateMenus: menuSeparation(menuData),
       menuData,
       isMobile,
       collapsed,
