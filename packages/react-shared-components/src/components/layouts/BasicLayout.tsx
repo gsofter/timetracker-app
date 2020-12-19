@@ -5,6 +5,7 @@ import {
   Settings,
   DefaultFooter,
   SettingDrawer,
+  BaseMenu,
 } from '@admin-layout/components';
 import React, { useEffect, useMemo, useRef } from 'react';
 import { Link, generatePath } from 'react-router-dom';
@@ -20,6 +21,8 @@ import { useHistory } from 'react-router-dom';
 import { IOrgNameInContextFragment } from '@admin-layout/core';
 // import logo from '../assets/'
 import { useDispatch } from 'react-redux';
+import { Menu } from 'antd';
+
 const noMatch = (
   <Result
     status={403}
@@ -123,6 +126,23 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
   const history = useHistory();
 
   const dispatch = useDispatch();
+
+  const menuSeparation = menus => {
+    const upperMenus = menus.filter(menu => menu.position === 'UPPER');
+    const middleMenus = menus.filter(
+      menu =>
+        menu.position === 'MIDDLE' ||
+        (menu.position !== 'UPPER' && menu.position !== 'LOWER' && menu.position !== 'BOTTOM'),
+    );
+    const lowerMenus = menus.filter(menu => menu.position === 'LOWER');
+    const bottomMenus = menus.filter(menu => menu.position === 'BOTTOM');
+    return {
+      upperMenus,
+      middleMenus,
+      lowerMenus,
+      bottomMenus,
+    };
+  };
   return (
     <>
       <ProLayout
@@ -157,6 +177,12 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
         postMenuData={menuData => {
           menuDataRef.current = menuData || [];
           return menuData || [];
+        }}
+        rightContentRender={({ menuData, ...props }) => {
+          console.log('rightContentRender', props);
+          const upMenus = menuSeparation(menuData).upperMenus;
+
+          return <BaseMenu {...props} menuData={upMenus} />;
         }}
       >
         {children}

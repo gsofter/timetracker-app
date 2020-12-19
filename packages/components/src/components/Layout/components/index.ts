@@ -11,6 +11,7 @@ import getMenuData from './utils/getMenuData';
 import getPageTitle from './getPageTitle';
 import PageLoading from './PageLoading';
 import FooterToolbar from './FooterToolbar';
+import BaseMenu from './SiderMenu/BaseMenu' // @sri modified
 
 export type { ProSettings as Settings, ProSettings } from './defaultSettings';
 
@@ -32,6 +33,7 @@ export {
   getMenuData,
   PageContainer,
   FooterToolbar,
+  BaseMenu, // @sri modified
 };
 
 export type {
