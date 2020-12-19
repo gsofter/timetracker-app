@@ -17,9 +17,8 @@ export const Workbench: React.SFC<IProps> = ({ children }) => {
 
 const stylesSheet: any = {
   container: () => ({
-    // comment below lines to enable scrolling for the page
-    // display: 'flex',
-    // height: '100%',
+    display: 'flex',
+    height: '100%',
     position: 'relative',
   }),
   child: ({ theme }) => ({
