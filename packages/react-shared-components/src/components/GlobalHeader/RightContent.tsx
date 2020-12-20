@@ -41,7 +41,9 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
   return (
     <div className={css(styleSheet.right)}>
       {menus.map(item => (
-        <Link to={item.path}> {item.name} </Link>
+        <Link key={item.name} to={item.path}>
+          {item.name}
+        </Link>
       ))}
     </div>
   );
