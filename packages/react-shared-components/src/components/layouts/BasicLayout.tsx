@@ -7,6 +7,7 @@ import {
   SettingDrawer,
 } from '@admin-layout/components';
 import React, { useEffect, useMemo, useRef } from 'react';
+import * as _ from 'lodash';
 import { Link, generatePath } from 'react-router-dom';
 import { GithubOutlined } from '@ant-design/icons';
 import { Result, Button } from 'antd';
@@ -141,6 +142,12 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
     };
   };
 
+  let drawerSettings;
+  useEffect(() => {
+    drawerSettings = _.cloneDeep(settings);
+    delete drawerSettings.location;
+  }, [settings]);
+
   return (
     <>
       <ProLayout
@@ -188,7 +195,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
         {children}
       </ProLayout>
       <SettingDrawer
-        settings={settings}
+        settings={drawerSettings}
         onSettingChange={config =>
           dispatch({
             type: 'settings/changeSetting',
