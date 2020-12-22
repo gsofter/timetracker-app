@@ -9,7 +9,7 @@ import { TutorialComponent } from '../../components/TutorialComponent';
 import { CustomScrollbar } from '../../components/CustomScrollbar';
 import { TaskListItem } from '../../components/TaskListItem';
 import { getDateInString } from '../../services/timeService';
-import { BlankListComponent } from '../../components/BlankListcomponent/BlankListComponent';
+import { BlankListComponent } from '../../components/BlankListcomponent';
 import { GlobalState } from '../../contexts/GlobalState';
 import { StartTaskMobile } from '../../components/StartTaskMobile';
 import { TimerSearchComponent } from '../../components/TimerSearchComponent';
