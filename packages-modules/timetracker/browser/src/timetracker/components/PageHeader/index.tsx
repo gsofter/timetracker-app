@@ -1,8 +1,9 @@
 import React from 'react';
 import { useFela } from 'react-fela';
+import { Properties } from 'csstype';
 
-const styleSheet: any = {
-  pageHeaderStyle: (props) => ({
+const styleSheet: { [key: string]: (obj) => Properties } = {
+  pageHeaderStyle: ({ theme, primaryColor, layout }) => ({
     position: 'relative',
     '& .header-wrapper': {
       display: 'flex',
@@ -42,7 +43,7 @@ const styleSheet: any = {
       lineHeight: 'normal',
       fontSize: '14px',
       color: '#ffffff',
-      backgroundColor: '#27ae60',
+      backgroundColor: primaryColor ? primaryColor : '#1b8efa',
       outline: 'none',
       cursor: 'pointer',
       borderRadius: '4px',
@@ -60,7 +61,7 @@ const styleSheet: any = {
     '& .header-wrapper__child-button:nth-child(2)': {
       marginLeft: '10px',
     },
-    button: {
+    '& button': {
       cursor: 'pointer',
       border: 'none',
       outline: 'none',

@@ -2,15 +2,17 @@ import React, { useState } from 'react';
 import classNames from 'classnames';
 import PageHeader from '../../components/PageHeader';
 import { ProjectData } from '../../components/ProjectsData';
+import { ProjectSearchBar } from '../../components/projectSearchBar';
+import { CreateProjectModal } from '../../components/CreateProjectModal';
 import { useFela } from 'react-fela';
 
 const ProjectsPage = (props) => {
   const { css } = useFela(props);
   const [isInitialFetching, setIsInitialFetching] = useState(true);
   const [etalonArr, setEtalonArr] = useState([]);
+  const [ addNewProjectModalToggle, setAddNewProjectModalToggle] = useState(false);
   const {
     tableData,
-    addNewProjectModalToggle,
     projectsPageAction,
     isMobile,
     vocabulary,
@@ -21,31 +23,31 @@ const ProjectsPage = (props) => {
       <div
         className={classNames('wrapper_projects_page', {
           'wrapper_projects_page--mobile': isMobile,
-        })}>
-        {/* {addNewProjectModalToggle && (
+        })} >
+        {addNewProjectModalToggle && (
                 <CreateProjectModal
-                    tableInfo={tableData}
-                    projectsPageAction={projectsPageAction}
+                    // tableInfo={tableData}
+                    // projectsPageAction={projectsPageAction}
                     // getProjects={this.getProjects}
                 />
-            )} */}
+            )}
         <div className="data_container_projects_page">
           <PageHeader title="Projects">
             <button
               className="header-wrapper__child-button"
-              onClick={() =>
-                projectsPageAction('TOGGLE_MODAL', { toggle: true })
+              onClick={(e) => setAddNewProjectModalToggle(true)
+                // projectsPageAction('TOGGLE_MODAL', { toggle: true })
               }>
               Create new project
             </button>
           </PageHeader>
-          {/* <div className="project_page_filters">
+          <div className="project_page_filters">
                     <ProjectSearchBar
-                        tableInfo={this.props.tableData}
-                        etalonArr={this.state.etalonArr}
-                        projectsPageAction={projectsPageAction}
+                        // tableInfo={this.props.tableData}
+                        // etalonArr={this.state.etalonArr}
+                        // projectsPageAction={projectsPageAction}
                     />
-                </div> */}
+                </div>
           <div className="project_data_wrapper">
             <ProjectData
               tableInfo={tableData}

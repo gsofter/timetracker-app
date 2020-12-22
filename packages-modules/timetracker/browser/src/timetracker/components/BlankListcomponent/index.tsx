@@ -31,12 +31,12 @@ const styleSheet: any = {
       position: 'relative',
       marginTop: '-50px',
     },
-    '& @media screen and (max-width: 1024px)': {
+    '@media screen and (max-width: 1024px)': {
       '& .animation-cat': {
         right: '-40px',
       },
     },
-    '& @media screen and (max-width: 414px)': {
+    '@media screen and (max-width: 414px)': {
       '& .animation-cat': {
         width: '50%',
         height: '70%',
