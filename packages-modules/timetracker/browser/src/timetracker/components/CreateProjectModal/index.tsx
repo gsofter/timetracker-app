@@ -1,9 +1,42 @@
-import { relative } from 'path';
-import React from 'react';
+import React, { useState } from 'react';
 import { useFela } from 'react-fela';
+import { ClientsDropdown } from '../ClientsDropdown';
+import DemoData from '../../demoData';
 
 export const CreateProjectModal = (props) => {
   const { css } = useFela(props);
+  const [clientsList, setClientsList] = useState([null]);
+  const [selectedValue, setSelectedValue] = useState({
+    id: 'a642f337-9082-4f64-8ace-1d0e99fa7258',
+    name: 'green',
+  });
+  const [listOpen, setListOpen] = useState(false);
+  const [selectValue, setSelectValue] = useState(DemoData.selectColors);
+  const [selectedClient, setSelectedClient] = useState(null);
+  const [selectedProject, setSelectedProject] = useState(null);
+  const [relationProjectsList, setRelationProjectsList] = useState(null);
+
+  const setItem = (value) => {
+    setSelectedValue(value);
+  };
+
+  const toggleSelect = () => {
+    setListOpen(!listOpen);
+  };
+
+  const clientSelect = (data) => {
+    setSelectedClient({ selectedClient: data ? data : null });
+  };
+
+  let selectItems = selectValue.map((value) => {
+    const { id, name } = value;
+    return (
+      <div key={id} className={`item`} onClick={(e) => setItem(value)}>
+        <div className={`circle ${name}`} />
+      </div>
+    );
+  });
+  let createProjectInput = null;
   return (
     <div className={css(styleSheet.projectPage)}>
       <div className="wrapper_create_projects_modal">
@@ -27,26 +60,25 @@ export const CreateProjectModal = (props) => {
               <input
                 className="project-input"
                 type="text"
-                // ref={input => {
-                //     createProjectInput = input;
-                // }}
+                ref={(input) => {
+                  createProjectInput = input;
+                }}
                 placeholder="Project name..."
               />
               <div
                 className="create_projects_modal_data_select_container"
-                // onClick={e => toggleSelect()}
-              >
+                onClick={(e) => toggleSelect()}>
                 <div className="select_main">
-                  {/* <div className={`circle ${state.selectedValue.name}`} /> */}
+                  <div className={`circle ${selectedValue.name}`} />
                 </div>
                 <i className="vector" />
-                {/* {state.listOpen && <div className="select_list">{selectItems}</div>} */}
+                {listOpen && <div className="select_list">{selectItems}</div>}
               </div>
-              {/* <ClientsDropdown
-                            clientsList={clientsList}
-                            clientSelect={clientSelect}
-                            vocabulary={vocabulary}
-                        /> */}
+              <ClientsDropdown
+                clientsList={clientsList}
+                clientSelect={clientSelect}
+                // vocabulary={vocabulary}
+              />
               {/* {props.userReducer.user.tokenJira && (
                             <ProjectsDropdown
                                 relationProjectsList={relationProjectsList}
@@ -72,7 +104,6 @@ export const CreateProjectModal = (props) => {
 
 const styleSheet: any = {
   projectPage: (props) => ({
-    position: 'relative',
     '& .create_projects_modal_background': {
       position: 'fixed',
       backgroundColor: 'rgba(89,89,89,0.5)',
@@ -226,13 +257,13 @@ const styleSheet: any = {
     '& .create_projects_modal_data .red': {
       backgroundColor: 'red',
     },
-    '.create_projects_modal_data .blue': {
+    '& .create_projects_modal_data .blue': {
       backgroundColor: 'blue',
     },
-    '.create_projects_modal_data .pink': {
+    '& .create_projects_modal_data .pink': {
       backgroundColor: 'pink',
     },
-    '.create_projects_modal_button_container': {
+    '& .create_projects_modal_button_container': {
       marginTop: '28px',
       padding: '0',
       display: 'flex',
@@ -258,7 +289,17 @@ const styleSheet: any = {
       width: '24px',
       height: '24px',
       marginLeft: '5px',
-      background: 'url("https://time.wobbly.me/static/media/Vector.6802a7a2.svg") no-repeat center',
+      background:
+        'url("https://time.wobbly.me/static/media/Vector.6802a7a2.svg") no-repeat center',
+    },
+    '& input': {
+      outline: 'none',
+    },
+    '& button, select': {
+      textTransform: 'none',
+    },
+    '& button, input': {
+      overflow: 'visible',
     },
   }),
 };

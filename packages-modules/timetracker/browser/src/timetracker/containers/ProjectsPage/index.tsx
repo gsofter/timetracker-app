@@ -35,7 +35,7 @@ const ProjectsPage = (props) => {
           <PageHeader title="Projects">
             <button
               className="header-wrapper__child-button"
-              onClick={(e) => setAddNewProjectModalToggle(e)
+              onClick={(e) => setAddNewProjectModalToggle(true)
                 // projectsPageAction('TOGGLE_MODAL', { toggle: true })
               }>
               Create new project

@@ -37,6 +37,28 @@ const DemoData = {
       totalTime: '10',
     },
   ],
+  selectColors: [
+    {
+      id: 'a642f337-9082-4f64-8ace-1d0e99fa7258',
+      name: 'green',
+    },
+    {
+      id: 'a642f337-9082-4f64-8ace-1d0e99fa7259',
+      name: 'red',
+    },
+    {
+      id: 'a642f337-9082-4f64-8ace-1d0e99fa7210',
+      name: 'pink',
+    },
+    {
+      id: 'a642f337-9082-4f64-8ace-1d0e99fa7211',
+      name: 'green',
+    },
+    {
+      id: 'a642f337-9082-4f64-8ace-1d0e99fa7212',
+      name: 'blue',
+    },
+  ],
 };
 
 export default DemoData;
