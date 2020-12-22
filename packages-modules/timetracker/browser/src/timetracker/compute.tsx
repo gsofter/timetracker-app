@@ -6,6 +6,7 @@ import { FileOutlined } from '@ant-design/icons';
 const Home = React.lazy(() => import('./containers/Home'));
 const TimeTracker = React.lazy(() => import('./containers/MainPage'));
 const ProjectsPage = React.lazy(() => import('./containers/ProjectsPage'));
+const ClientsPage = React.lazy(() => import('./containers/ClientsPage'));
 export const timePageStore: any[] = [
   {
     exact: false,
@@ -36,9 +37,18 @@ export const timePageStore: any[] = [
     path: '/:orgName/time-tracker/projects',
     priority: 3,
   },
+  {
+    exact: true,
+    key: 'timeTracker.clients',
+    name: 'Clients',
+    component: ClientsPage,
+    position: IMenuPosition.MIDDLE,
+    path: '/:orgName/time-tracker/clients',
+    priority: 4,
+  },
 ];
 
-const selectedRoutesAndMenus = ['timeTracker', 'timeTracker.timer', 'timeTracker.projects'];
+const selectedRoutesAndMenus = ['timeTracker', 'timeTracker.timer', 'timeTracker.projects', 'timeTracker.clients' ];
 
 // get menus
 const filteredMenus = getFilteredMenus(timePageStore, selectedRoutesAndMenus);
