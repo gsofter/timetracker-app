@@ -8,6 +8,7 @@ import {
   BaseMenu,
 } from '@admin-layout/components';
 import React, { useEffect, useMemo, useRef } from 'react';
+import * as _ from 'lodash';
 import { Link, generatePath } from 'react-router-dom';
 import { GithubOutlined } from '@ant-design/icons';
 import { Result, Button } from 'antd';
@@ -21,8 +22,7 @@ import { useHistory } from 'react-router-dom';
 import { IOrgNameInContextFragment } from '@admin-layout/core';
 // import logo from '../assets/'
 import { useDispatch } from 'react-redux';
-import { Menu } from 'antd';
-
+import RightContent from '../GlobalHeader/RightContent';
 const noMatch = (
   <Result
     status={403}
@@ -126,7 +126,6 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
   const history = useHistory();
 
   const dispatch = useDispatch();
-
   const menuSeparation = menus => {
     const upperMenus = menus.filter(menu => menu.position === 'UPPER');
     const middleMenus = menus.filter(
@@ -143,6 +142,13 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
       bottomMenus,
     };
   };
+
+  let drawerSettings;
+  useEffect(() => {
+    drawerSettings = _.cloneDeep(settings);
+    delete drawerSettings.location;
+  }, [settings]);
+
   return (
     <>
       <ProLayout
@@ -178,17 +184,19 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
           menuDataRef.current = menuData || [];
           return menuData || [];
         }}
-        rightContentRender={({ menuData, ...props }) => {
-          console.log('rightContentRender', props);
-          const upMenus = menuSeparation(menuData).upperMenus;
-
-          return <BaseMenu {...props} menuData={upMenus} />;
+        rightContentRender={p => {
+          return (
+            <RightContent
+              upperMenus={menuSeparation(p?.menuData).upperMenus}
+              orgName={props?.routeParams?.orgName}
+            />
+          );
         }}
       >
         {children}
       </ProLayout>
       <SettingDrawer
-        settings={settings}
+        settings={drawerSettings}
         onSettingChange={config =>
           dispatch({
             type: 'settings/changeSetting',

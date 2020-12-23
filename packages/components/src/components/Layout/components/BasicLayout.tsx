@@ -519,7 +519,7 @@ const styleSheet: (antPrefix?: string) => { [key: string]: (obj) => Properties }
     basicLayout: ({ theme, primaryColor, layout }) => ({
       display: 'flex',
       width: '100%',
-      minHeight: '100%',
+      minHeight: '100vh',
       [`& .${basicLayoutPrefixCls}`]: {
         display: 'flex',
         flexDirection: 'column',

@@ -4,15 +4,15 @@ import { Organization } from './components/Organization';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 
 export const accountPageStore: any[] = [
-    {
-        path: '/:orgName/orgnization',
-        key: 'organization',
-        tab: 'Organization Menu',
-        component: Organization,
-        position: IMenuPosition.UPPER,
-        exact: true,
-        priority: 2
-    }
+  {
+    path: '/:orgName/organization',
+    key: 'organization',
+    tab: 'Organization Menu',
+    component: Organization,
+    position: IMenuPosition.UPPER,
+    exact: true,
+    priority: 2,
+  },
 ];
 
 const selectedRoutesAndMenus = ['organization'];
