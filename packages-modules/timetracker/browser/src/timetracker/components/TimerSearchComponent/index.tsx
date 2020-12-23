@@ -164,13 +164,6 @@ export const TimerSearchComponent: React.FC<ITimerSearchComponent> = ({
                   thisMonth: 'This month',
                   lastMonth: 'Last month',
                   thisYear: 'This year',
-                  // v_today,
-                  // v_yesterday,
-                  // v_thisWeek,
-                  // v_lastWeek,
-                  // v_thisMonth,
-                  // v_lastMonth,
-                  // v_this_year,
                   // firstDayOfWeek,
                 },
                   )}
@@ -183,7 +176,6 @@ export const TimerSearchComponent: React.FC<ITimerSearchComponent> = ({
           <button
             className="timer-search__reset-btn"
             onClick={() => handleReset()}>
-            {/* {v_reset} */}
             Reset
           </button>
         </div>
@@ -333,7 +325,7 @@ const styleSheet: any = {
     '& .rdrMonthAndYearPickers select:hover': {
       backgroundColor: 'rgba(0,0,0,0.07)',
     },
-    '& .rdrMonthPicker, & .rdrYearPicker': {
+    '& .rdrMonthPicker, .rdrYearPicker': {
       margin: '0 5px',
     },
     '& .rdrNextPrevButton:hover': {
@@ -364,10 +356,10 @@ const styleSheet: any = {
       transform: 'translate(3px,0px)',
     },
 
-    '& .rdrMonth & .rdrWeekDays': {
+    '& .rdrMonth .rdrWeekDays': {
       padding: '0',
     },
-    '& .rdrMonths & .rdrMonthsVertical & .rdrMonth:first-child & .rdrMonthName': {
+    '& .rdrMonths .rdrMonthsVertical .rdrMonth:first-child .rdrMonthName': {
       display: 'none',
     },
     '& .rdrDay:focus': {
@@ -393,10 +385,10 @@ const styleSheet: any = {
       display: 'block',
       position: 'relative',
     },
-    '& .rdrDayToday & .rdrDayNumber span': {
+    '& .rdrDayToday .rdrDayNumber span': {
       fontWeight: '500',
     },
-    '& .rdrDayToday & .rdrDayNumber span:after': {
+    '& .rdrDayToday .rdrDayNumber span:after': {
       content: '',
       position: 'absolute',
       bottom: '4px',
@@ -408,13 +400,13 @@ const styleSheet: any = {
       borderRadius: '2px',
       background: '#3d91ff',
     },
-    '& .rdrDayToday & .rdrInRange ~ & .rdrDayNumber span:after, & .rdrDayToday & .rdrStartEdge ~ & .rdrDayNumber span:after, & .rdrDayToday & .rdrEndEdge ~ & .rdrDayNumber span:after, & .rdrDayToday & .rdrSelected ~ & .rdrDayNumber span:after': {
+    '& .rdrDayToday .rdrInRange ~ .rdrDayNumber span:after, .rdrDayToday .rdrStartEdge ~ .rdrDayNumber span:after, .rdrDayToday & .rdrEndEdge ~ .rdrDayNumber span:after, .rdrDayToday .rdrSelected ~ .rdrDayNumber span:after': {
       background: '#fff',
     },
-    '& .rdrDay:not(& .rdrDayPassive) & .rdrInRange ~ & .rdrDayNumber span, & .rdrDay:not(.rdrDayPassive) & .rdrStartEdge ~ & .rdrDayNumber span, & .rdrDay:not(.rdrDayPassive) & .rdrEndEdge ~ & .rdrDayNumber span, & .rdrDay:not(.rdrDayPassive) & .rdrSelected ~ & .rdrDayNumber span': {
+    '& .rdrDay:not(.rdrDayPassive) .rdrInRange ~ .rdrDayNumber span, .rdrDay:not(.rdrDayPassive) .rdrStartEdge ~ .rdrDayNumber span, .rdrDay:not(.rdrDayPassive) .rdrEndEdge ~ .rdrDayNumber span .rdrDay:not(.rdrDayPassive) .rdrSelected ~ .rdrDayNumber span': {
       color: 'rgba(255,255,255,0.85)',
     },
-    '& .rdrSelected, & .rdrInRange, & .rdrStartEdge, & .rdrEndEdge': {
+    '& .rdrSelected, .rdrInRange, .rdrStartEdge, .rdrEndEdge': {
       background: '#1b8efa',
       position: 'absolute',
       top: '5px',
@@ -438,29 +430,29 @@ const styleSheet: any = {
       borderBottomRightRadius: '1.042em',
       right: '2px',
     },
-    '& .rdrDayStartOfMonth & .rdrInRange, & .rdrDayStartOfMonth & .rdrEndEdge, & .rdrDayStartOfWeek & .rdrInRange, & .rdrDayStartOfWeek & .rdrEndEdge': {
+    '& .rdrDayStartOfMonth .rdrInRange, .rdrDayStartOfMonth .rdrEndEdge, .rdrDayStartOfWeek .rdrInRange, .rdrDayStartOfWeek .rdrEndEdge': {
       borderTopLeftRadius: '1.042em',
       borderBottomLeftRadius: '1.042em',
       left: '2px',
     },
-    '& .rdrDayEndOfMonth & .rdrInRange, & .rdrDayEndOfMonth & .rdrStartEdge, & .rdrDayEndOfWeek & .rdrInRange, & .rdrDayEndOfWeek & .rdrStartEdge': {
+    '& .rdrDayEndOfMonth .rdrInRange, .rdrDayEndOfMonth .rdrStartEdge, .rdrDayEndOfWeek .rdrInRange, .rdrDayEndOfWeek .rdrStartEdge': {
       borderTopRightRadius: '1.042em',
       borderBottomRightRadius: '1.042em',
       right: '2px',
     },
-    '& .rdrDayStartOfMonth & .rdrDayInPreview, & .rdrDayStartOfMonth & .rdrDayEndPreview, & .rdrDayStartOfWeek & .rdrDayInPreview, & .rdrDayStartOfWeek & .rdrDayEndPreview': {
+    '& .rdrDayStartOfMonth .rdrDayInPreview, .rdrDayStartOfMonth .rdrDayEndPreview, .rdrDayStartOfWeek .rdrDayInPreview, .rdrDayStartOfWeek .rdrDayEndPreview': {
       borderTopLeftRadius: '1.333em',
       borderBottomLeftRadius: '1.333em',
       borderLeftWidth: '1px',
       left: '0px',
     },
-    '& .rdrDayEndOfMonth & .rdrDayInPreview, & .rdrDayEndOfMonth & .rdrDayStartPreview, & .rdrDayEndOfWeek & .rdrDayInPreview, & .rdrDayEndOfWeek & .rdrDayStartPreview': {
+    '& .rdrDayEndOfMonth .rdrDayInPreview, .rdrDayEndOfMonth .rdrDayStartPreview, .rdrDayEndOfWeek .rdrDayInPreview, .rdrDayEndOfWeek .rdrDayStartPreview': {
       borderTopRightRadius: '1.333em',
       borderBottomRightRadius: '1.333em',
       borderRightWidth: '1px',
       right: '0px',
     },
-    '& .rdrDayStartPreview, & .rdrDayInPreview, & .rdrDayEndPreview': {
+    '& .rdrDayStartPreview, .rdrDayInPreview, .rdrDayEndPreview': {
       background: 'rgba(255,255,255,0.09)',
       position: 'absolute',
       top: '3px',
@@ -497,7 +489,7 @@ const styleSheet: any = {
       borderRight: 'solid 1px #eff2f7',
       background: '#fff',
     },
-    '& .rdrDefinedRangesWrapper & .rdrStaticRangeSelected': {
+    '& .rdrDefinedRangesWrapper .rdrStaticRangeSelected': {
       color: '#1b8efa',
       fontWeight: '600',
     },
@@ -510,7 +502,7 @@ const styleSheet: any = {
       padding: 0,
       background: '#fff',
     },
-    '& .rdrStaticRange:hover & .rdrStaticRangeLabel, & .rdrStaticRange:focus & .rdrStaticRangeLabel': {
+    '& .rdrStaticRange:hover .rdrStaticRangeLabel, .rdrStaticRange:focus .rdrStaticRangeLabel': {
       background: '#eff2f7',
     },
     '& .rdrStaticRangeLabel': {
@@ -540,12 +532,12 @@ const styleSheet: any = {
       marginRight: '10px',
       color: '#6c767a',
     },
-    '& .rdrInputRangeInput:focus, & .rdrInputRangeInput:hover': {
+    '& .rdrInputRangeInput:focus, .rdrInputRangeInput:hover': {
       borderColor: '#b4bfc4',
       outline: 0,
       color: '#333',
     },
-    '& .rdrCalendarWrapper:not(.rdrDateRangeWrapper) & .rdrDayHovered & .rdrDayNumber:after': {
+    '& .rdrCalendarWrapper:not(.rdrDateRangeWrapper) .rdrDayHovered .rdrDayNumber:after': {
       content: '',
       border: '1px solid #1b8efa',
       borderRadius: '1.333em',
@@ -559,20 +551,20 @@ const styleSheet: any = {
     '& .rdrDayPassive': {
       pointerEvents: 'none',
     },
-    '& .rdrDayPassive & .rdrDayNumber span': {
+    '& .rdrDayPassive .rdrDayNumber span': {
       color: '#d5dce0',
     },
-    '& .rdrDayPassive & .rdrInRange, & .rdrDayPassive & .rdrStartEdge, & .rdrDayPassive & .rdrEndEdge, & .rdrDayPassive & .rdrSelected, & .rdrDayPassive & .rdrDayStartPreview, & .rdrDayPassive & .rdrDayInPreview, & .rdrDayPassive & .rdrDayEndPreview': {
+    '& .rdrDayPassive .rdrInRange, .rdrDayPassive .rdrStartEdge, .rdrDayPassive .rdrEndEdge, .rdrDayPassive .rdrSelected, .rdrDayPassive .rdrDayStartPreview, .rdrDayPassive .rdrDayInPreview, .rdrDayPassive .rdrDayEndPreview': {
       display: 'none',
     },
     '& .rdrDayDisabled': {
       backgroundColor: '#f8f8f8',
       cursor: 'not-allowed',
     },
-    '& .rdrDayDisabled & .rdrDayNumber span': {
+    '& .rdrDayDisabled .rdrDayNumber span': {
       color: '#aeb9bf',
     },
-    '& .rdrDayDisabled & .rdrInRange, & .rdrDayDisabled & .rdrStartEdge, & .rdrDayDisabled & .rdrEndEdge, & .rdrDayDisabled & .rdrSelected, & .rdrDayDisabled & .rdrDayStartPreview, & .rdrDayDisabled & .rdrDayInPreview, & .rdrDayDisabled & .rdrDayEndPreview': {
+    '& .rdrDayDisabled .rdrInRange, .rdrDayDisabled .rdrStartEdge, .rdrDayDisabled .rdrEndEdge, .rdrDayDisabled .rdrSelected, .rdrDayDisabled .rdrDayStartPreview, .rdrDayDisabled .rdrDayInPreview, .rdrDayDisabled .rdrDayEndPreview': {
       '-webkit-filter': 'grayscale(100%) opacity(60%)',
       filter: 'grayscale(100%) opacity(60%)',
     },
@@ -621,7 +613,7 @@ const styleSheet: any = {
       boxShadow: '0 1px 2px 0 rgba(35,57,66,0.21)',
       border: '1px solid transparent',
     },
-    '& .rdrDateDisplayItem + & .rdrDateDisplayItem': {
+    '& .rdrDateDisplayItem + .rdrDateDisplayItem': {
       marginLeft: '0.833em',
     },
     '& .rdrDateDisplayItem input:disabled': {
