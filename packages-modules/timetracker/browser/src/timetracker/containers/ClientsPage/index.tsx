@@ -4,6 +4,7 @@ import { useFela } from 'react-fela';
 import { CustomScrollbar } from '../../components/CustomScrollbar';
 import PageHeader from '../../components/PageHeader';
 import { BlankListComponent } from '../../components/BlankListcomponent';
+import { ClientModal } from '../../components/ClientModal';
 import v from '../../en';
 import { styleSheet } from './styles';
 
@@ -35,21 +36,20 @@ const ClientsPage = (props) => {
             'wrapper_clients_page--mobile': isMobile,
           })}>
           {showModal && (
-            // <ClientModal
+            <ClientModal
             // closeModal={closeModal}
             // addNewClient={addNewClient}
             // toEditClient={editClient}
             // deleteClient={deleteClient}
             // editedClient={editedClient}
             // vocabulary={vocabulary}
-            // />
-            <p>Here is</p>
+            />
           )}
           <div className="data_container_clients_page">
             <PageHeader title={v.v_clients}>
               <button
                 className="header-wrapper__child-button"
-                // onClick={() => setState({ showModal: true })}
+                onClick={() => setShowModal(true)}
               >
                 {v.v_add_new_client}
               </button>
