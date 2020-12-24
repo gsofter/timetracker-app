@@ -69,13 +69,13 @@ export type IQuery = {
   /**  Counter from Datasource  */
   counterCache?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
-  getUserSchedules?: Maybe<Array<Maybe<ISchedule>>>;
+  getScheduleEvents?: Maybe<Array<Maybe<ISchedule>>>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
 };
 
 
-export type IQuerygetUserSchedulesArgs = {
+export type IQuerygetScheduleEventsArgs = {
   userId: Scalars['String'];
 };
 
@@ -267,7 +267,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   counter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   counterCache?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
-  getUserSchedules?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetUserSchedulesArgs, 'userId'>>,
+  getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, 'userId'>>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
 };
 

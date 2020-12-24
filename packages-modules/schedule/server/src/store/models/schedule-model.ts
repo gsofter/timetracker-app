@@ -1,5 +1,9 @@
-import { Schema, Model, Document, Connection } from 'mongoose';
 
+import { Schema, Model, Document, Connection } from 'mongoose';
+import { ISchedule } from './../../interfaces/generated-models';
+export interface IScheduleModel extends ISchedule, Document {
+    id: any
+}
 
 const ScheduleSchema = new Schema({
     // Event title
@@ -30,6 +34,6 @@ ScheduleSchema.set('toObject', {
     virtuals: true,
 });
 
-// export type ScheduleModelType = Model<IOrganizationModel>;
+export type ScheduleModelType = Model<IScheduleModel>;
 
-export const ScheduleModelFunc = (db) => db.model('schedule', ScheduleSchema);
+export const ScheduleModelFunc: (db: Connection) => ScheduleModelType = db => db.model<IScheduleModel>('schedule', ScheduleSchema);

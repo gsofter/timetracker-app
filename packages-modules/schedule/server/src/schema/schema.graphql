@@ -19,7 +19,7 @@ input ScheduleCreateRequest {
 }
 
 extend type Query {
-  getUserSchedules(userId: String!): [Schedule]
+  getScheduleEvents(userId: String!): [Schedule]
 }
 
 extend type Mutation {
