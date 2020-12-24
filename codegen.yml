@@ -82,3 +82,23 @@ generates:
       - add: |
           /* tslint:disable */
       - typescript-react-apollo
+  packages-modules/schedule/server/src/interfaces/generated-models.ts:
+    schema:
+      - packages/adminide-core/src/core-schema.graphql
+      - "packages-modules/schedule/server/src/**/*.graphql"
+    config:
+      scalars:
+        URI: URI
+        URIInput: URI | UriComponents
+      constEnums: true
+      noNamespaces: true
+      namingConvention: keep
+      typesPrefix: I
+      withMutationFn: false
+      withHOC: false
+      withComponent: false
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+      - typescript-resolvers
