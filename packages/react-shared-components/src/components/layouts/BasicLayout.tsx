@@ -201,6 +201,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
   );
 };
 
-export default connect(({ settings }: ConnectState) => ({
+export default connect(({ settings, router }: any) => ({
   settings,
+  location: router.location,
 }))(BasicLayout);
