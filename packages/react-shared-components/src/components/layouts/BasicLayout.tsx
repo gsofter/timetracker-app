@@ -5,7 +5,6 @@ import {
   Settings,
   DefaultFooter,
   SettingDrawer,
-  BaseMenu,
 } from '@admin-layout/components';
 import React, { useEffect, useMemo, useRef } from 'react';
 import * as _ from 'lodash';
@@ -23,6 +22,7 @@ import { IOrgNameInContextFragment } from '@admin-layout/core';
 // import logo from '../assets/'
 import { useDispatch } from 'react-redux';
 import RightContent from '../GlobalHeader/RightContent';
+import { CHANGE_SETTINGS_ACTION } from '../../constants/constants';
 const noMatch = (
   <Result
     status={403}
@@ -111,8 +111,6 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
 
   const menuDataRef = useRef<MenuDataItem[]>([]);
 
-  useEffect(() => {}, []);
-
   // get children authority
   const authorized = useMemo(
     () =>
@@ -192,7 +190,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
         settings={settings}
         onSettingChange={config =>
           dispatch({
-            type: 'settings/changeSetting',
+            type: CHANGE_SETTINGS_ACTION,
             payload: config,
           })
         }
@@ -201,6 +199,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
   );
 };
 
-export default connect(({ settings }: ConnectState) => ({
+export default connect(({ settings, router }: any) => ({
   settings,
+  location: router.location,
 }))(BasicLayout);
