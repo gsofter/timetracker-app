@@ -1,5 +1,6 @@
 import { Reducer } from 'redux';
 import defaultSettings, { DefaultSettings } from '../config/default-settings';
+import { CHANGE_SETTINGS_ACTION } from '../constants/constants';
 
 
 // Note: We customize reducer part as AntPro uses inbuild way.
@@ -19,7 +20,7 @@ interface SettingsActionPayload {
 }
 const settingsReducer = (state = defaultSettings, { type, payload = {} }: { type: string, payload: DefaultSettings }) => {
     switch (type) {
-        case 'settings/changeSetting':
+        case CHANGE_SETTINGS_ACTION:
             const { colorWeak, contentWidth } = payload;
             // @sri to avoid breaking during SSR, split into to checks
             if (state.contentWidth !== contentWidth) {
