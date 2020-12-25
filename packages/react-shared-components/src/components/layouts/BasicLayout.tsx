@@ -142,13 +142,6 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
       bottomMenus,
     };
   };
-
-  let drawerSettings;
-  useEffect(() => {
-    drawerSettings = _.cloneDeep(settings);
-    delete drawerSettings.location;
-  }, [settings]);
-
   return (
     <>
       <ProLayout
@@ -196,7 +189,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
         {children}
       </ProLayout>
       <SettingDrawer
-        settings={drawerSettings}
+        settings={settings}
         onSettingChange={config =>
           dispatch({
             type: 'settings/changeSetting',
