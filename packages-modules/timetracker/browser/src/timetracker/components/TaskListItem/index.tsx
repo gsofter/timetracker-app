@@ -7,7 +7,7 @@ import { Loading } from '../../components/Loading';
 import { ProjectsListPopup } from '../../components/ProjectsListPopup';
 import ModalPortal from '../../components/ModalPortal';
 import { StartEditTaskModal } from '../../components/StartEditTaskModal';
-// import { CalendarPopup } from '../../components/CalendarPopup';
+import { CalendarPopup } from '../../components/CalendarPopup';
 
 // Services
 import { getTimeDurationByGivenTimestamp } from '../../services/timeService';
@@ -46,7 +46,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   const [cursorPosition, SetCursorPosition] = useState([]);
 
   const { task, isMobile, vocabulary, swipedTask } = props;
-  const { v_edit_task, v_delete_task } = vocabulary;
+  // const { v_edit_task, v_delete_task } = vocabulary;
   const {
     issue,
     project,
@@ -81,8 +81,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
       setSwipedTaskAction,
       isMobile,
     } = props;
-    const { v_a_task_delete } = vocabulary;
-    let check = window.confirm(v_a_task_delete);
+    // const { v_a_task_delete } = vocabulary;
+    let check = window.confirm('Do you really want to delete this time entry?');
     if (check) {
       if (isMobile) {
         setSwipedTaskAction(null);
@@ -90,7 +90,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
       }
       setIsUpdatingTask(true);
       await deleteTask(task.id);
-      getTimeEntriesListAction();
+      // getTimeEntriesListAction();
     }
   };
 
@@ -130,10 +130,10 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   };
 
   const closeCalendar = (event) => {
-    if (!popupEditTask.current.contains(event.target)) {
-      setIsOpenCalendar(false);
-      document.removeEventListener('mousedown', closeCalendar);
-    }
+    setIsOpenCalendar(false);
+    // if (!popupEditTask.current.contains(event.target)) {
+    //   document.removeEventListener('mousedown', closeCalendar);
+    // }
   };
 
   // const setIsOpenProjectsListPopup = key => {
@@ -143,7 +143,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   // };
 
   const createRefCallback = (ref) => {
-    // popupEditTask = ref;
+    setPopupEditTask(ref);
   };
 
   const startEditIssue = (event) => {
@@ -205,8 +205,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
 
   const handleStartTimer = (event) => {
     // const { task } = props;
-    const { issue, project } = task;
-    setIsStartingTask(true);
+    // const { issue, project } = task;
+    // setIsStartingTask(true);
     // setState(
     //     {
     //         isStartingTask: true,
@@ -386,14 +386,14 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
                 className="task-item__delete-icon"
                 onClick={deleteTask}
               />
-              {/* {isOpenCalendar && (
-                                <CalendarPopup
-                                    createRefCallback={createRefCallback}
-                                    startDateTime={startDatetime}
-                                    endDateTime={endDatetime}
-                                    updateTask={updateTask}
-                                />
-                            )} */}
+              {isOpenCalendar && (
+                <CalendarPopup
+                  createRefCallback={createRefCallback}
+                  // startDateTime={startDatetime}
+                  // endDateTime={endDatetime}
+                  // updateTask={updateTask}
+                />
+              )}
             </div>
           </Loading>
         </div>
@@ -404,7 +404,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
               onClick={openEditTaskModal}>
               <EditIcon className="task-item__bottom-layer-edit-button-icon" />
               <span className="task-item__bottom-layer-edit-button-text">
-                {v_edit_task}
+                Edit task
               </span>
             </div>
             <div
@@ -412,12 +412,11 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
               onClick={deleteTask}>
               <TrashIcon className="task-item__bottom-layer-delete-button-icon" />
               <span className="task-item__bottom-layer-delete-button-text">
-                {v_delete_task}
+                Delete task
               </span>
             </div>
           </div>
         )}
-        <p>Here is data </p>
         {showEditModal && (
           <ModalPortal>
             <StartEditTaskModal
@@ -434,7 +433,6 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
 
 const styleSheet: any = {
   TaskListItem: (props) => ({
-    position: 'relative',
     '& .task-item': {
       position: 'relative',
       minWidth: '100%',
@@ -447,174 +445,160 @@ const styleSheet: any = {
       borderRadius: '0.4rem',
       color: '#ffffff',
       lineHeight: '1.8rem',
-      '&:last-child': {
-        margin: '0',
-      },
-      // styled task as hover when calendar is opened
-      '&.task-item--selected': {
-        backgroundColor: '#333333',
-
-        '& .task-item__edit-wrapper': {
-          display: 'flex',
-        },
-        '& .task-item__duration-time': {
-          margin: '0 1rem 0 0',
-        },
-      },
     },
-    // disabled hover when task disabled, calendar is opened and on the mobile device
-    '&:not(.task-item--disabled):not(.task-item--selected):not(.task-item--mobile):hover': {
+    '& .task-item:last-child': {
+      margin: '0',
+    },
+    '& .task-item--selected': {
       backgroundColor: '#333333',
-
-      '& .task-item__edit-wrapper': {
-        display: 'flex',
-      },
-      '& .task-item__duration-time': {
-        margin: '0 1rem 0 0',
-      },
     },
-
-    '& .task-item__issue': {
+    '& .task-item.task-item--selected .task-item__edit-wrapper': {
+      display: 'flex',
+    },
+    '& .task-item.task-item--selected .task-item__duration-time': {
+      margin: '0 1rem 0 0',
+    },
+    '& .task-item:not(.task-item--disabled):not(.task-item--selected):not(.task-item--mobile):hover': {
+      backgroundColor: '#333333',
+    },
+    '& .task-item:not(.task-item--disabled):not(.task-item--selected):not(.task-item--mobile):hover .task-item__edit-wrapper': {
+      display: 'flex',
+    },
+    '& .task-item:not(.task-item--disabled):not(.task-item--selected):not(.task-item--mobile):hover .task-item__duration-time': {
+      margin: '0 1rem 0 0',
+    },
+    '& .task-item .task-item__issue': {
       textOverflow: 'ellipsis',
       whiteSpace: 'nowrap',
       overflow: 'hidden',
       margin: '0 1rem 0 0',
       outline: 'none',
-      '&--editing': {
-        textOverflow: 'unset',
-      },
-
-      '& .task-item__period-time': {
-        margin: '0 1rem 0 0',
-        whiteSpace: 'nowrap',
-      },
-
-      '& .task-item__duration-time': {
-        margin: '0',
-        whiteSpace: 'nowrap',
-      },
-
-      '& .task-item__edit-wrapper': {
-        position: 'relative',
-        display: 'none',
-        justifyContent: 'space-between',
-        alignItems: 'flex-end',
-      },
-
-      '& .task-item__play-icon': {
-        margin: '0 1rem 0 0',
-        cursor: 'pointer',
-      },
-
-      '& .task-item__edit-icon': {
-        cursor: 'pointer',
-        margin: '0 1rem 0 0',
-        fill: '#6fcf97',
-        width: '1.5rem',
-        height: '1.5rem',
-      },
-      '& .task-item__delete-icon': {
-        cursor: 'pointer',
-      },
-      // Mobile styles
-      '& .task-item-swipe--swiped': {
-        '& .task-item--mobile': {
-          left: '-50%',
-        },
-      },
-      '& .task-item--mobile': {
-        padding: '1.2rem 1rem 1.2rem 1rem',
-        backgroundColor: '#4f4f4f',
-        borderRadius: '0',
-        zIndex: '2',
-        left: '0',
-        transition: 'left 0.2s linear',
-        margin: '0',
-
-        '& .task-item__period-time': {
-          display: 'none',
-        },
-
-        '& .task-item__duration-time': {
-          display: 'none',
-        },
-
-        '& .task-item__edit-wrapper': {
-          position: 'static',
-          display: 'flex',
-          flexDirection: 'column',
-        },
-
-        '& .task-item__duration-time-mobile': {
-          display: 'inline-block',
-          margin: '0 0 0.5rem 0',
-          fontSize: '1.2rem',
-          color: '#b8b8b8',
-          whiteSpace: 'nowrap',
-        },
-
-        '& .task-item__play-icon': {
-          margin: '0',
-        },
-
-        '& .task-item__edit-icon': {
-          display: 'none',
-        },
-
-        '& .task-item__delete-icon': {
-          display: 'none',
-        },
-      },
-      // Bottom layer for edit task on mobile device
-      '& .task-item-swipe': {
-        position: 'relative',
-        color: '#ffffff',
-
-        '& .task-item__bottom-layer': {
-          position: 'absolute',
-          display: 'flex',
-          zIndex: '1',
-          top: '0',
-          right: '0',
-          bottom: '0',
-          width: '50%',
-          fontWeight: '500',
-          fontSize: '1rem',
-          lineHeight: '1.4rem',
-
-          '& .task-item__bottom-layer-edit-button': {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '100%',
-            minWidth: '50%',
-            background: '#f2994a',
-          },
-
-          '& .task-item__bottom-layer-edit-button-icon': {
-            width: '1.9rem',
-            height: '2rem',
-            fill: '#ffffff',
-            margin: '0 0 0.5rem 0',
-          },
-
-          '& .task-item__bottom-layer-delete-button': {
-            display: 'flex',
-            flexDirection: 'column',
-            justifyContent: 'center',
-            alignItems: 'center',
-            minHeight: '100%',
-            minWidth: '50%',
-            background: '#eb5757',
-          },
-          '& .task-item__bottom-layer-delete-button-icon': {
-            width: '1.8rem',
-            height: '2rem',
-            margin: '0 0 0.5rem 0',
-          },
-        },
-      },
+    },
+    '& .task-item .task-item__issue--editing': {
+      textOverflow: 'unset',
+    },
+    '& .task-item ': {
+      margin: '0 1rem 0 0',
+      whiteSpace: 'nowrap',
+    },
+    '& .task-item__period-time': {
+      margin: '0 1rem 0 0',
+      whiteSpace: 'nowrap',
+    },
+    '& .task-item .task-item__duration-time': {
+      margin: '0',
+      whiteSpace: 'nowrap',
+    },
+    '& .task-item .task-item__edit-wrapper': {
+      position: 'relative',
+      display: 'none',
+      justifyContent: 'space-between',
+      alignItems: 'flex-end',
+    },
+    '& .task-item:not(.task-item--disabled):not(.task-item--selected)': {
+      display: 'flex',
+    },
+    '& .task-item__edit-wrapper': {
+      display: 'flex',
+    },
+    '& .task-item .task-item__play-icon': {
+      margin: '0 1rem 0 0',
+      cursor: 'pointer',
+    },
+    '& .task-item .task-item__edit-icon': {
+      cursor: 'pointer',
+      margin: '0 1rem 0 0',
+      fill: '#6fcf97',
+      width: '1.5rem',
+      height: '1.5rem',
+    },
+    '& .task-item .task-item__delete-icon': {
+      cursor: 'pointer',
+    },
+    '& .task-item-swipe--swiped .task-item--mobile': {
+      left: '-50%',
+    },
+    '& .task-item--mobile': {
+      padding: '1.2rem 1rem 1.2rem 1rem',
+      backgroundColor: '#4f4f4f',
+      borderRadius: '0',
+      zIndex: '2',
+      left: '0',
+      transition: 'left 0.2s linear',
+      margin: '0',
+    },
+    '& .task-item--mobile .task-item__period-time': {
+      display: 'none',
+    },
+    '& .task-item--mobile .task-item__duration-time': {
+      display: 'none',
+    },
+    '& .task-item--mobile .task-item__edit-wrapper': {
+      position: 'static',
+      display: 'flex',
+      flexDirection: 'column',
+    },
+    '& .task-item--mobile .task-item__duration-time-mobile': {
+      display: 'inline-block',
+      margin: '0 0 0.5rem 0',
+      fontSize: '1.2rem',
+      color: '#b8b8b8',
+      whiteSpace: 'nowrap',
+    },
+    '& .task-item--mobile .task-item__play-icon': {
+      margin: 0,
+    },
+    '& .task-item--mobile .task-item__edit-icon': {
+      display: 'none',
+    },
+    '& .task-item--mobile .task-item__delete-icon': {
+      display: 'none',
+    },
+    '& .task-item-swipe': {
+      position: 'relative',
+      color: '#ffffff',
+    },
+    '& .task-item-swipe .task-item__bottom-layer': {
+      position: 'absolute',
+      display: 'flex',
+      zIndex: '1',
+      top: '0',
+      right: '0',
+      bottom: '0',
+      width: '50%',
+      fontFamily: '"Roboto", sans-serif',
+      fontWeight: '500',
+      fontSize: '1rem',
+      lineHeight: '1.4rem',
+    },
+    '& .task-item-swipe .task-item__bottom-layer .task-item__bottom-layer-edit-button': {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100%',
+      minWidth: '50%',
+      background: '#f2994a',
+    },
+    '& .task-item-swipe .task-item__bottom-layer .task-item__bottom-layer-edit-button-icon': {
+      width: '1.9rem',
+      height: '2rem',
+      fill: '#ffffff',
+      margin: '0 0 0.5rem 0',
+    },
+    '& .task-item-swipe .task-item__bottom-layer .task-item__bottom-layer-delete-button': {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+      minHeight: '100%',
+      minWidth: '50%',
+      background: '#eb5757',
+    },
+    '& .task-item-swipe .task-item__bottom-layer .task-item__bottom-layer-delete-button-icon': {
+      width: '1.8rem',
+      height: '2rem',
+      margin: '0 0 0.5rem 0',
     },
   }),
 };

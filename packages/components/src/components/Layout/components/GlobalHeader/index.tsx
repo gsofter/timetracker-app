@@ -1,44 +1,46 @@
-import React from "react";
-import classNames from "classnames";
+import React from 'react';
+import classNames from 'classnames';
 
-import { HeaderViewProps } from "../Header";
+import { HeaderViewProps } from '../Header';
 import {
   defaultRenderLogo,
   SiderMenuProps,
   defaultRenderLogoAndTitle,
   defaultRenderCollapsedButton,
   PrivateSiderMenuProps,
-} from "../SiderMenu/SiderMenu";
-import { PureSettings } from "../defaultSettings";
-import TopNavHeader from "../TopNavHeader";
-import { MenuDataItem } from "../index";
-import { WithFalse } from "../typings";
+} from '../SiderMenu/SiderMenu';
+import { PureSettings } from '../defaultSettings';
+import TopNavHeader from '../TopNavHeader';
+import { MenuDataItem } from '../index';
+import { WithFalse } from '../typings';
 import { clearMenuItem } from '../utils/utils';
-import { useFela } from "react-fela";
-import { styleSheet } from './styles'
+import { useFela } from 'react-fela';
+import { styleSheet } from './styles';
 
 export interface GlobalHeaderProps extends Partial<PureSettings> {
   collapsed?: boolean;
   onCollapse?: (collapsed: boolean) => void;
   isMobile?: boolean;
   logo?: React.ReactNode;
-  menuRender?: WithFalse<
-    (props: HeaderViewProps, defaultDom: React.ReactNode) => React.ReactNode
+  menuRender?: WithFalse<(props: HeaderViewProps, defaultDom: React.ReactNode) => React.ReactNode>;
+  rightContentRender?: WithFalse<
+    // @sri modified
+    // props: HeaderViewProps =>  HeaderViewProps & PrivateSiderMenuProps
+    (props: HeaderViewProps & PrivateSiderMenuProps) => React.ReactNode
   >;
-  rightContentRender?: WithFalse<(props: HeaderViewProps) => React.ReactNode>;
   className?: string;
   prefixCls?: string;
   menuData?: MenuDataItem[];
   onMenuHeaderClick?: (e: React.MouseEvent<HTMLDivElement>) => void;
   style?: React.CSSProperties;
-  menuHeaderRender?: SiderMenuProps["menuHeaderRender"];
-  collapsedButtonRender?: SiderMenuProps["collapsedButtonRender"];
+  menuHeaderRender?: SiderMenuProps['menuHeaderRender'];
+  collapsedButtonRender?: SiderMenuProps['collapsedButtonRender'];
   splitMenus?: boolean;
 }
 
 const renderLogo = (
-  menuHeaderRender: SiderMenuProps["menuHeaderRender"],
-  logoDom: React.ReactNode
+  menuHeaderRender: SiderMenuProps['menuHeaderRender'],
+  logoDom: React.ReactNode,
 ) => {
   if (menuHeaderRender === false) {
     return null;
@@ -49,7 +51,7 @@ const renderLogo = (
   return logoDom;
 };
 
-const GlobalHeader: React.FC<GlobalHeaderProps & PrivateSiderMenuProps> = (props) => {
+const GlobalHeader: React.FC<GlobalHeaderProps & PrivateSiderMenuProps> = props => {
   const {
     isMobile,
     logo,
@@ -74,8 +76,8 @@ const GlobalHeader: React.FC<GlobalHeaderProps & PrivateSiderMenuProps> = (props
     [`${baseClassName}-layout-${layout}`]: layout && headerTheme === 'dark',
   });
 
-  if (layout === "mix" && !isMobile && splitMenus) {
-    const noChildrenMenuData = (menuData || []).map((item) => ({
+  if (layout === 'mix' && !isMobile && splitMenus) {
+    const noChildrenMenuData = (menuData || []).map(item => ({
       ...item,
       children: undefined,
     }));
@@ -115,11 +117,10 @@ const GlobalHeader: React.FC<GlobalHeaderProps & PrivateSiderMenuProps> = (props
             {collapsedButtonRender(collapsed)}
           </span>
         )}
-        {layout === "mix" && !isMobile && (
+        {layout === 'mix' && !isMobile && (
           <>
-            <div
-              className={`${baseClassName}-logo`} onClick={onMenuHeaderClick}>
-              {defaultRenderLogoAndTitle({ ...props, collapsed: false }, "headerTitleRender")}
+            <div className={`${baseClassName}-logo`} onClick={onMenuHeaderClick}>
+              {defaultRenderLogoAndTitle({ ...props, collapsed: false }, 'headerTitleRender')}
             </div>
           </>
         )}
