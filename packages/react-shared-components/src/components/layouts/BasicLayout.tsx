@@ -5,7 +5,6 @@ import {
   Settings,
   DefaultFooter,
   SettingDrawer,
-  BaseMenu,
 } from '@admin-layout/components';
 import React, { useEffect, useMemo, useRef } from 'react';
 import * as _ from 'lodash';
