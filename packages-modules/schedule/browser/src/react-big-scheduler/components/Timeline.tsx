@@ -18,7 +18,8 @@ import {
 } from 'antd';
 import { Modal } from './Modal';
 import { useFela } from 'react-fela';
-import DemoData  from './DemoData';
+import DemoData from './DemoData';
+import { PageContainer } from '@admin-layout/components';
 
 const { TextArea } = Input;
 
@@ -55,9 +56,7 @@ function TimelineCalendar(Props) {
     if (title) {
       let now = moment(startTime).format('HH:mm:ss');
       let then = moment(endTime).format('HH:mm:ss');
-      let calculateTime = moment
-        .utc(then, 'HH:mm:ss')
-        .diff(moment.utc(now, 'HH:mm:ss'), 'h');
+      let calculateTime = moment.utc(then, 'HH:mm:ss').diff(moment.utc(now, 'HH:mm:ss'), 'h');
 
       setEvents([
         ...events,
@@ -113,26 +112,26 @@ function TimelineCalendar(Props) {
     // tslint:disable-next-line
     console.log('Resized', itemId, time, edge);
   };
-  const handleReason = (e) => {
+  const handleReason = e => {
     setReason(e.target.value as any);
   };
-  const handleNote = (e) => {
+  const handleNote = e => {
     setNote(e.target.value as any);
   };
-  const handleSelectProject = (e) => {
+  const handleSelectProject = e => {
     setSelectproject(e);
   };
-  const handleTask = (e) => {
+  const handleTask = e => {
     setSelecttask(e);
   };
   const handleClose = () => {
     setIsShowing(false);
   };
-  const handleChecked = (e) => {
+  const handleChecked = e => {
     // tslint:disable-next-line
-      setChecked(e);
+    setChecked(e);
   };
-  const handleStartDate = (date) => {
+  const handleStartDate = date => {
     setStartDate(date as any);
   };
   const handleStartTime = (time, timeString) => {
@@ -141,7 +140,7 @@ function TimelineCalendar(Props) {
   const handleEndTime = (time, timeString) => {
     setEndTime(time as any);
   };
-  const handleSelectTimezone = (timezone) => {
+  const handleSelectTimezone = timezone => {
     // tslint:disable-next-line
     console.log('New Timezone Selected:', timezone);
   };
@@ -149,47 +148,26 @@ function TimelineCalendar(Props) {
   const renderModalBody = (): JSX.Element => {
     return (
       <>
-        <Form
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          layout="vertical"
-        >
+        <Form labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} layout="vertical">
           <div style={{ margin: '15px 0px' }}>
-            <Avatar
-              style={{ backgroundColor: '#3174ad' }}
-              icon={<UserOutlined />}
-            />
+            <Avatar style={{ backgroundColor: '#3174ad' }} icon={<UserOutlined />} />
             <span style={{ marginLeft: '10px' }}>Cdmbase</span>
           </div>
           <Form.Item label="Projects">
-            <Select
-              onChange={handleSelectProject}
-              value={selectproject}
-            >
-              <Select.Option value="Admin-project1">
-                Admin-project1
-              </Select.Option>
-              <Select.Option value="Admin-project2">
-                Admin-project2
-              </Select.Option>
+            <Select onChange={handleSelectProject} value={selectproject}>
+              <Select.Option value="Admin-project1">Admin-project1</Select.Option>
+              <Select.Option value="Admin-project2">Admin-project2</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="TO DO">
-            <Select
-              onChange={handleTask}
-              value={selecttask}
-            >
+            <Select onChange={handleTask} value={selecttask}>
               <Select.Option value="task1">Task1</Select.Option>
               <Select.Option value="task2">Task2</Select.Option>
               <Select.Option value="task3">Task3</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="DatePicker">
-            <DatePicker
-              onChange={handleStartDate}
-              value={startDate as any}
-            />{' '}
-            &nbsp;
+            <DatePicker onChange={handleStartDate} value={startDate as any} /> &nbsp;
             <span>From </span>
             <TimePicker
               use12Hours={true}
@@ -206,11 +184,7 @@ function TimelineCalendar(Props) {
             />
           </Form.Item>
           <Form.Item>
-            <Checkbox
-              onChange={handleChecked}
-            >
-              Checkbox
-            </Checkbox>
+            <Checkbox onChange={handleChecked}>Checkbox</Checkbox>
           </Form.Item>
           <Form.Item label="REASON *">
             <TextArea
@@ -221,12 +195,7 @@ function TimelineCalendar(Props) {
             />
           </Form.Item>
           <Form.Item label="Note">
-            <TextArea
-              onChange={handleNote}
-              rows={3}
-              value={note}
-              placeholder="Notes for time"
-            />
+            <TextArea onChange={handleNote} rows={3} value={note} placeholder="Notes for time" />
           </Form.Item>
 
           <Form.Item>
@@ -244,12 +213,8 @@ function TimelineCalendar(Props) {
   };
 
   return (
-    <>
-      <Row
-        align="middle"
-        justify="space-between"
-        style={{ marginBottom: '15px' }}
-      >
+    <PageContainer>
+      <Row align="middle" justify="space-between" style={{ marginBottom: '15px' }}>
         <Col>
           <div style={{ textAlign: 'center' }}>
             <h3>View & edit timesheets</h3>
@@ -321,12 +286,12 @@ function TimelineCalendar(Props) {
         itemTouchSendsClick={false}
         stackItems={true}
       />
-    </>
+    </PageContainer>
   );
 }
 
 const stylesheet: any = {
-  styles: (theme) => ({
+  styles: theme => ({
     position: 'relative',
     width: '100%',
     '& .sm-screen-size': {
@@ -397,7 +362,7 @@ const stylesheet: any = {
   }),
 };
 
-export default (props) => {
+export default props => {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>

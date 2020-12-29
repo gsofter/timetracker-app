@@ -22,6 +22,7 @@ import {
 import { Modal } from './Modal';
 import { useFela } from 'react-fela';
 import DemoData from './DemoData';
+import { PageContainer } from '@admin-layout/components';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -74,7 +75,7 @@ function SelectableCalendar({ localizer }: Props) {
 
   useEffect(() => {
     let res = [];
-    DemoData.resourceMap.forEach((item) => {
+    DemoData.resourceMap.forEach(item => {
       res.push({ resourceId: item.id, resourceTitle: item.title });
     });
     setResourceMap(res);
@@ -82,7 +83,7 @@ function SelectableCalendar({ localizer }: Props) {
 
   useEffect(() => {
     let data = [];
-    DemoData.items.forEach((item) => {
+    DemoData.items.forEach(item => {
       data.push({
         id: item.id,
         resourceId: item.group,
@@ -113,7 +114,7 @@ function SelectableCalendar({ localizer }: Props) {
     setIsShowing(!isShowing);
   };
 
-  const onChange = (e) => {
+  const onChange = e => {
     setChecked(e);
   };
   const handleSubmit = (e: any) => {
@@ -140,9 +141,7 @@ function SelectableCalendar({ localizer }: Props) {
 
       let now = moment(startTime).format('HH:mm:ss');
       let then = moment(endTime).format('HH:mm:ss');
-      let calculateTime = moment
-        .utc(then, 'HH:mm:ss')
-        .diff(moment.utc(now, 'HH:mm:ss'), 'm');
+      let calculateTime = moment.utc(then, 'HH:mm:ss').diff(moment.utc(now, 'HH:mm:ss'), 'm');
 
       newEvent.title = selecttask;
       setEvents([...(events as any), newEvent]);
@@ -203,29 +202,29 @@ function SelectableCalendar({ localizer }: Props) {
     );
   };
 
-  const handleSelectEvent = (event) => {
+  const handleSelectEvent = event => {
     alert(event.title);
   };
-  const handleReason = (e) => {
+  const handleReason = e => {
     setReason(e.target.value as any);
   };
-  const handleNote = (e) => {
+  const handleNote = e => {
     setNote(e.target.value as any);
   };
-  const handleSelectProject = (e) => {
+  const handleSelectProject = e => {
     setSelectproject(e);
   };
-  const handleTask = (e) => {
+  const handleTask = e => {
     setSelecttask(e);
   };
   const handleClose = () => {
     setIsShowing(false);
   };
-  const handleChecked = (e) => {
+  const handleChecked = e => {
     // tslint:disable-next-line
     console.log(e.target.checked);
   };
-  const handleStartDate = (date) => {
+  const handleStartDate = date => {
     setStartDate(date as any);
   };
   const handleStartTime = (time, timeString) => {
@@ -234,7 +233,7 @@ function SelectableCalendar({ localizer }: Props) {
   const handleEndTime = (time, timeString) => {
     setEndTime(time as any);
   };
-  const handleSelectTimezone = (timezone) => {
+  const handleSelectTimezone = timezone => {
     // tslint:disable-next-line
     console.log('New Timezone Selected:', timezone);
   };
@@ -242,26 +241,15 @@ function SelectableCalendar({ localizer }: Props) {
   const renderModalBody = (): JSX.Element => {
     return (
       <>
-        <Form
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          layout="vertical"
-        >
+        <Form labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} layout="vertical">
           <div style={{ margin: '15px 0px' }}>
-            <Avatar
-              style={{ backgroundColor: '#3174ad' }}
-              icon={<UserOutlined />}
-            />
+            <Avatar style={{ backgroundColor: '#3174ad' }} icon={<UserOutlined />} />
             <span style={{ marginLeft: '10px' }}>Cdmbase</span>
           </div>
           <Form.Item label="Projects">
             <Select onChange={handleSelectProject} value={selectproject}>
-              <Select.Option value="Admin-project1">
-                Admin-project1
-              </Select.Option>
-              <Select.Option value="Admin-project2">
-                Admin-project2
-              </Select.Option>
+              <Select.Option value="Admin-project1">Admin-project1</Select.Option>
+              <Select.Option value="Admin-project2">Admin-project2</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item label="TO DO">
@@ -272,8 +260,7 @@ function SelectableCalendar({ localizer }: Props) {
             </Select>
           </Form.Item>
           <Form.Item label="DatePicker">
-            <DatePicker onChange={handleStartDate} value={startDate as any} />{' '}
-            &nbsp;
+            <DatePicker onChange={handleStartDate} value={startDate as any} /> &nbsp;
             <span>From </span>
             <TimePicker
               use12Hours={true}
@@ -301,12 +288,7 @@ function SelectableCalendar({ localizer }: Props) {
             />
           </Form.Item>
           <Form.Item label="Note">
-            <TextArea
-              onChange={handleNote}
-              rows={3}
-              value={note}
-              placeholder="Notes for time"
-            />
+            <TextArea onChange={handleNote} rows={3} value={note} placeholder="Notes for time" />
           </Form.Item>
 
           <Form.Item>
@@ -324,12 +306,8 @@ function SelectableCalendar({ localizer }: Props) {
   };
 
   return (
-    <>
-      <Row
-        align="middle"
-        justify="space-between"
-        style={{ marginBottom: '15px' }}
-      >
+    <PageContainer>
+      <Row align="middle" justify="space-between" style={{ marginBottom: '15px' }}>
         <Col>
           <div style={{ textAlign: 'center' }}>
             <h3>View & edit timesheets</h3>
@@ -412,14 +390,18 @@ function SelectableCalendar({ localizer }: Props) {
         resourceIdAccessor="resourceId"
         resourceTitleAccessor="resourceTitle"
       />
-    </>
+    </PageContainer>
   );
 }
 
 const stylesheet: any = {
-  styles: (theme) => ({
+  styles: theme => ({
     position: 'relative',
     width: '100%',
+    // Default height for the Timesheet Calender view
+    '& .rbc-calendar': {
+      height: '100vh',
+    },
     '& .sm-screen-size': {
       '@media (max-width: 768px)': {
         width: '100% !important',
@@ -485,11 +467,11 @@ const stylesheet: any = {
   }),
 };
 
-export default (props) => {
+export default props => {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>
-      <div style={{ height: '100vh' }} className="calender-width">
+      <div className="calender-width">
         <SelectableCalendar localizer={localizerM} />
       </div>
     </div>

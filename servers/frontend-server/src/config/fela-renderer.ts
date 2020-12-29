@@ -28,19 +28,11 @@ export default () => {
             text-decoration: none;
             cursor: pointer;
           }
-          footer {
-            position:fixed;
-            bottom: 0;
-            left: 0;
-            right:0;
-            height: 20px;
-            background: #007acc;
-          }
           footer > .container {
             padding: 2px;
           }
           #content {
-            height: calc(100vh - 20px);
+            height: calc(100vh);
           }
           #container {
             height: 100%;

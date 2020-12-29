@@ -41,14 +41,17 @@
   "license": "ISC",
   "dependencies": {
     "@admin-layout/core": "../admin-core",
+    "@admin-layout/components": "../components",
     "@ant-design/pro-provider": "0.0.6",
     "@types/react-copy-to-clipboard": "^4.3.0",
     "@umijs/route-utils": "^1.0.5",
     "base-64": "^0.1.0",
     "identicon.js": "^2.3.1",
     "react-fontawesome": "^1.6.1",
+    "react-intl": "^5.10.4",
     "unstated-next": "^1.1.0",
     "use-json-comparison": "^1.0.5",
+    "use-merge-value": "^1.0.2",
     "use-media-antd-query": "^1.0.2", 
     "react-copy-to-clipboard": "^5.0.2"
   },

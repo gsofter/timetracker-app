@@ -1,0 +1,35 @@
+import { Schema, Model, Document, Connection } from 'mongoose';
+
+
+const ScheduleSchema = new Schema({
+    // Event title
+    title: { type: String, required: true },
+    // all day event ? true: false
+    allDay: { type: Boolean },
+    // start date
+    start: { type: Date },
+    // end date
+    end: { type: Date },
+    // description
+    desc: { type: String },
+    // resouceId => usereId
+    resourceId: { type: String },
+    // tip
+    tooltip: { type: String },
+});
+
+ScheduleSchema.virtual('id').get(function () {
+    return this._id.toHexString();
+});
+
+ScheduleSchema.set('toJSON', {
+    virtuals: true,
+});
+
+ScheduleSchema.set('toObject', {
+    virtuals: true,
+});
+
+// export type ScheduleModelType = Model<IOrganizationModel>;
+
+export const ScheduleModelFunc = (db) => db.model('schedule', ScheduleSchema);

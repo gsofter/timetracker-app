@@ -20,7 +20,8 @@ export const counterPageStore: any[] = [
         position: IMenuPosition.MIDDLE,
         name: 'Apollo Server & Client',
         path: '/:orgName/apollo-server-n-client',
-        priority: 1
+        priority: 1,
+        authority: ['admin', 'user'],
     },
     {
         exact: false,
@@ -29,7 +30,8 @@ export const counterPageStore: any[] = [
         component: Counter,
         position: IMenuPosition.MIDDLE,
         path: '/:orgName/apollo-server-n-client/counter',
-        priority: 2
+        priority: 2,
+        authority: ['admin', 'user'],
     },
 ];
 

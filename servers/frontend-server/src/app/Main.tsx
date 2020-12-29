@@ -8,6 +8,7 @@ import createRenderer from '../config/fela-renderer';
 import { rehydrate, render } from 'fela-dom';
 import { createApolloClient, cache } from '../config/apollo-client';
 import { epic$, rootEpic } from '../config/epic-config';
+import { IntlProvider } from 'react-intl';
 import {
   createReduxStore,
   storeReducer,
@@ -97,22 +98,22 @@ export class Main extends React.Component<any, MainState> {
     return this.state.error ? (
       <RedBox error={this.state.error} />
     ) : (
-      modules.getWrappedRoot(
-        <Provider store={store}>
-          <ApolloProvider client={client}>
-            <RendererProvider renderer={renderer}>
-              <PersistGate persistor={persistor}>
-                {modules.getWrappedRoot(
-                  <ConnectedRouter history={history}>
-                    <MainRoute />
-                  </ConnectedRouter>
-                )}
-              </PersistGate>
-            </RendererProvider>
-          </ApolloProvider>
-        </Provider>
-      )
-    );
+        modules.getWrappedRoot(
+            <Provider store={store}>
+              <ApolloProvider client={client}>
+                <RendererProvider renderer={renderer}>
+                  <PersistGate persistor={persistor}>
+                    {modules.getWrappedRoot(
+                      <ConnectedRouter history={history}>
+                        <MainRoute />
+                      </ConnectedRouter>
+                    )}
+                  </PersistGate>
+                </RendererProvider>
+              </ApolloProvider>
+            </Provider>
+        )
+      );
   }
 }
 

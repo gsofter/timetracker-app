@@ -15,6 +15,7 @@ import { StartTaskMobile } from '../../components/StartTaskMobile';
 import { TimerSearchComponent } from '../../components/TimerSearchComponent';
 import { showNotificationAction } from '../../actions/NotificationActions';
 import PageHeader from '../../components/PageHeader';
+import { PageContainer } from '@admin-layout/components';
 import en from '../../locales/en';
 import vocabulary from '../../en';
 import DemoData from '../../demoData';
@@ -72,17 +73,14 @@ const TimeTracker = (props) => {
         .format('dddd');
       return day[0].toUpperCase() + day.slice(1);
     };
-    return `${toUpperCaseFirstLetter(date)}, ${moment(date).format(
-      dateFormat
-    )}`;
+    return `${toUpperCaseFirstLetter(date)}, ${moment(date).format(dateFormat)}`;
   };
 
-  const renderTotalTimeByDay = (timers) => {
+  const renderTotalTimeByDay = timers => {
     const { durationTimeFormat } = props;
     let totalTime = 0;
     for (let i = 0; i < timers.length; i++) {
-      totalTime +=
-        +moment(timers[i].endDatetime) - +moment(timers[i].startDatetime);
+      totalTime += +moment(timers[i].endDatetime) - +moment(timers[i].startDatetime);
     }
 
     return getDateInString(totalTime, durationTimeFormat);
@@ -205,7 +203,7 @@ const TimeTracker = (props) => {
 };
 
 const styleSheet: any = {
-  mainPage: (props) => ({
+  mainPage: props => ({
     position: 'relative',
     width: '100%',
     backgroundColor: '#333',

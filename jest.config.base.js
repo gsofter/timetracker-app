@@ -2,7 +2,7 @@ const { defaults } = require("jest-config");
 
 module.exports = {
   "verbose": true,
-  testEnvironment: "jsdom",
+  testEnvironment: "node",
   setupFiles: [
     // needed for UI to mock canvas load
     // "jest-canvas-mock"

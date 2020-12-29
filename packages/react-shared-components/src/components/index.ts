@@ -1,2 +1,3 @@
-export * from './Layout';
-export * from './Themes';
+export * from './layouts';
+export * from './NoticeIcon';
+export * from './HeaderSearch';
