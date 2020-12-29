@@ -3,9 +3,23 @@ import React, { useContext } from 'react';
 import { ProjectsListPopup } from '../ProjectsListPopup';
 import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
+import {
+  stopTimerSocket,
+  startTimerSocket,
+  updateTimerSocket,
+} from '../../configSocket';
+import DemoData from '../../demoData';
 
 export interface IAddTask {
   onChange?: any;
+  vocabulary: any;
+  showNotificationAction?: any;
+  currentTimer: any;
+  timerTick: any;
+  setCurrentTimer: any;
+  handleJiraSync: any;
+  setTimerTick: Function;
+  setTimeInterval: any;
 }
 
 export const AddTask: React.FC<IAddTask> = (props: any) => {
@@ -14,8 +28,24 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
   const [projectId, setProjectId] = React.useState(null);
   const [isUpdating, setIsUpdating] = React.useState(false);
 
+  const {
+    currentTimer,
+    vocabulary,
+    timerTick,
+    isMobile,
+    handleJiraSync,
+    user,
+    showNotificationAction,
+    setCurrentTimer,
+    setTimerTick,
+    setTimeInterval,
+  } = props;
+
+  const { v_add_your_task_name, v_jira_synchronization } = vocabulary;
+
+
   const startTimer = (event) => {
-    const { showNotificationAction, vocabulary } = props;
+    console.log('time started!!')
     const {
       v_a_task_name_before,
       v_a_starting,
@@ -23,10 +53,12 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     } = vocabulary;
     if (issue.trim()) {
       setIsUpdating(true);
-      // startTimerSocket({
-      //     issue,
-      //     projectId,
-      // });
+      props.setTimeInterval(true);
+      setCurrentTimer(DemoData.timer_v2);
+      startTimerSocket({
+        issue,
+        projectId,
+      });
     } else {
       setIssue('');
       showNotificationAction({
@@ -35,6 +67,28 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
       });
     }
   };
+
+  const stopTimer = (event) => {
+    const {
+      v_a_task_name_before,
+      v_a_stopping,
+      v_a_time_tracking,
+    } = vocabulary;
+    if (issue.trim()) {
+      console.log('Timer stoped!!');
+      props.setTimeInterval(false);
+      setIsUpdating(true);
+      setCurrentTimer(null), stopTimerSocket();
+      // setTimerTick('');
+    } else {
+      setIssue('');
+      showNotificationAction({
+        text: `${v_a_task_name_before} ${v_a_stopping} ${v_a_time_tracking}`,
+        type: 'warning',
+      });
+    }
+  };
+
   // const updateTaskIssueDebounced = _.debounce(() => {
   // updateTimerSocket({
   //     issue,
@@ -42,9 +96,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
   // }, 1000);
 
   const onChangeInput = (event) => {
-    const { currentTimer } = props;
     const value = event.target.value;
-
     setIssue(value);
 
     if (currentTimer && value.trim() && currentTimer.issue !== value.trim()) {
@@ -135,61 +187,68 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
       </svg>
     );
   };
+
+  const onChangeProject = (id) => {
+    if (currentTimer) {
+      setIsUpdating(true);
+      updateTimerSocket({
+        projectId: id,
+        issue,
+      });
+    } else {
+      setProjectId(id);
+    }
+  };
+
   return (
     <div className={css(styleSheet.addTaskStyles)}>
       <React.Fragment>
         <div className={classNames('add-task')}>
           <input
             onFocus={(event) => (event.target.placeholder = '')}
-            // onBlur={(event) => (event.target.placeholder = v_add_your_task_name)}
-            // onKeyDown={(event) =>
-            //   event.keyCode === 13 &&
-            //   !currentTimer &&
-            //   !isUpdating &&
-            //   startTimer()
-            // }
+            onBlur={(event) =>
+              (event.target.placeholder = v_add_your_task_name)
+            }
+            onKeyDown={
+              (event) => event.keyCode === 13 && !currentTimer && !isUpdating
+              // &&
+              // startTimer()
+            }
             type="text"
             value={issue}
             onChange={onChangeInput}
-            // placeholder={v_add_your_task_name}
+            placeholder={v_add_your_task_name}
             className="add-task__input"
           />
           {/* {user.tokenJira && (
-        <SyncIcon
-          className={classNames('add-task__sync')}
-        // onClick={handleJiraSync}
-        // name={v_jira_synchronization}
-        />
-        )} */}
+            <SyncIcon
+              className={classNames('add-task__sync')}
+              onClick={handleJiraSync}
+              name={v_jira_synchronization}
+            />
+          )} */}
           <ProjectsListPopup
             withFolder={true}
             disabled={isUpdating}
-            // onChange={onChangeProject}
+            onChange={onChangeProject}
             selectedProjectId={projectId}
           />
           <span className="add-task__duration">
-            {'00:00:00'}
-            {/* {timerTick ? timerTick : '00:00:00'} */}
+            {timerTick ? timerTick : '00:00:01'}
           </span>
-          <Loading
-            mode="overlay"
-            flag={isUpdating}
-            withLogo={false}
-            circle={true}
-            width="3.6rem"
-            height="3.6rem">
-            {/* {currentTimer ? (
-            <StopIcon
-              className={classNames('add-task__stop-icon')}
-              onClick={stopTimer}
-            />
-          ) : ( */}
-            <PlayIcon
-              className={classNames('add-task__play-icon')}
-              onClick={startTimer}
-            />
-            {/* )} */}
-          </Loading>
+          <div>
+            {currentTimer ? (
+              <StopIcon
+                className={classNames('add-task__stop-icon')}
+                onClick={stopTimer}
+              />
+            ) : (
+              <PlayIcon
+                className={classNames('add-task__play-icon')}
+                onClick={startTimer}
+              />
+            )}
+          </div>
         </div>
       </React.Fragment>
     </div>

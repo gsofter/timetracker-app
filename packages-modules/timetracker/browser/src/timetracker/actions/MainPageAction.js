@@ -1,9 +1,9 @@
 import moment from 'moment';
-import { getTimeEntriesList } from '../configAPI';
-import { getTodayTimeEntriesParseFunction } from '../queries';
-import { updatePageTitle } from '../services/pageTitleService';
-import { getTimeDiff } from '../services/timeService';
-import { store } from '../store/configureStore';
+// import { getTimeEntriesList } from '../configAPI';
+// import { getTodayTimeEntriesParseFunction } from '../queries';
+// import { updatePageTitle } from '../services/pageTitleService';
+// import { getTimeDiff } from '../services/timeService';
+// import { store } from '../store/configureStore';
 
 export const SET_CURRENT_TIMER = 'SET_CURRENT_TIMER';
 export const RESET_CURRENT_TIMER = 'RESET_CURRENT_TIMER';
