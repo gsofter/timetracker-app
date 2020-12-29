@@ -1,6 +1,8 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { useFela } from 'react-fela';
+import DemoData from '../../demoData';
+import { usePrevious } from '../../services/hookHelpers';
 
 const FolderIcon = ({ className }) => (
   <svg
@@ -19,61 +21,31 @@ const FolderIcon = ({ className }) => (
 
 export const ProjectsListPopup = (props: any) => {
   const { css } = useFela(props);
-  const [projectsList, setProjectList] = useState([
-    {
-      end_datetime: '2020-12-08T12:02:12+00:00',
-      id: '4f154429-5366-400c-ae88-aa41c3d78537',
-      issue: 'Test project',
-      start_datetime: '2020-12-08T12:02:02+00:00',
-      sync_jira_status: false,
-      project: {
-        id: 'e3180114-d88f-40fc-a4fb-3c6a8e4a0dc8',
-        name: 'any',
-        project_color: {
-          name: 'green',
-        },
-      },
-    },
-    {
-      end_datetime: '2020-12-08T12:02:12+00:00',
-      id: '4f154429-5366-400c-ae88-aa41c3d78538',
-      issue: 'project2',
-      start_datetime: '2020-12-08T12:02:02+00:00',
-      sync_jira_status: false,
-      project: {
-        id: 'e3180114-d88f-40fc-a4fb-3c6a8e4a0dc9',
-        name: 'test',
-        project_color: {
-          name: 'blue',
-        },
-      },
-    },
-  ]);
+  const [projectsList, setProjectList] = useState(DemoData.timer_v2);
   const [isOpen, setIsOpen] = useState(false);
   const [inputValue, setInputValue] = useState('');
 
   const dropdown: any = React.createRef();
   const input: any = React.createRef();
+  const prevInputValue = usePrevious(inputValue);
 
   const { vocabulary, onChange, listItem, withFolder, isMobile } = props;
   // const { v_find } = vocabulary;
 
-  const getProjectData = (key) => {
+  const getProjectData = key => {
     const { selectedProjectId } = props;
-    const filteredProjectsList = projectsList.filter(
-      (project) => project.project.id === selectedProjectId,
-    );
+    const filteredProjectsList = projectsList.filter(project => project.project.id === selectedProjectId);
     if (key === 'color') {
-      if (filteredProjectsList.length > 0) {
-        return filteredProjectsList[0].project.project_color.name;
-      }
+        if (filteredProjectsList.length > 0) {
+            return filteredProjectsList[0].project.project_color.name;
+        }
     } else if (key === 'name') {
-      if (filteredProjectsList.length > 0) {
-        return filteredProjectsList[0].project.name;
-      }
+        if (filteredProjectsList.length > 0) {
+            return filteredProjectsList[0].project.name;
+        }
     }
     return filteredProjectsList[0];
-  };
+};
   const closeDropdown = (event) => {
     if (
       !event.target.classList.contains(
@@ -83,6 +55,7 @@ export const ProjectsListPopup = (props: any) => {
       const { onChangeVisibility } = props;
       document.removeEventListener('click', closeDropdown);
       setIsOpen(false);
+      onChangeVisibility(false);
       // this.setState(
       //     {
       //         isOpen: false,
@@ -111,15 +84,26 @@ export const ProjectsListPopup = (props: any) => {
     setInputValue(value.trim().toLowerCase());
   };
 
-  // const filterList = (initial) => {
-  //   // const { projectsList } = props;
+  const filterList = (initial) => {
+    const filteredProjectsList = projectsList.filter(
+      (project) => project.project.name.toLowerCase().indexOf(inputValue) !== -1
+    );
+    setProjectList(initial ? projectsList : filteredProjectsList);
+  };
 
-  //   const filteredProjectsList = projectsList.filter(
-  //     (project) => project.name.toLowerCase().indexOf(inputValue) !== -1
-  //   );
-  //   setInputValue(initial ? projectsList : filteredProjectsList);
-  // };
+  useEffect(() => {
+    if (prevInputValue !== inputValue) {
+      filterList(false);
+    } else {
+      filterList(true);
+    }
+  }, [inputValue]);
 
+  useEffect(() => {
+    if (isOpen && !isOpen) {
+      setInputValue('');
+    }
+  }, [isOpen]);
   return (
     <div className={css(styleSheet.ProjectsListPopupStyles)}>
       <div

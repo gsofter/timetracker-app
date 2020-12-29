@@ -10,7 +10,7 @@ import { getTimeDurationByGivenTimestamp } from '../../services/timeService';
 export const ProjectData = (props) => {
   const { css } = useFela(props);
   const { currentTeam, durationTimeFormat } = props;
-  const { timeEntriesList } = DemoData;
+  const [timeEntriesList, setTimeEntriesList] = useState(DemoData.timer_v2);
   const tableInfo = timeEntriesList;
   const tableHeader = [
     {
@@ -38,9 +38,9 @@ export const ProjectData = (props) => {
   const tableInfoElements = tableInfo.map((item, index) => (
     <tr key={'table-header_' + index}>
       <td data-label="Project name:">{item.project.name}</td>
-      <td data-label="Client">{item.client ? item.client.name : '-'}</td>
+      {/* <td data-label="Client">{item.client ? item.client.name : '-'}</td> */}
       <td data-label="Time">
-        {getTimeDurationByGivenTimestamp(item.totalTime, durationTimeFormat)}
+        {/* {getTimeDurationByGivenTimestamp(item.totalTime, durationTimeFormat)} */}
         {/* {checkIsAdminByRole(currentTeam.data.role) && ( */}
         <i className="edit_button" onClick={(e) => setEdiItem(item)} />
         {/* )} */}

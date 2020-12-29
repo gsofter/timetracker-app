@@ -13,8 +13,10 @@ import { CalendarPopup } from '../../components/CalendarPopup';
 import { getTimeDurationByGivenTimestamp } from '../../services/timeService';
 import { encodeTimeEntryIssue } from '../../services/timeEntryService';
 import { sleep } from '../../services/sleep';
+import { startTimerSocket } from '../../configSocket';
 
 import { CustomSwipe } from '../../components/CustomSwipe';
+import DemoData from '../../demoData';
 
 export interface ITaskList {
   issue?: string;
@@ -44,8 +46,17 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   const [isUpdatingIssue, setIsUpdatingIssue] = useState(false);
   const [popupEditTask, setPopupEditTask] = useState<any>([]);
   const [cursorPosition, SetCursorPosition] = useState([]);
-
+  const [changeTask, setChangeTask] = useState(DemoData.timer_v2);
+ 
   const { task, isMobile, vocabulary, swipedTask } = props;
+
+  interface IUpdateTask {
+    issue?: any;
+    projectId: number;
+    startDateTime?: any;
+    endDateTime?: any;
+  }
+
   // const { v_edit_task, v_delete_task } = vocabulary;
   const {
     issue,
@@ -95,12 +106,13 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   };
 
   const updateTask = async ({
-    issue,
+    // issue,
     projectId,
     startDateTime,
     endDateTime,
-  }) => {
+  }: IUpdateTask) => {
     setIsUpdatingTask(true);
+
     const { task, getTimeEntriesListAction } = props;
     const { id, project, issue: initialIssue } = task;
     const data = {
@@ -115,13 +127,14 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
       data.startDatetime = startDateTime.utc().toISOString();
       data.endDatetime = endDateTime.utc().toISOString();
     }
-    // await changeTask(id, data);
+    // await setChangeTask(id, data);
     await getTimeEntriesListAction();
     setIsUpdatingTask(false);
   };
 
   const onChangeProject = (projectId) => {
-    // updateTask({ projectId });
+
+    updateTask({ projectId });
   };
 
   const openCalendar = (event) => {
@@ -206,7 +219,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   const handleStartTimer = (event) => {
     // const { task } = props;
     // const { issue, project } = task;
-    // setIsStartingTask(true);
+    setIsStartingTask(true);
+    startTimerSocket({ issue, projectId: project.id });
     // setState(
     //     {
     //         isStartingTask: true,
@@ -315,10 +329,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
               isUpdatingIssue ||
               isStartingTask,
           })}>
-          <Loading
-            mode="overlay"
-            flag={isUpdatingTask || isStartingTask}
-            withLogo={false}>
+          <div>
             {/* <JiraIcon
                             task={task}
                             isSync={syncJiraStatus}
@@ -333,17 +344,15 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
               suppressContentEditableWarning={true}
               onKeyUp={setCaretPositionToState}
               onClick={setCaretPositionToState}
-              // onKeyDown={event => {
-              //     setCaretPositionToState();
-              //     event.keyCode === 13 && event.target.blur();
-              // }}
+              onKeyDown={(event) => {
+                setCaretPositionToState(null);
+                // event.keyCode === 13 && event.target.blur();
+              }}
               onFocus={startEditIssue}
               onBlur={endEditIssue}
-              // onInput={event => {
-              //     setState({
-              //         newIssue: ,
-              //     });
-              // }}
+              onInput={(event) => {
+                // setNewIssue(event.target.textContent);
+              }}
               onPaste={handlePaste}>
               {isUpdatingTask && newIssue ? newIssue : issue}
             </p>
@@ -386,16 +395,16 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
                 className="task-item__delete-icon"
                 onClick={deleteTask}
               />
-              {isOpenCalendar && (
+              {/* {isOpenCalendar && (
                 <CalendarPopup
                   createRefCallback={createRefCallback}
                   // startDateTime={startDatetime}
                   // endDateTime={endDatetime}
                   // updateTask={updateTask}
                 />
-              )}
+              )} */}
             </div>
-          </Loading>
+          </div>
         </div>
         {isMobile && (
           <div className="task-item__bottom-layer">
@@ -420,7 +429,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
         {showEditModal && (
           <ModalPortal>
             <StartEditTaskModal
-              editMode
+              editMode={true}
               task={task}
               disableShowModal={closeEditTaskModal}
             />
@@ -440,10 +449,10 @@ const styleSheet: any = {
       display: 'flex',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      margin: '0 0 1rem 0',
+      margin: '0 0 1rem',
       padding: '1.5rem 2rem 1.5rem 1.5rem',
-      borderRadius: '0.4rem',
-      color: '#ffffff',
+      borderRadius: '.4rem',
+      color: '#fff',
       lineHeight: '1.8rem',
     },
     '& .task-item:last-child': {
