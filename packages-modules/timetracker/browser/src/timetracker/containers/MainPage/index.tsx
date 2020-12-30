@@ -21,17 +21,57 @@ import vocabulary from '../../en';
 import DemoData from '../../demoData';
 import { initSocket } from '../../configSocket';
 import _ from 'lodash';
-import { setTimerTickAction } from '../../actions/MainPageAction';
 
-const TimeTracker = (props) => {
+const TimeTracker = props => {
   const { css } = useFela(props);
   const [currentTimer, setCurrentTimer] = useState(null);
-  const [timerTick, setTimerTick] = useState(0);
   const [isInitialFetching, setIsInitialFetching] = useState(true);
   const [timeEntriesList, setTimeEntriesList] = useState(DemoData.timer_v2);
-  const [ isFetchingTimeEntriesList, setIsFetchingTimeEntriesList] = useState(false);
-  const [ isFetchingSearch,  setIsFetchingSearch] = useState(false);
-  const [ isSearchMode, setIsSearchMode] = useState(false);
+  const [isFetchingTimeEntriesList, setIsFetchingTimeEntriesList] = useState(false);
+  const [isFetchingSearch, setIsFetchingSearch] = useState(false);
+  const [isSearchMode, setIsSearchMode] = useState(false);
+
+  const [second, setSecond] = useState('00');
+  const [minute, setMinute] = useState('00');
+  const [hour, setHour] = useState('00');
+  const [isActive, setIsActive] = useState(false);
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    let intervalId: any;
+
+    if (isActive) {
+      intervalId = setInterval(() => {
+        const secondCounter = counter % 60;
+        const minuteCounter = Math.floor(counter / 60);
+        const hourCounter = Math.floor(counter / 3600);
+
+        let computedSecond: any =
+          String(secondCounter).length === 1 ? `0${secondCounter}` : secondCounter;
+
+        let computedMinute: any =
+          String(minuteCounter).length === 1 ? `0${minuteCounter}` : minuteCounter;
+
+        let computedHours: any = String(hourCounter).length === 1 ? `0${hourCounter}` : hourCounter;
+
+        setSecond(computedSecond);
+        setMinute(computedMinute);
+        setHour(computedHours);
+
+        setCounter(counter => counter + 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [isActive, counter]);
+
+  const resetTimer = () => {
+    setIsActive(false);
+    setCounter(0);
+    setSecond('00');
+    setMinute('00');
+    setHour('00');
+  };
 
   const {
     isMobile,
@@ -67,7 +107,7 @@ const TimeTracker = (props) => {
   const renderDayDateString = (date: any) => {
     const { dateFormat } = props;
     const { lang } = vocabulary;
-    const toUpperCaseFirstLetter = (date) => {
+    const toUpperCaseFirstLetter = date => {
       const day = moment(date)
         .locale(lang.short)
         .format('dddd');
@@ -86,25 +126,14 @@ const TimeTracker = (props) => {
     return getDateInString(totalTime, durationTimeFormat);
   };
 
-  useEffect(  () => initSocket() );
+  useEffect(() => initSocket());
 
-  const setTimeInterval = (status?: any) => {
-    let interval;
-    if (status) {
-      interval = setInterval((start) => {
-        setTimerTick((prevTime) => (prevTime += 1));
-      }, 1000);
-    } else {
-      clearInterval(interval);
-      setTimerTick(0);
-    }
-  };
   const jiraSynchronizationHandleClick = e => {
     const { showNotificationAction, getTimeEntriesListAction, getProjectsListActions } = props;
     const {
-        v_jira_synchronization_problem,
-        v_jira_synchronization_ok,
-        v_jira_synchronization_confirm,
+      v_jira_synchronization_problem,
+      v_jira_synchronization_ok,
+      v_jira_synchronization_confirm,
     } = vocabulary;
 
     if (!window.confirm(v_jira_synchronization_confirm)) {
@@ -132,7 +161,7 @@ const TimeTracker = (props) => {
     //     .finally(() => {
     //       setIsInitialFetching(false);
     //     });
-};
+  };
 
   return (
     <GlobalState.Provider value={'dark'}>
@@ -141,9 +170,10 @@ const TimeTracker = (props) => {
           <div
             className={classNames('main-page', {
               'main-page--mobile': isMobile,
-            })}>
-              <PageHeader title={vocabulary.v_timer} disabledTitle={isMobile}>
-                  {/* <TimerSearchComponent /> */}
+            })}
+          >
+            <PageHeader title={vocabulary.v_timer} disabledTitle={isMobile}>
+              {/* <TimerSearchComponent /> */}
               {/* This component takes too much time*/}
               <p>Search component</p>
               {/* <TimerSearchComponent /> */}
@@ -153,45 +183,45 @@ const TimeTracker = (props) => {
               showNotificationAction={showNotificationAction}
               currentTimer={currentTimer}
               setCurrentTimer={setCurrentTimer}
-              timerTick={timerTick}
-              setTimerTick={setTimerTick}
               handleJiraSync={jiraSynchronizationHandleClick}
-              setTimeInterval={setTimeInterval}
+              setIsActive={setIsActive}
+              resetTimer={resetTimer}
+              hour={hour}
+              minute={minute}
+              second={second}
             />
             <CustomScrollbar>
               <div className="main-page__list">
-                    {timeEntriesList &&
-                        timeEntriesList.length === 0 &&
-                        BlankListComponent(
-                            vocabulary.v_no_entries,
-                            vocabulary.v_no_entries_sub,
-                            { bottom: '-175px' },
-                        )}
-                    {splitTimersByDay(timeEntriesList).map((day, index, arr) => (
-                        <div
-                            className={classNames('main-page__day', {
-                                'main-page__day--last-child': index === arr.length - 1,
-                            })}
-                            key={index}
-                        >
-                            <div className="main-page__day-header">
-                                <div className="main-page__day-date">
-                                    {renderDayDateString(day[0].startDatetime)}
-                                </div>
-                                <div className="main-page__day-date-all-time">
-                                    {vocabulary.v_total_time}: {renderTotalTimeByDay(day)}
-                                </div>
-                            </div>
-                            {day.map(task => (
-                                <TaskListItem key={task.id} task={task} />
-                            ))}
-                        </div>
+                {timeEntriesList &&
+                  timeEntriesList.length === 0 &&
+                  BlankListComponent(vocabulary.v_no_entries, vocabulary.v_no_entries_sub, {
+                    bottom: '-175px',
+                  })}
+                {splitTimersByDay(timeEntriesList).map((day, index, arr) => (
+                  <div
+                    className={classNames('main-page__day', {
+                      'main-page__day--last-child': index === arr.length - 1,
+                    })}
+                    key={index}
+                  >
+                    <div className="main-page__day-header">
+                      <div className="main-page__day-date">
+                        {renderDayDateString(day[0].startDatetime)}
+                      </div>
+                      <div className="main-page__day-date-all-time">
+                        {vocabulary.v_total_time}: {renderTotalTimeByDay(day)}
+                      </div>
+                    </div>
+                    {day.map(task => (
+                      <TaskListItem key={task.id} task={task} />
                     ))}
-                    {isFetchingTimeEntriesList }
-                    {isMobile &&
-                        !currentTimer &&
-                        pagination.disabled && <div className="main-page__empty-block" />}
-                </div>
+                  </div>
+                ))}
+                {isFetchingTimeEntriesList}
+                {isMobile && !currentTimer && pagination.disabled && (
+                  <div className="main-page__empty-block" />
+                )}
+              </div>
             </CustomScrollbar>
             {/* <StartTaskMobile /> */}
           </div>

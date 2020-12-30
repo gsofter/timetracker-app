@@ -1,13 +1,9 @@
 import classNames from 'classnames';
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ProjectsListPopup } from '../ProjectsListPopup';
 import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
-import {
-  stopTimerSocket,
-  startTimerSocket,
-  updateTimerSocket,
-} from '../../configSocket';
+import { stopTimerSocket, startTimerSocket, updateTimerSocket } from '../../configSocket';
 import DemoData from '../../demoData';
 
 export interface IAddTask {
@@ -15,11 +11,14 @@ export interface IAddTask {
   vocabulary: any;
   showNotificationAction?: any;
   currentTimer: any;
-  timerTick: any;
+  timerTick?: any;
   setCurrentTimer: any;
   handleJiraSync: any;
-  setTimerTick: Function;
-  setTimeInterval: any;
+  setIsActive: any;
+  resetTimer: any;
+  hour: any;
+  minute: any;
+  second: any;
 }
 
 export const AddTask: React.FC<IAddTask> = (props: any) => {
@@ -38,22 +37,20 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     showNotificationAction,
     setCurrentTimer,
     setTimerTick,
-    setTimeInterval,
+    setIsActive,
+    resetTimer,
+    hour,
+    minute,
+    second,
   } = props;
 
   const { v_add_your_task_name, v_jira_synchronization } = vocabulary;
 
-
-  const startTimer = (event) => {
-    console.log('time started!!')
-    const {
-      v_a_task_name_before,
-      v_a_starting,
-      v_a_time_tracking,
-    } = vocabulary;
+  const startTimer = () => {
+    props.setIsActive(true);
+    const { v_a_task_name_before, v_a_starting, v_a_time_tracking } = vocabulary;
     if (issue.trim()) {
       setIsUpdating(true);
-      props.setTimeInterval(true);
       setCurrentTimer(DemoData.timer_v2);
       startTimerSocket({
         issue,
@@ -68,18 +65,12 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     }
   };
 
-  const stopTimer = (event) => {
-    const {
-      v_a_task_name_before,
-      v_a_stopping,
-      v_a_time_tracking,
-    } = vocabulary;
+  const stopTimer = () => {
+    const { v_a_task_name_before, v_a_stopping, v_a_time_tracking } = vocabulary;
     if (issue.trim()) {
-      console.log('Timer stoped!!');
-      props.setTimeInterval(false);
       setIsUpdating(true);
       setCurrentTimer(null), stopTimerSocket();
-      // setTimerTick('');
+      props.resetTimer();
     } else {
       setIssue('');
       showNotificationAction({
@@ -95,7 +86,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
   // });
   // }, 1000);
 
-  const onChangeInput = (event) => {
+  const onChangeInput = event => {
     const value = event.target.value;
     setIssue(value);
 
@@ -104,7 +95,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     }
   };
 
-  const PlayIcon = (props) => {
+  const PlayIcon = props => {
     const { className, onClick } = props;
     return (
       <svg
@@ -112,14 +103,9 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
         onClick={onClick}
         viewBox="0 0 36 36"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg">
-        <circle
-          className={`${className}-circle`}
-          cx="18"
-          cy="18"
-          r="18"
-          fill="#27AE60"
-        />
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle className={`${className}-circle`} cx="18" cy="18" r="18" fill="#27AE60" />
         <path
           fillRule="evenodd"
           clipRule="evenodd"
@@ -130,7 +116,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     );
   };
 
-  const StopIcon = (props) => {
+  const StopIcon = props => {
     const { className, onClick } = props;
     return (
       <svg
@@ -138,14 +124,9 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
         onClick={onClick}
         viewBox="0 0 36 36"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg">
-        <circle
-          className={`${className}-circle`}
-          cx="18"
-          cy="18"
-          r="18"
-          fill="#EB5757"
-        />
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle className={`${className}-circle`} cx="18" cy="18" r="18" fill="#EB5757" />
         <rect x="12" y="12" width="12" height="12" rx="2" fill="white" />
       </svg>
     );
@@ -161,7 +142,8 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
         height="20"
         viewBox="0 0 20 20"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg">
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <path
           d="M0.833252 3.33334V8.33334H5.83325"
           stroke="#C1C0C0"
@@ -188,7 +170,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     );
   };
 
-  const onChangeProject = (id) => {
+  const onChangeProject = id => {
     if (currentTimer) {
       setIsUpdating(true);
       updateTimerSocket({
@@ -205,14 +187,11 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
       <React.Fragment>
         <div className={classNames('add-task')}>
           <input
-            onFocus={(event) => (event.target.placeholder = '')}
-            onBlur={(event) =>
-              (event.target.placeholder = v_add_your_task_name)
-            }
+            onFocus={event => (event.target.placeholder = '')}
+            onBlur={event => (event.target.placeholder = v_add_your_task_name)}
             onKeyDown={
-              (event) => event.keyCode === 13 && !currentTimer && !isUpdating
-              // &&
-              // startTimer()
+              event => event.keyCode === 13 && !currentTimer && !isUpdating
+              && startTimer()
             }
             type="text"
             value={issue}
@@ -234,19 +213,17 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
             selectedProjectId={projectId}
           />
           <span className="add-task__duration">
-            {timerTick ? timerTick : '00:00:01'}
+            <span className="hours">{props.hour}</span>
+            <span>:</span>
+            <span className="minute">{props.minute}</span>
+            <span>:</span>
+            <span className="second">{props.second}</span>
           </span>
           <div>
             {currentTimer ? (
-              <StopIcon
-                className={classNames('add-task__stop-icon')}
-                onClick={stopTimer}
-              />
+              <StopIcon className={classNames('add-task__stop-icon')} onClick={stopTimer} />
             ) : (
-              <PlayIcon
-                className={classNames('add-task__play-icon')}
-                onClick={startTimer}
-              />
+              <PlayIcon className={classNames('add-task__play-icon')} onClick={startTimer} />
             )}
           </div>
         </div>
@@ -256,7 +233,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
 };
 
 const styleSheet: any = {
-  addTaskStyles: (props) => ({
+  addTaskStyles: props => ({
     position: 'relative',
     '& .add-task': {
       color: '#ffffff',
