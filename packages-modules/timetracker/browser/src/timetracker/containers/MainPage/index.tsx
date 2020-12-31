@@ -83,12 +83,25 @@ const TimeTracker = props => {
     // isSearchMode,
   } = props;
 
+  const initialDateFormat = 'DD.MM.YYYY';
+  const dateFormat = localStorage.getItem('dateFormat') || initialDateFormat;
+
+  const initialTimeFormat = '24';
+  const timeFormat = localStorage.getItem('timeFormat') || initialTimeFormat;
+
+  const initialFirstDayOfWeek = 1;
+  const firstDayOfWeek = localStorage.getItem('firstDayOfWeek') || initialFirstDayOfWeek;
+
+  const initialDurationTimeFormat = 'improved';
+  const durationTimeFormat =
+    localStorage.getItem('durationTimeFormat') || initialDurationTimeFormat;
+
   const splitTimersByDay = (timers = []) => {
     const formattedLogsDates = [];
     const formattedLogsDatesValues = [];
 
     for (let i = 0; i < timers.length; i++) {
-      const date = moment(timers[i].startDatetime).format('YYYY-MM-DD');
+      const date = moment(timers[i].start_datetime).format('YYYY-MM-DD');
       let index = formattedLogsDates.indexOf(date);
       if (index === -1) {
         formattedLogsDates.push(date);
@@ -105,7 +118,6 @@ const TimeTracker = props => {
   };
 
   const renderDayDateString = (date: any) => {
-    const { dateFormat } = props;
     const { lang } = vocabulary;
     const toUpperCaseFirstLetter = date => {
       const day = moment(date)
@@ -117,10 +129,9 @@ const TimeTracker = props => {
   };
 
   const renderTotalTimeByDay = timers => {
-    const { durationTimeFormat } = props;
     let totalTime = 0;
     for (let i = 0; i < timers.length; i++) {
-      totalTime += +moment(timers[i].endDatetime) - +moment(timers[i].startDatetime);
+      totalTime += +moment(timers[i].end_datetime) - +moment(timers[i].start_datetime);
     }
 
     return getDateInString(totalTime, durationTimeFormat);
@@ -129,7 +140,7 @@ const TimeTracker = props => {
   useEffect(() => initSocket());
 
   const jiraSynchronizationHandleClick = e => {
-    const { showNotificationAction, getTimeEntriesListAction, getProjectsListActions } = props;
+    const { getTimeEntriesListAction, getProjectsListActions } = props;
     const {
       v_jira_synchronization_problem,
       v_jira_synchronization_ok,
@@ -206,14 +217,21 @@ const TimeTracker = props => {
                   >
                     <div className="main-page__day-header">
                       <div className="main-page__day-date">
-                        {renderDayDateString(day[0].startDatetime)}
+                        {renderDayDateString(day[0].start_datetime)}
                       </div>
                       <div className="main-page__day-date-all-time">
                         {vocabulary.v_total_time}: {renderTotalTimeByDay(day)}
                       </div>
                     </div>
                     {day.map(task => (
-                      <TaskListItem key={task.id} task={task} />
+                      <TaskListItem
+                        key={task.id}
+                        task={task}
+                        vocabulary={vocabulary}
+                        timeFormat={timeFormat}
+                        durationTimeFormat={durationTimeFormat}
+                        isMobile={isMobile}
+                      />
                     ))}
                   </div>
                 ))}
@@ -244,7 +262,7 @@ const styleSheet: any = {
       fontSize: '1.2rem',
       lineHeight: '1.6rem',
       overflow: 'hidden',
-      height: '100vh',
+      height: '140vh',
     },
     '& .main-page__list': {
       flexGrow: '1',

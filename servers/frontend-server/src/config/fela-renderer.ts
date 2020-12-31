@@ -31,9 +31,9 @@ export default () => {
           footer > .container {
             padding: 2px;
           }
-          #content {
-            height: calc(100vh);
-          }
+          // #content {
+          //   height: calc(100vh);
+          // }
           #container {
             height: 100%;
           }
