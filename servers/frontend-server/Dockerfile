@@ -1,5 +1,5 @@
 # The official nodejs docker image
-FROM node:12.18.6-alpine
+FROM node:12.18.4-alpine
 ENV PYTHON /usr/bin/python
 
 # Copy package.json only to temp folder, install its dependencies,
