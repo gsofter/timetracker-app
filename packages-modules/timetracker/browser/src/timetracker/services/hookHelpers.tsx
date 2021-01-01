@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 
 export const useDebounce = (value, delay) => {
     const [debouncedValue, setDebouncedValue] = useState(value);
@@ -31,4 +31,13 @@ export const useOutsideClick = (ref, callback) => {
             document.removeEventListener('click', handleClick);
         };
     });
+};
+
+export const usePrevious = (value) => {
+    const ref = useRef();
+
+    useEffect(() => {
+        ref.current = value;
+    }, [value]);
+    return ref.current;
 };

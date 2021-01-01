@@ -13,59 +13,95 @@ import { BlankListComponent } from '../../components/BlankListcomponent';
 import { GlobalState } from '../../contexts/GlobalState';
 import { StartTaskMobile } from '../../components/StartTaskMobile';
 import { TimerSearchComponent } from '../../components/TimerSearchComponent';
+import { showNotificationAction } from '../../actions/NotificationActions';
 import PageHeader from '../../components/PageHeader';
 import { PageContainer } from '@admin-layout/components';
 import en from '../../locales/en';
+import vocabulary from '../../en';
+import DemoData from '../../demoData';
+import { initSocket } from '../../configSocket';
+import _ from 'lodash';
 
-const TimeTracker = (props) => {
+const TimeTracker = props => {
   const { css } = useFela(props);
-  const isInitialFetching = true;
+  const [currentTimer, setCurrentTimer] = useState(null);
+  const [isInitialFetching, setIsInitialFetching] = useState(true);
+  const [timeEntriesList, setTimeEntriesList] = useState(DemoData.timer_v2);
+  const [isFetchingTimeEntriesList, setIsFetchingTimeEntriesList] = useState(false);
+  const [isFetchingSearch, setIsFetchingSearch] = useState(false);
+  const [isSearchMode, setIsSearchMode] = useState(false);
+
+  const [second, setSecond] = useState('00');
+  const [minute, setMinute] = useState('00');
+  const [hour, setHour] = useState('00');
+  const [isActive, setIsActive] = useState(false);
+  const [counter, setCounter] = useState(0);
+
+  useEffect(() => {
+    let intervalId: any;
+
+    if (isActive) {
+      intervalId = setInterval(() => {
+        const secondCounter = counter % 60;
+        const minuteCounter = Math.floor(counter / 60);
+        const hourCounter = Math.floor(counter / 3600);
+
+        let computedSecond: any =
+          String(secondCounter).length === 1 ? `0${secondCounter}` : secondCounter;
+
+        let computedMinute: any =
+          String(minuteCounter).length === 1 ? `0${minuteCounter}` : minuteCounter;
+
+        let computedHours: any = String(hourCounter).length === 1 ? `0${hourCounter}` : hourCounter;
+
+        setSecond(computedSecond);
+        setMinute(computedMinute);
+        setHour(computedHours);
+
+        setCounter(counter => counter + 1);
+      }, 1000);
+    }
+
+    return () => clearInterval(intervalId);
+  }, [isActive, counter]);
+
+  const resetTimer = () => {
+    setIsActive(false);
+    setCounter(0);
+    setSecond('00');
+    setMinute('00');
+    setHour('00');
+  };
+
   const {
     isMobile,
-    vocabulary,
-    currentTimer,
-    isFetchingTimeEntriesList,
+    // vocabulary,
+    // currentTimer,
+    // isFetchingTimeEntriesList,
     pagination,
-    isFetchingSearch,
-    isSearchMode,
+    // isFetchingSearch,
+    // isSearchMode,
   } = props;
 
-  const timeEntriesList = [
-    {
-      end_datetime: '2020-12-08T12:02:12+00:00',
-      id: '4f154429-5366-400c-ae88-aa41c3d78537',
-      issue: 'Test project',
-      start_datetime: '2020-12-08T12:02:02+00:00',
-      sync_jira_status: false,
-      project: {
-        id: 'e3180114-d88f-40fc-a4fb-3c6a8e4a0dc8',
-        name: 'any',
-        project_color: {
-          name: 'green',
-        },
-      },
-    },
-    {
-      end_datetime: '2020-12-08T12:02:12+00:00',
-      id: '4f154429-5366-400c-ae88-aa41c3d78538',
-      issue: 'project2',
-      start_datetime: '2020-12-08T12:02:02+00:00',
-      sync_jira_status: false,
-      project: {
-        id: 'e3180114-d88f-40fc-a4fb-3c6a8e4a0dc9',
-        name: 'any',
-        project_color: {
-          name: 'blue',
-        },
-      },
-    },
-  ];
+  const initialDateFormat = 'DD.MM.YYYY';
+  const dateFormat = localStorage.getItem('dateFormat') || initialDateFormat;
+
+  const initialTimeFormat = '24';
+  const timeFormat = localStorage.getItem('timeFormat') || initialTimeFormat;
+
+  const initialFirstDayOfWeek = 1;
+  const firstDayOfWeek = localStorage.getItem('firstDayOfWeek') || initialFirstDayOfWeek;
+
+  const initialDurationTimeFormat = 'improved';
+  const durationTimeFormat =
+    localStorage.getItem('durationTimeFormat') || initialDurationTimeFormat;
+
   const splitTimersByDay = (timers = []) => {
     const formattedLogsDates = [];
     const formattedLogsDatesValues = [];
 
     for (let i = 0; i < timers.length; i++) {
-      const date = moment(timers[i].startDatetime).format('YYYY-MM-DD');
+      const date = moment(timers[i].start_datetime).format('YYYY-MM-DD');
       let index = formattedLogsDates.indexOf(date);
       if (index === -1) {
         formattedLogsDates.push(date);
@@ -82,11 +118,10 @@ const TimeTracker = (props) => {
   };
 
   const renderDayDateString = (date: any) => {
-    const { dateFormat } = props;
-    // const { lang } = vocabulary;
-    const toUpperCaseFirstLetter = (date) => {
+    const { lang } = vocabulary;
+    const toUpperCaseFirstLetter = date => {
       const day = moment(date)
-        // .locale(lang.short)
+        .locale(lang.short)
         .format('dddd');
       return day[0].toUpperCase() + day.slice(1);
     };
@@ -94,13 +129,49 @@ const TimeTracker = (props) => {
   };
 
   const renderTotalTimeByDay = timers => {
-    const { durationTimeFormat } = props;
     let totalTime = 0;
     for (let i = 0; i < timers.length; i++) {
-      totalTime += +moment(timers[i].endDatetime) - +moment(timers[i].startDatetime);
+      totalTime += +moment(timers[i].end_datetime) - +moment(timers[i].start_datetime);
     }
 
     return getDateInString(totalTime, durationTimeFormat);
+  };
+
+  useEffect(() => initSocket());
+
+  const jiraSynchronizationHandleClick = e => {
+    const { getTimeEntriesListAction, getProjectsListActions } = props;
+    const {
+      v_jira_synchronization_problem,
+      v_jira_synchronization_ok,
+      v_jira_synchronization_confirm,
+    } = vocabulary;
+
+    if (!window.confirm(v_jira_synchronization_confirm)) {
+      return;
+    }
+    setIsInitialFetching(true);
+
+    // syncAllTasksWithJira()
+    //     .then(() => {
+    //         getTimeEntriesListAction();
+    //         getProjectsListActions();
+    //     })
+    //     .then(() => {
+    //         showNotificationAction({
+    //             text: `${v_jira_synchronization_ok}`,
+    //             type: 'success',
+    //         });
+    //     })
+    //     .catch(err => {
+    //         showNotificationAction({
+    //             text: `${v_jira_synchronization_problem}`,
+    //             type: 'error',
+    //         });
+    //     })
+    //     .finally(() => {
+    //       setIsInitialFetching(false);
+    //     });
   };
 
   return (
@@ -110,62 +181,67 @@ const TimeTracker = (props) => {
           <div
             className={classNames('main-page', {
               'main-page--mobile': isMobile,
-            })}>
-            {/* <PageHeader title={v_timer} disabledTitle={isMobile}> */}
-            <PageHeader title="Timer">
-                {/* This component takes too much time*/}
-                <p>Search component</p>
+            })}
+          >
+            <PageHeader title={vocabulary.v_timer} disabledTitle={isMobile}>
+              {/* <TimerSearchComponent /> */}
+              {/* This component takes too much time*/}
+              <p>Search component</p>
               {/* <TimerSearchComponent /> */}
             </PageHeader>
-            <AddTask />
+            <AddTask
+              vocabulary={vocabulary}
+              showNotificationAction={showNotificationAction}
+              currentTimer={currentTimer}
+              setCurrentTimer={setCurrentTimer}
+              handleJiraSync={jiraSynchronizationHandleClick}
+              setIsActive={setIsActive}
+              resetTimer={resetTimer}
+              hour={hour}
+              minute={minute}
+              second={second}
+            />
             <CustomScrollbar>
               <div className="main-page__list">
                 {timeEntriesList &&
                   timeEntriesList.length === 0 &&
-                  BlankListComponent(
-                    props.vocabulary.v_no_entries,
-                    props.vocabulary.v_no_entries_sub,
-                    { bottom: '-175px' },
-                  )}
+                  BlankListComponent(vocabulary.v_no_entries, vocabulary.v_no_entries_sub, {
+                    bottom: '-175px',
+                  })}
                 {splitTimersByDay(timeEntriesList).map((day, index, arr) => (
                   <div
                     className={classNames('main-page__day', {
                       'main-page__day--last-child': index === arr.length - 1,
                     })}
-                    key={index}>
+                    key={index}
+                  >
                     <div className="main-page__day-header">
                       <div className="main-page__day-date">
-                        {renderDayDateString(day[0].startDatetime)}
+                        {renderDayDateString(day[0].start_datetime)}
                       </div>
                       <div className="main-page__day-date-all-time">
-                        Total time: {renderTotalTimeByDay(day)}
+                        {vocabulary.v_total_time}: {renderTotalTimeByDay(day)}
                       </div>
-                      {day.map(task => (
-                        <TaskListItem key={task.id} task={task} />
-                      ))}
                     </div>
-                    {day.map((task) => (
-                      <TaskListItem key={task.id} task={task} />
+                    {day.map(task => (
+                      <TaskListItem
+                        key={task.id}
+                        task={task}
+                        vocabulary={vocabulary}
+                        timeFormat={timeFormat}
+                        durationTimeFormat={durationTimeFormat}
+                        isMobile={isMobile}
+                      />
                     ))}
                   </div>
                 ))}
-                {isFetchingTimeEntriesList && (
-                  <Loading
-                    mode="overlay"
-                    withLogo={false}
-                    flag={isFetchingTimeEntriesList}
-                    width="100%"
-                    circle={true}
-                    height="100%">
-                    <div className="main-page__lazy-load-spinner" />
-                  </Loading>
-                )}
+                {isFetchingTimeEntriesList}
                 {isMobile && !currentTimer && pagination.disabled && (
                   <div className="main-page__empty-block" />
                 )}
               </div>
             </CustomScrollbar>
-            <StartTaskMobile />
+            {/* <StartTaskMobile /> */}
           </div>
         </TutorialComponent>
       </div>
@@ -186,7 +262,7 @@ const styleSheet: any = {
       fontSize: '1.2rem',
       lineHeight: '1.6rem',
       overflow: 'hidden',
-      height: '100vh',
+      height: '140vh',
     },
     '& .main-page__list': {
       flexGrow: '1',
