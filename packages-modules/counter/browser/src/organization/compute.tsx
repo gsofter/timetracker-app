@@ -5,9 +5,9 @@ import { getFilteredMenus, getFilteredRoutes } from '../utils';
 
 export const accountPageStore: any[] = [
   {
-    path: '/:orgName/organization',
+    path: '//:orgName/organization',
     key: 'organization',
-    tab: 'Organization Menu',
+    name: 'Organization Menu',
     component: Organization,
     position: IMenuPosition.UPPER,
     exact: true,
