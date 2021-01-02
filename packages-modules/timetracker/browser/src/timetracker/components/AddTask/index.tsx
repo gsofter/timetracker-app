@@ -5,6 +5,7 @@ import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
 import { stopTimerSocket, startTimerSocket, updateTimerSocket } from '../../configSocket';
 import DemoData from '../../demoData';
+import _ from 'lodash';
 
 export interface IAddTask {
   onChange?: any;
@@ -19,14 +20,15 @@ export interface IAddTask {
   hour: any;
   minute: any;
   second: any;
+  setTimeEntriesList: any;
 }
 
 export const AddTask: React.FC<IAddTask> = (props: any) => {
   const { css } = useFela(props);
-  const [issue, setIssue] = React.useState('');
-  const [projectId, setProjectId] = React.useState(null);
-  const [isUpdating, setIsUpdating] = React.useState(false);
-
+  const [issue, setIssue] = useState('');
+  const [projectId, setProjectId] = useState(null);
+  const [isUpdating, setIsUpdating] = useState(false);
+  const [currentDate, setCurrentDate] = useState(null);
   const {
     currentTimer,
     vocabulary,
@@ -47,6 +49,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
   const { v_add_your_task_name, v_jira_synchronization } = vocabulary;
 
   const startTimer = () => {
+    setCurrentDate(new Date());
     props.setIsActive(true);
     const { v_a_task_name_before, v_a_starting, v_a_time_tracking } = vocabulary;
     if (issue.trim()) {
@@ -69,7 +72,20 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     const { v_a_task_name_before, v_a_stopping, v_a_time_tracking } = vocabulary;
     if (issue.trim()) {
       setIsUpdating(true);
+      const randomId = Math.floor(Math.random() * 1000 + 1);
+      const newValues = {
+        start_datetime: currentDate,
+        end_datetime: new Date(),
+        id: randomId,
+        issue: issue,
+        project: {
+          id: '03637823-d301-4ad5-a336-ea6af4b1d726',
+          name: 'Project Name',
+          project_color: { name: 'green' },
+        },
+      };
       setCurrentTimer(null), stopTimerSocket();
+      props.setTimeEntriesList([...DemoData.timer_v2, newValues]);
       props.resetTimer();
     } else {
       setIssue('');
@@ -80,20 +96,26 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     }
   };
 
-  // const updateTaskIssueDebounced = _.debounce(() => {
-  // updateTimerSocket({
-  //     issue,
-  // });
-  // }, 1000);
+  const updateTaskIssueDebounced = _.debounce(() => {
+    console.log('updateTaskIssueDebounced');
+    // updateTimerSocket(
+    //     issue
+    //     );
+  }, 1000);
 
   const onChangeInput = event => {
     const value = event.target.value;
     setIssue(value);
 
     if (currentTimer && value.trim() && currentTimer.issue !== value.trim()) {
-      // setIsUpdating(true), () => updateTaskIssueDebounced());
+      setIsUpdating(true);
     }
   };
+  // useEffect(() => {
+  //   if (isUpdating && currentTimer.issue !== issue.trim()) {
+  //     updateTaskIssueDebounced();
+  //   }
+  // }, [isUpdating, issue]);
 
   const PlayIcon = props => {
     const { className, onClick } = props;
@@ -189,9 +211,8 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
           <input
             onFocus={event => (event.target.placeholder = '')}
             onBlur={event => (event.target.placeholder = v_add_your_task_name)}
-            onKeyDown={
-              event => event.keyCode === 13 && !currentTimer && !isUpdating
-              && startTimer()
+            onKeyDown={event =>
+              event.keyCode === 13 && !currentTimer && !isUpdating && startTimer()
             }
             type="text"
             value={issue}

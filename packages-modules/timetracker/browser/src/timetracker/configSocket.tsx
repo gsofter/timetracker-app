@@ -82,8 +82,7 @@ export const initSocket = () => {
         socket = io(baseURL);
         socket.on();
         // socket.on('user-unauthorized', () => logoutByUnauthorized());
-        socket.on('check-timer-v2');
-        // socket.on('check-timer-v2', res => setCurrentTimer(res));
+        socket.on('check-timer-v2', res => setCurrentTimer(res));
 
         socket.on('connect', () => socketEmit('join-v2', null, () => socketEmit('check-timer-v2')));
     } else if (socket.disconnected) {

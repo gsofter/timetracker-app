@@ -86,7 +86,7 @@ export const ProjectsListPopup = (props: any) => {
 
   const filterList = (initial) => {
     const filteredProjectsList = projectsList.filter(
-      (project) => project.project.name.toLowerCase().indexOf(inputValue) !== -1
+      (project) => project.project.name.toLowerCase().indexOf(inputValue) !== -1,
     );
     setProjectList(initial ? projectsList : filteredProjectsList);
   };
