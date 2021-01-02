@@ -1,4 +1,4 @@
-import React, { CSSProperties, useContext, useEffect, useState } from 'react';
+import React, { CSSProperties, useContext, useEffect, useMemo, useState } from 'react';
 import { BreadcrumbProps as AntdBreadcrumbProps } from 'antd/lib/breadcrumb';
 import { Layout, ConfigProvider, Breadcrumb } from 'antd';
 import classNames from 'classnames';
@@ -282,12 +282,21 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
 
   const { breadcrumb = {}, breadcrumbMap, menuData = [] } = menuInfoData;
 
-  const matchMenus = getMatchMenu(location.pathname || '/', menuData, true);
-  const matchMenuKeys = Array.from(new Set(matchMenus.map(item => item.key || item.path || '')));
+  const matchMenus = useMemo(() => getMatchMenu(location.pathname || '/', menuData, true), [
+    location.pathname,
+    menuInfoData,
+  ]);
+
+  const matchMenuKeys = useMemo(
+    () => Array.from(new Set(matchMenus.map((item) => item.key || item.path || ''))),
+    [matchMenus],
+  );
 
   // 当前选中的menu，一般不会为空
   const currentMenu = (matchMenus[matchMenus.length - 1] || {}) as ProSettings & MenuDataItem;
+
   const currentMenuLayoutProps = useCurrentMenuLayoutProps(currentMenu);
+
   const { fixSiderbar, navTheme, layout: defaultPropsLayout, ...rest } = {
     ...props,
     ...currentMenuLayoutProps,
@@ -314,13 +323,13 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       setMenuInfoData(infoData);
     });
     return () => window.cancelAnimationFrame && window.cancelAnimationFrame(animationFrameId);
-  }, [props.route, stringify(menu)]);
+  }, [props.route, stringify(menu), props.location?.pathname]);
 
   // If it is a fix menu, calculate padding
   // don't need padding in phone mode
   const hasLeftPadding = propsLayout !== 'top' && !isMobile;
 
-  const [collapsed, onCollapse] = useMergedState<boolean>(defaultCollapsed || false, {
+  const [collapsed, onCollapse] = useMergedState<boolean>(() => defaultCollapsed || false, {
     value: props.collapsed,
     onChange: propsOnCollapse,
   });
@@ -441,6 +450,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   }, [stringify(props.location)]);
 
   const [hasFooterToolbar, setHasFooterToolbar] = useState(false);
+  
   useDocumentTitle(pageTitleInfo, props.title || defaultSettings.title);
 
   console.log('rest => ', rest);
@@ -470,32 +480,32 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         {props.pure ? (
           children
         ) : (
-          <div className={classNames(css(styleSheet().basicLayout), 'BasicLayout-Wrapper')}>
-            <div className={className}>
-              <Layout
-                style={{
-                  minHeight: '100%',
-                  ...style,
-                }}
-                hasSider={true}
-              >
-                {siderMenuDom}
-                <Layout style={genLayoutStyle}>
-                  {headerDom}
-                  <WrapContent
-                    isChildrenLayout={isChildrenLayout}
-                    {...rest}
-                    className={contentClassName}
-                    style={contentStyle}
-                  >
-                    {loading ? <PageLoading /> : children}
-                  </WrapContent>
-                  {footerDom}
+            <div className={classNames(css(styleSheet().basicLayout), 'BasicLayout-Wrapper')}>
+              <div className={className}>
+                <Layout
+                  style={{
+                    minHeight: '100%',
+                    ...style,
+                  }}
+                  hasSider={true}
+                >
+                  {siderMenuDom}
+                  <Layout style={genLayoutStyle}>
+                    {headerDom}
+                    <WrapContent
+                      isChildrenLayout={isChildrenLayout}
+                      {...rest}
+                      className={contentClassName}
+                      style={contentStyle}
+                    >
+                      {loading ? <PageLoading /> : children}
+                    </WrapContent>
+                    {footerDom}
+                  </Layout>
                 </Layout>
-              </Layout>
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </RouteContext.Provider>
     </MenuCounter.Provider>
   );
