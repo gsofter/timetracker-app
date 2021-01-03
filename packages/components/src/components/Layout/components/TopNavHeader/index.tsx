@@ -77,7 +77,7 @@ const TopNavHeader: React.FC<TopNavHeaderProps> = (props) => {
   const { css } = useFela();
 
   return (
-    <div className={css(styleSheet.topNavHeader as any)}>
+    <div className={css(styleSheet.topNavHeader)}>
       <div className={className} style={style}>
         <div ref={ref} className={`${prefixCls}-main ${contentWidth === 'Fixed' ? 'wide' : ''}`}>
           {headerDom && (
