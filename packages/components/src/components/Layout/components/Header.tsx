@@ -38,7 +38,6 @@ const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
   const renderContent = () => {
     const { isMobile, onCollapse, navTheme, layout, headerRender, headerContentRender } = props;
     const isTop = layout === 'top';
-    // const { css } = useFela({...props, primaryColor});
     const clearMenuData = clearMenuItem(props.menuData || []);
     let defaultDom = (
       <GlobalHeader onCollapse={onCollapse} {...props} menuData={clearMenuData}>
@@ -91,7 +90,7 @@ const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
     layout !== 'mix' && needSettingWidth ? `calc(100% - ${collapsed ? 48 : siderWidth}px)` : '100%';
 
   const right = needFixedHeader ? 0 : undefined;
-  const { css, theme } = useFela(props);
+  const { css } = useFela();
   return (
     <div className={classNames(css(styleSheet.headerStyle))}>
       {needFixedHeader && (

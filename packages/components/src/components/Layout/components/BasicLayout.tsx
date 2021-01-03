@@ -234,7 +234,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     };
   };
   //@sri custom css
-  const { css, theme } = useFela(props);
+  const { css } = useFela();
   const {
     children,
     onCollapse: propsOnCollapse,

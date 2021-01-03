@@ -443,7 +443,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = props => {
     settingState || {};
 
   //@sri custom additionÎ
-  const { css } = useFela({ ...props, primaryColor });
+  const { css } = useFela();
 
   useEffect(() => {
     // 语言修改，这个是和 locale 是配置起来的

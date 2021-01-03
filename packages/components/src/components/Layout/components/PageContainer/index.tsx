@@ -224,7 +224,7 @@ const PageContainer: React.FC<PageContainerProps> = props => {
     <div className={`${prefixedClassName}-warp`}>{pageHeaderDom}</div>
   ) : null;
 
-  const { css } = useFela(props);
+  const { css } = useFela();
   return (
     <div className={classNames('PageContainer-Wrapper', css(styleSheet.pageContainer))}>
       <div style={style} className={className}>
