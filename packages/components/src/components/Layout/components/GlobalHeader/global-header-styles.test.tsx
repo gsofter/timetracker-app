@@ -4,7 +4,7 @@ import { createSnapshot } from 'jest-react-fela';
 import { createComponent } from 'react-fela';
 import { THEMES } from '../../../Themes/redux/constants/index'
 
-import { styleSheet } from './styles-new';
+import { styleSheet } from './styles';
 import 'jest';
 
 
