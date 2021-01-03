@@ -21,7 +21,7 @@ export class WorkbenchTheme extends React.Component<IProps, {}> {
     const theme = { ...themeReducer, primaryColor: settings.primaryColor };
     return (
       <ThemeProvider theme={theme}>
-        <WorkbenchComponent>{children}</WorkbenchComponent>
+        <>{children}</>
       </ThemeProvider>
     );
   }
