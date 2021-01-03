@@ -12,7 +12,7 @@ export const styleSheet = {
 		const basicLayoutPrefixCls = `${antPrefix}-pro-basicLayout`;
 		const proLayoutHeaderHeight = LocalThemeSettings.proLayoutHeaderHeight;
 		return {
-			// BFC
+			// @sri modified to work with Fela
 			display: 'flex',
 			width: '100%',
 			'min-height': '100%',
