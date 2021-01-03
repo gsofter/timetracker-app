@@ -4,6 +4,10 @@
 It has `layout` component which is sync with https://github.com/reboxjs/pro-components/tree/master/packages/layout
 
 
+Readme:
+
+https://procomponents.ant.design/en-US/components/
+
 
 1. We can track the new changes from `ant-desig/pro-components` by create a PR against the cloned repository `reboxjs/pro-components` like below. 
 
@@ -45,3 +49,86 @@ https://www.cleancss.com/css-beautify/
 3. Write tests for fela styles so the styles can be compared. 
 
 https://fela.js.org/docs/recipes/TestingFelaComponents.html
+
+
+
+
+
+Manual converstion from LESS to fela styles
+======
+
+SCSS
+===
+
+```
+  &-logo {
+    position: relative;
+    display: flex;
+    align-items: center;
+    padding: 16px 16px;
+    line-height: 32px;
+    cursor: pointer;
+
+    > a {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      min-height: 32px;
+    }
+
+    img {
+      display: inline-block;
+      height: 32px;
+      vertical-align: middle;
+    }
+
+    h1 {
+      display: inline-block;
+      height: 32px;
+      margin: 0 0 0 12px;
+      color: white;
+      font-weight: 600;
+      font-size: 18px;
+      line-height: 32px;
+      vertical-align: middle;
+    }
+  }
+```
+
+To
+
+
+```ts
+            '&-logo': {
+                position: 'relative',
+                display: 'flex',
+                'align-items': 'center',
+                padding: '16px 16px',
+                'line-height': '32px',
+                cursor: 'pointer',
+
+                '> a': {
+                    display: 'flex',
+                    'align-items': 'center',
+                    'justify-content': 'center',
+                    'min-height': '32px',
+                },
+
+                '& img': {
+                    display: 'inline-block',
+                    height: '32px',
+                    'vertical-align': 'middle',
+                },
+
+                '& h1': {
+                    display: 'inline-block',
+                    height: '32px',
+                    margin: '0 0 0 12px',
+                    color: 'white',
+                    'font-weight': '600',
+                    'font-size': '18px',
+                    'line-height': '32px',
+                    'vertical-align': 'middle',
+                },
+            },
+```

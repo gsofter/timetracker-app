@@ -1,6 +1,8 @@
 import * as R from 'ramda';
 import * as cookie from 'js-cookie';
 import { THEMES, COLORS } from '../constants';
+import { IThemeState } from '../reducers';
+import { TokenColorsEntity } from '../../generated-types';
 
 export const getTheme = (themeName) => {
   const theme = R.find(R.propEq('name', themeName))(THEMES);
@@ -49,9 +51,9 @@ export const getThemeSetting = (themeName, setting, defaultValue = null) => {
   return theme.settings[setting];
 };
 
-export const getTokenColorsScopeSettings = (theme, scope = null) => {
+export const getTokenColorsScopeSettings = (theme: IThemeState, scope = null) => {
   const tokenColors = theme.defaultSettings.tokenColors;
-  let token = null;
+  let token: TokenColorsEntity = null;
 
   if (scope && scope !== '') {
     token = R.find(R.propEq('scope', scope))(tokenColors);

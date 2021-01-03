@@ -7,9 +7,14 @@ export interface IThemeSettings {
     tokenColors?: (TokenColorsEntity)[] | null;
 }
 export interface Colors {
+    primaryColor: string;
     list: {
         dropBackground: string;
     };
+    app: {
+       background: string;
+       headerHeight: string;
+    },
     editor: {
         background: string;
         foreground: string;

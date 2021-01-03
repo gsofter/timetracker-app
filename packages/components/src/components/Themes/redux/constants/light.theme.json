@@ -1,6 +1,9 @@
 {
 	"type": "light",
 	"colors": {
+		"primaryColor": "#1890ff",
+		"app.background": "#000",
+		"app.headerHeight": "48px",
 		"editor.background": "#ffffff",
 		"editor.foreground": "#000000",
 		"editor.inactiveSelectionBackground": "#e5ebf1",
@@ -15,6 +18,13 @@
 			"settings": {
 				"foreground": "#000000ff",
 				"background": "#ffffffff"
+			}
+		},
+		{
+			"scope": "header",
+			"settings": {
+				"foreground": "#262626",
+				"background": "#001529"
 			}
 		},
 		{

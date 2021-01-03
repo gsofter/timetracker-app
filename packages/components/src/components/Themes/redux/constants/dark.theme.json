@@ -1,6 +1,9 @@
 {
 	"type": "dark",
 	"colors": {
+		"primaryColor": "#1890ff",
+		"app.background": "#fff",
+		"app.headerHeight": "48px",
 		"list.dropBackground": "#383b3d",
 		"editor.background": "#1e1e1e",
 		"editor.foreground": "#d4d4d4",
