@@ -91,16 +91,14 @@ const Html = ({
         })}
       </head>
       <body {...bodyAttrs}>
-        <div className="demo">
           <div
-            id="content"
+            id="root"
             dangerouslySetInnerHTML={{
               __html:
                 content ||
                 'Try building the demo:<br/> ...and refreshing this page!',
             }}
           />
-        </div>
         <script
           dangerouslySetInnerHTML={{
             __html: `window.__ENV__=${serialize(env, {

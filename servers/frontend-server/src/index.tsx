@@ -7,7 +7,7 @@ import Main from './app/Main';
 // tslint:disable-next-line
 import 'backend_reload';
 
-const rootEl = document.getElementById('content');
+const rootEl = document.getElementById('root');
 let frontendReloadCount = 0;
 
 const renderApp = ({ key }: { key: number }) =>
