@@ -28,6 +28,18 @@
 			}
 		},
 		{
+			"scope": "text",
+			"settings": {
+				"foreground": "#595959"
+			}
+		},
+		{
+			"scope": "text.secondary",
+			"settings": {
+				"foreground": "#8c8c8c"
+			}
+		},
+		{
 			"scope": "emphasis",
 			"settings": {
 				"fontStyle": "italic"

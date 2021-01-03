@@ -141,7 +141,7 @@ export const styleSheet = {
 					'box-shadow': '2px 0 8px 0 rgba(29, 35, 41, 0.05)',
 					[`> .${antPrefix}-menu-root`]: {
 						[`:not(.${proLayoutSiderMenuPrefixCls}-link-menu)`]: {
-							height: `~'calc(100vh - ${navHeaderHeight})'`,
+							height: `~calc(100vh - ${navHeaderHeight})`,
 							'overflow-y': 'auto',
 						},
 					},

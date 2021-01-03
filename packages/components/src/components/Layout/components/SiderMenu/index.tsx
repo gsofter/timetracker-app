@@ -52,7 +52,7 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props
     return null;
   }
 
-  const felaSylts = css(styleSheet.siderMenuStyles as any);
+  const felaStyles = css(styleSheet.siderMenuStyles as any);
 
   return isMobile ? (
     <Drawer
@@ -70,7 +70,7 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props
       bodyStyle={{ height: '100vh', padding: 0, display: 'flex', flexDirection: 'row' }}
     >
       {/* SideMenu-Wrapper: For inspecting element to adjust css, it will be removed for at version */}
-      <div className={classNames('SideMenu-Wrapper-Mobile', css(styleSheet.siderMenuStyles as any))}>
+      <div className={classNames(felaStyles)}>
         <SiderMenu
           {...omitProps}
           className={classNames(`${prefixCls}-sider`, className)}
@@ -80,7 +80,7 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props
       </div>
     </Drawer>
   ) : (
-      <div className={classNames('SideMenu-Wrapper', css(styleSheet.siderMenuStyles as any))}>
+      <div className={classNames(felaStyles)}>
         <SiderMenu
           className={classNames(`${prefixCls}-sider`, className)}
           {...omitProps}

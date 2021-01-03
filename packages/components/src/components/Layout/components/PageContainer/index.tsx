@@ -12,7 +12,7 @@ import PageLoading from '../PageLoading';
 import { WithFalse } from '../typings';
 import { Properties } from 'csstype';
 import { useFela } from 'react-fela';
-
+import { styleSheet } from './styles';
 export interface PageHeaderTabConfig {
   /**
    * @name tabs 的列表
@@ -226,7 +226,7 @@ const PageContainer: React.FC<PageContainerProps> = props => {
 
   const { css } = useFela(props);
   return (
-    <div className={classNames('PageContainer-Wrapper', css(styleSheet.containerStyle))}>
+    <div className={classNames('PageContainer-Wrapper', css(styleSheet.pageContainer))}>
       <div style={style} className={className}>
         {fixedHeader && headerDom ? (
           // 在 hasHeader 且 fixedHeader 的情况下，才需要设置高度
@@ -246,85 +246,85 @@ const PageContainer: React.FC<PageContainerProps> = props => {
   );
 };
 
-const styleSheet: { [key: string]: (obj) => Properties } = {
-  containerStyle: ({ theme, primaryColor, layout, backgroundColor }) => ({
-    display: 'inherit',
-    margin: 'margin: -24px -24px 0',
-    '& .ant-pro-page-container-children-content': {
-      margin: '24px 24px 0',
-      padding: '24px',
-      color: `${primaryColor}`,
-      backgroundColor: '#fff',
-    },
-    '& .ant-pro-page-container-warp': {
-      backgroundColor: `${backgroundColor}`,
-    },
-    '& .ant-pro-page-container-warp .ant-tabs-nav': {
-      margin: 0,
-    },
-    '& .ant-pro-page-container-ghost .ant-pro-page-container-warp': {
-      backgroundColor: 'transparent',
-    },
-    '& .ant-pro-page-container-ghost .ant-pro-page-container-children-content': {
-      marginTop: 0,
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-detail': {
-      display: 'flex',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-row': {
-      display: 'flex',
-      width: '100%',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-title-content': {
-      marginBottom: '16px',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-title, .ant-pro-page-container-main .ant-pro-page-container-content': {
-      flex: 'auto',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-extraContent, .ant-pro-page-container-main .ant-pro-page-container-main': {
-      flex: '0 1 auto',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-main': {
-      width: '100%',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-title': {
-      marginBottom: '16px',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-logo': {
-      marginBottom: '16px',
-    },
-    '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
-      minWidth: '242px',
-      marginLeft: '88px',
-      textAlign: 'right',
-    },
-    '@media screen and (max-width: 1200px)': {
-      '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
-        marginLeft: '44px',
-      },
-    },
-    '& @media screen and (max-width: 992px)': {
-      '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
-        marginLeft: '20px',
-      },
-    },
-    '& @media screen and (max-width: 768px)': {
-      '& .ant-pro-page-container-main .ant-pro-page-container-row': {
-        display: 'block',
-      },
-      '& .ant-pro-page-container-main .ant-pro-page-container-action, .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
-        marginLeft: 0,
-        textAlign: 'left',
-      },
-    },
-    '& @media screen and (max-width: 576px)': {
-      '& .ant-pro-page-container-detail': {
-        display: 'block',
-      },
-      '& .ant-pro-page-container-extraContent': {
-        marginLeft: 0,
-      },
-    },
-  }),
-};
+// const styleSheet: { [key: string]: (obj) => Properties } = {
+//   containerStyle: ({ theme, primaryColor, layout, backgroundColor }) => ({
+//     display: 'inherit',
+//     margin: 'margin: -24px -24px 0',
+//     '& .ant-pro-page-container-children-content': {
+//       margin: '24px 24px 0',
+//       padding: '24px',
+//       color: `${primaryColor}`,
+//       backgroundColor: '#fff',
+//     },
+//     '& .ant-pro-page-container-warp': {
+//       backgroundColor: `${backgroundColor}`,
+//     },
+//     '& .ant-pro-page-container-warp .ant-tabs-nav': {
+//       margin: 0,
+//     },
+//     '& .ant-pro-page-container-ghost .ant-pro-page-container-warp': {
+//       backgroundColor: 'transparent',
+//     },
+//     '& .ant-pro-page-container-ghost .ant-pro-page-container-children-content': {
+//       marginTop: 0,
+//     },
+//     '& .ant-pro-page-container-main .ant-pro-page-container-detail': {
+//       display: 'flex',
+//     },
+//     '& .ant-pro-page-container-main .ant-pro-page-container-row': {
+//       display: 'flex',
+//       width: '100%',
+//     },
+//     '& .ant-pro-page-container-main .ant-pro-page-container-title-content': {
+//       marginBottom: '16px',
+//     },
+//     '& .ant-pro-page-container-main .ant-pro-page-container-title, .ant-pro-page-container-main .ant-pro-page-container-content': {
+//       flex: 'auto',
+//     },
+//     '& .ant-pro-page-container-main .ant-pro-page-container-extraContent, .ant-pro-page-container-main .ant-pro-page-container-main': {
+//       flex: '0 1 auto',
+//     },
+//     '& .ant-pro-page-container-main .ant-pro-page-container-main': {
+//       width: '100%',
+//     },
+//     '& .ant-pro-page-container-main .ant-pro-page-container-title': {
+//       marginBottom: '16px',
+//     },
+//     '& .ant-pro-page-container-main .ant-pro-page-container-logo': {
+//       marginBottom: '16px',
+//     },
+//     '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
+//       minWidth: '242px',
+//       marginLeft: '88px',
+//       textAlign: 'right',
+//     },
+//     '@media screen and (max-width: 1200px)': {
+//       '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
+//         marginLeft: '44px',
+//       },
+//     },
+//     '& @media screen and (max-width: 992px)': {
+//       '& .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
+//         marginLeft: '20px',
+//       },
+//     },
+//     '& @media screen and (max-width: 768px)': {
+//       '& .ant-pro-page-container-main .ant-pro-page-container-row': {
+//         display: 'block',
+//       },
+//       '& .ant-pro-page-container-main .ant-pro-page-container-action, .ant-pro-page-container-main .ant-pro-page-container-extraContent': {
+//         marginLeft: 0,
+//         textAlign: 'left',
+//       },
+//     },
+//     '& @media screen and (max-width: 576px)': {
+//       '& .ant-pro-page-container-detail': {
+//         display: 'block',
+//       },
+//       '& .ant-pro-page-container-extraContent': {
+//         marginLeft: 0,
+//       },
+//     },
+//   }),
+// };
 export default PageContainer;

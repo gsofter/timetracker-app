@@ -39,6 +39,18 @@
 			}
 		},
 		{
+			"scope": "text",
+			"settings": {
+				"foreground": "rgba(255,255,255,0.85)"
+			}
+		},
+		{
+			"scope": "text.secondary",
+			"settings": {
+				"foreground": "rgba(255,255,255,0.65)"
+			}
+		},
+		{
 			"scope": "comment",
 			"settings": {
 				"foreground": "#608b4e"

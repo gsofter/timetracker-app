@@ -30,6 +30,7 @@ import useCurrentMenuLayoutProps from './utils/useCurrentMenuLayoutProps';
 import { clearMenuItem } from './utils/utils';
 import { useFela } from 'react-fela';
 import { Property, Properties } from 'csstype';
+import { styleSheet } from './BasicLayoutStyles';
 
 export type BasicLayoutProps = Partial<RouterTypes<Route>> &
   SiderMenuProps &
@@ -450,7 +451,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   }, [stringify(props.location)]);
 
   const [hasFooterToolbar, setHasFooterToolbar] = useState(false);
-  
+
   useDocumentTitle(pageTitleInfo, props.title || defaultSettings.title);
 
   console.log('rest => ', rest);
@@ -480,7 +481,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         {props.pure ? (
           children
         ) : (
-            <div className={classNames(css(styleSheet().basicLayout), 'BasicLayout-Wrapper')}>
+            <div className={classNames(css(styleSheet.basicLayout as any))}>
               <div className={className}>
                 <Layout
                   style={{
@@ -519,67 +520,67 @@ BasicLayout.defaultProps = {
 
 export default BasicLayout;
 
-const styleSheet: (antPrefix?: string) => { [key: string]: (obj) => Properties } = (
-  antPrefix = 'ant',
-) => {
-  const proLayoutHeaderHeight = '48px';
-  const basicLayoutPrefixCls = `${antPrefix}-pro-basicLayout`;
+// const styleSheet: (antPrefix?: string) => { [key: string]: (obj) => Properties } = (
+//   antPrefix = 'ant',
+// ) => {
+//   const proLayoutHeaderHeight = '48px';
+//   const basicLayoutPrefixCls = `${antPrefix}-pro-basicLayout`;
 
-  return {
-    basicLayout: ({ theme, primaryColor, layout }) => ({
-      display: 'flex',
-      width: '100%',
-      minHeight: '100vh',
-      [`& .${basicLayoutPrefixCls}`]: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        minHeight: '100%',
-      },
-      [`& .${basicLayoutPrefixCls} .ant-layout-header.ant-pro-fixed-header`]: {
-        position: 'fixed',
-        top: 0,
-      },
-      [`& .${basicLayoutPrefixCls}-content`]: {
-        position: 'relative',
-        margin: '24px',
-      },
-      [`& .${basicLayoutPrefixCls}-content .ant-pro-page-container`]: {
-        margin: '-24px -24px 0',
-      },
-      [`& .${basicLayoutPrefixCls}-content-disable-margin`]: {
-        margin: 0,
-      },
-      [`& .${basicLayoutPrefixCls}-content-disable-margin .ant-pro-page-container`]: {
-        margin: 0,
-      },
-      [`& .${basicLayoutPrefixCls}-content > .ant-layout`]: {
-        maxHeight: '100%',
-      },
-      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
-        height: '100vh',
-        overflow: 'hidden',
-        transform: 'rotate(0)',
-      },
-      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
-        height: `calc(100vh - ${proLayoutHeaderHeight})`,
-      },
-      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
-        height: 'calc(4vh)',
-      },
-      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children`]: {
-        minHeight: 'calc(52vh)',
-      },
-      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
-        height: 'calc(52vh);',
-      },
-      [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp`]: {
-        backgroundColor: '#fff',
-      },
+//   return {
+//     basicLayout: ({ theme, primaryColor, layout }) => ({
+//       display: 'flex',
+//       width: '100%',
+//       minHeight: '100vh',
+//       [`& .${basicLayoutPrefixCls}`]: {
+//         display: 'flex',
+//         flexDirection: 'column',
+//         width: '100%',
+//         minHeight: '100%',
+//       },
+//       [`& .${basicLayoutPrefixCls} .ant-layout-header.ant-pro-fixed-header`]: {
+//         position: 'fixed',
+//         top: 0,
+//       },
+//       [`& .${basicLayoutPrefixCls}-content`]: {
+//         position: 'relative',
+//         margin: '24px',
+//       },
+//       [`& .${basicLayoutPrefixCls}-content .ant-pro-page-container`]: {
+//         margin: '-24px -24px 0',
+//       },
+//       [`& .${basicLayoutPrefixCls}-content-disable-margin`]: {
+//         margin: 0,
+//       },
+//       [`& .${basicLayoutPrefixCls}-content-disable-margin .ant-pro-page-container`]: {
+//         margin: 0,
+//       },
+//       [`& .${basicLayoutPrefixCls}-content > .ant-layout`]: {
+//         maxHeight: '100%',
+//       },
+//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
+//         height: '100vh',
+//         overflow: 'hidden',
+//         transform: 'rotate(0)',
+//       },
+//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
+//         height: `calc(100vh - ${proLayoutHeaderHeight})`,
+//       },
+//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
+//         height: 'calc(4vh)',
+//       },
+//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children`]: {
+//         minHeight: 'calc(52vh)',
+//       },
+//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
+//         height: 'calc(52vh);',
+//       },
+//       [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp`]: {
+//         backgroundColor: '#fff',
+//       },
 
-      [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp .ant-tabs-nav`]: {
-        margin: 0,
-      },
-    }),
-  };
-};
+//       [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp .ant-tabs-nav`]: {
+//         margin: 0,
+//       },
+//     }),
+//   };
+// };

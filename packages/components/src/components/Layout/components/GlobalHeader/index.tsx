@@ -88,7 +88,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps & PrivateSiderMenuProps> = props 
         {...props}
         splitMenus={false}
         menuData={clearMenuData}
-        theme={headerTheme as 'light' | 'dark'}
+        // theme={headerTheme as 'light' | 'dark'}
       />
     );
   }
@@ -99,7 +99,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps & PrivateSiderMenuProps> = props 
     </span>
   );
 
-  const { css, theme } = useFela(props);
+  const { css } = useFela(props);
 
   return (
     <div className={css(styleSheet.globalHeaderStyle)}>

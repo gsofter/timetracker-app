@@ -63,34 +63,22 @@ SCSS
 ```
   &-logo {
     position: relative;
-    display: flex;
-    align-items: center;
-    padding: 16px 16px;
-    line-height: 32px;
     cursor: pointer;
 
     > a {
       display: flex;
-      align-items: center;
-      justify-content: center;
-      min-height: 32px;
     }
 
     img {
       display: inline-block;
-      height: 32px;
-      vertical-align: middle;
     }
 
     h1 {
       display: inline-block;
-      height: 32px;
-      margin: 0 0 0 12px;
-      color: white;
-      font-weight: 600;
-      font-size: 18px;
-      line-height: 32px;
-      vertical-align: middle;
+    }
+    &:hover,
+    &.opened {
+      background: @primary-color;
     }
   }
 ```
@@ -102,33 +90,20 @@ To
             '&-logo': {
                 position: 'relative',
                 display: 'flex',
-                'align-items': 'center',
-                padding: '16px 16px',
-                'line-height': '32px',
-                cursor: 'pointer',
-
                 '> a': {
                     display: 'flex',
-                    'align-items': 'center',
-                    'justify-content': 'center',
-                    'min-height': '32px',
                 },
-
-                '& img': {
+                '& img': { // need to add `& ` to convert correctly 
                     display: 'inline-block',
-                    height: '32px',
-                    'vertical-align': 'middle',
                 },
-
-                '& h1': {
+                '& h1': {    // need to add `& ` to convert correctly 
                     display: 'inline-block',
-                    height: '32px',
-                    margin: '0 0 0 12px',
-                    color: 'white',
-                    'font-weight': '600',
-                    'font-size': '18px',
-                    'line-height': '32px',
-                    'vertical-align': 'middle',
+                },
+                '&:hover': {   // comma seperated will copy same styles as next one
+                    background: `${primaryColor}`,
+                },
+                '&.opened': {
+                  background: `${primaryColor}`,
                 },
             },
 ```

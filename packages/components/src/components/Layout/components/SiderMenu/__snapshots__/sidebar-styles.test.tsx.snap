@@ -190,7 +190,7 @@ exports[`Test styles should return a Component 1`] = `
 .bm
   .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed
   > .ant-menu-root:not(.ant-pro-sider-link-menu) {
-  height: ~\\"calc(100vh - 48px)\\";
+  height: ~calc(100vh - 48px);
 }
 .bn
   .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed
