@@ -1,0 +1,11 @@
+query GetScheduleEvents($userId: String!) {
+ 	getScheduleEvents(userId: $userId) {
+        title
+        allDay
+        start
+        end
+        desc
+        resourceId
+        tooltip
+    }
+}
