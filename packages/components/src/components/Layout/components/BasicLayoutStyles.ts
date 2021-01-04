@@ -1,11 +1,10 @@
-import { getTokenColorsScopeSettings } from '../../Themes/redux/utils';
-import { IThemeState } from '../../Themes/redux';
+import { ITheme } from '../../Themes/interfaces';
 import { GlobalThemeSettings, LocalThemeSettings } from './default-styles';
 import { Property, Properties } from 'csstype';
 
 
 export const styleSheet = {
-	basicLayout: ({ theme, prefixCls }: { theme: IThemeState, prefixCls: string }) => {
+	basicLayout: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
 		const { defaultSettings: { colors: { primaryColor }, } } = theme;
 		const { antPrefix } = GlobalThemeSettings;
 		// less variables

@@ -1,9 +1,9 @@
-import { IThemeState } from '../../../Themes/redux';
+import { ITheme } from '../../../Themes/interfaces';
 import { GlobalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-	pageContainer: ({ theme, prefixCls }: { theme: IThemeState, prefixCls: string }) => {
+	pageContainer: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
 		const { antPrefix, screenLg, screenMd, screenSm, screenXl } = GlobalThemeSettings;
 
 		// less variables

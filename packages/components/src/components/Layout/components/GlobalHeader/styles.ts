@@ -1,9 +1,9 @@
-import { IThemeState, getTokenColorsScopeSettings } from '../../../Themes/redux';
+import { ITheme } from '../../../Themes/interfaces';
 import { GlobalThemeSettings, LocalThemeSettings} from '../default-styles';
 
 
 export const styleSheet = {
-    globalHeaderStyle: ({ theme, prefixCls }: { theme: IThemeState, prefixCls: string }) => {
+    globalHeaderStyle: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
         const { antPrefix, componentBackground, layoutSiderBackground /**btnPrimaryColor,**/ } = GlobalThemeSettings;
         const { proLayoutHeaderHeight } = LocalThemeSettings;
         // const { defaultSettings: { colors: { primaryColor } } } = theme;

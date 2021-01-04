@@ -1,9 +1,12 @@
-import { IThemeState, getTokenColorsScopeSettings } from '../../../Themes/redux';
+// import { IThemeState, getTokenColorsScopeSettings } from '../../../Themes/redux';
+import { ITheme } from '../../../Themes/interfaces';
+
 import { GlobalThemeSettings } from '../default-styles';
+import { getTokenColorsScopeSettings } from '../../../Themes/utils';
 
 
 export const styleSheet = {
-  globalFooter: ({ theme, prefixCls }: { theme: IThemeState, prefixCls: string }) => {
+  globalFooter: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
     const { antPrefix, fontSizeBase } = GlobalThemeSettings;
 
     // less variables

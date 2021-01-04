@@ -1,9 +1,9 @@
-import { IThemeState, getTokenColorsScopeSettings } from '../../../Themes/redux';
+import { ITheme } from '../../../Themes/interfaces';
 import { GlobalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-    footerToolbarStyle: ({ theme, prefixCls }: { theme: IThemeState, prefixCls: string }) => {
+    footerToolbarStyle: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
         const { antPrefix, componentBackground, borderColorSplit, shadow1Up } = GlobalThemeSettings;
 
         // less variables

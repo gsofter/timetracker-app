@@ -1,10 +1,10 @@
-import { getTokenColorsScopeSettings } from '../../../Themes/redux/utils';
-import { IThemeState } from '../../../Themes/redux';
+import { getTokenColorsScopeSettings } from '../../../Themes/utils';
+import { ITheme } from '../../../Themes/interfaces';
 import { GlobalThemeSettings, LocalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-    topNavHeader: ({ theme, prefixCls }: { theme: IThemeState, prefixCls: string }) => {
+    topNavHeader: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
         const { defaultSettings: { colors: { primaryColor }, type: themeName } } = theme;
         const { componentBackground, btnPrimaryColor, antPrefix } = GlobalThemeSettings;
 

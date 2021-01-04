@@ -1,10 +1,10 @@
-import { getTokenColorsScopeSettings } from '../../../Themes/redux/utils';
-import { IThemeState } from '../../../Themes/redux';
+import { getTokenColorsScopeSettings } from '../../../Themes/utils';
+import { ITheme } from '../../../Themes/interfaces';
 import { GlobalThemeSettings, LocalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-	siderMenuStyles: ({ theme, prefixCls }: { theme: IThemeState, prefixCls: string }) => {
+	siderMenuStyles: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
 		const { defaultSettings: { colors: { primaryColor }, type: themeName } } = theme;
 		const {borderColorSplit, borderStyleBase, borderWidthBase, antPrefix } = GlobalThemeSettings;
 

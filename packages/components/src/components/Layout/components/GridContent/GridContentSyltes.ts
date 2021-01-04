@@ -1,9 +1,9 @@
-import { IThemeState } from '../../../Themes/redux';
+import { ITheme } from '../../../Themes/interfaces';
 import { GlobalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-	gridContent: ({ theme, prefixCls }: { theme: IThemeState, prefixCls: string }) => {
+	gridContent: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
 		const { antPrefix } = GlobalThemeSettings;
 
 		// less variables
