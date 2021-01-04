@@ -1,9 +1,9 @@
-import { ITheme } from '../../../Themes/interfaces';
+import { IThemeSettings } from '../../../Themes/interfaces';
 import { GlobalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-	gridContent: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
+	gridContent: ({ theme, prefixCls }: { theme: IThemeSettings, prefixCls: string }) => {
 		const { antPrefix } = GlobalThemeSettings;
 
 		// less variables

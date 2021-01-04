@@ -22,7 +22,7 @@ import { genStringToTheme } from '../utils/utils';
 import LayoutSetting, { renderLayoutSettingItem } from './LayoutChange';
 import RegionalSetting from './RegionalChange';
 import { useFela } from 'react-fela';
-
+import { styleSheet } from './styles';
 interface BodyProps {
   title: string;
   prefixCls: string;
@@ -33,8 +33,8 @@ type MergerSettingsType<T> = Partial<T> & {
   colorWeak?: boolean;
 };
 const Body: React.FC<BodyProps> = ({ children, prefixCls, title }) => (
-  <div>
-    <h3 className={`${styleSheet.settingDrawerTitle}`}>{title}</h3>
+  <div style={{ marginBottom: 24 }}>
+    <h3 className={`${prefixCls}-drawer-title`}>{title}</h3>
     {children}
   </div>
 );
@@ -564,8 +564,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = props => {
       placement="right"
       getContainer={getContainer}
       handler={
-        // tslint:disable-next-line: jsx-wrap-multiline
-        <div className={css(styleSheet.settingDrawerHandle)} onClick={() => setShow(!show)}>
+        <div className={`${baseClassName}-drawer-handle`} onClick={() => setShow(!show)}>
           {show ? (
             <CloseOutlined
               style={{
@@ -587,7 +586,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = props => {
         zIndex: 999,
       }}
     >
-      <div className={css(styleSheet.proSettingDrawerContent)}>
+      <div className={css(styleSheet.settingDrawer)}>
         <Body
           title={formatMessage({
             id: 'app.setting.pagestyle',
@@ -706,163 +705,163 @@ const SettingDrawer: React.FC<SettingDrawerProps> = props => {
 
 export default SettingDrawer;
 
-const styleSheet: any = {
-  settingDrawerTitle: ({ primaryColor }) => ({
-    marginBottom: '12px',
-    color: primaryColor,
-    fontSize: '14px',
-    lineHeight: '22px',
-  }),
-  settingDrawerHandle: ({ primaryColor }) => ({
-    position: 'absolute',
-    top: '240px',
-    right: '300px',
-    zIndex: 0,
-    display: 'flex',
-    alignItems: 'center',
-    justifyContent: 'center',
-    width: '48px',
-    height: '48px',
-    fontSize: '16px',
-    textAlign: 'center',
-    background: primaryColor,
-    borderRadius: '4px 0 0 4px',
-    cursor: 'pointer',
-    pointerEvents: 'auto',
-  }),
-  proSettingDrawerContent: ({ primaryColor }) => ({
-    position: 'relative',
-    minHeight: '100%',
-    '& .ant-pro-setting-drawer-content .ant-list-item span': {
-      flex: 1,
-    },
-    '& .ant-pro-setting-drawer-block-checkbox': {
-      display: 'flex',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item': {
-      position: 'relative',
-      marginRight: '16px',
-      boxShadow: '0 1px 2.5px 0 rgba(0,0,0,0.18)',
-      borderRadius: '4px',
-      overflow: 'hidden',
-      cursor: 'pointer',
-      width: '44px',
-      height: '36px',
-      backgroundColor: '#f0f2f5',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item::before': {
-      position: 'absolute',
-      top: '0',
-      left: '0',
-      width: '33%',
-      height: '100%',
-      backgroundColor: '#001529',
-      content: '""',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item::after': {
-      position: 'absolute',
-      top: '0',
-      left: '0',
-      width: '100%',
-      height: '25%',
-      backgroundColor: '#fff',
-      content: '""',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item-light::before': {
-      backgroundColor: '#fff',
-      content: '""',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item-light::after': {
-      backgroundColor: '#fff',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item-dark::before, .ant-pro-setting-drawer-block-checkbox-item-side::before': {
-      backgroundColor: '#011529',
-      content: '""',
-      zIndex: '1',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item-dark::after, .ant-pro-setting-drawer-block-checkbox-item-side::after': {
-      backgroundColor: '#fff',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item-top::before': {
-      backgroundColor: 'transparent',
-      content: '""',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item-top::after': {
-      backgroundColor: '#011529',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item-mix::before': {
-      backgroundColor: '#fff',
-      content: '""',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item-mix::after': {
-      backgroundColor: '#011529',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item-light:after': {
-      backgroundColor: '#fff',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item:after': {
-      position: 'absolute',
-      top: '0',
-      left: '0',
-      width: '100%',
-      height: '25%',
-      content: '""',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-selectIcon': {
-      position: 'absolute',
-      bottom: '4px',
-      right: '6px',
-      color: primaryColor,
-      fontWeight: 'bold',
-      fontSize: '14px',
-      pointerEvents: 'none',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-selectIcon .action': {
-      color: primaryColor,
-    },
-    '& .ant-pro-setting-drawer-color_block': {
-      display: 'inline-block',
-      width: '38px',
-      height: '22px',
-      margin: '4px',
-      marginRight: '12px',
-      verticalAlign: 'middle',
-      borderRadius: '4px',
-      cursor: 'pointer',
-    },
-    '& .ant-pro-setting-drawer-title': {
-      marginBottom: '12px',
-      color: primaryColor,
-      fontSize: '14px',
-      lineHeight: '22px',
-    },
-    '& .ant-pro-setting-drawer-production-hint': {
-      marginTop: '16px',
-      fontSize: '12px',
-    },
-    '& .ant-pro-setting-drawer-block-checkbox-item img': {
-      width: '48px',
-    },
-    '& .theme-color-block': {
-      display: 'inline-block',
-      width: '22px',
-      height: '22px',
-      margin: '4px',
-      marginRight: '12px',
-      verticalAlign: 'middle',
-      borderRadius: '4px',
-      cursor: 'pointer',
-    },
-    '& .ant-pro-setting-drawer-content .theme-color .theme-color-block': {
-      float: 'left',
-      width: '20px',
-      height: '20px',
-      marginRight: '8px',
-      color: '#fff',
-      fontWeight: '700',
-      textAlign: 'center',
-      borderRadius: '2px',
-      cursor: 'pointer',
-    },
-  }),
-};
+// const styleSheet: any = {
+//   settingDrawerTitle: ({ primaryColor }) => ({
+//     marginBottom: '12px',
+//     color: primaryColor,
+//     fontSize: '14px',
+//     lineHeight: '22px',
+//   }),
+//   settingDrawerHandle: ({ primaryColor }) => ({
+//     position: 'absolute',
+//     top: '240px',
+//     right: '300px',
+//     zIndex: 0,
+//     display: 'flex',
+//     alignItems: 'center',
+//     justifyContent: 'center',
+//     width: '48px',
+//     height: '48px',
+//     fontSize: '16px',
+//     textAlign: 'center',
+//     background: primaryColor,
+//     borderRadius: '4px 0 0 4px',
+//     cursor: 'pointer',
+//     pointerEvents: 'auto',
+//   }),
+//   proSettingDrawerContent: ({ primaryColor }) => ({
+//     position: 'relative',
+//     minHeight: '100%',
+//     '& .ant-pro-setting-drawer-content .ant-list-item span': {
+//       flex: 1,
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox': {
+//       display: 'flex',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item': {
+//       position: 'relative',
+//       marginRight: '16px',
+//       boxShadow: '0 1px 2.5px 0 rgba(0,0,0,0.18)',
+//       borderRadius: '4px',
+//       overflow: 'hidden',
+//       cursor: 'pointer',
+//       width: '44px',
+//       height: '36px',
+//       backgroundColor: '#f0f2f5',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item::before': {
+//       position: 'absolute',
+//       top: '0',
+//       left: '0',
+//       width: '33%',
+//       height: '100%',
+//       backgroundColor: '#001529',
+//       content: '""',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item::after': {
+//       position: 'absolute',
+//       top: '0',
+//       left: '0',
+//       width: '100%',
+//       height: '25%',
+//       backgroundColor: '#fff',
+//       content: '""',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item-light::before': {
+//       backgroundColor: '#fff',
+//       content: '""',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item-light::after': {
+//       backgroundColor: '#fff',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item-dark::before, .ant-pro-setting-drawer-block-checkbox-item-side::before': {
+//       backgroundColor: '#011529',
+//       content: '""',
+//       zIndex: '1',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item-dark::after, .ant-pro-setting-drawer-block-checkbox-item-side::after': {
+//       backgroundColor: '#fff',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item-top::before': {
+//       backgroundColor: 'transparent',
+//       content: '""',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item-top::after': {
+//       backgroundColor: '#011529',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item-mix::before': {
+//       backgroundColor: '#fff',
+//       content: '""',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item-mix::after': {
+//       backgroundColor: '#011529',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item-light:after': {
+//       backgroundColor: '#fff',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item:after': {
+//       position: 'absolute',
+//       top: '0',
+//       left: '0',
+//       width: '100%',
+//       height: '25%',
+//       content: '""',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-selectIcon': {
+//       position: 'absolute',
+//       bottom: '4px',
+//       right: '6px',
+//       color: primaryColor,
+//       fontWeight: 'bold',
+//       fontSize: '14px',
+//       pointerEvents: 'none',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-selectIcon .action': {
+//       color: primaryColor,
+//     },
+//     '& .ant-pro-setting-drawer-color_block': {
+//       display: 'inline-block',
+//       width: '38px',
+//       height: '22px',
+//       margin: '4px',
+//       marginRight: '12px',
+//       verticalAlign: 'middle',
+//       borderRadius: '4px',
+//       cursor: 'pointer',
+//     },
+//     '& .ant-pro-setting-drawer-title': {
+//       marginBottom: '12px',
+//       color: primaryColor,
+//       fontSize: '14px',
+//       lineHeight: '22px',
+//     },
+//     '& .ant-pro-setting-drawer-production-hint': {
+//       marginTop: '16px',
+//       fontSize: '12px',
+//     },
+//     '& .ant-pro-setting-drawer-block-checkbox-item img': {
+//       width: '48px',
+//     },
+//     '& .theme-color-block': {
+//       display: 'inline-block',
+//       width: '22px',
+//       height: '22px',
+//       margin: '4px',
+//       marginRight: '12px',
+//       verticalAlign: 'middle',
+//       borderRadius: '4px',
+//       cursor: 'pointer',
+//     },
+//     '& .ant-pro-setting-drawer-content .theme-color .theme-color-block': {
+//       float: 'left',
+//       width: '20px',
+//       height: '20px',
+//       marginRight: '8px',
+//       color: '#fff',
+//       fontWeight: '700',
+//       textAlign: 'center',
+//       borderRadius: '2px',
+//       cursor: 'pointer',
+//     },
+//   }),
+// };

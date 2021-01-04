@@ -1,22 +1,22 @@
 import { getTokenColorsScopeSettings } from '../../../Themes/utils';
-import { ITheme } from '../../../Themes/interfaces';
+import { IThemeSettings } from '../../../Themes/interfaces';
 import { GlobalThemeSettings, LocalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-	siderMenuStyles: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
-		const { defaultSettings: { colors: { primaryColor }, type: themeName } } = theme;
+	siderMenuStyles: ({ theme }: { theme: IThemeSettings }) => {
+		const { colors: { primaryColor } } = theme;
 		const {borderColorSplit, borderStyleBase, borderWidthBase, antPrefix } = GlobalThemeSettings;
 
 		const headerColor = getTokenColorsScopeSettings(theme, 'header');
 		// less variables
 		const proLayoutSiderMenuPrefixCls = `${antPrefix}-pro-sider`;
 		const navHeaderHeight = LocalThemeSettings.proLayoutHeaderHeight;
-		const layoutSiderBackground = headerColor.background;
+		const layoutSiderBackground = headerColor.foreground;
 		return {
 			[`& .${proLayoutSiderMenuPrefixCls}`]: {
 				position: 'relative',
-				'background-color': headerColor.background,
+				'background-color': headerColor.foreground,
 				borderRight: '0',
 				transition: 'background-color 0.3s, min-width 0.3s, max-width 0.3s',
 
@@ -205,6 +205,10 @@ export const styleSheet = {
 				'& .drawer .drawer-content': {
 					background: `${layoutSiderBackground}`,
 				},
+				// @sri customize for divider
+				'& .ant-divider': {
+					color: headerColor.foreground,
+				  },
 			},
 		};
 	}

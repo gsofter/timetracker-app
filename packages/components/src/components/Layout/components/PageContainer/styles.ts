@@ -1,9 +1,9 @@
-import { ITheme } from '../../../Themes/interfaces';
+import { IThemeSettings } from '../../../Themes/interfaces';
 import { GlobalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-	pageContainer: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
+	pageContainer: ({ theme }: { theme: IThemeSettings }) => {
 		const { antPrefix, screenLg, screenMd, screenSm, screenXl } = GlobalThemeSettings;
 
 		// less variables

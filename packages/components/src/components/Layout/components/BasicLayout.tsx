@@ -29,7 +29,6 @@ import compatibleLayout from './utils/compatibleLayout';
 import useCurrentMenuLayoutProps from './utils/useCurrentMenuLayoutProps';
 import { clearMenuItem } from './utils/utils';
 import { useFela } from 'react-fela';
-import { Property, Properties } from 'csstype';
 import { styleSheet } from './BasicLayoutStyles';
 
 export type BasicLayoutProps = Partial<RouterTypes<Route>> &

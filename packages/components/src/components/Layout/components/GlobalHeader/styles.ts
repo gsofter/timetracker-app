@@ -1,13 +1,12 @@
-import { ITheme } from '../../../Themes/interfaces';
-import { GlobalThemeSettings, LocalThemeSettings} from '../default-styles';
+import { IThemeSettings } from '../../../Themes/interfaces';
+import { GlobalThemeSettings, LocalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-    globalHeaderStyle: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
-        const { antPrefix, componentBackground, layoutSiderBackground /**btnPrimaryColor,**/ } = GlobalThemeSettings;
+    globalHeaderStyle: ({ theme }: { theme: IThemeSettings }) => {
+        const { antPrefix, componentBackground, layoutSiderBackground } = GlobalThemeSettings;
         const { proLayoutHeaderHeight } = LocalThemeSettings;
-        // const { defaultSettings: { colors: { primaryColor } } } = theme;
-        const primaryColor = '#fff'
+        const { colors: { primaryColor } } = theme;
         // less variables
         const proLayoutGlobalHeaderPrefixCls = `${antPrefix}-pro-global-header`;
         const proLayoutHeaderBg = componentBackground;
