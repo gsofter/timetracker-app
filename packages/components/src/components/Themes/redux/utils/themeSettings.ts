@@ -3,8 +3,9 @@ import * as cookie from 'js-cookie';
 import { THEMES, COLORS } from '../constants';
 import { IThemeState } from '../reducers';
 import { TokenColorsEntity } from '../../generated-types';
+import { ITheme } from '../../interfaces/theme';
 
-export const getTheme = (themeName) => {
+export const getTheme: (themeName: string) => any = (themeName) => {
   const theme = R.find(R.propEq('name', themeName))(THEMES);
   const themeSetting = cookie.get(`workbench.colorTheme.${themeName}`);
 

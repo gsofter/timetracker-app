@@ -5,7 +5,7 @@ import { GlobalThemeSettings, LocalThemeSettings } from '../default-styles';
 
 export const styleSheet = {
     topNavHeader: ({ theme, prefixCls }: { theme: IThemeState, prefixCls: string }) => {
-        // const { defaultSettings: { colors: { primaryColor }, type: themeName } } = theme;
+        const { defaultSettings: { colors: { primaryColor }, type: themeName } } = theme;
         const { componentBackground, btnPrimaryColor, antPrefix } = GlobalThemeSettings;
 
         const headerColor = getTokenColorsScopeSettings(theme, 'header');

@@ -99,10 +99,11 @@ export const accountPageStore: any[] = [
     {
         path: '//:orgName/usermenu/account/referrals',
         key: 'userMenu.account.referrals',
-        tab: 'Referrals',
-        name: 'Referrals',
+        // tab: 'Referrals',
+        // name: 'Referrals',
         position: IMenuPosition.BOTTOM,
         component: AccountSetting,
+        hideInMenu: true,
         exact: true,
         priority: 3,
         authority: ['admin', 'user'],

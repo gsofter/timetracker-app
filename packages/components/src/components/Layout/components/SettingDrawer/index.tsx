@@ -245,24 +245,24 @@ const getThemeList = (settings: Partial<ProSettings>) => {
     color: string;
     theme: 'dark' | 'light';
   }[] = [
-    {
-      key: 'daybreak',
-      color: '#1890ff',
-      theme: 'dark',
-    },
-  ];
+      {
+        key: 'daybreak',
+        color: '#1890ff',
+        theme: 'dark',
+      },
+    ];
 
   const lightColorList: {
     key: string;
     color: string;
     theme: 'dark' | 'light';
   }[] = [
-    {
-      key: 'daybreak',
-      color: '#1890ff',
-      theme: 'dark',
-    },
-  ];
+      {
+        key: 'daybreak',
+        color: '#1890ff',
+        theme: 'dark',
+      },
+    ];
   if (settings.layout !== 'mix') {
     themeList.push({
       key: 'dark',
@@ -443,7 +443,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = props => {
     settingState || {};
 
   //@sri custom additionÎ
-  const { css } = useFela();
+  const { css } = useFela({ primaryColor: props.settings.primaryColor });
 
   useEffect(() => {
     // 语言修改，这个是和 locale 是配置起来的
@@ -574,13 +574,13 @@ const SettingDrawer: React.FC<SettingDrawerProps> = props => {
               }}
             />
           ) : (
-            <SettingOutlined
-              style={{
-                color: '#fff',
-                fontSize: 20,
-              }}
-            />
-          )}
+              <SettingOutlined
+                style={{
+                  color: '#fff',
+                  fontSize: 20,
+                }}
+              />
+            )}
         </div>
       }
       style={{
