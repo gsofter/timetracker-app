@@ -1,5 +1,5 @@
 
 
 export * from './containers';
-export * from './generated-types';
+export * from './interfaces';
 
