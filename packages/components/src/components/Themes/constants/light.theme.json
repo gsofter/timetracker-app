@@ -3,6 +3,7 @@
 	"type": "light",
 	"colors": {
 		"primaryColor": "#1890ff",
+		"button.primaryColor": "#1890ff",
 		"app.background": "#000",
 		"app.headerHeight": "48px",
 		"list.dropBackground": "#383b3d",
