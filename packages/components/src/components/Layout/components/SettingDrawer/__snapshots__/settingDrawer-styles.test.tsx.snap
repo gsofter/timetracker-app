@@ -1,0 +1,251 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test styles should return a Component 1`] = `
+".a .ant-pro-setting-drawer-content {
+  position: relative;
+}
+.b .ant-pro-setting-drawer-content {
+  min-height: 100%;
+}
+.c .ant-pro-setting-drawer-content .ant-list-item span {
+  flex: 1;
+}
+.d .ant-pro-setting-drawer-block-checkbox {
+  display: flex;
+}
+.e .ant-pro-setting-drawer-block-checkbox-item {
+  position: relative;
+}
+.f .ant-pro-setting-drawer-block-checkbox-item {
+  margin-right: 16px;
+}
+.g .ant-pro-setting-drawer-block-checkbox-item {
+  box-shadow: 0 1px 2.5px 0 rgba(0, 0, 0, 0.18);
+}
+.h .ant-pro-setting-drawer-block-checkbox-item {
+  border-radius: 4px;
+}
+.i .ant-pro-setting-drawer-block-checkbox-item {
+  overflow: hidden;
+}
+.j .ant-pro-setting-drawer-block-checkbox-item {
+  cursor: pointer;
+}
+.k .ant-pro-setting-drawer-block-checkbox-item {
+  width: 44px;
+}
+.l .ant-pro-setting-drawer-block-checkbox-item {
+  height: 36px;
+}
+.m .ant-pro-setting-drawer-block-checkbox-item {
+  background-color: #f0f2f5;
+}
+.n .ant-pro-setting-drawer-block-checkbox-item::before {
+  position: absolute;
+}
+.o .ant-pro-setting-drawer-block-checkbox-item::before {
+  top: 0;
+}
+.p .ant-pro-setting-drawer-block-checkbox-item::before {
+  left: 0;
+}
+.q .ant-pro-setting-drawer-block-checkbox-item::before {
+  width: 33%;
+}
+.r .ant-pro-setting-drawer-block-checkbox-item::before {
+  height: 100%;
+}
+.s .ant-pro-setting-drawer-block-checkbox-item::before {
+  background-color: #fff;
+}
+.t .ant-pro-setting-drawer-block-checkbox-item::before {
+  content: \\"\\";
+}
+.u .ant-pro-setting-drawer-block-checkbox-item::after {
+  position: absolute;
+}
+.v .ant-pro-setting-drawer-block-checkbox-item::after {
+  top: 0;
+}
+.w .ant-pro-setting-drawer-block-checkbox-item::after {
+  left: 0;
+}
+.x .ant-pro-setting-drawer-block-checkbox-item::after {
+  width: 100%;
+}
+.y .ant-pro-setting-drawer-block-checkbox-item::after {
+  height: 25%;
+}
+.z .ant-pro-setting-drawer-block-checkbox-item::after {
+  background-color: #fff;
+}
+.ab .ant-pro-setting-drawer-block-checkbox-item::after {
+  content: \\"\\";
+}
+.ac .ant-pro-setting-drawer-block-checkbox-item-light::before {
+  background-color: #fff;
+}
+.ae .ant-pro-setting-drawer-block-checkbox-item-light::before {
+  content: \\"\\";
+}
+.af .ant-pro-setting-drawer-block-checkbox-item-light::after {
+  background-color: #fff;
+}
+.ag .ant-pro-setting-drawer-block-checkbox-item-dark::before {
+  background-color: #1f1f1f;
+}
+.ah .ant-pro-setting-drawer-block-checkbox-item-dark::before {
+  content: \\"\\";
+}
+.ai .ant-pro-setting-drawer-block-checkbox-item-dark::before {
+  z-index: 1;
+}
+.aj .ant-pro-setting-drawer-block-checkbox-item-dark::after {
+  background-color: #fff;
+}
+.ak .ant-pro-setting-drawer-block-checkbox-item-side::before {
+  background-color: #1f1f1f;
+}
+.al .ant-pro-setting-drawer-block-checkbox-item-side::before {
+  content: \\"\\";
+}
+.am .ant-pro-setting-drawer-block-checkbox-item-side::before {
+  z-index: 1;
+}
+.an .ant-pro-setting-drawer-block-checkbox-item-side::after {
+  background-color: #fff;
+}
+.ao .ant-pro-setting-drawer-block-checkbox-item-top::before {
+  background-color: transparent;
+}
+.ap .ant-pro-setting-drawer-block-checkbox-item-top::before {
+  content: \\"\\";
+}
+.aq .ant-pro-setting-drawer-block-checkbox-item-top::after {
+  background-color: #1f1f1f;
+}
+.ar .ant-pro-setting-drawer-block-checkbox-item-mix::before {
+  background-color: #fff;
+}
+.as .ant-pro-setting-drawer-block-checkbox-item-mix::before {
+  content: \\"\\";
+}
+.at .ant-pro-setting-drawer-block-checkbox-item-mix::after {
+  background-color: #1f1f1f;
+}
+.au .ant-pro-setting-drawer-block-checkbox-selectIcon {
+  position: absolute;
+}
+.av .ant-pro-setting-drawer-block-checkbox-selectIcon {
+  bottom: 4px;
+}
+.aw .ant-pro-setting-drawer-block-checkbox-selectIcon {
+  right: 6px;
+}
+.ax .ant-pro-setting-drawer-block-checkbox-selectIcon {
+  color: #1890ff;
+}
+.ay .ant-pro-setting-drawer-block-checkbox-selectIcon {
+  font-weight: bold;
+}
+.az .ant-pro-setting-drawer-block-checkbox-selectIcon {
+  font-size: 14px;
+}
+.ba .ant-pro-setting-drawer-block-checkbox-selectIcon {
+  pointer-events: none;
+}
+.bb .ant-pro-setting-drawer-block-checkbox-selectIcon .action {
+  color: #1890ff;
+}
+.bc .ant-pro-setting-drawer-color_block {
+  display: inline-block;
+}
+.bd .ant-pro-setting-drawer-color_block {
+  width: 38px;
+}
+.be .ant-pro-setting-drawer-color_block {
+  height: 22px;
+}
+.bf .ant-pro-setting-drawer-color_block {
+  margin: 4px;
+}
+.bg .ant-pro-setting-drawer-color_block {
+  margin-right: 12px;
+}
+.bh .ant-pro-setting-drawer-color_block {
+  vertical-align: middle;
+}
+.bi .ant-pro-setting-drawer-color_block {
+  border-radius: 4px;
+}
+.bj .ant-pro-setting-drawer-color_block {
+  cursor: pointer;
+}
+.bk .ant-pro-setting-drawer-title {
+  margin-bottom: 12px;
+}
+.bl .ant-pro-setting-drawer-title {
+  color: #262626;
+}
+.bm .ant-pro-setting-drawer-title {
+  font-size: 14px;
+}
+.bn .ant-pro-setting-drawer-title {
+  line-height: 22px;
+}
+.bo .ant-pro-setting-drawer-handle {
+  position: absolute;
+}
+.bp .ant-pro-setting-drawer-handle {
+  top: 240px;
+}
+.bq .ant-pro-setting-drawer-handle {
+  right: 300px;
+}
+.br .ant-pro-setting-drawer-handle {
+  z-index: 0;
+}
+.bs .ant-pro-setting-drawer-handle {
+  display: flex;
+}
+.bt .ant-pro-setting-drawer-handle {
+  align-items: center;
+}
+.bu .ant-pro-setting-drawer-handle {
+  justify-content: center;
+}
+.bv .ant-pro-setting-drawer-handle {
+  width: 48px;
+}
+.bw .ant-pro-setting-drawer-handle {
+  height: 48px;
+}
+.bx .ant-pro-setting-drawer-handle {
+  font-size: 16px;
+}
+.by .ant-pro-setting-drawer-handle {
+  text-align: center;
+}
+.bz .ant-pro-setting-drawer-handle {
+  background: #1890ff;
+}
+.ca .ant-pro-setting-drawer-handle {
+  border-radius: 4px 0 0 4px;
+}
+.cb .ant-pro-setting-drawer-handle {
+  cursor: pointer;
+}
+.cc .ant-pro-setting-drawer-handle {
+  pointer-events: auto;
+}
+.cd .ant-pro-setting-drawer-production-hint {
+  margin-top: 16px;
+}
+.ce .ant-pro-setting-drawer-production-hint {
+  font-size: 12px;
+}
+
+
+<div className=ant-pro a b c d e f g h i j k l m n o p q r s t u v w x y z ab ac ae af ag ah ai aj ak al am an ao ap aq ar as at au av aw ax ay az ba bb bc bd be bf bg bh bi bj bk bl bm bn bo bp bq br bs bt bu bv bw bx by bz ca cb cc cd ce />;
+"
+`;

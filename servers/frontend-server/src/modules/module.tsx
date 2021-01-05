@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Feature, FeatureWithRouterFactory, renderRoutes2 } from '@common-stack/client-react';
-import ProComponent, { WorkbenchTheme } from '@admin-layout/components';
+import { ThemeProvider } from '@admin-layout/components';
 import LayoutModule, { ProLayout } from '@admin-layout/react-shared-components';
 import CounterModule from '@admin-layout/counter-module-browser';
 import PlatformModule from '@admin-layout/platform-browser';
@@ -13,7 +13,7 @@ const features = new Feature(
   PlatformModule,
   CounterModule,
   ScheduleModule,
-  TimeTrackerModule,
+  // TimeTrackerModule,
 );
 
 const configuredRoutes =  features.getConfiguredRoutes();
@@ -23,9 +23,9 @@ const routes = renderRoutes2({ routes: configuredRoutes});
 export const MainRoute = props => {
   return (
     <React.Suspense fallback={<span>Loading....</span>}>
-      <WorkbenchTheme>
+      <ThemeProvider>
         {routes}
-      </WorkbenchTheme>
+      </ThemeProvider>
     </React.Suspense>
   );
 };

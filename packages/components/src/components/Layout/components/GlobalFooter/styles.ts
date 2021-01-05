@@ -1,30 +1,46 @@
-import { Property, Properties } from 'csstype';
+import { IThemeSettings } from '../../../Themes/interfaces';
 
-export const styleSheet: { [key: string]: (obj) => Properties } = {
-    footerLayout: ({ theme, primaryColor, layout }) => ({
-        display: 'inherit',
-        '& .ant-pro-global-footer': {
-            margin: '48px 0 24px 0',
-            padding: '0 16px',
-            textAlign: 'center',
-        },
-        '& .ant-pro-global-footer-links': {
-            marginBottom: '8px',
-        },
-        '& .ant-pro-global-footer-links a': {
-            color: 'rgba(0,0,0,0.45)',
+import { GlobalThemeSettings } from '../default-styles';
+import { getTokenColorsScopeSettings } from '../../../Themes/utils';
+
+
+export const styleSheet = {
+  globalFooter: ({ theme }: { theme: IThemeSettings }) => {
+    const { antPrefix, fontSizeBase } = GlobalThemeSettings;
+
+    // less variables
+    const proGlobalFooterPRefixCls = `${antPrefix}-pro-global-footer`;
+    const textColorSecondary = getTokenColorsScopeSettings(theme, 'text.secondary').foreground;
+    const textColor = getTokenColorsScopeSettings(theme, 'text').foreground;
+
+    return {
+      [`& .${proGlobalFooterPRefixCls}`]: {
+        margin: '48px 0 24px 0',
+        padding: '0 16px',
+        'text-align': 'center',
+
+        '&-links': {
+          'margin-bottom': ' 8px',
+
+          '& a': {
+            color: `${textColorSecondary}`,
             transition: 'all 0.3s',
-        },
-        '& .ant-pro-global-footer-links a:not(:last-child)': {
-            marginRight: '40px',
-        },
-        '& .ant-pro-global-footer-links a:hover': {
-            color: 'rgba(0,0,0,0.65)',
-        },
-        '& .ant-pro-global-footer-copyright': {
-            color: 'rgba(0,0,0,0.45)',
-            fontSize: '14px',
-        },
-    }),
-};
 
+            '&:not(:last-child)': {
+              'margin-right': '40px',
+            },
+
+            '&:hover': {
+              color: `${textColor}`,
+            },
+          },
+        },
+
+        '&-copyright': {
+          color: `${textColorSecondary}`,
+          'font-size': `${fontSizeBase}`,
+        },
+      },
+    };
+  },
+};

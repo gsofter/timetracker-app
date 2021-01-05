@@ -4,6 +4,10 @@
 It has `layout` component which is sync with https://github.com/reboxjs/pro-components/tree/master/packages/layout
 
 
+Readme:
+
+https://procomponents.ant.design/en-US/components/
+
 
 1. We can track the new changes from `ant-desig/pro-components` by create a PR against the cloned repository `reboxjs/pro-components` like below. 
 
@@ -45,3 +49,61 @@ https://www.cleancss.com/css-beautify/
 3. Write tests for fela styles so the styles can be compared. 
 
 https://fela.js.org/docs/recipes/TestingFelaComponents.html
+
+
+
+
+
+Manual converstion from LESS to fela styles
+======
+
+SCSS
+===
+
+```
+  &-logo {
+    position: relative;
+    cursor: pointer;
+
+    > a {
+      display: flex;
+    }
+
+    img {
+      display: inline-block;
+    }
+
+    h1 {
+      display: inline-block;
+    }
+    &:hover,
+    &.opened {
+      background: @primary-color;
+    }
+  }
+```
+
+To
+
+
+```ts
+            '&-logo': {
+                position: 'relative',
+                display: 'flex',
+                '> a': {
+                    display: 'flex',
+                },
+                '& img': { // need to add `& ` to convert correctly 
+                    display: 'inline-block',
+                },
+                '& h1': {    // need to add `& ` to convert correctly 
+                    display: 'inline-block',
+                },
+                '&:hover': {   // comma seperated will copy same styles as next one
+                    background: `${primaryColor}`,
+                },
+                '&.opened': {
+                  background: `${primaryColor}`,
+                },
+            },
+```

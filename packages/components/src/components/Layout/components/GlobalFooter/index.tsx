@@ -36,7 +36,7 @@ export default ({
     const baseClassName = `${prefixCls}-global-footer`;
     const clsString = classNames(baseClassName, className);
     return (
-        <div className={css(styleSheet.footerLayout)}>
+        <div className={css(styleSheet.globalFooter)}>
             <footer className={clsString} style={style}>
                 {links && (
                     <div className={`${baseClassName}-links`}>

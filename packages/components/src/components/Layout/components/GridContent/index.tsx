@@ -6,6 +6,7 @@ import RouteContext from '../RouteContext';
 import { PureSettings } from '../defaultSettings';
 import { Properties } from 'csstype';
 import { useFela } from 'react-fela';
+import { styleSheet } from './GridContentSyltes';
 interface GridContentProps {
   contentWidth?: PureSettings['contentWidth'];
   children: React.ReactNode;
@@ -29,7 +30,7 @@ const GridContent: React.FC<GridContentProps> = props => {
   let className = `${prefixCls}-grid-content`;
   const { css, theme } = useFela();
   return (
-    <div className={css(styleSheet.gridContentStyle)}>
+    <div className={css(styleSheet.gridContent)}>
       <div
         className={classNames(className, propsClassName, {
           wide: contentWidth === 'Fixed',
@@ -42,16 +43,16 @@ const GridContent: React.FC<GridContentProps> = props => {
   );
 };
 
-const styleSheet: { [key: string]: (obj) => Properties } = {
-  gridContentStyle: ({ theme, primaryColor, layout }) => ({
-    display: 'inherit',
-    '& .ant-pro-grid-content': {
-      width: '100%',
-      '&.wide': {
-        maxWidth: '1200px',
-        margin: '0 auto',
-      },
-    },
-  }),
-};
+// const styleSheet: { [key: string]: (obj) => Properties } = {
+//   gridContentStyle: ({ theme, primaryColor, layout }) => ({
+//     display: 'inherit',
+//     '& .ant-pro-grid-content': {
+//       width: '100%',
+//       '&.wide': {
+//         maxWidth: '1200px',
+//         margin: '0 auto',
+//       },
+//     },
+//   }),
+// };
 export default GridContent;

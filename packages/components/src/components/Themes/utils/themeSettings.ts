@@ -1,8 +1,9 @@
 import * as R from 'ramda';
 import * as cookie from 'js-cookie';
 import { THEMES, COLORS } from '../constants';
+import { IThemeSettings, TokenColorsEntity } from '../interfaces';
 
-export const getTheme = (themeName) => {
+export const getTheme: (themeName: string) => any = (themeName) => {
   const theme = R.find(R.propEq('name', themeName))(THEMES);
   const themeSetting = cookie.get(`workbench.colorTheme.${themeName}`);
 
@@ -49,9 +50,9 @@ export const getThemeSetting = (themeName, setting, defaultValue = null) => {
   return theme.settings[setting];
 };
 
-export const getTokenColorsScopeSettings = (theme, scope = null) => {
-  const tokenColors = theme.defaultSettings.tokenColors;
-  let token = null;
+export const getTokenColorsScopeSettings = (theme: IThemeSettings, scope = null) => {
+  const tokenColors = theme.tokenColors;
+  let token: TokenColorsEntity = null;
 
   if (scope && scope !== '') {
     token = R.find(R.propEq('scope', scope))(tokenColors);

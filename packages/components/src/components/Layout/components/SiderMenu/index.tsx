@@ -47,10 +47,12 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props
   }, [isMobile]);
 
   const omitProps = Omit(props, ['className', 'style']);
-  const { css } = useFela();
+  const { css } = useFela({ prefixCls });
   if (hide) {
     return null;
   }
+
+  const felaStyles = css(styleSheet.siderMenuStyles as any);
 
   return isMobile ? (
     <Drawer
@@ -68,7 +70,7 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props
       bodyStyle={{ height: '100vh', padding: 0, display: 'flex', flexDirection: 'row' }}
     >
       {/* SideMenu-Wrapper: For inspecting element to adjust css, it will be removed for at version */}
-      <div className={classNames('SideMenu-Wrapper-Mobile', css(styleSheet.siderMenuStyles))}>
+      <div className={classNames(felaStyles)}>
         <SiderMenu
           {...omitProps}
           className={classNames(`${prefixCls}-sider`, className)}
@@ -78,14 +80,14 @@ const SiderMenuWrapper: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props
       </div>
     </Drawer>
   ) : (
-    <div className={classNames('SideMenu-Wrapper', css(styleSheet.siderMenuStyles))}>
-      <SiderMenu
-        className={classNames(`${prefixCls}-sider`, className)}
-        {...omitProps}
-        style={style}
-      />
-    </div>
-  );
+      <div className={classNames(felaStyles)}>
+        <SiderMenu
+          className={classNames(`${prefixCls}-sider`, className)}
+          {...omitProps}
+          style={style}
+        />
+      </div>
+    );
 };
 
 SiderMenuWrapper.defaultProps = {
