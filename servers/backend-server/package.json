@@ -91,6 +91,7 @@
     "express": "^4.17.1",
     "graphql": "^14.5.8",
     "graphql-bigint": "^1.0.0",
+    "graphql-iso-date": "^3.6.1",
     "graphql-nats-subscriptions": "^1.4.2",
     "graphql-subscriptions": "^1.1.0",
     "graphql-tools": "^4.0.6",
