@@ -13,6 +13,7 @@
 		"body.background": "#000000",
 		"component.background": "#141414",
 		"layout.body.background": "#000000",
+		"layout.sider.background": "#1f1f1f",
 		"layout.header.background": "#1f1f1f",
 		"layout.trigger.background": "#262626"
 	},

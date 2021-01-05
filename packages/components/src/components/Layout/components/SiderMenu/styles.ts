@@ -5,18 +5,17 @@ import { GlobalThemeSettings, LocalThemeSettings } from '../default-styles';
 
 export const styleSheet = {
 	siderMenuStyles: ({ theme }: { theme: IThemeSettings }) => {
-		const { colors: { primaryColor } } = theme;
-		const {borderColorSplit, borderStyleBase, borderWidthBase, antPrefix } = GlobalThemeSettings;
+		const { colors: { primaryColor, 'layout.sider.background': layoutSiderBackground } } = theme;
+		const { borderColorSplit, borderStyleBase, borderWidthBase, antPrefix } = GlobalThemeSettings;
 
 		const headerColor = getTokenColorsScopeSettings(theme, 'header');
 		// less variables
 		const proLayoutSiderMenuPrefixCls = `${antPrefix}-pro-sider`;
 		const navHeaderHeight = LocalThemeSettings.proLayoutHeaderHeight;
-		const layoutSiderBackground = headerColor.foreground;
 		return {
 			[`& .${proLayoutSiderMenuPrefixCls}`]: {
 				position: 'relative',
-				'background-color': headerColor.foreground,
+				'background-color': layoutSiderBackground,
 				borderRight: '0',
 				transition: 'background-color 0.3s, min-width 0.3s, max-width 0.3s',
 
@@ -82,7 +81,7 @@ export const styleSheet = {
 
 				'&-extra': {
 					'margin-bottom': '16px',
-					padding: '0 16px',
+					// padding: '0 16px', //@sri no need
 					'&-no-logo': {
 						'margin-top': '16px',
 					},
@@ -175,7 +174,7 @@ export const styleSheet = {
 					},
 
 					[`& .${proLayoutSiderMenuPrefixCls}-collapsed-button`]: {
-						'border-top': `${borderWidthBase} ${borderStyleBase} ${borderColorSplit}`,
+						// 'border-top': `${borderWidthBase} ${borderStyleBase} ${borderColorSplit}`, //@sri we don't top border
 					},
 				},
 
@@ -192,7 +191,7 @@ export const styleSheet = {
 				},
 
 				'&-collapsed-button': {
-					'border-top': `${borderWidthBase} ${borderStyleBase} rgba(0, 0, 0, 0.25)`,
+					// 'border-top': `${borderWidthBase} ${borderStyleBase} rgba(0, 0, 0, 0.25)`, //@sri we don't top border
 					'& .anticon': {
 						'font-size': '16px',
 					},
@@ -207,8 +206,8 @@ export const styleSheet = {
 				},
 				// @sri customize for divider
 				'& .ant-divider': {
-					color: headerColor.foreground,
-				  },
+					color: '#bfbfbf',
+				},
 			},
 		};
 	}
