@@ -7,10 +7,8 @@ import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { WithFalse } from '../typings';
 import BaseMenu, { BaseMenuProps } from './BaseMenu';
 import MenuCounter from './Counter';
-import { useFela } from 'react-fela';
 
 const { Sider } = Layout;
-import { styleSheet } from './styles';
 
 export const defaultRenderLogo = (logo: React.ReactNode): React.ReactNode => {
   if (typeof logo === 'string') {
@@ -29,6 +27,7 @@ export const defaultRenderLogo = (logo: React.ReactNode): React.ReactNode => {
  * @param position
  */
 export const menuSeparation = (props, position) => {
+  console.log('--Menu SEperation LIST', props);
   if (props.separateMenus) {
     switch (position) {
       case 'UPPER':
