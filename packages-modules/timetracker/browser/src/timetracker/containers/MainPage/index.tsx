@@ -201,6 +201,7 @@ const TimeTracker = props => {
               minute={minute}
               second={second}
               setTimeEntriesList={setTimeEntriesList}
+              timeEntriesList={timeEntriesList}
             />
             <CustomScrollbar>
               <div className="main-page__list">
