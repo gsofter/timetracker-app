@@ -8,7 +8,7 @@ import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import { Row, Col, Form, Input, Button, Select, DatePicker, TimePicker } from 'antd';
-import { Modal } from './Modal';
+import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
 
@@ -58,6 +58,7 @@ const initialEvents = [
 
 interface Props {
   localizer: DateLocalizer;
+  handleAddSchedule: any;
 }
 
 class CalendarEvent {
@@ -86,7 +87,7 @@ class CalendarEvent {
   }
 }
 
-function SelectableCalendar({ localizer }: Props) {
+function SelectableCalendar({ localizer, handleAddSchedule }: Props) {
   const [isShowing, setIsShowing] = useState(false);
   const [repeat, setRepeat] = useState();
   const [startTime, setStartTime] = useState();
@@ -113,7 +114,9 @@ function SelectableCalendar({ localizer }: Props) {
       // Erroneous code
       // events.push(newEvent)
       // setEvents(events)
+      console.log("handleSelect => ", newEvent);
       setEvents([...(events as any), newEvent]);
+      handleAddSchedule(newEvent)
     }
   };
 
@@ -357,12 +360,16 @@ function SelectableCalendar({ localizer }: Props) {
   );
 }
 
-export default props => {
+export interface ISchedule {
+  handleAddSchedule: Function
+}
+
+export default function Schedule(props: ISchedule) {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>
       <div className="calender-width">
-        <SelectableCalendar localizer={localizer} />
+        <SelectableCalendar localizer={localizer} {...props} />
       </div>
     </div>
   );
