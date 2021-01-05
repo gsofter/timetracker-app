@@ -88,8 +88,9 @@ generates:
       - "packages-modules/schedule/server/src/**/*.graphql"
     documents: "packages-modules/schedule/browser/src/**/*.gql"
     config:
-      withMutationFn: true
-      withHOC: true
+      typesPrefix: I
+      withMutationFn: false
+      withHOC: false
       withComponent: true
       withHooks: true
     preset: import-types-preset
@@ -102,8 +103,8 @@ generates:
       - typescript-react-apollo
   packages-modules/schedule/core/src/interfaces/generated-models.ts:
     schema:
-      - packages/adminide-core/src/core-schema.graphql
-      - "packages-modules/schedule/server/src/**/*.graphql"
+      - packages-modules/schedule/server/src/**/*.graphql
+    documents: "packages-modules/schedule/browser/src/**/*.gql"
     config:
       scalars:
         URI: URI

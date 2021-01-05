@@ -1,5 +1,6 @@
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import gql from 'graphql-tag';
+import * as ApolloReactCommon from '@apollo/react-common';
 export type Maybe<T> = T | null;
 export type RequireFields<T, K extends keyof T> = { [X in Exclude<keyof T, K>]?: T[X] } & { [P in K]-?: NonNullable<T[P]> };
 /** All built-in and custom scalars, mapped to their actual values */
@@ -109,8 +110,51 @@ export type ISubscription = {
 };
 
 
+export type IAddScheduleMutationVariables = {
+  request?: Maybe<IScheduleCreateRequest>;
+};
 
 
+export type IAddScheduleMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<IMutation, 'addSchedule'>
+);
+
+export type IGetScheduleEventsQueryVariables = {
+  userId: Scalars['String'];
+};
+
+
+export type IGetScheduleEventsQuery = (
+  { __typename?: 'Query' }
+  & { getScheduleEvents?: Maybe<Array<Maybe<(
+    { __typename?: 'Schedule' }
+    & Pick<ISchedule, 'title' | 'allDay' | 'start' | 'end' | 'desc' | 'resourceId' | 'tooltip'>
+  )>>> }
+);
+
+
+export const AddScheduleDocument = gql`
+    mutation AddSchedule($request: ScheduleCreateRequest) {
+  addSchedule(request: $request)
+}
+    `;
+export type AddScheduleMutationResult = ApolloReactCommon.MutationResult<IAddScheduleMutation>;
+export type AddScheduleMutationOptions = ApolloReactCommon.BaseMutationOptions<IAddScheduleMutation, IAddScheduleMutationVariables>;
+export const GetScheduleEventsDocument = gql`
+    query GetScheduleEvents($userId: String!) {
+  getScheduleEvents(userId: $userId) {
+    title
+    allDay
+    start
+    end
+    desc
+    resourceId
+    tooltip
+  }
+}
+    `;
+export type GetScheduleEventsQueryResult = ApolloReactCommon.QueryResult<IGetScheduleEventsQuery, IGetScheduleEventsQueryVariables>;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
