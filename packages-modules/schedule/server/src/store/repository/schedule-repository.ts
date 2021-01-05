@@ -1,5 +1,5 @@
 import { message } from 'antd';
-import { ISchedule, IScheduleCreateRequest } from './../../interfaces/generated-models';
+import { ISchedule, IScheduleCreateRequest } from '@admin-layout/schedule-module-core';
 import * as Logger from 'bunyan'
 import { injectable, inject, optional } from 'inversify';
 import { IScheduleRepository } from './../../interfaces'

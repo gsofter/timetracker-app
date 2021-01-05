@@ -1,7 +1,8 @@
 import * as ILogger from 'bunyan'
 
 import { inject, injectable } from 'inversify'
-import { IScheduleService, IScheduleRepository, ISchedule, IScheduleCreateRequest } from '../interfaces'
+import { ISchedule, IScheduleCreateRequest } from '@admin-layout/schedule-module-core'
+import { IScheduleService, IScheduleRepository } from '../interfaces'
 import { TYPES } from '../constants'
 @injectable()
 export class ScheduleService implements IScheduleService {

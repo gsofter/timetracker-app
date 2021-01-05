@@ -1,8 +1,10 @@
+scalar DateTime
+
 type Schedule {
   title: String!
   allDay: Boolean
-  start: Date
-  end: Date
+  start: DateTime
+  end: DateTime
   desc: String
   resourceId: String
   tooltip: String
@@ -11,8 +13,8 @@ type Schedule {
 input ScheduleCreateRequest {
   title: String!
   allDay: Boolean
-  start: Date
-  end: Date
+  start: DateTime
+  end: DateTime
   desc: String
   resourceId: String
   tooltip: String

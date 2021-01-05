@@ -1,4 +1,4 @@
-import { IScheduleCreateRequest, ISchedule } from './generated-models'
+import { IScheduleCreateRequest, ISchedule } from '@admin-layout/schedule-module-core'
 
 export interface IScheduleService {
     /**

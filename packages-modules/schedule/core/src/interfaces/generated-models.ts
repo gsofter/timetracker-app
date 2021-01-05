@@ -10,12 +10,12 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
-  Date: any;
+  DateTime: any;
   AnyObject: any;
+  Date: any;
+  Time: any;
   JSON: any;
   JSONObject: any;
-  Time: any;
-  DateTime: any;
 };
 
 
@@ -84,8 +84,8 @@ export type ISchedule = {
    __typename?: 'Schedule';
   title: Scalars['String'];
   allDay?: Maybe<Scalars['Boolean']>;
-  start?: Maybe<Scalars['Date']>;
-  end?: Maybe<Scalars['Date']>;
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
   desc?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
@@ -94,8 +94,8 @@ export type ISchedule = {
 export type IScheduleCreateRequest = {
   title: Scalars['String'];
   allDay?: Maybe<Scalars['Boolean']>;
-  start?: Maybe<Scalars['Date']>;
-  end?: Maybe<Scalars['Date']>;
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
   desc?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
@@ -234,17 +234,17 @@ export type IResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>,
   Schedule: ResolverTypeWrapper<ISchedule>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  Date: ResolverTypeWrapper<Scalars['Date']>,
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   Mutation: ResolverTypeWrapper<{}>,
   ScheduleCreateRequest: IScheduleCreateRequest,
   Subscription: ResolverTypeWrapper<{}>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
+  Time: ResolverTypeWrapper<Scalars['Time']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<IFieldError>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
-  Time: ResolverTypeWrapper<Scalars['Time']>,
-  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -255,17 +255,17 @@ export type IResolversParentTypes = {
   String: Scalars['String'],
   Schedule: ISchedule,
   Boolean: Scalars['Boolean'],
-  Date: Scalars['Date'],
+  DateTime: Scalars['DateTime'],
   Mutation: {},
   ScheduleCreateRequest: IScheduleCreateRequest,
   Subscription: {},
   AnyObject: Scalars['AnyObject'],
+  Date: Scalars['Date'],
+  Time: Scalars['Time'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
   FieldError: IFieldError,
   ID: Scalars['ID'],
-  Time: Scalars['Time'],
-  DateTime: Scalars['DateTime'],
 };
 
 export interface IAnyObjectScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['AnyObject'], any> {
@@ -318,8 +318,8 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
 export type IScheduleResolvers<ContextType = any, ParentType extends IResolversParentTypes['Schedule'] = IResolversParentTypes['Schedule']> = {
   title?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   allDay?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  start?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
-  end?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   desc?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,

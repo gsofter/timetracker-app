@@ -1,6 +1,6 @@
 
 import { Schema, Model, Document, Connection } from 'mongoose';
-import { ISchedule } from './../../interfaces/generated-models';
+import { ISchedule } from '@admin-layout/schedule-module-core';
 export interface IScheduleModel extends ISchedule, Document {
     id: any
 }

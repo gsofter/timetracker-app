@@ -14,6 +14,9 @@ export type Scalars = {
   Int: number;
   Float: number;
   AnyObject: any;
+  Date: any;
+  Time: any;
+  DateTime: any;
   JSON: any;
   JSONObject: any;
 };
@@ -30,6 +33,8 @@ export type Counter = {
   /**  Current amount  */
   amount: Scalars['Int'];
 };
+
+
 
 export type FieldError = {
    __typename?: 'FieldError';
@@ -85,6 +90,7 @@ export type Subscription = {
   dummy?: Maybe<Scalars['Int']>;
   moleculerCounterUpdate?: Maybe<Counter>;
 };
+
 
 export type AddCounterStateMutationVariables = {
   amount: Scalars['Int'];
@@ -259,6 +265,9 @@ export type ResolversTypes = {
   Subscription: ResolverTypeWrapper<{}>,
   String: ResolverTypeWrapper<Scalars['String']>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
+  Time: ResolverTypeWrapper<Scalars['Time']>,
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<FieldError>,
@@ -276,6 +285,9 @@ export type ResolversParentTypes = {
   Subscription: {},
   String: Scalars['String'],
   AnyObject: Scalars['AnyObject'],
+  Date: Scalars['Date'],
+  Time: Scalars['Time'],
+  DateTime: Scalars['DateTime'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
   FieldError: FieldError,
@@ -295,6 +307,14 @@ export type CounterResolvers<ContextType = any, ParentType extends ResolversPare
   amount?: Resolver<ResolversTypes['Int'], ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
+
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date'
+}
+
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime'
+}
 
 export type FieldErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['FieldError'] = ResolversParentTypes['FieldError']> = {
   field?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -332,16 +352,23 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   moleculerCounterUpdate?: SubscriptionResolver<Maybe<ResolversTypes['Counter']>, "moleculerCounterUpdate", ParentType, ContextType>,
 };
 
+export interface TimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Time'], any> {
+  name: 'Time'
+}
+
 export type Resolvers<ContextType = any> = {
   AnyObject?: GraphQLScalarType,
   ClientCounter?: ClientCounterResolvers<ContextType>,
   Counter?: CounterResolvers<ContextType>,
+  Date?: GraphQLScalarType,
+  DateTime?: GraphQLScalarType,
   FieldError?: FieldErrorResolvers<ContextType>,
   JSON?: GraphQLScalarType,
   JSONObject?: GraphQLScalarType,
   Mutation?: MutationResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
+  Time?: GraphQLScalarType,
 };
 
 
