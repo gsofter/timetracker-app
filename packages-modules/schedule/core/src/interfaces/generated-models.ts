@@ -77,7 +77,7 @@ export type IQuery = {
 
 
 export type IQuerygetScheduleEventsArgs = {
-  userId: Scalars['String'];
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type ISchedule = {
@@ -85,6 +85,7 @@ export type ISchedule = {
   allDay?: Maybe<Scalars['Boolean']>;
   desc?: Maybe<Scalars['String']>;
   end?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   start?: Maybe<Scalars['DateTime']>;
   title: Scalars['String'];
@@ -121,7 +122,7 @@ export type IAddScheduleMutation = (
 );
 
 export type IGetScheduleEventsQueryVariables = {
-  userId: Scalars['String'];
+  userId?: Maybe<Scalars['String']>;
 };
 
 
@@ -142,7 +143,7 @@ export const AddScheduleDocument = gql`
 export type AddScheduleMutationResult = ApolloReactCommon.MutationResult<IAddScheduleMutation>;
 export type AddScheduleMutationOptions = ApolloReactCommon.BaseMutationOptions<IAddScheduleMutation, IAddScheduleMutationVariables>;
 export const GetScheduleEventsDocument = gql`
-    query GetScheduleEvents($userId: String!) {
+    query GetScheduleEvents($userId: String) {
   getScheduleEvents(userId: $userId) {
     title
     allDay
@@ -311,7 +312,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   counter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   counterCache?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
-  getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, 'userId'>>,
+  getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, never>>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
 };
 
@@ -319,6 +320,7 @@ export type IScheduleResolvers<ContextType = any, ParentType extends IResolversP
   allDay?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   desc?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   title?: Resolver<IResolversTypes['String'], ParentType, ContextType>,

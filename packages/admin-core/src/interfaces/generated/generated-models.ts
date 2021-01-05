@@ -97,11 +97,12 @@ export type IQuerygetContextPropertyArgs = {
 
 
 export type IQuerygetScheduleEventsArgs = {
-  userId: Scalars['String'];
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type ISchedule = {
    __typename?: 'Schedule';
+  id?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   allDay?: Maybe<Scalars['Boolean']>;
   start?: Maybe<Scalars['DateTime']>;
@@ -326,11 +327,12 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   getContextProperty?: Resolver<Maybe<IResolversTypes['AnyObject']>, ParentType, ContextType, RequireFields<IQuerygetContextPropertyArgs, never>>,
   getOrgNameFromContext?: Resolver<Maybe<IResolversTypes['Context']>, ParentType, ContextType>,
-  getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, 'userId'>>,
+  getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, never>>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
 };
 
 export type IScheduleResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Schedule'] = IResolversParentTypes['Schedule']> = {
+  id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   title?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   allDay?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,

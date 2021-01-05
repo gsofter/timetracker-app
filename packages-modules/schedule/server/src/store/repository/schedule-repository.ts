@@ -26,6 +26,8 @@ export class ScheduleRepository implements IScheduleRepository {
     }
 
     public async getScheduleEvents(userId: string): Promise<Array<ISchedule>> {
+        if (userId === undefined)
+            return await this.scheduleModel.find({}).exec();
         return await this.scheduleModel.find({ resourceId: userId }).exec();
     }
 

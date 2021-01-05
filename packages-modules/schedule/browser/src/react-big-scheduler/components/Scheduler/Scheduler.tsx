@@ -56,9 +56,10 @@ const initialEvents = [
   },
 ];
 
-interface Props {
+interface ISelectableCalendarProps {
   localizer: DateLocalizer;
   handleAddSchedule: any;
+  events:any;
 }
 
 class CalendarEvent {
@@ -87,7 +88,7 @@ class CalendarEvent {
   }
 }
 
-function SelectableCalendar({ localizer, handleAddSchedule }: Props) {
+function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
   const [isShowing, setIsShowing] = useState(false);
   const [repeat, setRepeat] = useState();
   const [startTime, setStartTime] = useState();
@@ -100,7 +101,7 @@ function SelectableCalendar({ localizer, handleAddSchedule }: Props) {
     minhours: '',
   });
 
-  const [events, setEvents] = React.useState(initialEvents);
+  const [events, setEvents] = React.useState(propEvents);
 
   const handleSelect = ({ start, end }) => {
     const title = window.prompt('New Event name');
@@ -115,7 +116,7 @@ function SelectableCalendar({ localizer, handleAddSchedule }: Props) {
       // events.push(newEvent)
       // setEvents(events)
       console.log("handleSelect => ", newEvent);
-      setEvents([...(events as any), newEvent]);
+      setEvents([...events, newEvent]);
       handleAddSchedule(newEvent)
     }
   };
@@ -360,11 +361,12 @@ function SelectableCalendar({ localizer, handleAddSchedule }: Props) {
   );
 }
 
-export interface ISchedule {
+export interface IScheduleProps {
   handleAddSchedule: Function
+  events: any;
 }
 
-export default function Schedule(props: ISchedule) {
+export default function Schedule(props: IScheduleProps) {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>

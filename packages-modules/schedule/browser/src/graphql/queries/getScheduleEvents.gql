@@ -1,4 +1,4 @@
-query GetScheduleEvents($userId: String!) {
+query GetScheduleEvents($userId: String) {
  	getScheduleEvents(userId: $userId) {
         title
         allDay

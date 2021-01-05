@@ -71,6 +71,7 @@ extend type Subscription {
 ,# scalar DateTime
 
 type Schedule {
+  id: String
   title: String!
   allDay: Boolean
   start: DateTime
@@ -91,7 +92,7 @@ input ScheduleCreateRequest {
 }
 
 extend type Query {
-  getScheduleEvents(userId: String!): [Schedule]
+  getScheduleEvents(userId: String): [Schedule]
 }
 
 extend type Mutation {

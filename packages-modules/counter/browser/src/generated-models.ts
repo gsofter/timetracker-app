@@ -92,11 +92,12 @@ export type Query = {
 
 
 export type QueryGetScheduleEventsArgs = {
-  userId: Scalars['String'];
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type Schedule = {
    __typename?: 'Schedule';
+  id?: Maybe<Scalars['String']>;
   title: Scalars['String'];
   allDay?: Maybe<Scalars['Boolean']>;
   start?: Maybe<Scalars['DateTime']>;
@@ -381,11 +382,12 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   counterCache?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType>,
   counterState?: Resolver<Maybe<ResolversTypes['ClientCounter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  getScheduleEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<QueryGetScheduleEventsArgs, 'userId'>>,
+  getScheduleEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<QueryGetScheduleEventsArgs, never>>,
   moleculerCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType>,
 };
 
 export type ScheduleResolvers<ContextType = any, ParentType extends ResolversParentTypes['Schedule'] = ResolversParentTypes['Schedule']> = {
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   allDay?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   start?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,

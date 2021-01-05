@@ -49,7 +49,7 @@ export type AddScheduleMutationHookResult = ReturnType<typeof useAddScheduleMuta
 export type AddScheduleMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IAddScheduleMutation>;
 export type AddScheduleMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IAddScheduleMutation, SchemaTypes.IAddScheduleMutationVariables>;
 export const GetScheduleEventsDocument = gql`
-    query GetScheduleEvents($userId: String!) {
+    query GetScheduleEvents($userId: String) {
   getScheduleEvents(userId: $userId) {
     title
     allDay
@@ -61,7 +61,7 @@ export const GetScheduleEventsDocument = gql`
   }
 }
     `;
-export type GetScheduleEventsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetScheduleEventsQuery, SchemaTypes.IGetScheduleEventsQueryVariables>, 'query'> & ({ variables: SchemaTypes.IGetScheduleEventsQueryVariables; skip?: boolean; } | { skip: boolean; });
+export type GetScheduleEventsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetScheduleEventsQuery, SchemaTypes.IGetScheduleEventsQueryVariables>, 'query'>;
 
     export const GetScheduleEventsComponent = (props: GetScheduleEventsComponentProps) => (
       <ApolloReactComponents.Query<SchemaTypes.IGetScheduleEventsQuery, SchemaTypes.IGetScheduleEventsQueryVariables> query={GetScheduleEventsDocument} {...props} />

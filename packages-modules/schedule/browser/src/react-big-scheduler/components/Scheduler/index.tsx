@@ -1,6 +1,6 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import SchedulerComponent from './Scheduler'
-import { useAddScheduleMutation } from '../../../generated-models'
+import { useAddScheduleMutation, useGetScheduleEventsQuery } from '../../../generated-models'
 import { IScheduleCreateRequest } from '@admin-layout/schedule-module-core'
 import { message } from 'antd'
 
@@ -14,7 +14,13 @@ const Scheduler = (props) => {
             message.error('Event creation failed!')
         })
     }
-    return <SchedulerComponent handleAddSchedule={handleAddSchedule}/>
+
+    const { data, loading, error, refetch } = useGetScheduleEventsQuery();
+    useEffect(() => {
+        refetch()
+    }, [refetch])
+
+    return !data && loading ? null : <SchedulerComponent handleAddSchedule={handleAddSchedule} events={data.getScheduleEvents}/>
 }
 
 export default Scheduler
