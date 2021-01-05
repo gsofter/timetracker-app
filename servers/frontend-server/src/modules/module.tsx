@@ -13,7 +13,7 @@ const features = new Feature(
   PlatformModule,
   CounterModule,
   ScheduleModule,
-  // TimeTrackerModule,
+  TimeTrackerModule,
 );
 
 const configuredRoutes =  features.getConfiguredRoutes();

@@ -50,10 +50,7 @@ export const timePageStore: any[] = [
 
 const selectedRoutesAndMenus = ['timeTracker', 'timeTracker.timer', 'timeTracker.projects', 'timeTracker.clients' ];
 
-// get menus
-const filteredMenus = getFilteredMenus(timePageStore, selectedRoutesAndMenus);
-
 // get routes
 const filteredRoutes = getFilteredRoutes(timePageStore, selectedRoutesAndMenus);
 
-export { filteredMenus, filteredRoutes };
+export { filteredRoutes };
