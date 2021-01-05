@@ -14,7 +14,7 @@ export default () => {
             height: 100%;
           }
           .ant-picker-dropdown, .ant-select-dropdown {
-            z-index: 10500;
+            
           }
         `,
   );
