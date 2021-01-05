@@ -1,25 +1,28 @@
-type Schedule { 
-    title: String!
-    allDay: Boolean?
-    start: Date    
-    end: Date
-    desc: String
-    resourceId: String,
-    tooltip: String,
+# scalar DateTime
+
+type Schedule {
+  id: String
+  title: String!
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  resourceId: String
+  tooltip: String
 }
 
 input ScheduleCreateRequest {
-    title: String!
-    allDay: Boolean?
-    start: Date    
-    end: Date
-    desc: String
-    resourceId: String,
-    tooltip: String,
+  title: String!
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  resourceId: String
+  tooltip: String
 }
 
 extend type Query {
-    getUserSchedules(userId: String!) : [Schedule]
+  getScheduleEvents(userId: String): [Schedule]
 }
 
 extend type Mutation {

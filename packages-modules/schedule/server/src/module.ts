@@ -1,33 +1,28 @@
-import schema from './schema/schema.graphql';
-import { ICounterService, IService } from './interfaces';
+import { schema } from './schema';
+// import schema from './schema/schema.graphql'
 import { resolver } from './resolvers';
-import { localCounterModule, externalCounterModule } from './containers';
-import { CounterMockMoleculerService } from './services';
+import { scheduleModule } from './containers';
 import { Feature } from '@common-stack/server-core';
 import { interfaces } from 'inversify';
 import { TYPES } from './constants';
-import { CounterDataSource } from './dataloader';
 
-const counterServiceGen = (container: interfaces.Container): IService => {
-    return {
-        counterMockService: container.getNamed<ICounterService>(TYPES.CounterMockService, 'proxy'),
-    };
-};
 
 const dataSources: (container: interfaces.Container) => any = () => {
     return {
-        counterCache: new CounterDataSource(),
+        // counterCache: new CounterDataSource(),
     };
 };
 
+const createServiceFunc = (container: interfaces.Container) => ({
+    scheduleService: container.get(TYPES.IScheduleService)
+})
+
 export default new Feature({
     schema: schema,
-    createContainerFunc: [localCounterModule],
+    createContainerFunc: [scheduleModule],
     createResolversFunc: resolver,
-    createServiceFunc: counterServiceGen,
+    createServiceFunc: createServiceFunc,
     // createContextFunc: () => ({ counterMock: counterMock }), // note anything set here should be singleton.
     createDataSourceFunc: dataSources,
-    createHemeraContainerFunc: [externalCounterModule],
-    addBrokerClientServiceClass: [CounterMockMoleculerService],
     addBrokerMainServiceClass: [],
 });

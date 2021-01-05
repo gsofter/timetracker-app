@@ -27,15 +27,16 @@ function startListening(port) {
 }
 
 const infraModule =
-    ({ broker, pubsub, logger }) => new ContainerModule((bind: interfaces.Bind) => {
+    ({broker, pubsub, mongoClient, logger}) => new ContainerModule((bind: interfaces.Bind) => {
         bind('Logger').toConstantValue(logger);
         bind(CommonType.LOGGER).toConstantValue(logger);
         bind('Environment').toConstantValue(config.NODE_ENV || 'development');
         bind(CommonType.ENVIRONMENT).toConstantValue(config.NODE_ENV || 'development');
         bind('PubSub').toConstantValue(pubsub);
         bind(CommonType.PUBSUB).toConstantValue(pubsub);
-        bind('MoleculerBroker').toConstantValue(broker);
         bind(CommonType.MOLECULER_BROKER).toConstantValue(broker);
+        bind('MoleculerBroker').toConstantValue(broker);
+        bind('MongoDBConnection').toConstantValue(mongoClient);
     });
 
 
@@ -93,12 +94,12 @@ export class StackServer {
             createContainerFunc: [
                 () => infraModule({
                     broker: this.microserviceBroker,
-                    pubsub, logger: serverLogger,
+                    pubsub, mongoClient, logger: serverLogger,
                 })],
             createHemeraContainerFunc: [
                 () => infraModule({
                     broker: this.microserviceBroker,
-                    pubsub, logger: serverLogger,
+                    pubsub, mongoClient, logger: serverLogger,
                 })],
         });
         const allModules = new Feature(InfraStructureFeature, modules);
