@@ -1,4 +1,7 @@
 scalar AnyObject
+scalar Date
+scalar Time
+scalar DateTime
 scalar JSON
 scalar JSONObject
 type FieldError {
@@ -64,4 +67,34 @@ extend type Subscription {
   counterUpdated: Counter
 
   moleculerCounterUpdate: Counter
+}
+,# scalar DateTime
+
+type Schedule {
+  id: String
+  title: String!
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  resourceId: String
+  tooltip: String
+}
+
+input ScheduleCreateRequest {
+  title: String!
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  resourceId: String
+  tooltip: String
+}
+
+extend type Query {
+  getScheduleEvents(userId: String): [Schedule]
+}
+
+extend type Mutation {
+  addSchedule(request: ScheduleCreateRequest): Boolean
 }

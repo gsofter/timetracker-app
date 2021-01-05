@@ -13,7 +13,10 @@ export type Scalars = {
   Boolean: boolean;
   Int: number;
   Float: number;
+  DateTime: any;
   AnyObject: any;
+  Date: any;
+  Time: any;
   JSON: any;
   JSONObject: any;
 };
@@ -31,6 +34,8 @@ export type Counter = {
   amount: Scalars['Int'];
 };
 
+
+
 export type FieldError = {
    __typename?: 'FieldError';
   field: Scalars['String'];
@@ -46,6 +51,7 @@ export type Mutation = {
   addCounterState?: Maybe<ClientCounter>;
   /**  add Counter  */
   addMoleculerCounter?: Maybe<Counter>;
+  addSchedule?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
   /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
@@ -66,6 +72,11 @@ export type MutationAddMoleculerCounterArgs = {
   amount?: Maybe<Scalars['Int']>;
 };
 
+
+export type MutationAddScheduleArgs = {
+  request?: Maybe<ScheduleCreateRequest>;
+};
+
 export type Query = {
    __typename?: 'Query';
   /**  Counter  */
@@ -74,8 +85,36 @@ export type Query = {
   counterCache?: Maybe<Counter>;
   counterState?: Maybe<ClientCounter>;
   dummy?: Maybe<Scalars['Int']>;
+  getScheduleEvents?: Maybe<Array<Maybe<Schedule>>>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<Counter>;
+};
+
+
+export type QueryGetScheduleEventsArgs = {
+  userId?: Maybe<Scalars['String']>;
+};
+
+export type Schedule = {
+   __typename?: 'Schedule';
+  id?: Maybe<Scalars['String']>;
+  title: Scalars['String'];
+  allDay?: Maybe<Scalars['Boolean']>;
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
+  desc?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  tooltip?: Maybe<Scalars['String']>;
+};
+
+export type ScheduleCreateRequest = {
+  title: Scalars['String'];
+  allDay?: Maybe<Scalars['Boolean']>;
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
+  desc?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  tooltip?: Maybe<Scalars['String']>;
 };
 
 export type Subscription = {
@@ -85,6 +124,7 @@ export type Subscription = {
   dummy?: Maybe<Scalars['Int']>;
   moleculerCounterUpdate?: Maybe<Counter>;
 };
+
 
 export type AddCounterStateMutationVariables = {
   amount: Scalars['Int'];
@@ -254,11 +294,16 @@ export type ResolversTypes = {
   Counter: ResolverTypeWrapper<Counter>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   ClientCounter: ResolverTypeWrapper<ClientCounter>,
-  Mutation: ResolverTypeWrapper<{}>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  Subscription: ResolverTypeWrapper<{}>,
   String: ResolverTypeWrapper<Scalars['String']>,
+  Schedule: ResolverTypeWrapper<Schedule>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
+  Mutation: ResolverTypeWrapper<{}>,
+  ScheduleCreateRequest: ScheduleCreateRequest,
+  Subscription: ResolverTypeWrapper<{}>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
+  Time: ResolverTypeWrapper<Scalars['Time']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<FieldError>,
@@ -271,11 +316,16 @@ export type ResolversParentTypes = {
   Counter: Counter,
   Int: Scalars['Int'],
   ClientCounter: ClientCounter,
-  Mutation: {},
-  Boolean: Scalars['Boolean'],
-  Subscription: {},
   String: Scalars['String'],
+  Schedule: Schedule,
+  Boolean: Scalars['Boolean'],
+  DateTime: Scalars['DateTime'],
+  Mutation: {},
+  ScheduleCreateRequest: ScheduleCreateRequest,
+  Subscription: {},
   AnyObject: Scalars['AnyObject'],
+  Date: Scalars['Date'],
+  Time: Scalars['Time'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
   FieldError: FieldError,
@@ -296,6 +346,14 @@ export type CounterResolvers<ContextType = any, ParentType extends ResolversPare
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export interface DateScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Date'], any> {
+  name: 'Date'
+}
+
+export interface DateTimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['DateTime'], any> {
+  name: 'DateTime'
+}
+
 export type FieldErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['FieldError'] = ResolversParentTypes['FieldError']> = {
   field?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   message?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
@@ -314,6 +372,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType, RequireFields<MutationAddCounterArgs, never>>,
   addCounterState?: Resolver<Maybe<ResolversTypes['ClientCounter']>, ParentType, ContextType, RequireFields<MutationAddCounterStateArgs, 'amount'>>,
   addMoleculerCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType, RequireFields<MutationAddMoleculerCounterArgs, never>>,
+  addSchedule?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddScheduleArgs, never>>,
   dummy?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   syncCachedCounter?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
 };
@@ -323,7 +382,20 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   counterCache?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType>,
   counterState?: Resolver<Maybe<ResolversTypes['ClientCounter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  getScheduleEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<QueryGetScheduleEventsArgs, never>>,
   moleculerCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType>,
+};
+
+export type ScheduleResolvers<ContextType = any, ParentType extends ResolversParentTypes['Schedule'] = ResolversParentTypes['Schedule']> = {
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  allDay?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  start?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  end?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  desc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  resourceId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  tooltip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type SubscriptionResolvers<ContextType = any, ParentType extends ResolversParentTypes['Subscription'] = ResolversParentTypes['Subscription']> = {
@@ -332,16 +404,24 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   moleculerCounterUpdate?: SubscriptionResolver<Maybe<ResolversTypes['Counter']>, "moleculerCounterUpdate", ParentType, ContextType>,
 };
 
+export interface TimeScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['Time'], any> {
+  name: 'Time'
+}
+
 export type Resolvers<ContextType = any> = {
   AnyObject?: GraphQLScalarType,
   ClientCounter?: ClientCounterResolvers<ContextType>,
   Counter?: CounterResolvers<ContextType>,
+  Date?: GraphQLScalarType,
+  DateTime?: GraphQLScalarType,
   FieldError?: FieldErrorResolvers<ContextType>,
   JSON?: GraphQLScalarType,
   JSONObject?: GraphQLScalarType,
   Mutation?: MutationResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
+  Schedule?: ScheduleResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
+  Time?: GraphQLScalarType,
 };
 
 

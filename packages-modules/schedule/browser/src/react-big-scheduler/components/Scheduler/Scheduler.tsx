@@ -8,7 +8,7 @@ import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import { Row, Col, Form, Input, Button, Select, DatePicker, TimePicker } from 'antd';
-import { Modal } from './Modal';
+import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
 
@@ -56,8 +56,10 @@ const initialEvents = [
   },
 ];
 
-interface Props {
+interface ISelectableCalendarProps {
   localizer: DateLocalizer;
+  handleAddSchedule: any;
+  events:any;
 }
 
 class CalendarEvent {
@@ -86,7 +88,7 @@ class CalendarEvent {
   }
 }
 
-function SelectableCalendar({ localizer }: Props) {
+function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
   const [isShowing, setIsShowing] = useState(false);
   const [repeat, setRepeat] = useState();
   const [startTime, setStartTime] = useState();
@@ -99,7 +101,7 @@ function SelectableCalendar({ localizer }: Props) {
     minhours: '',
   });
 
-  const [events, setEvents] = React.useState(initialEvents);
+  const [events, setEvents] = React.useState(propEvents);
 
   const handleSelect = ({ start, end }) => {
     const title = window.prompt('New Event name');
@@ -113,7 +115,9 @@ function SelectableCalendar({ localizer }: Props) {
       // Erroneous code
       // events.push(newEvent)
       // setEvents(events)
-      setEvents([...(events as any), newEvent]);
+      console.log("handleSelect => ", newEvent);
+      setEvents([...events, newEvent]);
+      handleAddSchedule(newEvent)
     }
   };
 
@@ -357,12 +361,17 @@ function SelectableCalendar({ localizer }: Props) {
   );
 }
 
-export default props => {
+export interface IScheduleProps {
+  handleAddSchedule: Function
+  events: any;
+}
+
+export default function Schedule(props: IScheduleProps) {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>
       <div className="calender-width">
-        <SelectableCalendar localizer={localizer} />
+        <SelectableCalendar localizer={localizer} {...props} />
       </div>
     </div>
   );
