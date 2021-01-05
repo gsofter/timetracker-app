@@ -151,7 +151,9 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
       newEvent.start = moment(startDate).toDate();
       newEvent.end = moment(endDate).toDate();
       newEvent.title = title;
+      newEvent.resourceId = values.selectuser
       setEvents([...(events as any), newEvent]);
+      handleAddSchedule(newEvent)
     }
 
     setIsShowing(!isShowing);
