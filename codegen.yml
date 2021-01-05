@@ -82,7 +82,25 @@ generates:
       - add: |
           /* tslint:disable */
       - typescript-react-apollo
-  packages-modules/schedule/server/src/interfaces/generated-models.ts:
+  packages-modules/schedule/browser/src/generated-models.tsx:
+    schema: 
+      - packages/adminide-core/src/core-schema.graphql
+      - "packages-modules/schedule/server/src/**/*.graphql"
+    documents: "packages-modules/schedule/browser/src/**/*.gql"
+    config:
+      withMutationFn: true
+      withHOC: true
+      withComponent: true
+      withHooks: true
+    preset: import-types-preset
+    presetConfig:
+      typesPath: "@admin-layout/schedule-module-core"
+      importTypesNamespace: SchemaTypes
+    plugins:
+      - add: |
+          /* tslint:disable */
+      - typescript-react-apollo
+  packages-modules/schedule/core/src/interfaces/generated-models.ts:
     schema:
       - packages/adminide-core/src/core-schema.graphql
       - "packages-modules/schedule/server/src/**/*.graphql"
