@@ -7,7 +7,7 @@ import { HomeOutlined } from '@ant-design/icons';
 
 export const commonPageStore: any[] = [
   {
-    path: '/',
+    path: '//home',
     tab: 'Home Component',
     key: 'home-component',
     exact: true,

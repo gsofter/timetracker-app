@@ -1,0 +1,100 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test styles should return a Component 1`] = `
+".a .ant-pro-page-container-children-content {
+  margin: 24px 24px 0;
+}
+.b .ant-pro-page-container-warp {
+  background-color: #fff;
+}
+.c .ant-pro-page-container-warp .ant-tabs-nav {
+  margin: 0;
+}
+.d .ant-pro-page-container-ghost .ant-pro-page-container-warp {
+  background-color: transparent;
+}
+.e .ant-pro-page-container-ghost .ant-pro-page-container-children-content {
+  margin-top: 0;
+}
+.f .ant-pro-page-container-main .ant-pro-page-container-detail {
+  display: flex;
+}
+.g .ant-pro-page-container-main .ant-pro-page-container-row {
+  display: flex;
+}
+.h .ant-pro-page-container-main .ant-pro-page-container-row {
+  width: 100%;
+}
+.i .ant-pro-page-container-main .ant-pro-page-container-title-content {
+  margin-bottom: 16px;
+}
+.j .ant-pro-page-container-main .ant-pro-page-container-title {
+  flex: auto;
+}
+.k .ant-pro-page-container-main .ant-pro-page-container-content {
+  flex: auto;
+}
+.l .ant-pro-page-container-main .ant-pro-page-container-content {
+  margin-bottom: 16px;
+}
+.m .ant-pro-page-container-main .ant-pro-page-container-extraContent {
+  flex: 0 1 auto;
+}
+.n .ant-pro-page-container-main .ant-pro-page-container-extraContent {
+  min-width: 242px;
+}
+.o .ant-pro-page-container-main .ant-pro-page-container-extraContent {
+  margin-left: 88px;
+}
+.p .ant-pro-page-container-main .ant-pro-page-container-extraContent {
+  text-align: right;
+}
+.q .ant-pro-page-container-main .ant-pro-page-container-main {
+  flex: 0 1 auto;
+}
+.r .ant-pro-page-container-main .ant-pro-page-container-main {
+  width: 100%;
+}
+.s .ant-pro-page-container-main .ant-pro-page-container-logo {
+  margin-bottom: 16px;
+}
+@media screen and (max-width: 1200px) {
+  .t .ant-pro-page-container-main .ant-pro-page-container-extraContent {
+    margin-left: 44px;
+  }
+}
+@media screen and (max-width: 992px) {
+  .u .ant-pro-page-container-main .ant-pro-page-container-extraContent {
+    margin-left: 20px;
+  }
+}
+@media screen and (max-width: 768px) {
+  .v .ant-pro-page-container-main .ant-pro-page-container-row {
+    display: block;
+  }
+  .w .ant-pro-page-container-main .ant-pro-page-container-action {
+    margin-left: 0;
+  }
+  .x .ant-pro-page-container-main .ant-pro-page-container-action {
+    text-align: left;
+  }
+  .y .ant-pro-page-container-main .ant-pro-page-container-extraContent {
+    margin-left: 0;
+  }
+  .z .ant-pro-page-container-main .ant-pro-page-container-extraContent {
+    text-align: left;
+  }
+}
+@media screen and (max-width: 576px) {
+  .ab .ant-pro-page-container-detail {
+    display: block;
+  }
+  .ac .ant-pro-page-container-extraContent {
+    margin-left: 0;
+  }
+}
+
+
+<div className=ant-pro a b c d e f g h i j k l m n o p q r s t u v w x y z ab ac />;
+"
+`;

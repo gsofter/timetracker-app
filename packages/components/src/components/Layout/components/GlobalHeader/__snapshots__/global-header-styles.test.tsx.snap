@@ -1,0 +1,110 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test styles should return a Component 1`] = `
+".a .ant-pro-global-header {
+  position: relative;
+}
+.b .ant-pro-global-header {
+  display: flex;
+}
+.c .ant-pro-global-header {
+  align-items: center;
+}
+.d .ant-pro-global-header {
+  height: 100%;
+}
+.e .ant-pro-global-header {
+  padding: 0 16px;
+}
+.f .ant-pro-global-header {
+  background: #fff;
+}
+.g .ant-pro-global-header {
+  box-shadow: 0 1px 4px rgba(0, 21, 41, 0.08);
+}
+.h .ant-pro-global-header > * {
+  height: 100%;
+}
+.i .ant-pro-global-header-collapsed-button {
+  display: flex;
+}
+.j .ant-pro-global-header-collapsed-button {
+  align-items: center;
+}
+.k .ant-pro-global-header-collapsed-button {
+  margin-left: 16px;
+}
+.l .ant-pro-global-header-collapsed-button {
+  font-size: 20px;
+}
+.m .ant-pro-global-header-layout-mix {
+  background-color: #001529;
+}
+.n .ant-pro-global-header-layout-mix .anticon {
+  color: #1890ff;
+}
+.o .ant-pro-global-header-logo {
+  position: relative;
+}
+.p .ant-pro-global-header-logo {
+  overflow: hidden;
+}
+.q .ant-pro-global-header-logo a {
+  display: flex;
+}
+.r .ant-pro-global-header-logo a {
+  align-items: center;
+}
+.s .ant-pro-global-header-logo a {
+  height: 100%;
+}
+.t .ant-pro-global-header-logo a img {
+  height: 28px;
+}
+.u .ant-pro-global-header-logo a h1 {
+  height: 32px;
+}
+.v .ant-pro-global-header-logo a h1 {
+  margin: 0 0 0 12px;
+}
+.w .ant-pro-global-header-logo a h1 {
+  color: #1890ff;
+}
+.x .ant-pro-global-header-logo a h1 {
+  font-weight: 600;
+}
+.y .ant-pro-global-header-logo a h1 {
+  font-size: 18px;
+}
+.z .ant-pro-global-header-logo a h1 {
+  line-height: 32px;
+}
+.ab .ant-pro-global-header-menu .anticon {
+  margin-right: 8px;
+}
+.ac .ant-pro-global-header-menu .ant-dropdown-menu-item {
+  min-width: 160px;
+}
+.ae .ant-pro-global-header .dark {
+  height: 48px;
+}
+.af .ant-pro-global-header .dark .action {
+  color: rgba(255, 255, 255, 0.85);
+}
+.ag .ant-pro-global-header .dark .action > i {
+  color: rgba(255, 255, 255, 0.85);
+}
+.ah .ant-pro-global-header .dark .action:hover {
+  background: #1890ff;
+}
+.ai .ant-pro-global-header .dark .action.opened {
+  background: #1890ff;
+}
+.aj .ant-pro-global-header .dark .action .ant-badge {
+  color: rgba(255, 255, 255, 0.85);
+}
+
+
+<div className=ant-pro a b c d e f g h i j k l m n o p q r s t u v w x y z ab ac ae af ag ah ai aj />;
+"
+`;

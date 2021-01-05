@@ -50,6 +50,7 @@
     "react-date-range": "1.0.0-beta",
     "react-dropzone": "11.0.2",
     "react-easy-swipe": "0.0.21",
+    "socket.io-client": "2.2.0",
     "uuidv4": "6.2.3",
     "yup": "0.27.0"
   },
@@ -57,8 +58,8 @@
     "@types/react-big-calendar": "^0.24.8"
   },
   "peerDependencies": {
-    "@common-stack/client-react": ">=0.0.234",
-    "@common-stack/core": ">=0.0.234",
+    "@common-stack/client-react": ">=0.0.249",
+    "@common-stack/core": ">=0.0.249",
     "antd": "^4.5.2"
   },
   "typings": "lib/index.d.ts",

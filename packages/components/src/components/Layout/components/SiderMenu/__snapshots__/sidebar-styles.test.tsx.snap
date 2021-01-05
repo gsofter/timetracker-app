@@ -1,0 +1,264 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test styles should return a Component 1`] = `
+".a .ant-pro-sider {
+  position: relative;
+}
+.b .ant-pro-sider {
+  background-color: #001529;
+}
+.c .ant-pro-sider {
+  border-right: 0;
+}
+.d .ant-pro-sider {
+  transition: background-color 0.3s, min-width 0.3s, max-width 0.3s;
+}
+.e .ant-pro-sider .ant-menu {
+  background: transparent;
+}
+.f .ant-pro-sider .ant-menu-submenu-title span.anticon {
+  transition: none;
+}
+.g .ant-pro-sider .ant-menu-submenu-title {
+  transition: none;
+}
+.h .ant-pro-sider .ant-menu-item span.anticon {
+  transition: none;
+}
+.i .ant-pro-sider .ant-menu-item {
+  transition: none;
+}
+.j .ant-pro-sider.ant-layout-sider-light .ant-menu-item a {
+  color: #262626;
+}
+.k .ant-pro-sider.ant-layout-sider-light .ant-menu-item-selected a {
+  color: #1890ff;
+}
+.l .ant-pro-sider.ant-layout-sider-light .ant-menu-item a:hover {
+  color: #1890ff;
+}
+.m .ant-pro-sider-logo {
+  position: relative;
+}
+.n .ant-pro-sider-logo {
+  display: flex;
+}
+.o .ant-pro-sider-logo {
+  align-items: center;
+}
+.p .ant-pro-sider-logo {
+  padding: 16px 16px;
+}
+.q .ant-pro-sider-logo {
+  line-height: 32px;
+}
+.r .ant-pro-sider-logo {
+  cursor: pointer;
+}
+.s .ant-pro-sider-logo > a {
+  display: flex;
+}
+.t .ant-pro-sider-logo > a {
+  align-items: center;
+}
+.u .ant-pro-sider-logo > a {
+  justify-content: center;
+}
+.v .ant-pro-sider-logo > a {
+  min-height: 32px;
+}
+.w .ant-pro-sider-logo img {
+  display: inline-block;
+}
+.x .ant-pro-sider-logo img {
+  height: 32px;
+}
+.y .ant-pro-sider-logo img {
+  vertical-align: middle;
+}
+.z .ant-pro-sider-logo h1 {
+  display: inline-block;
+}
+.ab .ant-pro-sider-logo h1 {
+  height: 32px;
+}
+.ac .ant-pro-sider-logo h1 {
+  margin: 0 0 0 12px;
+}
+.ae .ant-pro-sider-logo h1 {
+  color: white;
+}
+.af .ant-pro-sider-logo h1 {
+  font-weight: 600;
+}
+.ag .ant-pro-sider-logo h1 {
+  font-size: 18px;
+}
+.ah .ant-pro-sider-logo h1 {
+  line-height: 32px;
+}
+.ai .ant-pro-sider-logo h1 {
+  vertical-align: middle;
+}
+.aj .ant-pro-sider-extra {
+  margin-bottom: 16px;
+}
+.ak .ant-pro-sider-extra {
+  padding: 0 16px;
+}
+.al .ant-pro-sider-extra-no-logo {
+  margin-top: 16px;
+}
+.am .ant-pro-sider-menu {
+  position: relative;
+}
+.an .ant-pro-sider-menu {
+  z-index: 10;
+}
+.ao .ant-pro-sider-menu {
+  min-height: 100%;
+}
+.ap .ant-pro-sider-menu {
+  box-shadow: 2px 0 6px rgba(0, 21, 41, 0.35);
+}
+.aq .ant-pro-sider-menu span.ant-pro-menu-item-title {
+  transition: none;
+}
+.ar .ant-pro-sider .ant-layout-sider-children {
+  display: flex;
+}
+.as .ant-pro-sider .ant-layout-sider-children {
+  flex-direction: column;
+}
+.at .ant-pro-sider .ant-layout-sider-children {
+  height: 100%;
+}
+.au .ant-pro-sider .ant-layout-sider-children::-webkit-scrollbar {
+  width: 6px;
+}
+.av .ant-pro-sider .ant-layout-sider-children::-webkit-scrollbar {
+  height: 6px;
+}
+.aw .ant-pro-sider .ant-layout-sider-children::-webkit-scrollbar-track {
+  background: rgba(255, 255, 255, 0.15);
+}
+.ax .ant-pro-sider .ant-layout-sider-children::-webkit-scrollbar-track {
+  border-radius: 3px;
+}
+.ay .ant-pro-sider .ant-layout-sider-children::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px rgba(37, 37, 37, 0.05);
+}
+.az .ant-pro-sider .ant-layout-sider-children::-webkit-scrollbar-thumb {
+  background: rgba(255, 255, 255, 0.2);
+}
+.ba .ant-pro-sider .ant-layout-sider-children::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+}
+.bb .ant-pro-sider .ant-layout-sider-children::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 5px rgba(255, 255, 255, 0.05);
+}
+.bc .ant-pro-sider.ant-layout-sider-collapsed .ant-menu-inline-collapsed {
+  width: 48px;
+}
+.bd .ant-pro-sider.ant-layout-sider-collapsed .ant-pro-sider-logo {
+  padding: 16px 8px;
+}
+.be .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  position: fixed;
+}
+.bf .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  top: 0;
+}
+.bg .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  left: 0;
+}
+.bh .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  z-index: 100;
+}
+.bi .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  height: 100%;
+}
+.bj .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  overflow: auto;
+}
+.bk .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  overflow-x: hidden;
+}
+.bl .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed {
+  box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
+}
+.bm
+  .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed
+  > .ant-menu-root:not(.ant-pro-sider-link-menu) {
+  height: ~calc(100vh - 48px);
+}
+.bn
+  .ant-pro-sider.ant-layout-sider.ant-pro-sider-fixed
+  > .ant-menu-root:not(.ant-pro-sider-link-menu) {
+  overflow-y: auto;
+}
+.bo .ant-pro-sider-light .ant-layout-sider-children::-webkit-scrollbar-track {
+  background: rgba(0, 0, 0, 0.06);
+}
+.bp .ant-pro-sider-light .ant-layout-sider-children::-webkit-scrollbar-track {
+  border-radius: 3px;
+}
+.bq .ant-pro-sider-light .ant-layout-sider-children::-webkit-scrollbar-track {
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 21, 41, 0.05);
+}
+.br .ant-pro-sider-light .ant-layout-sider-children::-webkit-scrollbar-thumb {
+  background: rgba(0, 0, 0, 0.12);
+}
+.bs .ant-pro-sider-light .ant-layout-sider-children::-webkit-scrollbar-thumb {
+  border-radius: 3px;
+}
+.bt .ant-pro-sider-light .ant-layout-sider-children::-webkit-scrollbar-thumb {
+  -webkit-box-shadow: inset 0 0 5px rgba(0, 21, 41, 0.05);
+}
+.bu .ant-pro-sider-light {
+  background-color: #fff;
+}
+.bv .ant-pro-sider-light {
+  box-shadow: 2px 0 8px 0 rgba(29, 35, 41, 0.05);
+}
+.bw .ant-pro-sider-light .ant-pro-sider-logo h1 {
+  color: #1890ff;
+}
+.bx .ant-pro-sider-light .ant-menu-light {
+  border-right-color: transparent;
+}
+.by .ant-pro-sider-light .ant-pro-sider-collapsed-button {
+  border-top: 1px solid hsv(0, 0, 94%);
+}
+.bz .ant-pro-sider-icon {
+  width: 14px;
+}
+.ca .ant-pro-sider-icon {
+  vertical-align: baseline;
+}
+.cb .ant-pro-sider-links {
+  width: 100%;
+}
+.cc .ant-pro-sider-links ul.ant-menu-root {
+  height: auto;
+}
+.cd .ant-pro-sider-collapsed-button {
+  border-top: 1px solid rgba(0, 0, 0, 0.25);
+}
+.ce .ant-pro-sider-collapsed-button .anticon {
+  font-size: 16px;
+}
+.cf .ant-pro-sider .top-nav-menu li.ant-menu-item {
+  height: 100%;
+}
+.cg .ant-pro-sider .top-nav-menu li.ant-menu-item {
+  line-height: 1;
+}
+.ch .ant-pro-sider .drawer .drawer-content {
+  background: #001529;
+}
+
+
+<div className=ant-pro a b c d e f g h i j k l m n o p q r s t u v w x y z ab ac ae af ag ah ai aj ak al am an ao ap aq ar as at au av aw ax ay az ba bb bc bd be bf bg bh bi bj bk bl bm bn bo bp bq br bs bt bu bv bw bx by bz ca cb cc cd ce cf cg ch />;
+"
+`;

@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test styles should return a Component 1`] = `
+".a {
+  display: flex;
+}
+.b {
+  width: 100%;
+}
+.c {
+  min-height: 100%;
+}
+.d .ant-pro-basicLayout {
+  display: flex;
+}
+.e .ant-pro-basicLayout {
+  flex-direction: column;
+}
+.f .ant-pro-basicLayout {
+  width: 100%;
+}
+.g .ant-pro-basicLayout {
+  min-height: 100%;
+}
+.h .ant-pro-basicLayout .ant-layout-header.ant-pro-fixed-header {
+  position: fixed;
+}
+.i .ant-pro-basicLayout .ant-layout-header.ant-pro-fixed-header {
+  top: 0;
+}
+.j .ant-pro-basicLayout-content {
+  position: relative;
+}
+.k .ant-pro-basicLayout-content {
+  margin: 24px;
+}
+.l .ant-pro-basicLayout-content .ant-pro-page-container {
+  margin: -24px -24px 0;
+}
+.m .ant-pro-basicLayout-content-disable-margin {
+  margin: 0;
+}
+.n .ant-pro-basicLayout-content-disable-margin .ant-pro-page-container {
+  margin: 0;
+}
+.o .ant-pro-basicLayout-content > .ant-layout {
+  max-height: 100%;
+}
+.p
+  .ant-pro-basicLayout
+  .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar {
+  height: 100vh;
+}
+.q
+  .ant-pro-basicLayout
+  .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar {
+  overflow: hidden;
+}
+.r
+  .ant-pro-basicLayout
+  .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar {
+  transform: rotate(0);
+}
+.s .ant-pro-basicLayout .ant-pro-basicLayout-has-header .tech-page-container {
+  height: calc(100vh - 48px);
+}
+.t
+  .ant-pro-basicLayout
+  .ant-pro-basicLayout-has-header
+  .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header
+  .tech-page-container {
+  height: calc(100vh - 48px - 48px);
+}
+.u
+  .ant-pro-basicLayout
+  .ant-pro-basicLayout-has-header
+  .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header
+  .ant-pro-basicLayout-is-children {
+  min-height: calc(100vh - 48px);
+}
+.v
+  .ant-pro-basicLayout
+  .ant-pro-basicLayout-has-header
+  .ant-pro-basicLayout-is-children.ant-pro-basicLayout-has-header
+  .ant-pro-basicLayout-is-children.ant-pro-basicLayout-fix-siderbar {
+  height: calc(100vh - 48px);
+}
+
+
+<div className=ant-pro a b c d e f g h i j k l m n o p q r s t u v />;
+"
+`;

@@ -8,6 +8,7 @@ import { PrivateSiderMenuProps } from './SiderMenu/SiderMenu';
 import { clearMenuItem } from './utils/utils';
 import { useFela, connect } from 'react-fela';
 import { Property, Properties } from 'csstype';
+import { styleSheet } from './HeaderStyles';
 
 const { Header } = Layout;
 
@@ -37,7 +38,6 @@ const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
   const renderContent = () => {
     const { isMobile, onCollapse, navTheme, layout, headerRender, headerContentRender } = props;
     const isTop = layout === 'top';
-    // const { css } = useFela({...props, primaryColor});
     const clearMenuData = clearMenuItem(props.menuData || []);
     let defaultDom = (
       <GlobalHeader onCollapse={onCollapse} {...props} menuData={clearMenuData}>
@@ -90,9 +90,9 @@ const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
     layout !== 'mix' && needSettingWidth ? `calc(100% - ${collapsed ? 48 : siderWidth}px)` : '100%';
 
   const right = needFixedHeader ? 0 : undefined;
-  const { css, theme } = useFela(props);
+  const { css } = useFela();
   return (
-    <div className={classNames('Header-Wrapper', css(styleSheet.header))}>
+    <div className={classNames(css(styleSheet.headerStyle))}>
       {needFixedHeader && (
         <Header
           style={{
@@ -120,12 +120,4 @@ const HeaderView = (props: HeaderViewProps & PrivateSiderMenuProps) => {
   );
 };
 
-const styleSheet: { [key: string]: (obj) => Properties } = {
-  header: ({ theme, primaryColor, layout }) => ({
-    'z-index': 9,
-    width: '100%',
-  }),
-};
-
-// const StyleWrappedHeaderView = connect({ header: styleSheet.header })(HeaderView)
 export default HeaderView;

@@ -1,0 +1,38 @@
+{
+	"name": "dark",
+	"type": "dark",
+	"colors": {
+		"primaryColor": "#1890ff",
+		"app.background": "#fff",
+		"app.headerHeight": "48px",
+		"list.dropBackground": "#383b3d",
+		"sideBarTitle.foreground": "#bbbbbb",
+		"popover.background": "#1f1f1f",
+		"popover.customize.border.color": "#3a3a3a",
+		"body.background": "#000000",
+		"component.background": "#141414",
+		"layout.body.background": "#000000",
+		"layout.header.background": "#1f1f1f",
+		"layout.trigger.background": "#262626"
+	},
+	"tokenColors": [
+		{
+			"scope": "header",
+			"settings": {
+				"foreground": "#000080"
+			}
+		},
+		{
+			"scope": "text",
+			"settings": {
+				"foreground": "rgba(255,255,255,0.85)"
+			}
+		},
+		{
+			"scope": "text.secondary",
+			"settings": {
+				"foreground": "rgba(255,255,255,0.65)"
+			}
+		}
+	]
+}

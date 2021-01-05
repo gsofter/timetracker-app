@@ -1,4 +1,4 @@
-import { IThemeSettings } from '../../generated-types';
+import { IThemeSettings } from '../generated-types';
 const lightSettings: IThemeSettings = require('./light.theme.json');
 const darkSettings: IThemeSettings = require('./dark.theme.json');
 const hcSettings: IThemeSettings = require('./hc.theme.json');

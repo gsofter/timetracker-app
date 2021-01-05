@@ -12,7 +12,7 @@ import {
 
 export const accountPageStore: any[] = [
     {
-        path: '/:orgName/usermenu',
+        path: '//:orgName/usermenu',
         key: 'userMenu',
         tab: 'User Account',
         exact: false,
@@ -24,7 +24,7 @@ export const accountPageStore: any[] = [
         authority: ['admin', 'user'],
     },
     {
-        path: '/:orgName/usermenu/billing',
+        path: '//:orgName/usermenu/billing',
         key: 'userMenu.billing',
         exact: true,
         name: 'Billing Setting',
@@ -37,13 +37,13 @@ export const accountPageStore: any[] = [
         exact: true,
         key: 'userMenu.billing.home',
         name: 'Home',
-        path: '/:orgName/usermenu/billing/home',
+        path: '//:orgName/usermenu/billing/home',
         component: Billing,
         priority: 1,
         authority: ['admin', 'user'],
     },
     {
-        path: '/:orgName/usermenu/profile',
+        path: '//:orgName/usermenu/profile',
         key: 'userMenu.account.profile',
         tab: 'Profile Setting',
         component: Account,
@@ -53,7 +53,7 @@ export const accountPageStore: any[] = [
         authority: ['admin', 'user'],
     },
     {
-        path: '/:orgName/usermenu/account',
+        path: '//:orgName/usermenu/account',
         key: 'userMenu.account',
         tab: 'Accounts',
         name: 'Account',
@@ -64,7 +64,7 @@ export const accountPageStore: any[] = [
         authority: ['admin', 'user'],
     },
     {
-        path: '/:orgName/usermenu/account/collaborators',
+        path: '//:orgName/usermenu/account/collaborators',
         key: 'userMenu.account.collaborators',
         tab: 'Collaborators',
         name: 'Collaborators',
@@ -75,7 +75,7 @@ export const accountPageStore: any[] = [
         authority: ['admin', 'user'],
     },
     {
-        path: '/:orgName/usermenu/account/git-integration',
+        path: '//:orgName/usermenu/account/git-integration',
         key: 'userMenu.account.git-integration',
         tab: 'Integration',
         name: 'Integration',
@@ -86,7 +86,7 @@ export const accountPageStore: any[] = [
         authority: ['admin', 'user'],
     },
     {
-        path: '/:orgName/usermenu/account/tokens',
+        path: '//:orgName/usermenu/account/tokens',
         key: 'userMenu.account.tokens',
         tab: 'Tokens',
         name: 'Tokens',
@@ -97,18 +97,19 @@ export const accountPageStore: any[] = [
         authority: ['admin', 'user'],
     },
     {
-        path: '/:orgName/usermenu/account/referrals',
+        path: '//:orgName/usermenu/account/referrals',
         key: 'userMenu.account.referrals',
-        tab: 'Referrals',
-        name: 'Referrals',
+        // tab: 'Referrals',
+        // name: 'Referrals',
         position: IMenuPosition.BOTTOM,
         component: AccountSetting,
+        hideInMenu: true,
         exact: true,
         priority: 3,
         authority: ['admin', 'user'],
     },
     {
-        path: '/:orgName/usermenu/organization',
+        path: '//:orgName/usermenu/organization',
         key: 'userMenu.organization',
         tab: 'Create Organization',
         component: Organization,

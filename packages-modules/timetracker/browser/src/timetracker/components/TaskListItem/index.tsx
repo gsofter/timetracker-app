@@ -13,8 +13,10 @@ import { CalendarPopup } from '../../components/CalendarPopup';
 import { getTimeDurationByGivenTimestamp } from '../../services/timeService';
 import { encodeTimeEntryIssue } from '../../services/timeEntryService';
 import { sleep } from '../../services/sleep';
+import { startTimerSocket } from '../../configSocket';
 
 import { CustomSwipe } from '../../components/CustomSwipe';
+import DemoData from '../../demoData';
 
 export interface ITaskList {
   issue?: string;
@@ -28,9 +30,9 @@ export interface ITaskList {
   swipedTask?: any;
   durationTimeFormat?: any;
   viewport?: any;
-  startDateTime?: any;
-  endDateTime?: any;
-  startDatetime?: any;
+  start_dateTime?: any;
+  end_dateTime?: any;
+  start_datetime?: any;
 }
 
 export const TaskListItem: React.FC<ITaskList> = (props: any) => {
@@ -44,45 +46,48 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   const [isUpdatingIssue, setIsUpdatingIssue] = useState(false);
   const [popupEditTask, setPopupEditTask] = useState<any>([]);
   const [cursorPosition, SetCursorPosition] = useState([]);
+  const [changeTask, setChangeTask] = useState(DemoData.timer_v2);
 
-  const { task, isMobile, vocabulary, swipedTask } = props;
-  // const { v_edit_task, v_delete_task } = vocabulary;
   const {
-    issue,
-    project,
-    syncJiraStatus,
-    startDatetime,
-    endDatetime,
-    id,
-  } = task;
+    task,
+    isMobile,
+    vocabulary,
+    swipedTask,
+    timeFormat,
+    durationTimeFormat,
+    setSwipedTaskAction,
+    viewport,
+    getTimeEntriesListAction,
+  } = props;
 
-  const formatPeriodTime = (time) => {
-    const { timeFormat } = props;
-    const formattedTime = moment(time).format(
-      `${timeFormat === '12' ? 'h:mm a' : 'HH:mm'}`
-    );
+  interface IUpdateTask {
+    issue?: any;
+    projectId: number;
+    start_dateTime?: any;
+    end_dateTime?: any;
+    durationTimeFormat: any;
+    timeFormat: any;
+  }
+
+  const { v_edit_task, v_delete_task } = vocabulary;
+  const { issue, project, syncJiraStatus, start_datetime, end_datetime, id } = task;
+  const formatPeriodTime = time => {
+    const formattedTime = moment(time).format(`${timeFormat === '12' ? 'h:mm a' : 'HH:mm'}`);
     return formattedTime;
   };
 
   const formatDurationTime = (startTime, endTime) => {
-    const { durationTimeFormat } = props;
     const formattedTime = getTimeDurationByGivenTimestamp(
       +moment(endTime) - +moment(startTime),
-      durationTimeFormat
+      durationTimeFormat,
     );
     return formattedTime;
   };
 
-  const deleteTask = async (event) => {
-    const {
-      vocabulary,
-      task,
-      getTimeEntriesListAction,
-      setSwipedTaskAction,
-      isMobile,
-    } = props;
-    // const { v_a_task_delete } = vocabulary;
-    let check = window.confirm('Do you really want to delete this time entry?');
+  const deleteTask = async event => {
+    const {} = props;
+    const { v_a_task_delete } = vocabulary;
+    let check = window.confirm(v_a_task_delete);
     if (check) {
       if (isMobile) {
         setSwipedTaskAction(null);
@@ -90,50 +95,46 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
       }
       setIsUpdatingTask(true);
       await deleteTask(task.id);
-      // getTimeEntriesListAction();
+      getTimeEntriesListAction();
     }
   };
 
   const updateTask = async ({
-    issue,
+    // issue,
     projectId,
-    startDateTime,
-    endDateTime,
-  }) => {
+    start_dateTime,
+    end_dateTime,
+  }: IUpdateTask) => {
     setIsUpdatingTask(true);
-    const { task, getTimeEntriesListAction } = props;
-    const { id, project, issue: initialIssue } = task;
+    const { issue: initialIssue } = task;
     const data = {
-      issue: issue
-        ? encodeTimeEntryIssue(issue)
-        : encodeTimeEntryIssue(initialIssue),
+      issue: issue ? encodeTimeEntryIssue(issue) : encodeTimeEntryIssue(initialIssue),
       projectId: projectId || project.id,
-      startDatetime: null,
-      endDatetime: null,
+      start_datetime: null,
+      end_datetime: null,
     };
-    if (startDateTime && endDateTime) {
-      data.startDatetime = startDateTime.utc().toISOString();
-      data.endDatetime = endDateTime.utc().toISOString();
+    if (start_dateTime && end_dateTime) {
+      data.start_datetime = start_dateTime.utc().toISOString();
+      data.end_datetime = end_dateTime.utc().toISOString();
     }
-    // await changeTask(id, data);
+    // await setChangeTask(id, data);
     await getTimeEntriesListAction();
     setIsUpdatingTask(false);
   };
 
-  const onChangeProject = (projectId) => {
-    // updateTask({ projectId });
+  const onChangeProject = projectId => {
+    updateTask(projectId);
   };
 
-  const openCalendar = (event) => {
-    setIsOpenCalendar(true);
-    document.addEventListener('mousedown', closeCalendar);
-  };
-
-  const closeCalendar = (event) => {
+  const closeCalendar = event => {
     setIsOpenCalendar(false);
     // if (!popupEditTask.current.contains(event.target)) {
     //   document.removeEventListener('mousedown', closeCalendar);
     // }
+  };
+  const openCalendar = event => {
+    setIsOpenCalendar(true);
+    document.addEventListener('mousedown', closeCalendar);
   };
 
   // const setIsOpenProjectsListPopup = key => {
@@ -142,20 +143,22 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   //     });
   // };
 
-  const createRefCallback = (ref) => {
+  const createRefCallback = ref => {
     setPopupEditTask(ref);
   };
 
-  const startEditIssue = (event) => {
-    const { isMobile } = props;
-    if (isMobile) return;
+  const startEditIssue = event => {
+    if (isMobile) {
+      return;
+    }
     setIsUpdatingIssue(true);
     setNewIssue('');
   };
 
-  const endEditIssue = async (event) => {
-    const { isMobile, task } = props;
-    if (isMobile) return;
+  const endEditIssue = async event => {
+    if (isMobile) {
+      return;
+    }
     //   const { newIssue } = state;
     if (newIssue.trim() && newIssue.trim() !== task.issue) {
       //   await updateTask({ issue: newIssue.trim() });
@@ -174,20 +177,20 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     sel.addRange(range);
   };
 
-  const setCaretPositionToState = (event) => {
-    // const { isMobile } = props;
-    if (isMobile) return;
+  const setCaretPositionToState = event => {
+    if (isMobile) {
+      return;
+    }
     const sel = window.getSelection();
     SetCursorPosition([sel.anchorOffset, sel.focusOffset]);
   };
 
-  const handlePaste = (event) => {
+  const handlePaste = event => {
     //   const { cursorPosition } = state;
     const elem = event.target;
     const initialCursorPosition = cursorPosition;
     let data =
-      event.clipboardData.getData('text/html') ||
-      event.clipboardData.getData('text/plain');
+      event.clipboardData.getData('text/html') || event.clipboardData.getData('text/plain');
     const currentValue = elem.textContent;
     let tempDiv = document.createElement('DIV');
     tempDiv.innerHTML = data;
@@ -195,18 +198,18 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     const lengthOfSelected = cursorPosition[1] - cursorPosition[0];
     splitted.splice(cursorPosition[0], lengthOfSelected, tempDiv.innerText);
     elem.textContent = splitted.join('');
-    const newCursorPosition =
-      initialCursorPosition[0] + tempDiv.innerText.length;
+    const newCursorPosition = initialCursorPosition[0] + tempDiv.innerText.length;
     setCaretPosition(elem, newCursorPosition);
     setCaretPositionToState(event);
     setNewIssue(event.target.textContent);
     event.preventDefault();
   };
 
-  const handleStartTimer = (event) => {
+  const handleStartTimer = event => {
     // const { task } = props;
     // const { issue, project } = task;
-    // setIsStartingTask(true);
+    setIsStartingTask(true);
+    startTimerSocket({ issue, projectId: project.id });
     // setState(
     //     {
     //         isStartingTask: true,
@@ -216,7 +219,6 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   };
 
   const handleSwipeMove = ({ x, y }, event) => {
-    const { setSwipedTaskAction, task, viewport, swipedTask } = props;
     if (y <= 20 || x >= -20) {
       if (x <= -(viewport.width / 15) && swipedTask !== task.id) {
         setSwipedTaskAction(task.id);
@@ -226,13 +228,12 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     }
   };
 
-  const openEditTaskModal = (event) => {
-    const { setSwipedTaskAction } = props;
+  const openEditTaskModal = event => {
     setShowEditModal(true);
     setSwipedTaskAction(null);
   };
 
-  const closeEditTaskModal = (event) => {
+  const closeEditTaskModal = event => {
     setShowEditModal(false);
   };
 
@@ -244,7 +245,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
       height="15"
       viewBox="0 0 12 15"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -259,7 +261,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
       className={className}
       onClick={onClick}
       viewBox="0 0 19 19"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path d="M11.8147 3.20179L15.6797 7.06678L5.89624 16.8502L2.0334 12.9852L11.8147 3.20179ZM18.6125 2.26964L16.8889 0.545986C16.2227 -0.120146 15.1411 -0.120146 14.4727 0.545986L12.8216 2.19707L16.6866 6.0621L18.6125 4.1362C19.1292 3.61951 19.1292 2.7863 18.6125 2.26964ZM0.0107555 18.4178C-0.0595831 18.7344 0.226226 19.018 0.542821 18.941L4.84975 17.8968L0.98691 14.0318L0.0107555 18.4178Z" />
     </svg>
   );
@@ -272,7 +275,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
       height="15"
       viewBox="0 0 15 15"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -288,7 +292,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
       onClick={onClick}
       viewBox="0 0 20 21"
       fill="none"
-      xmlns="http://www.w3.org/2000/svg">
+      xmlns="http://www.w3.org/2000/svg"
+    >
       <path
         fillRule="evenodd"
         clipRule="evenodd"
@@ -304,21 +309,17 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
         className={classNames('task-item-swipe', {
           'task-item-swipe--swiped': swipedTask === id,
         })}
-        onSwipeMove={handleSwipeMove}>
+        onSwipeMove={handleSwipeMove}
+      >
         <div
           className={classNames('task-item', {
             'task-item--mobile': isMobile,
             'task-item--disabled': isUpdatingTask,
             'task-item--selected':
-              isOpenCalendar ||
-              isOpenProjectsListPopup ||
-              isUpdatingIssue ||
-              isStartingTask,
-          })}>
-          <Loading
-            mode="overlay"
-            flag={isUpdatingTask || isStartingTask}
-            withLogo={false}>
+              isOpenCalendar || isOpenProjectsListPopup || isUpdatingIssue || isStartingTask,
+          })}
+        >
+          <div className={'issue_width'}>
             {/* <JiraIcon
                             task={task}
                             isSync={syncJiraStatus}
@@ -333,18 +334,17 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
               suppressContentEditableWarning={true}
               onKeyUp={setCaretPositionToState}
               onClick={setCaretPositionToState}
-              // onKeyDown={event => {
-              //     setCaretPositionToState();
-              //     event.keyCode === 13 && event.target.blur();
-              // }}
+              onKeyDown={event => {
+                setCaretPositionToState(null);
+                // event.keyCode === 13 && event.target.blur();
+              }}
               onFocus={startEditIssue}
               onBlur={endEditIssue}
-              // onInput={event => {
-              //     setState({
-              //         newIssue: ,
-              //     });
-              // }}
-              onPaste={handlePaste}>
+              onInput={event => {
+                // setNewIssue(event.target.textContent);
+              }}
+              onPaste={handlePaste}
+            >
               {isUpdatingTask && newIssue ? newIssue : issue}
             </p>
             <ProjectsListPopup
@@ -355,75 +355,50 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
               selectedProjectId={project.id}
             />
             <p className="task-item__period-time">
-              <span className="task-item__start-time">
-                {formatPeriodTime(startDatetime)}
-              </span>
+              <span className="task-item__start-time">{formatPeriodTime(start_datetime)}</span>
               {' - '}
-              <span className="task-item__end-time">
-                {formatPeriodTime(endDatetime)}
-              </span>
+              <span className="task-item__end-time">{formatPeriodTime(end_datetime)}</span>
             </p>
             {!isMobile && (
               <p className="task-item__duration-time">
-                {formatDurationTime(startDatetime, endDatetime)}
+                {formatDurationTime(start_datetime, end_datetime)}
               </p>
             )}
             <div className="task-item__edit-wrapper">
               {isMobile && (
                 <p className="task-item__duration-time-mobile">
-                  {formatDurationTime(startDatetime, endDatetime)}
+                  {formatDurationTime(start_datetime, end_datetime)}
                 </p>
               )}
-              <PlayIcon
-                className="task-item__play-icon"
-                onClick={handleStartTimer}
-              />
-              <EditIcon
-                className="task-item__edit-icon"
-                onClick={openCalendar}
-              />
-              <DeleteIcon
-                className="task-item__delete-icon"
-                onClick={deleteTask}
-              />
-              {isOpenCalendar && (
+              <PlayIcon className="task-item__play-icon" onClick={handleStartTimer} />
+              <EditIcon className="task-item__edit-icon" onClick={openCalendar} />
+              <DeleteIcon className="task-item__delete-icon" onClick={deleteTask} />
+              {/* {isOpenCalendar && (
                 <CalendarPopup
                   createRefCallback={createRefCallback}
-                  // startDateTime={startDatetime}
-                  // endDateTime={endDatetime}
-                  // updateTask={updateTask}
+                  start_dateTime={start_datetime}
+                  end_dateTime={end_datetime}
+                  updateTask={updateTask}
                 />
-              )}
+              )} */}
             </div>
-          </Loading>
+          </div>
         </div>
         {isMobile && (
           <div className="task-item__bottom-layer">
-            <div
-              className="task-item__bottom-layer-edit-button"
-              onClick={openEditTaskModal}>
+            <div className="task-item__bottom-layer-edit-button" onClick={openEditTaskModal}>
               <EditIcon className="task-item__bottom-layer-edit-button-icon" />
-              <span className="task-item__bottom-layer-edit-button-text">
-                Edit task
-              </span>
+              <span className="task-item__bottom-layer-edit-button-text">{v_edit_task}</span>
             </div>
-            <div
-              className="task-item__bottom-layer-delete-button"
-              onClick={deleteTask}>
+            <div className="task-item__bottom-layer-delete-button" onClick={deleteTask}>
               <TrashIcon className="task-item__bottom-layer-delete-button-icon" />
-              <span className="task-item__bottom-layer-delete-button-text">
-                Delete task
-              </span>
+              <span className="task-item__bottom-layer-delete-button-text">{v_delete_task}</span>
             </div>
           </div>
         )}
         {showEditModal && (
           <ModalPortal>
-            <StartEditTaskModal
-              editMode
-              task={task}
-              disableShowModal={closeEditTaskModal}
-            />
+            <StartEditTaskModal editMode={true} task={task} disableShowModal={closeEditTaskModal} />
           </ModalPortal>
         )}
       </CustomSwipe>
@@ -432,7 +407,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
 };
 
 const styleSheet: any = {
-  TaskListItem: (props) => ({
+  TaskListItem: props => ({
     '& .task-item': {
       position: 'relative',
       minWidth: '100%',
@@ -440,10 +415,10 @@ const styleSheet: any = {
       display: 'flex',
       justifyContent: 'flex-start',
       alignItems: 'center',
-      margin: '0 0 1rem 0',
+      margin: '0 0 1rem',
       padding: '1.5rem 2rem 1.5rem 1.5rem',
-      borderRadius: '0.4rem',
-      color: '#ffffff',
+      borderRadius: '.4rem',
+      color: '#fff',
       lineHeight: '1.8rem',
     },
     '& .task-item:last-child': {
@@ -599,6 +574,9 @@ const styleSheet: any = {
       width: '1.8rem',
       height: '2rem',
       margin: '0 0 0.5rem 0',
+    },
+    '& .issue_width': {
+      display: 'flex',
     },
   }),
 };

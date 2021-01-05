@@ -140,8 +140,6 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props => {
     onOpenChange,
     headerHeight,
   } = props;
-  // @sri custom addition
-  const { css } = useFela(props);
 
   const baseClassName = `${prefixCls}-sider`;
   const { flatMenuKeys } = MenuCounter.useContainer();

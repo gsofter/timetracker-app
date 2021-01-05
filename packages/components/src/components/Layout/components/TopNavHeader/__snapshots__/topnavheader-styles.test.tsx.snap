@@ -1,0 +1,92 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test styles should return a Component 1`] = `
+".a .ant-pro-top-nav-header {
+  position: relative;
+}
+.b .ant-pro-top-nav-header {
+  width: 100%;
+}
+.c .ant-pro-top-nav-header {
+  height: 100%;
+}
+.d .ant-pro-top-nav-header {
+  box-shadow: 0 1px 4px 0 rgba(0, 21, 41, 0.12);
+}
+.e .ant-pro-top-nav-header {
+  transition: background 0.3s, width 0.2s;
+}
+.f .ant-pro-top-nav-header .ant-menu {
+  background: transparent;
+}
+.g .ant-pro-top-nav-header.light {
+  background-color: #fff;
+}
+.h .ant-pro-top-nav-header.light .ant-pro-top-nav-header-logo h1 {
+  color: #262626;
+}
+.i .ant-pro-top-nav-header.light .anticon {
+  color: inherit;
+}
+.j .ant-pro-top-nav-header-main {
+  display: flex;
+}
+.k .ant-pro-top-nav-header-main {
+  height: 100%;
+}
+.l .ant-pro-top-nav-header-main {
+  padding-left: 16px;
+}
+.m .ant-pro-top-nav-header-main-left {
+  display: flex;
+}
+.n .ant-pro-top-nav-header-main-left {
+  min-width: 192px;
+}
+.o .ant-pro-top-nav-header .anticon {
+  color: #fff;
+}
+.p .ant-pro-top-nav-header-logo {
+  position: relative;
+}
+.q .ant-pro-top-nav-header-logo {
+  min-width: 165px;
+}
+.r .ant-pro-top-nav-header-logo {
+  height: 100%;
+}
+.s .ant-pro-top-nav-header-logo {
+  overflow: hidden;
+}
+.t .ant-pro-top-nav-header-logo img {
+  display: inline-block;
+}
+.u .ant-pro-top-nav-header-logo img {
+  height: 32px;
+}
+.v .ant-pro-top-nav-header-logo img {
+  vertical-align: middle;
+}
+.w .ant-pro-top-nav-header-logo h1 {
+  display: inline-block;
+}
+.x .ant-pro-top-nav-header-logo h1 {
+  margin: 0 0 0 12px;
+}
+.y .ant-pro-top-nav-header-logo h1 {
+  color: #fff;
+}
+.z .ant-pro-top-nav-header-logo h1 {
+  font-weight: 400;
+}
+.ab .ant-pro-top-nav-header-logo h1 {
+  font-size: 16px;
+}
+.ac .ant-pro-top-nav-header-logo h1 {
+  vertical-align: top;
+}
+
+
+<div className=ant-pro a b c d e f g h i j k l m n o p q r s t u v w x y z ab ac />;
+"
+`;

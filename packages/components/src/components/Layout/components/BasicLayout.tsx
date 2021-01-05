@@ -1,4 +1,4 @@
-import React, { CSSProperties, useContext, useEffect, useState } from 'react';
+import React, { CSSProperties, useContext, useEffect, useMemo, useState } from 'react';
 import { BreadcrumbProps as AntdBreadcrumbProps } from 'antd/lib/breadcrumb';
 import { Layout, ConfigProvider, Breadcrumb } from 'antd';
 import classNames from 'classnames';
@@ -30,6 +30,7 @@ import useCurrentMenuLayoutProps from './utils/useCurrentMenuLayoutProps';
 import { clearMenuItem } from './utils/utils';
 import { useFela } from 'react-fela';
 import { Property, Properties } from 'csstype';
+import { styleSheet } from './BasicLayoutStyles';
 
 export type BasicLayoutProps = Partial<RouterTypes<Route>> &
   SiderMenuProps &
@@ -233,7 +234,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     };
   };
   //@sri custom css
-  const { css, theme } = useFela(props);
+  const { css } = useFela();
   const {
     children,
     onCollapse: propsOnCollapse,
@@ -282,12 +283,21 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
 
   const { breadcrumb = {}, breadcrumbMap, menuData = [] } = menuInfoData;
 
-  const matchMenus = getMatchMenu(location.pathname || '/', menuData, true);
-  const matchMenuKeys = Array.from(new Set(matchMenus.map(item => item.key || item.path || '')));
+  const matchMenus = useMemo(() => getMatchMenu(location.pathname || '/', menuData, true), [
+    location.pathname,
+    menuInfoData,
+  ]);
+
+  const matchMenuKeys = useMemo(
+    () => Array.from(new Set(matchMenus.map((item) => item.key || item.path || ''))),
+    [matchMenus],
+  );
 
   // 当前选中的menu，一般不会为空
   const currentMenu = (matchMenus[matchMenus.length - 1] || {}) as ProSettings & MenuDataItem;
+
   const currentMenuLayoutProps = useCurrentMenuLayoutProps(currentMenu);
+
   const { fixSiderbar, navTheme, layout: defaultPropsLayout, ...rest } = {
     ...props,
     ...currentMenuLayoutProps,
@@ -314,13 +324,13 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
       setMenuInfoData(infoData);
     });
     return () => window.cancelAnimationFrame && window.cancelAnimationFrame(animationFrameId);
-  }, [props.route, stringify(menu)]);
+  }, [props.route, stringify(menu), props.location?.pathname]);
 
   // If it is a fix menu, calculate padding
   // don't need padding in phone mode
   const hasLeftPadding = propsLayout !== 'top' && !isMobile;
 
-  const [collapsed, onCollapse] = useMergedState<boolean>(defaultCollapsed || false, {
+  const [collapsed, onCollapse] = useMergedState<boolean>(() => defaultCollapsed || false, {
     value: props.collapsed,
     onChange: propsOnCollapse,
   });
@@ -441,6 +451,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   }, [stringify(props.location)]);
 
   const [hasFooterToolbar, setHasFooterToolbar] = useState(false);
+
   useDocumentTitle(pageTitleInfo, props.title || defaultSettings.title);
 
   console.log('rest => ', rest);
@@ -470,32 +481,32 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
         {props.pure ? (
           children
         ) : (
-          <div className={classNames(css(styleSheet().basicLayout), 'BasicLayout-Wrapper')}>
-            <div className={className}>
-              <Layout
-                style={{
-                  minHeight: '100%',
-                  ...style,
-                }}
-                hasSider={true}
-              >
-                {siderMenuDom}
-                <Layout style={genLayoutStyle}>
-                  {headerDom}
-                  <WrapContent
-                    isChildrenLayout={isChildrenLayout}
-                    {...rest}
-                    className={contentClassName}
-                    style={contentStyle}
-                  >
-                    {loading ? <PageLoading /> : children}
-                  </WrapContent>
-                  {footerDom}
+            <div className={classNames(css(styleSheet.basicLayout as any))}>
+              <div className={className}>
+                <Layout
+                  style={{
+                    minHeight: '100%',
+                    ...style,
+                  }}
+                  hasSider={true}
+                >
+                  {siderMenuDom}
+                  <Layout style={genLayoutStyle}>
+                    {headerDom}
+                    <WrapContent
+                      isChildrenLayout={isChildrenLayout}
+                      {...rest}
+                      className={contentClassName}
+                      style={contentStyle}
+                    >
+                      {loading ? <PageLoading /> : children}
+                    </WrapContent>
+                    {footerDom}
+                  </Layout>
                 </Layout>
-              </Layout>
+              </div>
             </div>
-          </div>
-        )}
+          )}
       </RouteContext.Provider>
     </MenuCounter.Provider>
   );
@@ -509,67 +520,67 @@ BasicLayout.defaultProps = {
 
 export default BasicLayout;
 
-const styleSheet: (antPrefix?: string) => { [key: string]: (obj) => Properties } = (
-  antPrefix = 'ant',
-) => {
-  const proLayoutHeaderHeight = '48px';
-  const basicLayoutPrefixCls = `${antPrefix}-pro-basicLayout`;
+// const styleSheet: (antPrefix?: string) => { [key: string]: (obj) => Properties } = (
+//   antPrefix = 'ant',
+// ) => {
+//   const proLayoutHeaderHeight = '48px';
+//   const basicLayoutPrefixCls = `${antPrefix}-pro-basicLayout`;
 
-  return {
-    basicLayout: ({ theme, primaryColor, layout }) => ({
-      display: 'flex',
-      width: '100%',
-      minHeight: '100vh',
-      [`& .${basicLayoutPrefixCls}`]: {
-        display: 'flex',
-        flexDirection: 'column',
-        width: '100%',
-        minHeight: '100%',
-      },
-      [`& .${basicLayoutPrefixCls} .ant-layout-header.ant-pro-fixed-header`]: {
-        position: 'fixed',
-        top: 0,
-      },
-      [`& .${basicLayoutPrefixCls}-content`]: {
-        position: 'relative',
-        margin: '24px',
-      },
-      [`& .${basicLayoutPrefixCls}-content .ant-pro-page-container`]: {
-        margin: '-24px -24px 0',
-      },
-      [`& .${basicLayoutPrefixCls}-content-disable-margin`]: {
-        margin: 0,
-      },
-      [`& .${basicLayoutPrefixCls}-content-disable-margin .ant-pro-page-container`]: {
-        margin: 0,
-      },
-      [`& .${basicLayoutPrefixCls}-content > .ant-layout`]: {
-        maxHeight: '100%',
-      },
-      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
-        height: '100vh',
-        overflow: 'hidden',
-        transform: 'rotate(0)',
-      },
-      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
-        height: `calc(100vh - ${proLayoutHeaderHeight})`,
-      },
-      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
-        height: 'calc(4vh)',
-      },
-      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children`]: {
-        minHeight: 'calc(52vh)',
-      },
-      [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
-        height: 'calc(52vh);',
-      },
-      [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp`]: {
-        backgroundColor: '#fff',
-      },
+//   return {
+//     basicLayout: ({ theme, primaryColor, layout }) => ({
+//       display: 'flex',
+//       width: '100%',
+//       minHeight: '100vh',
+//       [`& .${basicLayoutPrefixCls}`]: {
+//         display: 'flex',
+//         flexDirection: 'column',
+//         width: '100%',
+//         minHeight: '100%',
+//       },
+//       [`& .${basicLayoutPrefixCls} .ant-layout-header.ant-pro-fixed-header`]: {
+//         position: 'fixed',
+//         top: 0,
+//       },
+//       [`& .${basicLayoutPrefixCls}-content`]: {
+//         position: 'relative',
+//         margin: '24px',
+//       },
+//       [`& .${basicLayoutPrefixCls}-content .ant-pro-page-container`]: {
+//         margin: '-24px -24px 0',
+//       },
+//       [`& .${basicLayoutPrefixCls}-content-disable-margin`]: {
+//         margin: 0,
+//       },
+//       [`& .${basicLayoutPrefixCls}-content-disable-margin .ant-pro-page-container`]: {
+//         margin: 0,
+//       },
+//       [`& .${basicLayoutPrefixCls}-content > .ant-layout`]: {
+//         maxHeight: '100%',
+//       },
+//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
+//         height: '100vh',
+//         overflow: 'hidden',
+//         transform: 'rotate(0)',
+//       },
+//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
+//         height: `calc(100vh - ${proLayoutHeaderHeight})`,
+//       },
+//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
+//         height: 'calc(4vh)',
+//       },
+//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children`]: {
+//         minHeight: 'calc(52vh)',
+//       },
+//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
+//         height: 'calc(52vh);',
+//       },
+//       [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp`]: {
+//         backgroundColor: '#fff',
+//       },
 
-      [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp .ant-tabs-nav`]: {
-        margin: 0,
-      },
-    }),
-  };
-};
+//       [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp .ant-tabs-nav`]: {
+//         margin: 0,
+//       },
+//     }),
+//   };
+// };

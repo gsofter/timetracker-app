@@ -1,11 +1,24 @@
 import classNames from 'classnames';
-import React, { useContext } from 'react';
+import React, { useContext, useState, useEffect } from 'react';
 import { ProjectsListPopup } from '../ProjectsListPopup';
 import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
+import { stopTimerSocket, startTimerSocket, updateTimerSocket } from '../../configSocket';
+import DemoData from '../../demoData';
 
 export interface IAddTask {
   onChange?: any;
+  vocabulary: any;
+  showNotificationAction?: any;
+  currentTimer: any;
+  timerTick?: any;
+  setCurrentTimer: any;
+  handleJiraSync: any;
+  setIsActive: any;
+  resetTimer: any;
+  hour: any;
+  minute: any;
+  second: any;
 }
 
 export const AddTask: React.FC<IAddTask> = (props: any) => {
@@ -14,19 +27,35 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
   const [projectId, setProjectId] = React.useState(null);
   const [isUpdating, setIsUpdating] = React.useState(false);
 
-  const startTimer = (event) => {
-    const { showNotificationAction, vocabulary } = props;
-    const {
-      v_a_task_name_before,
-      v_a_starting,
-      v_a_time_tracking,
-    } = vocabulary;
+  const {
+    currentTimer,
+    vocabulary,
+    timerTick,
+    isMobile,
+    handleJiraSync,
+    user,
+    showNotificationAction,
+    setCurrentTimer,
+    setTimerTick,
+    setIsActive,
+    resetTimer,
+    hour,
+    minute,
+    second,
+  } = props;
+
+  const { v_add_your_task_name, v_jira_synchronization } = vocabulary;
+
+  const startTimer = () => {
+    props.setIsActive(true);
+    const { v_a_task_name_before, v_a_starting, v_a_time_tracking } = vocabulary;
     if (issue.trim()) {
       setIsUpdating(true);
-      // startTimerSocket({
-      //     issue,
-      //     projectId,
-      // });
+      setCurrentTimer(DemoData.timer_v2);
+      startTimerSocket({
+        issue,
+        projectId,
+      });
     } else {
       setIssue('');
       showNotificationAction({
@@ -35,16 +64,30 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
       });
     }
   };
+
+  const stopTimer = () => {
+    const { v_a_task_name_before, v_a_stopping, v_a_time_tracking } = vocabulary;
+    if (issue.trim()) {
+      setIsUpdating(true);
+      setCurrentTimer(null), stopTimerSocket();
+      props.resetTimer();
+    } else {
+      setIssue('');
+      showNotificationAction({
+        text: `${v_a_task_name_before} ${v_a_stopping} ${v_a_time_tracking}`,
+        type: 'warning',
+      });
+    }
+  };
+
   // const updateTaskIssueDebounced = _.debounce(() => {
   // updateTimerSocket({
   //     issue,
   // });
   // }, 1000);
 
-  const onChangeInput = (event) => {
-    const { currentTimer } = props;
+  const onChangeInput = event => {
     const value = event.target.value;
-
     setIssue(value);
 
     if (currentTimer && value.trim() && currentTimer.issue !== value.trim()) {
@@ -52,7 +95,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     }
   };
 
-  const PlayIcon = (props) => {
+  const PlayIcon = props => {
     const { className, onClick } = props;
     return (
       <svg
@@ -60,14 +103,9 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
         onClick={onClick}
         viewBox="0 0 36 36"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg">
-        <circle
-          className={`${className}-circle`}
-          cx="18"
-          cy="18"
-          r="18"
-          fill="#27AE60"
-        />
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle className={`${className}-circle`} cx="18" cy="18" r="18" fill="#27AE60" />
         <path
           fillRule="evenodd"
           clipRule="evenodd"
@@ -78,7 +116,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     );
   };
 
-  const StopIcon = (props) => {
+  const StopIcon = props => {
     const { className, onClick } = props;
     return (
       <svg
@@ -86,14 +124,9 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
         onClick={onClick}
         viewBox="0 0 36 36"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg">
-        <circle
-          className={`${className}-circle`}
-          cx="18"
-          cy="18"
-          r="18"
-          fill="#EB5757"
-        />
+        xmlns="http://www.w3.org/2000/svg"
+      >
+        <circle className={`${className}-circle`} cx="18" cy="18" r="18" fill="#EB5757" />
         <rect x="12" y="12" width="12" height="12" rx="2" fill="white" />
       </svg>
     );
@@ -109,7 +142,8 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
         height="20"
         viewBox="0 0 20 20"
         fill="none"
-        xmlns="http://www.w3.org/2000/svg">
+        xmlns="http://www.w3.org/2000/svg"
+      >
         <path
           d="M0.833252 3.33334V8.33334H5.83325"
           stroke="#C1C0C0"
@@ -135,61 +169,63 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
       </svg>
     );
   };
+
+  const onChangeProject = id => {
+    if (currentTimer) {
+      setIsUpdating(true);
+      updateTimerSocket({
+        projectId: id,
+        issue,
+      });
+    } else {
+      setProjectId(id);
+    }
+  };
+
   return (
     <div className={css(styleSheet.addTaskStyles)}>
       <React.Fragment>
         <div className={classNames('add-task')}>
           <input
-            onFocus={(event) => (event.target.placeholder = '')}
-            // onBlur={(event) => (event.target.placeholder = v_add_your_task_name)}
-            // onKeyDown={(event) =>
-            //   event.keyCode === 13 &&
-            //   !currentTimer &&
-            //   !isUpdating &&
-            //   startTimer()
-            // }
+            onFocus={event => (event.target.placeholder = '')}
+            onBlur={event => (event.target.placeholder = v_add_your_task_name)}
+            onKeyDown={
+              event => event.keyCode === 13 && !currentTimer && !isUpdating
+              && startTimer()
+            }
             type="text"
             value={issue}
             onChange={onChangeInput}
-            // placeholder={v_add_your_task_name}
+            placeholder={v_add_your_task_name}
             className="add-task__input"
           />
           {/* {user.tokenJira && (
-        <SyncIcon
-          className={classNames('add-task__sync')}
-        // onClick={handleJiraSync}
-        // name={v_jira_synchronization}
-        />
-        )} */}
+            <SyncIcon
+              className={classNames('add-task__sync')}
+              onClick={handleJiraSync}
+              name={v_jira_synchronization}
+            />
+          )} */}
           <ProjectsListPopup
             withFolder={true}
             disabled={isUpdating}
-            // onChange={onChangeProject}
+            onChange={onChangeProject}
             selectedProjectId={projectId}
           />
           <span className="add-task__duration">
-            {'00:00:00'}
-            {/* {timerTick ? timerTick : '00:00:00'} */}
+            <span className="hours">{props.hour}</span>
+            <span>:</span>
+            <span className="minute">{props.minute}</span>
+            <span>:</span>
+            <span className="second">{props.second}</span>
           </span>
-          <Loading
-            mode="overlay"
-            flag={isUpdating}
-            withLogo={false}
-            circle={true}
-            width="3.6rem"
-            height="3.6rem">
-            {/* {currentTimer ? (
-            <StopIcon
-              className={classNames('add-task__stop-icon')}
-              onClick={stopTimer}
-            />
-          ) : ( */}
-            <PlayIcon
-              className={classNames('add-task__play-icon')}
-              onClick={startTimer}
-            />
-            {/* )} */}
-          </Loading>
+          <div>
+            {currentTimer ? (
+              <StopIcon className={classNames('add-task__stop-icon')} onClick={stopTimer} />
+            ) : (
+              <PlayIcon className={classNames('add-task__play-icon')} onClick={startTimer} />
+            )}
+          </div>
         </div>
       </React.Fragment>
     </div>
@@ -197,7 +233,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
 };
 
 const styleSheet: any = {
-  addTaskStyles: (props) => ({
+  addTaskStyles: props => ({
     position: 'relative',
     '& .add-task': {
       color: '#ffffff',
