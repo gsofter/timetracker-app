@@ -82,22 +82,22 @@ export type IQuerygetScheduleEventsArgs = {
 
 export type ISchedule = {
    __typename?: 'Schedule';
-  title: Scalars['String'];
   allDay?: Maybe<Scalars['Boolean']>;
-  start?: Maybe<Scalars['DateTime']>;
-  end?: Maybe<Scalars['DateTime']>;
   desc?: Maybe<Scalars['String']>;
+  end?: Maybe<Scalars['DateTime']>;
   resourceId?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['DateTime']>;
+  title: Scalars['String'];
   tooltip?: Maybe<Scalars['String']>;
 };
 
 export type IScheduleCreateRequest = {
-  title: Scalars['String'];
   allDay?: Maybe<Scalars['Boolean']>;
-  start?: Maybe<Scalars['DateTime']>;
-  end?: Maybe<Scalars['DateTime']>;
   desc?: Maybe<Scalars['String']>;
+  end?: Maybe<Scalars['DateTime']>;
   resourceId?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['DateTime']>;
+  title: Scalars['String'];
   tooltip?: Maybe<Scalars['String']>;
 };
 
@@ -316,12 +316,12 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
 };
 
 export type IScheduleResolvers<ContextType = any, ParentType extends IResolversParentTypes['Schedule'] = IResolversParentTypes['Schedule']> = {
-  title?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   allDay?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   desc?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  title?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };

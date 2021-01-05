@@ -15,9 +15,9 @@ export type Scalars = {
   Int: number;
   Float: number;
   AnyObject: any;
+  DateTime: any;
   Date: any;
   Time: any;
-  DateTime: any;
   JSON: any;
   JSONObject: any;
 };
@@ -55,6 +55,7 @@ export type IMutation = {
   addCounter?: Maybe<ICounter>;
   /**  add Counter  */
   addMoleculerCounter?: Maybe<ICounter>;
+  addSchedule?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
   /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
@@ -70,6 +71,11 @@ export type IMutationaddMoleculerCounterArgs = {
   amount?: Maybe<Scalars['Int']>;
 };
 
+
+export type IMutationaddScheduleArgs = {
+  request?: Maybe<IScheduleCreateRequest>;
+};
+
 export type IQuery = {
    __typename?: 'Query';
   /**  Counter  */
@@ -79,6 +85,7 @@ export type IQuery = {
   dummy?: Maybe<Scalars['Int']>;
   getContextProperty?: Maybe<Scalars['AnyObject']>;
   getOrgNameFromContext?: Maybe<IContext>;
+  getScheduleEvents?: Maybe<Array<Maybe<ISchedule>>>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
 };
@@ -86,6 +93,32 @@ export type IQuery = {
 
 export type IQuerygetContextPropertyArgs = {
   keys?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+
+export type IQuerygetScheduleEventsArgs = {
+  userId: Scalars['String'];
+};
+
+export type ISchedule = {
+   __typename?: 'Schedule';
+  title: Scalars['String'];
+  allDay?: Maybe<Scalars['Boolean']>;
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
+  desc?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  tooltip?: Maybe<Scalars['String']>;
+};
+
+export type IScheduleCreateRequest = {
+  title: Scalars['String'];
+  allDay?: Maybe<Scalars['Boolean']>;
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
+  desc?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  tooltip?: Maybe<Scalars['String']>;
 };
 
 export type ISubscription = {
@@ -205,12 +238,14 @@ export type IResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
   Context: ResolverTypeWrapper<IContext>,
-  Mutation: ResolverTypeWrapper<{}>,
+  Schedule: ResolverTypeWrapper<ISchedule>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
+  Mutation: ResolverTypeWrapper<{}>,
+  ScheduleCreateRequest: IScheduleCreateRequest,
   Subscription: ResolverTypeWrapper<{}>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   Time: ResolverTypeWrapper<Scalars['Time']>,
-  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<IFieldError>,
@@ -226,12 +261,14 @@ export type IResolversParentTypes = {
   String: Scalars['String'],
   AnyObject: Scalars['AnyObject'],
   Context: IContext,
-  Mutation: {},
+  Schedule: ISchedule,
   Boolean: Scalars['Boolean'],
+  DateTime: Scalars['DateTime'],
+  Mutation: {},
+  ScheduleCreateRequest: IScheduleCreateRequest,
   Subscription: {},
   Date: Scalars['Date'],
   Time: Scalars['Time'],
-  DateTime: Scalars['DateTime'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
   FieldError: IFieldError,
@@ -278,6 +315,7 @@ export interface IJSONObjectScalarConfig extends GraphQLScalarTypeConfig<IResolv
 export type IMutationResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
   addCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddCounterArgs, never>>,
   addMoleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddMoleculerCounterArgs, never>>,
+  addSchedule?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddScheduleArgs, never>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   syncCachedCounter?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
 };
@@ -288,7 +326,19 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   getContextProperty?: Resolver<Maybe<IResolversTypes['AnyObject']>, ParentType, ContextType, RequireFields<IQuerygetContextPropertyArgs, never>>,
   getOrgNameFromContext?: Resolver<Maybe<IResolversTypes['Context']>, ParentType, ContextType>,
+  getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, 'userId'>>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
+};
+
+export type IScheduleResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Schedule'] = IResolversParentTypes['Schedule']> = {
+  title?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
+  allDay?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  desc?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type ISubscriptionResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Subscription'] = IResolversParentTypes['Subscription']> = {
@@ -312,6 +362,7 @@ export type IResolvers<ContextType = MyContext> = {
   JSONObject?: GraphQLScalarType,
   Mutation?: IMutationResolvers<ContextType>,
   Query?: IQueryResolvers<ContextType>,
+  Schedule?: IScheduleResolvers<ContextType>,
   Subscription?: ISubscriptionResolvers<ContextType>,
   Time?: GraphQLScalarType,
 };

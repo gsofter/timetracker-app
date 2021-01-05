@@ -1,5 +1,5 @@
-// import { schema } from './schema';
-import schema from './schema/schema.graphql'
+import { schema } from './schema';
+// import schema from './schema/schema.graphql'
 import { resolver } from './resolvers';
 import { scheduleModule } from './containers';
 import { Feature } from '@common-stack/server-core';
