@@ -29,7 +29,6 @@ import compatibleLayout from './utils/compatibleLayout';
 import useCurrentMenuLayoutProps from './utils/useCurrentMenuLayoutProps';
 import { clearMenuItem } from './utils/utils';
 import { useFela } from 'react-fela';
-import { Property, Properties } from 'csstype';
 import { styleSheet } from './BasicLayoutStyles';
 
 export type BasicLayoutProps = Partial<RouterTypes<Route>> &
@@ -151,7 +150,6 @@ const renderSiderMenu = (props: BasicLayoutProps, matchMenuKeys: string[]): Reac
     );
     return menuRender(props, defaultDom);
   }
-
   return (
     <SiderMenu
       matchMenuKeys={matchMenuKeys}
@@ -216,23 +214,6 @@ const getPaddingLeft = (
  * @param props
  */
 const BasicLayout: React.FC<BasicLayoutProps> = props => {
-  //@sri custom function
-  const menuSeparation = menus => {
-    const upperMenus = menus.filter(menu => menu.position === 'UPPER');
-    const middleMenus = menus.filter(
-      menu =>
-        menu.position === 'MIDDLE' ||
-        (menu.position !== 'UPPER' && menu.position !== 'LOWER' && menu.position !== 'BOTTOM'),
-    );
-    const lowerMenus = menus.filter(menu => menu.position === 'LOWER');
-    const bottomMenus = menus.filter(menu => menu.position === 'BOTTOM');
-    return {
-      upperMenus,
-      middleMenus,
-      lowerMenus,
-      bottomMenus,
-    };
-  };
   //@sri custom css
   const { css } = useFela();
   const {
@@ -317,7 +298,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     if (menu?.loading) {
       return () => null;
     }
-    // if (!menuDataRender) {
     const infoData = getMenuData(route?.routes || [], menu, formatMessage, menuDataRender);
     // 稍微慢一点 render，不然会造成性能问题，看起来像是菜单的卡顿
     const animationFrameId = requestAnimationFrame(() => {
@@ -370,7 +350,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   const siderMenuDom = renderSiderMenu(
     {
       ...defaultProps,
-      separateMenus: menuSeparation(menuData),
       menuData,
       onCollapse,
       isMobile,
@@ -385,7 +364,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
     {
       ...defaultProps,
       hasSiderMenu: !!siderMenuDom,
-      separateMenus: menuSeparation(menuData),
       menuData,
       isMobile,
       collapsed,
@@ -396,7 +374,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
   );
 
   // render footer dom
-
   const footerDom = footerRender({
     isMobile,
     collapsed,
@@ -519,68 +496,3 @@ BasicLayout.defaultProps = {
 };
 
 export default BasicLayout;
-
-// const styleSheet: (antPrefix?: string) => { [key: string]: (obj) => Properties } = (
-//   antPrefix = 'ant',
-// ) => {
-//   const proLayoutHeaderHeight = '48px';
-//   const basicLayoutPrefixCls = `${antPrefix}-pro-basicLayout`;
-
-//   return {
-//     basicLayout: ({ theme, primaryColor, layout }) => ({
-//       display: 'flex',
-//       width: '100%',
-//       minHeight: '100vh',
-//       [`& .${basicLayoutPrefixCls}`]: {
-//         display: 'flex',
-//         flexDirection: 'column',
-//         width: '100%',
-//         minHeight: '100%',
-//       },
-//       [`& .${basicLayoutPrefixCls} .ant-layout-header.ant-pro-fixed-header`]: {
-//         position: 'fixed',
-//         top: 0,
-//       },
-//       [`& .${basicLayoutPrefixCls}-content`]: {
-//         position: 'relative',
-//         margin: '24px',
-//       },
-//       [`& .${basicLayoutPrefixCls}-content .ant-pro-page-container`]: {
-//         margin: '-24px -24px 0',
-//       },
-//       [`& .${basicLayoutPrefixCls}-content-disable-margin`]: {
-//         margin: 0,
-//       },
-//       [`& .${basicLayoutPrefixCls}-content-disable-margin .ant-pro-page-container`]: {
-//         margin: 0,
-//       },
-//       [`& .${basicLayoutPrefixCls}-content > .ant-layout`]: {
-//         maxHeight: '100%',
-//       },
-//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
-//         height: '100vh',
-//         overflow: 'hidden',
-//         transform: 'rotate(0)',
-//       },
-//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
-//         height: `calc(100vh - ${proLayoutHeaderHeight})`,
-//       },
-//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .tech-page-container`]: {
-//         height: 'calc(4vh)',
-//       },
-//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children`]: {
-//         minHeight: 'calc(52vh)',
-//       },
-//       [`& .${basicLayoutPrefixCls} .${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-has-header .${basicLayoutPrefixCls}-is-children.${basicLayoutPrefixCls}-fix-siderbar`]: {
-//         height: 'calc(52vh);',
-//       },
-//       [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp`]: {
-//         backgroundColor: '#fff',
-//       },
-
-//       [`& .${basicLayoutPrefixCls} .ant-pro-page-container-warp .ant-tabs-nav`]: {
-//         margin: 0,
-//       },
-//     }),
-//   };
-// };

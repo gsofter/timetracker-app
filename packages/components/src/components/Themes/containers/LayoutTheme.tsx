@@ -1,7 +1,7 @@
 import * as React from 'react';
 import {  useSelector } from 'react-redux';
 import { ThemeProvider as FelaThemeProvider } from 'react-fela';
-import { ITheme } from '../interfaces/theme';
+import { IThemeSettings } from '../interfaces';
 import { PureSettings } from '../../Layout/components/defaultSettings';
 import { THEMES } from '../constants';
 import { merge } from 'lodash';
@@ -22,7 +22,7 @@ export const ThemeProvider = ({ children }) => {
   // On mount, read the preferred theme from the persistence.
   React.useEffect(() => {
     setThemeName(navTheme);
-  }, [themeName]);
+  }, [navTheme]);
 
   // To toggle among other theme modes
   const toggle = () => {
@@ -30,7 +30,7 @@ export const ThemeProvider = ({ children }) => {
   }
 
   // Filter the styles based on the theme selected
-  const theme: ITheme = merge(getTheme(themeName), { defaultSettings: { colors: { primaryColor } } });
+  const theme: IThemeSettings = merge(getTheme(themeName).defaultSettings, {  colors: { primaryColor } } );
 
   return (
     <FelaThemeProvider theme={{ ...theme }}>

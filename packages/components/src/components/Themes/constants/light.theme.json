@@ -3,6 +3,7 @@
 	"type": "light",
 	"colors": {
 		"primaryColor": "#1890ff",
+		"button.primaryColor": "#1890ff",
 		"app.background": "#000",
 		"app.headerHeight": "48px",
 		"list.dropBackground": "#383b3d",
@@ -12,6 +13,7 @@
 		"body.background": "#000000",
 		"component.background": "#141414",
 		"layout.body.background": "#000000",
+		"layout.sider.background": "#fff",
 		"layout.header.background": "#1f1f1f",
 		"layout.trigger.background": "#262626"
 	},

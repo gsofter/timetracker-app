@@ -1,9 +1,9 @@
-import { ITheme } from '../../../Themes/interfaces';
+import { IThemeSettings } from '../../../Themes/interfaces';
 import { GlobalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-    footerToolbarStyle: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
+    footerToolbarStyle: ({ theme, prefixCls }: { theme: IThemeSettings, prefixCls: string }) => {
         const { antPrefix, componentBackground, borderColorSplit, shadow1Up } = GlobalThemeSettings;
 
         // less variables

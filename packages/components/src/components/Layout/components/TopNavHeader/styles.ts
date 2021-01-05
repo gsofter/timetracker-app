@@ -1,12 +1,12 @@
 import { getTokenColorsScopeSettings } from '../../../Themes/utils';
-import { ITheme } from '../../../Themes/interfaces';
+import { IThemeSettings } from '../../../Themes/interfaces';
 import { GlobalThemeSettings, LocalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-    topNavHeader: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
-        const { defaultSettings: { colors: { primaryColor }, type: themeName } } = theme;
-        const { componentBackground, btnPrimaryColor, antPrefix } = GlobalThemeSettings;
+    topNavHeader: ({ theme }: { theme: IThemeSettings }) => {
+        const { colors: { 'button.primaryColor': btnPrimaryColor, 'component.background': componentBackground } } = theme;
+        const { antPrefix } = GlobalThemeSettings;
 
         const headerColor = getTokenColorsScopeSettings(theme, 'header');
         // less variables

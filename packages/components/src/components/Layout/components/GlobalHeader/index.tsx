@@ -99,7 +99,7 @@ const GlobalHeader: React.FC<GlobalHeaderProps & PrivateSiderMenuProps> = props 
     </span>
   );
 
-  const { css } = useFela(props);
+  const { css } = useFela();
 
   return (
     <div className={css(styleSheet.globalHeaderStyle)}>

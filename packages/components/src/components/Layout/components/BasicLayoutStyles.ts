@@ -1,11 +1,11 @@
-import { ITheme } from '../../Themes/interfaces';
 import { GlobalThemeSettings, LocalThemeSettings } from './default-styles';
 import { Property, Properties } from 'csstype';
+import { IThemeSettings } from '../../Themes';
 
 
 export const styleSheet = {
-	basicLayout: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
-		const { defaultSettings: { colors: { primaryColor }, } } = theme;
+	basicLayout: ({ theme }: { theme: IThemeSettings }) => {
+		const { colors: { primaryColor }, }  = theme;
 		const { antPrefix } = GlobalThemeSettings;
 		// less variables
 		const basicLayoutPrefixCls = `${antPrefix}-pro-basicLayout`;

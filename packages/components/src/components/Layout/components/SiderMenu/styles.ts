@@ -1,22 +1,21 @@
 import { getTokenColorsScopeSettings } from '../../../Themes/utils';
-import { ITheme } from '../../../Themes/interfaces';
+import { IThemeSettings } from '../../../Themes/interfaces';
 import { GlobalThemeSettings, LocalThemeSettings } from '../default-styles';
 
 
 export const styleSheet = {
-	siderMenuStyles: ({ theme, prefixCls }: { theme: ITheme, prefixCls: string }) => {
-		const { defaultSettings: { colors: { primaryColor }, type: themeName } } = theme;
-		const {borderColorSplit, borderStyleBase, borderWidthBase, antPrefix } = GlobalThemeSettings;
+	siderMenuStyles: ({ theme }: { theme: IThemeSettings }) => {
+		const { colors: { primaryColor, 'layout.sider.background': layoutSiderBackground } } = theme;
+		const { borderColorSplit, borderStyleBase, borderWidthBase, antPrefix } = GlobalThemeSettings;
 
 		const headerColor = getTokenColorsScopeSettings(theme, 'header');
 		// less variables
 		const proLayoutSiderMenuPrefixCls = `${antPrefix}-pro-sider`;
 		const navHeaderHeight = LocalThemeSettings.proLayoutHeaderHeight;
-		const layoutSiderBackground = headerColor.background;
 		return {
 			[`& .${proLayoutSiderMenuPrefixCls}`]: {
 				position: 'relative',
-				'background-color': headerColor.background,
+				'background-color': layoutSiderBackground,
 				borderRight: '0',
 				transition: 'background-color 0.3s, min-width 0.3s, max-width 0.3s',
 
@@ -82,7 +81,7 @@ export const styleSheet = {
 
 				'&-extra': {
 					'margin-bottom': '16px',
-					padding: '0 16px',
+					// padding: '0 16px', //@sri no need
 					'&-no-logo': {
 						'margin-top': '16px',
 					},
@@ -175,7 +174,7 @@ export const styleSheet = {
 					},
 
 					[`& .${proLayoutSiderMenuPrefixCls}-collapsed-button`]: {
-						'border-top': `${borderWidthBase} ${borderStyleBase} ${borderColorSplit}`,
+						// 'border-top': `${borderWidthBase} ${borderStyleBase} ${borderColorSplit}`, //@sri we don't top border
 					},
 				},
 
@@ -192,7 +191,7 @@ export const styleSheet = {
 				},
 
 				'&-collapsed-button': {
-					'border-top': `${borderWidthBase} ${borderStyleBase} rgba(0, 0, 0, 0.25)`,
+					// 'border-top': `${borderWidthBase} ${borderStyleBase} rgba(0, 0, 0, 0.25)`, //@sri we don't top border
 					'& .anticon': {
 						'font-size': '16px',
 					},
@@ -204,6 +203,10 @@ export const styleSheet = {
 				},
 				'& .drawer .drawer-content': {
 					background: `${layoutSiderBackground}`,
+				},
+				// @sri customize for divider
+				'& .ant-divider': {
+					color: '#bfbfbf',
 				},
 			},
 		};

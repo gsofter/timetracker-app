@@ -1,24 +1,26 @@
-import React from 'react';
-import * as renderer from 'react-test-renderer';
-import { createRenderer } from 'fela';
-import { Provider, createComponent } from 'react-fela';
+import 'raf/polyfill'
+import * as React from 'react';
+import { createSnapshot } from 'jest-react-fela';
+import { createComponent } from 'react-fela';
+import { THEMES } from '../../../Themes/constants/index'
 
 import { styleSheet } from './styles';
 import 'jest';
 
-const styles = styleSheet();
-const Box = createComponent(styles.footerLayout);
 
-describe('Box', () => {
-    it('should render component', () => {
-      const felaRenderer = createRenderer();
-      console.log('----test---', felaRenderer)
-      const component = renderer.create(
-        <Provider renderer={felaRenderer}>
-          <Box>hello</Box>
-        </Provider>
-      )
-  
-      expect(component.toJSON()).toMatchSnapshot()
-    })
+const rule = (props) => styleSheet.globalFooter({
+  theme: THEMES[0].defaultSettings,
+});
+describe('Test styles', () => {
+
+  it('should return a Component', () => {
+
+
+    const Component = createComponent(rule)
+
+    expect(createSnapshot(<Component className='ant-pro' />)).toMatchSnapshot()
   })
+
+})
+
+

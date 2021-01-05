@@ -5,15 +5,16 @@ import {
   Settings,
   DefaultFooter,
   SettingDrawer,
+  BaseMenu,
+  getMenuSeparation,
 } from '@admin-layout/components';
 import React, { useEffect, useMemo, useRef } from 'react';
 import * as _ from 'lodash';
 import { Link, generatePath } from 'react-router-dom';
 import { GithubOutlined } from '@ant-design/icons';
-import { Result, Button } from 'antd';
+import { Result, Button, Divider } from 'antd';
 import { useIntl } from 'react-intl';
 import { connect } from 'react-redux';
-import { ConnectState } from '../../redux/connect';
 // import Authorized from '@/utils/Authorized';
 // import RightContent from '@/components/GlobalHeader/RightContent';
 import { getMatchMenu } from '@umijs/route-utils';
@@ -23,6 +24,8 @@ import { IOrgNameInContextFragment } from '@admin-layout/core';
 import { useDispatch } from 'react-redux';
 import RightContent from '../GlobalHeader/RightContent';
 import { CHANGE_SETTINGS_ACTION } from '../../constants/constants';
+
+
 const noMatch = (
   <Result
     status={403}
@@ -60,8 +63,8 @@ export type BasicLayoutContent = { [K in 'location']: BasicLayoutProps[K] } & {
 /**
  * use Authorized check all menu item
  */
-const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
-  menuList.map(item => {
+const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] => {
+  return menuList.map(item => {
     const localItem = {
       ...item,
       children: item.children ? menuDataRender(item.children) : undefined,
@@ -69,6 +72,7 @@ const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
     // return Authorized.check(item.authority, localItem, null) as MenuDataItem;
     return localItem;
   });
+}
 
 const defaultFooterDom = (
   <DefaultFooter
@@ -100,6 +104,58 @@ const generateMenuPath = (path, params) => {
   }
   return null;
 };
+
+const menuFooterRender = (props, mode = 'horizontal') => {
+  const { menuData, ...rest } = props;
+  const newMenuData = getMenuSeparation(props?.menuData).bottomMenus
+  const newProps = { ...rest, menuData: newMenuData };
+
+  return (
+    <BaseMenu
+      {...newProps}
+      mode="horizontal"
+      handleOpenChange={props.onOpenChange}
+      style={{
+        width: '100%',
+      }}
+      className={`ant-pro-sider-menu`}
+    />
+  );
+}
+
+const menuExtraRender = (props) => {
+  const { menuData, ...rest } = props;
+  const newMenuData = getMenuSeparation(props?.menuData).middleMenus
+  const newProps = { ...rest, menuData: newMenuData };
+
+  return (
+    <>
+      <div
+        style={{
+          flex: 1,
+          overflowY: 'auto',
+          overflowX: 'hidden',
+        }}
+        className="removeBoxShadow"
+      >
+        <BaseMenu
+          {...newProps}
+          mode="inline"
+          handleOpenChange={props.onOpenChange}
+          style={{
+            width: '100%',
+          }}
+          className={`ant-pro-sider-menu`}
+        />
+      </div>
+      <Divider plain>Admin</Divider>
+    </>
+  );
+}
+
+
+
+
 const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props => {
   const {
     children,
@@ -124,22 +180,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
   const history = useHistory();
 
   const dispatch = useDispatch();
-  const menuSeparation = menus => {
-    const upperMenus = menus.filter(menu => menu.position === 'UPPER');
-    const middleMenus = menus.filter(
-      menu =>
-        menu.position === 'MIDDLE' ||
-        (menu.position !== 'UPPER' && menu.position !== 'LOWER' && menu.position !== 'BOTTOM'),
-    );
-    const lowerMenus = menus.filter(menu => menu.position === 'LOWER');
-    const bottomMenus = menus.filter(menu => menu.position === 'BOTTOM');
-    return {
-      upperMenus,
-      middleMenus,
-      lowerMenus,
-      bottomMenus,
-    };
-  };
+
   return (
     <>
       <ProLayout
@@ -154,6 +195,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
             <Link to={generateMenuPath(menuItemProps.path, props.routeParams)}>{defaultDom}</Link>
           );
         }}
+        menuFooterRender={menuFooterRender}
         breadcrumbRender={(routers = []) => [
           {
             path: '/',
@@ -166,11 +208,12 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
           return first ? (
             <Link to={paths.join('/')}>{route.breadcrumbName}</Link>
           ) : (
-            <span>{route.breadcrumbName}</span>
-          );
+              <span>{route.breadcrumbName}</span>
+            );
         }}
         footerRender={() => defaultFooterDom}
         menuDataRender={menuDataRender}
+        menuExtraRender={menuExtraRender}
         postMenuData={menuData => {
           menuDataRef.current = menuData || [];
           return menuData || [];
@@ -178,7 +221,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
         rightContentRender={p => {
           return (
             <RightContent
-              upperMenus={menuSeparation(p?.menuData).upperMenus}
+              upperMenus={getMenuSeparation(p?.menuData).upperMenus}
               orgName={props?.routeParams?.orgName}
             />
           );
