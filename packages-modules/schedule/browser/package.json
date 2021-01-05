@@ -45,6 +45,7 @@
     "@admin-layout/react-shared-components": "file:../../../packages/react-shared-components",
     "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser",
     "@admin-layout/components": "file:../../../packages/components",
+    "@admin-layout/schedule-module-core": "file:../core",
     "@cdmbase/react-big-scheduler": "^0.2.8",
     "moment": "^2.29.1",
     "react-dnd": "^11.1.3",
