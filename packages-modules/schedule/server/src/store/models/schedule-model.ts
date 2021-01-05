@@ -9,7 +9,7 @@ const ScheduleSchema = new Schema({
     // Event title
     title: { type: String, required: true },
     // all day event ? true: false
-    allDay: { type: Boolean },
+    allDay: { type: Boolean, default: false },
     // start date
     start: { type: Date },
     // end date

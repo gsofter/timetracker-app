@@ -4,14 +4,14 @@ import { IResolvers, Counter } from '../generated-models';
 export const resolver = (options) => ({
   Query: {
     getScheduleEvents: (root, args, { scheduleService }) => {
-      options.logger('(Query.getScheduleEvents) args %j', args)
+      options.logger.trace('(Query.getScheduleEvents) args %j', args)
       return scheduleService.getScheduleEvents(args.userId);
     }
   },
   Mutation: {
     addSchedule: (root, args, { scheduleService }) => {
-      options.logger('(Mutation.addSchedule) args %j', args)
-      return scheduleService.createScheduleEvent(args.request);
+      options.logger.trace('(Mutation.addSchedule) args %j', args)
+      return scheduleService.createSchedule(args.request);
     }
   },
   Subscription: {

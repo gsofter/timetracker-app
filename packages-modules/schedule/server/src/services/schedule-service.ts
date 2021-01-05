@@ -21,8 +21,7 @@ export class ScheduleService implements IScheduleService {
         return this.scheduleRepository.getScheduleEvents(userId);
     }
 
-    public async createSchedule(newEvent: IScheduleCreateRequest): Promise<boolean> {
-        return this.createSchedule(newEvent);
+    public async createSchedule(newEvent: IScheduleCreateRequest): Promise<Boolean> {
+        return this.scheduleRepository.createSchedule(newEvent);
     }
-
 }
