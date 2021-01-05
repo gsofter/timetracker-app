@@ -44,7 +44,7 @@ export const Modal: React.SFC<IProps> = ({
 const stylesheet: any = {
   styles: (theme) => ({
     position: 'relative',
-    zIndex: 1111,
+    zIndex: 1011,
     '& .modalDialog': {
       position: 'fixed',
       height: '100%',
