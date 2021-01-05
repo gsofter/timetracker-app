@@ -121,7 +121,7 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props => {
   const extraDom = menuExtraRender && menuExtraRender(props);
   const menuDom = () => { // @sri converted to function inorder to filter menus.
     const { menuData, ...rest } = props;
-    const newMenuData = getMenuSeparation(menuData).middleMenus;
+    const newMenuData = getMenuSeparation(menuData).lowerMenus;
     const newProps = { ...rest, menuData: newMenuData };
     return menuContentRender !== false && flatMenuKeys && (
       <BaseMenu
