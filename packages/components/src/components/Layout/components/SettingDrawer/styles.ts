@@ -4,6 +4,31 @@ import { getTokenColorsScopeSettings } from '../../../Themes/utils';
 
 
 export const styleSheet = {
+    settingDrawerHandler: ({ theme }: { theme: IThemeSettings }) => {
+        const { antPrefix } = GlobalThemeSettings;
+        const { colors: { primaryColor, 'popover.background': popoverBackground } } = theme;
+        // less variables
+        const antProSettingDrawerHandle = `${antPrefix}-pro-setting-drawer-handle`;
+        return {
+            [`& .${antProSettingDrawerHandle}`]: {
+                position: 'absolute',
+                top: '240px',
+                right: '300px',
+                'z-index': '0',
+                display: 'flex',
+                'align-items': 'center',
+                'justify-content': 'center',
+                width: '48px',
+                height: '48px',
+                'font-size': '16px',
+                'text-align': 'center',
+                background: `${primaryColor}`,
+                'border-radius': '4px 0 0 4px',
+                cursor: 'pointer',
+                'pointer-events': 'auto',
+            },
+        };
+    },
     settingDrawer: ({ theme }: { theme: IThemeSettings }) => {
         const { antPrefix } = GlobalThemeSettings;
         const { colors: { primaryColor, 'popover.background': popoverBackground } } = theme;
@@ -142,23 +167,7 @@ export const styleSheet = {
                     'line-height': '22px',
                 },
 
-                '&-handle': {
-                    position: 'absolute',
-                    top: '240px',
-                    right: '300px',
-                    'z-index': '0',
-                    display: 'flex',
-                    'align-items': 'center',
-                    'justify-content': 'center',
-                    width: '48px',
-                    height: '48px',
-                    'font-size': '16px',
-                    'text-align': 'center',
-                    background: `${primaryColor}`,
-                    'border-radius': '4px 0 0 4px',
-                    cursor: 'pointer',
-                    'pointer-events': 'auto',
-                },
+                //@sri &-handler need to run seperately
 
                 '&-production-hint': {
                     'margin-top': '16px',
