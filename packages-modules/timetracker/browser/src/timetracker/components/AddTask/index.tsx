@@ -4,7 +4,6 @@ import { ProjectsListPopup } from '../ProjectsListPopup';
 import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
 import { stopTimerSocket, startTimerSocket, updateTimerSocket } from '../../configSocket';
-import DemoData from '../../demoData';
 import _ from 'lodash';
 
 export interface IAddTask {
@@ -21,6 +20,7 @@ export interface IAddTask {
   minute: any;
   second: any;
   setTimeEntriesList: any;
+  timeEntriesList: any[];
 }
 
 export const AddTask: React.FC<IAddTask> = (props: any) => {
@@ -44,6 +44,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     hour,
     minute,
     second,
+    timeEntriesList,
   } = props;
 
   const { v_add_your_task_name, v_jira_synchronization } = vocabulary;
@@ -54,7 +55,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     const { v_a_task_name_before, v_a_starting, v_a_time_tracking } = vocabulary;
     if (issue.trim()) {
       setIsUpdating(true);
-      setCurrentTimer(DemoData.timer_v2);
+      setCurrentTimer(timeEntriesList);
       startTimerSocket({
         issue,
         projectId,
@@ -76,6 +77,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
       const newValues = {
         start_datetime: currentDate,
         end_datetime: new Date(),
+        sync_jira_status: false,
         id: randomId,
         issue: issue,
         project: {
@@ -84,8 +86,11 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
           project_color: { name: 'green' },
         },
       };
+
       setCurrentTimer(null), stopTimerSocket();
-      props.setTimeEntriesList([...DemoData.timer_v2, newValues]);
+      let newTimerData: any[] = [...timeEntriesList];
+      newTimerData.unshift(newValues);
+      props.setTimeEntriesList(newTimerData);
       props.resetTimer();
     } else {
       setIssue('');
