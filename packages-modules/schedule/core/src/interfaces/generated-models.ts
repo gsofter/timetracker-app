@@ -130,7 +130,7 @@ export type IGetScheduleEventsQuery = (
   { __typename?: 'Query' }
   & { getScheduleEvents?: Maybe<Array<Maybe<(
     { __typename?: 'Schedule' }
-    & Pick<ISchedule, 'title' | 'allDay' | 'start' | 'end' | 'desc' | 'resourceId' | 'tooltip'>
+    & Pick<ISchedule, 'id' | 'title' | 'allDay' | 'start' | 'end' | 'desc' | 'resourceId' | 'tooltip'>
   )>>> }
 );
 
@@ -145,6 +145,7 @@ export type AddScheduleMutationOptions = ApolloReactCommon.BaseMutationOptions<I
 export const GetScheduleEventsDocument = gql`
     query GetScheduleEvents($userId: String) {
   getScheduleEvents(userId: $userId) {
+    id
     title
     allDay
     start

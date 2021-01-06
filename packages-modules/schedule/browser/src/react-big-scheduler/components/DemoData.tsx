@@ -18,14 +18,14 @@ const DemoData = {
     },
     {
       id: 2,
-      group: 2,
+      group: '2',
       title: 'item 2',
       start_time: new Date('Fri Nov 24 2020 15:00:00'),
-      end_time: new Date('Fri Nov 24 2020 17:00:00'),
+      end_time: new Date('Tue Jan 5 2021 17:00:00'),
     },
     {
       id: 3,
-      group: 3,
+      group: '3',
       title: 'item 3',
       start_time: new Date('Fri Nov 24 2020 02:00:00'),
       end_time: new Date('Fri Nov 24 2020 10:00:00'),
