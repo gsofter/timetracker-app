@@ -226,7 +226,7 @@ const PageContainer: React.FC<PageContainerProps> = props => {
 
   const { css } = useFela();
   return (
-    <div className={classNames('PageContainer-Wrapper', css(styleSheet.pageContainer))} style={{ height: '100%', width: '100%' }}>
+    <div className={classNames('PageContainer-Wrapper', css(styleSheet.pageContainer))}>
       <div style={style} className={className}>
         {fixedHeader && headerDom ? (
           // 在 hasHeader 且 fixedHeader 的情况下，才需要设置高度
