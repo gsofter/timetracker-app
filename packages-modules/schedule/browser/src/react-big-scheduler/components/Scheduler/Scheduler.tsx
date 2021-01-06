@@ -7,11 +7,12 @@ import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-import { Row, Col, Form, Input, Button, Select, DatePicker, TimePicker } from 'antd';
+import { Row, Col, Form, Input, Button, Select, DatePicker } from 'antd';
 import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
 
+const { RangePicker } = DatePicker;
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 
@@ -90,32 +91,16 @@ class CalendarEvent {
 
 function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
   const [isShowing, setIsShowing] = useState(false);
-  const [repeat, setRepeat] = useState();
-  const [startTime, setStartTime] = useState();
-  const [endTime, setEndTime] = useState();
-  const [startDate, setStartDate] = useState();
-  const [endDate, setEndDate] = useState();
-
-  const [values, setValues] = useState({
-    selectuser: '',
-    minhours: '',
-  });
-
-  const [events, setEvents] = React.useState(propEvents);
+  const [form] = Form.useForm();
+  const [events, setEvents] = React.useState(propEvents.map(ev => ({ ...ev, start: moment(ev.start).toDate(), end: moment(ev.end).toDate()})));
 
   const handleSelect = ({ start, end }) => {
     const title = window.prompt('New Event name');
-
     if (title) {
       let newEvent = {} as CalendarEvent;
       newEvent.start = moment(start).toDate();
       newEvent.end = moment(end).toDate();
       newEvent.title = title;
-
-      // Erroneous code
-      // events.push(newEvent)
-      // setEvents(events)
-      console.log("handleSelect => ", newEvent);
       setEvents([...events, newEvent]);
       handleAddSchedule(newEvent)
     }
@@ -125,50 +110,9 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
     setIsShowing(!isShowing);
   };
 
-  const handleChange = (e: any) => {
-    if (!e.target) {
-      setValues({ ...values, selectuser: e });
-    } else {
-      const { name, value } = e && e.target;
-      setValues({ ...values, [name]: value });
-    }
-  };
-
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    const submitValue = {
-      selectUser: values.selectuser,
-      minhours: values.minhours,
-      repeat: repeat,
-      startTime: startTime,
-      endTime: endTime,
-      startDate: startDate,
-      endDate: endDate,
-    };
-    const title = 'New event added';
-    if (title) {
-      let newEvent = {} as CalendarEvent;
-      newEvent.start = moment(startDate).toDate();
-      newEvent.end = moment(endDate).toDate();
-      newEvent.title = title;
-      newEvent.resourceId = values.selectuser
-      setEvents([...(events as any), newEvent]);
-      handleAddSchedule(newEvent)
-    }
-
-    setIsShowing(!isShowing);
-    console.log(submitValue, 'submitValue');
-  };
-
   const resetModal = (e: any) => {
     e.preventDefault();
-    setRepeat(null);
-    setStartDate(null);
-    setStartTime(null);
-    setEndTime(null);
-    setEndDate(null);
-    values.selectuser = '';
-    values.minhours = '';
+    form.resetFields();
   };
 
   const onEventDrop = ({ event, start, end, allDay }) => {
@@ -200,64 +144,45 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
     );
   };
 
+  const onFinish = (values) => {
+    const request = {
+      title: values.title,
+      start: moment(values.dateRange[0]).toDate(),
+      end: moment(values.dateRange[1]).toDate(),
+      resourceId: values.user,
+    }
+    console.log("request =>", request)
+    handleAddSchedule(request)
+    setIsShowing(!isShowing);
+    form.resetFields();
+  }
   const renderModalBody = (): JSX.Element => {
     return (
       <>
-        <Form labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} layout="vertical">
-          <Form.Item label="User">
-            <Select onChange={handleChange} value={values.selectuser}>
-              <Select.Option value="user1">User1</Select.Option>
-              <Select.Option value="user2">User2</Select.Option>
+        <Form labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} layout="vertical" onFinish={onFinish} form={form}>
+          <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Required field' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="User" name="user" rules={[{ required: true, message: 'Required field'}]}>
+            <Select>
+              <Select.Option value="1">Group1</Select.Option>
+              <Select.Option value="2">Group2</Select.Option>
+              <Select.Option value="3">Group3</Select.Option>
+              <Select.Option value="4">Group4</Select.Option>
+              <Select.Option value="5">Group5</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item label="DatePicker">
-            <DatePicker
-              onChange={date => {
-                setStartDate(date as any);
-              }}
-              value={startDate as any}
-            />{' '}
-            &nbsp;
-            <TimePicker
-              use12Hours
-              format="h:mm a"
-              onChange={(time, timeString) => {
-                setStartTime(time as any);
-              }}
-              value={startTime as any}
-            />
-            &nbsp;TO &nbsp;
-            <TimePicker
-              use12Hours
-              format="h:mm a"
-              onChange={(time, timeString) => {
-                setEndTime(time as any);
-              }}
-              value={endTime as any}
-            />
-            &nbsp;
-            <DatePicker
-              onChange={date => {
-                setEndDate(date as any);
-              }}
-              value={endDate as any}
-            />
+          <Form.Item label="RangePicker" name="dateRange" rules={[{ required: true, message: 'Required field'}]}>
+            <RangePicker allowClear showTime/>
           </Form.Item>
-          <Form.Item label="Minimum Hours">
+          <Form.Item label="Minimum Hours" name="minHours">
             <Input
               name="minhours"
               placeholder="5"
-              onChange={handleChange}
-              value={values.minhours as any}
             />
           </Form.Item>
-          <Form.Item label="Repeats">
-            <Select
-              onChange={e => {
-                setRepeat(e);
-              }}
-              value={repeat}
-            >
+          <Form.Item label="Repeats" name="repeats">
+            <Select>
               <Select.Option value="never">Never</Select.Option>
               <Select.Option value="yes">Yes</Select.Option>
             </Select>
@@ -268,7 +193,7 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
               Reset
             </Button>
             &nbsp;
-            <Button type="primary" htmlType="submit" onClick={handleSubmit}>
+            <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>

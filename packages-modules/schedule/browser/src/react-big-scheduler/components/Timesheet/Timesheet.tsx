@@ -19,19 +19,27 @@ import {
   Checkbox,
   Avatar,
 } from 'antd';
-import { Modal } from './Modal';
+import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
-import DemoData from './DemoData';
 import { PageContainer } from '@admin-layout/components';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizerM = momentLocalizer(moment);
-
+const { RangePicker } = DatePicker;
 const allViews: View[] = ['agenda', 'day', 'week', 'month'];
+const resourceMap = [
+  { resourceId: '1', resourceTitle: 'Project1' },
+  { resourceId: '2', resourceTitle: 'Project2' },
+  { resourceId: '3', resourceTitle: 'Project3' },
+  { resourceId: '4', resourceTitle: 'Project4' },
+  { resourceId: '5', resourceTitle: 'Project5' },
+];
 
-interface Props {
+interface ISelectableCalendarProps {
   localizer: DateLocalizer;
+  handleAddSchedule: any;
+  events:any;
 }
 
 class CalendarEvent {
@@ -60,53 +68,20 @@ class CalendarEvent {
   }
 }
 
-function SelectableCalendar({ localizer }: Props) {
+function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents}: ISelectableCalendarProps) {
   const [isShowing, setIsShowing] = useState(false);
-  const [selectproject, setSelectproject] = useState();
-  const [selecttask, setSelecttask] = useState();
-  const [startTime, setStartTime] = useState();
-  const [endTime, setEndTime] = useState();
-  const [startDate, setStartDate] = useState();
-  const [checked, setChecked] = useState(false);
-  const [reason, setReason] = useState();
-  const [note, setNote] = useState();
-  const [resource, setResourceMap] = useState([]);
-  const [events, setEvents] = React.useState([]);
-
-  useEffect(() => {
-    let res = [];
-    DemoData.resourceMap.forEach(item => {
-      res.push({ resourceId: item.id, resourceTitle: item.title });
-    });
-    setResourceMap(res);
-  }, []);
-
-  useEffect(() => {
-    let data = [];
-    DemoData.items.forEach(item => {
-      data.push({
-        id: item.id,
-        resourceId: item.group,
-        start: item.start_time,
-        end: item.end_time,
-        title: item.title,
-      });
-    });
-    setEvents(data);
-  }, []);
-
-  const handleSelect = ({ start, end }) => {
+  const [events, setEvents] = React.useState(propEvents.map(ev => ({ ...ev, start: moment(ev.start).toDate(), end: moment(ev.end).toDate()})));
+  const [form] = Form.useForm();
+  const handleSelect = ({ start, end, resourceId }) => {
     const title = window.prompt('New Event name');
     if (title) {
       let newEvent = {} as CalendarEvent;
       newEvent.start = moment(start).toDate();
       newEvent.end = moment(end).toDate();
       newEvent.title = title;
-
-      // Erroneous code
-      // events.push(newEvent)
-      // setEvents(events)
+      newEvent.resourceId = resourceId
       setEvents([...(events as any), newEvent]);
+      handleAddSchedule(newEvent);
     }
   };
 
@@ -114,61 +89,9 @@ function SelectableCalendar({ localizer }: Props) {
     setIsShowing(!isShowing);
   };
 
-  const onChange = e => {
-    setChecked(e);
-  };
-  const handleSubmit = (e: any) => {
-    e.preventDefault();
-    const submitValue = {
-      selecttask: selecttask,
-      selectproject: selectproject,
-      checked: checked,
-      // minhours: values.minhours,
-      startTime: startTime,
-      endTime: endTime,
-      startDate: startDate,
-      reason: reason,
-      note: note,
-    };
-    const title = 'New event added';
-    if (title) {
-      let newEvent = ({} as CalendarEvent) as any;
-      newEvent.start = moment(startDate).toDate();
-      newEvent.end = moment(endTime).toDate();
-      newEvent.resourceId = Math.floor(Math.random() * 10000);
-      newEvent.id = 10;
-      // newEvent.id = Math.floor(Math.random() * 10000);
-
-      let now = moment(startTime).format('HH:mm:ss');
-      let then = moment(endTime).format('HH:mm:ss');
-      let calculateTime = moment.utc(then, 'HH:mm:ss').diff(moment.utc(now, 'HH:mm:ss'), 'm');
-
-      newEvent.title = selecttask;
-      setEvents([...(events as any), newEvent]);
-      setResourceMap([
-        ...resource,
-        {
-          resourceTitle: selectproject,
-          resourceId: 10,
-          // resourceId: Math.floor(Math.random() * 10000),
-        },
-      ]);
-    }
-
-    setIsShowing(!isShowing);
-    // console.log(submitValue, 'submitValue');
-  };
-
   const resetModal = (e: any) => {
     e.preventDefault();
-    setSelectproject(null);
-    setSelecttask(null);
-    setStartDate(null);
-    setStartTime(null);
-    setEndTime(null);
-    setChecked(false);
-    setReason(null);
-    setNote(null);
+    form.resetFields();
   };
 
   const onEventDrop = ({ event, start, end, allDay }) => {
@@ -178,6 +101,7 @@ function SelectableCalendar({ localizer }: Props) {
     const nextEvents = [...events];
     nextEvents.splice(idx, 1, updatedEvent);
     setEvents(nextEvents);
+    handleAddSchedule(updatedEvent);
     alert(`${event.title} was dropped onto ${event.start}`);
   };
 
@@ -205,90 +129,60 @@ function SelectableCalendar({ localizer }: Props) {
   const handleSelectEvent = event => {
     alert(event.title);
   };
-  const handleReason = e => {
-    setReason(e.target.value as any);
-  };
-  const handleNote = e => {
-    setNote(e.target.value as any);
-  };
-  const handleSelectProject = e => {
-    setSelectproject(e);
-  };
-  const handleTask = e => {
-    setSelecttask(e);
-  };
   const handleClose = () => {
     setIsShowing(false);
   };
-  const handleChecked = e => {
-    // tslint:disable-next-line
-    console.log(e.target.checked);
-  };
-  const handleStartDate = date => {
-    setStartDate(date as any);
-  };
-  const handleStartTime = (time, timeString) => {
-    setStartTime(time as any);
-  };
-  const handleEndTime = (time, timeString) => {
-    setEndTime(time as any);
-  };
+  
   const handleSelectTimezone = timezone => {
     // tslint:disable-next-line
     console.log('New Timezone Selected:', timezone);
   };
 
+  const onFinish = (values) => {
+    const request = {
+      title: values.title,
+      start: moment(values.dateRange[0]).toDate(),
+      end: moment(values.dateRange[1]).toDate(),
+      resourceId: values.project,
+      desc: values.desc,
+    }
+    console.log("request =>", request)
+    handleAddSchedule(request)
+    setIsShowing(!isShowing);
+    form.resetFields();
+  }
+
   const renderModalBody = (): JSX.Element => {
     return (
       <>
-        <Form labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} layout="vertical">
+        <Form labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} layout="vertical" onFinish={onFinish} form={form}>
           <div style={{ margin: '15px 0px' }}>
             <Avatar style={{ backgroundColor: '#3174ad' }} icon={<UserOutlined />} />
             <span style={{ marginLeft: '10px' }}>Cdmbase</span>
           </div>
-          <Form.Item label="Projects">
-            <Select onChange={handleSelectProject} value={selectproject}>
-              <Select.Option value="Admin-project1">Admin-project1</Select.Option>
-              <Select.Option value="Admin-project2">Admin-project2</Select.Option>
+          <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Required field' }]}>
+            <Input />
+          </Form.Item>
+          <Form.Item label="Projects" name="project" rules={[{ required: true, message: 'Required field'}]}>
+            <Select>
+              {
+                resourceMap.map(res => {
+                  return <Select.Option value={res.resourceId} key={ res.resourceId }>{ res.resourceTitle}</Select.Option>
+                })
+              }
             </Select>
           </Form.Item>
-          <Form.Item label="TO DO">
-            <Select onChange={handleTask} value={selecttask}>
-              <Select.Option value="task1">Task1</Select.Option>
-              <Select.Option value="task2">Task2</Select.Option>
-              <Select.Option value="task3">Task3</Select.Option>
-            </Select>
+          <Form.Item label="DatePicker" name="dateRange" rules={[{ required: true, message: 'Required field'}]}>
+            <RangePicker showTime/>
           </Form.Item>
-          <Form.Item label="DatePicker">
-            <DatePicker onChange={handleStartDate} value={startDate as any} /> &nbsp;
-            <span>From </span>
-            <TimePicker
-              use12Hours={true}
-              format="h:mm a"
-              onChange={handleStartTime}
-              value={startTime as any}
-            />
-            &nbsp;TO &nbsp;
-            <TimePicker
-              use12Hours={true}
-              format="h:mm a"
-              onChange={handleEndTime}
-              value={endTime as any}
-            />
-          </Form.Item>
-          <Form.Item>
-            <Checkbox onChange={handleChecked}>Checkbox</Checkbox>
-          </Form.Item>
-          <Form.Item label="REASON *">
+          <Form.Item label="REASON *" name="desc" rules={[{ required: true, message: 'Required field'}]}>
             <TextArea
               rows={3}
-              onChange={handleReason}
-              value={reason}
               placeholder="Reason for time"
             />
           </Form.Item>
-          <Form.Item label="Note">
-            <TextArea onChange={handleNote} rows={3} value={note} placeholder="Notes for time" />
+          <Form.Item label="Note" name="note">
+            <TextArea placeholder="Notes for time" />
           </Form.Item>
 
           <Form.Item>
@@ -296,7 +190,7 @@ function SelectableCalendar({ localizer }: Props) {
               Reset
             </Button>
             &nbsp;
-            <Button type="primary" htmlType="submit" onClick={handleSubmit}>
+            <Button type="primary" htmlType="submit">
               Submit
             </Button>
           </Form.Item>
@@ -371,7 +265,7 @@ function SelectableCalendar({ localizer }: Props) {
         events={events}
         defaultView="week"
         views={allViews}
-        defaultDate={new Date('Fri Nov 22 2020')}
+        defaultDate={new Date()}
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelect}
         startAccessor="start"
@@ -386,7 +280,7 @@ function SelectableCalendar({ localizer }: Props) {
             event: EventAgenda,
           },
         }}
-        resources={resource}
+        resources={resourceMap}
         resourceIdAccessor="resourceId"
         resourceTitleAccessor="resourceTitle"
       />
@@ -472,8 +366,8 @@ export default props => {
   return (
     <div className={css(stylesheet.styles)}>
       <div className="calender-width">
-        <SelectableCalendar localizer={localizerM} />
+        <SelectableCalendar localizer={localizerM} {...props} />
       </div>
-    </div>
+    </div>  
   );
 };
