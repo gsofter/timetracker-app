@@ -51,6 +51,7 @@ export type AddScheduleMutationOptions = ApolloReactCommon.BaseMutationOptions<S
 export const GetScheduleEventsDocument = gql`
     query GetScheduleEvents($userId: String) {
   getScheduleEvents(userId: $userId) {
+    id
     title
     allDay
     start

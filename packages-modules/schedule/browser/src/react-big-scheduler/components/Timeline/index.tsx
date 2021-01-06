@@ -1,14 +1,15 @@
 import React, { useEffect } from 'react'
-import TimesheetComponent from './Timesheet'
+import TimelineComponent from './Timeline'
 import { useAddScheduleMutation, useGetScheduleEventsQuery } from '../../../generated-models'
 import { IScheduleCreateRequest } from '@admin-layout/schedule-module-core'
 import { message } from 'antd'
 
-const Timesheet = (props) => {
+const Timeline = (props) => {
     const [addMutation] = useAddScheduleMutation()
     const handleAddSchedule = (request: IScheduleCreateRequest) => {
         addMutation({ variables: { request } }).then(() => {
             message.success('A new event has been created!')
+            refetch();
         }).catch(err => {
             console.log(err.message)
             message.error('Event creation failed!')
@@ -20,7 +21,7 @@ const Timesheet = (props) => {
         refetch()
     }, [refetch])
 
-    return !data && loading ? null : <TimesheetComponent handleAddSchedule={handleAddSchedule} events={data.getScheduleEvents} />
+    return !data && loading ? null : <TimelineComponent handleAddSchedule={handleAddSchedule} events={data.getScheduleEvents} />
 }
 
-export default Timesheet
+export default Timeline

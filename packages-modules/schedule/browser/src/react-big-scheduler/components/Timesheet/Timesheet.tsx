@@ -146,7 +146,6 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents}:
       resourceId: values.project,
       desc: values.desc,
     }
-    console.log("request =>", request)
     handleAddSchedule(request)
     setIsShowing(!isShowing);
     form.resetFields();
