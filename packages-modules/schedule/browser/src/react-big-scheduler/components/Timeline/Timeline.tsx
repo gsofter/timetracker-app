@@ -1,5 +1,9 @@
 import React, { useState } from 'react';
-import TimelineComponent from 'react-calendar-timeline';
+import TimelineComponent, {
+    TimelineHeaders,
+    SidebarHeader,
+    DateHeader
+} from 'react-calendar-timeline';
 import moment from 'moment';
 import { UserOutlined, ScheduleOutlined } from '@ant-design/icons';
 import TimezonePicker from 'react-timezone';
@@ -94,7 +98,6 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
 
     const renderModalBody = (): JSX.Element => {
         return (
-
             <Form labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} layout="vertical" onFinish={onFinish} form={form}>
                 <div style={{ margin: '15px 0px' }}>
                     <Avatar style={{ backgroundColor: '#3174ad' }} icon={<UserOutlined />} />
@@ -138,7 +141,21 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
         );
     };
 
+    const [visibleTimeStart, setVisibleTimeStart] = useState(moment().startOf('week').valueOf())
+    const [visibleTimeEnd, setVisibleTimeEnd] = useState(moment().startOf('week').add(1, 'week').valueOf())
+    const onClickPrev = () => {
+        const zoom = visibleTimeEnd - visibleTimeStart
+        setVisibleTimeStart(visibleTimeStart - zoom)
+        setVisibleTimeEnd(visibleTimeEnd - zoom)
+    }
 
+    const onClickNext = () => {
+        const zoom = visibleTimeEnd - visibleTimeStart
+        setVisibleTimeStart(visibleTimeStart + zoom)
+        setVisibleTimeEnd(visibleTimeEnd + zoom)
+    }
+
+    const { css } = useFela();
     return (
         <PageContainer>
             <Row align="middle" justify="space-between" style={{ marginBottom: '15px' }}>
@@ -199,6 +216,13 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
                     </div>
                 </Col>
             </Row>
+
+            <Row>
+                <Col>
+                    <Button onClick={onClickPrev}> Prev </Button>
+                    <Button onClick={onClickNext}> Next </Button>
+                </Col>
+            </Row>
             <TimelineComponent
                 keys={keys}
                 groups={resourceMap}
@@ -213,7 +237,34 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
                 fullUpdate={true}
                 itemTouchSendsClick={false}
                 stackItems={true}
-            />
+                visibleTimeStart={visibleTimeStart}
+                visibleTimeEnd={visibleTimeEnd}
+            >
+                <TimelineHeaders style={{ height: 65 }}>
+                    <DateHeader
+                        unit="day"
+                        labelFormat={(dates) => {
+                            const curTime = dates[0]
+                            const isToday = (curTime.format('YYYY-MM-DD') === moment().format('YYYY-MM-DD'))
+                            return (
+                                <div className={css(stylesheet.dateHeader)}>
+                                    <div className="day" style={isToday ? { color: '#2196f3' } : {}}>{curTime.format('DD')}</div>
+                                    <div className="extra">
+                                        <span className="week" style={isToday ? { color: '#2196f3' } : {}}>{curTime.format('ddd')}</span>
+                                        <span className="month">{curTime.format('MMM')}</span>
+                                    </div>
+                                </div>
+                            )
+                        }}
+                        style={{ height: 100 }}
+                        intervalRenderer={({ getIntervalProps, intervalContext, data }) => {
+                            return <div {...getIntervalProps()} style={{ ...getIntervalProps().style, borderRight: '1px solid #bbb' }}>
+                                {intervalContext.intervalText}
+                            </div>
+                        }}
+                    />
+                </TimelineHeaders>
+            </TimelineComponent>
         </PageContainer>
     );
 }
@@ -285,9 +336,43 @@ const stylesheet: any = {
             textAlign: 'left',
         },
         '& .react-calendar-timeline .rct-header-root': {
-            backgroundColor: '#087acc',
+            backgroundColor: '#ffffff',
         },
+        '& .rct-calendar-header > div': {
+            height: '65px !important'
+        },
+        '& .react-calendar-timeline': {
+            border: '1px solid #bbb'
+        },
+        '& .react-calendar-timeline .rct-calendar-header': {
+            border: 'none',
+            borderRight: '1px solid #bbb',
+            borderLeft: '1px solid #bbb',
+        }
     }),
+
+    dateHeader: theme => ({
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-around',
+        alignItems: 'center',
+        textAlgin: 'center',
+        '& .day': {
+            fontSize: '3em',
+            fontWeight: '600',
+        },
+        '& .extra': {
+            display: 'flex',
+            flexDirection: 'column',
+            '& .week': {
+                fontSize: '1.1em',
+                fontWeight: '500',
+            },
+            '& .month': {
+                color: 'rgba(0,0,0, .5)'
+            }
+        }
+    })
 };
 
 export default props => {
