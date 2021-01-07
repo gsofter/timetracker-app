@@ -16,7 +16,9 @@ const ScheduleSchema = new Schema({
     end: { type: Date },
     // description
     desc: { type: String },
-    // resouceId => usereId
+    // userId
+    userId: { type: String },
+    // resouceId
     resourceId: { type: String },
     // tip
     tooltip: { type: String },

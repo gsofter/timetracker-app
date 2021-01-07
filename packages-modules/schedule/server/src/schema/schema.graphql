@@ -7,6 +7,7 @@ type Schedule {
   start: DateTime
   end: DateTime
   desc: String
+  userId: String
   resourceId: String
   tooltip: String
 }
@@ -17,6 +18,7 @@ input ScheduleCreateRequest {
   start: DateTime
   end: DateTime
   desc: String
+  userId: String
   resourceId: String
   tooltip: String
 }

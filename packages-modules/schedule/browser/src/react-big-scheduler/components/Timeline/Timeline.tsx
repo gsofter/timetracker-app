@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import TimelineComponent, {
     TimelineHeaders,
-    SidebarHeader,
     DateHeader
 } from 'react-calendar-timeline';
 import moment from 'moment';
@@ -21,7 +20,6 @@ import {
 import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
-import DemoData from '../DemoData'
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
@@ -31,11 +29,11 @@ export interface ITimelineCalendarProps {
 }
 
 const resourceMap = [
-    { resourceId: '1', resourceTitle: 'Project1' },
-    { resourceId: '2', resourceTitle: 'Project2' },
-    { resourceId: '3', resourceTitle: 'Project3' },
-    { resourceId: '4', resourceTitle: 'Project4' },
-    { resourceId: '5', resourceTitle: 'Project5' },
+    { resourceId: '1', resourceTitle: 'Project1', stackItems: true },
+    { resourceId: '2', resourceTitle: 'Project2', stackItems: true },
+    { resourceId: '3', resourceTitle: 'Project3', stackItems: true },
+    { resourceId: '4', resourceTitle: 'Project4', stackItems: true },
+    { resourceId: '5', resourceTitle: 'Project5', stackItems: true },
 ];
 
 const keys = {
@@ -52,7 +50,7 @@ const keys = {
 
 function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCalendarProps) {
     const [isShowing, setIsShowing] = useState(false);
-    const [events, setEvents] = React.useState(propEvents.map(ev => ({ ...ev, start: moment(ev.start).toDate(), end: moment(ev.end).toDate() })));
+    const [events, setEvents] = React.useState(propEvents);
 
     const openModal = () => {
         setIsShowing(!isShowing);
@@ -227,8 +225,6 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
                 keys={keys}
                 groups={resourceMap}
                 items={events}
-                defaultTimeStart={moment().add(-12, 'hour')}
-                defaultTimeEnd={moment().add(12, 'hour')}
                 canMove={true}
                 canResize={'both'}
                 onItemMove={handleItemMove}
@@ -236,7 +232,7 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
                 itemHeightRatio={0.75}
                 fullUpdate={true}
                 itemTouchSendsClick={false}
-                stackItems={true}
+                stackItems
                 visibleTimeStart={visibleTimeStart}
                 visibleTimeEnd={visibleTimeEnd}
             >

@@ -3,6 +3,7 @@ import TimesheetComponent from './Timesheet'
 import { useAddScheduleMutation, useGetScheduleEventsQuery } from '../../../generated-models'
 import { IScheduleCreateRequest } from '@admin-layout/schedule-module-core'
 import { message } from 'antd'
+import moment from 'moment'
 
 const Timesheet = (props) => {
     const [addMutation] = useAddScheduleMutation()
@@ -20,7 +21,10 @@ const Timesheet = (props) => {
         refetch()
     }, [refetch])
 
-    return !data && loading ? null : <TimesheetComponent handleAddSchedule={handleAddSchedule} events={data.getScheduleEvents} />
+    return !data && loading ? null :
+        <TimesheetComponent
+            handleAddSchedule={handleAddSchedule}
+            events={data.getScheduleEvents.map(ev => ({ ...ev, start: moment(ev.start).toDate(), end: moment(ev.end).toDate() }))} />
 }
 
 export default Timesheet

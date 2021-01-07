@@ -22,6 +22,7 @@ import {
 import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
+import { values } from 'lodash';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -39,7 +40,7 @@ const resourceMap = [
 interface ISelectableCalendarProps {
   localizer: DateLocalizer;
   handleAddSchedule: any;
-  events:any;
+  events: any;
 }
 
 class CalendarEvent {
@@ -68,9 +69,10 @@ class CalendarEvent {
   }
 }
 
-function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents}: ISelectableCalendarProps) {
+function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
   const [isShowing, setIsShowing] = useState(false);
-  const [events, setEvents] = React.useState(propEvents.map(ev => ({ ...ev, start: moment(ev.start).toDate(), end: moment(ev.end).toDate()})));
+  const [selectedProject, setSelectedProject] = useState('')
+  const [events, setEvents] = React.useState(propEvents);
   const [form] = Form.useForm();
   const handleSelect = ({ start, end, resourceId }) => {
     const title = window.prompt('New Event name');
@@ -79,7 +81,7 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents}:
       newEvent.start = moment(start).toDate();
       newEvent.end = moment(end).toDate();
       newEvent.title = title;
-      newEvent.resourceId = resourceId
+      newEvent.resourceId = resourceId ?? selectedProject
       setEvents([...(events as any), newEvent]);
       handleAddSchedule(newEvent);
     }
@@ -132,11 +134,22 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents}:
   const handleClose = () => {
     setIsShowing(false);
   };
-  
+
   const handleSelectTimezone = timezone => {
     // tslint:disable-next-line
     console.log('New Timezone Selected:', timezone);
   };
+
+  const onChangeProject = (value) => {
+    setSelectedProject(value)
+  }
+
+  useEffect(() => {
+    if (selectedProject === '')
+      setEvents(propEvents)
+    else
+      setEvents(propEvents.filter(ev => ev.resourceId === selectedProject))
+  }, [selectedProject])
 
   const onFinish = (values) => {
     const request = {
@@ -162,19 +175,19 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents}:
           <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Required field' }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="Projects" name="project" rules={[{ required: true, message: 'Required field'}]}>
+          <Form.Item label="Projects" name="project" rules={[{ required: true, message: 'Required field' }]}>
             <Select>
               {
                 resourceMap.map(res => {
-                  return <Select.Option value={res.resourceId} key={ res.resourceId }>{ res.resourceTitle}</Select.Option>
+                  return <Select.Option value={res.resourceId} key={res.resourceId}>{res.resourceTitle}</Select.Option>
                 })
               }
             </Select>
           </Form.Item>
-          <Form.Item label="DatePicker" name="dateRange" rules={[{ required: true, message: 'Required field'}]}>
-            <RangePicker showTime/>
+          <Form.Item label="DatePicker" name="dateRange" rules={[{ required: true, message: 'Required field' }]}>
+            <RangePicker showTime />
           </Form.Item>
-          <Form.Item label="REASON *" name="desc" rules={[{ required: true, message: 'Required field'}]}>
+          <Form.Item label="REASON *" name="desc" rules={[{ required: true, message: 'Required field' }]}>
             <TextArea
               rows={3}
               placeholder="Reason for time"
@@ -226,10 +239,14 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents}:
             layout="vertical"
             className="sm-screen-size"
           >
-            <Form.Item label="Members">
-              <Select>
-                <Select.Option value="user1">User1</Select.Option>
-                <Select.Option value="user2">User2</Select.Option>
+            <Form.Item label="Projects">
+              <Select onChange={onChangeProject} value={selectedProject}>
+                <Select.Option value="">All</Select.Option>
+                <Select.Option value="1">Project1</Select.Option>
+                <Select.Option value="2">Project2</Select.Option>
+                <Select.Option value="3">Project3</Select.Option>
+                <Select.Option value="4">Project4</Select.Option>
+                <Select.Option value="5">Project5</Select.Option>
               </Select>
             </Form.Item>
           </Form>
@@ -367,6 +384,6 @@ export default props => {
       <div className="calender-width">
         <SelectableCalendar localizer={localizerM} {...props} />
       </div>
-    </div>  
+    </div>
   );
 };

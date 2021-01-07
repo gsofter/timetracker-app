@@ -1,8 +1,9 @@
-import React, {useEffect} from 'react'
+import React, { useEffect } from 'react'
 import SchedulerComponent from './Scheduler'
 import { useAddScheduleMutation, useGetScheduleEventsQuery } from '../../../generated-models'
 import { IScheduleCreateRequest } from '@admin-layout/schedule-module-core'
 import { message } from 'antd'
+import moment from 'moment';
 
 const Scheduler = (props) => {
     const [addMutation] = useAddScheduleMutation()
@@ -20,7 +21,10 @@ const Scheduler = (props) => {
         refetch()
     }, [refetch])
 
-    return !data && loading ? null : <SchedulerComponent handleAddSchedule={handleAddSchedule} events={data.getScheduleEvents}/>
+    return !data && loading ? null :
+        <SchedulerComponent
+            handleAddSchedule={handleAddSchedule}
+            events={data.getScheduleEvents.map(ev => ({ ...ev, start: moment(ev.start).toDate(), end: moment(ev.end).toDate() }))} />
 }
 
 export default Scheduler

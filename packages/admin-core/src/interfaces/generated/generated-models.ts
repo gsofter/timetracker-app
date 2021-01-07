@@ -108,6 +108,7 @@ export type ISchedule = {
   start?: Maybe<Scalars['DateTime']>;
   end?: Maybe<Scalars['DateTime']>;
   desc?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
 };
@@ -118,6 +119,7 @@ export type IScheduleCreateRequest = {
   start?: Maybe<Scalars['DateTime']>;
   end?: Maybe<Scalars['DateTime']>;
   desc?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
 };
@@ -338,6 +340,7 @@ export type IScheduleResolvers<ContextType = MyContext, ParentType extends IReso
   start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   desc?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
