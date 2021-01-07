@@ -57,6 +57,7 @@ export const GetScheduleEventsDocument = gql`
     start
     end
     desc
+    userId
     resourceId
     tooltip
   }

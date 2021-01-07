@@ -103,6 +103,7 @@ export type Schedule = {
   start?: Maybe<Scalars['DateTime']>;
   end?: Maybe<Scalars['DateTime']>;
   desc?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
 };
@@ -113,6 +114,7 @@ export type ScheduleCreateRequest = {
   start?: Maybe<Scalars['DateTime']>;
   end?: Maybe<Scalars['DateTime']>;
   desc?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
 };
@@ -393,6 +395,7 @@ export type ScheduleResolvers<ContextType = any, ParentType extends ResolversPar
   start?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   end?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   desc?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   resourceId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   tooltip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,

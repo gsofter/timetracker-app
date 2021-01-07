@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
@@ -18,57 +18,18 @@ const localizer = momentLocalizer(moment);
 
 const allViews: View[] = ['agenda', 'day', 'week', 'month'];
 
-const initialEvents = [
-  {
-    id: 0,
-    title: 'All Day Event very long title',
-    allDay: true,
-    start: new Date(2020, 3, 0),
-    end: new Date(2020, 3, 1),
-  },
-  {
-    id: 1,
-    title: 'Long Event',
-    start: new Date(2020, 3, 7),
-    end: new Date(2020, 3, 10),
-  },
-
-  {
-    id: 2,
-    title: 'DTS STARTS',
-    start: new Date(2020, 2, 13, 0, 0, 0),
-    end: new Date(2020, 2, 20, 0, 0, 0),
-  },
-
-  {
-    id: 3,
-    title: 'DTS ENDS',
-    start: new Date(2020, 10, 6, 0, 0, 0),
-    end: new Date(2020, 10, 13, 0, 0, 0),
-    desc: 'Description is shown here',
-  },
-
-  {
-    id: 4,
-    title: 'Leave',
-    start: new Date(new Date().setHours(new Date().getHours() - 3)),
-    end: new Date(new Date().setHours(new Date().getHours() + 3)),
-    desc: 'Description is shown here',
-  },
-];
-
 interface ISelectableCalendarProps {
   localizer: DateLocalizer;
   handleAddSchedule: any;
-  events:any;
+  events: any;
 }
-
 class CalendarEvent {
   title: string;
   allDay: boolean;
   start: Date;
   end: Date;
   desc: string;
+  userId?: string;
   resourceId?: string;
   tooltip?: string;
 
@@ -78,7 +39,9 @@ class CalendarEvent {
     _endDate: Date,
     _allDay?: boolean,
     _desc?: string,
+    _userId?: string,
     _resourceId?: string,
+
   ) {
     this.title = _title;
     this.allDay = _allDay || false;
@@ -86,13 +49,24 @@ class CalendarEvent {
     this.end = _endDate;
     this.desc = _desc || '';
     this.resourceId = _resourceId;
+    this.userId = _userId;
+
   }
 }
 
 function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
   const [isShowing, setIsShowing] = useState(false);
   const [form] = Form.useForm();
-  const [events, setEvents] = React.useState(propEvents.map(ev => ({ ...ev, start: moment(ev.start).toDate(), end: moment(ev.end).toDate()})));
+  const [selectedUser, setSelectedUser] = useState('');
+  const [events, setEvents] = React.useState(propEvents);
+
+  // filter events by selected user
+  useEffect(() => {
+    if (selectedUser === '')
+      setEvents(propEvents);
+    else
+      setEvents(propEvents.filter(ev => ev.userId === selectedUser))
+  }, [selectedUser])
 
   const handleSelect = ({ start, end }) => {
     const title = window.prompt('New Event name');
@@ -101,6 +75,7 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
       newEvent.start = moment(start).toDate();
       newEvent.end = moment(end).toDate();
       newEvent.title = title;
+      newEvent.userId = selectedUser;
       setEvents([...events, newEvent]);
       handleAddSchedule(newEvent)
     }
@@ -124,6 +99,10 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
     setEvents(nextEvents);
     alert(`${event.title} was dropped onto ${event.start}`);
   };
+
+  const onChangeUser = (value) => {
+    setSelectedUser(value);
+  }
 
   const EventComponent = ({ start, end, title }) => {
     return (
@@ -149,7 +128,7 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
       title: values.title,
       start: moment(values.dateRange[0]).toDate(),
       end: moment(values.dateRange[1]).toDate(),
-      resourceId: values.user,
+      userId: values.user,
     }
     console.log("request =>", request)
     handleAddSchedule(request)
@@ -163,17 +142,14 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
           <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Required field' }]}>
             <Input />
           </Form.Item>
-          <Form.Item label="User" name="user" rules={[{ required: true, message: 'Required field'}]}>
+          <Form.Item label="User" name="user" rules={[{ required: true, message: 'Required field' }]}>
             <Select>
-              <Select.Option value="1">Group1</Select.Option>
-              <Select.Option value="2">Group2</Select.Option>
-              <Select.Option value="3">Group3</Select.Option>
-              <Select.Option value="4">Group4</Select.Option>
-              <Select.Option value="5">Group5</Select.Option>
+              <Select.Option value="1">User1</Select.Option>
+              <Select.Option value="2">User2</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item label="RangePicker" name="dateRange" rules={[{ required: true, message: 'Required field'}]}>
-            <RangePicker allowClear showTime/>
+          <Form.Item label="RangePicker" name="dateRange" rules={[{ required: true, message: 'Required field' }]}>
+            <RangePicker allowClear showTime />
           </Form.Item>
           <Form.Item label="Minimum Hours" name="minHours">
             <Input
@@ -231,9 +207,10 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
             className="sm-screen-size"
           >
             <Form.Item label="Members">
-              <Select>
-                <Select.Option value="user1">User1</Select.Option>
-                <Select.Option value="user2">User2</Select.Option>
+              <Select onChange={onChangeUser} value={selectedUser}>
+                <Select.Option value="">All</Select.Option>
+                <Select.Option value="1">User1</Select.Option>
+                <Select.Option value="2">User2</Select.Option>
               </Select>
             </Form.Item>
           </Form>

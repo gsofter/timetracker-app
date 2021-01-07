@@ -90,6 +90,7 @@ export type ISchedule = {
   start?: Maybe<Scalars['DateTime']>;
   title: Scalars['String'];
   tooltip?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type IScheduleCreateRequest = {
@@ -100,6 +101,7 @@ export type IScheduleCreateRequest = {
   start?: Maybe<Scalars['DateTime']>;
   title: Scalars['String'];
   tooltip?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type ISubscription = {
@@ -130,7 +132,7 @@ export type IGetScheduleEventsQuery = (
   { __typename?: 'Query' }
   & { getScheduleEvents?: Maybe<Array<Maybe<(
     { __typename?: 'Schedule' }
-    & Pick<ISchedule, 'id' | 'title' | 'allDay' | 'start' | 'end' | 'desc' | 'resourceId' | 'tooltip'>
+    & Pick<ISchedule, 'id' | 'title' | 'allDay' | 'start' | 'end' | 'desc' | 'userId' | 'resourceId' | 'tooltip'>
   )>>> }
 );
 
@@ -151,6 +153,7 @@ export const GetScheduleEventsDocument = gql`
     start
     end
     desc
+    userId
     resourceId
     tooltip
   }
@@ -326,6 +329,7 @@ export type IScheduleResolvers<ContextType = any, ParentType extends IResolversP
   start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   title?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

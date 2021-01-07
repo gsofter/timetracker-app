@@ -6,6 +6,7 @@ query GetScheduleEvents($userId: String) {
         start
         end
         desc
+        userId
         resourceId
         tooltip
     }

@@ -3,6 +3,7 @@ import TimelineComponent from './Timeline'
 import { useAddScheduleMutation, useGetScheduleEventsQuery } from '../../../generated-models'
 import { IScheduleCreateRequest } from '@admin-layout/schedule-module-core'
 import { message } from 'antd'
+import moment from 'moment'
 
 const Timeline = (props) => {
     const [addMutation] = useAddScheduleMutation()
@@ -21,7 +22,10 @@ const Timeline = (props) => {
         refetch()
     }, [refetch])
 
-    return !data && loading ? null : <TimelineComponent handleAddSchedule={handleAddSchedule} events={data.getScheduleEvents} />
+    return !data && loading ? null :
+        <TimelineComponent
+            handleAddSchedule={handleAddSchedule}
+            events={data.getScheduleEvents.map(ev => ({ ...ev, start: moment(ev.start).toDate(), end: moment(ev.end).toDate() }))} />
 }
 
 export default Timeline
