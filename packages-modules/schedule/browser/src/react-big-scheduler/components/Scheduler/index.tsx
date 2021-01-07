@@ -10,6 +10,7 @@ const Scheduler = (props) => {
     const handleAddSchedule = (request: IScheduleCreateRequest) => {
         addMutation({ variables: { request } }).then(() => {
             message.success('A new event has been created!')
+            refetch();
         }).catch(err => {
             console.log(err.message)
             message.error('Event creation failed!')

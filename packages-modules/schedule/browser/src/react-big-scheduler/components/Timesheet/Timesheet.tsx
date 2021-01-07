@@ -72,6 +72,7 @@ class CalendarEvent {
 function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
   const [isShowing, setIsShowing] = useState(false);
   const [selectedProject, setSelectedProject] = useState('')
+  const [selectedUser, setSelectedUser] = useState('')
   const [events, setEvents] = React.useState(propEvents);
   const [form] = Form.useForm();
   const handleSelect = ({ start, end, resourceId }) => {
@@ -144,18 +145,22 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
     setSelectedProject(value)
   }
 
+  const onChangeUser = (value) => {
+    setSelectedUser(value);
+  }
+
   useEffect(() => {
-    if (selectedProject === '')
-      setEvents(propEvents)
-    else
-      setEvents(propEvents.filter(ev => ev.resourceId === selectedProject))
-  }, [selectedProject])
+    setEvents(propEvents.filter(ev => {
+      return (ev.resourceId === selectedProject || selectedProject === '') && (ev.userId === selectedUser || selectedUser === '')
+    }))
+  }, [selectedProject, selectedUser])
 
   const onFinish = (values) => {
     const request = {
       title: values.title,
       start: moment(values.dateRange[0]).toDate(),
       end: moment(values.dateRange[1]).toDate(),
+      userId: values.user,
       resourceId: values.project,
       desc: values.desc,
     }
@@ -174,6 +179,12 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
           </div>
           <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Required field' }]}>
             <Input />
+          </Form.Item>
+          <Form.Item label="User" name="user" rules={[{ required: true, message: 'Required field' }]}>
+            <Select>
+              <Select.Option value="1">User1</Select.Option>
+              <Select.Option value="2">User2</Select.Option>
+            </Select>
           </Form.Item>
           <Form.Item label="Projects" name="project" rules={[{ required: true, message: 'Required field' }]}>
             <Select>
@@ -239,6 +250,22 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
             layout="vertical"
             className="sm-screen-size"
           >
+            <Form.Item label="Members">
+              <Select onChange={onChangeUser} value={selectedUser}>
+                <Select.Option value="">All</Select.Option>
+                <Select.Option value="1">User1</Select.Option>
+                <Select.Option value="2">User2</Select.Option>
+              </Select>
+            </Form.Item>
+          </Form>
+        </Col>
+        <Col md={6} xs={16}>
+          <Form
+            labelCol={{ span: 20 }}
+            wrapperCol={{ span: 20 }}
+            layout="vertical"
+            className="sm-screen-size"
+          >
             <Form.Item label="Projects">
               <Select onChange={onChangeProject} value={selectedProject}>
                 <Select.Option value="">All</Select.Option>
@@ -250,16 +277,6 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
               </Select>
             </Form.Item>
           </Form>
-        </Col>
-        <Col md={6} xs={16}>
-          <div className="vertical-">
-            <a href="#">
-              <span>
-                <ScheduleOutlined />
-              </span>{' '}
-              Timesheet settings
-            </a>
-          </div>
         </Col>
         <Col md={6} xs={16}>
           <div>
