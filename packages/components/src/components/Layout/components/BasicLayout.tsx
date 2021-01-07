@@ -431,7 +431,6 @@ const BasicLayout: React.FC<BasicLayoutProps> = props => {
 
   useDocumentTitle(pageTitleInfo, props.title || defaultSettings.title);
 
-  console.log('rest => ', rest);
   return (
     <MenuCounter.Provider>
       <RouteContext.Provider
