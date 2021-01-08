@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import TimelineComponent, {
     TimelineHeaders,
     DateHeader
@@ -20,6 +20,7 @@ import {
 import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
+import { values } from 'lodash';
 const { TextArea } = Input;
 const { RangePicker } = DatePicker;
 
@@ -51,6 +52,7 @@ const keys = {
 function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCalendarProps) {
     const [isShowing, setIsShowing] = useState(false);
     const [events, setEvents] = React.useState(propEvents);
+    const [selectedUser, setSelectedUser] = useState('')
 
     const openModal = () => {
         setIsShowing(!isShowing);
@@ -86,6 +88,7 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
             title: values.title,
             start: moment(values.dateRange[0]).toDate(),
             end: moment(values.dateRange[1]).toDate(),
+            userId: values.user,
             resourceId: values.project,
             desc: values.desc,
         }
@@ -93,6 +96,10 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
         setIsShowing(!isShowing);
         form.resetFields();
     }
+
+    useEffect(() => {
+        setEvents(propEvents.filter(ev => { return ev.userId === selectedUser || selectedUser === '' }))
+    }, [selectedUser])
 
     const renderModalBody = (): JSX.Element => {
         return (
@@ -104,13 +111,19 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
                 <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Required field' }]}>
                     <Input />
                 </Form.Item>
-                <Form.Item label="Projects" name="project" rules={[{ required: true, message: 'Required field' }]}>
+                <Form.Item label="User" name="user" rules={[{ required: true, message: 'Required field' }]}>
                     <Select>
-                        {
-                            resourceMap.map(res => {
-                                return <Select.Option value={res.resourceId} key={res.resourceId}>{res.resourceTitle}</Select.Option>
-                            })
-                        }
+                        <Select.Option value="1">User1</Select.Option>
+                        <Select.Option value="2">User2</Select.Option>
+                    </Select>
+                </Form.Item>
+                <Form.Item label="Project" name="project" rules={[{ required: true, message: 'Required field' }]}>
+                    <Select>
+                        <Select.Option value="1">Project1</Select.Option>
+                        <Select.Option value="2">Project2</Select.Option>
+                        <Select.Option value="3">Project3</Select.Option>
+                        <Select.Option value="4">Project4</Select.Option>
+                        <Select.Option value="5">Project5</Select.Option>
                     </Select>
                 </Form.Item>
                 <Form.Item label="DatePicker" name="dateRange" rules={[{ required: true, message: 'Required field' }]}>
@@ -154,6 +167,11 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
     }
 
     const { css } = useFela();
+
+    const onChangeUser = (value) => {
+        setSelectedUser(value)
+    }
+
     return (
         <PageContainer>
             <Row align="middle" justify="space-between" style={{ marginBottom: '15px' }}>
@@ -183,9 +201,10 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
                         className="sm-screen-size"
                     >
                         <Form.Item label="Members">
-                            <Select>
-                                <Select.Option value="user1">User1</Select.Option>
-                                <Select.Option value="user2">User2</Select.Option>
+                            <Select onChange={onChangeUser} value={selectedUser}>
+                                <Select.Option value="">All</Select.Option>
+                                <Select.Option value="1">User1</Select.Option>
+                                <Select.Option value="2">User2</Select.Option>
                             </Select>
                         </Form.Item>
                     </Form>
@@ -269,68 +288,68 @@ const stylesheet: any = {
     styles: theme => ({
         position: 'relative',
         width: '100%',
-        '& .sm-screen-size': {
-            '@media (max-width: 768px)': {
-                width: '100% !important',
-            },
-        },
-        '& ul.jsx-4179805763': {
-            zIndex: 1050,
-            webkitBoxSizing: 'border-box',
-            boxSizing: 'border-box',
-            padding: '4px 0',
-            fontSize: '13px',
-            maxHeight: '100px',
-            fontVariant: 'initial',
-            backgroundColor: '#fff',
-            borderRadius: '2px',
-            outline: 'none',
-            webkitBoxShadow:
-                '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
-            boxShadow:
-                '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
-        },
-        '& div.jsx-4179805763': {
-            marginTop: '8px',
-            width: '100%',
-        },
-        '& .rbc-day-slot': {
-            position: 'relative',
-        },
-        '& .rbc-day-slot .rbc-events-container': {
-            bottom: 0,
-            left: 0,
-            position: 'absolute',
-            right: 0,
-            marginRight: '10px',
-            top: 0,
-        },
-        '& .rbc-day-slot .rbc-events-container.rbc-rtl': {
-            left: '10px',
-            right: 0,
-        },
-        '& .rbc-day-slot .rbc-event': {
-            border: '1px solid #265985',
-            display: 'flex',
-            maxHeight: '100%',
-            minHeight: '20px',
-            flexFlow: 'column wrap',
-            alignItems: 'flex-start',
-            overflow: 'hidden',
-            position: 'absolute',
-        },
-        '& .rbc-event': {
-            border: 'none',
-            boxShadow: 'none',
-            margin: 0,
-            padding: '2px 5px',
-            backgroundColor: '#3174ad',
-            borderRadius: '5px',
-            color: '#fff',
-            cursor: 'pointer',
-            width: '100%',
-            textAlign: 'left',
-        },
+        // '& .sm-screen-size': {
+        //     '@media (max-width: 768px)': {
+        //         width: '100% !important',
+        //     },
+        // },
+        // '& ul.jsx-4179805763': {
+        //     zIndex: 1050,
+        //     webkitBoxSizing: 'border-box',
+        //     boxSizing: 'border-box',
+        //     padding: '4px 0',
+        //     fontSize: '13px',
+        //     maxHeight: '100px',
+        //     fontVariant: 'initial',
+        //     backgroundColor: '#fff',
+        //     borderRadius: '2px',
+        //     outline: 'none',
+        //     webkitBoxShadow:
+        //         '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
+        //     boxShadow:
+        //         '0 3px 6px -4px rgba(0, 0, 0, 0.12), 0 6px 16px 0 rgba(0, 0, 0, 0.08), 0 9px 28px 8px rgba(0, 0, 0, 0.05)',
+        // },
+        // '& div.jsx-4179805763': {
+        //     marginTop: '8px',
+        //     width: '100%',
+        // },
+        // '& .rbc-day-slot': {
+        //     position: 'relative',
+        // },
+        // '& .rbc-day-slot .rbc-events-container': {
+        //     bottom: 0,
+        //     left: 0,
+        //     position: 'absolute',
+        //     right: 0,
+        //     marginRight: '10px',
+        //     top: 0,
+        // },
+        // '& .rbc-day-slot .rbc-events-container.rbc-rtl': {
+        //     left: '10px',
+        //     right: 0,
+        // },
+        // '& .rbc-day-slot .rbc-event': {
+        //     border: '1px solid #265985',
+        //     display: 'flex',
+        //     maxHeight: '100%',
+        //     minHeight: '20px',
+        //     flexFlow: 'column wrap',
+        //     alignItems: 'flex-start',
+        //     overflow: 'hidden',
+        //     position: 'absolute',
+        // },
+        // '& .rbc-event': {
+        //     border: 'none',
+        //     boxShadow: 'none',
+        //     margin: 0,
+        //     padding: '2px 5px',
+        //     backgroundColor: '#3174ad',
+        //     borderRadius: '5px',
+        //     color: '#fff',
+        //     cursor: 'pointer',
+        //     width: '100%',
+        //     textAlign: 'left',
+        // },
         '& .react-calendar-timeline .rct-header-root': {
             backgroundColor: '#ffffff',
         },
