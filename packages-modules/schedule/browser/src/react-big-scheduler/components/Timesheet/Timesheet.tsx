@@ -27,7 +27,7 @@ import { values } from 'lodash';
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizerM = momentLocalizer(moment);
-const { RangePicker } = DatePicker;
+const { RangePicker } = TimePicker;
 const allViews: View[] = ['agenda', 'day', 'week', 'month'];
 const resourceMap = [
   { resourceId: '1', resourceTitle: 'Project1' },
@@ -163,8 +163,8 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
   const onFinish = (values) => {
     const request = {
       title: values.title,
-      start: moment(values.dateRange[0]).toDate(),
-      end: moment(values.dateRange[1]).toDate(),
+      start: moment(values.date.format("YYYY-MM-DD") + ' ' + values.timeRange[0].format('hh:mm:ss')).toDate(),
+      end: moment(values.date.format("YYYY-MM-DD") + ' ' + values.timeRange[1].format('hh:mm:ss')).toDate(),
       userId: values.user,
       resourceId: values.project,
       desc: values.desc,
@@ -200,9 +200,18 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
               }
             </Select>
           </Form.Item>
-          <Form.Item label="DatePicker" name="dateRange" rules={[{ required: true, message: 'Required field' }]}>
-            <RangePicker showTime />
-          </Form.Item>
+          <Row gutter={10}>
+            <Col>
+              <Form.Item label="Pick a date" name="date" rules={[{ required: true, message: 'Required field' }]}>
+                <DatePicker />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item label="Select time range" name="timeRange" rules={[{ required: true, message: 'Required field' }]}>
+                <RangePicker />
+              </Form.Item>
+            </Col>
+          </Row>
           <Form.Item label="REASON *" name="desc" rules={[{ required: true, message: 'Required field' }]}>
             <TextArea
               rows={3}
