@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
+import momentZ from 'moment-timezone'
 import { UserOutlined, ScheduleOutlined } from '@ant-design/icons';
 import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
@@ -23,6 +24,7 @@ import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
 import { values } from 'lodash';
+import { time } from 'console';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -69,13 +71,14 @@ class CalendarEvent {
   }
 }
 
-function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
+function SelectableCalendar({ handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
   const [isShowing, setIsShowing] = useState(false);
   const [selectedProject, setSelectedProject] = useState('')
   const [selectedUser, setSelectedUser] = useState('')
   const [events, setEvents] = React.useState(propEvents);
   const [isViewGroup, setIsViewGroup] = useState(false);
   const [form] = Form.useForm();
+  const [localizer, setLocalizer] = useState(momentLocalizer(moment))
   const handleSelect = ({ start, end, resourceId }) => {
     const title = window.prompt('New Event name');
     if (title) {
@@ -139,7 +142,8 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
 
   const handleSelectTimezone = timezone => {
     // tslint:disable-next-line
-    console.log('New Timezone Selected:', timezone);
+    // console.log('New Timezone Selected:', timezone);
+    setLocalizer(momentLocalizer(moment.tz.setDefault(timezone)))
   };
 
   const onChangeProject = (value) => {
