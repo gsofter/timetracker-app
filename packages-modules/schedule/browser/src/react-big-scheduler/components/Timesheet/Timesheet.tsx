@@ -74,6 +74,7 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
   const [selectedProject, setSelectedProject] = useState('')
   const [selectedUser, setSelectedUser] = useState('')
   const [events, setEvents] = React.useState(propEvents);
+  const [isViewGroup, setIsViewGroup] = useState(false);
   const [form] = Form.useForm();
   const handleSelect = ({ start, end, resourceId }) => {
     const title = window.prompt('New Event name');
@@ -147,6 +148,10 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
 
   const onChangeUser = (value) => {
     setSelectedUser(value);
+  }
+
+  const onChangeViewGroup = (event) => {
+    setIsViewGroup(event.target.checked);
   }
 
   useEffect(() => {
@@ -243,7 +248,7 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
             }}
           />
         </Col>
-        <Col md={6} xs={16}>
+        <Col md={4} xs={16}>
           <Form
             labelCol={{ span: 20 }}
             wrapperCol={{ span: 20 }}
@@ -259,7 +264,7 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
             </Form.Item>
           </Form>
         </Col>
-        <Col md={6} xs={16}>
+        <Col md={4} xs={16}>
           <Form
             labelCol={{ span: 20 }}
             wrapperCol={{ span: 20 }}
@@ -278,7 +283,19 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
             </Form.Item>
           </Form>
         </Col>
-        <Col md={6} xs={16}>
+        <Col md={4} xs={16}>
+          <Form
+            labelCol={{ span: 20 }}
+            wrapperCol={{ span: 20 }}
+            layout="vertical"
+            className="sm-screen-size"
+          >
+            <Form.Item label="View by group">
+              <Checkbox onChange={onChangeViewGroup} checked={isViewGroup} />
+            </Form.Item>
+          </Form>
+        </Col>
+        <Col md={4} xs={16}>
           <div>
             <span style={{ fontWeight: 'bold' }}>
               <a onClick={openModal}>Add Time</a>
@@ -313,9 +330,9 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
             event: EventAgenda,
           },
         }}
-        resources={resourceMap}
-        resourceIdAccessor="resourceId"
-        resourceTitleAccessor="resourceTitle"
+        resources={isViewGroup ? resourceMap : undefined}
+        resourceIdAccessor={isViewGroup ? "resourceId" : undefined}
+        resourceTitleAccessor={isViewGroup ? "resourceTitle" : undefined}
       />
     </PageContainer>
   );
