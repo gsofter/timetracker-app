@@ -2,6 +2,7 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
+import momentZ from 'moment-timezone'
 import { UserOutlined, ScheduleOutlined } from '@ant-design/icons';
 import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
@@ -23,11 +24,12 @@ import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
 import { values } from 'lodash';
+import { time } from 'console';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizerM = momentLocalizer(moment);
-const { RangePicker } = DatePicker;
+const { RangePicker } = TimePicker;
 const allViews: View[] = ['agenda', 'day', 'week', 'month'];
 const resourceMap = [
   { resourceId: '1', resourceTitle: 'Project1' },
@@ -69,13 +71,14 @@ class CalendarEvent {
   }
 }
 
-function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
+function SelectableCalendar({ handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
   const [isShowing, setIsShowing] = useState(false);
   const [selectedProject, setSelectedProject] = useState('')
   const [selectedUser, setSelectedUser] = useState('')
   const [events, setEvents] = React.useState(propEvents);
   const [isViewGroup, setIsViewGroup] = useState(false);
   const [form] = Form.useForm();
+  const [localizer, setLocalizer] = useState(momentLocalizer(moment))
   const handleSelect = ({ start, end, resourceId }) => {
     const title = window.prompt('New Event name');
     if (title) {
@@ -139,7 +142,8 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
 
   const handleSelectTimezone = timezone => {
     // tslint:disable-next-line
-    console.log('New Timezone Selected:', timezone);
+    // console.log('New Timezone Selected:', timezone);
+    setLocalizer(momentLocalizer(moment.tz.setDefault(timezone)))
   };
 
   const onChangeProject = (value) => {
@@ -163,8 +167,8 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
   const onFinish = (values) => {
     const request = {
       title: values.title,
-      start: moment(values.dateRange[0]).toDate(),
-      end: moment(values.dateRange[1]).toDate(),
+      start: moment(values.date.format("YYYY-MM-DD") + ' ' + values.timeRange[0].format('hh:mm:ss')).toDate(),
+      end: moment(values.date.format("YYYY-MM-DD") + ' ' + values.timeRange[1].format('hh:mm:ss')).toDate(),
       userId: values.user,
       resourceId: values.project,
       desc: values.desc,
@@ -200,9 +204,18 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
               }
             </Select>
           </Form.Item>
-          <Form.Item label="DatePicker" name="dateRange" rules={[{ required: true, message: 'Required field' }]}>
-            <RangePicker showTime />
-          </Form.Item>
+          <Row gutter={10}>
+            <Col>
+              <Form.Item label="Pick a date" name="date" rules={[{ required: true, message: 'Required field' }]}>
+                <DatePicker />
+              </Form.Item>
+            </Col>
+            <Col>
+              <Form.Item label="Select time range" name="timeRange" rules={[{ required: true, message: 'Required field' }]}>
+                <RangePicker />
+              </Form.Item>
+            </Col>
+          </Row>
           <Form.Item label="REASON *" name="desc" rules={[{ required: true, message: 'Required field' }]}>
             <TextArea
               rows={3}
