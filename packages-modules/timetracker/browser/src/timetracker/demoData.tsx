@@ -37,55 +37,6 @@ const DemoData = {
   //     totalTime: '10',
   //   },
   // ],
-  project_v2: [
-    {
-      id: 'e3180114-d88f-40fc-a4fb-3c6a8e4a0dc8',
-      name: 'any',
-      is_active: true,
-      project_color: { name: 'green' },
-      client: 'jhon Doe',
-      timer: [
-        { start_datetime: '2020-12-08T12:02:02+00:00', end_datetime: '2020-12-08T12:02:12+00:00' },
-        { start_datetime: '2020-12-10T06:25:20+00:00', end_datetime: '2020-12-10T06:34:53+00:00' },
-        { start_datetime: '2020-12-13T16:03:43+00:00', end_datetime: '2020-12-13T16:03:51+00:00' },
-        { start_datetime: '2020-12-08T11:56:38+00:00', end_datetime: '2020-12-08T11:56:41+00:00' },
-        { start_datetime: '2020-12-10T11:51:42+00:00', end_datetime: '2020-12-10T11:51:49+00:00' },
-      ],
-    },
-    {
-      id: '2a497a9c-3523-4c48-8157-133451821cc8',
-      name: 'test',
-      is_active: true,
-      project_color: { name: 'blue' },
-      client: null,
-      timer: [
-        { start_datetime: '2020-12-28T08:23:52+00:00', end_datetime: '2020-12-28T08:24:36+00:00' },
-        { start_datetime: '2020-12-28T08:24:49+00:00', end_datetime: '2020-12-28T08:24:58+00:00' },
-        { start_datetime: '2021-01-04T12:03:23+00:00', end_datetime: '2021-01-04T12:03:31+00:00' },
-        { start_datetime: '2021-01-04T12:03:43+00:00', end_datetime: '2021-01-04T12:03:51+00:00' },
-        { start_datetime: '2020-12-13T16:06:39+00:00', end_datetime: '2020-12-13T16:07:48+00:00' },
-        { start_datetime: '2020-12-25T12:28:19+00:00', end_datetime: '2020-12-25T12:28:25+00:00' },
-        { start_datetime: '2020-12-25T12:28:36+00:00', end_datetime: '2020-12-25T12:28:41+00:00' },
-        { start_datetime: '2020-12-24T07:17:28+00:00', end_datetime: '2020-12-24T07:17:35+00:00' },
-        { start_datetime: '2020-12-30T11:34:53+00:00', end_datetime: '2020-12-30T11:35:04+00:00' },
-      ],
-    },
-    {
-      id: '03637823-d301-4ad5-a336-ea6af4b1d726',
-      name: 'test1 today',
-      is_active: true,
-      project_color: { name: 'green' },
-      client: null,
-      timer: [
-        { start_datetime: '2020-12-23T11:09:25+00:00', end_datetime: '2020-12-23T11:09:39+00:00' },
-        { start_datetime: '2020-12-23T11:09:47+00:00', end_datetime: '2020-12-23T11:09:51+00:00' },
-        { start_datetime: '2020-12-23T11:09:51+00:00', end_datetime: '2020-12-23T11:10:06+00:00' },
-        { start_datetime: '2020-12-29T07:19:23+00:00', end_datetime: '2020-12-29T07:19:35+00:00' },
-        { start_datetime: '2020-12-29T07:20:32+00:00', end_datetime: '2020-12-29T07:20:37+00:00' },
-        { start_datetime: '2020-12-28T08:23:32+00:00', end_datetime: '2020-12-28T08:23:36+00:00' },
-      ],
-    },
-  ],
   selectColors: [
     {
       id: 'a642f337-9082-4f64-8ace-1d0e99fa7258',
@@ -120,10 +71,6 @@ const DemoData = {
         id: '2a497a9c-3523-4c48-8157-133451821cc8',
         project_color: { name: 'blue' },
       },
-      client: {
-        name: 'test client',
-      },
-      totalTime: '10',
     },
     {
       id: '28ccded6-5354-4516-946d-a8c162fd9759',
