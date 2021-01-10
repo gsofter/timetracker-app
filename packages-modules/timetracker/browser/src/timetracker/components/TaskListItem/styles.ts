@@ -28,8 +28,8 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
         '& Button': {
           marginTop: '10px',
           marginRight: '10px',
-          backgroundColor: primaryColor ? primaryColor : '#231890ff',
-          borderColor: primaryColor ? primaryColor : '#231890ff',
+          backgroundColor: primaryColor ? primaryColor : '#1b8efa',
+          borderColor: primaryColor ? primaryColor : '#1b8efa',
         }
       },
       '& .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date': {
@@ -119,7 +119,7 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
         margin: '0 1rem 0 0',
         cursor: 'pointer',
         '& svg': {
-            color: primaryColor ? primaryColor : '#0a7b3e',
+            color: primaryColor ? primaryColor : '#1b8efa',
         }
     },
     '& .task-item .task-item__edit-icon': {
@@ -129,7 +129,7 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
         width: '1.5rem',
         height: '1.5rem',
         '& svg': {
-            color: primaryColor ? primaryColor : '#0a7b3e',
+            color: primaryColor ? primaryColor : '#1b8efa',
         }
       },
       '& .task-item .task-item__delete-icon': {
