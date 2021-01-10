@@ -1,36 +1,41 @@
-import React, { useState, useEffect } from 'react';
+import React, { useEffect, useState } from 'react';
 import classNames from 'classnames';
 import { useFela } from 'react-fela';
 import moment from 'moment';
 
-import { PageContainer } from '@admin-layout/components';
-import PageHeader from '../../components/PageHeader';
-import vocabulary from '../../en';
-import { TimerSearchComponent } from '../../components/TimerSearchComponent/index';
 import { AddTask } from '../../components/AddTask';
+import { Loading } from '../../components/Loading';
+import { TutorialComponent } from '../../components/TutorialComponent';
+import { CustomScrollbar } from '../../components/CustomScrollbar';
+import { TaskListItem } from '../../components/TaskListItem';
+import { getDateInString } from '../../services/timeService';
+import { BlankListComponent } from '../../components/BlankListcomponent';
+import { GlobalState } from '../../contexts/GlobalState';
+import { StartTaskMobile } from '../../components/StartTaskMobile';
+import { TimerSearchComponent } from '../../components/TimerSearchComponent/index-old';
+import { showNotificationAction } from '../../actions/NotificationActions';
+import PageHeader from '../../components/PageHeader';
+import { PageContainer } from '@admin-layout/components';
+import en from '../../locales/en';
+import vocabulary from '../../en';
 import DemoData from '../../demoData';
 import { initSocket } from '../../configSocket';
-import { getDateInString } from '../../services/timeService';
-import { CustomScrollbar } from '../../components/CustomScrollbar';
-import { BlankListComponent } from '../../components/BlankListcomponent';
-import { TaskListItem } from '../../components/TaskListItem';
-import { TutorialComponent } from '../../components/TutorialComponent';
-import { styleSheet } from './styles';
+import _ from 'lodash';
 
 const TimeTracker = props => {
-  const { css } = useFela();
+  const { css } = useFela(props);
   const [currentTimer, setCurrentTimer] = useState(null);
   const [isInitialFetching, setIsInitialFetching] = useState(true);
   const [timeEntriesList, setTimeEntriesList] = useState(DemoData.timer_v2);
   const [isFetchingTimeEntriesList, setIsFetchingTimeEntriesList] = useState(false);
   const [isFetchingSearch, setIsFetchingSearch] = useState(false);
   const [isSearchMode, setIsSearchMode] = useState(false);
+
   const [second, setSecond] = useState('00');
   const [minute, setMinute] = useState('00');
   const [hour, setHour] = useState('00');
   const [isActive, setIsActive] = useState(false);
   const [counter, setCounter] = useState(0);
-  const { isMobile, currentTeam, pagination } = props;
 
   useEffect(() => {
     let intervalId: any;
@@ -67,6 +72,16 @@ const TimeTracker = props => {
     setMinute('00');
     setHour('00');
   };
+
+  const {
+    isMobile,
+    // vocabulary,
+    // currentTimer,
+    // isFetchingTimeEntriesList,
+    pagination,
+    // isFetchingSearch,
+    // isSearchMode,
+  } = props;
 
   const initialDateFormat = 'DD.MM.YYYY';
   const dateFormat = localStorage.getItem('dateFormat') || initialDateFormat;
@@ -136,6 +151,7 @@ const TimeTracker = props => {
       return;
     }
     setIsInitialFetching(true);
+
     // syncAllTasksWithJira()
     //     .then(() => {
     //         getTimeEntriesListAction();
@@ -159,32 +175,35 @@ const TimeTracker = props => {
   };
 
   return (
-    <div className={css(styleSheet.mainpageStyle as any)}>
-      <PageContainer>
-        <PageHeader disabledTitle={isMobile}>
-          <TimerSearchComponent />
-        </PageHeader>
+    <PageContainer>
+    <GlobalState.Provider value={'dark'}>
+      <div className={css(styleSheet.mainPage)}>
         <TutorialComponent>
           <div
             className={classNames('main-page', {
               'main-page--mobile': isMobile,
             })}
           >
-            <div className="task-container">
-              <AddTask
-                vocabulary={vocabulary}
-                currentTimer={currentTimer}
-                setCurrentTimer={setCurrentTimer}
-                handleJiraSync={jiraSynchronizationHandleClick}
-                setIsActive={setIsActive}
-                resetTimer={resetTimer}
-                hour={hour}
-                minute={minute}
-                second={second}
-                setTimeEntriesList={setTimeEntriesList}
-                timeEntriesList={timeEntriesList}
-              />
-            </div>
+            <PageHeader title={vocabulary.v_timer} disabledTitle={isMobile}>
+              {/* <TimerSearchComponent /> */}
+              {/* This component takes too much time*/}
+              <p>Search component</p>
+              {/* <TimerSearchComponent /> */}
+            </PageHeader>
+            <AddTask
+              vocabulary={vocabulary}
+              showNotificationAction={showNotificationAction}
+              currentTimer={currentTimer}
+              setCurrentTimer={setCurrentTimer}
+              handleJiraSync={jiraSynchronizationHandleClick}
+              setIsActive={setIsActive}
+              resetTimer={resetTimer}
+              hour={hour}
+              minute={minute}
+              second={second}
+              setTimeEntriesList={setTimeEntriesList}
+              timeEntriesList={timeEntriesList}
+            />
             <CustomScrollbar>
               <div className="main-page__list">
                 {timeEntriesList &&
@@ -225,11 +244,83 @@ const TimeTracker = props => {
                 )}
               </div>
             </CustomScrollbar>
+            {/* <StartTaskMobile /> */}
           </div>
         </TutorialComponent>
-      </PageContainer>
-    </div>
+      </div>
+      {props.children}
+    </GlobalState.Provider>
+    </PageContainer>
   );
+};
+
+const styleSheet: any = {
+  mainPage: props => ({
+    position: 'relative',
+    width: '100%',
+    backgroundColor: '#333',
+    '& .main-page': {
+      display: 'flex',
+      flexDirection: 'column',
+      padding: '2rem',
+      fontSize: '1.2rem',
+      lineHeight: '1.6rem',
+      overflow: 'hidden',
+      height: '140vh',
+    },
+    '& .main-page__list': {
+      flexGrow: '1',
+      height: '100%',
+    },
+    '& .main-page__results-title': {
+      fontWeight: '600',
+      fontSize: '1.8rem',
+      lineHeight: '2.5rem',
+      color: '#E0E0E0',
+      marginBottom: '1.2rem',
+      zIndex: '10',
+    },
+    '& .main-page__day': {
+      margin: '0 0 2.6rem 0',
+      padding: '1rem',
+      background: '#4f4f4f',
+    },
+    '& .main-page__day-header': {
+      display: 'flex',
+      justifyContent: 'space-between',
+      color: '#b8b8b8',
+      padding: '0 0.5rem 0 0.5rem',
+      margin: '0 0 1rem 0',
+    },
+    '& .main-page__day-date': {
+      fontWeight: '700',
+    },
+    '& .main-page__lazy-load-spinner': {
+      minHeight: '5rem',
+      minWidth: '100%',
+    },
+    '& .mainPage--mobile': {
+      padding: '0 1rem 0 1rem',
+    },
+    '& .main-page--mobile .main-page__day': {
+      padding: '1rem 0 1rem 0',
+    },
+    '& .main-page--mobile .main-page__day--last-child': {
+      margin: '0 0 0 0',
+    },
+    '& .main-page--mobile .main-page__empty-block': {
+      minWidth: '100%',
+      minHeight: '1rem',
+    },
+    '& button': {
+      cursor: 'pointer',
+      border: 'none',
+      outline: 'none',
+    },
+    '& input': {
+      outline: 'none',
+    },
+  }),
 };
 
 export default TimeTracker;
