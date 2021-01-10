@@ -418,14 +418,14 @@ const styleSheet: any = {
       margin: '0 0 1rem',
       padding: '1.5rem 2rem 1.5rem 1.5rem',
       borderRadius: '.4rem',
-      color: '#fff',
+      color: '#333',
       lineHeight: '1.8rem',
     },
     '& .task-item:last-child': {
       margin: '0',
     },
     '& .task-item--selected': {
-      backgroundColor: '#333333',
+      backgroundColor: '#fff',
     },
     '& .task-item.task-item--selected .task-item__edit-wrapper': {
       display: 'flex',
@@ -434,7 +434,7 @@ const styleSheet: any = {
       margin: '0 1rem 0 0',
     },
     '& .task-item:not(.task-item--disabled):not(.task-item--selected):not(.task-item--mobile):hover': {
-      backgroundColor: '#333333',
+      backgroundColor: '#fff',
     },
     '& .task-item:not(.task-item--disabled):not(.task-item--selected):not(.task-item--mobile):hover .task-item__edit-wrapper': {
       display: 'flex',
