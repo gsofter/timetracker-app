@@ -1,7 +1,0 @@
-extend type Mutation {
-    toggleSidebar(state: Boolean!): Boolean
-}
-
-extend type Query {
-    sidebarState: Boolean
-}

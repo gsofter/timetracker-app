@@ -6,19 +6,20 @@ import { getFilteredMenus, getFilteredRoutes } from '../utils';
 import { HomeOutlined } from '@ant-design/icons';
 
 export const commonPageStore: any[] = [
-    {
-        path: '/',
-        tab: 'Home',
-        key: 'home',
-        exact: true,
-        name: 'Home',
-        component: Home,
-        position: IMenuPosition.MIDDLE,
-        icon: <HomeOutlined/>,
-    },
+  {
+    path: '//home',
+    tab: 'Home Component',
+    key: 'home-component',
+    exact: true,
+    name: 'Home Component',
+    component: Home,
+    position: IMenuPosition.MIDDLE,
+    icon: <HomeOutlined />,
+    priority: 1,
+  },
 ];
 
-const selectedRoutesAndMenus = ['home'];
+const selectedRoutesAndMenus = ['home-component'];
 
 // get menus
 const filteredMenus = getFilteredMenus(commonPageStore, selectedRoutesAndMenus);

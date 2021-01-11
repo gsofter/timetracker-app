@@ -1,0 +1,63 @@
+{
+  "name": "@admin-layout/components",
+  "version": "0.0.1",
+  "description": "Sample core for higher packages to depend on",
+  "main": "lib/index.js",
+  "scripts": {
+    "jest": "./node_modules/.bin/jest",
+    "test": "jest",
+    "test:debug": "npm test -- --runInBand",
+    "test:watch": "npm test -- --watch",
+    "prepublish": "npm run build",
+    "watch": "npm run build:lib:watch",
+    "build": "npm run build:clean && npm run build:lib",
+    "build:clean": "rimraf lib",
+    "build:lib": "webpack",
+    "build:lib:watch": "npm run build:lib -- --watch"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "jest": {
+    "testEnvironment": "node",
+    "roots": [
+      "src"
+    ],
+    "modulePaths": [
+      "node_modules"
+    ],
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    },
+    "testRegex": "/__tests__/.*test*\\.(ts|tsx|js)$"
+  },
+  "author": "CDMBase LLC",
+  "license": "ISC",
+  "dependencies": {
+    "@admin-layout/core": "../admin-core",
+    "@ant-design/pro-provider": "0.0.6",
+    "@types/react-copy-to-clipboard": "^4.3.0",
+    "@umijs/route-utils": "^1.0.5",
+    "base-64": "^0.1.0",
+    "fast-deep-equal": "^3.1.3",
+    "identicon.js": "^2.3.1",
+    "react-fontawesome": "^1.6.1",
+    "unstated-next": "^1.1.0",
+    "use-json-comparison": "^1.0.5",
+    "use-media-antd-query": "^1.0.2", 
+    "react-copy-to-clipboard": "^5.0.2"
+  },
+  "devDependencies": {
+    "react-test-renderer": "^17.0.1"
+  },
+  "typings": "lib/index.d.ts",
+  "typescript": {
+    "definition": "lib/index.d.ts"
+  }
+}

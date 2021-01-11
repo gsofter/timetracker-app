@@ -1,41 +1,17 @@
-import { CounterMockService, CounterMockProxyService } from '../services';
 import { ContainerModule, interfaces } from 'inversify';
 import { TYPES } from '../constants';
-import { ICounterService } from '../interfaces';
+import { IScheduleRepository, IScheduleCreateRequest, IScheduleService } from '../interfaces'
+import { ScheduleService } from '../services';
+import { ScheduleRepository } from '../store/repository';
 
-/**
- * Local services and exposed micro services to serve remote connections.
- * Operates within in the Gateway.
- *
- * @param settings Settings
- */
-export const localCounterModule: (settings) => interfaces.ContainerModule =
-    (settings) => new ContainerModule((bind: interfaces.Bind) => {
+export const scheduleModule: (settings: any) => ContainerModule = (setting) => new ContainerModule((bind: interfaces.Bind) => {
+    bind<IScheduleRepository>(TYPES.IScheduleRepository)
+        .to(ScheduleRepository)
+        .inSingletonScope()
+        .whenTargetIsDefault()
 
-        // bind<ICounterService>(TYPES.CounterMockService)
-        //     .to(CounterMockService)
-        //     .inSingletonScope()
-        //     .whenTargetIsDefault();
-
-        bind<ICounterService>(TYPES.CounterMockService)
-            .to(CounterMockProxyService)
-            .inSingletonScope()
-            .whenTargetNamed('proxy');
-
-    });
-
-
-/**
- * Operates external to the Gateway. Usually a broker listen to calls and invoke this service
- * local to the micro container.
- *
- * @param settings Settings
- */
-export const externalCounterModule: (settings) => interfaces.ContainerModule =
-(settings) => new ContainerModule((bind: interfaces.Bind) => {
-
-    bind<ICounterService>(TYPES.CounterMockService)
-        .to(CounterMockService)
-        .inSingletonScope();
-
-});
+    bind<IScheduleService>(TYPES.IScheduleService).
+        to(ScheduleService)
+        .inSingletonScope()
+        .whenTargetIsDefault();
+}) 

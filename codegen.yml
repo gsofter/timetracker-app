@@ -11,8 +11,7 @@ generates:
       - packages/admin-platform/browser/src/graphql/**/*.graphql
       - packages/react-shared-components/src/components/**/*.graphql
     documents: 
-      - "packages/react-shared-components/src/components/**/gql/**/*.gql"
-      - packages/react-shared-components/src/components/**/*.gql
+      - packages/react-shared-components/src/**/*.gql
     config:
       constEnums: true
       noNamespaces: true
@@ -49,7 +48,7 @@ generates:
       - packages/react-shared-components/src/components/**/*.graphql
       - packages/admin-platform/browser/src/graphql/**/*.graphql
     documents: 
-      - "packages/react-shared-components/src/components/**/gql/**/*.gql"
+      - packages/react-shared-components/src/**/*.gql
     config:
       typesPrefix: I
       withMutationFn: false
@@ -83,3 +82,42 @@ generates:
       - add: |
           /* tslint:disable */
       - typescript-react-apollo
+  packages-modules/schedule/browser/src/generated-models.tsx:
+    schema: 
+      - packages/adminide-core/src/core-schema.graphql
+      - "packages-modules/schedule/server/src/**/*.graphql"
+    documents: "packages-modules/schedule/browser/src/**/*.gql"
+    config:
+      typesPrefix: I
+      withMutationFn: false
+      withHOC: false
+      withComponent: true
+      withHooks: true
+    preset: import-types-preset
+    presetConfig:
+      typesPath: "@admin-layout/schedule-module-core"
+      importTypesNamespace: SchemaTypes
+    plugins:
+      - add: |
+          /* tslint:disable */
+      - typescript-react-apollo
+  packages-modules/schedule/core/src/interfaces/generated-models.ts:
+    schema:
+      - packages-modules/schedule/server/src/**/*.graphql
+    documents: "packages-modules/schedule/browser/src/**/*.gql"
+    config:
+      scalars:
+        URI: URI
+        URIInput: URI | UriComponents
+      constEnums: true
+      noNamespaces: true
+      namingConvention: keep
+      typesPrefix: I
+      withMutationFn: false
+      withHOC: false
+      withComponent: false
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+      - typescript-resolvers

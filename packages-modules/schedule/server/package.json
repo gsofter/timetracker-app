@@ -42,9 +42,10 @@
   "author": "CDMBase LLC",
   "license": "ISC",
   "dependencies": {
+    "@admin-layout/schedule-module-core": "file:../core"
   },
   "peerDependencies": {
-    "@common-stack/server-core": ">=0.0.234"
+    "@common-stack/server-core": ">=0.0.249"
   },
   "typings": "lib/index.d.ts",
   "typescript": {

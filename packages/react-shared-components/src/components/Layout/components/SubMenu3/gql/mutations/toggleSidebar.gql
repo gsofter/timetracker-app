@@ -1,3 +1,0 @@
-mutation toggleSidebar($state: Boolean!) {
-    toggleSidebar(state: $state) @client
-}

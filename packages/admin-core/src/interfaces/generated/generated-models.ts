@@ -15,6 +15,9 @@ export type Scalars = {
   Int: number;
   Float: number;
   AnyObject: any;
+  DateTime: any;
+  Date: any;
+  Time: any;
   JSON: any;
   JSONObject: any;
 };
@@ -36,6 +39,8 @@ export type ICounter = {
   amount: Scalars['Int'];
 };
 
+
+
 export type IFieldError = {
    __typename?: 'FieldError';
   field: Scalars['String'];
@@ -50,10 +55,11 @@ export type IMutation = {
   addCounter?: Maybe<ICounter>;
   /**  add Counter  */
   addMoleculerCounter?: Maybe<ICounter>;
+  addScheduleEvent?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
   /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
-  toggleSidebar?: Maybe<Scalars['Boolean']>;
+  updateScheduleEvent?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -67,8 +73,14 @@ export type IMutationaddMoleculerCounterArgs = {
 };
 
 
-export type IMutationtoggleSidebarArgs = {
-  state: Scalars['Boolean'];
+export type IMutationaddScheduleEventArgs = {
+  request?: Maybe<IScheduleCreateRequest>;
+};
+
+
+export type IMutationupdateScheduleEventArgs = {
+  eventId?: Maybe<Scalars['String']>;
+  request?: Maybe<IScheduleCreateRequest>;
 };
 
 export type IQuery = {
@@ -80,14 +92,53 @@ export type IQuery = {
   dummy?: Maybe<Scalars['Int']>;
   getContextProperty?: Maybe<Scalars['AnyObject']>;
   getOrgNameFromContext?: Maybe<IContext>;
+  getScheduleEvents?: Maybe<Array<Maybe<ISchedule>>>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
-  sidebarState?: Maybe<Scalars['Boolean']>;
 };
 
 
 export type IQuerygetContextPropertyArgs = {
   keys?: Maybe<Array<Maybe<Scalars['String']>>>;
+};
+
+
+export type IQuerygetScheduleEventsArgs = {
+  userId?: Maybe<Scalars['String']>;
+};
+
+export type ISchedule = {
+   __typename?: 'Schedule';
+  id?: Maybe<Scalars['String']>;
+  title?: Maybe<Scalars['String']>;
+  allDay?: Maybe<Scalars['Boolean']>;
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
+  desc?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  tooltip?: Maybe<Scalars['String']>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  submittedOn?: Maybe<Scalars['DateTime']>;
+  reason?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']>;
+  approvedOn?: Maybe<Scalars['DateTime']>;
+};
+
+export type IScheduleCreateRequest = {
+  title?: Maybe<Scalars['String']>;
+  allDay?: Maybe<Scalars['Boolean']>;
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
+  desc?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  tooltip?: Maybe<Scalars['String']>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  submittedOn?: Maybe<Scalars['DateTime']>;
+  reason?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']>;
+  approvedOn?: Maybe<Scalars['DateTime']>;
 };
 
 export type ISubscription = {
@@ -98,19 +149,10 @@ export type ISubscription = {
   moleculerCounterUpdate?: Maybe<ICounter>;
 };
 
+
 export type IOrgNameInContextFragment = (
   { __typename?: 'Context' }
   & Pick<IContext, 'orgName'>
-);
-
-export type ItoggleSidebarMutationVariables = {
-  state: Scalars['Boolean'];
-};
-
-
-export type ItoggleSidebarMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<IMutation, 'toggleSidebar'>
 );
 
 export type IGetOrgNameFromContextQueryVariables = {};
@@ -124,26 +166,11 @@ export type IGetOrgNameFromContextQuery = (
   )> }
 );
 
-export type IsidebarStateQueryVariables = {};
-
-
-export type IsidebarStateQuery = (
-  { __typename?: 'Query' }
-  & Pick<IQuery, 'sidebarState'>
-);
-
 export const OrgNameInContextFragmentDoc = gql`
     fragment OrgNameInContext on Context {
   orgName
 }
     `;
-export const toggleSidebarDocument = gql`
-    mutation toggleSidebar($state: Boolean!) {
-  toggleSidebar(state: $state) @client
-}
-    `;
-export type toggleSidebarMutationResult = ApolloReactCommon.MutationResult<ItoggleSidebarMutation>;
-export type toggleSidebarMutationOptions = ApolloReactCommon.BaseMutationOptions<ItoggleSidebarMutation, ItoggleSidebarMutationVariables>;
 export const GetOrgNameFromContextDocument = gql`
     query GetOrgNameFromContext {
   getOrgNameFromContext @client {
@@ -152,12 +179,6 @@ export const GetOrgNameFromContextDocument = gql`
 }
     ${OrgNameInContextFragmentDoc}`;
 export type GetOrgNameFromContextQueryResult = ApolloReactCommon.QueryResult<IGetOrgNameFromContextQuery, IGetOrgNameFromContextQueryVariables>;
-export const sidebarStateDocument = gql`
-    query sidebarState {
-  sidebarState @client
-}
-    `;
-export type sidebarStateQueryResult = ApolloReactCommon.QueryResult<IsidebarStateQuery, IsidebarStateQueryVariables>;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -237,9 +258,14 @@ export type IResolversTypes = {
   String: ResolverTypeWrapper<Scalars['String']>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
   Context: ResolverTypeWrapper<IContext>,
+  Schedule: ResolverTypeWrapper<ISchedule>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   Mutation: ResolverTypeWrapper<{}>,
+  ScheduleCreateRequest: IScheduleCreateRequest,
   Subscription: ResolverTypeWrapper<{}>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
+  Time: ResolverTypeWrapper<Scalars['Time']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<IFieldError>,
@@ -255,9 +281,14 @@ export type IResolversParentTypes = {
   String: Scalars['String'],
   AnyObject: Scalars['AnyObject'],
   Context: IContext,
+  Schedule: ISchedule,
   Boolean: Scalars['Boolean'],
+  DateTime: Scalars['DateTime'],
   Mutation: {},
+  ScheduleCreateRequest: IScheduleCreateRequest,
   Subscription: {},
+  Date: Scalars['Date'],
+  Time: Scalars['Time'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
   FieldError: IFieldError,
@@ -279,6 +310,14 @@ export type ICounterResolvers<ContextType = MyContext, ParentType extends IResol
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export interface IDateScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['Date'], any> {
+  name: 'Date'
+}
+
+export interface IDateTimeScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['DateTime'], any> {
+  name: 'DateTime'
+}
+
 export type IFieldErrorResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['FieldError'] = IResolversParentTypes['FieldError']> = {
   field?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
   message?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
@@ -296,9 +335,10 @@ export interface IJSONObjectScalarConfig extends GraphQLScalarTypeConfig<IResolv
 export type IMutationResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
   addCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddCounterArgs, never>>,
   addMoleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddMoleculerCounterArgs, never>>,
+  addScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddScheduleEventArgs, never>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   syncCachedCounter?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  toggleSidebar?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationtoggleSidebarArgs, 'state'>>,
+  updateScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateScheduleEventArgs, never>>,
 };
 
 export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
@@ -307,8 +347,26 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   getContextProperty?: Resolver<Maybe<IResolversTypes['AnyObject']>, ParentType, ContextType, RequireFields<IQuerygetContextPropertyArgs, never>>,
   getOrgNameFromContext?: Resolver<Maybe<IResolversTypes['Context']>, ParentType, ContextType>,
+  getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, never>>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
-  sidebarState?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+};
+
+export type IScheduleResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Schedule'] = IResolversParentTypes['Schedule']> = {
+  id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  title?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  allDay?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  desc?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  reason?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  note?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type ISubscriptionResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Subscription'] = IResolversParentTypes['Subscription']> = {
@@ -317,16 +375,24 @@ export type ISubscriptionResolvers<ContextType = MyContext, ParentType extends I
   moleculerCounterUpdate?: SubscriptionResolver<Maybe<IResolversTypes['Counter']>, "moleculerCounterUpdate", ParentType, ContextType>,
 };
 
+export interface ITimeScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['Time'], any> {
+  name: 'Time'
+}
+
 export type IResolvers<ContextType = MyContext> = {
   AnyObject?: GraphQLScalarType,
   Context?: IContextResolvers<ContextType>,
   Counter?: ICounterResolvers<ContextType>,
+  Date?: GraphQLScalarType,
+  DateTime?: GraphQLScalarType,
   FieldError?: IFieldErrorResolvers<ContextType>,
   JSON?: GraphQLScalarType,
   JSONObject?: GraphQLScalarType,
   Mutation?: IMutationResolvers<ContextType>,
   Query?: IQueryResolvers<ContextType>,
+  Schedule?: IScheduleResolvers<ContextType>,
   Subscription?: ISubscriptionResolvers<ContextType>,
+  Time?: GraphQLScalarType,
 };
 
 
