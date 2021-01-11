@@ -1,7 +1,7 @@
 export const styleSheet = {
   pageHeaderStyle: ({ theme }) => {
     const {
-      colors: { primaryColor },
+      primaryColor,
     } = theme;
     return {
       position: 'relative',
@@ -46,7 +46,7 @@ export const styleSheet = {
         lineHeight: 'normal',
         fontSize: '14px',
         color: '#ffffff',
-        backgroundColor: primaryColor ? primaryColor : '#231890ff',
+        // backgroundColor: primaryColor ? primaryColor : '#231890ff',
         outline: 'none',
         cursor: 'pointer',
         borderRadius: '4px',

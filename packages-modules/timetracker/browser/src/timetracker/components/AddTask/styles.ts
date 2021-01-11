@@ -1,8 +1,8 @@
-export const styleSheet = {
+import { Property, Properties } from 'csstype';
+
+export const styleSheet: { [key: string]: (obj) => Properties } = {
   addTaskStyles: ({ theme }) => {
-    const {
-      colors: { primaryColor },
-    } = theme;
+    const { primaryColor } = theme;
     return {
       position: 'relative',
       '& .add-task': {
