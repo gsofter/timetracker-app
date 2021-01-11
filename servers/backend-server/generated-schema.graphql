@@ -68,33 +68,28 @@ extend type Subscription {
 
   moleculerCounterUpdate: Counter
 }
-,# scalar DateTime
-
-type Schedule {
-  id: String
-  title: String!
-  allDay: Boolean
-  start: DateTime
-  end: DateTime
-  desc: String
-  userId: String
-  resourceId: String
-  tooltip: String
+,type Schedule { 
+    title: String!
+    allDay: Boolean?
+    start: Date    
+    end: Date
+    desc: String
+    resourceId: String,
+    tooltip: String,
 }
 
 input ScheduleCreateRequest {
-  title: String!
-  allDay: Boolean
-  start: DateTime
-  end: DateTime
-  desc: String
-  userId: String
-  resourceId: String
-  tooltip: String
+    title: String!
+    allDay: Boolean?
+    start: Date    
+    end: Date
+    desc: String
+    resourceId: String,
+    tooltip: String,
 }
 
 extend type Query {
-  getScheduleEvents(userId: String): [Schedule]
+    getUserSchedules(userId: String!) : [Schedule]
 }
 
 extend type Mutation {
