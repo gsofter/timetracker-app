@@ -7,22 +7,17 @@ import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-import { Row, Col, Form, Input, Button, Select, DatePicker } from 'antd';
+import { Row, Col, Form, Input, Button, Select, DatePicker, Popconfirm } from 'antd';
 import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
+import { DeleteOutlined } from '@ant-design/icons';
 
 const { RangePicker } = DatePicker;
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizer = momentLocalizer(moment);
 
 const allViews: View[] = ['agenda', 'day', 'week', 'month'];
-
-interface ISelectableCalendarProps {
-  localizer: DateLocalizer;
-  handleAddSchedule: any;
-  events: any;
-}
 class CalendarEvent {
   title: string;
   allDay: boolean;
@@ -41,7 +36,6 @@ class CalendarEvent {
     _desc?: string,
     _userId?: string,
     _resourceId?: string,
-
   ) {
     this.title = _title;
     this.allDay = _allDay || false;
@@ -50,59 +44,64 @@ class CalendarEvent {
     this.desc = _desc || '';
     this.resourceId = _resourceId;
     this.userId = _userId;
-
   }
 }
 
-function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
-  const [isShowing, setIsShowing] = useState(false);
-  const [form] = Form.useForm();
-  const [selectedUser, setSelectedUser] = useState('');
-  const [events, setEvents] = React.useState(propEvents);
+export interface IScheduleProps {
+  handleAddScheduleEvent: Function;
+  handleUpdateScheduleEvent: Function;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
+  handleSelectEvent: (any) => void;
+  handleChangeUser: (any) => void;
+  handleRemoveEvent: () => void;
+  handleSelectSlot: (any) => void;
+  selectedEvent: any;
+  form: any;
+  showModal: boolean;
+  loading: boolean;
+  events: any;
+  selectedUser: string;
+}
 
-  // filter events by selected user
-  useEffect(() => {
-    if (selectedUser === '')
-      setEvents(propEvents);
-    else
-      setEvents(propEvents.filter(ev => ev.userId === selectedUser))
-  }, [selectedUser])
-
-  const handleSelect = ({ start, end }) => {
-    const title = window.prompt('New Event name');
-    if (title) {
-      let newEvent = {} as CalendarEvent;
-      newEvent.start = moment(start).toDate();
-      newEvent.end = moment(end).toDate();
-      newEvent.title = title;
-      newEvent.userId = selectedUser;
-      setEvents([...events, newEvent]);
-      handleAddSchedule(newEvent)
-    }
-  };
-
-  const openModal = () => {
-    setIsShowing(!isShowing);
-  };
-
+function SelectableCalendar({
+  localizer,
+  handleAddScheduleEvent,
+  handleUpdateScheduleEvent,
+  events,
+  showModal,
+  handleOpenModal,
+  handleCloseModal,
+  loading,
+  form,
+  selectedEvent,
+  handleSelectEvent,
+  selectedUser,
+  handleChangeUser,
+  handleRemoveEvent,
+  handleSelectSlot,
+}: IScheduleProps & { localizer: DateLocalizer }) {
   const resetModal = (e: any) => {
     e.preventDefault();
     form.resetFields();
   };
 
   const onEventDrop = ({ event, start, end, allDay }) => {
-    const idx = events.indexOf(event);
-    const updatedEvent = { ...event, start, end };
-
-    const nextEvents = [...events];
-    nextEvents.splice(idx, 1, updatedEvent);
-    setEvents(nextEvents);
-    alert(`${event.title} was dropped onto ${event.start}`);
+    const updateRequest = {
+      start,
+      end,
+      allDay,
+    };
+    handleUpdateScheduleEvent(event.id, updateRequest);
   };
 
-  const onChangeUser = (value) => {
-    setSelectedUser(value);
-  }
+  const onEventResize = ({ event, start, end }) => {
+    const updateRequest = {
+      start,
+      end,
+    };
+    handleUpdateScheduleEvent(event.id, updateRequest);
+  };
 
   const EventComponent = ({ start, end, title }) => {
     return (
@@ -123,39 +122,53 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
     );
   };
 
-  const onFinish = (values) => {
+  const onFinish = values => {
     const request = {
       title: values.title,
       start: moment(values.dateRange[0]).toDate(),
       end: moment(values.dateRange[1]).toDate(),
       userId: values.user,
-    }
-    console.log("request =>", request)
-    handleAddSchedule(request)
-    setIsShowing(!isShowing);
-    form.resetFields();
-  }
+    };
+    if (selectedEvent !== -1) handleUpdateScheduleEvent(selectedEvent, request);
+    else handleAddScheduleEvent(request);
+  };
+
   const renderModalBody = (): JSX.Element => {
     return (
       <>
-        <Form labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} layout="vertical" onFinish={onFinish} form={form}>
-          <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Required field' }]}>
+        <Form
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+          layout="vertical"
+          onFinish={onFinish}
+          form={form}
+        >
+          <Form.Item
+            label="Title"
+            name="title"
+            rules={[{ required: true, message: 'Required field' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="User" name="user" rules={[{ required: true, message: 'Required field' }]}>
+          <Form.Item
+            label="User"
+            name="user"
+            rules={[{ required: true, message: 'Required field' }]}
+          >
             <Select>
               <Select.Option value="1">User1</Select.Option>
               <Select.Option value="2">User2</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item label="RangePicker" name="dateRange" rules={[{ required: true, message: 'Required field' }]}>
+          <Form.Item
+            label="RangePicker"
+            name="dateRange"
+            rules={[{ required: true, message: 'Required field' }]}
+          >
             <RangePicker allowClear showTime />
           </Form.Item>
           <Form.Item label="Minimum Hours" name="minHours">
-            <Input
-              name="minhours"
-              placeholder="5"
-            />
+            <Input name="minhours" placeholder="5" />
           </Form.Item>
           <Form.Item label="Repeats" name="repeats">
             <Select>
@@ -169,9 +182,30 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
               Reset
             </Button>
             &nbsp;
-            <Button type="primary" htmlType="submit">
+            <Button type="primary" htmlType="submit" loading={loading}>
               Submit
             </Button>
+            &nbsp;
+            {selectedEvent !== -1 ? (
+              <Popconfirm
+                title="Are you sure to remove event"
+                okText="OK"
+                cancelText="Cancel"
+                onConfirm={handleRemoveEvent}
+              >
+                <Button
+                  type="primary"
+                  htmlType="button"
+                  loading={loading}
+                  icon={<DeleteOutlined />}
+                  danger
+                >
+                  Remove
+                </Button>
+              </Popconfirm>
+            ) : (
+              ''
+            )}
           </Form.Item>
         </Form>
       </>
@@ -207,7 +241,7 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
             className="sm-screen-size"
           >
             <Form.Item label="Members">
-              <Select onChange={onChangeUser} value={selectedUser}>
+              <Select onChange={handleChangeUser} value={selectedUser}>
                 <Select.Option value="">All</Select.Option>
                 <Select.Option value="1">User1</Select.Option>
                 <Select.Option value="2">User2</Select.Option>
@@ -228,12 +262,12 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
         <Col md={6} xs={16}>
           <div>
             <span style={{ fontWeight: 'bold' }}>
-              <a onClick={openModal}>Add Schedule</a>
+              <a onClick={handleOpenModal}>Add Schedule</a>
             </span>
             <Modal
-              modalTitle="Create Schedule"
-              showModal={isShowing}
-              handleClose={() => setIsShowing(false)}
+              modalTitle={selectedEvent !== -1 ? 'Edit Schedule' : 'Create Schedule'}
+              showModal={showModal}
+              handleClose={handleCloseModal}
               modalBody={renderModalBody()}
             />
           </div>
@@ -246,14 +280,15 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
         defaultView="month"
         views={allViews}
         defaultDate={new Date()}
-        onSelectEvent={event => alert(event.title)}
-        onSelectSlot={handleSelect}
+        onSelectEvent={handleSelectEvent}
+        onSelectSlot={handleSelectSlot}
         startAccessor="start"
         endAccessor="end"
         titleAccessor="title"
         toolbar
         resizable
         onEventDrop={onEventDrop}
+        onEventResize={onEventResize}
         components={{
           event: EventComponent,
           agenda: {
@@ -265,11 +300,6 @@ function SelectableCalendar({ localizer, handleAddSchedule, events: propEvents }
   );
 }
 
-export interface IScheduleProps {
-  handleAddSchedule: Function
-  events: any;
-}
-
 export default function Schedule(props: IScheduleProps) {
   const { css } = useFela();
   return (
@@ -279,7 +309,7 @@ export default function Schedule(props: IScheduleProps) {
       </div>
     </div>
   );
-};
+}
 
 const stylesheet: any = {
   styles: theme => ({

@@ -9,10 +9,18 @@ export const resolver = (options) => ({
     }
   },
   Mutation: {
-    addSchedule: (root, args, { scheduleService }) => {
-      options.logger.trace('(Mutation.addSchedule) args %j', args)
-      return scheduleService.createSchedule(args.request);
-    }
+    addScheduleEvent: (root, args, { scheduleService }) => {
+      options.logger.trace('(Mutation.addScheduleEvent) args %j', args)
+      return scheduleService.createScheduleEvent(args.request);
+    },
+    updateScheduleEvent: (root, args, { scheduleService }) => {
+      options.logger.trace('(Mutation.updateScheduleEvent) args %j', args)
+      return scheduleService.updateScheduleEvent(args.eventId, args.request);
+    },
+    removeScheduleEvent: (root, args, { scheduleService }) => {
+      options.logger.trace('(Mutation.removeScheduleEvent) args %j', args)
+      return scheduleService.removeScheduleEvent(args.eventId);
+    } 
   },
   Subscription: {
 

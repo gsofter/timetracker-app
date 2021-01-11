@@ -55,10 +55,11 @@ export type IMutation = {
   addCounter?: Maybe<ICounter>;
   /**  add Counter  */
   addMoleculerCounter?: Maybe<ICounter>;
-  addSchedule?: Maybe<Scalars['Boolean']>;
+  addScheduleEvent?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
   /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
+  updateScheduleEvent?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -72,7 +73,13 @@ export type IMutationaddMoleculerCounterArgs = {
 };
 
 
-export type IMutationaddScheduleArgs = {
+export type IMutationaddScheduleEventArgs = {
+  request?: Maybe<IScheduleCreateRequest>;
+};
+
+
+export type IMutationupdateScheduleEventArgs = {
+  eventId?: Maybe<Scalars['String']>;
   request?: Maybe<IScheduleCreateRequest>;
 };
 
@@ -103,7 +110,7 @@ export type IQuerygetScheduleEventsArgs = {
 export type ISchedule = {
    __typename?: 'Schedule';
   id?: Maybe<Scalars['String']>;
-  title: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
   allDay?: Maybe<Scalars['Boolean']>;
   start?: Maybe<Scalars['DateTime']>;
   end?: Maybe<Scalars['DateTime']>;
@@ -111,10 +118,15 @@ export type ISchedule = {
   userId?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  submittedOn?: Maybe<Scalars['DateTime']>;
+  reason?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']>;
+  approvedOn?: Maybe<Scalars['DateTime']>;
 };
 
 export type IScheduleCreateRequest = {
-  title: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
   allDay?: Maybe<Scalars['Boolean']>;
   start?: Maybe<Scalars['DateTime']>;
   end?: Maybe<Scalars['DateTime']>;
@@ -122,6 +134,11 @@ export type IScheduleCreateRequest = {
   userId?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  submittedOn?: Maybe<Scalars['DateTime']>;
+  reason?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']>;
+  approvedOn?: Maybe<Scalars['DateTime']>;
 };
 
 export type ISubscription = {
@@ -318,9 +335,10 @@ export interface IJSONObjectScalarConfig extends GraphQLScalarTypeConfig<IResolv
 export type IMutationResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
   addCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddCounterArgs, never>>,
   addMoleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddMoleculerCounterArgs, never>>,
-  addSchedule?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddScheduleArgs, never>>,
+  addScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddScheduleEventArgs, never>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   syncCachedCounter?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  updateScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateScheduleEventArgs, never>>,
 };
 
 export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
@@ -335,7 +353,7 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
 
 export type IScheduleResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Schedule'] = IResolversParentTypes['Schedule']> = {
   id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  title?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
+  title?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   allDay?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
@@ -343,6 +361,11 @@ export type IScheduleResolvers<ContextType = MyContext, ParentType extends IReso
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  reason?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  note?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

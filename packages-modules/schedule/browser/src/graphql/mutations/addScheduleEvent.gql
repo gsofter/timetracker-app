@@ -1,0 +1,3 @@
+mutation AddScheduleEvent($request: ScheduleCreateRequest) {
+    addScheduleEvent(request: $request)
+}
