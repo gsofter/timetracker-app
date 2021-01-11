@@ -42,10 +42,12 @@ export type IMutation = {
   addCounter?: Maybe<ICounter>;
   /**  add Counter  */
   addMoleculerCounter?: Maybe<ICounter>;
-  addSchedule?: Maybe<Scalars['Boolean']>;
+  addScheduleEvent?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
+  removeScheduleEvent?: Maybe<Scalars['Boolean']>;
   /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
+  updateScheduleEvent?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -59,7 +61,18 @@ export type IMutationaddMoleculerCounterArgs = {
 };
 
 
-export type IMutationaddScheduleArgs = {
+export type IMutationaddScheduleEventArgs = {
+  request?: Maybe<IScheduleCreateRequest>;
+};
+
+
+export type IMutationremoveScheduleEventArgs = {
+  eventId?: Maybe<Scalars['String']>;
+};
+
+
+export type IMutationupdateScheduleEventArgs = {
+  eventId?: Maybe<Scalars['String']>;
   request?: Maybe<IScheduleCreateRequest>;
 };
 
@@ -83,23 +96,33 @@ export type IQuerygetScheduleEventsArgs = {
 export type ISchedule = {
    __typename?: 'Schedule';
   allDay?: Maybe<Scalars['Boolean']>;
+  approvedOn?: Maybe<Scalars['DateTime']>;
   desc?: Maybe<Scalars['String']>;
   end?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['String']>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  note?: Maybe<Scalars['String']>;
+  reason?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   start?: Maybe<Scalars['DateTime']>;
-  title: Scalars['String'];
+  submittedOn?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
 };
 
 export type IScheduleCreateRequest = {
   allDay?: Maybe<Scalars['Boolean']>;
+  approvedOn?: Maybe<Scalars['DateTime']>;
   desc?: Maybe<Scalars['String']>;
   end?: Maybe<Scalars['DateTime']>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  note?: Maybe<Scalars['String']>;
+  reason?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   start?: Maybe<Scalars['DateTime']>;
-  title: Scalars['String'];
+  submittedOn?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
 };
@@ -113,14 +136,35 @@ export type ISubscription = {
 };
 
 
-export type IAddScheduleMutationVariables = {
+export type IAddScheduleEventMutationVariables = {
   request?: Maybe<IScheduleCreateRequest>;
 };
 
 
-export type IAddScheduleMutation = (
+export type IAddScheduleEventMutation = (
   { __typename?: 'Mutation' }
-  & Pick<IMutation, 'addSchedule'>
+  & Pick<IMutation, 'addScheduleEvent'>
+);
+
+export type IRemoveScheduleEventMutationVariables = {
+  eventId?: Maybe<Scalars['String']>;
+};
+
+
+export type IRemoveScheduleEventMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<IMutation, 'removeScheduleEvent'>
+);
+
+export type IUpdateScheduleEventMutationVariables = {
+  eventId?: Maybe<Scalars['String']>;
+  request?: Maybe<IScheduleCreateRequest>;
+};
+
+
+export type IUpdateScheduleEventMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<IMutation, 'updateScheduleEvent'>
 );
 
 export type IGetScheduleEventsQueryVariables = {
@@ -137,13 +181,27 @@ export type IGetScheduleEventsQuery = (
 );
 
 
-export const AddScheduleDocument = gql`
-    mutation AddSchedule($request: ScheduleCreateRequest) {
-  addSchedule(request: $request)
+export const AddScheduleEventDocument = gql`
+    mutation AddScheduleEvent($request: ScheduleCreateRequest) {
+  addScheduleEvent(request: $request)
 }
     `;
-export type AddScheduleMutationResult = ApolloReactCommon.MutationResult<IAddScheduleMutation>;
-export type AddScheduleMutationOptions = ApolloReactCommon.BaseMutationOptions<IAddScheduleMutation, IAddScheduleMutationVariables>;
+export type AddScheduleEventMutationResult = ApolloReactCommon.MutationResult<IAddScheduleEventMutation>;
+export type AddScheduleEventMutationOptions = ApolloReactCommon.BaseMutationOptions<IAddScheduleEventMutation, IAddScheduleEventMutationVariables>;
+export const RemoveScheduleEventDocument = gql`
+    mutation RemoveScheduleEvent($eventId: String) {
+  removeScheduleEvent(eventId: $eventId)
+}
+    `;
+export type RemoveScheduleEventMutationResult = ApolloReactCommon.MutationResult<IRemoveScheduleEventMutation>;
+export type RemoveScheduleEventMutationOptions = ApolloReactCommon.BaseMutationOptions<IRemoveScheduleEventMutation, IRemoveScheduleEventMutationVariables>;
+export const UpdateScheduleEventDocument = gql`
+    mutation UpdateScheduleEvent($eventId: String, $request: ScheduleCreateRequest) {
+  updateScheduleEvent(eventId: $eventId, request: $request)
+}
+    `;
+export type UpdateScheduleEventMutationResult = ApolloReactCommon.MutationResult<IUpdateScheduleEventMutation>;
+export type UpdateScheduleEventMutationOptions = ApolloReactCommon.BaseMutationOptions<IUpdateScheduleEventMutation, IUpdateScheduleEventMutationVariables>;
 export const GetScheduleEventsDocument = gql`
     query GetScheduleEvents($userId: String) {
   getScheduleEvents(userId: $userId) {
@@ -307,9 +365,11 @@ export interface IJSONObjectScalarConfig extends GraphQLScalarTypeConfig<IResolv
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
   addCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddCounterArgs, never>>,
   addMoleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddMoleculerCounterArgs, never>>,
-  addSchedule?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddScheduleArgs, never>>,
+  addScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddScheduleEventArgs, never>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  removeScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveScheduleEventArgs, never>>,
   syncCachedCounter?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  updateScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateScheduleEventArgs, never>>,
 };
 
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
@@ -322,12 +382,17 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
 
 export type IScheduleResolvers<ContextType = any, ParentType extends IResolversParentTypes['Schedule'] = IResolversParentTypes['Schedule']> = {
   allDay?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   desc?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  note?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  reason?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  title?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
+  submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  title?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,

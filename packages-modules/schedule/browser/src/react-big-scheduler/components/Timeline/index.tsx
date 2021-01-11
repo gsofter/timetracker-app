@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import TimelineComponent from './Timeline'
-import { useAddScheduleMutation, useGetScheduleEventsQuery } from '../../../generated-models'
+import { useAddScheduleEventMutation, useGetScheduleEventsQuery } from '../../../generated-models'
 import { IScheduleCreateRequest } from '@admin-layout/schedule-module-core'
 import { message } from 'antd'
 import moment from 'moment'
 
 const Timeline = (props) => {
-    const [addMutation] = useAddScheduleMutation()
+    const [addMutation] = useAddScheduleEventMutation()
     const handleAddSchedule = (request: IScheduleCreateRequest) => {
         addMutation({ variables: { request } }).then(() => {
             message.success('A new event has been created!')

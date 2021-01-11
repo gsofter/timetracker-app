@@ -1,0 +1,3 @@
+mutation UpdateScheduleEvent($eventId: String, $request: ScheduleCreateRequest) {
+    updateScheduleEvent(eventId: $eventId, request: $request)
+}

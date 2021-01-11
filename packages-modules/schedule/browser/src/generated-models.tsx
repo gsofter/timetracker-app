@@ -12,42 +12,117 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 
-export const AddScheduleDocument = gql`
-    mutation AddSchedule($request: ScheduleCreateRequest) {
-  addSchedule(request: $request)
+
+
+export const AddScheduleEventDocument = gql`
+    mutation AddScheduleEvent($request: ScheduleCreateRequest) {
+  addScheduleEvent(request: $request)
 }
     `;
-export type IAddScheduleMutationFn = ApolloReactCommon.MutationFunction<SchemaTypes.IAddScheduleMutation, SchemaTypes.IAddScheduleMutationVariables>;
-export type AddScheduleComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<SchemaTypes.IAddScheduleMutation, SchemaTypes.IAddScheduleMutationVariables>, 'mutation'>;
+export type IAddScheduleEventMutationFn = ApolloReactCommon.MutationFunction<SchemaTypes.IAddScheduleEventMutation, SchemaTypes.IAddScheduleEventMutationVariables>;
+export type AddScheduleEventComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<SchemaTypes.IAddScheduleEventMutation, SchemaTypes.IAddScheduleEventMutationVariables>, 'mutation'>;
 
-    export const AddScheduleComponent = (props: AddScheduleComponentProps) => (
-      <ApolloReactComponents.Mutation<SchemaTypes.IAddScheduleMutation, SchemaTypes.IAddScheduleMutationVariables> mutation={AddScheduleDocument} {...props} />
+    export const AddScheduleEventComponent = (props: AddScheduleEventComponentProps) => (
+      <ApolloReactComponents.Mutation<SchemaTypes.IAddScheduleEventMutation, SchemaTypes.IAddScheduleEventMutationVariables> mutation={AddScheduleEventDocument} {...props} />
     );
     
 
 /**
- * __useAddScheduleMutation__
+ * __useAddScheduleEventMutation__
  *
- * To run a mutation, you first call `useAddScheduleMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useAddScheduleMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useAddScheduleEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useAddScheduleEventMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [addScheduleMutation, { data, loading, error }] = useAddScheduleMutation({
+ * const [addScheduleEventMutation, { data, loading, error }] = useAddScheduleEventMutation({
  *   variables: {
  *      request: // value for 'request'
  *   },
  * });
  */
-export function useAddScheduleMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SchemaTypes.IAddScheduleMutation, SchemaTypes.IAddScheduleMutationVariables>) {
-        return ApolloReactHooks.useMutation<SchemaTypes.IAddScheduleMutation, SchemaTypes.IAddScheduleMutationVariables>(AddScheduleDocument, baseOptions);
+export function useAddScheduleEventMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SchemaTypes.IAddScheduleEventMutation, SchemaTypes.IAddScheduleEventMutationVariables>) {
+        return ApolloReactHooks.useMutation<SchemaTypes.IAddScheduleEventMutation, SchemaTypes.IAddScheduleEventMutationVariables>(AddScheduleEventDocument, baseOptions);
       }
-export type AddScheduleMutationHookResult = ReturnType<typeof useAddScheduleMutation>;
-export type AddScheduleMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IAddScheduleMutation>;
-export type AddScheduleMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IAddScheduleMutation, SchemaTypes.IAddScheduleMutationVariables>;
+export type AddScheduleEventMutationHookResult = ReturnType<typeof useAddScheduleEventMutation>;
+export type AddScheduleEventMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IAddScheduleEventMutation>;
+export type AddScheduleEventMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IAddScheduleEventMutation, SchemaTypes.IAddScheduleEventMutationVariables>;
+export const RemoveScheduleEventDocument = gql`
+    mutation RemoveScheduleEvent($eventId: String) {
+  removeScheduleEvent(eventId: $eventId)
+}
+    `;
+export type IRemoveScheduleEventMutationFn = ApolloReactCommon.MutationFunction<SchemaTypes.IRemoveScheduleEventMutation, SchemaTypes.IRemoveScheduleEventMutationVariables>;
+export type RemoveScheduleEventComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<SchemaTypes.IRemoveScheduleEventMutation, SchemaTypes.IRemoveScheduleEventMutationVariables>, 'mutation'>;
+
+    export const RemoveScheduleEventComponent = (props: RemoveScheduleEventComponentProps) => (
+      <ApolloReactComponents.Mutation<SchemaTypes.IRemoveScheduleEventMutation, SchemaTypes.IRemoveScheduleEventMutationVariables> mutation={RemoveScheduleEventDocument} {...props} />
+    );
+    
+
+/**
+ * __useRemoveScheduleEventMutation__
+ *
+ * To run a mutation, you first call `useRemoveScheduleEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveScheduleEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeScheduleEventMutation, { data, loading, error }] = useRemoveScheduleEventMutation({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *   },
+ * });
+ */
+export function useRemoveScheduleEventMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SchemaTypes.IRemoveScheduleEventMutation, SchemaTypes.IRemoveScheduleEventMutationVariables>) {
+        return ApolloReactHooks.useMutation<SchemaTypes.IRemoveScheduleEventMutation, SchemaTypes.IRemoveScheduleEventMutationVariables>(RemoveScheduleEventDocument, baseOptions);
+      }
+export type RemoveScheduleEventMutationHookResult = ReturnType<typeof useRemoveScheduleEventMutation>;
+export type RemoveScheduleEventMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IRemoveScheduleEventMutation>;
+export type RemoveScheduleEventMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IRemoveScheduleEventMutation, SchemaTypes.IRemoveScheduleEventMutationVariables>;
+export const UpdateScheduleEventDocument = gql`
+    mutation UpdateScheduleEvent($eventId: String, $request: ScheduleCreateRequest) {
+  updateScheduleEvent(eventId: $eventId, request: $request)
+}
+    `;
+export type IUpdateScheduleEventMutationFn = ApolloReactCommon.MutationFunction<SchemaTypes.IUpdateScheduleEventMutation, SchemaTypes.IUpdateScheduleEventMutationVariables>;
+export type UpdateScheduleEventComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<SchemaTypes.IUpdateScheduleEventMutation, SchemaTypes.IUpdateScheduleEventMutationVariables>, 'mutation'>;
+
+    export const UpdateScheduleEventComponent = (props: UpdateScheduleEventComponentProps) => (
+      <ApolloReactComponents.Mutation<SchemaTypes.IUpdateScheduleEventMutation, SchemaTypes.IUpdateScheduleEventMutationVariables> mutation={UpdateScheduleEventDocument} {...props} />
+    );
+    
+
+/**
+ * __useUpdateScheduleEventMutation__
+ *
+ * To run a mutation, you first call `useUpdateScheduleEventMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateScheduleEventMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateScheduleEventMutation, { data, loading, error }] = useUpdateScheduleEventMutation({
+ *   variables: {
+ *      eventId: // value for 'eventId'
+ *      request: // value for 'request'
+ *   },
+ * });
+ */
+export function useUpdateScheduleEventMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SchemaTypes.IUpdateScheduleEventMutation, SchemaTypes.IUpdateScheduleEventMutationVariables>) {
+        return ApolloReactHooks.useMutation<SchemaTypes.IUpdateScheduleEventMutation, SchemaTypes.IUpdateScheduleEventMutationVariables>(UpdateScheduleEventDocument, baseOptions);
+      }
+export type UpdateScheduleEventMutationHookResult = ReturnType<typeof useUpdateScheduleEventMutation>;
+export type UpdateScheduleEventMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IUpdateScheduleEventMutation>;
+export type UpdateScheduleEventMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IUpdateScheduleEventMutation, SchemaTypes.IUpdateScheduleEventMutationVariables>;
 export const GetScheduleEventsDocument = gql`
     query GetScheduleEvents($userId: String) {
   getScheduleEvents(userId: $userId) {

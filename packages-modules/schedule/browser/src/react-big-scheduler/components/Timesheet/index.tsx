@@ -1,12 +1,12 @@
 import React, { useEffect } from 'react'
 import TimesheetComponent from './Timesheet'
-import { useAddScheduleMutation, useGetScheduleEventsQuery } from '../../../generated-models'
+import { useAddScheduleEventMutation, useGetScheduleEventsQuery } from '../../../generated-models'
 import { IScheduleCreateRequest } from '@admin-layout/schedule-module-core'
 import { message } from 'antd'
 import moment from 'moment'
 
 const Timesheet = (props) => {
-    const [addMutation] = useAddScheduleMutation()
+    const [addMutation] = useAddScheduleEventMutation()
     const handleAddSchedule = (request: IScheduleCreateRequest) => {
         addMutation({ variables: { request } }).then(() => {
             message.success('A new event has been created!')

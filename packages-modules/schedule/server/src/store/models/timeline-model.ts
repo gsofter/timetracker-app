@@ -22,16 +22,6 @@ const ScheduleSchema = new Schema({
     resourceId: { type: String },
     // tip
     tooltip: { type: String },
-    // isBillable
-    isBillable: { type:Boolean, default: false },
-    // submitted date
-    submittedOn: { type: Date },
-    // reason
-    reason: { type: String },
-    // note
-    note: { type: String },
-    // approved date
-    approvedOn: { type: Date },
 });
 
 ScheduleSchema.virtual('id').get(function () {

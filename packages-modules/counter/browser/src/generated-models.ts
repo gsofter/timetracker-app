@@ -51,10 +51,11 @@ export type Mutation = {
   addCounterState?: Maybe<ClientCounter>;
   /**  add Counter  */
   addMoleculerCounter?: Maybe<Counter>;
-  addSchedule?: Maybe<Scalars['Boolean']>;
+  addScheduleEvent?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
   /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
+  updateScheduleEvent?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -73,7 +74,13 @@ export type MutationAddMoleculerCounterArgs = {
 };
 
 
-export type MutationAddScheduleArgs = {
+export type MutationAddScheduleEventArgs = {
+  request?: Maybe<ScheduleCreateRequest>;
+};
+
+
+export type MutationUpdateScheduleEventArgs = {
+  eventId?: Maybe<Scalars['String']>;
   request?: Maybe<ScheduleCreateRequest>;
 };
 
@@ -98,7 +105,7 @@ export type QueryGetScheduleEventsArgs = {
 export type Schedule = {
    __typename?: 'Schedule';
   id?: Maybe<Scalars['String']>;
-  title: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
   allDay?: Maybe<Scalars['Boolean']>;
   start?: Maybe<Scalars['DateTime']>;
   end?: Maybe<Scalars['DateTime']>;
@@ -106,10 +113,15 @@ export type Schedule = {
   userId?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  submittedOn?: Maybe<Scalars['DateTime']>;
+  reason?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']>;
+  approvedOn?: Maybe<Scalars['DateTime']>;
 };
 
 export type ScheduleCreateRequest = {
-  title: Scalars['String'];
+  title?: Maybe<Scalars['String']>;
   allDay?: Maybe<Scalars['Boolean']>;
   start?: Maybe<Scalars['DateTime']>;
   end?: Maybe<Scalars['DateTime']>;
@@ -117,6 +129,11 @@ export type ScheduleCreateRequest = {
   userId?: Maybe<Scalars['String']>;
   resourceId?: Maybe<Scalars['String']>;
   tooltip?: Maybe<Scalars['String']>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  submittedOn?: Maybe<Scalars['DateTime']>;
+  reason?: Maybe<Scalars['String']>;
+  note?: Maybe<Scalars['String']>;
+  approvedOn?: Maybe<Scalars['DateTime']>;
 };
 
 export type Subscription = {
@@ -374,9 +391,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType, RequireFields<MutationAddCounterArgs, never>>,
   addCounterState?: Resolver<Maybe<ResolversTypes['ClientCounter']>, ParentType, ContextType, RequireFields<MutationAddCounterStateArgs, 'amount'>>,
   addMoleculerCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType, RequireFields<MutationAddMoleculerCounterArgs, never>>,
-  addSchedule?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddScheduleArgs, never>>,
+  addScheduleEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddScheduleEventArgs, never>>,
   dummy?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   syncCachedCounter?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  updateScheduleEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateScheduleEventArgs, never>>,
 };
 
 export type QueryResolvers<ContextType = any, ParentType extends ResolversParentTypes['Query'] = ResolversParentTypes['Query']> = {
@@ -390,7 +408,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
 
 export type ScheduleResolvers<ContextType = any, ParentType extends ResolversParentTypes['Schedule'] = ResolversParentTypes['Schedule']> = {
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  title?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   allDay?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   start?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   end?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
@@ -398,6 +416,11 @@ export type ScheduleResolvers<ContextType = any, ParentType extends ResolversPar
   userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   resourceId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   tooltip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  isBillable?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  submittedOn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  approvedOn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
