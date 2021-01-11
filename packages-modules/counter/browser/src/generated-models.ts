@@ -53,6 +53,7 @@ export type Mutation = {
   addMoleculerCounter?: Maybe<Counter>;
   addScheduleEvent?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
+  removeScheduleEvent?: Maybe<Scalars['Boolean']>;
   /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
   updateScheduleEvent?: Maybe<Scalars['Boolean']>;
@@ -76,6 +77,11 @@ export type MutationAddMoleculerCounterArgs = {
 
 export type MutationAddScheduleEventArgs = {
   request?: Maybe<ScheduleCreateRequest>;
+};
+
+
+export type MutationRemoveScheduleEventArgs = {
+  eventId?: Maybe<Scalars['String']>;
 };
 
 
@@ -393,6 +399,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addMoleculerCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType, RequireFields<MutationAddMoleculerCounterArgs, never>>,
   addScheduleEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddScheduleEventArgs, never>>,
   dummy?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  removeScheduleEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveScheduleEventArgs, never>>,
   syncCachedCounter?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   updateScheduleEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateScheduleEventArgs, never>>,
 };

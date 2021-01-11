@@ -112,3 +112,93 @@ extend type Mutation {
   updateScheduleEvent(eventId: String, request: ScheduleCreateRequest): Boolean
   removeScheduleEvent(eventId: String): Boolean
 }
+
+# scalar DateTime
+
+type Timeline {
+  id: String
+  title: String
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  userId: String
+  resourceId: String
+  tooltip: String
+  isBillable: Boolean
+  submittedOn: DateTime
+  reason: String
+  note: String
+  approvedOn: DateTime
+}
+
+input TimelineCreateRequest {
+  title: String
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  userId: String
+  resourceId: String
+  tooltip: String
+  isBillable: Boolean
+  submittedOn: DateTime
+  reason: String
+  note: String
+  approvedOn: DateTime
+}
+
+extend type Query {
+  getTimelineEvents(userId: String): [Timeline]
+}
+
+extend type Mutation {
+  addTimelineEvent(request: TimelineCreateRequest): Boolean
+  updateTimelineEvent(eventId: String, request: TimelineCreateRequest): Boolean
+  removeTimelineEvent(eventId: String): Boolean
+}
+
+# scalar DateTime
+
+type Timesheet {
+  id: String
+  title: String
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  userId: String
+  resourceId: String
+  tooltip: String
+  isBillable: Boolean
+  submittedOn: DateTime
+  reason: String
+  note: String
+  approvedOn: DateTime
+}
+
+input TimesheetCreateRequest {
+  title: String
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  userId: String
+  resourceId: String
+  tooltip: String
+  isBillable: Boolean
+  submittedOn: DateTime
+  reason: String
+  note: String
+  approvedOn: DateTime
+}
+
+extend type Query {
+  getTimesheetEvents(userId: String): [Timesheet]
+}
+
+extend type Mutation {
+  addTimesheetEvent(request: TimesheetCreateRequest): Boolean
+  updateTimesheetEvent(eventId: String, request: TimesheetCreateRequest): Boolean
+  removeTimesheetEvent(eventId: String): Boolean
+}

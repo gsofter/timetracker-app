@@ -113,7 +113,7 @@ const Scheduler = props => {
     <SchedulerComponent
       handleAddScheduleEvent={handleAddScheduleEvent}
       handleUpdateScheduleEvent={handleUpdateScheduleEvent}
-      events={filterEvents(data.getScheduleEvents)}
+      events={filterEvents(data?.getScheduleEvents)}
       showModal={showModal}
       handleOpenModal={openModal}
       handleCloseModal={closeModal}

@@ -1,0 +1,44 @@
+# scalar DateTime
+
+type Timesheet {
+  id: String
+  title: String
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  userId: String
+  resourceId: String
+  tooltip: String
+  isBillable: Boolean
+  submittedOn: DateTime
+  reason: String
+  note: String
+  approvedOn: DateTime
+}
+
+input TimesheetCreateRequest {
+  title: String
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  userId: String
+  resourceId: String
+  tooltip: String
+  isBillable: Boolean
+  submittedOn: DateTime
+  reason: String
+  note: String
+  approvedOn: DateTime
+}
+
+extend type Query {
+  getTimesheetEvents(userId: String): [Timesheet]
+}
+
+extend type Mutation {
+  addTimesheetEvent(request: TimesheetCreateRequest): Boolean
+  updateTimesheetEvent(eventId: String, request: TimesheetCreateRequest): Boolean
+  removeTimesheetEvent(eventId: String): Boolean
+}

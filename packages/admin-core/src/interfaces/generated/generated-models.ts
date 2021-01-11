@@ -57,6 +57,7 @@ export type IMutation = {
   addMoleculerCounter?: Maybe<ICounter>;
   addScheduleEvent?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
+  removeScheduleEvent?: Maybe<Scalars['Boolean']>;
   /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
   updateScheduleEvent?: Maybe<Scalars['Boolean']>;
@@ -75,6 +76,11 @@ export type IMutationaddMoleculerCounterArgs = {
 
 export type IMutationaddScheduleEventArgs = {
   request?: Maybe<IScheduleCreateRequest>;
+};
+
+
+export type IMutationremoveScheduleEventArgs = {
+  eventId?: Maybe<Scalars['String']>;
 };
 
 
@@ -337,6 +343,7 @@ export type IMutationResolvers<ContextType = MyContext, ParentType extends IReso
   addMoleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddMoleculerCounterArgs, never>>,
   addScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddScheduleEventArgs, never>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  removeScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveScheduleEventArgs, never>>,
   syncCachedCounter?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   updateScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateScheduleEventArgs, never>>,
 };
