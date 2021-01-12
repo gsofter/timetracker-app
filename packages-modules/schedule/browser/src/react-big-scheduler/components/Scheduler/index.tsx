@@ -9,7 +9,6 @@ import {
 import { IScheduleCreateRequest } from '@admin-layout/schedule-module-core';
 import { message, Form } from 'antd';
 import moment from 'moment';
-import events from 'events';
 
 const Scheduler = props => {
   const [addMutation, { loading: loadingAdd }] = useAddScheduleEventMutation();
@@ -113,7 +112,7 @@ const Scheduler = props => {
     <SchedulerComponent
       handleAddScheduleEvent={handleAddScheduleEvent}
       handleUpdateScheduleEvent={handleUpdateScheduleEvent}
-      events={filterEvents(data.getScheduleEvents)}
+      events={filterEvents(data?.getScheduleEvents)}
       showModal={showModal}
       handleOpenModal={openModal}
       handleCloseModal={closeModal}

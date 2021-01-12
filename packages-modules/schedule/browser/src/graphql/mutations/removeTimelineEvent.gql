@@ -1,0 +1,3 @@
+mutation RemoveTimelineEvent($eventId: String) {
+  removeTimelineEvent(eventId: $eventId)
+}

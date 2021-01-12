@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
-import momentZ from 'moment-timezone'
-import { UserOutlined, ScheduleOutlined } from '@ant-design/icons';
+import momentZ from 'moment-timezone';
+import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
 import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -19,12 +19,11 @@ import {
   TimePicker,
   Checkbox,
   Avatar,
+  Popconfirm,
 } from 'antd';
 import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
-import { values } from 'lodash';
-import { time } from 'console';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -32,17 +31,30 @@ const localizerM = momentLocalizer(moment);
 const { RangePicker } = TimePicker;
 const allViews: View[] = ['agenda', 'day', 'week', 'month'];
 const resourceMap = [
-  { resourceId: '1', resourceTitle: 'Project1' },
-  { resourceId: '2', resourceTitle: 'Project2' },
-  { resourceId: '3', resourceTitle: 'Project3' },
-  { resourceId: '4', resourceTitle: 'Project4' },
-  { resourceId: '5', resourceTitle: 'Project5' },
+  { projectId: '1', projectTitle: 'Project1' },
+  { projectId: '2', projectTitle: 'Project2' },
+  { projectId: '3', projectTitle: 'Project3' },
+  { projectId: '4', projectTitle: 'Project4' },
+  { projectId: '5', projectTitle: 'Project5' },
 ];
 
-interface ISelectableCalendarProps {
-  localizer: DateLocalizer;
-  handleAddSchedule: any;
+interface ITimesheetProps {
+  form: any;
   events: any;
+  showModal: boolean;
+  selectedProject: any;
+  selectedUser: any;
+  selectedEvent: any;
+  loading: boolean;
+  handleAddTimesheetEvent: Function;
+  handleUpdateTimesheetEvent: Function;
+  handleRemoveTimesheetEvent: () => void;
+  handleOpenModal: () => void;
+  handleCloseModal: () => void;
+  handleSelectSlot: (any) => void;
+  handleSelectEvent: (any) => void;
+  handleChangeProject: (any) => void;
+  handleChangeUser: (any) => void;
 }
 
 class CalendarEvent {
@@ -71,30 +83,26 @@ class CalendarEvent {
   }
 }
 
-function SelectableCalendar({ handleAddSchedule, events: propEvents }: ISelectableCalendarProps) {
-  const [isShowing, setIsShowing] = useState(false);
-  const [selectedProject, setSelectedProject] = useState('')
-  const [selectedUser, setSelectedUser] = useState('')
-  const [events, setEvents] = React.useState(propEvents);
+function SelectableCalendar({
+  events,
+  handleAddTimesheetEvent,
+  handleUpdateTimesheetEvent,
+  handleRemoveTimesheetEvent,
+  form,
+  showModal,
+  loading,
+  handleOpenModal,
+  handleCloseModal,
+  handleSelectSlot,
+  handleSelectEvent,
+  selectedProject,
+  selectedEvent,
+  handleChangeProject,
+  selectedUser,
+  handleChangeUser,
+}: ITimesheetProps & { localizer: DateLocalizer }) {
   const [isViewGroup, setIsViewGroup] = useState(false);
-  const [form] = Form.useForm();
-  const [localizer, setLocalizer] = useState(momentLocalizer(moment))
-  const handleSelect = ({ start, end, resourceId }) => {
-    const title = window.prompt('New Event name');
-    if (title) {
-      let newEvent = {} as CalendarEvent;
-      newEvent.start = moment(start).toDate();
-      newEvent.end = moment(end).toDate();
-      newEvent.title = title;
-      newEvent.resourceId = resourceId ?? selectedProject
-      setEvents([...(events as any), newEvent]);
-      handleAddSchedule(newEvent);
-    }
-  };
-
-  const openModal = () => {
-    setIsShowing(!isShowing);
-  };
+  const [localizer, setLocalizer] = useState(momentLocalizer(moment));
 
   const resetModal = (e: any) => {
     e.preventDefault();
@@ -102,14 +110,13 @@ function SelectableCalendar({ handleAddSchedule, events: propEvents }: ISelectab
   };
 
   const onEventDrop = ({ event, start, end, allDay }) => {
-    const idx = events.indexOf(event);
-    const updatedEvent = { ...event, start, end };
+    const updateRequest = { start: moment(start), end: moment(end) };
+    handleUpdateTimesheetEvent(event.id, updateRequest);
+  };
 
-    const nextEvents = [...events];
-    nextEvents.splice(idx, 1, updatedEvent);
-    setEvents(nextEvents);
-    handleAddSchedule(updatedEvent);
-    alert(`${event.title} was dropped onto ${event.start}`);
+  const onEventResize = ({ event, start, end }) => {
+    const updateRequest = { start: moment(start), end: moment(end) };
+    handleUpdateTimesheetEvent(event.id, updateRequest);
   };
 
   const EventComponent = ({ start, end, title }) => {
@@ -133,94 +140,106 @@ function SelectableCalendar({ handleAddSchedule, events: propEvents }: ISelectab
     );
   };
 
-  const handleSelectEvent = event => {
-    alert(event.title);
-  };
-  const handleClose = () => {
-    setIsShowing(false);
-  };
-
   const handleSelectTimezone = timezone => {
     // tslint:disable-next-line
     // console.log('New Timezone Selected:', timezone);
-    setLocalizer(momentLocalizer(moment.tz.setDefault(timezone)))
+    setLocalizer(momentLocalizer(moment.tz.setDefault(timezone)));
   };
 
-  const onChangeProject = (value) => {
-    setSelectedProject(value)
-  }
-
-  const onChangeUser = (value) => {
-    setSelectedUser(value);
-  }
-
-  const onChangeViewGroup = (event) => {
+  const onChangeViewGroup = event => {
     setIsViewGroup(event.target.checked);
-  }
+  };
 
-  useEffect(() => {
-    setEvents(propEvents.filter(ev => {
-      return (ev.resourceId === selectedProject || selectedProject === '') && (ev.userId === selectedUser || selectedUser === '')
-    }))
-  }, [selectedProject, selectedUser])
-
-  const onFinish = (values) => {
+  const onFinish = values => {
     const request = {
       title: values.title,
-      start: moment(values.date.format("YYYY-MM-DD") + ' ' + values.timeRange[0].format('hh:mm:ss')).toDate(),
-      end: moment(values.date.format("YYYY-MM-DD") + ' ' + values.timeRange[1].format('hh:mm:ss')).toDate(),
+      start: moment(
+        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[0].format('hh:mm:ss'),
+      ).toDate(),
+      end: moment(
+        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[1].format('hh:mm:ss'),
+      ).toDate(),
       userId: values.user,
-      resourceId: values.project,
-      desc: values.desc,
-    }
-    handleAddSchedule(request)
-    setIsShowing(!isShowing);
-    form.resetFields();
-  }
+      projectId: values.project,
+      reason: values.reason,
+      note: values.note,
+    };
+    if (selectedEvent === -1) handleAddTimesheetEvent(request);
+    else handleUpdateTimesheetEvent(selectedEvent, request);
+  };
 
   const renderModalBody = (): JSX.Element => {
     return (
       <>
-        <Form labelCol={{ span: 24 }} wrapperCol={{ span: 24 }} layout="vertical" onFinish={onFinish} form={form}>
+        <Form
+          labelCol={{ span: 24 }}
+          wrapperCol={{ span: 24 }}
+          layout="vertical"
+          onFinish={onFinish}
+          form={form}
+        >
           <div style={{ margin: '15px 0px' }}>
             <Avatar style={{ backgroundColor: '#3174ad' }} icon={<UserOutlined />} />
             <span style={{ marginLeft: '10px' }}>Cdmbase</span>
           </div>
-          <Form.Item label="Title" name="title" rules={[{ required: true, message: 'Required field' }]}>
+          <Form.Item
+            label="Title"
+            name="title"
+            rules={[{ required: true, message: 'Required field' }]}
+          >
             <Input />
           </Form.Item>
-          <Form.Item label="User" name="user" rules={[{ required: true, message: 'Required field' }]}>
+          <Form.Item
+            label="User"
+            name="user"
+            rules={[{ required: true, message: 'Required field' }]}
+          >
             <Select>
               <Select.Option value="1">User1</Select.Option>
               <Select.Option value="2">User2</Select.Option>
             </Select>
           </Form.Item>
-          <Form.Item label="Projects" name="project" rules={[{ required: true, message: 'Required field' }]}>
+          <Form.Item
+            label="Projects"
+            name="project"
+            rules={[{ required: true, message: 'Required field' }]}
+          >
             <Select>
-              {
-                resourceMap.map(res => {
-                  return <Select.Option value={res.resourceId} key={res.resourceId}>{res.resourceTitle}</Select.Option>
-                })
-              }
+              {resourceMap.map(res => {
+                return (
+                  <Select.Option value={res.projectId} key={res.projectId}>
+                    {res.projectTitle}
+                  </Select.Option>
+                );
+              })}
             </Select>
           </Form.Item>
           <Row gutter={10}>
             <Col>
-              <Form.Item label="Pick a date" name="date" rules={[{ required: true, message: 'Required field' }]}>
+              <Form.Item
+                label="Pick a date"
+                name="date"
+                rules={[{ required: true, message: 'Required field' }]}
+              >
                 <DatePicker />
               </Form.Item>
             </Col>
             <Col>
-              <Form.Item label="Select time range" name="timeRange" rules={[{ required: true, message: 'Required field' }]}>
+              <Form.Item
+                label="Select time range"
+                name="timeRange"
+                rules={[{ required: true, message: 'Required field' }]}
+              >
                 <RangePicker />
               </Form.Item>
             </Col>
           </Row>
-          <Form.Item label="REASON *" name="desc" rules={[{ required: true, message: 'Required field' }]}>
-            <TextArea
-              rows={3}
-              placeholder="Reason for time"
-            />
+          <Form.Item
+            label="REASON *"
+            name="reason"
+            rules={[{ required: true, message: 'Required field' }]}
+          >
+            <TextArea rows={3} placeholder="Reason for time" />
           </Form.Item>
           <Form.Item label="Note" name="note">
             <TextArea placeholder="Notes for time" />
@@ -234,6 +253,27 @@ function SelectableCalendar({ handleAddSchedule, events: propEvents }: ISelectab
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
+            &nbsp;
+            {selectedEvent !== -1 ? (
+              <Popconfirm
+                title="Are you sure to remove event"
+                okText="OK"
+                cancelText="Cancel"
+                onConfirm={handleRemoveTimesheetEvent}
+              >
+                <Button
+                  type="primary"
+                  htmlType="button"
+                  loading={loading}
+                  icon={<DeleteOutlined />}
+                  danger
+                >
+                  Remove
+                </Button>
+              </Popconfirm>
+            ) : (
+              ''
+            )}
           </Form.Item>
         </Form>
       </>
@@ -269,7 +309,7 @@ function SelectableCalendar({ handleAddSchedule, events: propEvents }: ISelectab
             className="sm-screen-size"
           >
             <Form.Item label="Members">
-              <Select onChange={onChangeUser} value={selectedUser}>
+              <Select onChange={handleChangeUser} value={selectedUser}>
                 <Select.Option value="">All</Select.Option>
                 <Select.Option value="1">User1</Select.Option>
                 <Select.Option value="2">User2</Select.Option>
@@ -285,7 +325,7 @@ function SelectableCalendar({ handleAddSchedule, events: propEvents }: ISelectab
             className="sm-screen-size"
           >
             <Form.Item label="Projects">
-              <Select onChange={onChangeProject} value={selectedProject}>
+              <Select onChange={handleChangeProject} value={selectedProject}>
                 <Select.Option value="">All</Select.Option>
                 <Select.Option value="1">Project1</Select.Option>
                 <Select.Option value="2">Project2</Select.Option>
@@ -311,12 +351,12 @@ function SelectableCalendar({ handleAddSchedule, events: propEvents }: ISelectab
         <Col md={4} xs={16}>
           <div>
             <span style={{ fontWeight: 'bold' }}>
-              <a onClick={openModal}>Add Time</a>
+              <a onClick={handleOpenModal}>Add Time</a>
             </span>
             <Modal
-              modalTitle="Add Time"
-              showModal={isShowing}
-              handleClose={handleClose}
+              modalTitle={selectedEvent === -1 ? 'Add Timesheet' : 'Edit Timesheet'}
+              showModal={showModal}
+              handleClose={handleCloseModal}
               modalBody={renderModalBody()}
             />
           </div>
@@ -330,13 +370,14 @@ function SelectableCalendar({ handleAddSchedule, events: propEvents }: ISelectab
         views={allViews}
         defaultDate={new Date()}
         onSelectEvent={handleSelectEvent}
-        onSelectSlot={handleSelect}
+        onSelectSlot={handleSelectSlot}
         startAccessor="start"
         endAccessor="end"
         titleAccessor="title"
         toolbar={true}
         resizable={true}
         onEventDrop={onEventDrop}
+        onEventResize={onEventResize}
         components={{
           event: EventComponent,
           agenda: {
@@ -344,8 +385,8 @@ function SelectableCalendar({ handleAddSchedule, events: propEvents }: ISelectab
           },
         }}
         resources={isViewGroup ? resourceMap : undefined}
-        resourceIdAccessor={isViewGroup ? "resourceId" : undefined}
-        resourceTitleAccessor={isViewGroup ? "resourceTitle" : undefined}
+        resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
+        resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
       />
     </PageContainer>
   );
@@ -424,7 +465,7 @@ const stylesheet: any = {
   }),
 };
 
-export default props => {
+export default (props: ITimesheetProps) => {
   const { css } = useFela();
   return (
     <div className={css(stylesheet.styles)}>
