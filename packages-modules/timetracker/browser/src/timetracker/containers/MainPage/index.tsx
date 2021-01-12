@@ -30,6 +30,8 @@ const TimeTracker = props => {
   const [hour, setHour] = useState('00');
   const [isActive, setIsActive] = useState(false);
   const [counter, setCounter] = useState(0);
+  const [issue, setIssue] = useState('');
+  const [currentDate, setCurrentDate] = useState(null);
   const { isMobile, currentTeam, pagination } = props;
 
   useEffect(() => {
@@ -178,11 +180,15 @@ const TimeTracker = props => {
                 handleJiraSync={jiraSynchronizationHandleClick}
                 setIsActive={setIsActive}
                 resetTimer={resetTimer}
+                setIssue={setIssue}
+                issue={issue}
                 hour={hour}
                 minute={minute}
                 second={second}
                 setTimeEntriesList={setTimeEntriesList}
                 timeEntriesList={timeEntriesList}
+                currentDate={currentDate}
+                setCurrentDate={setCurrentDate}
               />
             </div>
             <CustomScrollbar>
@@ -215,6 +221,16 @@ const TimeTracker = props => {
                         timeFormat={timeFormat}
                         durationTimeFormat={durationTimeFormat}
                         isMobile={isMobile}
+                        setCurrentTimer={setCurrentTimer}
+                        timeEntriesList={timeEntriesList}
+                        setIsActive={setIsActive}
+                        resetTimer={resetTimer}
+                        hour={hour}
+                        setIssue={setIssue}
+                        minute={minute}
+                        second={second}
+                        currentDate={currentDate}
+                        setCurrentDate={setCurrentDate}
                       />
                     ))}
                   </div>

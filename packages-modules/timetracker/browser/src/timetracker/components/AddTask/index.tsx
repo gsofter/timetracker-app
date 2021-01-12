@@ -23,14 +23,17 @@ export interface IAddTask {
   second: any;
   setTimeEntriesList: any;
   timeEntriesList: any[];
+  issue: string;
+  setIssue: any;
+  currentDate: any;
+  setCurrentDate: any;
+
 }
 
 export const AddTask: React.FC<IAddTask> = (props: any) => {
   const { css } = useFela(props);
-  const [issue, setIssue] = useState('');
   const [projectId, setProjectId] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [currentDate, setCurrentDate] = useState(null);
   const {
     currentTimer,
     vocabulary,
@@ -47,13 +50,17 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     minute,
     second,
     timeEntriesList,
+    issue,
+    setIssue,
+    currentDate,
+    setCurrentDate
   } = props;
 
   const { v_add_your_task_name, v_jira_synchronization } = vocabulary;
 
   const startTimer = () => {
     setCurrentDate(new Date());
-    props.setIsActive(true);
+    setIsActive(true);
     const { v_a_task_name_before, v_a_starting, v_a_time_tracking } = vocabulary;
     if (issue.trim()) {
       setIsUpdating(true);
@@ -93,7 +100,8 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
       let newTimerData: any[] = [...timeEntriesList];
       newTimerData.unshift(newValues);
       props.setTimeEntriesList(newTimerData);
-      props.resetTimer();
+      resetTimer();
+      setIssue('');
     } else {
       setIssue('');
       showNotificationAction({
@@ -253,7 +261,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
             ) : (
               <PlayCircleFilled
                 className={classNames('add-task__play-icon')}
-                onClick={startTimer}
+                onClick={issue ? startTimer : null}
               />
             )}
           </div>
