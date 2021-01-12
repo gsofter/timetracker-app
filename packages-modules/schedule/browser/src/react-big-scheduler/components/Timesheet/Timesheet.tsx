@@ -29,7 +29,7 @@ const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizerM = momentLocalizer(moment);
 const { RangePicker } = TimePicker;
-const allViews: View[] = ['agenda', 'day', 'week', 'month'];
+const allViews: View[] = ['day', 'week', 'month'];
 const resourceMap = [
   { projectId: '1', projectTitle: 'Project1' },
   { projectId: '2', projectTitle: 'Project2' },
