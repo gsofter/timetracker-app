@@ -36,6 +36,8 @@ const keys = {
   groupLabelKey: 'resourceTitle',
 };
 
+const SM_SCREEN_SIZE = 768;
+
 function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCalendarProps) {
   const [isShowing, setIsShowing] = useState(false);
   const [events, setEvents] = React.useState(propEvents);
@@ -84,6 +86,53 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
     form.resetFields();
   };
 
+  const [visibleTimeStart, setVisibleTimeStart] = useState(
+    moment()
+      .startOf('week')
+      .add(1, 'day')
+      .valueOf(),
+  );
+  const [visibleTimeEnd, setVisibleTimeEnd] = useState(
+    moment()
+      .startOf('week')
+      .add(1, 'week')
+      .add(1, 'day')
+      .valueOf(),
+  );
+  const onClickPrev = () => {
+    const zoom = visibleTimeEnd - visibleTimeStart;
+    setVisibleTimeStart(visibleTimeStart - zoom);
+    setVisibleTimeEnd(visibleTimeEnd - zoom);
+  };
+
+  const onClickNext = () => {
+    const zoom = visibleTimeEnd - visibleTimeStart;
+    setVisibleTimeStart(visibleTimeStart + zoom);
+    setVisibleTimeEnd(visibleTimeEnd + zoom);
+  };
+
+  const { css } = useFela();
+
+  const onChangeUser = value => {
+    setSelectedUser(value);
+  };
+
+  const onResizeScreen = () => {
+    console.log('onResizeScreen.innerWidth => ', window.innerWidth);
+    if (window.innerWidth < SM_SCREEN_SIZE)
+      setVisibleTimeEnd(
+        moment(visibleTimeStart)
+          .add('3', 'day')
+          .valueOf(),
+      );
+    else
+      setVisibleTimeEnd(
+        moment(visibleTimeStart)
+          .add('7', 'day')
+          .valueOf(),
+      );
+  };
+
   useEffect(() => {
     setEvents(
       propEvents.filter(ev => {
@@ -91,6 +140,11 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
       }),
     );
   }, [selectedUser]);
+
+  useEffect(() => {
+    window.addEventListener('resize', onResizeScreen);
+    return () => window.removeEventListener('resize', onResizeScreen);
+  });
 
   const renderModalBody = (): JSX.Element => {
     return (
@@ -160,37 +214,6 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
         </Form.Item>
       </Form>
     );
-  };
-
-  const [visibleTimeStart, setVisibleTimeStart] = useState(
-    moment()
-      .startOf('week')
-      .add(1, 'day')
-      .valueOf(),
-  );
-  const [visibleTimeEnd, setVisibleTimeEnd] = useState(
-    moment()
-      .startOf('week')
-      .add(1, 'week')
-      .add(1, 'day')
-      .valueOf(),
-  );
-  const onClickPrev = () => {
-    const zoom = visibleTimeEnd - visibleTimeStart;
-    setVisibleTimeStart(visibleTimeStart - zoom);
-    setVisibleTimeEnd(visibleTimeEnd - zoom);
-  };
-
-  const onClickNext = () => {
-    const zoom = visibleTimeEnd - visibleTimeStart;
-    setVisibleTimeStart(visibleTimeStart + zoom);
-    setVisibleTimeEnd(visibleTimeEnd + zoom);
-  };
-
-  const { css } = useFela();
-
-  const onChangeUser = value => {
-    setSelectedUser(value);
   };
 
   return (
@@ -301,7 +324,11 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
               return (
                 <div
                   {...getIntervalProps()}
-                  style={{ ...getIntervalProps().style, borderRight: '1px solid #bbb' }}
+                  style={{
+                    ...getIntervalProps().style,
+                    borderRight: '1px solid #bbb',
+                    height: '100%',
+                  }}
                 >
                   {intervalContext.intervalText}
                 </div>
@@ -385,6 +412,9 @@ const stylesheet: any = {
     },
     '& .rct-calendar-header > div': {
       height: '65px !important',
+      '@media (max-width: 768px)': {
+        height: '100% !important',
+      },
     },
     '& .react-calendar-timeline': {
       border: '1px solid #bbb',
@@ -402,9 +432,16 @@ const stylesheet: any = {
     justifyContent: 'space-around',
     alignItems: 'center',
     textAlgin: 'center',
+    '@media (max-width: 768px)': {
+      flexDirection: 'column',
+    },
     '& .day': {
       fontSize: '3em',
       fontWeight: '600',
+      '@media (max-width: 768px)': {
+        fontSize: '14px',
+        fontWeight: '500',
+      },
     },
     '& .extra': {
       display: 'flex',
@@ -412,9 +449,16 @@ const stylesheet: any = {
       '& .week': {
         fontSize: '1.1em',
         fontWeight: '500',
+        '@media (max-width: 768px)': {
+          fontSize: '12px',
+          fontWeight: '400',
+        },
       },
       '& .month': {
         color: 'rgba(0,0,0, .5)',
+        '@media (max-width: 768px)': {
+          display: 'none',
+        },
       },
     },
   }),
