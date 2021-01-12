@@ -1,0 +1,3 @@
+mutation AddTimesheetEvent($request: TimesheetCreateRequest) {
+  addTimesheetEvent(request: $request)
+}

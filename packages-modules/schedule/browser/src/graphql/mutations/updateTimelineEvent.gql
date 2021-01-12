@@ -1,0 +1,3 @@
+mutation UpdateTimelineEvent($eventId: String, $request: TimelineCreateRequest) {
+  updateTimelineEvent(eventId: $eventId, request: $request)
+}

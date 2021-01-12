@@ -1,0 +1,13 @@
+query GetTimelineEvents($userId: String) {
+  getTimelineEvents(userId: $userId) {
+    id
+    title
+    allDay
+    start
+    end
+    desc
+    userId
+    resourceId
+    tooltip
+  }
+}

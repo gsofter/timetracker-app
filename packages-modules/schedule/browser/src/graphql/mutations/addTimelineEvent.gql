@@ -1,0 +1,3 @@
+mutation AddTimelineEvent($request: TimelineCreateRequest) {
+  addTimelineEvent(request: $request)
+}

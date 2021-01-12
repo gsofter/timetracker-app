@@ -169,6 +169,7 @@ type Timesheet {
   desc: String
   userId: String
   resourceId: String
+  projectId: String
   tooltip: String
   isBillable: Boolean
   submittedOn: DateTime
@@ -185,6 +186,7 @@ input TimesheetCreateRequest {
   desc: String
   userId: String
   resourceId: String
+  projectId: String
   tooltip: String
   isBillable: Boolean
   submittedOn: DateTime

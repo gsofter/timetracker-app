@@ -17,8 +17,10 @@ const TimesheetSchema = new Schema({
   desc: { type: String },
   // userId
   userId: { type: String },
-  // resouceId
+  // resourceId
   resourceId: { type: String },
+  // projectId
+  projectId: { type: String },
   // tip
   tooltip: { type: String },
   // isBillable

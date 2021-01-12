@@ -1,0 +1,3 @@
+mutation RemoveTimesheetEvent($eventId: String) {
+  removeTimesheetEvent(eventId: $eventId)
+}

@@ -1,0 +1,14 @@
+query GetTimesheetEvents($userId: String) {
+  getTimesheetEvents(userId: $userId) {
+    id
+    title
+    allDay
+    start
+    end
+    userId
+    projectId
+    reason
+    note
+    tooltip
+  }
+}
