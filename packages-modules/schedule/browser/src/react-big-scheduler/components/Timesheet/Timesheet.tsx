@@ -3,7 +3,7 @@ import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
 import momentZ from 'moment-timezone';
-import { UserOutlined } from '@ant-design/icons';
+import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
 import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
@@ -19,6 +19,7 @@ import {
   TimePicker,
   Checkbox,
   Avatar,
+  Popconfirm,
 } from 'antd';
 import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
@@ -44,9 +45,10 @@ interface ITimesheetProps {
   selectedProject: any;
   selectedUser: any;
   selectedEvent: any;
+  loading: boolean;
   handleAddTimesheetEvent: Function;
   handleUpdateTimesheetEvent: Function;
-  handleRemoveTimesheetEvent: Function;
+  handleRemoveTimesheetEvent: () => void;
   handleOpenModal: () => void;
   handleCloseModal: () => void;
   handleSelectSlot: (any) => void;
@@ -88,6 +90,7 @@ function SelectableCalendar({
   handleRemoveTimesheetEvent,
   form,
   showModal,
+  loading,
   handleOpenModal,
   handleCloseModal,
   handleSelectSlot,
@@ -250,6 +253,27 @@ function SelectableCalendar({
             <Button type="primary" htmlType="submit">
               Submit
             </Button>
+            &nbsp;
+            {selectedEvent !== -1 ? (
+              <Popconfirm
+                title="Are you sure to remove event"
+                okText="OK"
+                cancelText="Cancel"
+                onConfirm={handleRemoveTimesheetEvent}
+              >
+                <Button
+                  type="primary"
+                  htmlType="button"
+                  loading={loading}
+                  icon={<DeleteOutlined />}
+                  danger
+                >
+                  Remove
+                </Button>
+              </Popconfirm>
+            ) : (
+              ''
+            )}
           </Form.Item>
         </Form>
       </>

@@ -123,6 +123,7 @@ const Timesheet = props => {
     <TimesheetComponent
       events={filterEvents(data.getTimesheetEvents)}
       form={form}
+      loading={loadingAdd || loadingUpdate || loadingRemove}
       showModal={showModal}
       selectedUser={selectedUser}
       selectedProject={selectedProject}
