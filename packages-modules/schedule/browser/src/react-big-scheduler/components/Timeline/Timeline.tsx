@@ -93,11 +93,16 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
       .valueOf(),
   );
   const [visibleTimeEnd, setVisibleTimeEnd] = useState(
-    moment()
-      .startOf('week')
-      .add(1, 'week')
-      .add(1, 'day')
-      .valueOf(),
+    window.screen.width <= SM_SCREEN_SIZE
+      ? moment()
+          .startOf('week')
+          .add(4, 'day')
+          .valueOf()
+      : moment()
+          .startOf('week')
+          .add(1, 'week')
+          .add(1, 'day')
+          .valueOf(),
   );
   const onClickPrev = () => {
     const zoom = visibleTimeEnd - visibleTimeStart;
