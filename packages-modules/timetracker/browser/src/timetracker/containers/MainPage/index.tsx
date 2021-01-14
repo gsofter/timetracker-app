@@ -36,6 +36,9 @@ const TimeTracker = props => {
   const [hour, setHour] = useState('00');
   const [isActive, setIsActive] = useState(false);
   const [counter, setCounter] = useState(0);
+  const [issue, setIssue] = useState('');
+  const [currentDate, setCurrentDate] = useState(null);
+  const { currentTeam } = props;
 
   useEffect(() => {
     let intervalId: any;
@@ -174,6 +177,16 @@ const TimeTracker = props => {
     //     });
   };
 
+  const updateTime = (dayId, startTime, endTime) => {
+    let timeEntriesListState = [...timeEntriesList]
+    const entryIndex = [...timeEntriesListState].findIndex(x => x.id === dayId)
+    if(entryIndex > -1) {
+      timeEntriesListState[entryIndex].start_datetime = startTime;
+      timeEntriesListState[entryIndex].end_datetime = endTime;
+      setTimeEntriesList(timeEntriesListState)
+    }
+  }
+
   return (
     <GlobalState.Provider value={'dark'}>
       <div className={css(styleSheet.mainPage)}>
@@ -183,26 +196,25 @@ const TimeTracker = props => {
               'main-page--mobile': isMobile,
             })}
           >
-            <PageHeader title={vocabulary.v_timer} disabledTitle={isMobile}>
-              {/* <TimerSearchComponent /> */}
-              {/* This component takes too much time*/}
-              <p>Search component</p>
-              {/* <TimerSearchComponent /> */}
-            </PageHeader>
-            <AddTask
-              vocabulary={vocabulary}
-              showNotificationAction={showNotificationAction}
-              currentTimer={currentTimer}
-              setCurrentTimer={setCurrentTimer}
-              handleJiraSync={jiraSynchronizationHandleClick}
-              setIsActive={setIsActive}
-              resetTimer={resetTimer}
-              hour={hour}
-              minute={minute}
-              second={second}
-              setTimeEntriesList={setTimeEntriesList}
-              timeEntriesList={timeEntriesList}
-            />
+            <div className="task-container">
+              <AddTask
+                vocabulary={vocabulary}
+                currentTimer={currentTimer}
+                setCurrentTimer={setCurrentTimer}
+                handleJiraSync={jiraSynchronizationHandleClick}
+                setIsActive={setIsActive}
+                resetTimer={resetTimer}
+                setIssue={setIssue}
+                issue={issue}
+                hour={hour}
+                minute={minute}
+                second={second}
+                setTimeEntriesList={setTimeEntriesList}
+                timeEntriesList={timeEntriesList}
+                currentDate={currentDate}
+                setCurrentDate={setCurrentDate}
+              />
+            </div>
             <CustomScrollbar>
               <div className="main-page__list">
                 {timeEntriesList &&
@@ -233,6 +245,18 @@ const TimeTracker = props => {
                         timeFormat={timeFormat}
                         durationTimeFormat={durationTimeFormat}
                         isMobile={isMobile}
+                        setCurrentTimer={setCurrentTimer}
+                        timeEntriesList={timeEntriesList}
+                        setTimeEntriesList={setTimeEntriesList}
+                        setIsActive={setIsActive}
+                        resetTimer={resetTimer}
+                        hour={hour}
+                        setIssue={setIssue}
+                        minute={minute}
+                        second={second}
+                        currentDate={currentDate}
+                        setCurrentDate={setCurrentDate}
+                        updateTime={updateTime}
                       />
                     ))}
                   </div>
