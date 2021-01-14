@@ -5,6 +5,48 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
     const { primaryColor } = theme;
     return {
       position: 'relative',
+      '& .site-calendar-card': {
+        width: '300px',
+        border: '1px solid #f0f0f0',
+        borderRadius: '2px',
+        position: 'absolute',
+        top: '100%',
+        display: 'block',
+        right: '0',
+        zIndex: 1,
+        animation: 'slowVisibility 0.3s',
+        backgroundColor: 'white',
+        padding: '20px',
+
+        '& .ant-picker': {
+           width: '100%',
+           marginTop: '10px'
+        },
+        '& .dataPicker--button': {
+          display: 'flex',
+        },
+        '& Button': {
+          marginTop: '10px',
+          marginRight: '10px',
+          backgroundColor: primaryColor ? primaryColor : '#231890ff',
+          borderColor: primaryColor ? primaryColor : '#231890ff',
+        }
+      },
+      '& .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date': {
+        height: '50px',
+      },
+      '& .edit-task-popup': {
+        display: 'block',
+        position: 'absolute',
+        top: '130%',
+        right: '0',
+        backgroundColor: 'white',
+        borderRadius: '0.4rem',
+        color: 'black',
+        zIndex: '1',
+        animation: 'slowVisibility 0.3s',
+        padding: '20px',
+      },
       '& .task-item': {
         position: 'relative',
         minWidth: '100%',

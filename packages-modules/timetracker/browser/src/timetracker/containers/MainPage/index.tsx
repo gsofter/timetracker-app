@@ -160,6 +160,16 @@ const TimeTracker = props => {
     //     });
   };
 
+  const updateTime = (dayId, startTime, endTime) => {
+    let timeEntriesListState = [...timeEntriesList]
+    const entryIndex = [...timeEntriesListState].findIndex(x => x.id === dayId)
+    if(entryIndex > -1) {
+      timeEntriesListState[entryIndex].start_datetime = startTime;
+      timeEntriesListState[entryIndex].end_datetime = endTime;
+      setTimeEntriesList(timeEntriesListState)
+    }
+  }
+
   return (
     <div className={css(styleSheet.mainpageStyle as any)}>
       <PageContainer>
@@ -223,6 +233,7 @@ const TimeTracker = props => {
                         isMobile={isMobile}
                         setCurrentTimer={setCurrentTimer}
                         timeEntriesList={timeEntriesList}
+                        setTimeEntriesList={setTimeEntriesList}
                         setIsActive={setIsActive}
                         resetTimer={resetTimer}
                         hour={hour}
@@ -231,6 +242,7 @@ const TimeTracker = props => {
                         second={second}
                         currentDate={currentDate}
                         setCurrentDate={setCurrentDate}
+                        updateTime={updateTime}
                       />
                     ))}
                   </div>

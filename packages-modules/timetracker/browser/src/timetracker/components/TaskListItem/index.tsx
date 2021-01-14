@@ -10,6 +10,7 @@ import { StartEditTaskModal } from '../../components/StartEditTaskModal';
 import { CalendarPopup } from '../../components/CalendarPopup';
 import { PlayCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { styleSheet } from './styles';
+import { Calendar, TimePicker, Button } from 'antd';
 
 // Services
 import { getTimeDurationByGivenTimestamp } from '../../services/timeService';
@@ -19,6 +20,8 @@ import { startTimerSocket } from '../../configSocket';
 
 import { CustomSwipe } from '../../components/CustomSwipe';
 import DemoData from '../../demoData';
+import { DatePicker, Space } from 'antd';
+const { RangePicker } = TimePicker;
 
 export interface ITaskList {
   issue?: string;
@@ -45,6 +48,8 @@ export interface ITaskList {
   setIssue: any;
   currentDate: any;
   setCurrentDate: any;
+  setTimeEntriesList: any;
+  updateTime: (id: any, start: any, end: any) => void;
 }
 
 export const TaskListItem: React.FC<ITaskList> = (props: any) => {
@@ -59,6 +64,10 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   const [popupEditTask, setPopupEditTask] = useState<any>([]);
   const [cursorPosition, SetCursorPosition] = useState([]);
   const [changeTask, setChangeTask] = useState(DemoData.timer_v2);
+  const [timePicker, setTimePicker] = useState(null);
+  const [datePicker, setDatePicker] = useState(null);
+  const [updateTimer, setUpdateTimer] = useState(null);
+  const [isEdit, setIsEdit] = useState(false)
 
   const {
     task,
@@ -76,6 +85,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     setIssue,
     currentDate,
     setCurrentDate,
+    setTimeEntriesList,
+    updateTime,
   } = props;
 
   interface IUpdateTask {
@@ -85,11 +96,12 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     end_dateTime?: any;
     durationTimeFormat: any;
     timeFormat: any;
-    setIssue: any
+    setIssue: any;
   }
 
   const { v_edit_task, v_delete_task } = vocabulary;
-  const { issue, project, syncJiraStatus, start_datetime, end_datetime, id } = task;
+  const [taskState, setTaskState] = useState(task);
+  const { issue, project, syncJiraStatus, start_datetime, end_datetime, id } = taskState;
   const formatPeriodTime = time => {
     const formattedTime = moment(time).format(`${timeFormat === '12' ? 'h:mm a' : 'HH:mm'}`);
     return formattedTime;
@@ -104,7 +116,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   };
 
   const deleteTask = async event => {
-    const {} = props;
+    const { getTimeEntriesListAction, setSwipedTaskAction, isMobile } = props;
     const { v_a_task_delete } = vocabulary;
     let check = window.confirm(v_a_task_delete);
     if (check) {
@@ -113,7 +125,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
         await sleep(1000);
       }
       setIsUpdatingTask(true);
-      await deleteTask(task.id);
+      const newList = timeEntriesList.filter(item => item.id !== id);
+      setTimeEntriesList(newList);
       getTimeEntriesListAction();
     }
   };
@@ -148,19 +161,43 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   const closeCalendar = event => {
     setIsOpenCalendar(false);
     // if (!popupEditTask.current.contains(event.target)) {
-    //   document.removeEventListener('mousedown', closeCalendar);
-    // }
+    //     document.removeEventListener('mousedown', closeCalendar);
+    //   }
   };
-  const openCalendar = event => {
-    setIsOpenCalendar(true);
-    document.addEventListener('mousedown', closeCalendar);
+  const openCalendar = (startTime, endTime) => {
+    setIsEdit(true)
+    setIsOpenCalendar(!isOpenCalendar);
+    const newList = timeEntriesList.filter(item => item.id === id);
+    setUpdateTimer([timeEntriesList, ...newList]);
+    //  document.addEventListener('mousedown', closeCalendar);
   };
 
-  // const setIsOpenProjectsListPopup = key => {
-  //     setState({
-  //         isOpenProjectsListPopup: key,
-  //     });
-  // };
+  const updateTimeTracker = () => {
+    if (!timePicker && !timePicker.length) {
+      return;
+    }
+    const start = timePicker[0];
+    const end = timePicker[1];
+    if (start && end) {
+      updateTime(id, start, end);
+      setTaskState({
+        ...taskState,
+        start_datetime: start,
+        end_datetime: end,
+      });
+      setIsOpenCalendar(false);
+    }
+  };
+
+  // Date Picker Functions
+  const handleDatePicker = (value, dateString) => {
+    setDatePicker(dateString);
+  };
+
+  const handleTimePicker = time => {
+    setIsEdit(false)
+    setTimePicker(time);
+  };
 
   const createRefCallback = ref => {
     setPopupEditTask(ref);
@@ -228,7 +265,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     setCurrentDate(new Date());
     setIsActive(true);
     if (issue.trim()) {
-      setIssue(issue)
+      setIssue(issue);
       setIsStartingTask(true);
       setCurrentTimer(timeEntriesList);
       startTimerSocket({ issue, projectId: project.id });
@@ -389,8 +426,31 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
                 </p>
               )}
               <PlayCircleOutlined className="task-item__play-icon" onClick={handleStartTimer} />
-              <EditOutlined className="task-item__edit-icon" onClick={openCalendar} />
+              <EditOutlined
+                className="task-item__edit-icon"
+                onClick={() => openCalendar(start_datetime, end_datetime)}
+              />
               <DeleteIcon className="task-item__delete-icon" onClick={deleteTask} />
+              {isOpenCalendar && (
+                <div className="site-calendar-card">
+                  <RangePicker
+                    format="HH:mm"
+                    value={isEdit ? [moment(start_datetime), moment(end_datetime)] : timePicker}
+                    onCalendarChange={handleTimePicker}
+                  />
+                  <br />
+                  <DatePicker onChange={handleDatePicker} value={moment(start_datetime)} />
+                  <br />
+                  <div className="dataPicker--button">
+                    <Button className="theme-primary" onClick={updateTimeTracker} type="primary">
+                      Update
+                    </Button>
+                    <Button className="theme-primary" onClick={closeCalendar} type="primary">
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              )}
               {/* {isOpenCalendar && (
                 <CalendarPopup
                   createRefCallback={createRefCallback}
