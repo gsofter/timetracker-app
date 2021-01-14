@@ -20,10 +20,12 @@ import {
   Checkbox,
   Avatar,
   Popconfirm,
+  Switch,
 } from 'antd';
 import { Modal } from '../Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
+import TabularCalendar from './TabularCalendar';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -38,6 +40,10 @@ const resourceMap = [
   { projectId: '5', projectTitle: 'Project5' },
 ];
 
+enum VIEW_MODE {
+  CALENDAR_VIEW,
+  TABULAR_VIEW,
+}
 interface ITimesheetProps {
   form: any;
   events: any;
@@ -77,7 +83,7 @@ function SelectableCalendar({
 }: ITimesheetProps & { localizer: DateLocalizer }) {
   const [isViewGroup, setIsViewGroup] = useState(false);
   const [localizer, setLocalizer] = useState(momentLocalizer(moment));
-
+  const [viewMode, setViewMode] = useState(VIEW_MODE.CALENDAR_VIEW);
   const resetModal = (e: any) => {
     e.preventDefault();
     form.resetFields();
@@ -140,6 +146,11 @@ function SelectableCalendar({
     };
     if (selectedEvent === -1) handleAddTimesheetEvent(request);
     else handleUpdateTimesheetEvent(selectedEvent, request);
+  };
+
+  const onChangeViewMode = checked => {
+    console.log('onChangeViewMode.checked => ', checked);
+    setViewMode(checked ? VIEW_MODE.CALENDAR_VIEW : VIEW_MODE.TABULAR_VIEW);
   };
 
   const renderModalBody = (): JSX.Element => {
@@ -256,7 +267,7 @@ function SelectableCalendar({
 
   return (
     <PageContainer>
-      <Row align="middle" justify="space-between" style={{ marginBottom: '15px' }}>
+      <Row align="middle" justify="space-between" style={{ marginBottom: '10px' }}>
         <Col>
           <div style={{ textAlign: 'center' }}>
             <h3>View & edit timesheets</h3>
@@ -336,32 +347,47 @@ function SelectableCalendar({
           </div>
         </Col>
       </Row>
-      <DnDCalendar
-        selectable={true}
-        localizer={localizer}
-        events={events}
-        defaultView="week"
-        views={allViews}
-        defaultDate={new Date()}
-        onSelectEvent={handleSelectEvent}
-        onSelectSlot={handleSelectSlot}
-        startAccessor="start"
-        endAccessor="end"
-        titleAccessor="title"
-        toolbar={true}
-        resizable={true}
-        onEventDrop={onEventDrop}
-        onEventResize={onEventResize}
-        components={{
-          event: EventComponent,
-          agenda: {
-            event: EventAgenda,
-          },
-        }}
-        resources={isViewGroup ? resourceMap : undefined}
-        resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
-        resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
-      />
+      <Row align="middle" justify="space-between" style={{ marginBottom: '10px' }}>
+        <Col>
+          <Switch
+            checkedChildren="Calendar View"
+            unCheckedChildren="Tabular View"
+            checked={viewMode === VIEW_MODE.CALENDAR_VIEW}
+            onChange={onChangeViewMode}
+          />
+        </Col>
+      </Row>
+      {viewMode === VIEW_MODE.CALENDAR_VIEW ? (
+        <DnDCalendar
+          selectable={true}
+          localizer={localizer}
+          events={events}
+          defaultView="week"
+          views={allViews}
+          defaultDate={new Date()}
+          onSelectEvent={handleSelectEvent}
+          onSelectSlot={handleSelectSlot}
+          startAccessor="start"
+          endAccessor="end"
+          titleAccessor="title"
+          toolbar={true}
+          resizable={true}
+          onEventDrop={onEventDrop}
+          onEventResize={onEventResize}
+          components={{
+            event: EventComponent,
+            agenda: {
+              event: EventAgenda,
+            },
+          }}
+          resources={isViewGroup ? resourceMap : undefined}
+          resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
+          resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
+        />
+      ) : (
+        // TODO: make custom calendar
+        <TabularCalendar events={events} projects={resourceMap} />
+      )}
     </PageContainer>
   );
 }
