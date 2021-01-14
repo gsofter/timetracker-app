@@ -6,8 +6,8 @@ export const styleSheet = {
     return {
       position: 'relative',
       '& .theme-primary': {
-        backgroundColor: primaryColor ? primaryColor : '#231890ff',
-        borderColor: primaryColor ? primaryColor : '#231890ff',
+        backgroundColor: primaryColor ? primaryColor : '#1b8efa',
+        borderColor: primaryColor ? primaryColor : '#1b8efa',
       },
       '& .header-wrapper': {
         display: 'flex',
@@ -46,7 +46,7 @@ export const styleSheet = {
         lineHeight: 'normal',
         fontSize: '14px',
         color: '#ffffff',
-        // backgroundColor: primaryColor ? primaryColor : '#231890ff',
+        backgroundColor: primaryColor ? primaryColor : '#1b8efa',
         outline: 'none',
         cursor: 'pointer',
         borderRadius: '4px',

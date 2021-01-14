@@ -8,6 +8,9 @@ import { ProjectsListPopup } from '../../components/ProjectsListPopup';
 import ModalPortal from '../../components/ModalPortal';
 import { StartEditTaskModal } from '../../components/StartEditTaskModal';
 import { CalendarPopup } from '../../components/CalendarPopup';
+import { PlayCircleOutlined, EditOutlined } from '@ant-design/icons';
+import { styleSheet } from './styles';
+import { Calendar, TimePicker, Button } from 'antd';
 
 // Services
 import { getTimeDurationByGivenTimestamp } from '../../services/timeService';
@@ -17,6 +20,8 @@ import { startTimerSocket } from '../../configSocket';
 
 import { CustomSwipe } from '../../components/CustomSwipe';
 import DemoData from '../../demoData';
+import { DatePicker, Space } from 'antd';
+const { RangePicker } = TimePicker;
 
 export interface ITaskList {
   issue?: string;
@@ -33,6 +38,18 @@ export interface ITaskList {
   start_dateTime?: any;
   end_dateTime?: any;
   start_datetime?: any;
+  setCurrentTimer?: any;
+  timeEntriesList: any[];
+  setIsActive: any;
+  resetTimer: any;
+  hour: any;
+  minute: any;
+  second: any;
+  setIssue: any;
+  currentDate: any;
+  setCurrentDate: any;
+  setTimeEntriesList: any;
+  updateTime: (id: any, start: any, end: any) => void;
 }
 
 export const TaskListItem: React.FC<ITaskList> = (props: any) => {
@@ -47,6 +64,10 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   const [popupEditTask, setPopupEditTask] = useState<any>([]);
   const [cursorPosition, SetCursorPosition] = useState([]);
   const [changeTask, setChangeTask] = useState(DemoData.timer_v2);
+  const [timePicker, setTimePicker] = useState(null);
+  const [datePicker, setDatePicker] = useState(null);
+  const [updateTimer, setUpdateTimer] = useState(null);
+  const [isEdit, setIsEdit] = useState(false)
 
   const {
     task,
@@ -58,6 +79,14 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     setSwipedTaskAction,
     viewport,
     getTimeEntriesListAction,
+    setCurrentTimer,
+    timeEntriesList,
+    setIsActive,
+    setIssue,
+    currentDate,
+    setCurrentDate,
+    setTimeEntriesList,
+    updateTime,
   } = props;
 
   interface IUpdateTask {
@@ -67,10 +96,12 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     end_dateTime?: any;
     durationTimeFormat: any;
     timeFormat: any;
+    setIssue: any;
   }
 
   const { v_edit_task, v_delete_task } = vocabulary;
-  const { issue, project, syncJiraStatus, start_datetime, end_datetime, id } = task;
+  const [taskState, setTaskState] = useState(task);
+  const { issue, project, syncJiraStatus, start_datetime, end_datetime, id } = taskState;
   const formatPeriodTime = time => {
     const formattedTime = moment(time).format(`${timeFormat === '12' ? 'h:mm a' : 'HH:mm'}`);
     return formattedTime;
@@ -85,7 +116,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   };
 
   const deleteTask = async event => {
-    const {} = props;
+    const { getTimeEntriesListAction, setSwipedTaskAction, isMobile } = props;
     const { v_a_task_delete } = vocabulary;
     let check = window.confirm(v_a_task_delete);
     if (check) {
@@ -94,7 +125,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
         await sleep(1000);
       }
       setIsUpdatingTask(true);
-      await deleteTask(task.id);
+      const newList = timeEntriesList.filter(item => item.id !== id);
+      setTimeEntriesList(newList);
       getTimeEntriesListAction();
     }
   };
@@ -129,19 +161,43 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   const closeCalendar = event => {
     setIsOpenCalendar(false);
     // if (!popupEditTask.current.contains(event.target)) {
-    //   document.removeEventListener('mousedown', closeCalendar);
-    // }
+    //     document.removeEventListener('mousedown', closeCalendar);
+    //   }
   };
-  const openCalendar = event => {
-    setIsOpenCalendar(true);
-    document.addEventListener('mousedown', closeCalendar);
+  const openCalendar = (startTime, endTime) => {
+    setIsEdit(true)
+    setIsOpenCalendar(!isOpenCalendar);
+    const newList = timeEntriesList.filter(item => item.id === id);
+    setUpdateTimer([timeEntriesList, ...newList]);
+    //  document.addEventListener('mousedown', closeCalendar);
   };
 
-  // const setIsOpenProjectsListPopup = key => {
-  //     setState({
-  //         isOpenProjectsListPopup: key,
-  //     });
-  // };
+  const updateTimeTracker = () => {
+    if (!timePicker && !timePicker.length) {
+      return;
+    }
+    const start = timePicker[0];
+    const end = timePicker[1];
+    if (start && end) {
+      updateTime(id, start, end);
+      setTaskState({
+        ...taskState,
+        start_datetime: start,
+        end_datetime: end,
+      });
+      setIsOpenCalendar(false);
+    }
+  };
+
+  // Date Picker Functions
+  const handleDatePicker = (value, dateString) => {
+    setDatePicker(dateString);
+  };
+
+  const handleTimePicker = time => {
+    setIsEdit(false)
+    setTimePicker(time);
+  };
 
   const createRefCallback = ref => {
     setPopupEditTask(ref);
@@ -206,16 +262,15 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   };
 
   const handleStartTimer = event => {
-    // const { task } = props;
-    // const { issue, project } = task;
+    setCurrentDate(new Date());
+    setIsActive(true);
+    if (issue.trim()) {
+      setIssue(issue);
+      setIsStartingTask(true);
+      setCurrentTimer(timeEntriesList);
+      startTimerSocket({ issue, projectId: project.id });
+    }
     setIsStartingTask(true);
-    startTimerSocket({ issue, projectId: project.id });
-    // setState(
-    //     {
-    //         isStartingTask: true,
-    //     },
-    //     () => startTimerSocket({ issue, projectId: project.id })
-    // );
   };
 
   const handleSwipeMove = ({ x, y }, event) => {
@@ -304,7 +359,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   );
 
   return (
-    <div className={css(styleSheet.TaskListItem)}>
+    <div className={css(styleSheet.TaskListItem as any)}>
       <CustomSwipe
         className={classNames('task-item-swipe', {
           'task-item-swipe--swiped': swipedTask === id,
@@ -370,9 +425,32 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
                   {formatDurationTime(start_datetime, end_datetime)}
                 </p>
               )}
-              <PlayIcon className="task-item__play-icon" onClick={handleStartTimer} />
-              <EditIcon className="task-item__edit-icon" onClick={openCalendar} />
+              <PlayCircleOutlined className="task-item__play-icon" onClick={handleStartTimer} />
+              <EditOutlined
+                className="task-item__edit-icon"
+                onClick={() => openCalendar(start_datetime, end_datetime)}
+              />
               <DeleteIcon className="task-item__delete-icon" onClick={deleteTask} />
+              {isOpenCalendar && (
+                <div className="site-calendar-card">
+                  <RangePicker
+                    format="HH:mm"
+                    value={isEdit ? [moment(start_datetime), moment(end_datetime)] : timePicker}
+                    onCalendarChange={handleTimePicker}
+                  />
+                  <br />
+                  <DatePicker onChange={handleDatePicker} value={moment(start_datetime)} />
+                  <br />
+                  <div className="dataPicker--button">
+                    <Button className="theme-primary" onClick={updateTimeTracker} type="primary">
+                      Update
+                    </Button>
+                    <Button className="theme-primary" onClick={closeCalendar} type="primary">
+                      Cancel
+                    </Button>
+                  </div>
+                </div>
+              )}
               {/* {isOpenCalendar && (
                 <CalendarPopup
                   createRefCallback={createRefCallback}
@@ -404,179 +482,4 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
       </CustomSwipe>
     </div>
   );
-};
-
-const styleSheet: any = {
-  TaskListItem: props => ({
-    '& .task-item': {
-      position: 'relative',
-      minWidth: '100%',
-      fontSize: '1.4rem',
-      display: 'flex',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      margin: '0 0 1rem',
-      padding: '1.5rem 2rem 1.5rem 1.5rem',
-      borderRadius: '.4rem',
-      color: '#fff',
-      lineHeight: '1.8rem',
-    },
-    '& .task-item:last-child': {
-      margin: '0',
-    },
-    '& .task-item--selected': {
-      backgroundColor: '#333333',
-    },
-    '& .task-item.task-item--selected .task-item__edit-wrapper': {
-      display: 'flex',
-    },
-    '& .task-item.task-item--selected .task-item__duration-time': {
-      margin: '0 1rem 0 0',
-    },
-    '& .task-item:not(.task-item--disabled):not(.task-item--selected):not(.task-item--mobile):hover': {
-      backgroundColor: '#333333',
-    },
-    '& .task-item:not(.task-item--disabled):not(.task-item--selected):not(.task-item--mobile):hover .task-item__edit-wrapper': {
-      display: 'flex',
-    },
-    '& .task-item:not(.task-item--disabled):not(.task-item--selected):not(.task-item--mobile):hover .task-item__duration-time': {
-      margin: '0 1rem 0 0',
-    },
-    '& .task-item .task-item__issue': {
-      textOverflow: 'ellipsis',
-      whiteSpace: 'nowrap',
-      overflow: 'hidden',
-      margin: '0 1rem 0 0',
-      outline: 'none',
-    },
-    '& .task-item .task-item__issue--editing': {
-      textOverflow: 'unset',
-    },
-    '& .task-item ': {
-      margin: '0 1rem 0 0',
-      whiteSpace: 'nowrap',
-    },
-    '& .task-item__period-time': {
-      margin: '0 1rem 0 0',
-      whiteSpace: 'nowrap',
-    },
-    '& .task-item .task-item__duration-time': {
-      margin: '0',
-      whiteSpace: 'nowrap',
-    },
-    '& .task-item .task-item__edit-wrapper': {
-      position: 'relative',
-      display: 'none',
-      justifyContent: 'space-between',
-      alignItems: 'flex-end',
-    },
-    '& .task-item:not(.task-item--disabled):not(.task-item--selected)': {
-      display: 'flex',
-    },
-    '& .task-item__edit-wrapper': {
-      display: 'flex',
-    },
-    '& .task-item .task-item__play-icon': {
-      margin: '0 1rem 0 0',
-      cursor: 'pointer',
-    },
-    '& .task-item .task-item__edit-icon': {
-      cursor: 'pointer',
-      margin: '0 1rem 0 0',
-      fill: '#6fcf97',
-      width: '1.5rem',
-      height: '1.5rem',
-    },
-    '& .task-item .task-item__delete-icon': {
-      cursor: 'pointer',
-    },
-    '& .task-item-swipe--swiped .task-item--mobile': {
-      left: '-50%',
-    },
-    '& .task-item--mobile': {
-      padding: '1.2rem 1rem 1.2rem 1rem',
-      backgroundColor: '#4f4f4f',
-      borderRadius: '0',
-      zIndex: '2',
-      left: '0',
-      transition: 'left 0.2s linear',
-      margin: '0',
-    },
-    '& .task-item--mobile .task-item__period-time': {
-      display: 'none',
-    },
-    '& .task-item--mobile .task-item__duration-time': {
-      display: 'none',
-    },
-    '& .task-item--mobile .task-item__edit-wrapper': {
-      position: 'static',
-      display: 'flex',
-      flexDirection: 'column',
-    },
-    '& .task-item--mobile .task-item__duration-time-mobile': {
-      display: 'inline-block',
-      margin: '0 0 0.5rem 0',
-      fontSize: '1.2rem',
-      color: '#b8b8b8',
-      whiteSpace: 'nowrap',
-    },
-    '& .task-item--mobile .task-item__play-icon': {
-      margin: 0,
-    },
-    '& .task-item--mobile .task-item__edit-icon': {
-      display: 'none',
-    },
-    '& .task-item--mobile .task-item__delete-icon': {
-      display: 'none',
-    },
-    '& .task-item-swipe': {
-      position: 'relative',
-      color: '#ffffff',
-    },
-    '& .task-item-swipe .task-item__bottom-layer': {
-      position: 'absolute',
-      display: 'flex',
-      zIndex: '1',
-      top: '0',
-      right: '0',
-      bottom: '0',
-      width: '50%',
-      fontFamily: '"Roboto", sans-serif',
-      fontWeight: '500',
-      fontSize: '1rem',
-      lineHeight: '1.4rem',
-    },
-    '& .task-item-swipe .task-item__bottom-layer .task-item__bottom-layer-edit-button': {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '100%',
-      minWidth: '50%',
-      background: '#f2994a',
-    },
-    '& .task-item-swipe .task-item__bottom-layer .task-item__bottom-layer-edit-button-icon': {
-      width: '1.9rem',
-      height: '2rem',
-      fill: '#ffffff',
-      margin: '0 0 0.5rem 0',
-    },
-    '& .task-item-swipe .task-item__bottom-layer .task-item__bottom-layer-delete-button': {
-      display: 'flex',
-      flexDirection: 'column',
-      justifyContent: 'center',
-      alignItems: 'center',
-      minHeight: '100%',
-      minWidth: '50%',
-      background: '#eb5757',
-    },
-    '& .task-item-swipe .task-item__bottom-layer .task-item__bottom-layer-delete-button-icon': {
-      width: '1.8rem',
-      height: '2rem',
-      margin: '0 0 0.5rem 0',
-    },
-    '& .issue_width': {
-      display: 'flex',
-    },
-  }),
 };
