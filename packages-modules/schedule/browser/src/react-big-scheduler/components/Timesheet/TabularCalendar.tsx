@@ -35,9 +35,11 @@ const generateWeekHeaderColumnItem = (date: Moment, clsName) => {
     dataIndex: date.format('YYYY-MM-DD'),
     key: date.format('YYYY-MM-DD'),
     align: 'center',
-    render: workDur => {
-      return (
-        <span>
+    render: (workDur, record, index) => {
+      return workDur === 0 && record.key !== 'all' ? (
+        ''
+      ) : (
+        <span style={record.key === 'all' ? { fontWeight: 'bold' } : {}}>
           {moment.duration(workDur).hours()}:{moment.duration(workDur).minutes()}:
           {moment.duration(workDur).seconds()}
         </span>
@@ -146,9 +148,13 @@ const TabularCalendar = ({ events, projects }: ITabularCalendar) => {
       dataIndex: 'total',
       key: 'total',
       align: 'center',
-      render: workDur => {
+      render: (workDur, record, index) => {
         return (
-          <span>
+          <span
+            style={
+              record.key === 'all' ? { fontWeight: 'bold', color: 'green' } : { fontWeight: 'bold' }
+            }
+          >
             {moment.duration(workDur).hours()}:{moment.duration(workDur).minutes()}:
             {moment.duration(workDur).seconds()}
           </span>
@@ -252,6 +258,12 @@ const styles: { [property: string]: (props) => CSSProperties } = {
     '& .today': {
       color: '#1890ff',
     },
+  }),
+  greenText: props => ({
+    color: 'green',
+  }),
+  boldText: props => ({
+    fontWeight: 'bold',
   }),
 };
 export default TabularCalendar;
