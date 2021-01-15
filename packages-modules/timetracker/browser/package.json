@@ -45,6 +45,7 @@
     "@admin-layout/react-shared-components": "file:../../../packages/react-shared-components",
     "@admin-layout/components": "file:../../../packages/components",
     "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser",
+    "@admin-layout/timetracker-module-core": "file:../core",
     "@cdmbase/react-big-scheduler": "^0.2.8",
     "react-custom-scrollbars": "^4.2.1",
     "react-date-range": "1.0.0-beta",

@@ -3,11 +3,10 @@ import React, { useContext, useState, useEffect } from 'react';
 import { ProjectsListPopup } from '../ProjectsListPopup';
 import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
-import { stopTimerSocket, startTimerSocket, updateTimerSocket } from '../../configSocket';
 import _ from 'lodash';
 import { PlayCircleFilled, StopFilled } from '@ant-design/icons';
 import { styleSheet } from './styles';
-
+import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
 export interface IAddTask {
   onChange?: any;
   vocabulary: any;
@@ -15,22 +14,20 @@ export interface IAddTask {
   currentTimer: any;
   timerTick?: any;
   setCurrentTimer: any;
-  handleJiraSync: any;
   setIsActive: any;
   resetTimer: any;
+  task: string;
+  setTask: any;
+  currentDate: any;
+  setCurrentDate: any;
   hour: any;
   minute: any;
   second: any;
-  setTimeEntriesList: any;
-  timeEntriesList: any[];
-  issue: string;
-  setIssue: any;
-  currentDate: any;
-  setCurrentDate: any;
-
+  createTimeRecord: (ITimeRecordRequest) => void;
+  timeRecords: [ITimeRecord];
 }
 
-export const AddTask: React.FC<IAddTask> = (props: any) => {
+export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   const { css } = useFela(props);
   const [projectId, setProjectId] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
@@ -38,22 +35,19 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     currentTimer,
     vocabulary,
     timerTick,
-    isMobile,
-    handleJiraSync,
-    user,
     showNotificationAction,
     setCurrentTimer,
-    setTimerTick,
     setIsActive,
     resetTimer,
+    task,
+    setTask,
+    currentDate,
+    setCurrentDate,
+    createTimeRecord,
+    timeRecords,
     hour,
     minute,
     second,
-    timeEntriesList,
-    issue,
-    setIssue,
-    currentDate,
-    setCurrentDate
   } = props;
 
   const { v_add_your_task_name, v_jira_synchronization } = vocabulary;
@@ -62,15 +56,11 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     setCurrentDate(new Date());
     setIsActive(true);
     const { v_a_task_name_before, v_a_starting, v_a_time_tracking } = vocabulary;
-    if (issue.trim()) {
+    if (task.trim()) {
       setIsUpdating(true);
-      setCurrentTimer(timeEntriesList);
-      startTimerSocket({
-        issue,
-        projectId,
-      });
+      setCurrentTimer(timeRecords);
     } else {
-      setIssue('');
+      setTask('');
       showNotificationAction({
         text: `${v_a_task_name_before} ${v_a_starting} ${v_a_time_tracking}`,
         type: 'warning',
@@ -80,30 +70,20 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
 
   const stopTimer = () => {
     const { v_a_task_name_before, v_a_stopping, v_a_time_tracking } = vocabulary;
-    if (issue.trim()) {
+    if (task.trim()) {
       setIsUpdating(true);
-      const randomId = Math.floor(Math.random() * 1000 + 1);
-      const newValues = {
-        start_datetime: currentDate,
-        end_datetime: new Date(),
-        sync_jira_status: false,
-        id: randomId,
-        issue: issue,
-        project: {
-          id: '03637823-d301-4ad5-a336-ea6af4b1d726',
-          name: 'Project Name',
-          project_color: { name: 'green' },
-        },
+      const newTimeRecord = {
+        start: currentDate,
+        end: new Date(),
+        projectId: '03637823-d301-4ad5-a336-ea6af4b1d726',
+        task: task,
       };
-
-      setCurrentTimer(null), stopTimerSocket();
-      let newTimerData: any[] = [...timeEntriesList];
-      newTimerData.unshift(newValues);
-      props.setTimeEntriesList(newTimerData);
+      createTimeRecord(newTimeRecord);
+      setCurrentTimer(null);
       resetTimer();
-      setIssue('');
+      setTask('');
     } else {
-      setIssue('');
+      setTask('');
       showNotificationAction({
         text: `${v_a_task_name_before} ${v_a_stopping} ${v_a_time_tracking}`,
         type: 'warning',
@@ -111,26 +91,14 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     }
   };
 
-  const updateTaskIssueDebounced = _.debounce(() => {
-    console.log('updateTaskIssueDebounced');
-    // updateTimerSocket(
-    //     issue
-    //     );
-  }, 1000);
-
   const onChangeInput = event => {
     const value = event.target.value;
-    setIssue(value);
+    setTask(value);
 
-    if (currentTimer && value.trim() && currentTimer.issue !== value.trim()) {
+    if (currentTimer && value.trim() && currentTimer.task !== value.trim()) {
       setIsUpdating(true);
     }
   };
-  // useEffect(() => {
-  //   if (isUpdating && currentTimer.issue !== issue.trim()) {
-  //     updateTaskIssueDebounced();
-  //   }
-  // }, [isUpdating, issue]);
 
   const PlayIcon = props => {
     const { className, onClick } = props;
@@ -210,10 +178,6 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
   const onChangeProject = id => {
     if (currentTimer) {
       setIsUpdating(true);
-      updateTimerSocket({
-        projectId: id,
-        issue,
-      });
     } else {
       setProjectId(id);
     }
@@ -230,18 +194,11 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
               event.keyCode === 13 && !currentTimer && !isUpdating && startTimer()
             }
             type="text"
-            value={issue}
+            value={task}
             onChange={onChangeInput}
             placeholder={v_add_your_task_name}
             className="add-task__input"
           />
-          {/* {user.tokenJira && (
-            <SyncIcon
-              className={classNames('add-task__sync')}
-              onClick={handleJiraSync}
-              name={v_jira_synchronization}
-            />
-          )} */}
           <ProjectsListPopup
             withFolder={true}
             disabled={isUpdating}
@@ -249,11 +206,11 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
             selectedProjectId={projectId}
           />
           <span className="add-task__duration">
-            <span className="hours">{props.hour}</span>
+            <span className="hours">{hour}</span>
             <span>:</span>
-            <span className="minute">{props.minute}</span>
+            <span className="minute">{minute}</span>
             <span>:</span>
-            <span className="second">{props.second}</span>
+            <span className="second">{second}</span>
           </span>
           <div>
             {currentTimer ? (

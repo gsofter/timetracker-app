@@ -1,0 +1,12 @@
+query GetTimeRecords {
+  getTimeRecords {
+    id
+    start
+    end
+    task
+    tags
+    projectId
+    clientId
+    totalTime
+  }
+}

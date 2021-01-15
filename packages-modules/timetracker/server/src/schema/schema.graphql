@@ -1,37 +1,32 @@
-""" Database counter """
-type Counter {
-  """ Current amount """
-  amount: Int!
+type TimeRecord {
+  id: String
+  start: DateTime
+  end: DateTime
+  task: String
+  tags: [String]
+  totalTime: String
+  isBillable: Boolean
+  projectId: String
+  clientId: String
+}
+
+input TimeRecordRequest {
+  start: DateTime
+  end: DateTime
+  task: String
+  tags: [String]
+  isBillable: Boolean
+  projectId: String
+  clientId: String
+  totalTime: String
 }
 
 extend type Query {
-  """ Counter """
-  counter: Counter
-
-  """ Counter from Datasource """
-  counterCache: Counter
-
-  """ Moleculer Counter """
-  moleculerCounter: Counter
+  getTimeRecords: [TimeRecord]
 }
 
 extend type Mutation {
-  """ Increase counter value returns current counter amount """
-  addCounter(
-    """ Amount to add to counter """
-    amount: Int
-  ): Counter
-
-  """ sync cached counter with current value """
-  syncCachedCounter: Boolean
-
-  """ add Counter """
-  addMoleculerCounter(amount: Int): Counter
-}
-
-extend type Subscription {
-  """ Subscription fired when anyone increases counter """
-  counterUpdated: Counter
-
-  moleculerCounterUpdate: Counter
+  createTimeRecord(request: TimeRecordRequest): Boolean
+  updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
+  removeTimeRecord(recordId: String): Boolean
 }

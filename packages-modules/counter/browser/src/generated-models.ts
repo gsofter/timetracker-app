@@ -136,16 +136,11 @@ export type Query = {
   counterCache?: Maybe<Counter>;
   counterState?: Maybe<ClientCounter>;
   dummy?: Maybe<Scalars['Int']>;
-  getScheduleEvents?: Maybe<Array<Maybe<Schedule>>>;
   getTimelineEvents?: Maybe<Array<Maybe<Timeline>>>;
   getTimesheetEvents?: Maybe<Array<Maybe<Timesheet>>>;
+  getUserSchedules?: Maybe<Array<Maybe<Schedule>>>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<Counter>;
-};
-
-
-export type QueryGetScheduleEventsArgs = {
-  userId?: Maybe<Scalars['String']>;
 };
 
 
@@ -156,6 +151,11 @@ export type QueryGetTimelineEventsArgs = {
 
 export type QueryGetTimesheetEventsArgs = {
   userId?: Maybe<Scalars['String']>;
+};
+
+
+export type QueryGetUserSchedulesArgs = {
+  userId: Scalars['String'];
 };
 
 export type Schedule = {
@@ -440,11 +440,11 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>,
   ClientCounter: ResolverTypeWrapper<ClientCounter>,
   String: ResolverTypeWrapper<Scalars['String']>,
-  Schedule: ResolverTypeWrapper<Schedule>,
+  Timeline: ResolverTypeWrapper<Timeline>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
-  Timeline: ResolverTypeWrapper<Timeline>,
   Timesheet: ResolverTypeWrapper<Timesheet>,
+  Schedule: ResolverTypeWrapper<Schedule>,
   Mutation: ResolverTypeWrapper<{}>,
   ScheduleCreateRequest: ScheduleCreateRequest,
   TimelineCreateRequest: TimelineCreateRequest,
@@ -466,11 +466,11 @@ export type ResolversParentTypes = {
   Int: Scalars['Int'],
   ClientCounter: ClientCounter,
   String: Scalars['String'],
-  Schedule: Schedule,
+  Timeline: Timeline,
   Boolean: Scalars['Boolean'],
   DateTime: Scalars['DateTime'],
-  Timeline: Timeline,
   Timesheet: Timesheet,
+  Schedule: Schedule,
   Mutation: {},
   ScheduleCreateRequest: ScheduleCreateRequest,
   TimelineCreateRequest: TimelineCreateRequest,
@@ -543,9 +543,9 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   counterCache?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType>,
   counterState?: Resolver<Maybe<ResolversTypes['ClientCounter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  getScheduleEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<QueryGetScheduleEventsArgs, never>>,
   getTimelineEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Timeline']>>>, ParentType, ContextType, RequireFields<QueryGetTimelineEventsArgs, never>>,
   getTimesheetEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Timesheet']>>>, ParentType, ContextType, RequireFields<QueryGetTimesheetEventsArgs, never>>,
+  getUserSchedules?: Resolver<Maybe<Array<Maybe<ResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<QueryGetUserSchedulesArgs, 'userId'>>,
   moleculerCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType>,
 };
 

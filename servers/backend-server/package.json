@@ -61,6 +61,7 @@
     "@admin-layout/core": "file:../../packages/admin-core",
     "@admin-layout/counter-module-server": "file:../../packages-modules/counter/server",
     "@admin-layout/schedule-module-server": "file:../../packages-modules/schedule/server",
+    "@admin-layout/timetracker-module-server": "file:../../packages-modules/timetracker/server",
     "@admin-layout/platform-server": "file:../../packages/admin-platform/server",
     "@cdm-logger/server": "^6.0.0",
     "@common-stack/core": "0.0.249",

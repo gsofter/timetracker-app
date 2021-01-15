@@ -16,12 +16,24 @@ import { BlankListComponent } from '../../components/BlankListcomponent';
 import { TaskListItem } from '../../components/TaskListItem';
 import { TutorialComponent } from '../../components/TutorialComponent';
 import { styleSheet } from './styles';
+import { useCreateTimeRecordMutation, useGetTimeRecordsQuery } from '../../../generated-models';
+import { ITimeRecordRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
+import { message } from 'antd';
+import * as _ from 'lodash';
 
-const TimeTracker = props => {
+interface ITimeTracker {
+  isMobile: any;
+  currentTeam: any;
+  pagination: any;
+  createTimeRecord: (ITimeRecordRequest) => void;
+  timeRecords: [ITimeRecord];
+}
+
+const TimeTracker = (props: ITimeTracker) => {
   const { css } = useFela();
   const [currentTimer, setCurrentTimer] = useState(null);
   const [isInitialFetching, setIsInitialFetching] = useState(true);
-  const [timeEntriesList, setTimeEntriesList] = useState(DemoData.timer_v2);
+  const [timeEntriesList, setTimeEntriesList] = useState([]);
   const [isFetchingTimeEntriesList, setIsFetchingTimeEntriesList] = useState(false);
   const [isFetchingSearch, setIsFetchingSearch] = useState(false);
   const [isSearchMode, setIsSearchMode] = useState(false);
@@ -32,7 +44,7 @@ const TimeTracker = props => {
   const [counter, setCounter] = useState(0);
   const [issue, setIssue] = useState('');
   const [currentDate, setCurrentDate] = useState(null);
-  const { isMobile, currentTeam, pagination } = props;
+  const { isMobile, currentTeam, pagination, createTimeRecord, timeRecords } = props;
 
   useEffect(() => {
     let intervalId: any;
@@ -83,12 +95,12 @@ const TimeTracker = props => {
   const durationTimeFormat =
     localStorage.getItem('durationTimeFormat') || initialDurationTimeFormat;
 
-  const splitTimersByDay = (timers = []) => {
-    const formattedLogsDates = [];
-    const formattedLogsDatesValues = [];
+  const splitTimersByDay = (timeRecords: [ITimeRecord]): [ITimeRecord][] => {
+    let formattedLogsDates = [];
+    let formattedLogsDatesValues = [];
 
-    for (let i = 0; i < timers.length; i++) {
-      const date = moment(timers[i].start_datetime).format('YYYY-MM-DD');
+    for (let i = 0; i < timeRecords.length; i++) {
+      const date = moment(timeRecords[i].start).format('YYYY-MM-DD');
       let index = formattedLogsDates.indexOf(date);
       if (index === -1) {
         formattedLogsDates.push(date);
@@ -99,7 +111,7 @@ const TimeTracker = props => {
         formattedLogsDatesValues[index] = [];
       }
 
-      formattedLogsDatesValues[index].push(timers[i]);
+      formattedLogsDatesValues[index].push(timeRecords[i]);
     }
     return formattedLogsDatesValues;
   };
@@ -126,49 +138,15 @@ const TimeTracker = props => {
 
   useEffect(() => initSocket());
 
-  const jiraSynchronizationHandleClick = e => {
-    const { getTimeEntriesListAction, getProjectsListActions } = props;
-    const {
-      v_jira_synchronization_problem,
-      v_jira_synchronization_ok,
-      v_jira_synchronization_confirm,
-    } = vocabulary;
-
-    if (!window.confirm(v_jira_synchronization_confirm)) {
-      return;
-    }
-    setIsInitialFetching(true);
-    // syncAllTasksWithJira()
-    //     .then(() => {
-    //         getTimeEntriesListAction();
-    //         getProjectsListActions();
-    //     })
-    //     .then(() => {
-    //         showNotificationAction({
-    //             text: `${v_jira_synchronization_ok}`,
-    //             type: 'success',
-    //         });
-    //     })
-    //     .catch(err => {
-    //         showNotificationAction({
-    //             text: `${v_jira_synchronization_problem}`,
-    //             type: 'error',
-    //         });
-    //     })
-    //     .finally(() => {
-    //       setIsInitialFetching(false);
-    //     });
-  };
-
   const updateTime = (dayId, startTime, endTime) => {
-    let timeEntriesListState = [...timeEntriesList]
-    const entryIndex = [...timeEntriesListState].findIndex(x => x.id === dayId)
-    if(entryIndex > -1) {
+    let timeEntriesListState = [...timeEntriesList];
+    const entryIndex = [...timeEntriesListState].findIndex(x => x.id === dayId);
+    if (entryIndex > -1) {
       timeEntriesListState[entryIndex].start_datetime = startTime;
       timeEntriesListState[entryIndex].end_datetime = endTime;
-      setTimeEntriesList(timeEntriesListState)
+      setTimeEntriesList(timeEntriesListState);
     }
-  }
+  };
 
   return (
     <div className={css(styleSheet.mainpageStyle as any)}>
@@ -187,28 +165,22 @@ const TimeTracker = props => {
                 vocabulary={vocabulary}
                 currentTimer={currentTimer}
                 setCurrentTimer={setCurrentTimer}
-                handleJiraSync={jiraSynchronizationHandleClick}
                 setIsActive={setIsActive}
                 resetTimer={resetTimer}
-                setIssue={setIssue}
-                issue={issue}
+                currentDate={currentDate}
+                setCurrentDate={setCurrentDate}
+                createTimeRecord={createTimeRecord}
+                setTask={setIssue}
+                task={issue}
                 hour={hour}
                 minute={minute}
                 second={second}
-                setTimeEntriesList={setTimeEntriesList}
-                timeEntriesList={timeEntriesList}
-                currentDate={currentDate}
-                setCurrentDate={setCurrentDate}
+                timeRecords={timeRecords}
               />
             </div>
             <CustomScrollbar>
               <div className="main-page__list">
-                {timeEntriesList &&
-                  timeEntriesList.length === 0 &&
-                  BlankListComponent(vocabulary.v_no_entries, vocabulary.v_no_entries_sub, {
-                    bottom: '-175px',
-                  })}
-                {splitTimersByDay(timeEntriesList).map((day, index, arr) => (
+                {splitTimersByDay(timeRecords).map((dayRecords, index, arr) => (
                   <div
                     className={classNames('main-page__day', {
                       'main-page__day--last-child': index === arr.length - 1,
@@ -217,22 +189,22 @@ const TimeTracker = props => {
                   >
                     <div className="main-page__day-header">
                       <div className="main-page__day-date">
-                        {renderDayDateString(day[0].start_datetime)}
+                        {renderDayDateString(dayRecords[0].start)}
                       </div>
                       <div className="main-page__day-date-all-time">
-                        {vocabulary.v_total_time}: {renderTotalTimeByDay(day)}
+                        {vocabulary.v_total_time}: {renderTotalTimeByDay(dayRecords)}
                       </div>
                     </div>
-                    {day.map(task => (
+                    {dayRecords.map(timeRecord => (
                       <TaskListItem
-                        key={task.id}
-                        task={task}
+                        key={timeRecord.id}
+                        timeRecord={timeRecord}
                         vocabulary={vocabulary}
                         timeFormat={timeFormat}
                         durationTimeFormat={durationTimeFormat}
                         isMobile={isMobile}
                         setCurrentTimer={setCurrentTimer}
-                        timeEntriesList={timeEntriesList}
+                        timeRecords={timeRecords}
                         setTimeEntriesList={setTimeEntriesList}
                         setIsActive={setIsActive}
                         resetTimer={resetTimer}
@@ -260,4 +232,27 @@ const TimeTracker = props => {
   );
 };
 
-export default TimeTracker;
+const TimeTrackerWrapper = props => {
+  const { data, error, refetch, loading } = useGetTimeRecordsQuery();
+  const [createMutation] = useCreateTimeRecordMutation();
+  const createTimeRecord = (request: ITimeRecordRequest) => {
+    createMutation({ variables: { request } })
+      .then(() => {
+        message.success('TimeRecord created');
+        refetch();
+      })
+      .catch(error => {
+        message.error(error.message);
+      });
+  };
+  return data && !loading ? (
+    <TimeTracker
+      {...props}
+      createTimeRecord={createTimeRecord}
+      timeRecords={_.get(data, 'getTimeRecords', [])}
+    />
+  ) : (
+    <></>
+  );
+};
+export default TimeTrackerWrapper;

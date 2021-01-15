@@ -1,20 +1,18 @@
 
 import { Feature } from '@common-stack/server-core';
 import { interfaces } from 'inversify';
-// import { TYPES } from './constants';
-// import { CounterDataSource } from './dataloader';
+import { schema } from './schema'
+import { timeTrackerModule } from './containers'
+import { resolver } from './resolvers'
+import { TYPES } from './constants';
 
-// const counterServiceGen = (container: interfaces.Container): IService => {
-//     return {
-//     };
-// };
-
-// const dataSources: (container: interfaces.Container) => any = () => {
-//     return {
-//         counterCache: new CounterDataSource(),
-//     };
-// };
+const createServiceFunc = (container: interfaces.Container) => ({
+    timeTrackerService: container.get(TYPES.ITimeTrackerService),
+})
 
 export default new Feature({
-
+    schema: schema,
+    createResolversFunc: [resolver],
+    createContainerFunc: [timeTrackerModule],
+    createServiceFunc: createServiceFunc,
 });

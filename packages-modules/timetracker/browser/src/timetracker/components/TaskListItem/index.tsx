@@ -21,6 +21,7 @@ import { startTimerSocket } from '../../configSocket';
 import { CustomSwipe } from '../../components/CustomSwipe';
 import DemoData from '../../demoData';
 import { DatePicker, Space } from 'antd';
+import { ITimeRecord } from '@admin-layout/timetracker-module-core';
 const { RangePicker } = TimePicker;
 
 export interface ITaskList {
@@ -28,7 +29,7 @@ export interface ITaskList {
   projectId?: any;
   timeFormat?: any;
   vocabulary?: any;
-  task?: any;
+  timeRecord?: ITimeRecord;
   getTimeEntriesListAction?: any;
   setSwipedTaskAction?: any;
   isMobile?: any;
@@ -37,9 +38,9 @@ export interface ITaskList {
   viewport?: any;
   start_dateTime?: any;
   end_dateTime?: any;
-  start_datetime?: any;
+  start?: any;
   setCurrentTimer?: any;
-  timeEntriesList: any[];
+  timeRecords: [ITimeRecord];
   setIsActive: any;
   resetTimer: any;
   hour: any;
@@ -52,7 +53,7 @@ export interface ITaskList {
   updateTime: (id: any, start: any, end: any) => void;
 }
 
-export const TaskListItem: React.FC<ITaskList> = (props: any) => {
+export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   const { css } = useFela(props);
   const [isUpdatingTask, setIsUpdatingTask] = useState(false);
   const [isOpenCalendar, setIsOpenCalendar] = useState(false);
@@ -67,10 +68,10 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   const [timePicker, setTimePicker] = useState(null);
   const [datePicker, setDatePicker] = useState(null);
   const [updateTimer, setUpdateTimer] = useState(null);
-  const [isEdit, setIsEdit] = useState(false)
+  const [isEdit, setIsEdit] = useState(false);
 
   const {
-    task,
+    timeRecord,
     isMobile,
     vocabulary,
     swipedTask,
@@ -80,7 +81,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     viewport,
     getTimeEntriesListAction,
     setCurrentTimer,
-    timeEntriesList,
+    timeRecords,
     setIsActive,
     setIssue,
     currentDate,
@@ -100,8 +101,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   }
 
   const { v_edit_task, v_delete_task } = vocabulary;
-  const [taskState, setTaskState] = useState(task);
-  const { issue, project, syncJiraStatus, start_datetime, end_datetime, id } = taskState;
+  const [recordState, setRecordState] = useState(timeRecord);
+  const { id, projectId, start, end, task } = recordState;
   const formatPeriodTime = time => {
     const formattedTime = moment(time).format(`${timeFormat === '12' ? 'h:mm a' : 'HH:mm'}`);
     return formattedTime;
@@ -125,7 +126,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
         await sleep(1000);
       }
       setIsUpdatingTask(true);
-      const newList = timeEntriesList.filter(item => item.id !== id);
+      const newList = timeRecords.filter(item => item.id !== id);
       setTimeEntriesList(newList);
       getTimeEntriesListAction();
     }
@@ -138,18 +139,18 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     end_dateTime,
   }: IUpdateTask) => {
     setIsUpdatingTask(true);
-    const { issue: initialIssue } = task;
-    const data = {
-      issue: issue ? encodeTimeEntryIssue(issue) : encodeTimeEntryIssue(initialIssue),
-      projectId: projectId || project.id,
-      start_datetime: null,
-      end_datetime: null,
+    const { task: originalTask } = timeRecord;
+    const data: ITimeRecord = {
+      task: task ? encodeTimeEntryIssue(task) : encodeTimeEntryIssue(originalTask),
+      projectId: projectId.toString(),
+      start: null,
+      end: null,
     };
     if (start_dateTime && end_dateTime) {
-      data.start_datetime = start_dateTime.utc().toISOString();
-      data.end_datetime = end_dateTime.utc().toISOString();
+      data.start = start_dateTime.utc().toISOString();
+      data.end = end_dateTime.utc().toISOString();
     }
-    // await setChangeTask(id, data);
+
     await getTimeEntriesListAction();
     setIsUpdatingTask(false);
   };
@@ -165,10 +166,10 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     //   }
   };
   const openCalendar = (startTime, endTime) => {
-    setIsEdit(true)
+    setIsEdit(true);
     setIsOpenCalendar(!isOpenCalendar);
-    const newList = timeEntriesList.filter(item => item.id === id);
-    setUpdateTimer([timeEntriesList, ...newList]);
+    const newList = timeRecords.filter(item => item.id === id);
+    setUpdateTimer([timeRecords, ...newList]);
     //  document.addEventListener('mousedown', closeCalendar);
   };
 
@@ -180,10 +181,10 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
     const end = timePicker[1];
     if (start && end) {
       updateTime(id, start, end);
-      setTaskState({
-        ...taskState,
-        start_datetime: start,
-        end_datetime: end,
+      setRecordState({
+        ...recordState,
+        start: start,
+        end: end,
       });
       setIsOpenCalendar(false);
     }
@@ -195,7 +196,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   };
 
   const handleTimePicker = time => {
-    setIsEdit(false)
+    setIsEdit(false);
     setTimePicker(time);
   };
 
@@ -216,10 +217,10 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
       return;
     }
     //   const { newIssue } = state;
-    if (newIssue.trim() && newIssue.trim() !== task.issue) {
+    if (newIssue.trim() && newIssue.trim() !== timeRecord.task) {
       //   await updateTask({ issue: newIssue.trim() });
     } else {
-      event.target.textContent = task.issue;
+      event.target.textContent = timeRecord.task;
     }
     setIsUpdatingIssue(false);
   };
@@ -264,20 +265,20 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   const handleStartTimer = event => {
     setCurrentDate(new Date());
     setIsActive(true);
-    if (issue.trim()) {
-      setIssue(issue);
+    if (task.trim()) {
+      setIssue(task);
       setIsStartingTask(true);
-      setCurrentTimer(timeEntriesList);
-      startTimerSocket({ issue, projectId: project.id });
+      setCurrentTimer(timeRecords);
+      // startTimerSocket({ issue, projectId: project.id });
     }
     setIsStartingTask(true);
   };
 
   const handleSwipeMove = ({ x, y }, event) => {
     if (y <= 20 || x >= -20) {
-      if (x <= -(viewport.width / 15) && swipedTask !== task.id) {
-        setSwipedTaskAction(task.id);
-      } else if (x >= viewport.width / 15 && swipedTask === task.id) {
+      if (x <= -(viewport.width / 15) && swipedTask !== timeRecord.id) {
+        setSwipedTaskAction(timeRecord.id);
+      } else if (x >= viewport.width / 15 && swipedTask === timeRecord.id) {
         setSwipedTaskAction(null);
       }
     }
@@ -291,25 +292,6 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
   const closeEditTaskModal = event => {
     setShowEditModal(false);
   };
-
-  const PlayIcon = ({ className, onClick }) => (
-    <svg
-      className={className}
-      onClick={onClick}
-      width="12"
-      height="15"
-      viewBox="0 0 12 15"
-      fill="none"
-      xmlns="http://www.w3.org/2000/svg"
-    >
-      <path
-        fillRule="evenodd"
-        clipRule="evenodd"
-        d="M11.3513 6.43723L1.92647 0.14824C1.64784 -0.0274411 1.30186 0.00182833 1.04056 0.00182833C-0.00463631 0.00182833 3.58597e-07 0.856458 3.58597e-07 1.07297V13.927C3.58597e-07 14.11 -0.00457534 14.9982 1.04056 14.9982C1.30186 14.9982 1.6479 15.0273 1.92647 14.8517L11.3513 8.56279C12.1248 8.07529 11.9912 7.49998 11.9912 7.49998C11.9912 7.49998 12.1249 6.92467 11.3513 6.43723Z"
-        fill="#6FCF97"
-      />
-    </svg>
-  );
 
   const EditIcon = ({ className, onClick = null }) => (
     <svg
@@ -400,46 +382,42 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
               }}
               onPaste={handlePaste}
             >
-              {isUpdatingTask && newIssue ? newIssue : issue}
+              {isUpdatingTask && newIssue ? newIssue : task}
             </p>
             <ProjectsListPopup
               disabled={isMobile}
               onChangeVisibility={setIsOpenProjectsListPopup}
               listItem={true}
               onChange={onChangeProject}
-              selectedProjectId={project.id}
+              selectedProjectId={timeRecord.id}
             />
             <p className="task-item__period-time">
-              <span className="task-item__start-time">{formatPeriodTime(start_datetime)}</span>
+              <span className="task-item__start-time">{formatPeriodTime(start)}</span>
               {' - '}
-              <span className="task-item__end-time">{formatPeriodTime(end_datetime)}</span>
+              <span className="task-item__end-time">{formatPeriodTime(end)}</span>
             </p>
             {!isMobile && (
-              <p className="task-item__duration-time">
-                {formatDurationTime(start_datetime, end_datetime)}
-              </p>
+              <p className="task-item__duration-time">{formatDurationTime(start, end)}</p>
             )}
             <div className="task-item__edit-wrapper">
               {isMobile && (
-                <p className="task-item__duration-time-mobile">
-                  {formatDurationTime(start_datetime, end_datetime)}
-                </p>
+                <p className="task-item__duration-time-mobile">{formatDurationTime(start, end)}</p>
               )}
               <PlayCircleOutlined className="task-item__play-icon" onClick={handleStartTimer} />
               <EditOutlined
                 className="task-item__edit-icon"
-                onClick={() => openCalendar(start_datetime, end_datetime)}
+                onClick={() => openCalendar(start, end)}
               />
               <DeleteIcon className="task-item__delete-icon" onClick={deleteTask} />
               {isOpenCalendar && (
                 <div className="site-calendar-card">
                   <RangePicker
                     format="HH:mm"
-                    value={isEdit ? [moment(start_datetime), moment(end_datetime)] : timePicker}
+                    value={isEdit ? [moment(start), moment(end)] : timePicker}
                     onCalendarChange={handleTimePicker}
                   />
                   <br />
-                  <DatePicker onChange={handleDatePicker} value={moment(start_datetime)} />
+                  <DatePicker onChange={handleDatePicker} value={moment(start)} />
                   <br />
                   <div className="dataPicker--button">
                     <Button className="theme-primary" onClick={updateTimeTracker} type="primary">
@@ -451,14 +429,6 @@ export const TaskListItem: React.FC<ITaskList> = (props: any) => {
                   </div>
                 </div>
               )}
-              {/* {isOpenCalendar && (
-                <CalendarPopup
-                  createRefCallback={createRefCallback}
-                  start_dateTime={start_datetime}
-                  end_dateTime={end_datetime}
-                  updateTask={updateTask}
-                />
-              )} */}
             </div>
           </div>
         </div>

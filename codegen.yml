@@ -1,16 +1,16 @@
 overwrite: true
-schema: "./servers/backend-server/generated-schema.graphql"
+schema: './servers/backend-server/generated-schema.graphql'
 generates:
   typings/graphql.d.ts:
-    schema: "packages-modules/counter/browser/src/apollo-server-n-client/**/*.graphql"
-    documents: "packages-modules/counter/browser/src/**/*.gql"
+    schema: 'packages-modules/counter/browser/src/apollo-server-n-client/**/*.graphql'
+    documents: 'packages-modules/counter/browser/src/**/*.gql'
     plugins:
       - typescript-graphql-files-modules
   packages/admin-core/src/interfaces/generated/generated-models.ts:
     schema:
       - packages/admin-platform/browser/src/graphql/**/*.graphql
       - packages/react-shared-components/src/components/**/*.graphql
-    documents: 
+    documents:
       - packages/react-shared-components/src/**/*.gql
     config:
       constEnums: true
@@ -29,13 +29,13 @@ generates:
       - typescript-react-apollo
       - typescript-resolvers
   packages-modules/counter/browser/src/generated-models.ts:
-    schema: "packages-modules/counter/browser/src/apollo-server-n-client/**/*.graphql"
-    documents: "packages-modules/counter/browser/src/**/*.gql"
+    schema: 'packages-modules/counter/browser/src/apollo-server-n-client/**/*.graphql'
+    documents: 'packages-modules/counter/browser/src/**/*.gql'
     config:
-        noNamespaces: true
-        withMutationFn: false
-        withHOC: false
-        withComponent: false
+      noNamespaces: true
+      withMutationFn: false
+      withHOC: false
+      withComponent: false
     plugins:
       - add: |
           /* tslint:disable */
@@ -47,7 +47,7 @@ generates:
     schema:
       - packages/react-shared-components/src/components/**/*.graphql
       - packages/admin-platform/browser/src/graphql/**/*.graphql
-    documents: 
+    documents:
       - packages/react-shared-components/src/**/*.gql
     config:
       typesPrefix: I
@@ -60,15 +60,15 @@ generates:
       noGraphQLTag: true
     preset: import-types-preset
     presetConfig:
-      typesPath: "@admin-layout/core"
+      typesPath: '@admin-layout/core'
       importTypesNamespace: SchemaTypes
     plugins:
       - add: |
           /* tslint:disable */
       - typescript-react-apollo
   packages-modules/counter/browser/src/apollo-server-n-client/generated-model.tsx:
-    schema: "packages-modules/counter/browser/src/apollo-server-n-client/**/*.graphql"
-    documents: "packages-modules/counter/browser/src/**/*.gql"
+    schema: 'packages-modules/counter/browser/src/apollo-server-n-client/**/*.graphql'
+    documents: 'packages-modules/counter/browser/src/**/*.gql'
     config:
       withMutationFn: true
       withHOC: true
@@ -76,17 +76,17 @@ generates:
       withHooks: true
     preset: import-types-preset
     presetConfig:
-      typesPath: "../generated-models"
+      typesPath: '../generated-models'
       importTypesNamespace: SchemaTypes
     plugins:
       - add: |
           /* tslint:disable */
       - typescript-react-apollo
   packages-modules/schedule/browser/src/generated-models.tsx:
-    schema: 
+    schema:
       - packages/adminide-core/src/core-schema.graphql
-      - "packages-modules/schedule/server/src/**/*.graphql"
-    documents: "packages-modules/schedule/browser/src/**/*.gql"
+      - 'packages-modules/schedule/server/src/**/*.graphql'
+    documents: 'packages-modules/schedule/browser/src/**/*.gql'
     config:
       typesPrefix: I
       withMutationFn: false
@@ -95,7 +95,7 @@ generates:
       withHooks: true
     preset: import-types-preset
     presetConfig:
-      typesPath: "@admin-layout/schedule-module-core"
+      typesPath: '@admin-layout/schedule-module-core'
       importTypesNamespace: SchemaTypes
     plugins:
       - add: |
@@ -104,7 +104,46 @@ generates:
   packages-modules/schedule/core/src/interfaces/generated-models.ts:
     schema:
       - packages-modules/schedule/server/src/**/*.graphql
-    documents: "packages-modules/schedule/browser/src/**/*.gql"
+    documents: 'packages-modules/schedule/browser/src/**/*.gql'
+    config:
+      scalars:
+        URI: URI
+        URIInput: URI | UriComponents
+      constEnums: true
+      noNamespaces: true
+      namingConvention: keep
+      typesPrefix: I
+      withMutationFn: false
+      withHOC: false
+      withComponent: false
+    plugins:
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+      - typescript-resolvers
+  packages-modules/timetracker/browser/src/generated-models.tsx:
+    schema:
+      - packages/adminide-core/src/core-schema.graphql
+      - 'packages-modules/timetracker/server/src/**/*.graphql'
+    documents: 'packages-modules/timetracker/browser/src/**/*.gql'
+    config:
+      typesPrefix: I
+      withMutationFn: false
+      withHOC: false
+      withComponent: true
+      withHooks: true
+    preset: import-types-preset
+    presetConfig:
+      typesPath: '@admin-layout/timetracker-module-core'
+      importTypesNamespace: SchemaTypes
+    plugins:
+      - add: |
+          /* tslint:disable */
+      - typescript-react-apollo
+  packages-modules/timetracker/core/src/interfaces/generated-models.ts:
+    schema:
+      - packages-modules/timetracker/server/src/**/*.graphql
+    documents: 'packages-modules/timetracker/browser/src/**/*.gql'
     config:
       scalars:
         URI: URI

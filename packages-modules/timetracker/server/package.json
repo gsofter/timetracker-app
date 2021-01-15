@@ -42,7 +42,8 @@
   "author": "CDMBase LLC",
   "license": "ISC",
   "dependencies": {
-    "humanize-duration": "^3.24.0"
+    "humanize-duration": "^3.24.0",
+    "@admin-layout/timetracker-module-core": "file:../core"
   },
   "peerDependencies": {
     "@common-stack/server-core": ">=0.0.249"

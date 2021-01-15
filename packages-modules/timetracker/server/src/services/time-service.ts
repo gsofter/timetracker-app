@@ -1,7 +1,7 @@
 import { injectable } from 'inversify';
 import * as humanizeDuration from 'humanize-duration';
 
-export class TimeService {
+export class TimeTrackerService {
     constructor() {}
 
     getISOTime(): string {
