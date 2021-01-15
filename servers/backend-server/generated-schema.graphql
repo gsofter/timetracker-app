@@ -104,7 +104,7 @@ input ScheduleCreateRequest {
 }
 
 extend type Query {
-    getUserSchedules(userId: String!) : [Schedule]
+  getScheduleEvents(userId: String): [Schedule]
 }
 
 extend type Mutation {
@@ -203,4 +203,36 @@ extend type Mutation {
   addTimesheetEvent(request: TimesheetCreateRequest): Boolean
   updateTimesheetEvent(eventId: String, request: TimesheetCreateRequest): Boolean
   removeTimesheetEvent(eventId: String): Boolean
+}
+,type TimeRecord {
+  id: String
+  start: DateTime
+  end: DateTime
+  task: String
+  tags: [String]
+  totalTime: String
+  isBillable: Boolean
+  projectId: String
+  clientId: String
+}
+
+input TimeRecordRequest {
+  start: DateTime
+  end: DateTime
+  task: String
+  tags: [String]
+  isBillable: Boolean
+  projectId: String
+  clientId: String
+  totalTime: String
+}
+
+extend type Query {
+  getTimeRecords: [TimeRecord]
+}
+
+extend type Mutation {
+  createTimeRecord(request: TimeRecordRequest): Boolean
+  updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
+  removeTimeRecord(recordId: String): Boolean
 }

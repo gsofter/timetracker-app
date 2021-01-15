@@ -121,6 +121,25 @@ generates:
       - typescript-operations
       - typescript-react-apollo
       - typescript-resolvers
+  packages-modules/timetracker/browser/src/generated-models.tsx:
+    schema:
+      - packages/adminide-core/src/core-schema.graphql
+      - 'packages-modules/timetracker/server/src/**/*.graphql'
+    documents: 'packages-modules/timetracker/browser/src/**/*.gql'
+    config:
+      typesPrefix: I
+      withMutationFn: false
+      withHOC: false
+      withComponent: true
+      withHooks: true
+    preset: import-types-preset
+    presetConfig:
+      typesPath: '@admin-layout/timetracker-module-core'
+      importTypesNamespace: SchemaTypes
+    plugins:
+      - add: |
+          /* tslint:disable */
+      - typescript-react-apollo
   packages-modules/timetracker/core/src/interfaces/generated-models.ts:
     schema:
       - packages-modules/timetracker/server/src/**/*.graphql
