@@ -2,6 +2,7 @@ import * as ILogger from 'bunyan'
 
 import { inject, injectable } from 'inversify'
 import { ITimeTrackerService, ITimeTrackerRepository } from '../interfaces'
+import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core'
 import { TYPES } from '../constants'
 @injectable()
 export class TimeTrackerService implements ITimeTrackerService {
@@ -17,6 +18,18 @@ export class TimeTrackerService implements ITimeTrackerService {
     }
 
     public async getTimeRecords(): Promise<Array<any>> {
-        return [];
+        return this.trackerRepository.getTimeRecords();
+    }
+
+    public async createTimeRecord( request: ITimeRecordRequest) {
+        return this.trackerRepository.createTimeRecord(request)
+    }
+
+    public async updateTimeRecord(recordId: string, request: ITimeRecordRequest) {
+        return this.trackerRepository.updateTimeRecord(recordId, request)
+    }
+
+    public async removeTimeRecord(recordId: string) {
+        return this.trackerRepository.removeTimeRecord(recordId)
     }
 }

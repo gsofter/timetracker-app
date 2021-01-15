@@ -1,10 +1,9 @@
-import { message } from 'antd';
 import * as Logger from 'bunyan';
 import { injectable, inject, optional } from 'inversify';
 import { ITimeTrackerRepository } from './../../interfaces';
 import * as mongoose from 'mongoose';
 import { TimeRecordModelType, TimeRecordModelFunc } from './../models/timetracker-model';
-
+import { ITimeRecordRequest } from '@admin-layout/timetracker-module-core'
 @injectable()
 export class TimeTrackerRepository implements ITimeTrackerRepository {
   private timeRecordModel: TimeRecordModelType;
@@ -25,6 +24,33 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   }
 
   public async getTimeRecords() {
-    return [];
+    return this.timeRecordModel.find({});
+  }
+
+  public async createTimeRecord(request: ITimeRecordRequest) {
+    try {
+        await this.timeRecordModel.create({ ...request })
+        return true;
+    } catch(err) {
+        throw new Error(err.message);
+    }
+  }
+
+  public async updateTimeRecord(recordId: string, request: ITimeRecordRequest) {
+    try {
+        await this.timeRecordModel.update({ _id: recordId }, { ...request })
+        return true;
+    } catch(err) {
+        throw new Error(err.message);
+    }
+  }
+
+  public async removeTimeRecord(recordId: string) {
+    try {
+        await this.timeRecordModel.remove({ _id: recordId})
+        return true;
+    } catch(err) {
+        throw new Error(err.message);
+    }
   }
 }

@@ -24,3 +24,9 @@ input TimeRecordRequest {
 extend type Query {
   getTimeRecords: [TimeRecord]
 }
+
+extend type Mutation {
+  createTimeRecord(request: TimeRecordRequest): Boolean
+  updateTimeRecord(recordId: string, request: TimeRecordRequest): Boolean
+  removeTimeRecord(recordId: string, request: TimeRecordRequest): Boolean
+}

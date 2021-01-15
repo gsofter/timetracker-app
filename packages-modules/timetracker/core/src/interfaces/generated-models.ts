@@ -45,13 +45,16 @@ export type IMutation = {
   addScheduleEvent?: Maybe<Scalars['Boolean']>;
   addTimelineEvent?: Maybe<Scalars['Boolean']>;
   addTimesheetEvent?: Maybe<Scalars['Boolean']>;
+  createTimeRecord?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
   removeScheduleEvent?: Maybe<Scalars['Boolean']>;
+  removeTimeRecord?: Maybe<Scalars['Boolean']>;
   removeTimelineEvent?: Maybe<Scalars['Boolean']>;
   removeTimesheetEvent?: Maybe<Scalars['Boolean']>;
   /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
   updateScheduleEvent?: Maybe<Scalars['Boolean']>;
+  updateTimeRecord?: Maybe<Scalars['Boolean']>;
   updateTimelineEvent?: Maybe<Scalars['Boolean']>;
   updateTimesheetEvent?: Maybe<Scalars['Boolean']>;
 };
@@ -82,8 +85,18 @@ export type IMutationaddTimesheetEventArgs = {
 };
 
 
+export type IMutationcreateTimeRecordArgs = {
+  request?: Maybe<ITimeRecordRequest>;
+};
+
+
 export type IMutationremoveScheduleEventArgs = {
   eventId?: Maybe<Scalars['String']>;
+};
+
+
+export type IMutationremoveTimeRecordArgs = {
+  request?: Maybe<ITimeRecordRequest>;
 };
 
 
@@ -100,6 +113,11 @@ export type IMutationremoveTimesheetEventArgs = {
 export type IMutationupdateScheduleEventArgs = {
   eventId?: Maybe<Scalars['String']>;
   request?: Maybe<IScheduleCreateRequest>;
+};
+
+
+export type IMutationupdateTimeRecordArgs = {
+  request?: Maybe<ITimeRecordRequest>;
 };
 
 
@@ -390,6 +408,7 @@ export type IResolversTypes = {
   ScheduleCreateRequest: IScheduleCreateRequest,
   TimelineCreateRequest: ITimelineCreateRequest,
   TimesheetCreateRequest: ITimesheetCreateRequest,
+  TimeRecordRequest: ITimeRecordRequest,
   Subscription: ResolverTypeWrapper<{}>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
@@ -398,7 +417,6 @@ export type IResolversTypes = {
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<IFieldError>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
-  TimeRecordRequest: ITimeRecordRequest,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -417,6 +435,7 @@ export type IResolversParentTypes = {
   ScheduleCreateRequest: IScheduleCreateRequest,
   TimelineCreateRequest: ITimelineCreateRequest,
   TimesheetCreateRequest: ITimesheetCreateRequest,
+  TimeRecordRequest: ITimeRecordRequest,
   Subscription: {},
   AnyObject: Scalars['AnyObject'],
   Date: Scalars['Date'],
@@ -425,7 +444,6 @@ export type IResolversParentTypes = {
   JSONObject: Scalars['JSONObject'],
   FieldError: IFieldError,
   ID: Scalars['ID'],
-  TimeRecordRequest: ITimeRecordRequest,
 };
 
 export interface IAnyObjectScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['AnyObject'], any> {
@@ -465,12 +483,15 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   addScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddScheduleEventArgs, never>>,
   addTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddTimelineEventArgs, never>>,
   addTimesheetEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddTimesheetEventArgs, never>>,
+  createTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationcreateTimeRecordArgs, never>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   removeScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveScheduleEventArgs, never>>,
+  removeTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimeRecordArgs, never>>,
   removeTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimelineEventArgs, never>>,
   removeTimesheetEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimesheetEventArgs, never>>,
   syncCachedCounter?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   updateScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateScheduleEventArgs, never>>,
+  updateTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimeRecordArgs, never>>,
   updateTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimelineEventArgs, never>>,
   updateTimesheetEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimesheetEventArgs, never>>,
 };
