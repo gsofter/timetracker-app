@@ -5,6 +5,8 @@ import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
 import { stopTimerSocket, startTimerSocket, updateTimerSocket } from '../../configSocket';
 import _ from 'lodash';
+import { PlayCircleFilled, StopFilled } from '@ant-design/icons';
+import { styleSheet } from './styles';
 
 export interface IAddTask {
   onChange?: any;
@@ -21,14 +23,17 @@ export interface IAddTask {
   second: any;
   setTimeEntriesList: any;
   timeEntriesList: any[];
+  issue: string;
+  setIssue: any;
+  currentDate: any;
+  setCurrentDate: any;
+
 }
 
 export const AddTask: React.FC<IAddTask> = (props: any) => {
   const { css } = useFela(props);
-  const [issue, setIssue] = useState('');
   const [projectId, setProjectId] = useState(null);
   const [isUpdating, setIsUpdating] = useState(false);
-  const [currentDate, setCurrentDate] = useState(null);
   const {
     currentTimer,
     vocabulary,
@@ -45,13 +50,17 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
     minute,
     second,
     timeEntriesList,
+    issue,
+    setIssue,
+    currentDate,
+    setCurrentDate
   } = props;
 
   const { v_add_your_task_name, v_jira_synchronization } = vocabulary;
 
   const startTimer = () => {
     setCurrentDate(new Date());
-    props.setIsActive(true);
+    setIsActive(true);
     const { v_a_task_name_before, v_a_starting, v_a_time_tracking } = vocabulary;
     if (issue.trim()) {
       setIsUpdating(true);
@@ -91,7 +100,8 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
       let newTimerData: any[] = [...timeEntriesList];
       newTimerData.unshift(newValues);
       props.setTimeEntriesList(newTimerData);
-      props.resetTimer();
+      resetTimer();
+      setIssue('');
     } else {
       setIssue('');
       showNotificationAction({
@@ -210,7 +220,7 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
   };
 
   return (
-    <div className={css(styleSheet.addTaskStyles)}>
+    <div className={css(styleSheet.addTaskStyles as any)}>
       <React.Fragment>
         <div className={classNames('add-task')}>
           <input
@@ -247,77 +257,16 @@ export const AddTask: React.FC<IAddTask> = (props: any) => {
           </span>
           <div>
             {currentTimer ? (
-              <StopIcon className={classNames('add-task__stop-icon')} onClick={stopTimer} />
+              <StopFilled className={classNames('add-task__stop-icon')} onClick={stopTimer} />
             ) : (
-              <PlayIcon className={classNames('add-task__play-icon')} onClick={startTimer} />
+              <PlayCircleFilled
+                className={classNames('add-task__play-icon')}
+                onClick={startTimer}
+              />
             )}
           </div>
         </div>
       </React.Fragment>
     </div>
   );
-};
-
-const styleSheet: any = {
-  addTaskStyles: props => ({
-    position: 'relative',
-    '& .add-task': {
-      color: '#ffffff',
-      display: 'flex',
-      justifyContent: 'flex-start',
-      alignItems: 'center',
-      margin: '0 0 2.6rem 0',
-      padding: '0.7rem 1rem',
-      borderRadius: '0.4rem',
-      background: '#4f4f4f',
-      boxShadow: '0 0.3rem 0.6rem rgba(0, 0, 0, 0.15)',
-    },
-    '& .add-task__input': {
-      flexGrow: '1',
-      fontSize: '1.4rem',
-      lineHeight: '1.9rem',
-      color: '#fff',
-      background: '#4f4f4f',
-      border: 'none',
-    },
-    '& .add-task__input::placeholder': {
-      color: '#e0e0e0',
-      fontSize: '16px',
-    },
-    '& .add-task__sync': {
-      cursor: 'pointer',
-      width: '20px',
-      height: '20px',
-      marginRight: '18px',
-    },
-
-    '& .add-task__play-icon': {
-      cursor: 'pointer',
-      borderRadius: '50%',
-      width: '3.6rem',
-      height: '3.6rem',
-      boxShadow: '0 0.4rem 0.4rem rgba(0, 0, 0, 0.25)',
-      '&--disabled': {
-        '& .add-task__play-icon-circle': {
-          fill: '#0a7b3e',
-        },
-      },
-    },
-
-    '& .add-task__duration': {
-      fontSize: '1.6rem',
-      margin: '0 0.5rem 0 0',
-    },
-
-    '& .add-task__stop-icon': {
-      cursor: 'pointer',
-      borderRadius: '50%',
-      width: '3.6rem',
-      height: '3.6rem',
-      boxShadow: '0 0.4rem 0.4rem rgba(0, 0, 0, 0.25)',
-      '&--disabled': {
-        opacity: '0.6',
-      },
-    },
-  }),
 };

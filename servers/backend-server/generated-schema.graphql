@@ -104,7 +104,7 @@ input ScheduleCreateRequest {
 }
 
 extend type Query {
-  getScheduleEvents(userId: String): [Schedule]
+    getUserSchedules(userId: String!) : [Schedule]
 }
 
 extend type Mutation {

@@ -41,11 +41,11 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
         // boxShadow: '0 0.4rem 0.4rem rgba(0, 0, 0, 0.25)',
         '& svg': {
             fontSize: '50px',
-            color:  primaryColor ? primaryColor : 'red',
+            color:  primaryColor ? primaryColor : '#1b8efa',
         },
         '&--disabled': {
           '& .add-task__play-icon-circle': {
-            fill: primaryColor ? primaryColor : '#0a7b3e',
+            fill: primaryColor ? primaryColor : '#1b8efa',
           },
         },
       },
