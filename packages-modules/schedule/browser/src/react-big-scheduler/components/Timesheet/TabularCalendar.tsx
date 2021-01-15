@@ -67,6 +67,7 @@ const TabularCalendar = ({ events, projects }: ITabularCalendar) => {
       dataIndex: string;
       render?: Function;
       align: string;
+      fixed?: string;
     }> = Array(7)
       .fill(0)
       .map((value, index) => {
@@ -190,12 +191,12 @@ const TabularCalendar = ({ events, projects }: ITabularCalendar) => {
   return (
     <div>
       <Row className="toolBar">
-        <Col sm={6} className="control">
+        <Col xs={24} md={6} className="control">
           <Button onClick={onClickToday}> Today </Button>
           <Button onClick={onClickBack}> Back </Button>
           <Button onClick={onClickNext}> Next </Button>
         </Col>
-        <Col sm={12} style={{ textAlign: 'center' }}>
+        <Col xs={24} md={12} style={{ textAlign: 'center' }}>
           <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
           <span className="duration-end">
             {moment(weekStart).format('MM') ===
@@ -210,13 +211,19 @@ const TabularCalendar = ({ events, projects }: ITabularCalendar) => {
                   .format('MMMM DD')}
           </span>
         </Col>
-        <Col sm={6} className="control" style={{ textAlign: 'right' }}>
+        <Col xs={24} md={6} className="control" style={{ textAlign: 'right' }}>
           <Button> Day </Button>
           <Button> Week </Button>
           <Button> Month </Button>
         </Col>
       </Row>
-      <Table columns={headerColumns} dataSource={data} bordered pagination={false}></Table>
+      <Table
+        columns={headerColumns}
+        dataSource={data}
+        bordered
+        pagination={false}
+        scroll={{ x: '100%' }}
+      ></Table>
     </div>
   );
 };
