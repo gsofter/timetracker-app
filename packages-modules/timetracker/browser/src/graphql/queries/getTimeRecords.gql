@@ -3,5 +3,10 @@ query GetTimeRecords {
     id
     start
     end
+    task
+    tags
+    projectId
+    clientId
+    totalTime
   }
 }

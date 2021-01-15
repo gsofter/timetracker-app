@@ -27,6 +27,6 @@ extend type Query {
 
 extend type Mutation {
   createTimeRecord(request: TimeRecordRequest): Boolean
-  updateTimeRecord(recordId: string, request: TimeRecordRequest): Boolean
-  removeTimeRecord(recordId: string, request: TimeRecordRequest): Boolean
+  updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
+  removeTimeRecord(recordId: String): Boolean
 }

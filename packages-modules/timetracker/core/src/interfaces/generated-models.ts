@@ -96,7 +96,7 @@ export type IMutationremoveScheduleEventArgs = {
 
 
 export type IMutationremoveTimeRecordArgs = {
-  request?: Maybe<ITimeRecordRequest>;
+  recordId?: Maybe<Scalars['String']>;
 };
 
 
@@ -117,6 +117,7 @@ export type IMutationupdateScheduleEventArgs = {
 
 
 export type IMutationupdateTimeRecordArgs = {
+  recordId?: Maybe<Scalars['String']>;
   request?: Maybe<ITimeRecordRequest>;
 };
 
@@ -299,6 +300,37 @@ export type ITimesheetCreateRequest = {
   approvedOn?: Maybe<Scalars['DateTime']>;
 };
 
+export type ICreateTimeRecordMutationVariables = {
+  request?: Maybe<ITimeRecordRequest>;
+};
+
+
+export type ICreateTimeRecordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<IMutation, 'createTimeRecord'>
+);
+
+export type IRemoveTimeRecordMutationVariables = {
+  recordId?: Maybe<Scalars['String']>;
+};
+
+
+export type IRemoveTimeRecordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<IMutation, 'removeTimeRecord'>
+);
+
+export type IUpdateTimeRecordMutationVariables = {
+  recordId?: Maybe<Scalars['String']>;
+  request?: Maybe<ITimeRecordRequest>;
+};
+
+
+export type IUpdateTimeRecordMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<IMutation, 'updateTimeRecord'>
+);
+
 export type IGetTimeRecordsQueryVariables = {};
 
 
@@ -306,17 +338,43 @@ export type IGetTimeRecordsQuery = (
   { __typename?: 'Query' }
   & { getTimeRecords?: Maybe<Array<Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'start' | 'end'>
+    & Pick<ITimeRecord, 'id' | 'start' | 'end' | 'task' | 'tags' | 'projectId' | 'clientId' | 'totalTime'>
   )>>> }
 );
 
 
+export const CreateTimeRecordDocument = gql`
+    mutation CreateTimeRecord($request: TimeRecordRequest) {
+  createTimeRecord(request: $request)
+}
+    `;
+export type CreateTimeRecordMutationResult = ApolloReactCommon.MutationResult<ICreateTimeRecordMutation>;
+export type CreateTimeRecordMutationOptions = ApolloReactCommon.BaseMutationOptions<ICreateTimeRecordMutation, ICreateTimeRecordMutationVariables>;
+export const RemoveTimeRecordDocument = gql`
+    mutation RemoveTimeRecord($recordId: String) {
+  removeTimeRecord(recordId: $recordId)
+}
+    `;
+export type RemoveTimeRecordMutationResult = ApolloReactCommon.MutationResult<IRemoveTimeRecordMutation>;
+export type RemoveTimeRecordMutationOptions = ApolloReactCommon.BaseMutationOptions<IRemoveTimeRecordMutation, IRemoveTimeRecordMutationVariables>;
+export const UpdateTimeRecordDocument = gql`
+    mutation UpdateTimeRecord($recordId: String, $request: TimeRecordRequest) {
+  updateTimeRecord(recordId: $recordId, request: $request)
+}
+    `;
+export type UpdateTimeRecordMutationResult = ApolloReactCommon.MutationResult<IUpdateTimeRecordMutation>;
+export type UpdateTimeRecordMutationOptions = ApolloReactCommon.BaseMutationOptions<IUpdateTimeRecordMutation, IUpdateTimeRecordMutationVariables>;
 export const GetTimeRecordsDocument = gql`
     query GetTimeRecords {
   getTimeRecords {
     id
     start
     end
+    task
+    tags
+    projectId
+    clientId
+    totalTime
   }
 }
     `;

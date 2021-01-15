@@ -1,0 +1,3 @@
+mutation CreateTimeRecord($request: TimeRecordRequest) {
+  createTimeRecord(request: $request)
+}
