@@ -124,6 +124,7 @@ export type IQuery = {
   getScheduleEvents?: Maybe<Array<Maybe<ISchedule>>>;
   getTimelineEvents?: Maybe<Array<Maybe<ITimeline>>>;
   getTimesheetEvents?: Maybe<Array<Maybe<ITimesheet>>>;
+  getUserSchedules?: Maybe<Array<Maybe<ISchedule>>>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
 };
@@ -141,6 +142,11 @@ export type IQuerygetTimelineEventsArgs = {
 
 export type IQuerygetTimesheetEventsArgs = {
   userId?: Maybe<Scalars['String']>;
+};
+
+
+export type IQuerygetUserSchedulesArgs = {
+  userId: Scalars['String'];
 };
 
 export type ISchedule = {
@@ -676,6 +682,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, never>>,
   getTimelineEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Timeline']>>>, ParentType, ContextType, RequireFields<IQuerygetTimelineEventsArgs, never>>,
   getTimesheetEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Timesheet']>>>, ParentType, ContextType, RequireFields<IQuerygetTimesheetEventsArgs, never>>,
+  getUserSchedules?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetUserSchedulesArgs, 'userId'>>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
 };
 
