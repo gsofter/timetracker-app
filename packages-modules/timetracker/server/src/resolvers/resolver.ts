@@ -16,7 +16,7 @@ export const resolver = (options) => ({
     },
     removeTimeRecord: (root,  args, { timeTrackerService }) => {
       options.logger.trace('(Mutation.revmoeTimeRecord) args %j', args)
-      return timeTrackerService.revmoeTimeRecord(args.recordId);
+      return timeTrackerService.removeTimeRecord(args.recordId);
     }
   },
   Subscription: {

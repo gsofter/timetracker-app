@@ -10,7 +10,6 @@ import { StartEditTaskModal } from '../../components/StartEditTaskModal';
 import { CalendarPopup } from '../../components/CalendarPopup';
 import { PlayCircleOutlined, EditOutlined } from '@ant-design/icons';
 import { styleSheet } from './styles';
-import { Calendar, TimePicker, Button } from 'antd';
 
 // Services
 import { getTimeDurationByGivenTimestamp } from '../../services/timeService';
@@ -20,7 +19,7 @@ import { startTimerSocket } from '../../configSocket';
 
 import { CustomSwipe } from '../../components/CustomSwipe';
 import DemoData from '../../demoData';
-import { DatePicker, Space } from 'antd';
+import { DatePicker, Space, Popconfirm, Button, TimePicker } from 'antd';
 import { ITimeRecord } from '@admin-layout/timetracker-module-core';
 const { RangePicker } = TimePicker;
 
@@ -49,8 +48,8 @@ export interface ITaskList {
   setIssue: any;
   currentDate: any;
   setCurrentDate: any;
-  setTimeEntriesList: any;
   updateTime: (id: any, start: any, end: any) => void;
+  removeTimeRecord: (recordId: string) => void;
 }
 
 export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
@@ -86,8 +85,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
     setIssue,
     currentDate,
     setCurrentDate,
-    setTimeEntriesList,
     updateTime,
+    removeTimeRecord,
   } = props;
 
   interface IUpdateTask {
@@ -116,20 +115,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
     return formattedTime;
   };
 
-  const deleteTask = async event => {
-    const { getTimeEntriesListAction, setSwipedTaskAction, isMobile } = props;
-    const { v_a_task_delete } = vocabulary;
-    let check = window.confirm(v_a_task_delete);
-    if (check) {
-      if (isMobile) {
-        setSwipedTaskAction(null);
-        await sleep(1000);
-      }
-      setIsUpdatingTask(true);
-      const newList = timeRecords.filter(item => item.id !== id);
-      setTimeEntriesList(newList);
-      getTimeEntriesListAction();
-    }
+  const deleteRecord = async event => {
+    removeTimeRecord(id);
   };
 
   const updateTask = async ({
@@ -304,10 +291,9 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
     </svg>
   );
 
-  const DeleteIcon = ({ className, onClick }) => (
+  const DeleteIcon = ({ className }) => (
     <svg
       className={className}
-      onClick={onClick}
       width="15"
       height="15"
       viewBox="0 0 15 15"
@@ -408,7 +394,17 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
                 className="task-item__edit-icon"
                 onClick={() => openCalendar(start, end)}
               />
-              <DeleteIcon className="task-item__delete-icon" onClick={deleteTask} />
+              <Popconfirm
+                title="Are you sure?"
+                placement="top"
+                okText="OK"
+                cancelText="Cancel"
+                onConfirm={deleteRecord}
+              >
+                <Button>
+                  <DeleteIcon className="task-item__delete-icon" />
+                </Button>
+              </Popconfirm>
               {isOpenCalendar && (
                 <div className="site-calendar-card">
                   <RangePicker
@@ -438,7 +434,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
               <EditIcon className="task-item__bottom-layer-edit-button-icon" />
               <span className="task-item__bottom-layer-edit-button-text">{v_edit_task}</span>
             </div>
-            <div className="task-item__bottom-layer-delete-button" onClick={deleteTask}>
+            <div className="task-item__bottom-layer-delete-button" onClick={deleteRecord}>
               <TrashIcon className="task-item__bottom-layer-delete-button-icon" />
               <span className="task-item__bottom-layer-delete-button-text">{v_delete_task}</span>
             </div>
