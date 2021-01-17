@@ -24,6 +24,7 @@ import {
 import { ITimeRecordRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
 import { message } from 'antd';
 import * as _ from 'lodash';
+import Timer from 'react-compound-timer';
 
 interface ITimeTracker {
   isMobile: any;
@@ -139,16 +140,16 @@ const TimeTracker = (props: ITimeTracker) => {
     return `${toUpperCaseFirstLetter(date)}, ${moment(date).format(dateFormat)}`;
   };
 
-  const renderTotalTimeByDay = timers => {
+  const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
-    for (let i = 0; i < timers.length; i++) {
-      totalTime += +moment(timers[i].end_datetime) - +moment(timers[i].start_datetime);
+    for (let i = 0; i < timeRecords.length; i++) {
+      totalTime += timeRecords[i].totalTime;
     }
 
     return getDateInString(totalTime, durationTimeFormat);
   };
 
-  useEffect(() => initSocket());
+  // useEffect(() => initSocket());
 
   const updateTime = (dayId, startTime, endTime) => {
     let timeEntriesListState = [...timeEntriesList];
@@ -173,22 +174,7 @@ const TimeTracker = (props: ITimeTracker) => {
             })}
           >
             <div className="task-container">
-              <AddTask
-                vocabulary={vocabulary}
-                currentTimer={currentTimer}
-                setCurrentTimer={setCurrentTimer}
-                setIsActive={setIsActive}
-                resetTimer={resetTimer}
-                currentDate={currentDate}
-                setCurrentDate={setCurrentDate}
-                createTimeRecord={createTimeRecord}
-                setTask={setIssue}
-                task={issue}
-                hour={hour}
-                minute={minute}
-                second={second}
-                timeRecords={timeRecords}
-              />
+              <AddTask createTimeRecord={createTimeRecord} />
             </div>
             <CustomScrollbar>
               <div className="main-page__list">
@@ -204,7 +190,7 @@ const TimeTracker = (props: ITimeTracker) => {
                         {renderDayDateString(dayRecords[0].start)}
                       </div>
                       <div className="main-page__day-date-all-time">
-                        {vocabulary.v_total_time}: {renderTotalTimeByDay(dayRecords)}
+                        Total time: {renderTotalTimeByDay(dayRecords)}
                       </div>
                     </div>
                     {dayRecords.map(timeRecord => (
