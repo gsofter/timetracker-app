@@ -4,7 +4,7 @@ type TimeRecord {
   end: DateTime
   task: String
   tags: [String]
-  totalTime: String
+  totalTime: Int
   isBillable: Boolean
   projectId: String
   clientId: String
@@ -18,7 +18,7 @@ input TimeRecordRequest {
   isBillable: Boolean
   projectId: String
   clientId: String
-  totalTime: String
+  totalTime: Int
 }
 
 extend type Query {

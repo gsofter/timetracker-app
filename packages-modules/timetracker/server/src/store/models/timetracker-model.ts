@@ -14,7 +14,7 @@ const timeRecordSchema = new Schema({
     isBillable: { type: Boolean},
     projectId: { type: String },
     clientId: { type: String },
-    totalTime: { type: String },
+    totalTime: { type: Number },
 });
 
 timeRecordSchema.virtual('id').get(function() {

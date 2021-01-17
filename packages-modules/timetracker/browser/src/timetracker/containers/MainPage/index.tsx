@@ -16,16 +16,22 @@ import { BlankListComponent } from '../../components/BlankListcomponent';
 import { TaskListItem } from '../../components/TaskListItem';
 import { TutorialComponent } from '../../components/TutorialComponent';
 import { styleSheet } from './styles';
-import { useCreateTimeRecordMutation, useGetTimeRecordsQuery } from '../../../generated-models';
+import {
+  useCreateTimeRecordMutation,
+  useGetTimeRecordsQuery,
+  useRemoveTimeRecordMutation,
+} from '../../../generated-models';
 import { ITimeRecordRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
 import { message } from 'antd';
 import * as _ from 'lodash';
+import Timer from 'react-compound-timer';
 
 interface ITimeTracker {
   isMobile: any;
   currentTeam: any;
   pagination: any;
   createTimeRecord: (ITimeRecordRequest) => void;
+  removeTimeRecord: (string) => void;
   timeRecords: [ITimeRecord];
 }
 
@@ -44,7 +50,14 @@ const TimeTracker = (props: ITimeTracker) => {
   const [counter, setCounter] = useState(0);
   const [issue, setIssue] = useState('');
   const [currentDate, setCurrentDate] = useState(null);
-  const { isMobile, currentTeam, pagination, createTimeRecord, timeRecords } = props;
+  const {
+    isMobile,
+    currentTeam,
+    pagination,
+    createTimeRecord,
+    timeRecords,
+    removeTimeRecord,
+  } = props;
 
   useEffect(() => {
     let intervalId: any;
@@ -127,16 +140,16 @@ const TimeTracker = (props: ITimeTracker) => {
     return `${toUpperCaseFirstLetter(date)}, ${moment(date).format(dateFormat)}`;
   };
 
-  const renderTotalTimeByDay = timers => {
+  const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
-    for (let i = 0; i < timers.length; i++) {
-      totalTime += +moment(timers[i].end_datetime) - +moment(timers[i].start_datetime);
+    for (let i = 0; i < timeRecords.length; i++) {
+      totalTime += timeRecords[i].totalTime;
     }
 
     return getDateInString(totalTime, durationTimeFormat);
   };
 
-  useEffect(() => initSocket());
+  // useEffect(() => initSocket());
 
   const updateTime = (dayId, startTime, endTime) => {
     let timeEntriesListState = [...timeEntriesList];
@@ -161,22 +174,7 @@ const TimeTracker = (props: ITimeTracker) => {
             })}
           >
             <div className="task-container">
-              <AddTask
-                vocabulary={vocabulary}
-                currentTimer={currentTimer}
-                setCurrentTimer={setCurrentTimer}
-                setIsActive={setIsActive}
-                resetTimer={resetTimer}
-                currentDate={currentDate}
-                setCurrentDate={setCurrentDate}
-                createTimeRecord={createTimeRecord}
-                setTask={setIssue}
-                task={issue}
-                hour={hour}
-                minute={minute}
-                second={second}
-                timeRecords={timeRecords}
-              />
+              <AddTask createTimeRecord={createTimeRecord} />
             </div>
             <CustomScrollbar>
               <div className="main-page__list">
@@ -192,7 +190,7 @@ const TimeTracker = (props: ITimeTracker) => {
                         {renderDayDateString(dayRecords[0].start)}
                       </div>
                       <div className="main-page__day-date-all-time">
-                        {vocabulary.v_total_time}: {renderTotalTimeByDay(dayRecords)}
+                        Total time: {renderTotalTimeByDay(dayRecords)}
                       </div>
                     </div>
                     {dayRecords.map(timeRecord => (
@@ -205,7 +203,6 @@ const TimeTracker = (props: ITimeTracker) => {
                         isMobile={isMobile}
                         setCurrentTimer={setCurrentTimer}
                         timeRecords={timeRecords}
-                        setTimeEntriesList={setTimeEntriesList}
                         setIsActive={setIsActive}
                         resetTimer={resetTimer}
                         hour={hour}
@@ -215,6 +212,7 @@ const TimeTracker = (props: ITimeTracker) => {
                         currentDate={currentDate}
                         setCurrentDate={setCurrentDate}
                         updateTime={updateTime}
+                        removeTimeRecord={removeTimeRecord}
                       />
                     ))}
                   </div>
@@ -235,6 +233,9 @@ const TimeTracker = (props: ITimeTracker) => {
 const TimeTrackerWrapper = props => {
   const { data, error, refetch, loading } = useGetTimeRecordsQuery();
   const [createMutation] = useCreateTimeRecordMutation();
+  const [removeMutation] = useRemoveTimeRecordMutation();
+
+  // create time record
   const createTimeRecord = (request: ITimeRecordRequest) => {
     createMutation({ variables: { request } })
       .then(() => {
@@ -245,10 +246,23 @@ const TimeTrackerWrapper = props => {
         message.error(error.message);
       });
   };
+
+  // remove time record
+  const removeTimeRecord = (recordId: string) => {
+    removeMutation({ variables: { recordId } })
+      .then(() => {
+        message.success('TimeRecord Removed');
+        refetch();
+      })
+      .catch(error => {
+        message.error(error.message);
+      });
+  };
   return data && !loading ? (
     <TimeTracker
       {...props}
       createTimeRecord={createTimeRecord}
+      removeTimeRecord={removeTimeRecord}
       timeRecords={_.get(data, 'getTimeRecords', [])}
     />
   ) : (

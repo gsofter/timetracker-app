@@ -27,10 +27,10 @@ export type ClientCounter = {
   counter?: Maybe<Scalars['Int']>;
 };
 
-/**  Database counter  */
+/** Database counter */
 export type Counter = {
    __typename?: 'Counter';
-  /**  Current amount  */
+  /** Current amount */
   amount: Scalars['Int'];
 };
 
@@ -46,21 +46,24 @@ export type FieldError = {
 
 export type Mutation = {
    __typename?: 'Mutation';
-  /**  Increase counter value returns current counter amount  */
+  /** Increase counter value returns current counter amount */
   addCounter?: Maybe<Counter>;
   addCounterState?: Maybe<ClientCounter>;
-  /**  add Counter  */
+  /** add Counter */
   addMoleculerCounter?: Maybe<Counter>;
   addScheduleEvent?: Maybe<Scalars['Boolean']>;
   addTimelineEvent?: Maybe<Scalars['Boolean']>;
   addTimesheetEvent?: Maybe<Scalars['Boolean']>;
+  createTimeRecord?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
   removeScheduleEvent?: Maybe<Scalars['Boolean']>;
+  removeTimeRecord?: Maybe<Scalars['Boolean']>;
   removeTimelineEvent?: Maybe<Scalars['Boolean']>;
   removeTimesheetEvent?: Maybe<Scalars['Boolean']>;
-  /**  sync cached counter with current value  */
+  /** sync cached counter with current value */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
   updateScheduleEvent?: Maybe<Scalars['Boolean']>;
+  updateTimeRecord?: Maybe<Scalars['Boolean']>;
   updateTimelineEvent?: Maybe<Scalars['Boolean']>;
   updateTimesheetEvent?: Maybe<Scalars['Boolean']>;
 };
@@ -96,8 +99,18 @@ export type MutationAddTimesheetEventArgs = {
 };
 
 
+export type MutationCreateTimeRecordArgs = {
+  request?: Maybe<TimeRecordRequest>;
+};
+
+
 export type MutationRemoveScheduleEventArgs = {
   eventId?: Maybe<Scalars['String']>;
+};
+
+
+export type MutationRemoveTimeRecordArgs = {
+  recordId?: Maybe<Scalars['String']>;
 };
 
 
@@ -117,6 +130,12 @@ export type MutationUpdateScheduleEventArgs = {
 };
 
 
+export type MutationUpdateTimeRecordArgs = {
+  recordId?: Maybe<Scalars['String']>;
+  request?: Maybe<TimeRecordRequest>;
+};
+
+
 export type MutationUpdateTimelineEventArgs = {
   eventId?: Maybe<Scalars['String']>;
   request?: Maybe<TimelineCreateRequest>;
@@ -130,17 +149,23 @@ export type MutationUpdateTimesheetEventArgs = {
 
 export type Query = {
    __typename?: 'Query';
-  /**  Counter  */
+  /** Counter */
   counter?: Maybe<Counter>;
-  /**  Counter from Datasource  */
+  /** Counter from Datasource */
   counterCache?: Maybe<Counter>;
   counterState?: Maybe<ClientCounter>;
   dummy?: Maybe<Scalars['Int']>;
+  getScheduleEvents?: Maybe<Array<Maybe<Schedule>>>;
+  getTimeRecords?: Maybe<Array<Maybe<TimeRecord>>>;
   getTimelineEvents?: Maybe<Array<Maybe<Timeline>>>;
   getTimesheetEvents?: Maybe<Array<Maybe<Timesheet>>>;
-  getUserSchedules?: Maybe<Array<Maybe<Schedule>>>;
-  /**  Moleculer Counter  */
+  /** Moleculer Counter */
   moleculerCounter?: Maybe<Counter>;
+};
+
+
+export type QueryGetScheduleEventsArgs = {
+  userId?: Maybe<Scalars['String']>;
 };
 
 
@@ -151,11 +176,6 @@ export type QueryGetTimelineEventsArgs = {
 
 export type QueryGetTimesheetEventsArgs = {
   userId?: Maybe<Scalars['String']>;
-};
-
-
-export type QueryGetUserSchedulesArgs = {
-  userId: Scalars['String'];
 };
 
 export type Schedule = {
@@ -194,7 +214,7 @@ export type ScheduleCreateRequest = {
 
 export type Subscription = {
    __typename?: 'Subscription';
-  /**  Subscription fired when anyone increases counter  */
+  /** Subscription fired when anyone increases counter */
   counterUpdated?: Maybe<Counter>;
   dummy?: Maybe<Scalars['Int']>;
   moleculerCounterUpdate?: Maybe<Counter>;
@@ -233,6 +253,30 @@ export type TimelineCreateRequest = {
   reason?: Maybe<Scalars['String']>;
   note?: Maybe<Scalars['String']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
+};
+
+export type TimeRecord = {
+   __typename?: 'TimeRecord';
+  id?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
+  task?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  totalTime?: Maybe<Scalars['Int']>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  projectId?: Maybe<Scalars['String']>;
+  clientId?: Maybe<Scalars['String']>;
+};
+
+export type TimeRecordRequest = {
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
+  task?: Maybe<Scalars['String']>;
+  tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  projectId?: Maybe<Scalars['String']>;
+  clientId?: Maybe<Scalars['String']>;
+  totalTime?: Maybe<Scalars['Int']>;
 };
 
 export type Timesheet = {
@@ -440,15 +484,17 @@ export type ResolversTypes = {
   Int: ResolverTypeWrapper<Scalars['Int']>,
   ClientCounter: ResolverTypeWrapper<ClientCounter>,
   String: ResolverTypeWrapper<Scalars['String']>,
-  Timeline: ResolverTypeWrapper<Timeline>,
+  Schedule: ResolverTypeWrapper<Schedule>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
+  TimeRecord: ResolverTypeWrapper<TimeRecord>,
+  Timeline: ResolverTypeWrapper<Timeline>,
   Timesheet: ResolverTypeWrapper<Timesheet>,
-  Schedule: ResolverTypeWrapper<Schedule>,
   Mutation: ResolverTypeWrapper<{}>,
   ScheduleCreateRequest: ScheduleCreateRequest,
   TimelineCreateRequest: TimelineCreateRequest,
   TimesheetCreateRequest: TimesheetCreateRequest,
+  TimeRecordRequest: TimeRecordRequest,
   Subscription: ResolverTypeWrapper<{}>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
@@ -466,15 +512,17 @@ export type ResolversParentTypes = {
   Int: Scalars['Int'],
   ClientCounter: ClientCounter,
   String: Scalars['String'],
-  Timeline: Timeline,
+  Schedule: Schedule,
   Boolean: Scalars['Boolean'],
   DateTime: Scalars['DateTime'],
+  TimeRecord: TimeRecord,
+  Timeline: Timeline,
   Timesheet: Timesheet,
-  Schedule: Schedule,
   Mutation: {},
   ScheduleCreateRequest: ScheduleCreateRequest,
   TimelineCreateRequest: TimelineCreateRequest,
   TimesheetCreateRequest: TimesheetCreateRequest,
+  TimeRecordRequest: TimeRecordRequest,
   Subscription: {},
   AnyObject: Scalars['AnyObject'],
   Date: Scalars['Date'],
@@ -528,12 +576,15 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addScheduleEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddScheduleEventArgs, never>>,
   addTimelineEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddTimelineEventArgs, never>>,
   addTimesheetEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddTimesheetEventArgs, never>>,
+  createTimeRecord?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationCreateTimeRecordArgs, never>>,
   dummy?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   removeScheduleEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveScheduleEventArgs, never>>,
+  removeTimeRecord?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveTimeRecordArgs, never>>,
   removeTimelineEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveTimelineEventArgs, never>>,
   removeTimesheetEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveTimesheetEventArgs, never>>,
   syncCachedCounter?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   updateScheduleEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateScheduleEventArgs, never>>,
+  updateTimeRecord?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateTimeRecordArgs, never>>,
   updateTimelineEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateTimelineEventArgs, never>>,
   updateTimesheetEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateTimesheetEventArgs, never>>,
 };
@@ -543,9 +594,10 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   counterCache?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType>,
   counterState?: Resolver<Maybe<ResolversTypes['ClientCounter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  getScheduleEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<QueryGetScheduleEventsArgs, never>>,
+  getTimeRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimeRecord']>>>, ParentType, ContextType>,
   getTimelineEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Timeline']>>>, ParentType, ContextType, RequireFields<QueryGetTimelineEventsArgs, never>>,
   getTimesheetEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Timesheet']>>>, ParentType, ContextType, RequireFields<QueryGetTimesheetEventsArgs, never>>,
-  getUserSchedules?: Resolver<Maybe<Array<Maybe<ResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<QueryGetUserSchedulesArgs, 'userId'>>,
   moleculerCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType>,
 };
 
@@ -595,6 +647,19 @@ export type TimelineResolvers<ContextType = any, ParentType extends ResolversPar
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type TimeRecordResolvers<ContextType = any, ParentType extends ResolversParentTypes['TimeRecord'] = ResolversParentTypes['TimeRecord']> = {
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  start?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  end?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  task?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
+  totalTime?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  isBillable?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  projectId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  clientId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type TimesheetResolvers<ContextType = any, ParentType extends ResolversParentTypes['Timesheet'] = ResolversParentTypes['Timesheet']> = {
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   title?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
@@ -629,6 +694,7 @@ export type Resolvers<ContextType = any> = {
   Subscription?: SubscriptionResolvers<ContextType>,
   Time?: GraphQLScalarType,
   Timeline?: TimelineResolvers<ContextType>,
+  TimeRecord?: TimeRecordResolvers<ContextType>,
   Timesheet?: TimesheetResolvers<ContextType>,
 };
 
