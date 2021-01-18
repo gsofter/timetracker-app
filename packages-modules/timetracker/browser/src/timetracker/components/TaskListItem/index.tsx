@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import { useFela } from 'react-fela';
@@ -17,7 +17,7 @@ import {
   Dropdown,
   Menu,
 } from 'antd';
-import { ITimeRecord } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
 const { RangePicker } = TimePicker;
 import CSS from 'csstype';
 import {
@@ -27,8 +27,11 @@ import {
   CaretRightOutlined,
   MoreOutlined,
   DeleteOutlined,
+  BarsOutlined,
 } from '@ant-design/icons';
 const { Title } = Typography;
+import * as _ from 'lodash';
+import debounce from '../../services/debouce';
 export interface ITaskList {
   issue?: string;
   projectId?: any;
@@ -56,29 +59,25 @@ export interface ITaskList {
   setCurrentDate: any;
   updateTime: (id: any, start: any, end: any) => void;
   removeTimeRecord: (recordId: string) => void;
+  updateTimeRecord: (recordId: string, request: ITimeRecordRequest) => void;
 }
 
 export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
-  const { removeTimeRecord } = props;
+  const { removeTimeRecord, timeRecord, updateTimeRecord } = props;
   const { css } = useFela(props);
-  const { timeRecord } = props;
-  const [selectedProject, setSelectedProject] = useState('');
+  const [selectedProject, setSelectedProject] = useState(timeRecord.projectId ?? '');
+  const [taskName, setTaskName] = useState(timeRecord.task ?? '');
+  const [isBillable, setIsBillable] = useState(timeRecord.isBillable);
   const projects = [
     { id: '1', name: 'Project1' },
     { id: '2', name: 'Project2' },
   ];
 
   const handleSelectProject = (projectId: string) => {
+    const request = { projectId };
+    updateTimeRecord(timeRecord.id, request);
     setSelectedProject(projectId);
   };
-
-  const projectPopRender = projects.map(project => {
-    return (
-      <div className={classNames({ selected: selectedProject === project.id })}>
-        <a onClick={() => handleSelectProject(project.id)}>{project.name}</a>
-      </div>
-    );
-  });
 
   const formatDuration = (seconds: number) => {
     const hour = Math.floor(seconds / 3600);
@@ -101,25 +100,69 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
     </Menu>
   );
 
+  const projectDropdownMenus = (
+    <Menu className={css(styles.projectDown)}>
+      {projects.map(project => {
+        return (
+          <Menu.Item
+            key={project.id}
+            className={classNames({ selected: selectedProject === project.id })}
+            onClick={() => handleSelectProject(project.id)}
+          >
+            {project.name}
+          </Menu.Item>
+        );
+      })}
+    </Menu>
+  );
+
+  const debouncedFunc = useMemo(
+    () =>
+      debounce(value => {
+        const request = { task: value };
+        // updateTimeRecord(timeRecord.id, request);
+      }, 800),
+    [],
+  );
+  const handleChangeTask = useCallback(
+    e => {
+      e.persist();
+      setTaskName(e.target.value);
+      debouncedFunc(e.target.value);
+    },
+    [debouncedFunc],
+  );
+
+  const handleChangeBillable = event => {
+    setIsBillable(event.target.checked);
+    updateTimeRecord(timeRecord.id, { isBillable: event.target.checked });
+  };
+
   return (
     <div className={css(styles.timeRecord)}>
       <Row>
         <Col sm={24} md={24} lg={12} className="input">
-          <Input placeholder="What are you working on?" size="large" value={timeRecord.task} />
-          <Popover
-            content={() => {
-              return (
-                <div className={css(styles.projectPopup)}>
-                  <div className="project-list">{projectPopRender}</div>
-                </div>
-              );
-            }}
-            trigger="click"
-          >
-            <Button icon={<PlusCircleOutlined />} size="large" style={{ marginLeft: '20px' }}>
-              Projects
+          <Input
+            placeholder="What are you working on?"
+            size="large"
+            value={taskName}
+            onChange={handleChangeTask}
+          />
+          <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
+            <Button
+              icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
+              size="large"
+              style={
+                selectedProject === ''
+                  ? { marginLeft: '20px' }
+                  : { marginLeft: '20px', color: 'green' }
+              }
+            >
+              {selectedProject === ''
+                ? 'Projects'
+                : projects.find(p => p.id === selectedProject).name}
             </Button>
-          </Popover>
+          </Dropdown>
         </Col>
         <Col sm={24} md={24} lg={12} className="control">
           <div className="tag">
@@ -127,7 +170,9 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
           </div>
           <span className="divider" />
           <div className="billable">
-            <Checkbox checked={timeRecord.isBillable}>Billing</Checkbox>
+            <Checkbox checked={isBillable} onChange={handleChangeBillable}>
+              Billing
+            </Checkbox>
           </div>
           <span className="divider" />
           <div className="time-display">
@@ -194,5 +239,12 @@ const styles: { [key: string]: (props) => CSS.Properties } = {
         marginLeft: '-10px',
       },
     },
+    projectDown: ({ theme }) => ({
+      display: 'block',
+      '& .selected': {
+        fontStyle: 'bold',
+        color: 'red',
+      },
+    }),
   }),
 };

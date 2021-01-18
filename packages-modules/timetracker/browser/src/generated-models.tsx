@@ -134,6 +134,7 @@ export const GetTimeRecordsDocument = gql`
     projectId
     clientId
     totalTime
+    isBillable
   }
 }
     `;

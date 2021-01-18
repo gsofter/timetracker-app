@@ -20,6 +20,7 @@ import {
   useCreateTimeRecordMutation,
   useGetTimeRecordsQuery,
   useRemoveTimeRecordMutation,
+  useUpdateTimeRecordMutation,
 } from '../../../generated-models';
 import { ITimeRecordRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
 import { message } from 'antd';
@@ -32,6 +33,7 @@ interface ITimeTracker {
   pagination: any;
   createTimeRecord: (ITimeRecordRequest) => void;
   removeTimeRecord: (string) => void;
+  updateTimeRecord: (string, ITimeRecordRequest) => void;
   timeRecords: [ITimeRecord];
 }
 
@@ -57,6 +59,7 @@ const TimeTracker = (props: ITimeTracker) => {
     createTimeRecord,
     timeRecords,
     removeTimeRecord,
+    updateTimeRecord,
   } = props;
 
   useEffect(() => {
@@ -213,6 +216,7 @@ const TimeTracker = (props: ITimeTracker) => {
                         setCurrentDate={setCurrentDate}
                         updateTime={updateTime}
                         removeTimeRecord={removeTimeRecord}
+                        updateTimeRecord={updateTimeRecord}
                       />
                     ))}
                   </div>
@@ -234,6 +238,7 @@ const TimeTrackerWrapper = props => {
   const { data, error, refetch, loading } = useGetTimeRecordsQuery();
   const [createMutation] = useCreateTimeRecordMutation();
   const [removeMutation] = useRemoveTimeRecordMutation();
+  const [updateMutation] = useUpdateTimeRecordMutation();
 
   // create time record
   const createTimeRecord = (request: ITimeRecordRequest) => {
@@ -258,11 +263,24 @@ const TimeTrackerWrapper = props => {
         message.error(error.message);
       });
   };
+
+  // update time record
+  const updateTimeRecord = (recordId: string, request: ITimeRecordRequest) => {
+    updateMutation({ variables: { recordId, request } })
+      .then(() => {
+        message.success('TimeRecord updated');
+        refetch();
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  };
   return data && !loading ? (
     <TimeTracker
       {...props}
       createTimeRecord={createTimeRecord}
       removeTimeRecord={removeTimeRecord}
+      updateTimeRecord={updateTimeRecord}
       timeRecords={_.get(data, 'getTimeRecords', [])}
     />
   ) : (
