@@ -1,5 +1,0 @@
-query counterCacheQuery {
-  counterCache {
-    amount
-  }
-}
