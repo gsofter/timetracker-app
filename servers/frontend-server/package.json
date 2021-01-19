@@ -60,6 +60,7 @@
     "@admin-layout/core": "file:../../packages/admin-core",
     "@admin-layout/components": "file:../../packages/components",
     "@admin-layout/counter-module-browser": "file:../../packages-modules/counter/browser",
+    "@admin-layout/activity-module-browser": "file:../../packages-modules/activity/browser",
     "@admin-layout/react-shared-components": "file:../../packages/react-shared-components",
     "@admin-layout/schedule-module-browser": "file:../../packages-modules/schedule/browser",
     "@admin-layout/timetracker-module-browser": "file:../../packages-modules/timetracker/browser",

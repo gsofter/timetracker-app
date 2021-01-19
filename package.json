@@ -70,6 +70,8 @@
     "@admin-layout/core": "file:packages/admin-core",
     "@admin-layout/counter-module-browser": "file:packages-modules/counter/browser",
     "@admin-layout/counter-module-server": "file:packages-modules/counter/server",
+    "@admin-layout/activity-module-browser": "file:packages-modules/activity/browser",
+    "@admin-layout/activity-module-server": "file:packages-modules/activity/server",
     "@admin-layout/platform-browser": "file:packages/admin-platform/browser",
     "@admin-layout/platform-server": "file:packages/admin-platform/server",
     "@admin-layout/react-shared-components": "file:packages/react-shared-components",
