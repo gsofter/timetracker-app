@@ -4,11 +4,8 @@ import { ProjectsListPopup } from '../ProjectsListPopup';
 import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
 import _ from 'lodash';
-import { PlusCircleOutlined, TagOutlined, StopFilled } from '@ant-design/icons';
+import { PlusCircleOutlined, TagOutlined, StopFilled, BarsOutlined } from '@ant-design/icons';
 import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
-<<<<<<< HEAD
-import { Input, Button, Checkbox, Typography, Row, Col, Popover, List } from 'antd';
-=======
 import {
   Input,
   Button,
@@ -21,7 +18,6 @@ import {
   Menu,
   Select,
 } from 'antd';
->>>>>>> 00819a9571016ebe7ad0a3fd6d9ca0f36b7fc1f5
 import CSS from 'csstype';
 import Timer from 'react-compound-timer';
 import moment from 'moment';
@@ -82,6 +78,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   };
 
   const handleSelectProject = projectId => {
+    console.log('handleSelectProject.projectId =>', projectId);
     setSelectedProject(projectId);
   };
 
@@ -89,15 +86,6 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     setIsBilling(event.target.checked);
   };
 
-<<<<<<< HEAD
-  const projectPopRender = projects.map(project => {
-    return (
-      <div className={classNames({ selected: selectedProject === project.id })}>
-        <a onClick={() => handleSelectProject(project.id)}>{project.name}</a>
-      </div>
-    );
-  });
-=======
   // Dropdown overlay for project select
   const projectDropdownMenus = (
     <Menu className={css(styles.projectDown)}>
@@ -114,7 +102,6 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
       })}
     </Menu>
   );
->>>>>>> 00819a9571016ebe7ad0a3fd6d9ca0f36b7fc1f5
 
   const handleTagsChange = value => {
     console.log('handleTagsChange.value =>', value);
@@ -152,20 +139,21 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                 size="large"
                 onChange={handleTaskChange}
               />
-              <Popover
-                content={() => {
-                  return (
-                    <div className={css(styles.projectPopup)}>
-                      <div className="project-list">{projectPopRender}</div>
-                    </div>
-                  );
-                }}
-                trigger="click"
-              >
-                <Button icon={<PlusCircleOutlined />} size="large" style={{ marginLeft: '20px' }}>
-                  Projects
+              <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
+                <Button
+                  icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
+                  size="large"
+                  style={
+                    selectedProject === ''
+                      ? { marginLeft: '20px' }
+                      : { marginLeft: '20px', color: 'green' }
+                  }
+                >
+                  {selectedProject === ''
+                    ? 'Projects'
+                    : projects.find(p => p.id === selectedProject).name}
                 </Button>
-              </Popover>
+              </Dropdown>
             </Col>
             <Col sm={24} md={24} lg={12} className="control">
               <div className="tag">
@@ -239,9 +227,9 @@ const styles: { [key: string]: (obj) => CSS.Properties } = {
       },
     },
   }),
-  projectPopup: ({ theme }) => ({
+  projectDown: ({ theme }) => ({
     display: 'block',
-    '& .project-list .selected a': {
+    '& .selected': {
       fontStyle: 'bold',
       color: 'red',
     },

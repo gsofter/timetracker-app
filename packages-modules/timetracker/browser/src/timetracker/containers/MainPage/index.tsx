@@ -16,6 +16,7 @@ import {
   useCreateTimeRecordMutation,
   useGetTimeRecordsQuery,
   useRemoveTimeRecordMutation,
+  useUpdateTimeRecordMutation,
 } from '../../../generated-models';
 import { ITimeRecordRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
 import { message } from 'antd';
@@ -28,68 +29,13 @@ interface ITimeTracker {
   pagination: any;
   createTimeRecord: (ITimeRecordRequest) => void;
   removeTimeRecord: (string) => void;
+  updateTimeRecord: (string, ITimeRecordRequest) => void;
   timeRecords: [ITimeRecord];
 }
 
 const TimeTracker = (props: ITimeTracker) => {
   const { css } = useFela();
-  const [currentTimer, setCurrentTimer] = useState(null);
-  const [isInitialFetching, setIsInitialFetching] = useState(true);
-  const [timeEntriesList, setTimeEntriesList] = useState([]);
-  const [isFetchingTimeEntriesList, setIsFetchingTimeEntriesList] = useState(false);
-  const [isFetchingSearch, setIsFetchingSearch] = useState(false);
-  const [isSearchMode, setIsSearchMode] = useState(false);
-  const [second, setSecond] = useState('00');
-  const [minute, setMinute] = useState('00');
-  const [hour, setHour] = useState('00');
-  const [isActive, setIsActive] = useState(false);
-  const [counter, setCounter] = useState(0);
-  const [issue, setIssue] = useState('');
-  const [currentDate, setCurrentDate] = useState(null);
-  const {
-    isMobile,
-    currentTeam,
-    pagination,
-    createTimeRecord,
-    timeRecords,
-    removeTimeRecord,
-  } = props;
-
-  useEffect(() => {
-    let intervalId: any;
-
-    if (isActive) {
-      intervalId = setInterval(() => {
-        const secondCounter = counter % 60;
-        const minuteCounter = Math.floor(counter / 60);
-        const hourCounter = Math.floor(counter / 3600);
-
-        let computedSecond: any =
-          String(secondCounter).length === 1 ? `0${secondCounter}` : secondCounter;
-
-        let computedMinute: any =
-          String(minuteCounter).length === 1 ? `0${minuteCounter}` : minuteCounter;
-
-        let computedHours: any = String(hourCounter).length === 1 ? `0${hourCounter}` : hourCounter;
-
-        setSecond(computedSecond);
-        setMinute(computedMinute);
-        setHour(computedHours);
-
-        setCounter(counter => counter + 1);
-      }, 1000);
-    }
-
-    return () => clearInterval(intervalId);
-  }, [isActive, counter]);
-
-  const resetTimer = () => {
-    setIsActive(false);
-    setCounter(0);
-    setSecond('00');
-    setMinute('00');
-    setHour('00');
-  };
+  const { createTimeRecord, timeRecords, removeTimeRecord, updateTimeRecord, isMobile } = props;
 
   const initialDateFormat = 'DD.MM.YYYY';
   const dateFormat = localStorage.getItem('dateFormat') || initialDateFormat;
@@ -173,6 +119,7 @@ const TimeTracker = (props: ITimeTracker) => {
                         timeRecord={timeRecord}
                         timeRecords={timeRecords}
                         removeTimeRecord={removeTimeRecord}
+                        updateTimeRecord={updateTimeRecord}
                       />
                     ))}
                   </div>
@@ -190,6 +137,7 @@ const TimeTrackerWrapper = props => {
   const { data, error, refetch, loading } = useGetTimeRecordsQuery();
   const [createMutation] = useCreateTimeRecordMutation();
   const [removeMutation] = useRemoveTimeRecordMutation();
+  const [updateMutation] = useUpdateTimeRecordMutation();
 
   // create time record
   const createTimeRecord = (request: ITimeRecordRequest) => {
@@ -214,11 +162,24 @@ const TimeTrackerWrapper = props => {
         message.error(error.message);
       });
   };
+
+  // update time record
+  const updateTimeRecord = (recordId: string, request: ITimeRecordRequest) => {
+    updateMutation({ variables: { recordId, request } })
+      .then(() => {
+        message.success('TimeRecord Updated');
+        refetch();
+      })
+      .catch(error => {
+        message.error(error.message);
+      });
+  };
   return data && !loading ? (
     <TimeTracker
       {...props}
       createTimeRecord={createTimeRecord}
       removeTimeRecord={removeTimeRecord}
+      updateTimeRecord={updateTimeRecord}
       timeRecords={_.get(data, 'getTimeRecords', [])}
     />
   ) : (

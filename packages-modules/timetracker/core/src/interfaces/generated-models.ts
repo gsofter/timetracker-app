@@ -338,7 +338,7 @@ export type IGetTimeRecordsQuery = (
   { __typename?: 'Query' }
   & { getTimeRecords?: Maybe<Array<Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'start' | 'end' | 'task' | 'tags' | 'projectId' | 'clientId' | 'totalTime'>
+    & Pick<ITimeRecord, 'id' | 'start' | 'end' | 'task' | 'tags' | 'projectId' | 'clientId' | 'totalTime' | 'isBillable'>
   )>>> }
 );
 
@@ -375,6 +375,7 @@ export const GetTimeRecordsDocument = gql`
     projectId
     clientId
     totalTime
+    isBillable
   }
 }
     `;
