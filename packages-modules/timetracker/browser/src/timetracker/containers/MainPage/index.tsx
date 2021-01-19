@@ -167,11 +167,11 @@ const TimeTrackerWrapper = props => {
   const updateTimeRecord = (recordId: string, request: ITimeRecordRequest) => {
     updateMutation({ variables: { recordId, request } })
       .then(() => {
-        message.success('TimeRecord updated');
+        message.success('TimeRecord Updated');
         refetch();
       })
-      .catch(err => {
-        console.log(err.message);
+      .catch(error => {
+        message.error(error.message);
       });
   };
   return data && !loading ? (

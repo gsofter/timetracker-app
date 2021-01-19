@@ -31,7 +31,7 @@ import {
 } from '@ant-design/icons';
 const { Title } = Typography;
 import * as _ from 'lodash';
-import debounce from '../../services/debouce';
+import debounce from '../../services/debounce';
 import { formatDuration } from '../../services/timeRecordService';
 
 export interface ITaskList {
