@@ -6,7 +6,22 @@ import { useFela } from 'react-fela';
 import _ from 'lodash';
 import { PlusCircleOutlined, TagOutlined, StopFilled } from '@ant-design/icons';
 import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
+<<<<<<< HEAD
 import { Input, Button, Checkbox, Typography, Row, Col, Popover, List } from 'antd';
+=======
+import {
+  Input,
+  Button,
+  Checkbox,
+  Typography,
+  Row,
+  Col,
+  Popover,
+  Dropdown,
+  Menu,
+  Select,
+} from 'antd';
+>>>>>>> 00819a9571016ebe7ad0a3fd6d9ca0f36b7fc1f5
 import CSS from 'csstype';
 import Timer from 'react-compound-timer';
 import moment from 'moment';
@@ -74,6 +89,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     setIsBilling(event.target.checked);
   };
 
+<<<<<<< HEAD
   const projectPopRender = projects.map(project => {
     return (
       <div className={classNames({ selected: selectedProject === project.id })}>
@@ -81,7 +97,50 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
       </div>
     );
   });
+=======
+  // Dropdown overlay for project select
+  const projectDropdownMenus = (
+    <Menu className={css(styles.projectDown)}>
+      {projects.map(project => {
+        return (
+          <Menu.Item
+            key={project.id}
+            className={classNames({ selected: selectedProject === project.id })}
+            onClick={() => handleSelectProject(project.id)}
+          >
+            {project.name}
+          </Menu.Item>
+        );
+      })}
+    </Menu>
+  );
+>>>>>>> 00819a9571016ebe7ad0a3fd6d9ca0f36b7fc1f5
 
+  const handleTagsChange = value => {
+    console.log('handleTagsChange.value =>', value);
+  };
+
+  // Dropdown for tags
+  const tagsOverlay = (
+    <Menu>
+      <Menu.Item key={1}>
+        {' '}
+        <Select
+          mode="tags"
+          style={{ width: '100%' }}
+          onChange={handleTagsChange}
+          tokenSeparators={[',']}
+        >
+          <Select.Option key="1" value="1">
+            AAAA
+          </Select.Option>
+          <Select.Option key="2" value="2">
+            BBBB
+          </Select.Option>
+        </Select>
+      </Menu.Item>
+    </Menu>
+  );
   return (
     <Timer startImmediately={false} onStart={handleStart}>
       {({ start, resume, pause, stop, reset, timerState }) => (
@@ -110,7 +169,9 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
             </Col>
             <Col sm={24} md={24} lg={12} className="control">
               <div className="tag">
-                <Button icon={<TagOutlined />} size="large"></Button>
+                <Dropdown overlay={tagsOverlay} trigger={['click']}>
+                  <Button icon={<TagOutlined />} size="large"></Button>
+                </Dropdown>
               </div>
               <span className="divider" />
               <div className="billable">

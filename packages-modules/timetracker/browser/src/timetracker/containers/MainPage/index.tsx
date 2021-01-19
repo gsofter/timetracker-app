@@ -8,11 +8,7 @@ import PageHeader from '../../components/PageHeader';
 import vocabulary from '../../en';
 import { TimerSearchComponent } from '../../components/TimerSearchComponent/index';
 import { AddTask } from '../../components/AddTask';
-import DemoData from '../../demoData';
-import { initSocket } from '../../configSocket';
-import { getDateInString } from '../../services/timeService';
 import { CustomScrollbar } from '../../components/CustomScrollbar';
-import { BlankListComponent } from '../../components/BlankListcomponent';
 import { TaskListItem } from '../../components/TaskListItem';
 import { TutorialComponent } from '../../components/TutorialComponent';
 import { styleSheet } from './styles';
@@ -25,7 +21,7 @@ import { ITimeRecordRequest, ITimeRecord } from '@admin-layout/timetracker-modul
 import { message } from 'antd';
 import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
-
+import { formatDuration } from '../../services/timeRecordService';
 interface ITimeTracker {
   isMobile: any;
   currentTeam: any;
@@ -98,16 +94,6 @@ const TimeTracker = (props: ITimeTracker) => {
   const initialDateFormat = 'DD.MM.YYYY';
   const dateFormat = localStorage.getItem('dateFormat') || initialDateFormat;
 
-  const initialTimeFormat = '24';
-  const timeFormat = localStorage.getItem('timeFormat') || initialTimeFormat;
-
-  const initialFirstDayOfWeek = 1;
-  const firstDayOfWeek = localStorage.getItem('firstDayOfWeek') || initialFirstDayOfWeek;
-
-  const initialDurationTimeFormat = 'improved';
-  const durationTimeFormat =
-    localStorage.getItem('durationTimeFormat') || initialDurationTimeFormat;
-
   const splitTimersByDay = (timeRecords: [ITimeRecord]): [ITimeRecord][] => {
     let formattedLogsDates = [];
     let formattedLogsDatesValues = [];
@@ -146,19 +132,7 @@ const TimeTracker = (props: ITimeTracker) => {
       totalTime += timeRecords[i].totalTime;
     }
 
-    return getDateInString(totalTime, durationTimeFormat);
-  };
-
-  // useEffect(() => initSocket());
-
-  const updateTime = (dayId, startTime, endTime) => {
-    let timeEntriesListState = [...timeEntriesList];
-    const entryIndex = [...timeEntriesListState].findIndex(x => x.id === dayId);
-    if (entryIndex > -1) {
-      timeEntriesListState[entryIndex].start_datetime = startTime;
-      timeEntriesListState[entryIndex].end_datetime = endTime;
-      setTimeEntriesList(timeEntriesListState);
-    }
+    return formatDuration(totalTime);
   };
 
   return (
@@ -197,30 +171,12 @@ const TimeTracker = (props: ITimeTracker) => {
                       <TaskListItem
                         key={timeRecord.id}
                         timeRecord={timeRecord}
-                        vocabulary={vocabulary}
-                        timeFormat={timeFormat}
-                        durationTimeFormat={durationTimeFormat}
-                        isMobile={isMobile}
-                        setCurrentTimer={setCurrentTimer}
                         timeRecords={timeRecords}
-                        setIsActive={setIsActive}
-                        resetTimer={resetTimer}
-                        hour={hour}
-                        setIssue={setIssue}
-                        minute={minute}
-                        second={second}
-                        currentDate={currentDate}
-                        setCurrentDate={setCurrentDate}
-                        updateTime={updateTime}
                         removeTimeRecord={removeTimeRecord}
                       />
                     ))}
                   </div>
                 ))}
-                {isFetchingTimeEntriesList}
-                {isMobile && !currentTimer && pagination.disabled && (
-                  <div className="main-page__empty-block" />
-                )}
               </div>
             </CustomScrollbar>
           </div>

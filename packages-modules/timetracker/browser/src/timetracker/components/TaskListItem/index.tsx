@@ -29,32 +29,16 @@ import {
   DeleteOutlined,
 } from '@ant-design/icons';
 const { Title } = Typography;
+<<<<<<< HEAD
+=======
+import * as _ from 'lodash';
+import debounce from '../../services/debouce';
+import { formatDuration } from '../../services/timeRecordService';
+
+>>>>>>> 00819a9571016ebe7ad0a3fd6d9ca0f36b7fc1f5
 export interface ITaskList {
-  issue?: string;
-  projectId?: any;
-  timeFormat?: any;
-  vocabulary?: any;
   timeRecord?: ITimeRecord;
-  getTimeEntriesListAction?: any;
-  setSwipedTaskAction?: any;
-  isMobile?: any;
-  swipedTask?: any;
-  durationTimeFormat?: any;
-  viewport?: any;
-  start_dateTime?: any;
-  end_dateTime?: any;
-  start?: any;
-  setCurrentTimer?: any;
   timeRecords: [ITimeRecord];
-  setIsActive: any;
-  resetTimer: any;
-  hour: any;
-  minute: any;
-  second: any;
-  setIssue: any;
-  currentDate: any;
-  setCurrentDate: any;
-  updateTime: (id: any, start: any, end: any) => void;
   removeTimeRecord: (recordId: string) => void;
 }
 
@@ -67,11 +51,13 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
     { id: '1', name: 'Project1' },
     { id: '2', name: 'Project2' },
   ];
+  const debounceTimeLimit = 800;
 
   const handleSelectProject = (projectId: string) => {
     setSelectedProject(projectId);
   };
 
+<<<<<<< HEAD
   const projectPopRender = projects.map(project => {
     return (
       <div className={classNames({ selected: selectedProject === project.id })}>
@@ -88,6 +74,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
     return format(hour) + ':' + format(minute) + ':' + format(second);
   };
 
+=======
+>>>>>>> 00819a9571016ebe7ad0a3fd6d9ca0f36b7fc1f5
   const handleRemove = () => {
     removeTimeRecord(timeRecord.id);
   };
@@ -101,6 +89,47 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
     </Menu>
   );
 
+<<<<<<< HEAD
+=======
+  const projectDropdownMenus = (
+    <Menu className={css(styles.projectDown)}>
+      {projects.map(project => {
+        return (
+          <Menu.Item
+            key={project.id}
+            className={classNames({ selected: selectedProject === project.id })}
+            onClick={() => handleSelectProject(project.id)}
+          >
+            {project.name}
+          </Menu.Item>
+        );
+      })}
+    </Menu>
+  );
+
+  const debouncedFunc = useMemo(
+    () =>
+      debounce(value => {
+        const request = { task: value };
+        updateTimeRecord(timeRecord.id, request);
+      }, debounceTimeLimit),
+    [],
+  );
+  const handleChangeTask = useCallback(
+    e => {
+      e.persist();
+      setTaskName(e.target.value);
+      debouncedFunc(e.target.value);
+    },
+    [debouncedFunc],
+  );
+
+  const handleChangeBillable = event => {
+    setIsBillable(event.target.checked);
+    updateTimeRecord(timeRecord.id, { isBillable: event.target.checked });
+  };
+
+>>>>>>> 00819a9571016ebe7ad0a3fd6d9ca0f36b7fc1f5
   return (
     <div className={css(styles.timeRecord)}>
       <Row>
