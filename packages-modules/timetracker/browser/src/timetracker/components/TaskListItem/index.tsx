@@ -49,7 +49,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   const [isBillable, setIsBillable] = useState(timeRecord.isBillable);
   const projects = [
     { id: '1', name: 'Project1' },
-    { id: '2', name: 'Project2' },
+    { id: '2', name: '12' },
   ];
   const debounceTimeLimit = 800;
 
@@ -119,6 +119,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
             size="large"
             value={taskName}
             onChange={handleChangeTask}
+            style={{ width: '80%' }}
           />
           <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
             <Button
@@ -126,13 +127,13 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
               size="large"
               style={
                 selectedProject === ''
-                  ? { marginLeft: '20px' }
-                  : { marginLeft: '20px', color: 'green' }
+                  ? { marginLeft: '20px', width: '20%' }
+                  : { marginLeft: '20px', width: '20%', color: 'green' }
               }
             >
               {selectedProject === ''
                 ? 'Projects'
-                : projects.find(p => p.id === selectedProject).name}
+                : projects.find(p => p.id === selectedProject)?.name}
             </Button>
           </Dropdown>
         </Col>
@@ -183,7 +184,7 @@ const styles: { [key: string]: (props) => CSS.Properties } = {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'center',
+      alignItems: 'start',
     },
     '& .control': {
       display: 'flex',
