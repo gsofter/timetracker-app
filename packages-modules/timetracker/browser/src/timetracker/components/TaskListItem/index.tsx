@@ -32,32 +32,11 @@ import {
 const { Title } = Typography;
 import * as _ from 'lodash';
 import debounce from '../../services/debouce';
+import { formatDuration } from '../../services/timeRecordService';
+
 export interface ITaskList {
-  issue?: string;
-  projectId?: any;
-  timeFormat?: any;
-  vocabulary?: any;
   timeRecord?: ITimeRecord;
-  getTimeEntriesListAction?: any;
-  setSwipedTaskAction?: any;
-  isMobile?: any;
-  swipedTask?: any;
-  durationTimeFormat?: any;
-  viewport?: any;
-  start_dateTime?: any;
-  end_dateTime?: any;
-  start?: any;
-  setCurrentTimer?: any;
   timeRecords: [ITimeRecord];
-  setIsActive: any;
-  resetTimer: any;
-  hour: any;
-  minute: any;
-  second: any;
-  setIssue: any;
-  currentDate: any;
-  setCurrentDate: any;
-  updateTime: (id: any, start: any, end: any) => void;
   removeTimeRecord: (recordId: string) => void;
   updateTimeRecord: (recordId: string, request: ITimeRecordRequest) => void;
 }
@@ -72,19 +51,12 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
     { id: '1', name: 'Project1' },
     { id: '2', name: 'Project2' },
   ];
+  const debounceTimeLimit = 800;
 
   const handleSelectProject = (projectId: string) => {
     const request = { projectId };
     updateTimeRecord(timeRecord.id, request);
     setSelectedProject(projectId);
-  };
-
-  const formatDuration = (seconds: number) => {
-    const hour = Math.floor(seconds / 3600);
-    const minute = Math.floor((seconds % 3600) / 60);
-    const second = seconds % 60;
-    const format = (num: number) => (num < 10 ? '0' + num : num.toString());
-    return format(hour) + ':' + format(minute) + ':' + format(second);
   };
 
   const handleRemove = () => {
@@ -120,8 +92,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
     () =>
       debounce(value => {
         const request = { task: value };
-        // updateTimeRecord(timeRecord.id, request);
-      }, 800),
+        updateTimeRecord(timeRecord.id, request);
+      }, debounceTimeLimit),
     [],
   );
   const handleChangeTask = useCallback(
