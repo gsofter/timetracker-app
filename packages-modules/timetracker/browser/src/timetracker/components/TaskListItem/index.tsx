@@ -48,8 +48,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   const [taskName, setTaskName] = useState(timeRecord.task ?? '');
   const [isBillable, setIsBillable] = useState(timeRecord.isBillable);
   const projects = [
-    { id: '1', name: 'Project1' },
-    { id: '2', name: '12' },
+    { id: '1', name: 'AAA' },
+    { id: '2', name: 'BBB' },
   ];
   const debounceTimeLimit = 800;
 
@@ -127,8 +127,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
               size="large"
               style={
                 selectedProject === ''
-                  ? { marginLeft: '20px', width: '20%' }
-                  : { marginLeft: '20px', width: '20%', color: 'green' }
+                  ? { marginLeft: '20px', width: '20%', textAlign: 'left' }
+                  : { marginLeft: '20px', width: '20%', textAlign: 'left', color: 'green' }
               }
             >
               {selectedProject === ''

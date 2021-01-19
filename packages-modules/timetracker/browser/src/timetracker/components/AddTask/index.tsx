@@ -37,8 +37,8 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   const [isBilling, setIsBilling] = useState(false);
   const [selectedProject, setSelectedProject] = useState('');
   const projects = [
-    { id: '1', name: 'Project1' },
-    { id: '2', name: 'Project2' },
+    { id: '1', name: 'AAA' },
+    { id: '2', name: 'BBB' },
   ];
 
   const resetTimerValues = () => {
