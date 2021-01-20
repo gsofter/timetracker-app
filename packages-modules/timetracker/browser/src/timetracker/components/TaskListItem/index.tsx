@@ -113,60 +113,62 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   return (
     <div className={css(styles.timeRecord)}>
       <Row>
-        <Col sm={24} md={24} lg={12} className="input">
-          <Input
-            placeholder="What are you working on?"
-            size="large"
-            value={taskName}
-            onChange={handleChangeTask}
-            style={{ width: '80%' }}
-          />
-          <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
-            <Button
-              icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
-              size="large"
-              style={
-                selectedProject === ''
-                  ? { marginLeft: '20px', width: '20%', textAlign: 'left' }
-                  : { marginLeft: '20px', width: '20%', textAlign: 'left', color: 'green' }
-              }
-            >
-              {selectedProject === ''
-                ? 'Projects'
-                : projects.find(p => p.id === selectedProject)?.name}
-            </Button>
-          </Dropdown>
+        <Col sm={24} md={24} xl={12} className="input">
+          <Row style={{ width: '100%' }}>
+            <Col xs={24} sm={18}>
+              <Input
+                placeholder="What are you working on?"
+                size="large"
+                value={taskName}
+                onChange={handleChangeTask}
+                style={{ width: '80%' }}
+              />
+            </Col>
+            <Col xs={24} sm={6}>
+              <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
+                <Button
+                  icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
+                  size="large"
+                  style={
+                    selectedProject === ''
+                      ? { marginLeft: '20px', width: '20%', textAlign: 'left' }
+                      : { marginLeft: '20px', width: '20%', textAlign: 'left', color: 'green' }
+                  }
+                >
+                  {selectedProject === ''
+                    ? 'Projects'
+                    : projects.find(p => p.id === selectedProject)?.name}
+                </Button>
+              </Dropdown>
+            </Col>
+          </Row>
         </Col>
-        <Col sm={24} md={24} lg={12} className="control">
-          <div className="tag">
-            <Button icon={<TagOutlined />} size="large"></Button>
-          </div>
-          <span className="divider" />
-          <div className="billable">
-            <Checkbox checked={isBillable} onChange={handleChangeBillable}>
-              Billing
-            </Checkbox>
-          </div>
-          <span className="divider" />
-          <div className="time-display">
-            <Title level={5}>
-              {moment(timeRecord.start).format('HH:mm A')} -
-              {moment(timeRecord.end).format('HH:mm A')}
-            </Title>
-          </div>
-          <span className="divider" />
-          <div className="total-time">
-            <Title level={5}>{formatDuration(timeRecord.totalTime)}</Title>
-          </div>
-          <span className="divider" />
-          <div>
-            <Button type="primary" size="large" icon={<CaretRightOutlined />}></Button>
-          </div>
-          <div className="more">
-            <Dropdown overlay={menus} trigger={['click']}>
-              <Button icon={<MoreOutlined />} size="large"></Button>
-            </Dropdown>
-          </div>
+        <Col sm={24} md={24} lg={24} xl={12} className="control">
+          <Row style={{ width: '100%' }}>
+            <Col xs={12} sm={2} md={2}>
+              <Button icon={<TagOutlined />} size="large"></Button>
+            </Col>
+            <Col xs={12} sm={4} md={4}>
+              <Checkbox checked={isBillable} onChange={handleChangeBillable}>
+                Billing
+              </Checkbox>
+            </Col>
+            <Col xs={24} sm={8} md={8}>
+              <Title level={5}>
+                {moment(timeRecord.start).format('HH:mm A')} -
+                {moment(timeRecord.end).format('HH:mm A')}
+              </Title>
+            </Col>
+            <Col xs={12} sm={6} md={6}>
+              <Title level={5}>{formatDuration(timeRecord.totalTime)}</Title>
+            </Col>
+            <Col xs={12} sm={4} md={4}>
+              <Button type="primary" size="large" icon={<CaretRightOutlined />}></Button>
+              <Dropdown overlay={menus} trigger={['click']}>
+                <Button icon={<MoreOutlined />} size="large"></Button>
+              </Dropdown>
+            </Col>
+          </Row>
         </Col>
       </Row>
     </div>
@@ -190,9 +192,25 @@ const styles: { [key: string]: (props) => CSS.Properties } = {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'flex-end',
+      '@media (max-width: 1200px)': {
+        justifyContent: 'space-between',
+        marginTop: '10px',
+        borderTop: '1px solid #eee',
+      },
+      '@media (max-width: 768px)': {
+        flexDirection: 'column',
+        justifyContent: 'space-between',
+      },
       alignItems: 'center',
-      '& div': {
-        padding: '5px 10px',
+      '& > div': {
+        padding: '5px 5px',
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'space-between',
+        '@media (max-width: 768px)': {
+          width: '100%',
+          justifyContent: 'space-around',
+        },
       },
       '& .divider': {
         // marginTop: '5px',

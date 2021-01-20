@@ -133,57 +133,71 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
       {({ start, resume, pause, stop, reset, timerState }) => (
         <div className={css(styles.timeTracker)}>
           <Row>
-            <Col sm={24} md={24} lg={12} className="input">
-              <Input
-                placeholder="What are you working on?"
-                size="large"
-                onChange={handleTaskChange}
-              />
-              <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
-                <Button
-                  icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
-                  size="large"
-                  style={
-                    selectedProject === ''
-                      ? { marginLeft: '20px' }
-                      : { marginLeft: '20px', color: 'green' }
-                  }
-                >
-                  {selectedProject === ''
-                    ? 'Projects'
-                    : projects.find(p => p.id === selectedProject).name}
-                </Button>
-              </Dropdown>
+            <Col sm={24} md={24} xl={12} className="input">
+              <Row style={{ width: '100%' }}>
+                <Col xs={24} sm={18}>
+                  <Input
+                    placeholder="What are you working on?"
+                    size="large"
+                    onChange={handleTaskChange}
+                  />
+                </Col>
+                <Col xs={24} sm={6}>
+                  <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
+                    <Button
+                      icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
+                      size="large"
+                      style={
+                        selectedProject === ''
+                          ? { marginLeft: '20px' }
+                          : { marginLeft: '20px', color: 'green' }
+                      }
+                    >
+                      {selectedProject === ''
+                        ? 'Projects'
+                        : projects.find(p => p.id === selectedProject).name}
+                    </Button>
+                  </Dropdown>
+                </Col>
+              </Row>
             </Col>
-            <Col sm={24} md={24} lg={12} className="control">
-              <div className="tag">
-                <Dropdown overlay={tagsOverlay} trigger={['click']}>
-                  <Button icon={<TagOutlined />} size="large"></Button>
-                </Dropdown>
-              </div>
-              <span className="divider" />
-              <div className="billable">
-                <Checkbox checked={isBilling} onChange={handleChangeBilling}>
-                  Billing
-                </Checkbox>
-              </div>
-              <span className="divider" />
-              <div className="time-display">
-                <Title level={5} style={{ marginBottom: '0px' }}>
-                  <Timer.Hours />: <Timer.Minutes />: <Timer.Seconds />
-                </Title>
-              </div>
-              <span className="divider" />
-              <div className={classNames('start', { hidden: isStart })}>
-                <Button type="primary" size="large" onClick={start}>
-                  START
-                </Button>
-              </div>
-              <div className={classNames('start', { hidden: !isStart })}>
-                <Button type="primary" danger size="large" onClick={() => handleStop(reset, stop)}>
-                  STOP
-                </Button>
-              </div>
+            <Col sm={24} md={24} xl={12} className="control">
+              <Row style={{ width: '100%' }}>
+                <Col xs={12} sm={4} md={4}>
+                  <Dropdown overlay={tagsOverlay} trigger={['click']}>
+                    <Button icon={<TagOutlined />} size="large"></Button>
+                  </Dropdown>
+                </Col>
+                <Col xs={12} sm={4} md={4}>
+                  <Checkbox checked={isBilling} onChange={handleChangeBilling}>
+                    Billing
+                  </Checkbox>
+                </Col>
+                <Col xs={24} sm={10} md={10} style={{ textAlign: 'center' }}>
+                  <Title level={5} style={{ marginBottom: '0px' }}>
+                    <Timer.Hours formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
+                    <Timer.Minutes formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
+                    <Timer.Seconds formatValue={val => `${val < 10 ? `0${val}` : val}`} />
+                  </Title>
+                </Col>
+                <Col xs={24} sm={6} md={6}>
+                  <div className={classNames('start', { hidden: isStart })}>
+                    <Button type="primary" size="large" onClick={start}>
+                      START
+                    </Button>
+                  </div>
+                  <div className={classNames('start', { hidden: !isStart })}>
+                    <Button
+                      type="primary"
+                      danger
+                      size="large"
+                      onClick={() => handleStop(reset, stop)}
+                    >
+                      STOP
+                    </Button>
+                  </div>
+                </Col>
+              </Row>
             </Col>
           </Row>
         </div>
@@ -209,6 +223,11 @@ const styles: { [key: string]: (obj) => CSS.Properties } = {
       flexDirection: 'row',
       justifyContent: 'flex-end',
       alignItems: 'center',
+      '@media (max-width: 1200px)': {
+        justifyContent: 'space-between',
+        marginTop: '10px',
+        borderTop: '1px solid #eee',
+      },
       '& div': {
         padding: '5px 10px',
       },
@@ -218,12 +237,30 @@ const styles: { [key: string]: (obj) => CSS.Properties } = {
         borderLeft: '1px dashed #eee',
         height: '75%',
       },
+      '& .start button': {
+        width: '100%',
+        '@media (max-width: 575px)': {
+          width: '100%',
+        },
+      },
       '& .hidden': {
         display: 'none',
       },
       '& .project-list': {
         fontStyle: 'bold',
         color: 'red',
+      },
+      '& .flex-col': {
+        display: 'flex',
+        flexDirection: 'column',
+        justifyContent: 'center',
+        alignItems: 'center',
+      },
+      '& .flex-row': {
+        display: 'flex',
+        flexDirection: 'row',
+        justifyContent: 'center',
+        alignItems: 'center',
       },
     },
   }),

@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { useFela } from 'react-fela';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 
 import { PageContainer } from '@admin-layout/components';
 import PageHeader from '../../components/PageHeader';
@@ -41,35 +41,54 @@ const TimeTracker = (props: ITimeTracker) => {
   const dateFormat = localStorage.getItem('dateFormat') || initialDateFormat;
 
   const splitTimersByDay = (timeRecords: [ITimeRecord]): [ITimeRecord][] => {
-    let formattedLogsDates = [];
-    let formattedLogsDatesValues = [];
+    timeRecords.sort((a, b) => {
+      if (moment(a.end) < moment(b.end)) return 1;
+      else if (moment(a.end) > moment(b.end)) return -1;
+      else return 0;
+    });
 
+    let grouppedDates = {};
     for (let i = 0; i < timeRecords.length; i++) {
-      const date = moment(timeRecords[i].start).format('YYYY-MM-DD');
-      let index = formattedLogsDates.indexOf(date);
-      if (index === -1) {
-        formattedLogsDates.push(date);
-        index = formattedLogsDates.length - 1;
+      const dispFormat = 'YYYY-MM-DD';
+      const date = moment(timeRecords[i].end);
+      let dateStr = date.format(dispFormat);
+      const weekStartDay = moment().startOf('week');
+      if (weekStartDay > date) dateStr = date.startOf('week').format(dispFormat);
+      if (!grouppedDates.hasOwnProperty(dateStr)) {
+        grouppedDates[dateStr] = [];
       }
-
-      if (typeof formattedLogsDatesValues[index] === 'undefined') {
-        formattedLogsDatesValues[index] = [];
-      }
-
-      formattedLogsDatesValues[index].push(timeRecords[i]);
+      grouppedDates[dateStr].push(timeRecords[i]);
     }
-    return formattedLogsDatesValues;
+
+    let groupedDateArray = [];
+    for (let key of Object.keys(grouppedDates)) {
+      let timeArray = grouppedDates[key];
+      groupedDateArray.push(timeArray);
+    }
+    return groupedDateArray;
   };
 
-  const renderDayDateString = (date: any) => {
-    const { lang } = vocabulary;
-    const toUpperCaseFirstLetter = date => {
-      const day = moment(date)
-        .locale(lang.short)
-        .format('dddd');
-      return day[0].toUpperCase() + day.slice(1);
-    };
-    return `${toUpperCaseFirstLetter(date)}, ${moment(date).format(dateFormat)}`;
+  const renderDayDateString = (date: string) => {
+    if (moment(date) < moment().startOf('week')) {
+      return (
+        moment(date)
+          .startOf('week')
+          .format('MMM/DD/YYYY') +
+        ' - ' +
+        moment(date)
+          .startOf('week')
+          .add('7', 'day')
+          .format('MMM/DD/YYYY')
+      );
+    }
+    return moment(date).calendar(null, {
+      sameDay: '[Today]',
+      nextDay: '[Tomorrow]',
+      nextWeek: 'dddd',
+      lastDay: '[Yesterday]',
+      lastWeek: '[Last] dddd',
+      sameElse: 'DD/MM/YYYY',
+    });
   };
 
   const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
@@ -107,7 +126,7 @@ const TimeTracker = (props: ITimeTracker) => {
                   >
                     <div className="main-page__day-header">
                       <div className="main-page__day-date">
-                        {renderDayDateString(dayRecords[0].start)}
+                        {renderDayDateString(dayRecords[0].end)}
                       </div>
                       <div className="main-page__day-date-all-time">
                         Total time: {renderTotalTimeByDay(dayRecords)}
