@@ -23,6 +23,12 @@ import { message } from 'antd';
 import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
 import { formatDuration } from '../../services/timeRecordService';
+import {
+  getTimeRecord as getLocalTimeRecord,
+  saveTimeRecord as saveToLocal,
+  clearTimeRecord as clearLocal,
+} from '../../services/store';
+
 interface ITimeTracker {
   isMobile: any;
   currentTeam: any;
@@ -31,14 +37,53 @@ interface ITimeTracker {
   removeTimeRecord: (string) => void;
   updateTimeRecord: (string, ITimeRecordRequest) => void;
   timeRecords: [ITimeRecord];
+  timer: any;
 }
 
 const TimeTracker = (props: ITimeTracker) => {
   const { css } = useFela();
-  const { createTimeRecord, timeRecords, removeTimeRecord, updateTimeRecord, isMobile } = props;
-
+  const {
+    createTimeRecord,
+    timeRecords,
+    removeTimeRecord,
+    updateTimeRecord,
+    isMobile,
+    timer,
+  } = props;
+  const { start, stop, reset, setTime } = timer;
   const initialDateFormat = 'DD.MM.YYYY';
   const dateFormat = localStorage.getItem('dateFormat') || initialDateFormat;
+
+  const [isRecording, setIsRecording] = useState(false);
+
+  const [currentTimeRecord, setCurrentTimeRecord] = useState<ITimeRecord>({
+    start: '',
+    end: '',
+    isBillable: false,
+    projectId: '',
+    task: '',
+  });
+
+  const [playingRecordId, setPlayingRecordId] = useState('');
+
+  // load playing record from local storage
+  useEffect(() => {
+    const localRecord: ITimeRecord = getLocalTimeRecord();
+    if (!localRecord || localRecord === undefined) {
+      // no need to do additional configuration
+    } else {
+      setCurrentTimeRecord({
+        start: localRecord.start,
+        task: localRecord.task,
+        projectId: localRecord.projectId,
+        isBillable: localRecord.isBillable,
+      });
+      const passedDuration = moment().valueOf() - moment(localRecord.start).valueOf();
+      console.log('passedDuration => ', passedDuration);
+      setTime(passedDuration);
+      startTimer();
+    }
+  }, []);
 
   const splitTimersByDay = (timeRecords: [ITimeRecord]): [ITimeRecord][] => {
     timeRecords.sort((a, b) => {
@@ -100,6 +145,76 @@ const TimeTracker = (props: ITimeTracker) => {
     return formatDuration(totalTime);
   };
 
+  const startTimer = () => {
+    const newTimeRecord = {
+      ...currentTimeRecord,
+      start: currentTimeRecord.start === '' ? moment().toString() : currentTimeRecord.start,
+    };
+    setCurrentTimeRecord(newTimeRecord);
+    start();
+    setIsRecording(true);
+    if (getLocalTimeRecord() === undefined || getLocalTimeRecord() === null)
+      saveToLocal(newTimeRecord);
+    message.info('New timer started!');
+  };
+
+  const resetTimerValues = () => {
+    setIsRecording(false);
+    setCurrentTimeRecord({
+      start: '',
+      end: '',
+      isBillable: false,
+      projectId: '',
+      task: '',
+    });
+    reset();
+    clearLocal();
+    stop();
+  };
+
+  // save current time record to database
+  const saveCurrentTimeRecord = () => {
+    const endTime = moment();
+    const startTime = moment(currentTimeRecord.start);
+    const newTimeRecord: ITimeRecordRequest = {
+      start: startTime,
+      end: endTime,
+      task: currentTimeRecord.task,
+      projectId: currentTimeRecord.projectId,
+      totalTime: Math.floor((endTime.valueOf() - startTime.valueOf()) / 1000),
+      isBillable: currentTimeRecord.isBillable,
+    };
+    createTimeRecord(newTimeRecord);
+  };
+
+  const stopTimer = () => {
+    saveCurrentTimeRecord();
+    resetTimerValues();
+  };
+
+  const handleTaskChange = event => {
+    event.preventDefault();
+    setCurrentTimeRecord({ ...currentTimeRecord, task: event.target.value });
+  };
+
+  const handleSelectProject = projectId => {
+    setCurrentTimeRecord({ ...currentTimeRecord, projectId: projectId });
+  };
+
+  const handleChangeBillable = event => {
+    setCurrentTimeRecord({ ...currentTimeRecord, isBillable: event.target.checked });
+  };
+
+  const handleTagsChange = value => {
+    console.log('handleTagsChange.value =>', value);
+  };
+
+  const handlePlayTimer = (timeRecord: ITimeRecord) => {
+    if (isRecording) stopTimer();
+    setCurrentTimeRecord({ ...timeRecord, start: moment().toISOString() });
+    startTimer();
+  };
+
   return (
     <div className={css(styleSheet.mainpageStyle as any)}>
       <PageContainer>
@@ -113,7 +228,18 @@ const TimeTracker = (props: ITimeTracker) => {
             })}
           >
             <div className="task-container">
-              <AddTask createTimeRecord={createTimeRecord} />
+              <AddTask
+                createTimeRecord={createTimeRecord}
+                currentTimeRecord={currentTimeRecord}
+                timer={timer}
+                handleStart={startTimer}
+                handleStop={stopTimer}
+                isRecording={isRecording}
+                handleTaskChange={handleTaskChange}
+                handleSelectProject={handleSelectProject}
+                handleChangeBillable={handleChangeBillable}
+                handleTagsChange={handleTagsChange}
+              />
             </div>
             <CustomScrollbar>
               <div className="main-page__list">
@@ -139,6 +265,7 @@ const TimeTracker = (props: ITimeTracker) => {
                         timeRecords={timeRecords}
                         removeTimeRecord={removeTimeRecord}
                         updateTimeRecord={updateTimeRecord}
+                        handlePlayTimer={handlePlayTimer}
                       />
                     ))}
                   </div>
@@ -193,6 +320,10 @@ const TimeTrackerWrapper = props => {
         message.error(error.message);
       });
   };
+
+  // const curTimeRecord: ITimeRecord = getLocalTimeRecord();
+  // console.log('curTimeRecord => ', curTimeRecord);
+
   return data && !loading ? (
     <TimeTracker
       {...props}
@@ -205,4 +336,11 @@ const TimeTrackerWrapper = props => {
     <></>
   );
 };
-export default TimeTrackerWrapper;
+
+const withTimer = timerProps => WrappedComponent => wrappedComponentProps => (
+  <Timer {...timerProps}>
+    {timerRenderProps => <WrappedComponent {...wrappedComponentProps} timer={timerRenderProps} />}
+  </Timer>
+);
+
+export default withTimer({ startImmediately: false })(TimeTrackerWrapper);

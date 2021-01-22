@@ -53,6 +53,7 @@
     "react-dropzone": "11.0.2",
     "react-easy-swipe": "0.0.21",
     "socket.io-client": "2.2.0",
+    "store": "^2.0.12",
     "uuidv4": "6.2.3",
     "yup": "0.27.0"
   },

@@ -39,10 +39,11 @@ export interface ITaskList {
   timeRecords: [ITimeRecord];
   removeTimeRecord: (recordId: string) => void;
   updateTimeRecord: (recordId: string, request: ITimeRecordRequest) => void;
+  handlePlayTimer: (timeRecord: ITimeRecord) => void;
 }
 
 export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
-  const { removeTimeRecord, timeRecord, updateTimeRecord } = props;
+  const { removeTimeRecord, timeRecord, updateTimeRecord, handlePlayTimer } = props;
   const { css } = useFela(props);
   const [selectedProject, setSelectedProject] = useState(timeRecord.projectId ?? '');
   const [taskName, setTaskName] = useState(timeRecord.task ?? '');
@@ -163,7 +164,12 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
               <Title level={5}>{formatDuration(timeRecord.totalTime)}</Title>
             </Col>
             <Col xs={12} sm={4} md={4}>
-              <Button type="primary" size="large" icon={<CaretRightOutlined />}></Button>
+              <Button
+                type="primary"
+                size="large"
+                icon={<CaretRightOutlined />}
+                onClick={() => handlePlayTimer(timeRecord)}
+              ></Button>
               <Dropdown overlay={menus} trigger={['click']}>
                 <Button icon={<MoreOutlined />} size="large"></Button>
               </Dropdown>
