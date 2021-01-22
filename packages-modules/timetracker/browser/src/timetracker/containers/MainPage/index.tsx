@@ -23,6 +23,12 @@ import { message } from 'antd';
 import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
 import { formatDuration } from '../../services/timeRecordService';
+import {
+  getTimeRecord as getLocalTimeRecord,
+  saveTimeRecord as saveToLocal,
+  clearTimeRecord as clearLocal,
+} from '../../services/store';
+
 interface ITimeTracker {
   isMobile: any;
   currentTeam: any;
@@ -44,15 +50,40 @@ const TimeTracker = (props: ITimeTracker) => {
     isMobile,
     timer,
   } = props;
-  const { start, stop, reset } = timer;
+  const { start, stop, reset, setTime } = timer;
   const initialDateFormat = 'DD.MM.YYYY';
   const dateFormat = localStorage.getItem('dateFormat') || initialDateFormat;
 
   const [isRecording, setIsRecording] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  const [taskName, setTaskName] = useState('');
-  const [isBillable, setIsBillable] = useState(false);
-  const [selectedProject, setSelectedProject] = useState('');
+
+  const [currentTimeRecord, setCurrentTimeRecord] = useState<ITimeRecord>({
+    start: '',
+    end: '',
+    isBillable: false,
+    projectId: '',
+    task: '',
+  });
+
+  const [playingRecordId, setPlayingRecordId] = useState('');
+
+  // load playing record from local storage
+  useEffect(() => {
+    const localRecord: ITimeRecord = getLocalTimeRecord();
+    if (!localRecord || localRecord === undefined) {
+      // no need to do additional configuration
+    } else {
+      setCurrentTimeRecord({
+        start: localRecord.start,
+        task: localRecord.task,
+        projectId: localRecord.projectId,
+        isBillable: localRecord.isBillable,
+      });
+      const passedDuration = moment().valueOf() - moment(localRecord.start).valueOf();
+      console.log('passedDuration => ', passedDuration);
+      setTime(passedDuration);
+      startTimer();
+    }
+  }, []);
 
   const splitTimersByDay = (timeRecords: [ITimeRecord]): [ITimeRecord][] => {
     timeRecords.sort((a, b) => {
@@ -115,52 +146,63 @@ const TimeTracker = (props: ITimeTracker) => {
   };
 
   const startTimer = () => {
-    setStartTime(moment());
+    const newTimeRecord = {
+      ...currentTimeRecord,
+      start: currentTimeRecord.start === '' ? moment().toString() : currentTimeRecord.start,
+    };
+    setCurrentTimeRecord(newTimeRecord);
     start();
     setIsRecording(true);
+    if (getLocalTimeRecord() === undefined || getLocalTimeRecord() === null)
+      saveToLocal(newTimeRecord);
     message.info('New timer started!');
   };
 
   const resetTimerValues = () => {
     setIsRecording(false);
-    setStartTime(null);
-    setTaskName('');
-    setIsBillable(false);
-    setSelectedProject('');
+    setCurrentTimeRecord({
+      start: '',
+      end: '',
+      isBillable: false,
+      projectId: '',
+      task: '',
+    });
     reset();
+    clearLocal();
     stop();
   };
 
   // save current time record to database
   const saveCurrentTimeRecord = () => {
     const endTime = moment();
+    const startTime = moment(currentTimeRecord.start);
     const newTimeRecord: ITimeRecordRequest = {
       start: startTime,
       end: endTime,
-      task: taskName,
-      projectId: selectedProject,
+      task: currentTimeRecord.task,
+      projectId: currentTimeRecord.projectId,
       totalTime: Math.floor((endTime.valueOf() - startTime.valueOf()) / 1000),
-      isBillable,
+      isBillable: currentTimeRecord.isBillable,
     };
     createTimeRecord(newTimeRecord);
   };
 
-  const handleStopTimer = () => {
+  const stopTimer = () => {
     saveCurrentTimeRecord();
     resetTimerValues();
   };
 
   const handleTaskChange = event => {
     event.preventDefault();
-    setTaskName(event.target.value);
+    setCurrentTimeRecord({ ...currentTimeRecord, task: event.target.value });
   };
 
   const handleSelectProject = projectId => {
-    setSelectedProject(projectId);
+    setCurrentTimeRecord({ ...currentTimeRecord, projectId: projectId });
   };
 
   const handleChangeBillable = event => {
-    setIsBillable(event.target.checked);
+    setCurrentTimeRecord({ ...currentTimeRecord, isBillable: event.target.checked });
   };
 
   const handleTagsChange = value => {
@@ -168,11 +210,8 @@ const TimeTracker = (props: ITimeTracker) => {
   };
 
   const handlePlayTimer = (timeRecord: ITimeRecord) => {
-    if (isRecording) saveCurrentTimeRecord();
-    resetTimerValues();
-    setTaskName(timeRecord.task);
-    setIsBillable(timeRecord.isBillable);
-    setSelectedProject(timeRecord.projectId);
+    if (isRecording) stopTimer();
+    setCurrentTimeRecord({ ...timeRecord, start: moment().toISOString() });
     startTimer();
   };
 
@@ -191,13 +230,10 @@ const TimeTracker = (props: ITimeTracker) => {
             <div className="task-container">
               <AddTask
                 createTimeRecord={createTimeRecord}
+                currentTimeRecord={currentTimeRecord}
                 timer={timer}
                 handleStart={startTimer}
-                handleStop={handleStopTimer}
-                startTime={startTime}
-                taskName={taskName}
-                selectedProject={selectedProject}
-                isBillable={isBillable}
+                handleStop={stopTimer}
                 isRecording={isRecording}
                 handleTaskChange={handleTaskChange}
                 handleSelectProject={handleSelectProject}
@@ -284,6 +320,10 @@ const TimeTrackerWrapper = props => {
         message.error(error.message);
       });
   };
+
+  // const curTimeRecord: ITimeRecord = getLocalTimeRecord();
+  // console.log('curTimeRecord => ', curTimeRecord);
+
   return data && !loading ? (
     <TimeTracker
       {...props}

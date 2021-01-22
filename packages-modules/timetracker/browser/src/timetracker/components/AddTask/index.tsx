@@ -25,6 +25,7 @@ const { Title } = Typography;
 
 export interface IAddTask {
   createTimeRecord: (ITimeRecordRequest) => void;
+  currentTimeRecord: ITimeRecord;
   handleStart: () => void;
   handleStop: () => void;
   handleTaskChange: (any) => void;
@@ -32,22 +33,14 @@ export interface IAddTask {
   handleSelectProject: (any) => void;
   handleTagsChange: (any) => void;
   timer: any;
-  startTime: number;
-  taskName: string;
-  selectedProject: string;
-  isBillable: boolean;
   isRecording: boolean;
 }
 
 export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   const {
-    createTimeRecord,
     timer,
-    startTime,
-    taskName,
-    selectedProject,
-    isBillable,
     isRecording,
+    currentTimeRecord,
     handleTaskChange,
     handleStart,
     handleStop,
@@ -69,7 +62,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
         return (
           <Menu.Item
             key={project.id}
-            className={classNames({ selected: selectedProject === project.id })}
+            className={classNames({ selected: currentTimeRecord.projectId === project.id })}
             onClick={() => handleSelectProject(project.id)}
           >
             {project.name}
@@ -108,24 +101,26 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
               <Input
                 placeholder="What are you working on?"
                 size="large"
-                value={taskName}
+                value={currentTimeRecord.task}
                 onChange={handleTaskChange}
               />
             </Col>
             <Col xs={24} sm={6}>
               <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
                 <Button
-                  icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
+                  icon={
+                    currentTimeRecord.projectId === '' ? <PlusCircleOutlined /> : <BarsOutlined />
+                  }
                   size="large"
                   style={
-                    selectedProject === ''
+                    currentTimeRecord.projectId === ''
                       ? { marginLeft: '20px' }
                       : { marginLeft: '20px', color: 'green' }
                   }
                 >
-                  {selectedProject === ''
+                  {currentTimeRecord.projectId === ''
                     ? 'Projects'
-                    : projects.find(p => p.id === selectedProject).name}
+                    : projects.find(p => p.id === currentTimeRecord.projectId).name}
                 </Button>
               </Dropdown>
             </Col>
@@ -139,7 +134,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
               </Dropdown>
             </Col>
             <Col xs={12} sm={4} md={4}>
-              <Checkbox checked={isBillable} onChange={handleChangeBillable}>
+              <Checkbox checked={currentTimeRecord.isBillable} onChange={handleChangeBillable}>
                 Billing
               </Checkbox>
             </Col>
