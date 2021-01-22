@@ -25,66 +25,42 @@ const { Title } = Typography;
 
 export interface IAddTask {
   createTimeRecord: (ITimeRecordRequest) => void;
+  handleStart: () => void;
+  handleStop: () => void;
+  handleTaskChange: (any) => void;
+  handleChangeBillable: (any) => void;
+  handleSelectProject: (any) => void;
+  handleTagsChange: (any) => void;
+  timer: any;
+  startTime: number;
+  taskName: string;
+  selectedProject: string;
+  isBillable: boolean;
+  isRecording: boolean;
 }
 
 export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
-  const { createTimeRecord } = props;
+  const {
+    createTimeRecord,
+    timer,
+    startTime,
+    taskName,
+    selectedProject,
+    isBillable,
+    isRecording,
+    handleTaskChange,
+    handleStart,
+    handleStop,
+    handleSelectProject,
+    handleChangeBillable,
+    handleTagsChange,
+  } = props;
   const { css } = useFela(props);
-  const [isStart, setIsStart] = useState(false);
-  const [startTime, setStartTime] = useState(null);
-  // const [endTime, setEndTime] = useState(null);
-  const [taskName, setTaskName] = useState('');
-  const [isBilling, setIsBilling] = useState(false);
-  const [selectedProject, setSelectedProject] = useState('');
   const projects = [
     { id: '1', name: 'AAA' },
     { id: '2', name: 'BBB' },
   ];
-
-  const resetTimerValues = () => {
-    setIsStart(false);
-    setStartTime(null);
-    setTaskName('');
-    setIsBilling(false);
-    setSelectedProject('');
-  };
-
-  const handleTaskChange = event => {
-    event.preventDefault();
-    setTaskName(event.target.value);
-  };
-
-  const handleStart = () => {
-    console.log('timer started!');
-    setStartTime(moment());
-    setIsStart(true);
-  };
-
-  const handleStop = (resetFn: Function, stopFn) => {
-    const endTime = moment();
-    const newTimeRecord: ITimeRecordRequest = {
-      start: startTime,
-      end: endTime,
-      task: taskName,
-      projectId: selectedProject,
-      totalTime: Math.floor((endTime.valueOf() - startTime.valueOf()) / 1000),
-      isBillable: isBilling,
-    };
-    createTimeRecord(newTimeRecord);
-    setIsStart(false);
-    resetFn();
-    resetTimerValues();
-    stopFn();
-  };
-
-  const handleSelectProject = projectId => {
-    console.log('handleSelectProject.projectId =>', projectId);
-    setSelectedProject(projectId);
-  };
-
-  const handleChangeBilling = event => {
-    setIsBilling(event.target.checked);
-  };
+  const { getTime } = timer;
 
   // Dropdown overlay for project select
   const projectDropdownMenus = (
@@ -103,15 +79,10 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     </Menu>
   );
 
-  const handleTagsChange = value => {
-    console.log('handleTagsChange.value =>', value);
-  };
-
   // Dropdown for tags
   const tagsOverlay = (
     <Menu>
       <Menu.Item key={1}>
-        {' '}
         <Select
           mode="tags"
           style={{ width: '100%' }}
@@ -129,80 +100,72 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     </Menu>
   );
   return (
-    <Timer startImmediately={false} onStart={handleStart}>
-      {({ start, resume, pause, stop, reset, timerState }) => (
-        <div className={css(styles.timeTracker)}>
-          <Row>
-            <Col sm={24} md={24} xl={12} className="input">
-              <Row style={{ width: '100%' }}>
-                <Col xs={24} sm={18}>
-                  <Input
-                    placeholder="What are you working on?"
-                    size="large"
-                    onChange={handleTaskChange}
-                  />
-                </Col>
-                <Col xs={24} sm={6}>
-                  <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
-                    <Button
-                      icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
-                      size="large"
-                      style={
-                        selectedProject === ''
-                          ? { marginLeft: '20px' }
-                          : { marginLeft: '20px', color: 'green' }
-                      }
-                    >
-                      {selectedProject === ''
-                        ? 'Projects'
-                        : projects.find(p => p.id === selectedProject).name}
-                    </Button>
-                  </Dropdown>
-                </Col>
-              </Row>
+    <div className={css(styles.timeTracker)}>
+      <Row>
+        <Col sm={24} md={24} xl={12} className="input">
+          <Row style={{ width: '100%' }}>
+            <Col xs={24} sm={18}>
+              <Input
+                placeholder="What are you working on?"
+                size="large"
+                value={taskName}
+                onChange={handleTaskChange}
+              />
             </Col>
-            <Col sm={24} md={24} xl={12} className="control">
-              <Row style={{ width: '100%' }}>
-                <Col xs={12} sm={4} md={4}>
-                  <Dropdown overlay={tagsOverlay} trigger={['click']}>
-                    <Button icon={<TagOutlined />} size="large"></Button>
-                  </Dropdown>
-                </Col>
-                <Col xs={12} sm={4} md={4}>
-                  <Checkbox checked={isBilling} onChange={handleChangeBilling}>
-                    Billing
-                  </Checkbox>
-                </Col>
-                <Col xs={24} sm={10} md={10} style={{ textAlign: 'center' }}>
-                  <Title level={5} style={{ marginBottom: '0px' }}>
-                    <Timer.Hours formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
-                    <Timer.Minutes formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
-                    <Timer.Seconds formatValue={val => `${val < 10 ? `0${val}` : val}`} />
-                  </Title>
-                </Col>
-                <Col xs={24} sm={6} md={6}>
-                  <div className={classNames('start', { hidden: isStart })}>
-                    <Button type="primary" size="large" onClick={start}>
-                      START
-                    </Button>
-                  </div>
-                  <div className={classNames('start', { hidden: !isStart })}>
-                    <Button
-                      type="primary"
-                      danger
-                      size="large"
-                      onClick={() => handleStop(reset, stop)}
-                    >
-                      STOP
-                    </Button>
-                  </div>
-                </Col>
-              </Row>
+            <Col xs={24} sm={6}>
+              <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
+                <Button
+                  icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
+                  size="large"
+                  style={
+                    selectedProject === ''
+                      ? { marginLeft: '20px' }
+                      : { marginLeft: '20px', color: 'green' }
+                  }
+                >
+                  {selectedProject === ''
+                    ? 'Projects'
+                    : projects.find(p => p.id === selectedProject).name}
+                </Button>
+              </Dropdown>
             </Col>
           </Row>
-        </div>
-      )}
-    </Timer>
+        </Col>
+        <Col sm={24} md={24} xl={12} className="control">
+          <Row style={{ width: '100%' }}>
+            <Col xs={12} sm={4} md={4}>
+              <Dropdown overlay={tagsOverlay} trigger={['click']}>
+                <Button icon={<TagOutlined />} size="large"></Button>
+              </Dropdown>
+            </Col>
+            <Col xs={12} sm={4} md={4}>
+              <Checkbox checked={isBillable} onChange={handleChangeBillable}>
+                Billing
+              </Checkbox>
+            </Col>
+            <Col xs={24} sm={10} md={10} style={{ textAlign: 'center' }}>
+              <Title level={5} style={{ marginBottom: '0px' }}>
+                <Timer.Hours formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
+                <Timer.Minutes formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
+                <Timer.Seconds formatValue={val => `${val < 10 ? `0${val}` : val}`} />
+              </Title>
+            </Col>
+            <Col xs={24} sm={6} md={6}>
+              <div className={classNames('start', { hidden: isRecording })}>
+                <Button type="primary" size="large" onClick={handleStart}>
+                  START
+                </Button>
+              </div>
+              <div className={classNames('start', { hidden: !isRecording })}>
+                <Button type="primary" danger size="large" onClick={handleStop}>
+                  STOP
+                </Button>
+              </div>
+            </Col>
+          </Row>
+        </Col>
+      </Row>
+    </div>
   );
 };
 
