@@ -34,7 +34,6 @@ export {
   PageContainer,
   FooterToolbar,
   BaseMenu, //@sri added
-  getMenuSeparation, //@sri added
 };
 
 export type {
