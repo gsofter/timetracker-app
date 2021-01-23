@@ -1,4 +1,4 @@
-import { MenuDataItem } from "../typings";
+import { MenuDataItem } from '@admin-layout/components';
 
 
 

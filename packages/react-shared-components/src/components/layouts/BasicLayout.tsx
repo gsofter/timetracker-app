@@ -6,8 +6,8 @@ import {
   DefaultFooter,
   SettingDrawer,
   BaseMenu,
-  getMenuSeparation,
 } from '@admin-layout/components';
+import { getMenuSeparation } from './seperatedMenus';
 import React, { useEffect, useMemo, useRef } from 'react';
 import * as _ from 'lodash';
 import { Link, generatePath } from 'react-router-dom';
@@ -123,6 +123,25 @@ const menuFooterRender = (props, mode = 'horizontal') => {
   );
 }
 
+const menuContentRender = (props, menudom) => {
+  const { menuData, ...rest } = props;
+  const newMenuData = getMenuSeparation(props?.menuData).lowerMenus;
+  const newProps = { ...rest, menuData: newMenuData };
+
+  return (
+    <BaseMenu
+      {...newProps}
+      mode="inline"
+      handleOpenChange={props.onOpenChange}
+      style={{
+        width: '100%',
+      }}
+      className={`ant-pro-sider-menu`}
+    />
+  );
+}
+
+
 const menuExtraRender = (props) => {
   const { menuData, ...rest } = props;
   const newMenuData = getMenuSeparation(props?.menuData).middleMenus
@@ -195,6 +214,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
             <Link to={generateMenuPath(menuItemProps.path, props.routeParams)}>{defaultDom}</Link>
           );
         }}
+        menuContentRender={menuContentRender}
         menuFooterRender={menuFooterRender}
         breadcrumbRender={(routers = []) => [
           {
