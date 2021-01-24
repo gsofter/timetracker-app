@@ -28,10 +28,7 @@ export interface IAddTask {
   currentTimeRecord: ITimeRecord;
   handleStart: () => void;
   handleStop: () => void;
-  handleTaskChange: (any) => void;
-  handleChangeBillable: (any) => void;
-  handleSelectProject: (any) => void;
-  handleTagsChange: (any) => void;
+  setCurrentTimeRecord: Function;
   timer: any;
   isRecording: boolean;
 }
@@ -41,12 +38,9 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     timer,
     isRecording,
     currentTimeRecord,
-    handleTaskChange,
     handleStart,
     handleStop,
-    handleSelectProject,
-    handleChangeBillable,
-    handleTagsChange,
+    setCurrentTimeRecord,
   } = props;
   const { css } = useFela(props);
   const projects = [
@@ -54,6 +48,23 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     { id: '2', name: 'BBB' },
   ];
   const { getTime } = timer;
+
+  const handleTaskChange = event => {
+    event.preventDefault();
+    setCurrentTimeRecord({ ...currentTimeRecord, task: event.target.value });
+  };
+
+  const handleSelectProject = projectId => {
+    setCurrentTimeRecord({ ...currentTimeRecord, projectId: projectId });
+  };
+
+  const handleChangeBillable = event => {
+    setCurrentTimeRecord({ ...currentTimeRecord, isBillable: event.target.checked });
+  };
+
+  const handleTagsChange = value => {
+    console.log('handleTagsChange.value =>', value);
+  };
 
   // Dropdown overlay for project select
   const projectDropdownMenus = (
@@ -120,7 +131,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                 >
                   {currentTimeRecord.projectId === ''
                     ? 'Projects'
-                    : projects.find(p => p.id === currentTimeRecord.projectId).name}
+                    : projects.find(p => p.id === currentTimeRecord.projectId)?.name}
                 </Button>
               </Dropdown>
             </Col>

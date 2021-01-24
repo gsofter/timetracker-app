@@ -229,10 +229,11 @@ input TimeRecordRequest {
 
 extend type Query {
   getTimeRecords: [TimeRecord]
+  getPlayingTimeRecord: TimeRecord
 }
 
 extend type Mutation {
-  createTimeRecord(request: TimeRecordRequest): Boolean
+  createTimeRecord(request: TimeRecordRequest): String
   updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
   removeTimeRecord(recordId: String): Boolean
 }

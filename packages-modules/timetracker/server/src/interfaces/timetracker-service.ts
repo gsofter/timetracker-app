@@ -7,9 +7,14 @@ export interface ITimeTrackerService {
     getTimeRecords(): Promise<Array<ITimeRecord>>
 
     /**
+     * Get Playing TimeRecord
+     */
+    getPlayingTimeRecord(): Promise<ITimeRecord>
+
+    /**
      * Create a new time record
      */
-    createTimeRecord(request: ITimeRecordRequest): Promise<Boolean>
+    createTimeRecord(request: ITimeRecordRequest): Promise<string>
 
     /**
      * Update a existing time record

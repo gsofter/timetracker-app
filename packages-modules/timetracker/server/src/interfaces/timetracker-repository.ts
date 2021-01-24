@@ -8,9 +8,14 @@ export interface ITimeTrackerRepository {
     getTimeRecords(): Promise<Array<any>>
 
     /**
+     * Get Playing TimeRecord
+     */
+    getPlayingTimeRecord(): Promise<ITimeRecord>
+    
+    /**
      * Create a new time record
      */
-    createTimeRecord(request: ITimeRecordRequest) : Promise<Boolean>
+    createTimeRecord(request: ITimeRecordRequest) : Promise<string>
 
     /**
      * Update a new time record

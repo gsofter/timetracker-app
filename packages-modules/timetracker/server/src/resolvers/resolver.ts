@@ -4,6 +4,10 @@ export const resolver = (options) => ({
       options.logger.trace('(Query.getTimeRecords) args %j', args)
       return timeTrackerService.getTimeRecords();
     },
+    getPlayingTimeRecord: (root, args, { timeTrackerService }) => {
+      options.logger.trace('(Query.getPlayingTimeRecord) args %j', args)
+      return timeTrackerService.getPlayingTimeRecord();
+    }
   },
   Mutation: {
     createTimeRecord: (root,  args, { timeTrackerService }) => {
