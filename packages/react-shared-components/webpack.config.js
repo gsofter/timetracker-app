@@ -94,7 +94,7 @@ var webpack_opts = {
   },
   externals: [
     nodeExternals({
-      : [/.*\.css$/],
+      allowlist: [/.*\.css$/],
       modulesDir: "../../node_modules"
     }),
     nodeExternals()
