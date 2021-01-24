@@ -14,6 +14,7 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 
+
 export const CreateTimeRecordDocument = gql`
     mutation CreateTimeRecord($request: TimeRecordRequest) {
   createTimeRecord(request: $request)
@@ -123,6 +124,52 @@ export function useUpdateTimeRecordMutation(baseOptions?: ApolloReactHooks.Mutat
 export type UpdateTimeRecordMutationHookResult = ReturnType<typeof useUpdateTimeRecordMutation>;
 export type UpdateTimeRecordMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IUpdateTimeRecordMutation>;
 export type UpdateTimeRecordMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IUpdateTimeRecordMutation, SchemaTypes.IUpdateTimeRecordMutationVariables>;
+export const GetPlayingTimeRecordDocument = gql`
+    query GetPlayingTimeRecord {
+  getPlayingTimeRecord {
+    id
+    start
+    end
+    task
+    tags
+    projectId
+    clientId
+    totalTime
+    isBillable
+  }
+}
+    `;
+export type GetPlayingTimeRecordComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetPlayingTimeRecordQuery, SchemaTypes.IGetPlayingTimeRecordQueryVariables>, 'query'>;
+
+    export const GetPlayingTimeRecordComponent = (props: GetPlayingTimeRecordComponentProps) => (
+      <ApolloReactComponents.Query<SchemaTypes.IGetPlayingTimeRecordQuery, SchemaTypes.IGetPlayingTimeRecordQueryVariables> query={GetPlayingTimeRecordDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetPlayingTimeRecordQuery__
+ *
+ * To run a query within a React component, call `useGetPlayingTimeRecordQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetPlayingTimeRecordQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetPlayingTimeRecordQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetPlayingTimeRecordQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchemaTypes.IGetPlayingTimeRecordQuery, SchemaTypes.IGetPlayingTimeRecordQueryVariables>) {
+        return ApolloReactHooks.useQuery<SchemaTypes.IGetPlayingTimeRecordQuery, SchemaTypes.IGetPlayingTimeRecordQueryVariables>(GetPlayingTimeRecordDocument, baseOptions);
+      }
+export function useGetPlayingTimeRecordLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchemaTypes.IGetPlayingTimeRecordQuery, SchemaTypes.IGetPlayingTimeRecordQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SchemaTypes.IGetPlayingTimeRecordQuery, SchemaTypes.IGetPlayingTimeRecordQueryVariables>(GetPlayingTimeRecordDocument, baseOptions);
+        }
+export type GetPlayingTimeRecordQueryHookResult = ReturnType<typeof useGetPlayingTimeRecordQuery>;
+export type GetPlayingTimeRecordLazyQueryHookResult = ReturnType<typeof useGetPlayingTimeRecordLazyQuery>;
+export type GetPlayingTimeRecordQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetPlayingTimeRecordQuery, SchemaTypes.IGetPlayingTimeRecordQueryVariables>;
 export const GetTimeRecordsDocument = gql`
     query GetTimeRecords {
   getTimeRecords {

@@ -15,6 +15,7 @@ import { styleSheet } from './styles';
 import {
   useCreateTimeRecordMutation,
   useGetTimeRecordsQuery,
+  useGetPlayingTimeRecordQuery,
   useRemoveTimeRecordMutation,
   useUpdateTimeRecordMutation,
 } from '../../../generated-models';
@@ -23,11 +24,6 @@ import { message } from 'antd';
 import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
 import { formatDuration } from '../../services/timeRecordService';
-import {
-  getTimeRecord as getLocalTimeRecord,
-  saveTimeRecord as saveToLocal,
-  clearTimeRecord as clearLocal,
-} from '../../services/store';
 
 interface ITimeTracker {
   isMobile: any;
@@ -38,103 +34,27 @@ interface ITimeTracker {
   updateTimeRecord: (string, ITimeRecordRequest) => void;
   timeRecords: [ITimeRecord];
   timer: any;
+  setCurrentTimeRecord: Function;
+  setIsRecording: Function;
+  currentTimeRecord: ITimeRecord;
+  isRecording: boolean;
 }
 
 const TimeTracker = (props: ITimeTracker) => {
   const { css } = useFela();
   const {
-    createTimeRecord,
     timeRecords,
+    createTimeRecord,
     removeTimeRecord,
     updateTimeRecord,
     isMobile,
     timer,
+    setCurrentTimeRecord,
+    currentTimeRecord,
+    setIsRecording,
+    isRecording,
   } = props;
   const { start, stop, reset, setTime } = timer;
-  const initialDateFormat = 'DD.MM.YYYY';
-  const dateFormat = localStorage.getItem('dateFormat') || initialDateFormat;
-
-  const [isRecording, setIsRecording] = useState(false);
-
-  const [currentTimeRecord, setCurrentTimeRecord] = useState<ITimeRecord>({
-    start: '',
-    end: '',
-    isBillable: false,
-    projectId: '',
-    task: '',
-  });
-
-  const [playingRecordId, setPlayingRecordId] = useState('');
-
-  // load playing record from local storage
-  useEffect(() => {
-    const localRecord: ITimeRecord = getLocalTimeRecord();
-    if (!localRecord || localRecord === undefined) {
-      // no need to do additional configuration
-    } else {
-      setCurrentTimeRecord({
-        start: localRecord.start,
-        task: localRecord.task,
-        projectId: localRecord.projectId,
-        isBillable: localRecord.isBillable,
-      });
-      const passedDuration = moment().valueOf() - moment(localRecord.start).valueOf();
-      console.log('passedDuration => ', passedDuration);
-      setTime(passedDuration);
-      startTimer();
-    }
-  }, []);
-
-  const splitTimersByDay = (timeRecords: [ITimeRecord]): [ITimeRecord][] => {
-    timeRecords.sort((a, b) => {
-      if (moment(a.end) < moment(b.end)) return 1;
-      else if (moment(a.end) > moment(b.end)) return -1;
-      else return 0;
-    });
-
-    let grouppedDates = {};
-    for (let i = 0; i < timeRecords.length; i++) {
-      const dispFormat = 'YYYY-MM-DD';
-      const date = moment(timeRecords[i].end);
-      let dateStr = date.format(dispFormat);
-      const weekStartDay = moment().startOf('week');
-      if (weekStartDay > date) dateStr = date.startOf('week').format(dispFormat);
-      if (!grouppedDates.hasOwnProperty(dateStr)) {
-        grouppedDates[dateStr] = [];
-      }
-      grouppedDates[dateStr].push(timeRecords[i]);
-    }
-
-    let groupedDateArray = [];
-    for (let key of Object.keys(grouppedDates)) {
-      let timeArray = grouppedDates[key];
-      groupedDateArray.push(timeArray);
-    }
-    return groupedDateArray;
-  };
-
-  const renderDayDateString = (date: string) => {
-    if (moment(date) < moment().startOf('week')) {
-      return (
-        moment(date)
-          .startOf('week')
-          .format('MMM/DD/YYYY') +
-        ' - ' +
-        moment(date)
-          .startOf('week')
-          .add('7', 'day')
-          .format('MMM/DD/YYYY')
-      );
-    }
-    return moment(date).calendar(null, {
-      sameDay: '[Today]',
-      nextDay: '[Tomorrow]',
-      nextWeek: 'dddd',
-      lastDay: '[Yesterday]',
-      lastWeek: '[Last] dddd',
-      sameElse: 'DD/MM/YYYY',
-    });
-  };
 
   const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
@@ -146,29 +66,25 @@ const TimeTracker = (props: ITimeTracker) => {
   };
 
   const startTimer = () => {
-    const newTimeRecord = {
+    const newTimeRecord: ITimeRecordRequest = {
       ...currentTimeRecord,
-      start: currentTimeRecord.start === '' ? moment().toString() : currentTimeRecord.start,
+      start: moment(),
+      end: null,
     };
-    setCurrentTimeRecord(newTimeRecord);
-    start();
-    setIsRecording(true);
-    if (getLocalTimeRecord() === undefined || getLocalTimeRecord() === null)
-      saveToLocal(newTimeRecord);
-    message.info('New timer started!');
+    createTimeRecord(newTimeRecord);
   };
 
   const resetTimerValues = () => {
     setIsRecording(false);
     setCurrentTimeRecord({
-      start: '',
-      end: '',
+      start: moment(),
+      end: null,
       isBillable: false,
       projectId: '',
       task: '',
     });
+    setTime(0);
     reset();
-    clearLocal();
     stop();
   };
 
@@ -176,6 +92,7 @@ const TimeTracker = (props: ITimeTracker) => {
   const saveCurrentTimeRecord = () => {
     const endTime = moment();
     const startTime = moment(currentTimeRecord.start);
+
     const newTimeRecord: ITimeRecordRequest = {
       start: startTime,
       end: endTime,
@@ -184,7 +101,9 @@ const TimeTracker = (props: ITimeTracker) => {
       totalTime: Math.floor((endTime.valueOf() - startTime.valueOf()) / 1000),
       isBillable: currentTimeRecord.isBillable,
     };
-    createTimeRecord(newTimeRecord);
+    if (currentTimeRecord.id === undefined || currentTimeRecord.id === '')
+      createTimeRecord(newTimeRecord);
+    else updateTimeRecord(currentTimeRecord.id, newTimeRecord);
   };
 
   const stopTimer = () => {
@@ -192,27 +111,14 @@ const TimeTracker = (props: ITimeTracker) => {
     resetTimerValues();
   };
 
-  const handleTaskChange = event => {
-    event.preventDefault();
-    setCurrentTimeRecord({ ...currentTimeRecord, task: event.target.value });
-  };
-
-  const handleSelectProject = projectId => {
-    setCurrentTimeRecord({ ...currentTimeRecord, projectId: projectId });
-  };
-
-  const handleChangeBillable = event => {
-    setCurrentTimeRecord({ ...currentTimeRecord, isBillable: event.target.checked });
-  };
-
-  const handleTagsChange = value => {
-    console.log('handleTagsChange.value =>', value);
-  };
-
   const handlePlayTimer = (timeRecord: ITimeRecord) => {
     if (isRecording) stopTimer();
-    setCurrentTimeRecord({ ...timeRecord, start: moment().toISOString() });
-    startTimer();
+    const newTimeRecord: ITimeRecordRequest = {
+      ..._.omit(timeRecord, ['id', '__typename']),
+      start: moment(),
+      end: null,
+    };
+    createTimeRecord(newTimeRecord);
   };
 
   return (
@@ -235,10 +141,7 @@ const TimeTracker = (props: ITimeTracker) => {
                 handleStart={startTimer}
                 handleStop={stopTimer}
                 isRecording={isRecording}
-                handleTaskChange={handleTaskChange}
-                handleSelectProject={handleSelectProject}
-                handleChangeBillable={handleChangeBillable}
-                handleTagsChange={handleTagsChange}
+                setCurrentTimeRecord={setCurrentTimeRecord}
               />
             </div>
             <CustomScrollbar>
@@ -280,7 +183,9 @@ const TimeTracker = (props: ITimeTracker) => {
 };
 
 const TimeTrackerWrapper = props => {
+  const { setTime, reset, stop, start } = props.timer;
   const { data, error, refetch, loading } = useGetTimeRecordsQuery();
+  const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
   const [createMutation] = useCreateTimeRecordMutation();
   const [removeMutation] = useRemoveTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
@@ -289,8 +194,8 @@ const TimeTrackerWrapper = props => {
   const createTimeRecord = (request: ITimeRecordRequest) => {
     createMutation({ variables: { request } })
       .then(() => {
-        message.success('TimeRecord created');
-        refetch();
+        message.info('TimeRecord created');
+        plRefetch();
       })
       .catch(error => {
         message.error(error.message);
@@ -315,14 +220,33 @@ const TimeTrackerWrapper = props => {
       .then(() => {
         message.success('TimeRecord Updated');
         refetch();
+        plRefetch();
       })
       .catch(error => {
         message.error(error.message);
       });
   };
 
-  // const curTimeRecord: ITimeRecord = getLocalTimeRecord();
-  // console.log('curTimeRecord => ', curTimeRecord);
+  const [currentTimeRecord, setCurrentTimeRecord] = useState<ITimeRecord>({
+    start: null,
+    end: null,
+    isBillable: false,
+    projectId: '',
+    task: '',
+  });
+  const [isRecording, setIsRecording] = useState(false);
+
+  useEffect(() => {
+    console.log('useFffect/[plData, plLoading] called');
+    if (plData && plData.getPlayingTimeRecord) {
+      const playingRecord = plData.getPlayingTimeRecord;
+      const passDur = moment().valueOf() - moment(playingRecord.start).valueOf();
+      setCurrentTimeRecord(playingRecord);
+      setIsRecording(true);
+      setTime(passDur);
+      start();
+    }
+  }, [plData, plLoading]);
 
   return data && !loading ? (
     <TimeTracker
@@ -331,6 +255,10 @@ const TimeTrackerWrapper = props => {
       removeTimeRecord={removeTimeRecord}
       updateTimeRecord={updateTimeRecord}
       timeRecords={_.get(data, 'getTimeRecords', [])}
+      setIsRecording={setIsRecording}
+      setCurrentTimeRecord={setCurrentTimeRecord}
+      currentTimeRecord={currentTimeRecord}
+      isRecording={isRecording}
     />
   ) : (
     <></>
@@ -342,5 +270,56 @@ const withTimer = timerProps => WrappedComponent => wrappedComponentProps => (
     {timerRenderProps => <WrappedComponent {...wrappedComponentProps} timer={timerRenderProps} />}
   </Timer>
 );
+
+const splitTimersByDay = (timeRecords: [ITimeRecord]): [ITimeRecord][] => {
+  timeRecords.sort((a, b) => {
+    if (moment(a.end) < moment(b.end)) return 1;
+    else if (moment(a.end) > moment(b.end)) return -1;
+    else return 0;
+  });
+
+  let grouppedDates = {};
+  for (let i = 0; i < timeRecords.length; i++) {
+    const dispFormat = 'YYYY-MM-DD';
+    const date = moment(timeRecords[i].end);
+    let dateStr = date.format(dispFormat);
+    const weekStartDay = moment().startOf('week');
+    if (weekStartDay > date) dateStr = date.startOf('week').format(dispFormat);
+    if (!grouppedDates.hasOwnProperty(dateStr)) {
+      grouppedDates[dateStr] = [];
+    }
+    grouppedDates[dateStr].push(timeRecords[i]);
+  }
+
+  let groupedDateArray = [];
+  for (let key of Object.keys(grouppedDates)) {
+    let timeArray = grouppedDates[key];
+    groupedDateArray.push(timeArray);
+  }
+  return groupedDateArray;
+};
+
+const renderDayDateString = (date: string) => {
+  if (moment(date) < moment().startOf('week')) {
+    return (
+      moment(date)
+        .startOf('week')
+        .format('MMM/DD/YYYY') +
+      ' - ' +
+      moment(date)
+        .startOf('week')
+        .add('7', 'day')
+        .format('MMM/DD/YYYY')
+    );
+  }
+  return moment(date).calendar(null, {
+    sameDay: '[Today]',
+    nextDay: '[Tomorrow]',
+    nextWeek: 'dddd',
+    lastDay: '[Yesterday]',
+    lastWeek: '[Last] dddd',
+    sameElse: 'DD/MM/YYYY',
+  });
+};
 
 export default withTimer({ startImmediately: false })(TimeTrackerWrapper);

@@ -1,0 +1,7 @@
+extend type query {
+    getPlayingTimeRecord: TimeRecord
+}
+
+extend type mutation {
+    
+}

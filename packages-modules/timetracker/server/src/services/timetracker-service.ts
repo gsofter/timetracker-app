@@ -21,6 +21,10 @@ export class TimeTrackerService implements ITimeTrackerService {
         return this.trackerRepository.getTimeRecords();
     }
 
+    public async getPlayingTimeRecord(): Promise<ITimeRecord> {
+        return this.trackerRepository.getPlayingTimeRecord();
+    }
+
     public async createTimeRecord( request: ITimeRecordRequest) {
         return this.trackerRepository.createTimeRecord(request)
     }

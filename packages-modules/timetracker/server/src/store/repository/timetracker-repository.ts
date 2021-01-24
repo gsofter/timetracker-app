@@ -24,13 +24,21 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   }
 
   public async getTimeRecords() {
-    return this.timeRecordModel.find({});
+    return this.timeRecordModel.find({ end: {$ne:null} });
+  }
+
+  public async getPlayingTimeRecord() {
+    const res = await this.timeRecordModel.find({ end: null });
+    if(res.length > 0) {
+      return res[0]
+    }
+    return null;
   }
 
   public async createTimeRecord(request: ITimeRecordRequest) {
     try {
-        await this.timeRecordModel.create({ ...request })
-        return true;
+        const response = await this.timeRecordModel.create({ ...request })
+        return response.id;
     } catch(err) {
         throw new Error(err.message);
     }
