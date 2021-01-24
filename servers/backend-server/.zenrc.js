@@ -27,7 +27,7 @@ const config = {
                 ],
                 externals: [
                     nodeExternals({}),
-                    nodeExternals({ whitelist: [/webpack\/hot/i], modulesDir: "../../node_modules" })
+                    nodeExternals({ : [/webpack\/hot/i], modulesDir: "../../node_modules" })
                 ],
             }
         },
