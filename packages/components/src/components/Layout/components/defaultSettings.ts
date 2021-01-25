@@ -67,12 +67,6 @@ export interface PureSettings {
    * @description 只在 mix 模式下生效
    */
   splitMenus?: boolean;
-  
-  /**
-   * @name beeena
-   * @description Add language for the implement react-intel
-   */
-  language?: 'en-US';
 }
 export type ProSettings = PureSettings & RenderSetting;
 
@@ -89,6 +83,5 @@ const defaultSettings: ProSettings = {
   title: 'CDMBase LLC',
   iconfontUrl: '',
   primaryColor: '#1890ff',
-  language: 'en-US'
 };
 export default defaultSettings;
