@@ -7,5 +7,10 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
     height: '48px',
     marginLeft: 'auto',
     overflow: 'hidden',
-  }),
+    '& .lang-btn': {
+      marginTop: '10px',
+      marginRight: '10px',
+    },
+  }
+  ),
 };
