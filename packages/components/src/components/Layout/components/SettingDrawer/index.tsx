@@ -64,7 +64,7 @@ export interface SettingDrawerProps {
 
 export interface SettingDrawerState extends MergerSettingsType<ProSettings> {
   collapse?: boolean;
-  language?: string;
+  // language?: string;
 }
 
 let oldSetting: MergerSettingsType<ProSettings> = {};

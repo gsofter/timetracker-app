@@ -16,6 +16,7 @@ const proSettings: DefaultSettings = {
     colorWeak: false,
     title: 'CDMBase LLC',
     iconfontUrl: '',
+    language: 'en-US'
 }
 
 export type { DefaultSettings };

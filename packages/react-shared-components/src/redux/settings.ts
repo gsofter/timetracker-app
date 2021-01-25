@@ -1,6 +1,6 @@
 import { Reducer } from 'redux';
 import defaultSettings, { DefaultSettings } from '../config/default-settings';
-import { CHANGE_SETTINGS_ACTION } from '../constants/constants';
+import { CHANGE_SETTINGS_ACTION , CHANGE_LANGUAGE} from '../constants/constants';
 
 
 // Note: We customize reducer part as AntPro uses inbuild way.
@@ -13,7 +13,6 @@ const updateColorWeak: (colorWeak: boolean) => void = (colorWeak) => {
         }
     }
 };
-
 interface SettingsActionPayload {
     colorWeak: any;
     contentWidth: any;
@@ -33,9 +32,15 @@ const settingsReducer = (state = defaultSettings, { type, payload = {} }: { type
                 ...state,
                 ...payload,
             };
+         case CHANGE_LANGUAGE:
+             return {
+                ...state,
+                 language:payload
+             }
+
         default:
             return state;
     }
 }
 
-export { settingsReducer };
+export { settingsReducer};
