@@ -1,10 +1,15 @@
-import classNames from 'classnames';
 import React, { useContext, useEffect, useState } from 'react';
 import { ProjectsListPopup } from '../ProjectsListPopup';
 import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
 import _ from 'lodash';
-import { PlusCircleOutlined, TagOutlined, StopFilled, BarsOutlined } from '@ant-design/icons';
+import {
+  PlusCircleOutlined,
+  TagOutlined,
+  StopFilled,
+  BarsOutlined,
+  CloseOutlined,
+} from '@ant-design/icons';
 import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
 import {
   Input,
@@ -22,6 +27,7 @@ import CSS from 'csstype';
 import Timer from 'react-compound-timer';
 import moment from 'moment';
 import BillableCheck from '../BillableCheck';
+import classNames from 'classnames';
 
 const { Title } = Typography;
 
@@ -31,26 +37,34 @@ export interface IAddTask {
   handleStart: () => void;
   handleStop: () => void;
   setCurrentTimeRecord: Function;
+  resetTimerValues: Function;
+  removePlayingTimeRecord: Function;
   timer: any;
   isRecording: boolean;
 }
 
+const projects = [
+  { id: '1', name: 'AAA' },
+  { id: '2', name: 'BBB' },
+];
+
+enum MODE {
+  MANUAL,
+  TRACK,
+}
+
 export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   const {
-    timer,
     isRecording,
     currentTimeRecord,
     handleStart,
     handleStop,
     setCurrentTimeRecord,
+    resetTimerValues,
+    removePlayingTimeRecord,
   } = props;
   const { css } = useFela(props);
-  const projects = [
-    { id: '1', name: 'AAA' },
-    { id: '2', name: 'BBB' },
-  ];
-  const { getTime } = timer;
-
+  const [mode, setMode] = useState(MODE.TRACK);
   const handleTaskChange = event => {
     event.preventDefault();
     setCurrentTimeRecord({ ...currentTimeRecord, task: event.target.value });
@@ -68,6 +82,9 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     console.log('handleTagsChange.value =>', value);
   };
 
+  const handleDiscard = event => {
+    removePlayingTimeRecord();
+  };
   // Dropdown overlay for project select
   const projectDropdownMenus = (
     <Menu className={css(styles.projectDown)}>
@@ -104,6 +121,15 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
         </Select>
       </Menu.Item>
     </Menu>
+  );
+
+  const discardConfirmOverlay = (
+    <div>
+      Are you sure to Discard?
+      <Button type="primary" onClick={handleDiscard}>
+        Discard
+      </Button>
+    </div>
   );
   return (
     <div className={css(styles.timeTracker)}>
@@ -148,6 +174,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                 onChange={handleChangeBillable}
               />
             </Col>
+
             <Col span={10} className="flex-center">
               <Title level={5} style={{ marginBottom: '0px' }}>
                 <Timer.Hours formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
@@ -155,12 +182,12 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                 <Timer.Seconds formatValue={val => `${val < 10 ? `0${val}` : val}`} />
               </Title>
             </Col>
-            <Col span={6}>
+            <Col span={5}>
               <div
                 className={classNames(
                   'start',
                   { hidden: isRecording },
-                  { 'flex-center': !isRecording },
+                  { 'flex-end': !isRecording },
                 )}
               >
                 <Button type="primary" size="large" onClick={handleStart}>
@@ -171,13 +198,18 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                 className={classNames(
                   'start',
                   { hidden: !isRecording },
-                  { 'flex-center': isRecording },
+                  { 'flex-end': isRecording },
                 )}
               >
                 <Button type="primary" danger size="large" onClick={handleStop}>
                   STOP
                 </Button>
               </div>
+            </Col>
+            <Col span={1} className={classNames({ hidden: !isRecording })}>
+              <Dropdown overlay={discardConfirmOverlay} trigger={['click']}>
+                <Button icon={<CloseOutlined />}></Button>
+              </Dropdown>
             </Col>
           </Row>
         </Col>
@@ -246,6 +278,11 @@ const styles: { [key: string]: (obj) => CSS.Properties } = {
     '& .flex-center': {
       display: 'flex',
       justifyContent: 'center',
+      alignItems: 'center',
+    },
+    '& .flex-end': {
+      display: 'flex',
+      justifyContent: 'end',
       alignItems: 'center',
     },
   }),
