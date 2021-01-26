@@ -33,6 +33,7 @@ const { Title } = Typography;
 import * as _ from 'lodash';
 import debounce from '../../services/debounce';
 import { formatDuration } from '../../services/timeRecordService';
+import BillableCheck from '../BillableCheck';
 
 export interface ITaskList {
   timeRecord?: ITimeRecord;
@@ -107,33 +108,32 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   );
 
   const handleChangeBillable = event => {
-    setIsBillable(event.target.checked);
-    updateTimeRecord(timeRecord.id, { isBillable: event.target.checked });
+    setIsBillable(!isBillable);
+    updateTimeRecord(timeRecord.id, { isBillable: !timeRecord.isBillable });
   };
 
   return (
     <div className={css(styles.timeRecord)}>
       <Row>
-        <Col sm={24} md={24} xl={12} className="input">
+        <Col span={24} xl={12} className="input">
           <Row style={{ width: '100%' }}>
-            <Col xs={24} sm={18}>
+            <Col span={18}>
               <Input
                 placeholder="What are you working on?"
                 size="large"
                 value={taskName}
                 onChange={handleChangeTask}
-                style={{ width: '80%' }}
               />
             </Col>
-            <Col xs={24} sm={6}>
+            <Col span={6} className="flex-end">
               <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
                 <Button
                   icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
                   size="large"
                   style={
                     selectedProject === ''
-                      ? { marginLeft: '20px', width: '20%', textAlign: 'left' }
-                      : { marginLeft: '20px', width: '20%', textAlign: 'left', color: 'green' }
+                      ? { textAlign: 'left' }
+                      : { textAlign: 'left', color: 'green' }
                   }
                 >
                   {selectedProject === ''
@@ -144,26 +144,24 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
             </Col>
           </Row>
         </Col>
-        <Col sm={24} md={24} lg={24} xl={12} className="control">
+        <Col span={24} xl={12} className="control">
           <Row style={{ width: '100%' }}>
-            <Col xs={12} sm={2} md={2}>
+            <Col span={2} className="flex-center">
               <Button icon={<TagOutlined />} size="large"></Button>
             </Col>
-            <Col xs={12} sm={4} md={4}>
-              <Checkbox checked={isBillable} onChange={handleChangeBillable}>
-                Billing
-              </Checkbox>
+            <Col span={2} className="flex-center">
+              <BillableCheck checked={isBillable} onChange={handleChangeBillable} />
             </Col>
-            <Col xs={24} sm={8} md={8}>
+            <Col span={8} className="flex-center">
               <Title level={5}>
-                {moment(timeRecord.start).format('HH:mm A')} -
+                {moment(timeRecord.start).format('HH:mm A')} &nbsp;
                 {moment(timeRecord.end).format('HH:mm A')}
               </Title>
             </Col>
-            <Col xs={12} sm={6} md={6}>
+            <Col span={6} className="flex-center">
               <Title level={5}>{formatDuration(timeRecord.totalTime)}</Title>
             </Col>
-            <Col xs={12} sm={4} md={4}>
+            <Col span={4} className="flex-end">
               <Button
                 type="primary"
                 size="large"
@@ -186,7 +184,6 @@ const styles: { [key: string]: (props) => CSS.Properties } = {
     padding: '5px 10px',
     border: '1px solid #eee',
     borderRadius: '5px',
-    marginBottom: '5px',
     backgroundColor: 'white',
     '& .input': {
       display: 'flex',
@@ -236,12 +233,26 @@ const styles: { [key: string]: (props) => CSS.Properties } = {
         marginLeft: '-10px',
       },
     },
-    projectDown: ({ theme }) => ({
-      display: 'block',
-      '& .selected': {
-        fontStyle: 'bold',
-        color: 'red',
-      },
-    }),
+    '& .flex-center': {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'center',
+    },
+    '& .flex-end': {
+      display: 'flex',
+      alignItems: 'center',
+      justifyContent: 'flex-end',
+    },
+    '& h5': {
+      marginBottom: '0px',
+      textAlign: 'center',
+    },
+  }),
+  projectDown: ({ theme }) => ({
+    display: 'block',
+    '& .selected': {
+      fontStyle: 'bold',
+      color: 'red',
+    },
   }),
 };

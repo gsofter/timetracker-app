@@ -32,6 +32,8 @@ interface ITimeTracker {
   createTimeRecord: (ITimeRecordRequest) => void;
   removeTimeRecord: (string) => void;
   updateTimeRecord: (string, ITimeRecordRequest) => void;
+  removePlayingTimeRecord: Function;
+  resetTimerValues: Function;
   timeRecords: [ITimeRecord];
   timer: any;
   setCurrentTimeRecord: Function;
@@ -46,6 +48,7 @@ const TimeTracker = (props: ITimeTracker) => {
     timeRecords,
     createTimeRecord,
     removeTimeRecord,
+    removePlayingTimeRecord,
     updateTimeRecord,
     isMobile,
     timer,
@@ -53,6 +56,7 @@ const TimeTracker = (props: ITimeTracker) => {
     currentTimeRecord,
     setIsRecording,
     isRecording,
+    resetTimerValues,
   } = props;
   const { start, stop, reset, setTime } = timer;
 
@@ -72,20 +76,6 @@ const TimeTracker = (props: ITimeTracker) => {
       end: null,
     };
     createTimeRecord(newTimeRecord);
-  };
-
-  const resetTimerValues = () => {
-    setIsRecording(false);
-    setCurrentTimeRecord({
-      start: moment(),
-      end: null,
-      isBillable: false,
-      projectId: '',
-      task: '',
-    });
-    setTime(0);
-    reset();
-    stop();
   };
 
   // save current time record to database
@@ -142,6 +132,8 @@ const TimeTracker = (props: ITimeTracker) => {
                 handleStop={stopTimer}
                 isRecording={isRecording}
                 setCurrentTimeRecord={setCurrentTimeRecord}
+                resetTimerValues={resetTimerValues}
+                removePlayingTimeRecord={removePlayingTimeRecord}
               />
             </div>
             <CustomScrollbar>
@@ -227,6 +219,33 @@ const TimeTrackerWrapper = props => {
       });
   };
 
+  // remove current playing time record
+  const removePlayingTimeRecord = () => {
+    removeMutation({ variables: { recordId: currentTimeRecord.id } })
+      .then(() => {
+        // message.success('TimeRecord Removed');
+        plRefetch();
+        resetTimerValues();
+      })
+      .catch(error => {
+        message.error(error.message);
+      });
+  };
+
+  const resetTimerValues = () => {
+    setIsRecording(false);
+    setCurrentTimeRecord({
+      start: moment(),
+      end: null,
+      isBillable: false,
+      projectId: '',
+      task: '',
+    });
+    setTime(0);
+    reset();
+    stop();
+  };
+
   const [currentTimeRecord, setCurrentTimeRecord] = useState<ITimeRecord>({
     start: null,
     end: null,
@@ -237,7 +256,7 @@ const TimeTrackerWrapper = props => {
   const [isRecording, setIsRecording] = useState(false);
 
   useEffect(() => {
-    console.log('useFffect/[plData, plLoading] called');
+    console.log('useEffect / [plData, plLoading]');
     if (plData && plData.getPlayingTimeRecord) {
       const playingRecord = plData.getPlayingTimeRecord;
       const passDur = moment().valueOf() - moment(playingRecord.start).valueOf();
@@ -253,12 +272,14 @@ const TimeTrackerWrapper = props => {
       {...props}
       createTimeRecord={createTimeRecord}
       removeTimeRecord={removeTimeRecord}
+      removePlayingTimeRecord={removePlayingTimeRecord}
       updateTimeRecord={updateTimeRecord}
       timeRecords={_.get(data, 'getTimeRecords', [])}
       setIsRecording={setIsRecording}
       setCurrentTimeRecord={setCurrentTimeRecord}
       currentTimeRecord={currentTimeRecord}
       isRecording={isRecording}
+      resetTimerValues={resetTimerValues}
     />
   ) : (
     <></>
