@@ -19,7 +19,7 @@ export default function BillableCheck(props: IBillableCheck) {
 
 const styles: { [key: string]: (obj) => CSS.Properties } = {
   billable: ({ theme, checked }) => ({
-    fontSize: '1rem',
+    fontSize: '20px',
     fontWeight: checked ? 'bold' : 'normal',
     color: checked ? '#1890ff' : '#bbb',
     cursor: 'pointer',

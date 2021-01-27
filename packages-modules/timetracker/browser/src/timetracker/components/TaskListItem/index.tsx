@@ -125,11 +125,10 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
                 onChange={handleChangeTask}
               />
             </Col>
-            <Col span={6} className="flex-end">
+            <Col span={6} className="flex-end project-selection">
               <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
                 <Button
                   icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
-                  size="large"
                   style={
                     selectedProject === ''
                       ? { textAlign: 'left' }
@@ -152,13 +151,13 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
             <Col span={2} className="flex-center">
               <BillableCheck checked={isBillable} onChange={handleChangeBillable} />
             </Col>
-            <Col span={8} className="flex-center">
+            <Col span={14} sm={6} className="flex-center">
               <Title level={5}>
                 {moment(timeRecord.start).format('HH:mm A')} &nbsp;
                 {moment(timeRecord.end).format('HH:mm A')}
               </Title>
             </Col>
-            <Col span={6} className="flex-center">
+            <Col span={6} className="duration">
               <Title level={5}>{formatDuration(timeRecord.totalTime)}</Title>
             </Col>
             <Col span={4} className="flex-end">
@@ -185,6 +184,9 @@ const styles: { [key: string]: (props) => CSS.Properties } = {
     border: '1px solid #eee',
     borderRadius: '5px',
     backgroundColor: 'white',
+    '& .project-selection': {
+      overflow: 'hidden',
+    },
     '& .input': {
       display: 'flex',
       flexDirection: 'row',
@@ -231,6 +233,14 @@ const styles: { [key: string]: (props) => CSS.Properties } = {
         padding: '0px',
         marginRight: '-10px',
         marginLeft: '-10px',
+      },
+      '& .duration': {
+        display: 'flex',
+        alignItems: 'center',
+        justifyContent: 'center',
+        '@media(max-width: 576px)': {
+          display: 'none',
+        },
       },
     },
     '& .flex-center': {
