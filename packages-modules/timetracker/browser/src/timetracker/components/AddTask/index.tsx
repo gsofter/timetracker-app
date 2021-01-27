@@ -2,33 +2,39 @@ import React, { useContext, useEffect, useState } from 'react';
 import { ProjectsListPopup } from '../ProjectsListPopup';
 import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
-import _ from 'lodash';
+import _, { parseInt, range } from 'lodash';
 import {
   PlusCircleOutlined,
   TagOutlined,
   StopFilled,
-  BarsOutlined,
   CloseOutlined,
+  ClockCircleOutlined,
+  BarsOutlined,
 } from '@ant-design/icons';
 import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
 import {
   Input,
   Button,
-  Checkbox,
   Typography,
   Row,
   Col,
-  Popover,
   Dropdown,
   Menu,
   Select,
+  Radio,
+  DatePicker,
+  TimePicker,
 } from 'antd';
 import CSS from 'csstype';
 import Timer from 'react-compound-timer';
 import moment from 'moment';
 import BillableCheck from '../BillableCheck';
 import classNames from 'classnames';
+// import TimeField from 'react-simple-timefield';
+import { useRifm } from 'rifm';
+import { formatDuration } from '../../services/timeRecordService';
 
+const { RangePicker } = TimePicker;
 const { Title } = Typography;
 
 export interface IAddTask {
@@ -65,6 +71,9 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   } = props;
   const { css } = useFela(props);
   const [mode, setMode] = useState(MODE.TRACK);
+  const [manualStart, setManualStart] = useState(moment());
+  const [manualEnd, setManualEnd] = useState(moment());
+  const [manualDur, setManualDur] = useState(moment().format('HH:mm:ss'));
   const handleTaskChange = event => {
     event.preventDefault();
     setCurrentTimeRecord({ ...currentTimeRecord, task: event.target.value });
@@ -85,6 +94,51 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   const handleDiscard = event => {
     removePlayingTimeRecord();
   };
+
+  const handleChangeMode = m => {
+    setMode(m);
+  };
+
+  const handleChangeRange = (range, str) => {
+    const start = range[0];
+    const end = range[1];
+    console.log('handleChangeRange.range =>', range, str);
+  };
+
+  const handleChangeDurDate = date => {
+    console.log('handleChangeDurDate.date =>', date);
+  };
+
+  const handleChangeDur = value => {
+    console.log('handleChangeDur.value', value);
+    setManualDur(value);
+  };
+
+  const formatDuration = (dur: string) => {
+    let arr = dur.split(':').map(d => parseInt(d, 10));
+
+    if (arr[2] > 59) arr[2] = 59;
+    if (arr[1] > 59) arr[1] = 59;
+
+    const totalSeconds = arr[0] * 3600 + arr[1] * 60 + arr[0];
+    const duration = moment.duration(totalSeconds, 'seconds');
+    return (
+      duration.hours().toString() +
+      ':' +
+      duration.minutes().toString() +
+      ':' +
+      duration.seconds().toString()
+    );
+  };
+
+  const rifm = useRifm({
+    value: manualDur,
+    onChange: handleChangeDur,
+    format: formatDuration,
+    accept: /\d+/g,
+    mask: manualDur.length < 9,
+  });
+
   // Dropdown overlay for project select
   const projectDropdownMenus = (
     <Menu className={css(styles.projectDown)}>
@@ -134,7 +188,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   return (
     <div className={css(styles.timeTracker)}>
       <Row>
-        <Col span={24} xl={12} className="input">
+        <Col span={24} xxl={12} className="input">
           <Row style={{ width: '100%' }}>
             <Col span={18} className="flex-center">
               <Input
@@ -161,55 +215,103 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
             </Col>
           </Row>
         </Col>
-        <Col span={24} xl={12} className="control">
+        <Col span={24} xxl={12} className="control">
           <Row style={{ width: '100%' }}>
-            <Col span={4} className="flex-center">
+            <Col span={2} sm={4} xxl={2} className="flex-center">
               <Dropdown overlay={tagsOverlay} trigger={['click']}>
                 <Button icon={<TagOutlined />} size="large"></Button>
               </Dropdown>
             </Col>
-            <Col span={4} className={classNames(css(styles.billing), 'flex-center')}>
+            <Col span={2} sm={4} xxl={2} className={classNames(css(styles.billing), 'flex-center')}>
               <BillableCheck
                 checked={currentTimeRecord.isBillable}
                 onChange={handleChangeBillable}
               />
             </Col>
 
-            <Col span={10} className="flex-center">
-              <Title level={5} style={{ marginBottom: '0px' }}>
-                <Timer.Hours formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
-                <Timer.Minutes formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
-                <Timer.Seconds formatValue={val => `${val < 10 ? `0${val}` : val}`} />
-              </Title>
-            </Col>
-            <Col span={5}>
-              <div
-                className={classNames(
-                  'start',
-                  { hidden: isRecording },
-                  { 'flex-end': !isRecording },
-                )}
-              >
-                <Button type="primary" size="large" onClick={handleStart}>
-                  START
-                </Button>
+            {mode === MODE.TRACK ? (
+              <>
+                <Col span={14} className="flex-center">
+                  <Title level={5} style={{ marginBottom: '0px' }}>
+                    <Timer.Hours formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
+                    <Timer.Minutes formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
+                    <Timer.Seconds formatValue={val => `${val < 10 ? `0${val}` : val}`} />
+                  </Title>
+                </Col>
+
+                <div
+                  className={classNames(
+                    'start',
+                    { hidden: isRecording },
+                    { 'flex-end': !isRecording },
+                  )}
+                >
+                  <Button type="primary" onClick={handleStart}>
+                    START
+                  </Button>
+                </div>
+                <div
+                  className={classNames(
+                    'start',
+                    { hidden: !isRecording },
+                    { 'flex-end': isRecording },
+                  )}
+                >
+                  <Button type="primary" danger onClick={handleStop}>
+                    STOP
+                  </Button>
+                </div>
+
+                <Col span={1} className={classNames({ hidden: !isRecording })}>
+                  <Dropdown overlay={discardConfirmOverlay} trigger={['click']}>
+                    <Button icon={<CloseOutlined />}></Button>
+                  </Dropdown>
+                </Col>
+              </>
+            ) : (
+              <>
+                <Col span={16} sm={6} xxl={10} className="flex-row flex-center">
+                  <RangePicker
+                    format="HH:mm"
+                    defaultValue={[moment(), moment()]}
+                    bordered={false}
+                    onChange={handleChangeRange}
+                  />
+                  <DatePicker
+                    defaultValue={moment()}
+                    bordered={false}
+                    onChange={handleChangeDurDate}
+                    format="yyyy-MM-dd"
+                  />
+                </Col>
+                <Col span={0} sm={6} className="duration">
+                  <div className="flex-center">
+                    {/* <TimeField
+                      value={manualDur.format('HH:mm:ss')}
+                      format="HH:mm:ss"
+                      onChange={handleChangeDur}
+                    ></TimeField> */}
+                    <Input value={rifm.value} onChange={rifm.onChange} accept={'/d/g'} />
+                  </div>
+                </Col>
+                <Col span={3} className="flex-center">
+                  <Button type="primary" size="small">
+                    ADD
+                  </Button>
+                </Col>
+              </>
+            )}
+            <Col span={1}>
+              <div className={classNames('mode', { hidden: isRecording }, 'flex-col')}>
+                <ClockCircleOutlined
+                  className={classNames({ selected: mode === MODE.TRACK })}
+                  onClick={() => handleChangeMode(MODE.TRACK)}
+                />
+                <BarsOutlined
+                  className={classNames({ selected: mode === MODE.MANUAL })}
+                  onClick={() => handleChangeMode(MODE.MANUAL)}
+                />
               </div>
-              <div
-                className={classNames(
-                  'start',
-                  { hidden: !isRecording },
-                  { 'flex-end': isRecording },
-                )}
-              >
-                <Button type="primary" danger size="large" onClick={handleStop}>
-                  STOP
-                </Button>
-              </div>
-            </Col>
-            <Col span={1} className={classNames({ hidden: !isRecording })}>
-              <Dropdown overlay={discardConfirmOverlay} trigger={['click']}>
-                <Button icon={<CloseOutlined />}></Button>
-              </Dropdown>
             </Col>
           </Row>
         </Col>
@@ -241,7 +343,7 @@ const styles: { [key: string]: (obj) => CSS.Properties } = {
         borderTop: '1px solid #eee',
       },
       '& > div': {
-        padding: '5px 10px',
+        padding: '5px 0px',
       },
       '& .divider': {
         // marginTop: '5px',
@@ -262,18 +364,26 @@ const styles: { [key: string]: (obj) => CSS.Properties } = {
         fontStyle: 'bold',
         color: 'red',
       },
-      '& .flex-col': {
+      '& .duration': {
         display: 'flex',
-        flexDirection: 'column',
         justifyContent: 'center',
         alignItems: 'center',
+        '@media (max-width: 576px)': {
+          display: 'none',
+        },
       },
-      '& .flex-row': {
-        display: 'flex',
-        flexDirection: 'row',
-        justifyContent: 'center',
-        alignItems: 'center',
-      },
+    },
+    '& .flex-col': {
+      display: 'flex',
+      flexDirection: 'column',
+      justifyContent: 'center',
+      alignItems: 'center',
+    },
+    '& .flex-row': {
+      display: 'flex',
+      flexDirection: 'row',
+      justifyContent: 'center',
+      alignItems: 'center',
     },
     '& .flex-center': {
       display: 'flex',
@@ -284,6 +394,13 @@ const styles: { [key: string]: (obj) => CSS.Properties } = {
       display: 'flex',
       justifyContent: 'end',
       alignItems: 'center',
+    },
+    '& .mode': {
+      width: '30px',
+    },
+    '& .mode .selected': {
+      color: '#1890ff',
+      border: '1px solid #1890ff',
     },
   }),
   projectDown: ({ theme }) => ({

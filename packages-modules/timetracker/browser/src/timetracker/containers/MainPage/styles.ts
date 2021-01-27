@@ -7,7 +7,11 @@ export const styleSheet = {
         background: '#fff',
         display: 'flex',
         flexDirection: 'column',
-        padding: '2rem',
+        '@media(max-width: 758px)': {
+          padding: '0px',
+          marginLeft: '-20px',
+          marginRight: '-20px',
+        },
         fontSize: '1.2rem',
         lineHeight: '1.6rem',
         overflow: 'hidden',
@@ -28,6 +32,8 @@ export const styleSheet = {
       '& .main-page__day': {
         margin: '0 0 2.6rem 0',
         padding: '1rem',
+        paddingLeft:'0px',
+        paddingRight: '0px',
         background: '#f0f2f5;',
       },
       '& .main-page__day-header': {
@@ -71,6 +77,11 @@ export const styleSheet = {
       '& input': {
         outline: 'none',
       },
+
+      '& .task-container': {
+        // marginLeft: '-30px',
+        // marginRight: '-30px',
+      }
     };
   },
 };
