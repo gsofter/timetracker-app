@@ -188,6 +188,7 @@ const TimeTrackerWrapper = props => {
       .then(() => {
         message.info('TimeRecord created');
         plRefetch();
+        refetch();
       })
       .catch(error => {
         message.error(error.message);

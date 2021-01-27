@@ -59,6 +59,16 @@ enum MODE {
   TRACK,
 }
 
+const formatDurationInput = (dur: string) => {
+  let arr = dur.split(':').map(d => parseInt(d, 10));
+
+  if (arr[2] > 59) arr[2] = 59;
+  if (arr[1] > 59) arr[1] = 59;
+
+  const totalSeconds = arr[0] * 3600 + arr[1] * 60 + arr[0];
+  return formatDuration(totalSeconds);
+};
+
 export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   const {
     isRecording,
@@ -68,6 +78,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     setCurrentTimeRecord,
     resetTimerValues,
     removePlayingTimeRecord,
+    createTimeRecord,
   } = props;
   const { css } = useFela(props);
   const [mode, setMode] = useState(MODE.TRACK);
@@ -100,9 +111,13 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   };
 
   const handleChangeRange = (range, str) => {
+    console.log('handleChangeRange.range =>', range, str);
     const start = range[0];
     const end = range[1];
-    console.log('handleChangeRange.range =>', range, str);
+    setManualStart(start);
+    setManualEnd(end);
+    const timeDiff = (end.valueOf() - start.valueOf()) / 1000;
+    setManualDur(formatDuration(timeDiff));
   };
 
   const handleChangeDurDate = date => {
@@ -114,31 +129,26 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     setManualDur(value);
   };
 
-  const formatDuration = (dur: string) => {
-    let arr = dur.split(':').map(d => parseInt(d, 10));
-
-    if (arr[2] > 59) arr[2] = 59;
-    if (arr[1] > 59) arr[1] = 59;
-
-    const totalSeconds = arr[0] * 3600 + arr[1] * 60 + arr[0];
-    const duration = moment.duration(totalSeconds, 'seconds');
-    return (
-      duration.hours().toString() +
-      ':' +
-      duration.minutes().toString() +
-      ':' +
-      duration.seconds().toString()
-    );
-  };
-
   const rifm = useRifm({
     value: manualDur,
     onChange: handleChangeDur,
-    format: formatDuration,
+    format: formatDurationInput,
     accept: /\d+/g,
     mask: manualDur.length < 9,
   });
 
+  const handleAddManual = () => {
+    const newRecordReq: ITimeRecordRequest = {
+      start: manualStart,
+      end: manualEnd,
+      isBillable: currentTimeRecord.isBillable,
+      task: currentTimeRecord.task,
+      totalTime: Math.floor((manualEnd.valueOf() - manualStart.valueOf()) / 1000),
+      projectId: currentTimeRecord.projectId,
+    };
+
+    createTimeRecord(newRecordReq);
+  };
   // Dropdown overlay for project select
   const projectDropdownMenus = (
     <Menu className={css(styles.projectDown)}>
@@ -198,13 +208,12 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                 onChange={handleTaskChange}
               />
             </Col>
-            <Col span={6} className="flex-center">
+            <Col span={6} className="flex-center project-selection">
               <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
                 <Button
                   icon={
                     currentTimeRecord.projectId === '' ? <PlusCircleOutlined /> : <BarsOutlined />
                   }
-                  size="large"
                   style={currentTimeRecord.projectId === '' ? {} : { color: 'green' }}
                 >
                   {currentTimeRecord.projectId === ''
@@ -231,7 +240,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
 
             {mode === MODE.TRACK ? (
               <>
-                <Col span={14} className="flex-center">
+                <Col span={14} sm={10} xxl={14} className="flex-center">
                   <Title level={5} style={{ marginBottom: '0px' }}>
                     <Timer.Hours formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
                     <Timer.Minutes formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
@@ -239,28 +248,30 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                   </Title>
                 </Col>
 
-                <div
-                  className={classNames(
-                    'start',
-                    { hidden: isRecording },
-                    { 'flex-end': !isRecording },
-                  )}
-                >
-                  <Button type="primary" onClick={handleStart}>
-                    START
-                  </Button>
-                </div>
-                <div
-                  className={classNames(
-                    'start',
-                    { hidden: !isRecording },
-                    { 'flex-end': isRecording },
-                  )}
-                >
-                  <Button type="primary" danger onClick={handleStop}>
-                    STOP
-                  </Button>
-                </div>
+                <Col span={5} sm={5}>
+                  <div
+                    className={classNames(
+                      'start',
+                      { hidden: isRecording },
+                      { 'flex-end': !isRecording },
+                    )}
+                  >
+                    <Button type="primary" onClick={handleStart}>
+                      START
+                    </Button>
+                  </div>
+                  <div
+                    className={classNames(
+                      'start',
+                      { hidden: !isRecording },
+                      { 'flex-end': isRecording },
+                    )}
+                  >
+                    <Button type="primary" danger onClick={handleStop}>
+                      STOP
+                    </Button>
+                  </div>
+                </Col>
 
                 <Col span={1} className={classNames({ hidden: !isRecording })}>
                   <Dropdown overlay={discardConfirmOverlay} trigger={['click']}>
@@ -295,7 +306,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                   </div>
                 </Col>
                 <Col span={3} className="flex-center">
-                  <Button type="primary" size="small">
+                  <Button type="primary" size="small" onClick={handleAddManual}>
                     ADD
                   </Button>
                 </Col>
@@ -331,6 +342,9 @@ const styles: { [key: string]: (obj) => CSS.Properties } = {
       flexDirection: 'row',
       justifyContent: 'space-between',
       alignItems: 'center',
+      '& .project-selection': {
+        overflow: 'hidden',
+      },
     },
     '& .control': {
       display: 'flex',
