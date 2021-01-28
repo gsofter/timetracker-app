@@ -23,6 +23,7 @@ import LayoutSetting, { renderLayoutSettingItem } from './LayoutChange';
 import RegionalSetting from './RegionalChange';
 import { useFela } from 'react-fela';
 import { styleSheet } from './styles';
+import { useIntl } from 'react-intl';
 
 interface BodyProps {
   title: string;
@@ -86,22 +87,24 @@ const getDifferentSetting = (state: Partial<ProSettings>) => {
 };
 
 export const getFormatMessage = (): ((data: { id: string; defaultMessage?: string }) => string) => {
-  const formatMessage = ({
-    id,
-    defaultMessage,
-  }: {
-    id: string;
-    defaultMessage?: string;
-  }): string => {
-    const locales = getLocales();
-    if (locales[id]) {
-      return locales[id];
-    }
-    if (defaultMessage) {
-      return defaultMessage as string;
-    }
-    return id;
-  };
+  // @sri Following are needed otherwise FormatMessage will not work
+  const { formatMessage } = useIntl();
+  // const formatMessage = ({
+  //   id,
+  //   defaultMessage,
+  // }: {
+  //   id: string;
+  //   defaultMessage?: string;
+  // }): string => {
+  //   const locales = getLocales();
+  //   if (locales[id]) {
+  //     return locales[id];
+  //   }
+  //   if (defaultMessage) {
+  //     return defaultMessage as string;
+  //   }
+  //   return id;
+  // };
   return formatMessage;
 };
 
@@ -523,6 +526,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
     setSettingState(nextState);
   };
 
+  
   const formatMessage = getFormatMessage();
   const themeList = getThemeList(settingState);
 

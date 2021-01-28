@@ -3,13 +3,13 @@ import PropTypes from 'prop-types';
 import { IntlProvider } from 'react-intl';
 
 import { LOCALES } from './constants';
-import messages from './messages';
+import getLocale from './getLocale';
 
 const Provider = ({ children, locale }) => (
   <IntlProvider
     textComponent={Fragment}
     locale={locale}
-    messages={messages[locale]}
+    messages={getLocale[locale].default}
   >
     {children}
   </IntlProvider>
