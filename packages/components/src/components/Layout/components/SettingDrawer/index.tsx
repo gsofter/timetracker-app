@@ -87,24 +87,22 @@ const getDifferentSetting = (state: Partial<ProSettings>) => {
 };
 
 export const getFormatMessage = (): ((data: { id: string; defaultMessage?: string }) => string) => {
-  // @sri Following are needed otherwise FormatMessage will not work
-  const { formatMessage } = useIntl();
-  // const formatMessage = ({
-  //   id,
-  //   defaultMessage,
-  // }: {
-  //   id: string;
-  //   defaultMessage?: string;
-  // }): string => {
-  //   const locales = getLocales();
-  //   if (locales[id]) {
-  //     return locales[id];
-  //   }
-  //   if (defaultMessage) {
-  //     return defaultMessage as string;
-  //   }
-  //   return id;
-  // };
+  const formatMessage = ({
+    id,
+    defaultMessage,
+  }: {
+    id: string;
+    defaultMessage?: string;
+  }): string => {
+    const locales = getLocales();
+    if (locales[id]) {
+      return locales[id];
+    }
+    if (defaultMessage) {
+      return defaultMessage as string;
+    }
+    return id;
+  };
   return formatMessage;
 };
 
