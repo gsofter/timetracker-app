@@ -1,18 +1,16 @@
-type TimeFrame { 
-  userId: String;
-  orgId: String;
-  timeline: [TimeRecord];
-  timesheet: [Timesheet];
+enum TimesheetState {
+    APPROVED_PENDING
+    APPROVED
+    APPROVED_FINALIZED # --- which means no going back
+    DENYED
+    SUBMITTED
+    DENYED_FINALIZED # --- which means no going back
 }
 
-type TimeRecord {
-  startTime: DateTime # Time in milliseconds
-  endTime: DateTime # time in milliseconds
-  isBilling: Boolean
-  taskId: String
-  projectId: String
-  tags: [String]
-  reason: String # limit to 50 words 
+
+type TimesheetDateRange {
+  startDate: Date # (only Date without time, ex. 01/20/2021) 
+  endDate: Date # (only Date without time)
 }
 
 type Timesheet {
@@ -25,19 +23,23 @@ type Timesheet {
   updatedOn: Date
 }
 
-type TimesheetDateRange {
-  startDate: Date # (only Date without time, ex. 01/20/2021) 
-  endDate: Date # (only Date without time)
+type TimeRecord {
+  startTime: DateTime # Time in milliseconds
+  endTime: DateTime # time in milliseconds
+  isBilling: Boolean
+  taskId: String
+  projectId: String
+  tags: [String]
+  reason: String # limit to 50 words 
 }
 
-enum TimesheetState {
-    APPROVED_PENDING
-    APPROVED
-    APPROVED_FINALIZED # --- which means no going back
-    DENYED
-    SUBMITTED
-    DENYED_FINALIZED # --- which means no going back
+type TimeFrame { 
+  userId: String;
+  orgId: String;
+  timeline: [TimeRecord];
+  timesheet: [Timesheet];
 }
+
 
 input TimeRecordRequest {
   startTime: DateTime
