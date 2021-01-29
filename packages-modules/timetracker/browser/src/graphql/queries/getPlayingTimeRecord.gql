@@ -1,8 +1,8 @@
 query GetPlayingTimeRecord {
   getPlayingTimeRecord {
     id
-    start
-    end
+    startTime
+    endTime
     task
     tags
     projectId

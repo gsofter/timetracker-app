@@ -1,12 +1,21 @@
 import { Schema, Model, Document, Connection } from 'mongoose'
-import { ITimeRecord } from '@admin-layout/timetracker-module-core'
+import { ITimeFrame } from '@admin-layout/timetracker-module-core'
 
-interface ITimeRecordModel extends ITimeRecord, Document {
+interface ITimeFrameModel extends ITimeFrame , Document {
     id: any;
 }
 
-const timeRecordSchema = new Schema({
-    // record
+enum TimesheetState {
+    APPROVED_PENDING,
+    APPROVED,
+    APPROVED_FINALIZED,
+    DENYED,
+    SUBMITTED,
+    DENYED_FINALIZED
+}
+
+// ===> Timeline
+const TimeRecordSchema = new Schema({
     start: { type: Date },
     end: { type: Date },
     task: { type: String },
@@ -15,18 +24,41 @@ const timeRecordSchema = new Schema({
     projectId: { type: String },
     clientId: { type: String },
     totalTime: { type: Number },
+})
+
+// ===> TimesheetDateRange 
+const TimesheetDateRangeSchema = new Schema({
+    startDate: { type: Date },
+    endDate: { type: Date },
+})
+
+const TimesheetSchema = new Schema({
+    dateRange: { type: TimesheetDateRangeSchema},
+    state: { type: TimesheetState },
+    submittedOn: { type: Date },
+    approvedOn: { type: Date },
+    updatedBy: { type: String },
+    updatedOn: { type: Date }
+})
+
+const TimeFrameSchema = new Schema({
+    // record
+    userId: { type: String },
+    orgId: { type: String },
+    timerecords: [TimeRecordSchema],
+    timesheets: [TimesheetSchema],
 });
 
-timeRecordSchema.virtual('id').get(function() {
+TimeFrameSchema.virtual('id').get(function() {
     return this._id.toHexString();
 })
 
-timeRecordSchema.set('toJSON', { 
+TimeFrameSchema.set('toJSON', { 
     virtuals: true,
 })
 
-timeRecordSchema.set('toObject', { virtuals: true})
+TimeFrameSchema.set('toObject', { virtuals: true})
 
-export type TimeRecordModelType = Model<ITimeRecordModel>
+export type TimeFrameModelType = Model<ITimeFrameModel>
 
-export const TimeRecordModelFunc : (db: Connection) => TimeRecordModelType = db => db.model<ITimeRecordModel>('timerecord', timeRecordSchema)
+export const TimeFrameModelFunc : (db: Connection) => TimeFrameModelType = db => db.model<ITimeFrameModel>('timerecord', timeRecordSchema)

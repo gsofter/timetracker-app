@@ -1,8 +1,8 @@
 query GetTimeRecords {
   getTimeRecords {
     id
-    start
-    end
+    startTime
+    endTime
     task
     tags
     projectId
