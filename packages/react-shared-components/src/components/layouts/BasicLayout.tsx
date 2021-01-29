@@ -52,6 +52,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
   route: ProLayoutProps['route'] & {
     authority: string[];
   };
+  formatMessage: any;
 }
 
 export type BasicLayoutContent = { [K in 'location']: BasicLayoutProps[K] } & {
@@ -195,7 +196,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
     [location.pathname],
   );
 
-  // const { formatMessage } = useIntl();
+  const { formatMessage } = useIntl();
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -203,6 +204,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
   return (
     <>
       <ProLayout
+        formatMessage={formatMessage}
         {...props}
         {...settings}
         onMenuHeaderClick={() => history.push('/')}
@@ -238,11 +240,12 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
           menuDataRef.current = menuData || [];
           return menuData || [];
         }}
-        rightContentRender={p => {
+        rightContentRender={rightProps=> {
           return (
             <RightContent
-              upperMenus={getMenuSeparation(p?.menuData).upperMenus}
+              upperMenus={getMenuSeparation(rightProps?.menuData).upperMenus}
               orgName={props?.routeParams?.orgName}
+              {...rightProps}
             />
           );
         }}

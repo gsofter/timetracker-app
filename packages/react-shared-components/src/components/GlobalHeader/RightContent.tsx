@@ -14,13 +14,13 @@ import { ProSettings } from '@admin-layout/components';
 import { Menu, Dropdown, Button, Space } from 'antd';
 import { LOCALES } from './../../locales';
 import { CHANGE_LANGUAGE } from '../../constants/constants';
-import { useIntl } from 'react-intl';
 
 export interface GlobalHeaderRightProps {
   theme?: string;
   layout?: any;
   upperMenus: any;
   orgName: string;
+  formatMessage?: any;
 }
 
 const ENVTagColor = {
@@ -30,11 +30,10 @@ const ENVTagColor = {
 };
 
 const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
-  const { theme, layout, upperMenus, orgName } = props;
+  const { theme, layout, upperMenus, orgName, formatMessage} = props;
   const dispatch = useDispatch();
   const [language, setLanguage] = React.useState('ENG');
   const [locale, setLocale] = React.useState(LOCALES.EN_US);
-  const { formatMessage } = useIntl();
   let className = 'right';
   if (theme === 'dark' && layout === 'top') {
     className = 'right dark';
@@ -103,6 +102,12 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
 
   return (
     <div className={css(styleSheet.right)}>
+      <div>
+        {formatMessage({
+          id: 'app.settings.menuMap.basic',
+          defaultMessage: 'Hello',
+        })}
+        </div>
       <Dropdown overlay={LanguageMenu} placement="bottomRight">
         <Button className="lang-btn">{language}</Button>
       </Dropdown>
