@@ -221,7 +221,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
         breadcrumbRender={(routers = []) => [
           {
             path: '/',
-            breadcrumbName: 'Home',
+            breadcrumbName: formatMessage({ id: 'menu.home' }),
           },
           ...routers,
         ]}
