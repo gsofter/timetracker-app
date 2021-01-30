@@ -102,12 +102,6 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
 
   return (
     <div className={css(styleSheet.right)}>
-      <div>
-        {formatMessage({
-          id: 'app.settings.menuMap.basic',
-          defaultMessage: 'Hello',
-        })}
-        </div>
       <Dropdown overlay={LanguageMenu} placement="bottomRight">
         <Button className="lang-btn">{language}</Button>
       </Dropdown>
