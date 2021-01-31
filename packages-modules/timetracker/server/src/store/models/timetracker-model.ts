@@ -5,7 +5,7 @@ interface ITimeTrackerModel extends ITimeTracker , Document {
     id: any;
 }
 
-enum TimeSheetState {
+enum TimesheetState {
     APPROVED_PENDING,
     APPROVED,
     APPROVED_FINALIZED,
@@ -31,9 +31,9 @@ const TimesheetDateRangeSchema = new Schema({
     endDate: { type: Date },
 })
 
-const TimeSheetSchema = new Schema({
+const TimesheetSchema = new Schema({
     dateRange: { type: TimesheetDateRangeSchema},
-    state: { type: TimeSheetState },
+    state: { type: TimesheetState },
     submittedOn: { type: Date },
     approvedOn: { type: Date },
     updatedBy: { type: String },
@@ -43,8 +43,8 @@ const TimeSheetSchema = new Schema({
 const TimeTrackerSchema = new Schema({
     userId: { type: String },
     orgId: { type: String },
-    timerecords: [TimeRecordSchema],
-    timesheets: [TimeSheetSchema],
+    timeRecords: [TimeRecordSchema],
+    timesheets: [TimesheetSchema],
 });
 
 TimeTrackerSchema.virtual('id').get(function() {

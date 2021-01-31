@@ -1,3 +1,4 @@
+export const DEFAULT_USER = "123"
 export const TYPES = {
     ITimeTrackerService: Symbol('ITimeTrackerService'),
     ITimeRecordService: Symbol('ITimeRecordService'),
