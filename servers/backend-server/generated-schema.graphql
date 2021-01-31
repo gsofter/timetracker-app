@@ -8,72 +8,68 @@ type FieldError {
   field: String!
   message: String!
 }
+
 type Query {
-  dummy: Int
+    dummy: Int
 }
+
 type Mutation {
-  dummy: Int
+    dummy: Int
 }
+
 type Subscription {
-  dummy: Int
+    dummy: Int
 }
+
 interface Node {
-  id: ID!
+      id: ID!
 }
+
+
 schema {
-  query: Query
-  mutation: Mutation
-  subscription: Subscription
+    query: Query
+    mutation: Mutation
+    subscription: Subscription
 }
-"""
-Database counter
-"""
+""" Database counter """
 type Counter {
-  """
-  Current amount
-  """
+  """ Current amount """
   amount: Int!
 }
+
 extend type Query {
-  """
-  Counter
-  """
+  """ Counter """
   counter: Counter
-  """
-  Counter from Datasource
-  """
+
+  """ Counter from Datasource """
   counterCache: Counter
-  """
-  Moleculer Counter
-  """
+
+  """ Moleculer Counter """
   moleculerCounter: Counter
 }
+
 extend type Mutation {
-  """
-  Increase counter value returns current counter amount
-  """
+  """ Increase counter value returns current counter amount """
   addCounter(
-    """
-    Amount to add to counter
-    """
+    """ Amount to add to counter """
     amount: Int
   ): Counter
-  """
-  sync cached counter with current value
-  """
+
+  """ sync cached counter with current value """
   syncCachedCounter: Boolean
-  """
-  add Counter
-  """
+
+  """ add Counter """
   addMoleculerCounter(amount: Int): Counter
 }
+
 extend type Subscription {
-  """
-  Subscription fired when anyone increases counter
-  """
+  """ Subscription fired when anyone increases counter """
   counterUpdated: Counter
+
   moleculerCounterUpdate: Counter
-} # scalar DateTime
+}
+,# scalar DateTime
+
 type Schedule {
   id: String
   title: String
@@ -90,6 +86,7 @@ type Schedule {
   note: String
   approvedOn: DateTime
 }
+
 input ScheduleCreateRequest {
   title: String
   allDay: Boolean
@@ -105,15 +102,19 @@ input ScheduleCreateRequest {
   note: String
   approvedOn: DateTime
 }
+
 extend type Query {
   getScheduleEvents(userId: String): [Schedule]
 }
+
 extend type Mutation {
   addScheduleEvent(request: ScheduleCreateRequest): Boolean
   updateScheduleEvent(eventId: String, request: ScheduleCreateRequest): Boolean
   removeScheduleEvent(eventId: String): Boolean
 }
+
 # scalar DateTime
+
 type Timeline {
   id: String
   title: String
@@ -130,6 +131,7 @@ type Timeline {
   note: String
   approvedOn: DateTime
 }
+
 input TimelineCreateRequest {
   title: String
   allDay: Boolean
@@ -145,21 +147,50 @@ input TimelineCreateRequest {
   note: String
   approvedOn: DateTime
 }
+
 extend type Query {
   getTimelineEvents(userId: String): [Timeline]
 }
+
 extend type Mutation {
   addTimelineEvent(request: TimelineCreateRequest): Boolean
   updateTimelineEvent(eventId: String, request: TimelineCreateRequest): Boolean
   removeTimelineEvent(eventId: String): Boolean
 }
-# scalar DateTime
-
-type TimesheetDateRange {
-  startDate: Date # (only Date without time, ex. 01/20/2021)
-  endDate: Date # (only Date without time)
+,type TimeRecord {
+  id: String
+  startTime: DateTime
+  endTime: DateTime
+  taskId: String
+  taskName: String
+  tags: [String]
+  isBillable: Boolean
+  projectId: String
+  clientId: String
 }
 
+input TimeRecordRequest {
+  startTime: DateTime
+  endTime: DateTime
+  taskName: String
+  tags: [String]
+  isBillable: Boolean
+  projectId: String
+  clientId: String
+}
+
+extend type Query {
+  getTimeRecords: [TimeRecord]
+  getPlayingTimeRecord: TimeRecord
+}
+
+extend type Mutation {
+  createTimeRecord(request: TimeRecordRequest): String
+  updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
+  removeTimeRecord(recordId: String): Boolean
+}
+
+# scalar DateTime
 enum TimesheetState {
   APPROVED_PENDING
   APPROVED
@@ -167,6 +198,11 @@ enum TimesheetState {
   DENYED
   SUBMITTED
   DENYED_FINALIZED # --- which means no going back
+}
+
+type TimesheetDateRange {
+  startDate: Date # (only Date without time, ex. 01/20/2021)
+  endDate: Date # (only Date without time)
 }
 
 type Timesheet {
@@ -199,33 +235,9 @@ extend type Mutation {
   removeTimesheet(sheetId: String): Boolean
 }
 
-type TimeRecord {
-  id: String
-  start: DateTime
-  end: DateTime
-  task: String
-  tags: [String]
-  totalTime: Int
-  isBillable: Boolean
-  projectId: String
-  clientId: String
-}
-input TimeRecordRequest {
-  start: DateTime
-  end: DateTime
-  task: String
-  tags: [String]
-  isBillable: Boolean
-  projectId: String
-  clientId: String
-  totalTime: Int
-}
-extend type Query {
-  getTimeRecords: [TimeRecord]
-  getPlayingTimeRecord: TimeRecord
-}
-extend type Mutation {
-  createTimeRecord(request: TimeRecordRequest): String
-  updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
-  removeTimeRecord(recordId: String): Boolean
+type TimeTracker {
+  userId: String
+  orgId: String
+  timeRecords: [TimeRecord]
+  timesheets: [Timesheet]
 }

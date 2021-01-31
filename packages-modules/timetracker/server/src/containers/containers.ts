@@ -1,6 +1,6 @@
 import { ContainerModule, interfaces } from 'inversify';
 import { TYPES } from '../constants';
-import { ITimeTrackerRepository, ITimeTrackerService, ITimesheetService } from '../interfaces'
+import { ITimeTrackerRepository, ITimeTrackerService } from '../interfaces'
 import { TimeTrackerService } from '../services'
 import { TimeTrackerRepository } from '../store/repository'
 

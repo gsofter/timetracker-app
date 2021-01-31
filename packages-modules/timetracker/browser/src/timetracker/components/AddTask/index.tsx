@@ -139,10 +139,10 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
 
   const handleAddManual = () => {
     const newRecordReq: ITimeRecordRequest = {
-      start: manualStart,
-      end: manualEnd,
+      startTime: manualStart,
+      endTime: manualEnd,
       isBillable: currentTimeRecord.isBillable,
-      task: currentTimeRecord.task,
+      taskName: currentTimeRecord.taskName,
       totalTime: Math.floor((manualEnd.valueOf() - manualStart.valueOf()) / 1000),
       projectId: currentTimeRecord.projectId,
     };

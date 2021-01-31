@@ -260,7 +260,7 @@ const TimeTrackerWrapper = props => {
     console.log('useEffect / [plData, plLoading]');
     if (plData && plData.getPlayingTimeRecord) {
       const playingRecord = plData.getPlayingTimeRecord;
-      const passDur = moment().valueOf() - moment(playingRecord.start).valueOf();
+      const passDur = moment().valueOf() - moment(playingRecord.startTime).valueOf();
       setCurrentTimeRecord(playingRecord);
       setIsRecording(true);
       setTime(passDur);

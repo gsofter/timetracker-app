@@ -209,36 +209,36 @@ export type ISubscription = {
 
 export type ITimeline = {
    __typename?: 'Timeline';
-  id?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
   allDay?: Maybe<Scalars['Boolean']>;
-  start?: Maybe<Scalars['DateTime']>;
-  end?: Maybe<Scalars['DateTime']>;
-  desc?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['String']>;
-  resourceId?: Maybe<Scalars['String']>;
-  tooltip?: Maybe<Scalars['String']>;
-  isBillable?: Maybe<Scalars['Boolean']>;
-  submittedOn?: Maybe<Scalars['DateTime']>;
-  reason?: Maybe<Scalars['String']>;
-  note?: Maybe<Scalars['String']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
+  desc?: Maybe<Scalars['String']>;
+  end?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['String']>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  note?: Maybe<Scalars['String']>;
+  reason?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['DateTime']>;
+  submittedOn?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<Scalars['String']>;
+  tooltip?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type ITimelineCreateRequest = {
-  title?: Maybe<Scalars['String']>;
   allDay?: Maybe<Scalars['Boolean']>;
-  start?: Maybe<Scalars['DateTime']>;
-  end?: Maybe<Scalars['DateTime']>;
-  desc?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['String']>;
-  resourceId?: Maybe<Scalars['String']>;
-  tooltip?: Maybe<Scalars['String']>;
-  isBillable?: Maybe<Scalars['Boolean']>;
-  submittedOn?: Maybe<Scalars['DateTime']>;
-  reason?: Maybe<Scalars['String']>;
-  note?: Maybe<Scalars['String']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
+  desc?: Maybe<Scalars['String']>;
+  end?: Maybe<Scalars['DateTime']>;
+  isBillable?: Maybe<Scalars['Boolean']>;
+  note?: Maybe<Scalars['String']>;
+  reason?: Maybe<Scalars['String']>;
+  resourceId?: Maybe<Scalars['String']>;
+  start?: Maybe<Scalars['DateTime']>;
+  submittedOn?: Maybe<Scalars['DateTime']>;
+  title?: Maybe<Scalars['String']>;
+  tooltip?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type ITimeRecord = {
@@ -684,20 +684,20 @@ export interface ITimeScalarConfig extends GraphQLScalarTypeConfig<IResolversTyp
 }
 
 export type ITimelineResolvers<ContextType = any, ParentType extends IResolversParentTypes['Timeline'] = IResolversParentTypes['Timeline']> = {
-  id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  title?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   allDay?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  desc?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  reason?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  note?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  desc?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  note?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  reason?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  title?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

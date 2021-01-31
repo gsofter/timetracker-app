@@ -254,6 +254,7 @@ export type ITimeRecord = {
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   task?: Maybe<Scalars['String']>;
   taskId?: Maybe<Scalars['String']>;
+  taskName?: Maybe<Scalars['String']>;
   totalTime?: Maybe<Scalars['Int']>;
 };
 
@@ -267,6 +268,7 @@ export type ITimeRecordRequest = {
   startTime?: Maybe<Scalars['DateTime']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   task?: Maybe<Scalars['String']>;
+  taskName?: Maybe<Scalars['String']>;
   totalTime?: Maybe<Scalars['Int']>;
 };
 
@@ -751,6 +753,7 @@ export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolver
   tags?: Resolver<Maybe<Array<Maybe<IResolversTypes['String']>>>, ParentType, ContextType>,
   task?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   taskId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  taskName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   totalTime?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
