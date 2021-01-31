@@ -3,7 +3,6 @@ import { IMenuPosition } from '@common-stack/client-react';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 import { ScheduleOutlined } from '@ant-design/icons';
 
-const Timesheet = React.lazy(() => import('./components/Timesheet'));
 const Timeline = React.lazy(() => import('./components/Timeline'));
 const Home = React.lazy(() => import('./components/Home'));
 
