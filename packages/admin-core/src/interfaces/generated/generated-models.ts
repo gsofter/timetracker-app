@@ -32,10 +32,10 @@ export type IContext = {
   orgName?: Maybe<Scalars['String']>;
 };
 
-/**  Database counter  */
+/** Database counter */
 export type ICounter = {
    __typename?: 'Counter';
-  /**  Current amount  */
+  /** Current amount */
   amount: Scalars['Int'];
 };
 
@@ -51,25 +51,25 @@ export type IFieldError = {
 
 export type IMutation = {
    __typename?: 'Mutation';
-  /**  Increase counter value returns current counter amount  */
+  /** Increase counter value returns current counter amount */
   addCounter?: Maybe<ICounter>;
-  /**  add Counter  */
+  /** add Counter */
   addMoleculerCounter?: Maybe<ICounter>;
   addScheduleEvent?: Maybe<Scalars['Boolean']>;
   addTimelineEvent?: Maybe<Scalars['Boolean']>;
-  addTimesheetEvent?: Maybe<Scalars['Boolean']>;
   createTimeRecord?: Maybe<Scalars['String']>;
+  createTimesheet?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
   removeScheduleEvent?: Maybe<Scalars['Boolean']>;
   removeTimeRecord?: Maybe<Scalars['Boolean']>;
   removeTimelineEvent?: Maybe<Scalars['Boolean']>;
-  removeTimesheetEvent?: Maybe<Scalars['Boolean']>;
-  /**  sync cached counter with current value  */
+  removeTimesheet?: Maybe<Scalars['Boolean']>;
+  /** sync cached counter with current value */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
   updateScheduleEvent?: Maybe<Scalars['Boolean']>;
   updateTimeRecord?: Maybe<Scalars['Boolean']>;
   updateTimelineEvent?: Maybe<Scalars['Boolean']>;
-  updateTimesheetEvent?: Maybe<Scalars['Boolean']>;
+  updateTimesheet?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -93,13 +93,13 @@ export type IMutationaddTimelineEventArgs = {
 };
 
 
-export type IMutationaddTimesheetEventArgs = {
-  request?: Maybe<ITimesheetCreateRequest>;
+export type IMutationcreateTimeRecordArgs = {
+  request?: Maybe<ITimeRecordRequest>;
 };
 
 
-export type IMutationcreateTimeRecordArgs = {
-  request?: Maybe<ITimeRecordRequest>;
+export type IMutationcreateTimesheetArgs = {
+  request?: Maybe<ITimesheetCreateRequest>;
 };
 
 
@@ -118,8 +118,8 @@ export type IMutationremoveTimelineEventArgs = {
 };
 
 
-export type IMutationremoveTimesheetEventArgs = {
-  eventId?: Maybe<Scalars['String']>;
+export type IMutationremoveTimesheetArgs = {
+  sheetId?: Maybe<Scalars['String']>;
 };
 
 
@@ -141,16 +141,16 @@ export type IMutationupdateTimelineEventArgs = {
 };
 
 
-export type IMutationupdateTimesheetEventArgs = {
-  eventId?: Maybe<Scalars['String']>;
+export type IMutationupdateTimesheetArgs = {
+  sheetId?: Maybe<Scalars['String']>;
   request?: Maybe<ITimesheetCreateRequest>;
 };
 
 export type IQuery = {
    __typename?: 'Query';
-  /**  Counter  */
+  /** Counter */
   counter?: Maybe<ICounter>;
-  /**  Counter from Datasource  */
+  /** Counter from Datasource */
   counterCache?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
   getContextProperty?: Maybe<Scalars['AnyObject']>;
@@ -159,8 +159,8 @@ export type IQuery = {
   getScheduleEvents?: Maybe<Array<Maybe<ISchedule>>>;
   getTimeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
   getTimelineEvents?: Maybe<Array<Maybe<ITimeline>>>;
-  getTimesheetEvents?: Maybe<Array<Maybe<ITimesheet>>>;
-  /**  Moleculer Counter  */
+  getTimesheets?: Maybe<Array<Maybe<ITimesheet>>>;
+  /** Moleculer Counter */
   moleculerCounter?: Maybe<ICounter>;
 };
 
@@ -180,7 +180,7 @@ export type IQuerygetTimelineEventsArgs = {
 };
 
 
-export type IQuerygetTimesheetEventsArgs = {
+export type IQuerygetTimesheetsArgs = {
   userId?: Maybe<Scalars['String']>;
 };
 
@@ -220,7 +220,7 @@ export type IScheduleCreateRequest = {
 
 export type ISubscription = {
    __typename?: 'Subscription';
-  /**  Subscription fired when anyone increases counter  */
+  /** Subscription fired when anyone increases counter */
   counterUpdated?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
   moleculerCounterUpdate?: Maybe<ICounter>;
@@ -287,38 +287,38 @@ export type ITimeRecordRequest = {
 
 export type ITimesheet = {
    __typename?: 'Timesheet';
-  id?: Maybe<Scalars['String']>;
-  title?: Maybe<Scalars['String']>;
-  allDay?: Maybe<Scalars['Boolean']>;
-  start?: Maybe<Scalars['DateTime']>;
-  end?: Maybe<Scalars['DateTime']>;
-  desc?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['String']>;
-  resourceId?: Maybe<Scalars['String']>;
-  projectId?: Maybe<Scalars['String']>;
-  tooltip?: Maybe<Scalars['String']>;
-  isBillable?: Maybe<Scalars['Boolean']>;
-  submittedOn?: Maybe<Scalars['DateTime']>;
-  reason?: Maybe<Scalars['String']>;
-  note?: Maybe<Scalars['String']>;
-  approvedOn?: Maybe<Scalars['DateTime']>;
+  id?: Maybe<Scalars['ID']>;
+  dateRange?: Maybe<ITimesheetDateRange>;
+  state?: Maybe<ITimesheetState>;
+  submittedOn?: Maybe<Scalars['Date']>;
+  approvedOn?: Maybe<Scalars['Date']>;
+  updatedBy?: Maybe<Scalars['String']>;
+  updatedOn?: Maybe<Scalars['Date']>;
 };
 
 export type ITimesheetCreateRequest = {
-  title?: Maybe<Scalars['String']>;
-  allDay?: Maybe<Scalars['Boolean']>;
-  start?: Maybe<Scalars['DateTime']>;
-  end?: Maybe<Scalars['DateTime']>;
-  desc?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['String']>;
-  resourceId?: Maybe<Scalars['String']>;
-  projectId?: Maybe<Scalars['String']>;
-  tooltip?: Maybe<Scalars['String']>;
-  isBillable?: Maybe<Scalars['Boolean']>;
-  submittedOn?: Maybe<Scalars['DateTime']>;
-  reason?: Maybe<Scalars['String']>;
-  note?: Maybe<Scalars['String']>;
-  approvedOn?: Maybe<Scalars['DateTime']>;
+  startDate?: Maybe<Scalars['Date']>;
+  endDate?: Maybe<Scalars['Date']>;
+  state?: Maybe<ITimesheetState>;
+  submittedOn?: Maybe<Scalars['Date']>;
+  approvedOn?: Maybe<Scalars['Date']>;
+  updatedBy?: Maybe<Scalars['String']>;
+  updatedOn?: Maybe<Scalars['Date']>;
+};
+
+export type ITimesheetDateRange = {
+   __typename?: 'TimesheetDateRange';
+  startDate?: Maybe<Scalars['Date']>;
+  endDate?: Maybe<Scalars['Date']>;
+};
+
+export const enum ITimesheetState {
+  APPROVED_PENDING = 'APPROVED_PENDING',
+  APPROVED = 'APPROVED',
+  APPROVED_FINALIZED = 'APPROVED_FINALIZED',
+  DENYED = 'DENYED',
+  SUBMITTED = 'SUBMITTED',
+  DENYED_FINALIZED = 'DENYED_FINALIZED'
 };
 
 export type IOrgNameInContextFragment = (
@@ -435,18 +435,20 @@ export type IResolversTypes = {
   Schedule: ResolverTypeWrapper<ISchedule>,
   Timeline: ResolverTypeWrapper<ITimeline>,
   Timesheet: ResolverTypeWrapper<ITimesheet>,
+  ID: ResolverTypeWrapper<Scalars['ID']>,
+  TimesheetDateRange: ResolverTypeWrapper<ITimesheetDateRange>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
+  TimesheetState: ITimesheetState,
   Mutation: ResolverTypeWrapper<{}>,
   ScheduleCreateRequest: IScheduleCreateRequest,
   TimelineCreateRequest: ITimelineCreateRequest,
-  TimesheetCreateRequest: ITimesheetCreateRequest,
   TimeRecordRequest: ITimeRecordRequest,
+  TimesheetCreateRequest: ITimesheetCreateRequest,
   Subscription: ResolverTypeWrapper<{}>,
-  Date: ResolverTypeWrapper<Scalars['Date']>,
   Time: ResolverTypeWrapper<Scalars['Time']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<IFieldError>,
-  ID: ResolverTypeWrapper<Scalars['ID']>,
   ClientCacheTypeNames: IClientCacheTypeNames,
 };
 
@@ -464,18 +466,20 @@ export type IResolversParentTypes = {
   Schedule: ISchedule,
   Timeline: ITimeline,
   Timesheet: ITimesheet,
+  ID: Scalars['ID'],
+  TimesheetDateRange: ITimesheetDateRange,
+  Date: Scalars['Date'],
+  TimesheetState: ITimesheetState,
   Mutation: {},
   ScheduleCreateRequest: IScheduleCreateRequest,
   TimelineCreateRequest: ITimelineCreateRequest,
-  TimesheetCreateRequest: ITimesheetCreateRequest,
   TimeRecordRequest: ITimeRecordRequest,
+  TimesheetCreateRequest: ITimesheetCreateRequest,
   Subscription: {},
-  Date: Scalars['Date'],
   Time: Scalars['Time'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
   FieldError: IFieldError,
-  ID: Scalars['ID'],
   ClientCacheTypeNames: IClientCacheTypeNames,
 };
 
@@ -520,18 +524,18 @@ export type IMutationResolvers<ContextType = MyContext, ParentType extends IReso
   addMoleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddMoleculerCounterArgs, never>>,
   addScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddScheduleEventArgs, never>>,
   addTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddTimelineEventArgs, never>>,
-  addTimesheetEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddTimesheetEventArgs, never>>,
   createTimeRecord?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType, RequireFields<IMutationcreateTimeRecordArgs, never>>,
+  createTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationcreateTimesheetArgs, never>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   removeScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveScheduleEventArgs, never>>,
   removeTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimeRecordArgs, never>>,
   removeTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimelineEventArgs, never>>,
-  removeTimesheetEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimesheetEventArgs, never>>,
+  removeTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimesheetArgs, never>>,
   syncCachedCounter?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   updateScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateScheduleEventArgs, never>>,
   updateTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimeRecordArgs, never>>,
   updateTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimelineEventArgs, never>>,
-  updateTimesheetEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimesheetEventArgs, never>>,
+  updateTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimesheetArgs, never>>,
 };
 
 export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
@@ -544,7 +548,7 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, never>>,
   getTimeRecords?: Resolver<Maybe<Array<Maybe<IResolversTypes['TimeRecord']>>>, ParentType, ContextType>,
   getTimelineEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Timeline']>>>, ParentType, ContextType, RequireFields<IQuerygetTimelineEventsArgs, never>>,
-  getTimesheetEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Timesheet']>>>, ParentType, ContextType, RequireFields<IQuerygetTimesheetEventsArgs, never>>,
+  getTimesheets?: Resolver<Maybe<Array<Maybe<IResolversTypes['Timesheet']>>>, ParentType, ContextType, RequireFields<IQuerygetTimesheetsArgs, never>>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
 };
 
@@ -608,21 +612,19 @@ export type ITimeRecordResolvers<ContextType = MyContext, ParentType extends IRe
 };
 
 export type ITimesheetResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Timesheet'] = IResolversParentTypes['Timesheet']> = {
-  id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  title?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  allDay?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  desc?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  projectId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  reason?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  note?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  id?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType>,
+  dateRange?: Resolver<Maybe<IResolversTypes['TimesheetDateRange']>, ParentType, ContextType>,
+  state?: Resolver<Maybe<IResolversTypes['TimesheetState']>, ParentType, ContextType>,
+  submittedOn?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  approvedOn?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  updatedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  updatedOn?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type ITimesheetDateRangeResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['TimesheetDateRange'] = IResolversParentTypes['TimesheetDateRange']> = {
+  startDate?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  endDate?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -643,6 +645,7 @@ export type IResolvers<ContextType = MyContext> = {
   Timeline?: ITimelineResolvers<ContextType>,
   TimeRecord?: ITimeRecordResolvers<ContextType>,
   Timesheet?: ITimesheetResolvers<ContextType>,
+  TimesheetDateRange?: ITimesheetDateRangeResolvers<ContextType>,
 };
 
 

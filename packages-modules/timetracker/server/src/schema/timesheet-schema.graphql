@@ -1,0 +1,44 @@
+# scalar DateTime
+enum TimesheetState {
+  APPROVED_PENDING
+  APPROVED
+  APPROVED_FINALIZED # --- which means no going back
+  DENYED
+  SUBMITTED
+  DENYED_FINALIZED # --- which means no going back
+}
+
+type TimesheetDateRange {
+  startDate: Date # (only Date without time, ex. 01/20/2021)
+  endDate: Date # (only Date without time)
+}
+
+type Timesheet {
+  id: ID
+  dateRange: TimesheetDateRange
+  state: TimesheetState
+  submittedOn: Date
+  approvedOn: Date
+  updatedBy: String # ---> userId
+  updatedOn: Date
+}
+
+input TimesheetCreateRequest {
+  startDate: Date
+  endDate: Date
+  state: TimesheetState
+  submittedOn: Date
+  approvedOn: Date
+  updatedBy: String # ---> userId
+  updatedOn: Date
+}
+
+extend type Query {
+  getTimesheets(userId: String): [Timesheet]
+}
+
+extend type Mutation {
+  createTimesheet(request: TimesheetCreateRequest): Boolean
+  updateTimesheet(sheetId: String, request: TimesheetCreateRequest): Boolean
+  removeTimesheet(sheetId: String): Boolean
+}

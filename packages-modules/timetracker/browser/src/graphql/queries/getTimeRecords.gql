@@ -6,8 +6,6 @@ query GetTimeRecords {
     task
     tags
     projectId
-    clientId
-    totalTime
     isBillable
   }
 }
