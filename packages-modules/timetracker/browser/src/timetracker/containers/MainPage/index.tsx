@@ -54,26 +54,25 @@ const TimeTracker = (props: ITimeTracker) => {
     timer,
     setCurrentTimeRecord,
     currentTimeRecord,
-    setIsRecording,
     isRecording,
     resetTimerValues,
   } = props;
-  const { start, stop, reset, setTime } = timer;
 
   const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
     for (let i = 0; i < timeRecords.length; i++) {
-      totalTime += timeRecords[i].totalTime;
+      totalTime +=
+        moment(timeRecords[i].endTime).valueOf() - moment(timeRecords[i].startTime).valueOf();
     }
 
-    return formatDuration(totalTime);
+    return formatDuration(Math.floor(totalTime / 1000));
   };
 
   const startTimer = () => {
     const newTimeRecord: ITimeRecordRequest = {
       ...currentTimeRecord,
-      start: moment(),
-      end: null,
+      startTime: moment(),
+      endTime: null,
     };
     createTimeRecord(newTimeRecord);
   };
@@ -81,14 +80,14 @@ const TimeTracker = (props: ITimeTracker) => {
   // save current time record to database
   const saveCurrentTimeRecord = () => {
     const endTime = moment();
-    const startTime = moment(currentTimeRecord.start);
+    const startTime = moment(currentTimeRecord.startTime);
 
     const newTimeRecord: ITimeRecordRequest = {
-      start: startTime,
-      end: endTime,
-      task: currentTimeRecord.task,
+      startTime: startTime,
+      endTime: endTime,
+      taskName: currentTimeRecord.taskName,
       projectId: currentTimeRecord.projectId,
-      totalTime: Math.floor((endTime.valueOf() - startTime.valueOf()) / 1000),
+      // totalTime: Math.floor((endTime.valueOf() - startTime.valueOf()) / 1000),
       isBillable: currentTimeRecord.isBillable,
     };
     if (currentTimeRecord.id === undefined || currentTimeRecord.id === '')
@@ -105,8 +104,8 @@ const TimeTracker = (props: ITimeTracker) => {
     if (isRecording) stopTimer();
     const newTimeRecord: ITimeRecordRequest = {
       ..._.omit(timeRecord, ['id', '__typename']),
-      start: moment(),
-      end: null,
+      startTime: moment(),
+      endTime: null,
     };
     createTimeRecord(newTimeRecord);
   };
@@ -147,7 +146,7 @@ const TimeTracker = (props: ITimeTracker) => {
                   >
                     <div className="main-page__day-header">
                       <div className="main-page__day-date">
-                        {renderDayDateString(dayRecords[0].end)}
+                        {renderDayDateString(dayRecords[0].endTime)}
                       </div>
                       <div className="main-page__day-date-all-time">
                         Total time: {renderTotalTimeByDay(dayRecords)}
@@ -236,11 +235,11 @@ const TimeTrackerWrapper = props => {
   const resetTimerValues = () => {
     setIsRecording(false);
     setCurrentTimeRecord({
-      start: moment(),
-      end: null,
+      startTime: moment(),
+      endTime: null,
       isBillable: false,
       projectId: '',
-      task: '',
+      taskName: '',
     });
     setTime(0);
     reset();
@@ -248,11 +247,11 @@ const TimeTrackerWrapper = props => {
   };
 
   const [currentTimeRecord, setCurrentTimeRecord] = useState<ITimeRecord>({
-    start: null,
-    end: null,
+    startTime: null,
+    endTime: null,
     isBillable: false,
     projectId: '',
-    task: '',
+    taskName: '',
   });
   const [isRecording, setIsRecording] = useState(false);
 
@@ -295,15 +294,15 @@ const withTimer = timerProps => WrappedComponent => wrappedComponentProps => (
 
 const splitTimersByDay = (timeRecords: [ITimeRecord]): [ITimeRecord][] => {
   timeRecords.sort((a, b) => {
-    if (moment(a.end) < moment(b.end)) return 1;
-    else if (moment(a.end) > moment(b.end)) return -1;
+    if (moment(a.endTime) < moment(b.endTime)) return 1;
+    else if (moment(a.endTime) > moment(b.endTime)) return -1;
     else return 0;
   });
 
   let grouppedDates = {};
   for (let i = 0; i < timeRecords.length; i++) {
     const dispFormat = 'YYYY-MM-DD';
-    const date = moment(timeRecords[i].end);
+    const date = moment(timeRecords[i].endTime);
     let dateStr = date.format(dispFormat);
     const weekStartDay = moment().startOf('week');
     if (weekStartDay > date) dateStr = date.startOf('week').format(dispFormat);

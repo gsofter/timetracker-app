@@ -143,7 +143,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
       endTime: manualEnd,
       isBillable: currentTimeRecord.isBillable,
       taskName: currentTimeRecord.taskName,
-      totalTime: Math.floor((manualEnd.valueOf() - manualStart.valueOf()) / 1000),
+      // totalTime: Math.floor((manualEnd.valueOf() - manualStart.valueOf()) / 1000),
       projectId: currentTimeRecord.projectId,
     };
 
@@ -204,7 +204,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
               <Input
                 placeholder="What are you working on?"
                 size="large"
-                value={currentTimeRecord.task}
+                value={currentTimeRecord.taskName}
                 onChange={handleTaskChange}
               />
             </Col>

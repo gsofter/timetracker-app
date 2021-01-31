@@ -200,54 +200,52 @@ export function useUpdateTimeRecordMutation(baseOptions?: ApolloReactHooks.Mutat
 export type UpdateTimeRecordMutationHookResult = ReturnType<typeof useUpdateTimeRecordMutation>;
 export type UpdateTimeRecordMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IUpdateTimeRecordMutation>;
 export type UpdateTimeRecordMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IUpdateTimeRecordMutation, SchemaTypes.IUpdateTimeRecordMutationVariables>;
-export const UpdateTimeSheetDocument = gql`
-    mutation UpdateTimeSheet($sheetId: String, $request: TimesheetCreateRequest) {
+export const UpdateTimesheetDocument = gql`
+    mutation UpdateTimesheet($sheetId: String, $request: TimesheetCreateRequest) {
   updateTimesheet(sheetId: $sheetId, request: $request)
 }
     `;
-export type IUpdateTimeSheetMutationFn = ApolloReactCommon.MutationFunction<SchemaTypes.IUpdateTimeSheetMutation, SchemaTypes.IUpdateTimeSheetMutationVariables>;
-export type UpdateTimeSheetComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<SchemaTypes.IUpdateTimeSheetMutation, SchemaTypes.IUpdateTimeSheetMutationVariables>, 'mutation'>;
+export type IUpdateTimesheetMutationFn = ApolloReactCommon.MutationFunction<SchemaTypes.IUpdateTimesheetMutation, SchemaTypes.IUpdateTimesheetMutationVariables>;
+export type UpdateTimesheetComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<SchemaTypes.IUpdateTimesheetMutation, SchemaTypes.IUpdateTimesheetMutationVariables>, 'mutation'>;
 
-    export const UpdateTimeSheetComponent = (props: UpdateTimeSheetComponentProps) => (
-      <ApolloReactComponents.Mutation<SchemaTypes.IUpdateTimeSheetMutation, SchemaTypes.IUpdateTimeSheetMutationVariables> mutation={UpdateTimeSheetDocument} {...props} />
+    export const UpdateTimesheetComponent = (props: UpdateTimesheetComponentProps) => (
+      <ApolloReactComponents.Mutation<SchemaTypes.IUpdateTimesheetMutation, SchemaTypes.IUpdateTimesheetMutationVariables> mutation={UpdateTimesheetDocument} {...props} />
     );
     
 
 /**
- * __useUpdateTimeSheetMutation__
+ * __useUpdateTimesheetMutation__
  *
- * To run a mutation, you first call `useUpdateTimeSheetMutation` within a React component and pass it any options that fit your needs.
- * When your component renders, `useUpdateTimeSheetMutation` returns a tuple that includes:
+ * To run a mutation, you first call `useUpdateTimesheetMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTimesheetMutation` returns a tuple that includes:
  * - A mutate function that you can call at any time to execute the mutation
  * - An object with fields that represent the current status of the mutation's execution
  *
  * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
  *
  * @example
- * const [updateTimeSheetMutation, { data, loading, error }] = useUpdateTimeSheetMutation({
+ * const [updateTimesheetMutation, { data, loading, error }] = useUpdateTimesheetMutation({
  *   variables: {
  *      sheetId: // value for 'sheetId'
  *      request: // value for 'request'
  *   },
  * });
  */
-export function useUpdateTimeSheetMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SchemaTypes.IUpdateTimeSheetMutation, SchemaTypes.IUpdateTimeSheetMutationVariables>) {
-        return ApolloReactHooks.useMutation<SchemaTypes.IUpdateTimeSheetMutation, SchemaTypes.IUpdateTimeSheetMutationVariables>(UpdateTimeSheetDocument, baseOptions);
+export function useUpdateTimesheetMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SchemaTypes.IUpdateTimesheetMutation, SchemaTypes.IUpdateTimesheetMutationVariables>) {
+        return ApolloReactHooks.useMutation<SchemaTypes.IUpdateTimesheetMutation, SchemaTypes.IUpdateTimesheetMutationVariables>(UpdateTimesheetDocument, baseOptions);
       }
-export type UpdateTimeSheetMutationHookResult = ReturnType<typeof useUpdateTimeSheetMutation>;
-export type UpdateTimeSheetMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IUpdateTimeSheetMutation>;
-export type UpdateTimeSheetMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IUpdateTimeSheetMutation, SchemaTypes.IUpdateTimeSheetMutationVariables>;
+export type UpdateTimesheetMutationHookResult = ReturnType<typeof useUpdateTimesheetMutation>;
+export type UpdateTimesheetMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IUpdateTimesheetMutation>;
+export type UpdateTimesheetMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IUpdateTimesheetMutation, SchemaTypes.IUpdateTimesheetMutationVariables>;
 export const GetPlayingTimeRecordDocument = gql`
     query GetPlayingTimeRecord {
   getPlayingTimeRecord {
     id
     startTime
     endTime
-    task
+    taskName
     tags
     projectId
-    clientId
-    totalTime
     isBillable
   }
 }
@@ -289,7 +287,7 @@ export const GetTimeRecordsDocument = gql`
     id
     startTime
     endTime
-    task
+    taskName
     tags
     projectId
     isBillable

@@ -3,11 +3,9 @@ query GetPlayingTimeRecord {
     id
     startTime
     endTime
-    task
+    taskName
     tags
     projectId
-    clientId
-    totalTime
     isBillable
   }
 }

@@ -49,7 +49,7 @@ const Timesheet = props => {
 
   // remove event handler
   const handleRemoveTimesheetEvent = () => {
-    removeMutation({ variables: { eventId: selectedEvent.toString() } })
+    removeMutation({ variables: { sheetId: selectedEvent.toString() } })
       .then(() => {
         message.success('Event has removed');
         refetch();
@@ -121,7 +121,7 @@ const Timesheet = props => {
 
   return !data && loading ? null : (
     <TimesheetComponent
-      events={filterEvents(data.getTimesheetEvents)}
+      events={filterEvents(data.getTimesheets)}
       form={form}
       loading={loadingAdd || loadingUpdate || loadingRemove}
       showModal={showModal}
