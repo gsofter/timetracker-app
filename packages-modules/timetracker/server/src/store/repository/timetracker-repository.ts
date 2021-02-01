@@ -25,7 +25,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
   public async getTimeRecords(userId?: string): Promise<Array<ITimeRecord>> {
     const trackDoc = await this.timeTrackerModel.find({ userId, timeline: { end: { $ne: null } } } );
-    if(trackDoc) {
+    if(trackDoc && trackDoc.length > 0) {
       return trackDoc[0].timeRecords;
     }
     else {
@@ -35,7 +35,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
   public async getTimesheets(userId?: string): Promise<Array<ITimesheet>> {
     const trackDoc = await this.timeTrackerModel.find({ userId, timeline: { end: { $ne: null } } } );
-    if(trackDoc) {
+    if(trackDoc && trackDoc.length > 0) {
       return trackDoc[0].timesheets;
     }
     else {
@@ -45,7 +45,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
   public async getPlayingTimeRecord(userId?: string):Promise<ITimeRecord>  {
     const trackDoc = await this.timeTrackerModel.find({ userId, timeline: { end: null } } );
-    if(trackDoc) {
+    if(trackDoc && trackDoc.length > 0) {
       return trackDoc[0].timeRecords[0];
     }
     return null;
