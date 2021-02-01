@@ -60,7 +60,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   const debounceTimeLimit = 800;
 
   const handleSelectProject = (projectId: string) => {
-    const request = { projectId };
+    const request = { ...timeRecord, projectId };
     updateTimeRecord(timeRecord.id, request);
     setSelectedProject(projectId);
   };
@@ -97,7 +97,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   const debouncedFunc = useMemo(
     () =>
       debounce(value => {
-        const request = { taskName: value };
+        const request = { ...timeRecord, taskName: value };
         updateTimeRecord(timeRecord.id, request);
       }, debounceTimeLimit),
     [],
@@ -113,7 +113,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
 
   const handleChangeBillable = event => {
     setIsBillable(!isBillable);
-    updateTimeRecord(timeRecord.id, { isBillable: !timeRecord.isBillable });
+    updateTimeRecord(timeRecord.id, { ...timeRecord, isBillable: !timeRecord.isBillable });
   };
 
   return (

@@ -35,7 +35,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
       timeRecords: { $elemMatch: { endTime: { $ne: null } } },
     });
     if (trackDoc && trackDoc.length > 0) {
-      return trackDoc[0].timeRecords;
+      return trackDoc[0].timeRecords.filter(r => r.endTime !== null && r.endTime);
     } else {
       return [];
     }
@@ -63,7 +63,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     });
     console.log('getPlayingTimeRecord.trackDoc', trackDoc);
     if (trackDoc && trackDoc.length > 0) {
-      return trackDoc[0].timeRecords[0];
+      return trackDoc[0].timeRecords.find(r => r.endTime === null);
     }
     return null;
   }
@@ -97,8 +97,8 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   public async updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest) {
     try {
       const response = await this.timeTrackerModel.update(
-        { userId: userId, timeRecords: { $elemMatch: { _id: recordId } } },
-        { $push: { timeRecords: request } },
+        { userId: userId, orgId: orgId, timeRecords: { $elemMatch: { _id: recordId } } },
+        { $set: { "timeRecords.$": request } },
       );
       return true;
     } catch (err) {
@@ -110,7 +110,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     try {
       const response = await this.timeTrackerModel.update(
         { userId: userId, orgId: orgId, timesheets: { $elemMatch: { _id: sheetId } } },
-        { $push: { timesheets: request } },
+        { $set: { "timesheets.$": request } },
       );
       return true;
     } catch (err) {
@@ -120,11 +120,12 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
   public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
     try {
-      await this.timeTrackerModel.remove({
+      await this.timeTrackerModel.update({
         userId,
         orgId,
-        timeRecords: { $elemMatch: { _id: recordId } },
-      });
+      }, {
+        $pull: { "timeRecords._id": recordId } },
+      );
       return true;
     } catch (err) {
       throw new Error(err.message);
@@ -133,10 +134,12 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
   public async removeTimesheet(userId: string, orgId: string, sheetId: string) {
     try {
-      await this.timeTrackerModel.remove({
+      await this.timeTrackerModel.update({
         userId,
-        orgId,
-        timesheets: { $elemMatch: { _id: sheetId } },
+        orgId
+      },
+      {
+        $pull: { "timesheets._id": sheetId }
       });
       return true;
     } catch (err) {
