@@ -59,4 +59,4 @@ TimeTrackerSchema.set('toObject', { virtuals: true})
 
 export type TimeTrackerModelType = Model<ITimeTrackerModel>
 
-export const TimeTrackerModelFunc : (db: Connection) => TimeTrackerModelType = db => db.model<ITimeTrackerModel>('timetracker', TimeRecordSchema)
+export const TimeTrackerModelFunc : (db: Connection) => TimeTrackerModelType = db => db.model<ITimeTrackerModel>('timetracker', TimeTrackerSchema)
