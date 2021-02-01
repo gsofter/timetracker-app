@@ -1,3 +1,0 @@
-mutation UpdateTimesheetEvent($eventId: String, $request: TimesheetCreateRequest) {
-  updateTimesheetEvent(eventId: $eventId, request: $request)
-}

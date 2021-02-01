@@ -1,24 +1,23 @@
 type TimeRecord {
   id: String
-  start: DateTime
-  end: DateTime
-  task: String
+  startTime: DateTime
+  endTime: DateTime
+  taskId: String
+  taskName: String
   tags: [String]
-  totalTime: Int
   isBillable: Boolean
   projectId: String
   clientId: String
 }
 
 input TimeRecordRequest {
-  start: DateTime
-  end: DateTime
-  task: String
+  startTime: DateTime
+  endTime: DateTime
+  taskName: String
   tags: [String]
   isBillable: Boolean
   projectId: String
   clientId: String
-  totalTime: Int
 }
 
 extend type Query {

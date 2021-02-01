@@ -43,11 +43,15 @@ export interface ITaskList {
   handlePlayTimer: (timeRecord: ITimeRecord) => void;
 }
 
+const calcTotalTime = (startTime: string, endTime: string): number => {
+  return Math.floor((moment(endTime).valueOf() - moment(startTime).valueOf()) / 1000);
+};
+
 export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   const { removeTimeRecord, timeRecord, updateTimeRecord, handlePlayTimer } = props;
   const { css } = useFela(props);
   const [selectedProject, setSelectedProject] = useState(timeRecord.projectId ?? '');
-  const [taskName, setTaskName] = useState(timeRecord.task ?? '');
+  const [taskName, setTaskName] = useState(timeRecord.taskName ?? '');
   const [isBillable, setIsBillable] = useState(timeRecord.isBillable);
   const projects = [
     { id: '1', name: 'AAA' },
@@ -56,7 +60,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   const debounceTimeLimit = 800;
 
   const handleSelectProject = (projectId: string) => {
-    const request = { projectId };
+    const request = { ..._.omit(timeRecord, ['__typename', 'id']), projectId };
     updateTimeRecord(timeRecord.id, request);
     setSelectedProject(projectId);
   };
@@ -93,7 +97,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   const debouncedFunc = useMemo(
     () =>
       debounce(value => {
-        const request = { task: value };
+        const request = { ..._.omit(timeRecord, ['__typename', 'id']), taskName: value };
         updateTimeRecord(timeRecord.id, request);
       }, debounceTimeLimit),
     [],
@@ -109,7 +113,10 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
 
   const handleChangeBillable = event => {
     setIsBillable(!isBillable);
-    updateTimeRecord(timeRecord.id, { isBillable: !timeRecord.isBillable });
+    updateTimeRecord(timeRecord.id, {
+      ..._.omit(timeRecord, ['__typename', 'id']),
+      isBillable: !timeRecord.isBillable,
+    });
   };
 
   return (
@@ -153,12 +160,14 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
             </Col>
             <Col span={14} sm={6} className="flex-center">
               <Title level={5}>
-                {moment(timeRecord.start).format('HH:mm A')} &nbsp;
-                {moment(timeRecord.end).format('HH:mm A')}
+                {moment(timeRecord.startTime).format('HH:mm A')} &nbsp;
+                {moment(timeRecord.endTime).format('HH:mm A')}
               </Title>
             </Col>
             <Col span={6} className="duration">
-              <Title level={5}>{formatDuration(timeRecord.totalTime)}</Title>
+              <Title level={5}>
+                {formatDuration(calcTotalTime(timeRecord.startTime, timeRecord.endTime))}
+              </Title>
             </Col>
             <Col span={4} className="flex-end">
               <Button

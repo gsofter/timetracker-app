@@ -1,10 +1,10 @@
 import React, { useEffect, useState } from 'react';
 import TimesheetComponent from './Timesheet';
 import {
-  useAddTimesheetEventMutation,
-  useUpdateTimesheetEventMutation,
-  useRemoveTimesheetEventMutation,
-  useGetTimesheetEventsQuery,
+  useCreateTimesheetMutation,
+  useUpdateTimesheetMutation,
+  useRemoveTimesheetMutation,
+  useGetTimesheetsQuery,
 } from '../../../generated-models';
 import { ITimesheetCreateRequest } from '@admin-layout/schedule-module-core';
 import { message, Form } from 'antd';
@@ -14,9 +14,9 @@ const Timesheet = props => {
   const [selectedEvent, setSelectedEvent] = useState(-1);
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedProject, setSelectedProject] = useState('');
-  const [addMutation, { loading: loadingAdd }] = useAddTimesheetEventMutation();
-  const [updateMutation, { loading: loadingUpdate }] = useUpdateTimesheetEventMutation();
-  const [removeMutation, { loading: loadingRemove }] = useRemoveTimesheetEventMutation();
+  const [addMutation, { loading: loadingAdd }] = useCreateTimesheetMutation();
+  const [updateMutation, { loading: loadingUpdate }] = useUpdateTimesheetMutation();
+  const [removeMutation, { loading: loadingRemove }] = useRemoveTimesheetMutation();
   const [showModal, setShowModal] = useState(false);
   const [form] = Form.useForm();
   // create event handler
@@ -49,7 +49,7 @@ const Timesheet = props => {
 
   // remove event handler
   const handleRemoveTimesheetEvent = () => {
-    removeMutation({ variables: { eventId: selectedEvent.toString() } })
+    removeMutation({ variables: { sheetId: selectedEvent.toString() } })
       .then(() => {
         message.success('Event has removed');
         refetch();
@@ -91,7 +91,7 @@ const Timesheet = props => {
     form.resetFields();
     setShowModal(false);
   };
-  const { data, loading, error, refetch } = useGetTimesheetEventsQuery();
+  const { data, loading, error, refetch } = useGetTimesheetsQuery();
   useEffect(() => {
     refetch();
   }, [refetch]);
@@ -121,7 +121,7 @@ const Timesheet = props => {
 
   return !data && loading ? null : (
     <TimesheetComponent
-      events={filterEvents(data.getTimesheetEvents)}
+      events={filterEvents(data.getTimesheets)}
       form={form}
       loading={loadingAdd || loadingUpdate || loadingRemove}
       showModal={showModal}

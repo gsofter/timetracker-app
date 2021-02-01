@@ -2,11 +2,16 @@ import * as Logger from 'bunyan';
 import { injectable, inject, optional } from 'inversify';
 import { ITimeTrackerRepository } from './../../interfaces';
 import * as mongoose from 'mongoose';
-import { TimeRecordModelType, TimeRecordModelFunc } from './../models/timetracker-model';
-import { ITimeRecordRequest } from '@admin-layout/timetracker-module-core'
+import { TimeTrackerModelType, TimeTrackerModelFunc } from './../models/timetracker-model';
+import {
+  ITimeRecordRequest,
+  ITimeRecord,
+  ITimesheet,
+  ITimesheetCreateRequest,
+} from '@admin-layout/timetracker-module-core';
 @injectable()
 export class TimeTrackerRepository implements ITimeTrackerRepository {
-  private timeRecordModel: TimeRecordModelType;
+  private timeTrackerModel: TimeTrackerModelType;
   private logger: Logger;
   constructor(
     @inject('MongoDBConnection')
@@ -20,45 +25,125 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     options?: any,
   ) {
     this.logger = logger.child({ className: 'ScheduleRepository' });
-    this.timeRecordModel = TimeRecordModelFunc(db);
+    this.timeTrackerModel = TimeTrackerModelFunc(db);
   }
 
-  public async getTimeRecords() {
-    return this.timeRecordModel.find({ end: {$ne:null} });
+  public async getTimeRecords(userId: string, orgId: string): Promise<Array<ITimeRecord>> {
+    const trackDoc = await this.timeTrackerModel.find({
+      userId,
+      orgId,
+      timeRecords: { $elemMatch: { endTime: { $ne: null } } },
+    });
+    if (trackDoc && trackDoc.length > 0) {
+      return trackDoc[0].timeRecords.filter(r => r.endTime !== null && r.endTime);
+    } else {
+      return [];
+    }
   }
 
-  public async getPlayingTimeRecord() {
-    const res = await this.timeRecordModel.find({ end: null });
-    if(res.length > 0) {
-      return res[0]
+  public async getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>> {
+    const trackDoc = await this.timeTrackerModel.find({
+      userId,
+      orgId,
+      timeRecords: { $elemMatch: { endTime: { $ne: null } } },
+    });
+    if (trackDoc && trackDoc.length > 0) {
+      return trackDoc[0].timesheets;
+    } else {
+      return [];
+    }
+  }
+
+  public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
+    console.log('getPlayingTimeRecord.userId', userId);
+    const trackDoc = await this.timeTrackerModel.find({
+      userId,
+      orgId,
+      timeRecords: { $elemMatch: { endTime: null } },
+    });
+    console.log('getPlayingTimeRecord.trackDoc', trackDoc);
+    if (trackDoc && trackDoc.length > 0) {
+      return trackDoc[0].timeRecords.find(r => r.endTime === null);
     }
     return null;
   }
 
-  public async createTimeRecord(request: ITimeRecordRequest) {
+  public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
     try {
-        const response = await this.timeRecordModel.create({ ...request })
-        return response.id;
-    } catch(err) {
-        throw new Error(err.message);
+      const response = await this.timeTrackerModel.update(
+        { userId: userId, orgId: orgId},
+        { userId: userId, $push: { timeRecords: request } },
+        { upsert: true },
+      );
+      return response.id;
+    } catch (err) {
+      throw new Error(err.message);
     }
   }
 
-  public async updateTimeRecord(recordId: string, request: ITimeRecordRequest) {
+  public async createTimesheet(userId: string, orgId: string, request: ITimesheetCreateRequest) {
     try {
-        await this.timeRecordModel.update({ _id: recordId }, { ...request })
-        return true;
-    } catch(err) {
-        throw new Error(err.message);
+      const response = await this.timeTrackerModel.update(
+        { userId: userId },
+        { $push: { timesheets: request } },
+        { upsert: true },
+      );
+      return true;
+    } catch (err) {
+      throw new Error(err.message);
     }
   }
 
-  public async removeTimeRecord(recordId: string) {
+  public async updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest) {
     try {
-        await this.timeRecordModel.remove({ _id: recordId})
-        return true;
-    } catch(err) {
-        throw new Error(err.message);
+      const response = await this.timeTrackerModel.update(
+        { userId: userId, orgId: orgId, timeRecords: { $elemMatch: { _id: recordId } } },
+        { $set: { "timeRecords.$": request } },
+      );
+      return true;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  public async updateTimesheet(userId: string, orgId: string, sheetId: string, request: ITimesheetCreateRequest) {
+    try {
+      const response = await this.timeTrackerModel.update(
+        { userId: userId, orgId: orgId, timesheets: { $elemMatch: { _id: sheetId } } },
+        { $set: { "timesheets.$": request } },
+      );
+      return true;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
+    try {
+      await this.timeTrackerModel.update({
+        userId,
+        orgId,
+      }, {
+        $pull: { "timeRecords._id": recordId } },
+      );
+      return true;
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  public async removeTimesheet(userId: string, orgId: string, sheetId: string) {
+    try {
+      await this.timeTrackerModel.update({
+        userId,
+        orgId
+      },
+      {
+        $pull: { "timesheets._id": sheetId }
+      });
+      return true;
+    } catch (err) {
+      throw new Error(err.message);
     }
   }
 }

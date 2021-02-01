@@ -28,6 +28,15 @@ export const timePageStore: any[] = [
     path: '//:orgName/time-tracker/timer',
     priority: 2,
   },
+  // {
+  //   exact: true,
+  //   key: 'timeTracker.timesheet',
+  //   name: 'Timesheet',
+  //   component: TimeTracker,
+  //   position: IMenuPosition.MIDDLE,
+  //   path: '//:orgName/time-tracker/timesheet',
+  //   priority: 2,
+  // },
   {
     exact: true,
     key: 'timeTracker.projects',

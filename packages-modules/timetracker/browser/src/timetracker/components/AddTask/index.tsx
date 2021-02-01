@@ -87,7 +87,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   const [manualDur, setManualDur] = useState(moment().format('HH:mm:ss'));
   const handleTaskChange = event => {
     event.preventDefault();
-    setCurrentTimeRecord({ ...currentTimeRecord, task: event.target.value });
+    setCurrentTimeRecord({ ...currentTimeRecord, taskName: event.target.value });
   };
 
   const handleSelectProject = projectId => {
@@ -139,11 +139,11 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
 
   const handleAddManual = () => {
     const newRecordReq: ITimeRecordRequest = {
-      start: manualStart,
-      end: manualEnd,
+      startTime: manualStart,
+      endTime: manualEnd,
       isBillable: currentTimeRecord.isBillable,
-      task: currentTimeRecord.task,
-      totalTime: Math.floor((manualEnd.valueOf() - manualStart.valueOf()) / 1000),
+      taskName: currentTimeRecord.taskName,
+      // totalTime: Math.floor((manualEnd.valueOf() - manualStart.valueOf()) / 1000),
       projectId: currentTimeRecord.projectId,
     };
 
@@ -204,7 +204,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
               <Input
                 placeholder="What are you working on?"
                 size="large"
-                value={currentTimeRecord.task}
+                value={currentTimeRecord.taskName}
                 onChange={handleTaskChange}
               />
             </Col>

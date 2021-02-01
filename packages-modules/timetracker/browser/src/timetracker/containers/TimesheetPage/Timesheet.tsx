@@ -22,10 +22,11 @@ import {
   Popconfirm,
   Switch,
 } from 'antd';
-import { Modal } from '../Modal';
+import { Modal } from './Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
 import TabularCalendar from './TabularCalendar';
+import { ITimesheetCreateRequest } from '@admin-layout/timetracker-module-core';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -131,18 +132,17 @@ function SelectableCalendar({
   };
 
   const onFinish = values => {
-    const request = {
-      title: values.title,
-      start: moment(
+    const request: ITimesheetCreateRequest = {
+      //   title: values.title,
+      startDate: moment(
         values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[0].format('hh:mm:ss'),
       ).toDate(),
-      end: moment(
+      endDate: moment(
         values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[1].format('hh:mm:ss'),
       ).toDate(),
-      userId: values.user,
-      projectId: values.project,
-      reason: values.reason,
-      note: values.note,
+      //   projectId: values.project,
+      //   reason: values.reason,
+      //   note: values.note,
     };
     if (selectedEvent === -1) handleAddTimesheetEvent(request);
     else handleUpdateTimesheetEvent(selectedEvent, request);

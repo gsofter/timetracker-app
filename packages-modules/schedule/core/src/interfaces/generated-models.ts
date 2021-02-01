@@ -11,8 +11,8 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
-  AnyObject: any;
   Date: any;
+  AnyObject: any;
   Time: any;
   JSON: any;
   JSONObject: any;
@@ -44,19 +44,19 @@ export type IMutation = {
   addMoleculerCounter?: Maybe<ICounter>;
   addScheduleEvent?: Maybe<Scalars['Boolean']>;
   addTimelineEvent?: Maybe<Scalars['Boolean']>;
-  addTimesheetEvent?: Maybe<Scalars['Boolean']>;
   createTimeRecord?: Maybe<Scalars['String']>;
+  createTimesheet?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
   removeScheduleEvent?: Maybe<Scalars['Boolean']>;
   removeTimeRecord?: Maybe<Scalars['Boolean']>;
   removeTimelineEvent?: Maybe<Scalars['Boolean']>;
-  removeTimesheetEvent?: Maybe<Scalars['Boolean']>;
+  removeTimesheet?: Maybe<Scalars['Boolean']>;
   /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
   updateScheduleEvent?: Maybe<Scalars['Boolean']>;
   updateTimeRecord?: Maybe<Scalars['Boolean']>;
   updateTimelineEvent?: Maybe<Scalars['Boolean']>;
-  updateTimesheetEvent?: Maybe<Scalars['Boolean']>;
+  updateTimesheet?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -80,13 +80,13 @@ export type IMutationaddTimelineEventArgs = {
 };
 
 
-export type IMutationaddTimesheetEventArgs = {
-  request?: Maybe<ITimesheetCreateRequest>;
+export type IMutationcreateTimeRecordArgs = {
+  request?: Maybe<ITimeRecordRequest>;
 };
 
 
-export type IMutationcreateTimeRecordArgs = {
-  request?: Maybe<ITimeRecordRequest>;
+export type IMutationcreateTimesheetArgs = {
+  request?: Maybe<ITimesheetCreateRequest>;
 };
 
 
@@ -105,8 +105,8 @@ export type IMutationremoveTimelineEventArgs = {
 };
 
 
-export type IMutationremoveTimesheetEventArgs = {
-  eventId?: Maybe<Scalars['String']>;
+export type IMutationremoveTimesheetArgs = {
+  sheetId?: Maybe<Scalars['String']>;
 };
 
 
@@ -128,8 +128,8 @@ export type IMutationupdateTimelineEventArgs = {
 };
 
 
-export type IMutationupdateTimesheetEventArgs = {
-  eventId?: Maybe<Scalars['String']>;
+export type IMutationupdateTimesheetArgs = {
+  sheetId?: Maybe<Scalars['String']>;
   request?: Maybe<ITimesheetCreateRequest>;
 };
 
@@ -140,10 +140,11 @@ export type IQuery = {
   /**  Counter from Datasource  */
   counterCache?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
+  getPlayingTimeRecord?: Maybe<ITimeRecord>;
   getScheduleEvents?: Maybe<Array<Maybe<ISchedule>>>;
   getTimeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
   getTimelineEvents?: Maybe<Array<Maybe<ITimeline>>>;
-  getTimesheetEvents?: Maybe<Array<Maybe<ITimesheet>>>;
+  getTimesheets?: Maybe<Array<Maybe<ITimesheet>>>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
 };
@@ -159,7 +160,7 @@ export type IQuerygetTimelineEventsArgs = {
 };
 
 
-export type IQuerygetTimesheetEventsArgs = {
+export type IQuerygetTimesheetsArgs = {
   userId?: Maybe<Scalars['String']>;
 };
 
@@ -243,61 +244,68 @@ export type ITimelineCreateRequest = {
 export type ITimeRecord = {
    __typename?: 'TimeRecord';
   id?: Maybe<Scalars['String']>;
-  start?: Maybe<Scalars['DateTime']>;
-  end?: Maybe<Scalars['DateTime']>;
-  task?: Maybe<Scalars['String']>;
+  startTime?: Maybe<Scalars['DateTime']>;
+  endTime?: Maybe<Scalars['DateTime']>;
+  taskId?: Maybe<Scalars['String']>;
+  taskName?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
-  totalTime?: Maybe<Scalars['Int']>;
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
   clientId?: Maybe<Scalars['String']>;
 };
 
 export type ITimeRecordRequest = {
-  start?: Maybe<Scalars['DateTime']>;
-  end?: Maybe<Scalars['DateTime']>;
-  task?: Maybe<Scalars['String']>;
+  startTime?: Maybe<Scalars['DateTime']>;
+  endTime?: Maybe<Scalars['DateTime']>;
+  taskName?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
   clientId?: Maybe<Scalars['String']>;
-  totalTime?: Maybe<Scalars['Int']>;
 };
 
 export type ITimesheet = {
    __typename?: 'Timesheet';
-  allDay?: Maybe<Scalars['Boolean']>;
-  approvedOn?: Maybe<Scalars['DateTime']>;
-  desc?: Maybe<Scalars['String']>;
-  end?: Maybe<Scalars['DateTime']>;
-  id?: Maybe<Scalars['String']>;
-  isBillable?: Maybe<Scalars['Boolean']>;
-  note?: Maybe<Scalars['String']>;
-  projectId?: Maybe<Scalars['String']>;
-  reason?: Maybe<Scalars['String']>;
-  resourceId?: Maybe<Scalars['String']>;
-  start?: Maybe<Scalars['DateTime']>;
-  submittedOn?: Maybe<Scalars['DateTime']>;
-  title?: Maybe<Scalars['String']>;
-  tooltip?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['ID']>;
+  dateRange?: Maybe<ITimesheetDateRange>;
+  state?: Maybe<ITimesheetState>;
+  submittedOn?: Maybe<Scalars['Date']>;
+  approvedOn?: Maybe<Scalars['Date']>;
+  updatedBy?: Maybe<Scalars['String']>;
+  updatedOn?: Maybe<Scalars['Date']>;
 };
 
 export type ITimesheetCreateRequest = {
-  allDay?: Maybe<Scalars['Boolean']>;
-  approvedOn?: Maybe<Scalars['DateTime']>;
-  desc?: Maybe<Scalars['String']>;
-  end?: Maybe<Scalars['DateTime']>;
-  isBillable?: Maybe<Scalars['Boolean']>;
-  note?: Maybe<Scalars['String']>;
-  projectId?: Maybe<Scalars['String']>;
-  reason?: Maybe<Scalars['String']>;
-  resourceId?: Maybe<Scalars['String']>;
-  start?: Maybe<Scalars['DateTime']>;
-  submittedOn?: Maybe<Scalars['DateTime']>;
-  title?: Maybe<Scalars['String']>;
-  tooltip?: Maybe<Scalars['String']>;
+  startDate?: Maybe<Scalars['Date']>;
+  endDate?: Maybe<Scalars['Date']>;
+  state?: Maybe<ITimesheetState>;
+  submittedOn?: Maybe<Scalars['Date']>;
+  approvedOn?: Maybe<Scalars['Date']>;
+  updatedBy?: Maybe<Scalars['String']>;
+  updatedOn?: Maybe<Scalars['Date']>;
+};
+
+export type ITimesheetDateRange = {
+   __typename?: 'TimesheetDateRange';
+  startDate?: Maybe<Scalars['Date']>;
+  endDate?: Maybe<Scalars['Date']>;
+};
+
+export const enum ITimesheetState {
+  APPROVED_PENDING = 'APPROVED_PENDING',
+  APPROVED = 'APPROVED',
+  APPROVED_FINALIZED = 'APPROVED_FINALIZED',
+  DENYED = 'DENYED',
+  SUBMITTED = 'SUBMITTED',
+  DENYED_FINALIZED = 'DENYED_FINALIZED'
+};
+
+export type ITimeTracker = {
+   __typename?: 'TimeTracker';
   userId?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
+  timeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
+  timesheets?: Maybe<Array<Maybe<ITimesheet>>>;
 };
 
 export type IAddScheduleEventMutationVariables = {
@@ -320,16 +328,6 @@ export type IAddTimelineEventMutation = (
   & Pick<IMutation, 'addTimelineEvent'>
 );
 
-export type IAddTimesheetEventMutationVariables = {
-  request?: Maybe<ITimesheetCreateRequest>;
-};
-
-
-export type IAddTimesheetEventMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<IMutation, 'addTimesheetEvent'>
-);
-
 export type IRemoveScheduleEventMutationVariables = {
   eventId?: Maybe<Scalars['String']>;
 };
@@ -348,16 +346,6 @@ export type IRemoveTimelineEventMutationVariables = {
 export type IRemoveTimelineEventMutation = (
   { __typename?: 'Mutation' }
   & Pick<IMutation, 'removeTimelineEvent'>
-);
-
-export type IRemoveTimesheetEventMutationVariables = {
-  eventId?: Maybe<Scalars['String']>;
-};
-
-
-export type IRemoveTimesheetEventMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<IMutation, 'removeTimesheetEvent'>
 );
 
 export type IUpdateScheduleEventMutationVariables = {
@@ -380,17 +368,6 @@ export type IUpdateTimelineEventMutationVariables = {
 export type IUpdateTimelineEventMutation = (
   { __typename?: 'Mutation' }
   & Pick<IMutation, 'updateTimelineEvent'>
-);
-
-export type IUpdateTimesheetEventMutationVariables = {
-  eventId?: Maybe<Scalars['String']>;
-  request?: Maybe<ITimesheetCreateRequest>;
-};
-
-
-export type IUpdateTimesheetEventMutation = (
-  { __typename?: 'Mutation' }
-  & Pick<IMutation, 'updateTimesheetEvent'>
 );
 
 export type IGetScheduleEventsQueryVariables = {
@@ -419,19 +396,6 @@ export type IGetTimelineEventsQuery = (
   )>>> }
 );
 
-export type IGetTimesheetEventsQueryVariables = {
-  userId?: Maybe<Scalars['String']>;
-};
-
-
-export type IGetTimesheetEventsQuery = (
-  { __typename?: 'Query' }
-  & { getTimesheetEvents?: Maybe<Array<Maybe<(
-    { __typename?: 'Timesheet' }
-    & Pick<ITimesheet, 'id' | 'title' | 'allDay' | 'start' | 'end' | 'userId' | 'projectId' | 'reason' | 'note' | 'tooltip'>
-  )>>> }
-);
-
 
 export const AddScheduleEventDocument = gql`
     mutation AddScheduleEvent($request: ScheduleCreateRequest) {
@@ -447,13 +411,6 @@ export const AddTimelineEventDocument = gql`
     `;
 export type AddTimelineEventMutationResult = ApolloReactCommon.MutationResult<IAddTimelineEventMutation>;
 export type AddTimelineEventMutationOptions = ApolloReactCommon.BaseMutationOptions<IAddTimelineEventMutation, IAddTimelineEventMutationVariables>;
-export const AddTimesheetEventDocument = gql`
-    mutation AddTimesheetEvent($request: TimesheetCreateRequest) {
-  addTimesheetEvent(request: $request)
-}
-    `;
-export type AddTimesheetEventMutationResult = ApolloReactCommon.MutationResult<IAddTimesheetEventMutation>;
-export type AddTimesheetEventMutationOptions = ApolloReactCommon.BaseMutationOptions<IAddTimesheetEventMutation, IAddTimesheetEventMutationVariables>;
 export const RemoveScheduleEventDocument = gql`
     mutation RemoveScheduleEvent($eventId: String) {
   removeScheduleEvent(eventId: $eventId)
@@ -468,13 +425,6 @@ export const RemoveTimelineEventDocument = gql`
     `;
 export type RemoveTimelineEventMutationResult = ApolloReactCommon.MutationResult<IRemoveTimelineEventMutation>;
 export type RemoveTimelineEventMutationOptions = ApolloReactCommon.BaseMutationOptions<IRemoveTimelineEventMutation, IRemoveTimelineEventMutationVariables>;
-export const RemoveTimesheetEventDocument = gql`
-    mutation RemoveTimesheetEvent($eventId: String) {
-  removeTimesheetEvent(eventId: $eventId)
-}
-    `;
-export type RemoveTimesheetEventMutationResult = ApolloReactCommon.MutationResult<IRemoveTimesheetEventMutation>;
-export type RemoveTimesheetEventMutationOptions = ApolloReactCommon.BaseMutationOptions<IRemoveTimesheetEventMutation, IRemoveTimesheetEventMutationVariables>;
 export const UpdateScheduleEventDocument = gql`
     mutation UpdateScheduleEvent($eventId: String, $request: ScheduleCreateRequest) {
   updateScheduleEvent(eventId: $eventId, request: $request)
@@ -489,13 +439,6 @@ export const UpdateTimelineEventDocument = gql`
     `;
 export type UpdateTimelineEventMutationResult = ApolloReactCommon.MutationResult<IUpdateTimelineEventMutation>;
 export type UpdateTimelineEventMutationOptions = ApolloReactCommon.BaseMutationOptions<IUpdateTimelineEventMutation, IUpdateTimelineEventMutationVariables>;
-export const UpdateTimesheetEventDocument = gql`
-    mutation UpdateTimesheetEvent($eventId: String, $request: TimesheetCreateRequest) {
-  updateTimesheetEvent(eventId: $eventId, request: $request)
-}
-    `;
-export type UpdateTimesheetEventMutationResult = ApolloReactCommon.MutationResult<IUpdateTimesheetEventMutation>;
-export type UpdateTimesheetEventMutationOptions = ApolloReactCommon.BaseMutationOptions<IUpdateTimesheetEventMutation, IUpdateTimesheetEventMutationVariables>;
 export const GetScheduleEventsDocument = gql`
     query GetScheduleEvents($userId: String) {
   getScheduleEvents(userId: $userId) {
@@ -528,23 +471,6 @@ export const GetTimelineEventsDocument = gql`
 }
     `;
 export type GetTimelineEventsQueryResult = ApolloReactCommon.QueryResult<IGetTimelineEventsQuery, IGetTimelineEventsQueryVariables>;
-export const GetTimesheetEventsDocument = gql`
-    query GetTimesheetEvents($userId: String) {
-  getTimesheetEvents(userId: $userId) {
-    id
-    title
-    allDay
-    start
-    end
-    userId
-    projectId
-    reason
-    note
-    tooltip
-  }
-}
-    `;
-export type GetTimesheetEventsQueryResult = ApolloReactCommon.QueryResult<IGetTimesheetEventsQuery, IGetTimesheetEventsQueryVariables>;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -621,26 +547,29 @@ export type IResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
   Counter: ResolverTypeWrapper<ICounter>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
-  String: ResolverTypeWrapper<Scalars['String']>,
-  Schedule: ResolverTypeWrapper<ISchedule>,
-  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   TimeRecord: ResolverTypeWrapper<ITimeRecord>,
+  String: ResolverTypeWrapper<Scalars['String']>,
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
+  Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
+  Schedule: ResolverTypeWrapper<ISchedule>,
   Timeline: ResolverTypeWrapper<ITimeline>,
   Timesheet: ResolverTypeWrapper<ITimesheet>,
+  ID: ResolverTypeWrapper<Scalars['ID']>,
+  TimesheetDateRange: ResolverTypeWrapper<ITimesheetDateRange>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
+  TimesheetState: ITimesheetState,
   Mutation: ResolverTypeWrapper<{}>,
   ScheduleCreateRequest: IScheduleCreateRequest,
   TimelineCreateRequest: ITimelineCreateRequest,
-  TimesheetCreateRequest: ITimesheetCreateRequest,
   TimeRecordRequest: ITimeRecordRequest,
+  TimesheetCreateRequest: ITimesheetCreateRequest,
   Subscription: ResolverTypeWrapper<{}>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
-  Date: ResolverTypeWrapper<Scalars['Date']>,
   Time: ResolverTypeWrapper<Scalars['Time']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<IFieldError>,
-  ID: ResolverTypeWrapper<Scalars['ID']>,
+  TimeTracker: ResolverTypeWrapper<ITimeTracker>,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -648,26 +577,29 @@ export type IResolversParentTypes = {
   Query: {},
   Counter: ICounter,
   Int: Scalars['Int'],
-  String: Scalars['String'],
-  Schedule: ISchedule,
-  Boolean: Scalars['Boolean'],
-  DateTime: Scalars['DateTime'],
   TimeRecord: ITimeRecord,
+  String: Scalars['String'],
+  DateTime: Scalars['DateTime'],
+  Boolean: Scalars['Boolean'],
+  Schedule: ISchedule,
   Timeline: ITimeline,
   Timesheet: ITimesheet,
+  ID: Scalars['ID'],
+  TimesheetDateRange: ITimesheetDateRange,
+  Date: Scalars['Date'],
+  TimesheetState: ITimesheetState,
   Mutation: {},
   ScheduleCreateRequest: IScheduleCreateRequest,
   TimelineCreateRequest: ITimelineCreateRequest,
-  TimesheetCreateRequest: ITimesheetCreateRequest,
   TimeRecordRequest: ITimeRecordRequest,
+  TimesheetCreateRequest: ITimesheetCreateRequest,
   Subscription: {},
   AnyObject: Scalars['AnyObject'],
-  Date: Scalars['Date'],
   Time: Scalars['Time'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
   FieldError: IFieldError,
-  ID: Scalars['ID'],
+  TimeTracker: ITimeTracker,
 };
 
 export interface IAnyObjectScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['AnyObject'], any> {
@@ -706,28 +638,29 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   addMoleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType, RequireFields<IMutationaddMoleculerCounterArgs, never>>,
   addScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddScheduleEventArgs, never>>,
   addTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddTimelineEventArgs, never>>,
-  addTimesheetEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddTimesheetEventArgs, never>>,
   createTimeRecord?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType, RequireFields<IMutationcreateTimeRecordArgs, never>>,
+  createTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationcreateTimesheetArgs, never>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   removeScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveScheduleEventArgs, never>>,
   removeTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimeRecordArgs, never>>,
   removeTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimelineEventArgs, never>>,
-  removeTimesheetEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimesheetEventArgs, never>>,
+  removeTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimesheetArgs, never>>,
   syncCachedCounter?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   updateScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateScheduleEventArgs, never>>,
   updateTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimeRecordArgs, never>>,
   updateTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimelineEventArgs, never>>,
-  updateTimesheetEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimesheetEventArgs, never>>,
+  updateTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimesheetArgs, never>>,
 };
 
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
   counter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   counterCache?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  getPlayingTimeRecord?: Resolver<Maybe<IResolversTypes['TimeRecord']>, ParentType, ContextType>,
   getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, never>>,
   getTimeRecords?: Resolver<Maybe<Array<Maybe<IResolversTypes['TimeRecord']>>>, ParentType, ContextType>,
   getTimelineEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Timeline']>>>, ParentType, ContextType, RequireFields<IQuerygetTimelineEventsArgs, never>>,
-  getTimesheetEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Timesheet']>>>, ParentType, ContextType, RequireFields<IQuerygetTimesheetEventsArgs, never>>,
+  getTimesheets?: Resolver<Maybe<Array<Maybe<IResolversTypes['Timesheet']>>>, ParentType, ContextType, RequireFields<IQuerygetTimesheetsArgs, never>>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
 };
 
@@ -779,11 +712,11 @@ export type ITimelineResolvers<ContextType = any, ParentType extends IResolversP
 
 export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolversParentTypes['TimeRecord'] = IResolversParentTypes['TimeRecord']> = {
   id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  task?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  startTime?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  endTime?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  taskId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  taskName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   tags?: Resolver<Maybe<Array<Maybe<IResolversTypes['String']>>>, ParentType, ContextType>,
-  totalTime?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   projectId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   clientId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
@@ -791,21 +724,27 @@ export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolver
 };
 
 export type ITimesheetResolvers<ContextType = any, ParentType extends IResolversParentTypes['Timesheet'] = IResolversParentTypes['Timesheet']> = {
-  allDay?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  desc?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  end?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  note?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  projectId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  reason?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  resourceId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  start?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  title?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  tooltip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  id?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType>,
+  dateRange?: Resolver<Maybe<IResolversTypes['TimesheetDateRange']>, ParentType, ContextType>,
+  state?: Resolver<Maybe<IResolversTypes['TimesheetState']>, ParentType, ContextType>,
+  submittedOn?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  approvedOn?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  updatedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  updatedOn?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type ITimesheetDateRangeResolvers<ContextType = any, ParentType extends IResolversParentTypes['TimesheetDateRange'] = IResolversParentTypes['TimesheetDateRange']> = {
+  startDate?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  endDate?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type ITimeTrackerResolvers<ContextType = any, ParentType extends IResolversParentTypes['TimeTracker'] = IResolversParentTypes['TimeTracker']> = {
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  orgId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  timeRecords?: Resolver<Maybe<Array<Maybe<IResolversTypes['TimeRecord']>>>, ParentType, ContextType>,
+  timesheets?: Resolver<Maybe<Array<Maybe<IResolversTypes['Timesheet']>>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -825,6 +764,8 @@ export type IResolvers<ContextType = any> = {
   Timeline?: ITimelineResolvers<ContextType>,
   TimeRecord?: ITimeRecordResolvers<ContextType>,
   Timesheet?: ITimesheetResolvers<ContextType>,
+  TimesheetDateRange?: ITimesheetDateRangeResolvers<ContextType>,
+  TimeTracker?: ITimeTrackerResolvers<ContextType>,
 };
 
 

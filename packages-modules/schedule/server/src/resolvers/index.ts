@@ -1,5 +1,4 @@
 import { resolver as scheduleResolver } from './schedule-resolver'
-import { resolver as timelineResolver } from './timeline-resolver'
-import { resolver as timesheetResolver } from './timesheet-resolver'
+// import { resolver as timelineResolver } from './timeline-resolver'
 
-export const resolvers = [scheduleResolver, timelineResolver, timesheetResolver]
+export const resolvers = [scheduleResolver]

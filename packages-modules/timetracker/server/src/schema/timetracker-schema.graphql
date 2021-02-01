@@ -1,0 +1,6 @@
+type TimeTracker {
+  userId: String
+  orgId: String
+  timeRecords: [TimeRecord]
+  timesheets: [Timesheet]
+}

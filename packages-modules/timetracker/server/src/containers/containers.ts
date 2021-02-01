@@ -15,4 +15,5 @@ export const timeTrackerModule: (settings: any) => ContainerModule = setting =>
       .to(TimeTrackerService)
       .inSingletonScope()
       .whenTargetIsDefault();
+
   });
