@@ -87,7 +87,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   const [manualDur, setManualDur] = useState(moment().format('HH:mm:ss'));
   const handleTaskChange = event => {
     event.preventDefault();
-    setCurrentTimeRecord({ ...currentTimeRecord, task: event.target.value });
+    setCurrentTimeRecord({ ...currentTimeRecord, taskName: event.target.value });
   };
 
   const handleSelectProject = projectId => {

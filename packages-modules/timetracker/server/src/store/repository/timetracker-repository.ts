@@ -53,7 +53,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
   public async createTimeRecord(userId: string, request: ITimeRecordRequest) {
     try {
-        const response = await this.timeTrackerModel.update({ userId: userId }, { $push: { timeRecords: request }}, { upsert: true });
+        const response = await this.timeTrackerModel.update({ userId: userId }, { userId: userId, $push: { timeRecords: request }}, { upsert: true });
         return response.id;
     } catch(err) {
         throw new Error(err.message);
