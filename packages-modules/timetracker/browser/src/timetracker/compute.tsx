@@ -3,6 +3,7 @@ import { IMenuPosition } from '@common-stack/client-react';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 import { FileOutlined } from '@ant-design/icons';
 import TimeTracker from './containers/MainPage';
+import Timesheet from './containers/TimesheetPage';
 const Home = React.lazy(() => import('./containers/Home'));
 // const TimeTracker = React.lazy(() => import('./containers/MainPage'));
 const ProjectsPage = React.lazy(() => import('./containers/ProjectsPage'));
@@ -28,15 +29,15 @@ export const timePageStore: any[] = [
     path: '//:orgName/time-tracker/timer',
     priority: 2,
   },
-  // {
-  //   exact: true,
-  //   key: 'timeTracker.timesheet',
-  //   name: 'Timesheet',
-  //   component: TimeTracker,
-  //   position: IMenuPosition.MIDDLE,
-  //   path: '//:orgName/time-tracker/timesheet',
-  //   priority: 2,
-  // },
+  {
+    exact: true,
+    key: 'timeTracker.timesheet',
+    name: 'Timesheet',
+    component: Timesheet,
+    position: IMenuPosition.MIDDLE,
+    path: '//:orgName/time-tracker/timesheet',
+    priority: 3,
+  },
   {
     exact: true,
     key: 'timeTracker.projects',
@@ -44,7 +45,7 @@ export const timePageStore: any[] = [
     component: ProjectsPage,
     position: IMenuPosition.MIDDLE,
     path: '//:orgName/time-tracker/projects',
-    priority: 3,
+    priority: 4,
   },
   {
     exact: true,
@@ -53,7 +54,7 @@ export const timePageStore: any[] = [
     component: ClientsPage,
     position: IMenuPosition.MIDDLE,
     path: '//:orgName/time-tracker/clients',
-    priority: 4,
+    priority: 5,
   },
 ];
 
@@ -62,6 +63,7 @@ const selectedRoutesAndMenus = [
   'timeTracker.timer',
   'timeTracker.projects',
   'timeTracker.clients',
+  'timeTracker.timesheet',
 ];
 
 // get routes

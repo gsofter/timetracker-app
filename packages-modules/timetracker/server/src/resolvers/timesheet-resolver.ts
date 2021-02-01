@@ -1,23 +1,23 @@
 import { DEFAULT_USER, DEFAULT_ORG } from '../constants'
 export const resolver = (options) => ({
     Query: {
-      getTimesheets: (root, args, { timeSheetService }) => {
+      getTimesheets: (root, args, { timeTrackerService }) => {
         options.logger.trace('(Query.getTimeSheets) args %j', args)
-        return timeSheetService.getTimeSheetEvents(DEFAULT_USER, DEFAULT_ORG);
+        return timeTrackerService.getTimesheets(DEFAULT_USER, DEFAULT_ORG);
       },
     },
     Mutation: {
-      createTimesheet: (root, args, { timeSheetService }) => {
-        options.logger.trace('(Mutation.addTimeSheet) args %j', args)
-        return timeSheetService.createTimeSheet(DEFAULT_USER, DEFAULT_ORG, args.request);
+      createTimesheet: (root, args, { timeTrackerService }) => {
+        options.logger.trace('(Mutation.createTimesheet) args %j', args)
+        return timeTrackerService.createTimesheet(DEFAULT_USER, DEFAULT_ORG, args.request);
       },
-      updateTimesheet: (root, args, { timeSheetService }) => {
-        options.logger.trace('(Mutation.updateTimeSheet) args %j', args)
-        return timeSheetService.updateTimeSheet(DEFAULT_USER, DEFAULT_ORG, args.eventId, args.request);
+      updateTimesheet: (root, args, { timeTrackerService }) => {
+        options.logger.trace('(Mutation.updateTimesheet) args %j', args)
+        return timeTrackerService.updateTimesheet(DEFAULT_USER, DEFAULT_ORG, args.sheetId, args.request);
       },
-      removeTimesheet: (root, args, { timeSheetService }) => {
-        options.logger.trace('(Mutation.removeTimeSheet) args %j', args)
-        return timeSheetService.removeTimeSheet(DEFAULT_USER, DEFAULT_ORG, args.eventId);
+      removeTimesheet: (root, args, { timeTrackerService }) => {
+        options.logger.trace('(Mutation.removeTimesheet) args %j', args)
+        return timeTrackerService.removeTimesheet(DEFAULT_USER, DEFAULT_ORG, args.sheetId);
       } 
     },
     Subscription: {
