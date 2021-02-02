@@ -120,13 +120,18 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
   public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
     try {
-      await this.timeTrackerModel.update({
-        userId,
-        orgId,
-      }, {
-        $pull: { "timeRecords._id": recordId } },
-      );
-      return true;
+      const trackerDoc = await this.timeTrackerModel.find({userId, orgId });
+      if(trackerDoc && trackerDoc.length > 0) {
+        const timeRecords = trackerDoc[0].timeRecords.filter(tr => tr.id !== recordId);
+        await this.timeTrackerModel.update({
+          userId,
+          orgId,
+        }, {
+          timeRecords
+        });
+        return true;
+      }
+      return false
     } catch (err) {
       throw new Error(err.message);
     }

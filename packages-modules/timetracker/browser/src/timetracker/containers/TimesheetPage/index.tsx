@@ -6,7 +6,7 @@ import {
   useRemoveTimesheetMutation,
   useGetTimesheetsQuery,
 } from '../../../generated-models';
-import { ITimesheetCreateRequest } from '@admin-layout/schedule-module-core';
+import { ITimesheetCreateRequest } from '@admin-layout/timetracker-module-core';
 import { message, Form } from 'antd';
 import moment from 'moment';
 
@@ -34,8 +34,8 @@ const Timesheet = props => {
   };
 
   // update event handler
-  const handleUpdateTimesheetEvent = (eventId: string, request: ITimesheetCreateRequest) => {
-    updateMutation({ variables: { eventId, request } })
+  const handleUpdateTimesheetEvent = (sheetId: string, request: ITimesheetCreateRequest) => {
+    updateMutation({ variables: { sheetId, request } })
       .then(() => {
         message.success('A new event has been updated!');
         refetch();
@@ -119,7 +119,7 @@ const Timesheet = props => {
     setSelectedProject(value);
   };
 
-  return !data && loading ? null : (
+  return !data || loading ? null : (
     <TimesheetComponent
       events={filterEvents(data.getTimesheets)}
       form={form}

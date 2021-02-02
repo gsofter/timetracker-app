@@ -47,6 +47,14 @@ const TimeTrackerSchema = new Schema({
     timesheets: [TimesheetSchema],
 });
 
+TimeRecordSchema.virtual('id').get(function() {
+    return this._id.toHexString();
+})
+
+TimeRecordSchema.set('toJSON', { 
+    virtuals: true,
+})
+
 TimeTrackerSchema.virtual('id').get(function() {
     return this._id.toHexString();
 })
