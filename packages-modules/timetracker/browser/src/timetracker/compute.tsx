@@ -2,10 +2,9 @@ import * as React from 'react';
 import { IMenuPosition } from '@common-stack/client-react';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 import { FileOutlined } from '@ant-design/icons';
-import TimeTracker from './containers/MainPage';
-import Timesheet from './containers/TimesheetPage';
 const Home = React.lazy(() => import('./containers/Home'));
-// const TimeTracker = React.lazy(() => import('./containers/MainPage'));
+const TimeTracker = React.lazy(() => import('./containers/MainPage'));
+const Timesheet = React.lazy(() => import('./containers/TimesheetPage'));
 const ProjectsPage = React.lazy(() => import('./containers/ProjectsPage'));
 const ClientsPage = React.lazy(() => import('./containers/ClientsPage'));
 export const timePageStore: any[] = [
