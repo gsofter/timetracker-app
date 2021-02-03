@@ -114,7 +114,7 @@ const menuFooterRender = (props, mode = 'horizontal') => {
   return (
     <BaseMenu
       {...newProps}
-      mode="horizontal"
+      mode="vertical"
       handleOpenChange={props.onOpenChange}
       style={{
         width: '100%',
