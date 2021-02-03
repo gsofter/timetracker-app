@@ -18,6 +18,7 @@ export default () => {
           }
           .ant-menu-submenu-popup {
             position: fixed;
+            top: 78% !important;
           }
         `,
   );
