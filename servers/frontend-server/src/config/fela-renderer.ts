@@ -16,10 +16,6 @@ export default () => {
           .ant-picker-dropdown, .ant-select-dropdown {
             
           }
-          .ant-menu-submenu-popup {
-            position: fixed;
-            top: 78% !important;
-          }
         `,
   );
 
