@@ -117,8 +117,10 @@ const TabularCalendar = ({ events, projects }: ITabularCalendar) => {
         const workEnd = Math.min(dayEndVal, evEndVal);
         const workDur = workEnd - workStart;
         const demoDataId = demoData.findIndex(d => d.key === ev.projectId);
-        demoData[demoDataId][h.dataIndex] += workDur;
-        demoData[demoDataId].total += workDur;
+        if (demoDataId !== -1) {
+          demoData[demoDataId][h.dataIndex] += workDur;
+          demoData[demoDataId].total += workDur;
+        }
       }
     }
 
