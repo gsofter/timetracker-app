@@ -8,14 +8,10 @@ enum TimesheetState {
   DENYED_FINALIZED # --- which means no going back
 }
 
-type TimesheetDateRange {
-  startDate: Date # (only Date without time, ex. 01/20/2021)
-  endDate: Date # (only Date without time)
-}
-
 type Timesheet {
   id: ID
-  dateRange: TimesheetDateRange
+  startDate: Date # (only Date without time)
+  endDate: Date # (only Date without time)
   state: TimesheetState
   submittedOn: Date
   approvedOn: Date

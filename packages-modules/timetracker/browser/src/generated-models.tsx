@@ -329,10 +329,8 @@ export const GetTimesheetsDocument = gql`
     query GetTimesheets($userId: String) {
   getTimesheets(userId: $userId) {
     id
-    dateRange {
-      startDate
-      endDate
-    }
+    startDate
+    endDate
   }
 }
     `;
