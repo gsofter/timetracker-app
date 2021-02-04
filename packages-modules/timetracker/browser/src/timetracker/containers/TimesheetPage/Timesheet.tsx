@@ -26,7 +26,7 @@ import { Modal } from './Modal';
 import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
 import TabularCalendar from './TabularCalendar';
-import { ITimesheetCreateRequest } from '@admin-layout/timetracker-module-core';
+import { ITimesheetCreateRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -45,9 +45,10 @@ enum VIEW_MODE {
   CALENDAR_VIEW,
   TABULAR_VIEW,
 }
+
 interface ITimesheetProps {
   form: any;
-  events: any;
+  events: [ITimeRecord];
   showModal: boolean;
   selectedProject: any;
   selectedUser: any;
@@ -181,7 +182,7 @@ function SelectableCalendar({
           >
             <Select>
               <Select.Option value="1">User1</Select.Option>
-              <Select.Option value="2">User2</Select.Option>
+              <Select.Option value="123">User2</Select.Option>
             </Select>
           </Form.Item>
           <Form.Item
@@ -367,9 +368,9 @@ function SelectableCalendar({
           defaultDate={new Date()}
           onSelectEvent={handleSelectEvent}
           onSelectSlot={handleSelectSlot}
-          startAccessor="start"
-          endAccessor="end"
-          titleAccessor="title"
+          startAccessor="startTime"
+          endAccessor="endTime"
+          titleAccessor="taskName"
           toolbar={true}
           resizable={true}
           onEventDrop={onEventDrop}
@@ -380,9 +381,9 @@ function SelectableCalendar({
               event: EventAgenda,
             },
           }}
-          resources={isViewGroup ? resourceMap : undefined}
-          resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
-          resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
+          // resources={isViewGroup ? resourceMap : undefined}
+          // resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
+          // resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
         />
       ) : (
         // TODO: make custom calendar

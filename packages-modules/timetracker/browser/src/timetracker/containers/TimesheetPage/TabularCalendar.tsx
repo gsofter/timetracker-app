@@ -1,8 +1,9 @@
 import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
-import { Table, Row, Col, Button } from 'antd';
+import { Table, Row, Col, Button, Input } from 'antd';
 import moment, { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
+import { ITimeRecord } from '@admin-layout/timetracker-module-core';
 
 interface IProject {
   projectId: string;
@@ -10,7 +11,7 @@ interface IProject {
 }
 
 interface ITabularCalendar {
-  events: any;
+  events: [ITimeRecord];
   projects: Array<IProject>;
 }
 
@@ -38,11 +39,17 @@ const generateWeekHeaderColumnItem = (date: Moment, clsName) => {
     render: (workDur, record, index) => {
       return workDur === 0 && record.key !== 'all' ? (
         ''
-      ) : (
-        <span style={record.key === 'all' ? { fontWeight: 'bold' } : {}}>
+      ) : record.key === 'all' ? (
+        <span style={{ fontWeight: 'bold' }}>
           {moment.duration(workDur).hours()}:{moment.duration(workDur).minutes()}:
           {moment.duration(workDur).seconds()}
         </span>
+      ) : (
+        <Input
+          value={`${moment.duration(workDur).hours()}:${moment
+            .duration(workDur)
+            .minutes()}:${moment.duration(workDur).seconds()}`}
+        />
       );
     },
     // render: ({ text }) => <div> {text} </div>,
@@ -97,9 +104,9 @@ const TabularCalendar = ({ events, projects }: ITabularCalendar) => {
       .valueOf();
     for (let ev of events) {
       // skip for the event outside of current week
-      if (ev.start > moment(weekEnd) || ev.end < moment(weekStart)) continue;
-      const evStartVal = ev.start.valueOf();
-      const evEndVal = ev.end.valueOf();
+      if (ev.startTime > moment(weekEnd) || ev.endTime < moment(weekStart)) continue;
+      const evStartVal = ev.startTime.valueOf();
+      const evEndVal = ev.endTime.valueOf();
 
       for (let h of newHeaderColumns) {
         const dayStartVal = moment(h.dataIndex).valueOf();
@@ -273,4 +280,5 @@ const styles: { [property: string]: (props) => CSSProperties } = {
     fontWeight: 'bold',
   }),
 };
+
 export default TabularCalendar;
