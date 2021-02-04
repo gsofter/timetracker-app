@@ -267,8 +267,9 @@ export type ITimeRecordRequest = {
 export type ITimesheet = {
    __typename?: 'Timesheet';
   approvedOn?: Maybe<Scalars['Date']>;
-  dateRange?: Maybe<ITimesheetDateRange>;
+  endDate?: Maybe<Scalars['Date']>;
   id?: Maybe<Scalars['ID']>;
+  startDate?: Maybe<Scalars['Date']>;
   state?: Maybe<ITimesheetState>;
   submittedOn?: Maybe<Scalars['Date']>;
   updatedBy?: Maybe<Scalars['String']>;
@@ -283,12 +284,6 @@ export type ITimesheetCreateRequest = {
   submittedOn?: Maybe<Scalars['Date']>;
   updatedBy?: Maybe<Scalars['String']>;
   updatedOn?: Maybe<Scalars['Date']>;
-};
-
-export type ITimesheetDateRange = {
-   __typename?: 'TimesheetDateRange';
-  endDate?: Maybe<Scalars['Date']>;
-  startDate?: Maybe<Scalars['Date']>;
 };
 
 export const enum ITimesheetState {
@@ -401,11 +396,7 @@ export type IGetTimesheetsQuery = (
   { __typename?: 'Query' }
   & { getTimesheets?: Maybe<Array<Maybe<(
     { __typename?: 'Timesheet' }
-    & Pick<ITimesheet, 'id'>
-    & { dateRange?: Maybe<(
-      { __typename?: 'TimesheetDateRange' }
-      & Pick<ITimesheetDateRange, 'startDate' | 'endDate'>
-    )> }
+    & Pick<ITimesheet, 'id' | 'startDate' | 'endDate'>
   )>>> }
 );
 
@@ -484,10 +475,8 @@ export const GetTimesheetsDocument = gql`
     query GetTimesheets($userId: String) {
   getTimesheets(userId: $userId) {
     id
-    dateRange {
-      startDate
-      endDate
-    }
+    startDate
+    endDate
   }
 }
     `;
@@ -576,7 +565,6 @@ export type IResolversTypes = {
   Timeline: ResolverTypeWrapper<ITimeline>,
   Timesheet: ResolverTypeWrapper<ITimesheet>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
-  TimesheetDateRange: ResolverTypeWrapper<ITimesheetDateRange>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
   TimesheetState: ITimesheetState,
   Mutation: ResolverTypeWrapper<{}>,
@@ -606,7 +594,6 @@ export type IResolversParentTypes = {
   Timeline: ITimeline,
   Timesheet: ITimesheet,
   Date: Scalars['Date'],
-  TimesheetDateRange: ITimesheetDateRange,
   ID: Scalars['ID'],
   TimesheetState: ITimesheetState,
   Mutation: {},
@@ -746,18 +733,13 @@ export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolver
 
 export type ITimesheetResolvers<ContextType = any, ParentType extends IResolversParentTypes['Timesheet'] = IResolversParentTypes['Timesheet']> = {
   approvedOn?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
-  dateRange?: Resolver<Maybe<IResolversTypes['TimesheetDateRange']>, ParentType, ContextType>,
+  endDate?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
   id?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType>,
+  startDate?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
   state?: Resolver<Maybe<IResolversTypes['TimesheetState']>, ParentType, ContextType>,
   submittedOn?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
   updatedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   updatedOn?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-};
-
-export type ITimesheetDateRangeResolvers<ContextType = any, ParentType extends IResolversParentTypes['TimesheetDateRange'] = IResolversParentTypes['TimesheetDateRange']> = {
-  endDate?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
-  startDate?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -785,7 +767,6 @@ export type IResolvers<ContextType = any> = {
   Timeline?: ITimelineResolvers<ContextType>,
   TimeRecord?: ITimeRecordResolvers<ContextType>,
   Timesheet?: ITimesheetResolvers<ContextType>,
-  TimesheetDateRange?: ITimesheetDateRangeResolvers<ContextType>,
   TimeTracker?: ITimeTrackerResolvers<ContextType>,
 };
 

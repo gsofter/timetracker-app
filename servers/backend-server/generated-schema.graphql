@@ -237,3 +237,51 @@ extend type Mutation {
   updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
   removeTimeRecord(recordId: String): Boolean
 }
+
+# scalar DateTime
+enum TimesheetState {
+  APPROVED_PENDING
+  APPROVED
+  APPROVED_FINALIZED # --- which means no going back
+  DENYED
+  SUBMITTED
+  DENYED_FINALIZED # --- which means no going back
+}
+
+type Timesheet {
+  id: ID
+  startDate: Date # (only Date without time)
+  endDate: Date # (only Date without time)
+  state: TimesheetState
+  submittedOn: Date
+  approvedOn: Date
+  updatedBy: String # ---> userId
+  updatedOn: Date
+}
+
+input TimesheetCreateRequest {
+  startDate: Date
+  endDate: Date
+  state: TimesheetState
+  submittedOn: Date
+  approvedOn: Date
+  updatedBy: String # ---> userId
+  updatedOn: Date
+}
+
+extend type Query {
+  getTimesheets(userId: String): [Timesheet]
+}
+
+extend type Mutation {
+  createTimesheet(request: TimesheetCreateRequest): Boolean
+  updateTimesheet(sheetId: String, request: TimesheetCreateRequest): Boolean
+  removeTimesheet(sheetId: String): Boolean
+}
+
+type TimeTracker {
+  userId: String
+  orgId: String
+  timeRecords: [TimeRecord]
+  timesheets: [Timesheet]
+}

@@ -5,6 +5,7 @@ import {
   useUpdateTimesheetMutation,
   useRemoveTimesheetMutation,
   useGetTimesheetsQuery,
+  useGetTimeRecordsQuery,
 } from '../../../generated-models';
 import { ITimesheetCreateRequest } from '@admin-layout/timetracker-module-core';
 import { message, Form } from 'antd';
@@ -91,7 +92,7 @@ const Timesheet = props => {
     form.resetFields();
     setShowModal(false);
   };
-  const { data, loading, error, refetch } = useGetTimesheetsQuery();
+  const { data, loading, error, refetch } = useGetTimeRecordsQuery();
   useEffect(() => {
     refetch();
   }, [refetch]);
@@ -100,8 +101,8 @@ const Timesheet = props => {
     return events
       .map(ev => ({
         ...ev,
-        start: moment(ev.start).toDate(),
-        end: moment(ev.end).toDate(),
+        startTime: moment(ev.startTime).toDate(),
+        endTime: moment(ev.endTime).toDate(),
       }))
       .filter(ev => {
         return (
@@ -121,7 +122,7 @@ const Timesheet = props => {
 
   return !data || loading ? null : (
     <TimesheetComponent
-      events={filterEvents(data.getTimesheets)}
+      events={filterEvents(data.getTimeRecords)}
       form={form}
       loading={loadingAdd || loadingUpdate || loadingRemove}
       showModal={showModal}

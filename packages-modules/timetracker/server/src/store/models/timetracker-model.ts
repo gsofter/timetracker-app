@@ -25,14 +25,9 @@ const TimeRecordSchema = new Schema({
     projectId: { type: String }, // ----> project
 })
 
-// ===> TimesheetDateRange 
-const TimesheetDateRangeSchema = new Schema({
+const TimesheetSchema = new Schema({
     startDate: { type: Date },
     endDate: { type: Date },
-})
-
-const TimesheetSchema = new Schema({
-    dateRange: { type: TimesheetDateRangeSchema},
     state: { type: TimesheetState },
     submittedOn: { type: Date },
     approvedOn: { type: Date },
