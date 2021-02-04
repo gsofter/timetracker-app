@@ -4,6 +4,7 @@ import moment, { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
 import { ITimeRecord } from '@admin-layout/timetracker-module-core';
+import { TimesheetInput } from '../../components/TimesheetInput';
 
 interface IProject {
   projectId: string;
@@ -38,18 +39,14 @@ const generateWeekHeaderColumnItem = (date: Moment, clsName) => {
     align: 'center',
     render: (workDur, record, index) => {
       return workDur === 0 && record.key !== 'all' ? (
-        ''
+        <TimesheetInput />
       ) : record.key === 'all' ? (
         <span style={{ fontWeight: 'bold' }}>
           {moment.duration(workDur).hours()}:{moment.duration(workDur).minutes()}:
           {moment.duration(workDur).seconds()}
         </span>
       ) : (
-        <Input
-          value={`${moment.duration(workDur).hours()}:${moment
-            .duration(workDur)
-            .minutes()}:${moment.duration(workDur).seconds()}`}
-        />
+        <TimesheetInput workDur={workDur} />
       );
     },
     // render: ({ text }) => <div> {text} </div>,
