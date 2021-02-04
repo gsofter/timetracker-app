@@ -157,26 +157,74 @@ extend type Mutation {
   updateTimelineEvent(eventId: String, request: TimelineCreateRequest): Boolean
   removeTimelineEvent(eventId: String): Boolean
 }
+
+# scalar DateTime
+
+type Timesheet {
+  id: String
+  title: String
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  userId: String
+  resourceId: String
+  projectId: String
+  tooltip: String
+  isBillable: Boolean
+  submittedOn: DateTime
+  reason: String
+  note: String
+  approvedOn: DateTime
+}
+
+input TimesheetCreateRequest {
+  title: String
+  allDay: Boolean
+  start: DateTime
+  end: DateTime
+  desc: String
+  userId: String
+  resourceId: String
+  projectId: String
+  tooltip: String
+  isBillable: Boolean
+  submittedOn: DateTime
+  reason: String
+  note: String
+  approvedOn: DateTime
+}
+
+extend type Query {
+  getTimesheetEvents(userId: String): [Timesheet]
+}
+
+extend type Mutation {
+  addTimesheetEvent(request: TimesheetCreateRequest): Boolean
+  updateTimesheetEvent(eventId: String, request: TimesheetCreateRequest): Boolean
+  removeTimesheetEvent(eventId: String): Boolean
+}
 ,type TimeRecord {
   id: String
-  startTime: DateTime
-  endTime: DateTime
-  taskId: String
-  taskName: String
+  start: DateTime
+  end: DateTime
+  task: String
   tags: [String]
+  totalTime: Int
   isBillable: Boolean
   projectId: String
   clientId: String
 }
 
 input TimeRecordRequest {
-  startTime: DateTime
-  endTime: DateTime
-  taskName: String
+  start: DateTime
+  end: DateTime
+  task: String
   tags: [String]
   isBillable: Boolean
   projectId: String
   clientId: String
+  totalTime: Int
 }
 
 extend type Query {
@@ -188,56 +236,4 @@ extend type Mutation {
   createTimeRecord(request: TimeRecordRequest): String
   updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
   removeTimeRecord(recordId: String): Boolean
-}
-
-# scalar DateTime
-enum TimesheetState {
-  APPROVED_PENDING
-  APPROVED
-  APPROVED_FINALIZED # --- which means no going back
-  DENYED
-  SUBMITTED
-  DENYED_FINALIZED # --- which means no going back
-}
-
-type TimesheetDateRange {
-  startDate: Date # (only Date without time, ex. 01/20/2021)
-  endDate: Date # (only Date without time)
-}
-
-type Timesheet {
-  id: ID
-  dateRange: TimesheetDateRange
-  state: TimesheetState
-  submittedOn: Date
-  approvedOn: Date
-  updatedBy: String # ---> userId
-  updatedOn: Date
-}
-
-input TimesheetCreateRequest {
-  startDate: Date
-  endDate: Date
-  state: TimesheetState
-  submittedOn: Date
-  approvedOn: Date
-  updatedBy: String # ---> userId
-  updatedOn: Date
-}
-
-extend type Query {
-  getTimesheets(userId: String): [Timesheet]
-}
-
-extend type Mutation {
-  createTimesheet(request: TimesheetCreateRequest): Boolean
-  updateTimesheet(sheetId: String, request: TimesheetCreateRequest): Boolean
-  removeTimesheet(sheetId: String): Boolean
-}
-
-type TimeTracker {
-  userId: String
-  orgId: String
-  timeRecords: [TimeRecord]
-  timesheets: [Timesheet]
 }

@@ -110,17 +110,32 @@ const menuFooterRender = (props, mode = 'horizontal') => {
   const { menuData, ...rest } = props;
   const newMenuData = getMenuSeparation(props?.menuData).bottomMenus
   const newProps = { ...rest, menuData: newMenuData };
+  const menuProps = {
+    inlineCollapsed: true,
+    mode:"inline",
+    getPopupContainer:
+      (trigger => {
+        console.log('element', trigger);
 
+        // return trigger.parentElement
+        return document.getElementById('area');
+      })
+
+  }
   return (
-    <BaseMenu
-      {...newProps}
-      mode="horizontal"
-      handleOpenChange={props.onOpenChange}
-      style={{
-        width: '100%',
-      }}
-      className={`ant-pro-sider-menu`}
-    />
+    <>
+      <div id="area" />
+      <BaseMenu
+        {...newProps}
+        mode="horizontal"
+        handleOpenChange={props.onOpenChange}
+        menuProps={menuProps}
+        style={{
+          width: '100%',
+        }}
+        className={`ant-pro-sider-menu`}
+      />
+    </>
   );
 }
 
@@ -240,7 +255,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
           menuDataRef.current = menuData || [];
           return menuData || [];
         }}
-        rightContentRender={rightProps=> {
+        rightContentRender={rightProps => {
           return (
             <RightContent
               upperMenus={getMenuSeparation(rightProps?.menuData).upperMenus}
