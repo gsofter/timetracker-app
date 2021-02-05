@@ -338,7 +338,7 @@ const renderDayDateString = (date: string) => {
     nextDay: '[Tomorrow]',
     nextWeek: 'dddd',
     lastDay: '[Yesterday]',
-    lastWeek: '[Last] dddd',
+    lastWeek: 'dddd',
     sameElse: 'DD/MM/YYYY',
   });
 };
