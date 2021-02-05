@@ -24,6 +24,7 @@ import { IOrgNameInContextFragment } from '@admin-layout/core';
 import { useDispatch } from 'react-redux';
 import RightContent from '../GlobalHeader/RightContent';
 import { CHANGE_SETTINGS_ACTION } from '../../constants/constants';
+import { DashOutlined } from '@ant-design/icons';
 
 
 const noMatch = (
@@ -170,6 +171,7 @@ const menuExtraRender = (props) => {
           flex: 1,
           overflowY: 'auto',
           overflowX: 'hidden',
+          marginBottom: '16px',
         }}
         className="removeBoxShadow"
       >
@@ -183,7 +185,10 @@ const menuExtraRender = (props) => {
           className={`ant-pro-sider-menu`}
         />
       </div>
-      <Divider plain>Admin</Divider>
+      {props.collapsed && true ? 
+      <DashOutlined className="ant-divider" 
+      style={{marginLeft: '17px', borderTop: '0px'}}/> : 
+      <Divider plain>Admin</Divider>}
     </>
   );
 }
