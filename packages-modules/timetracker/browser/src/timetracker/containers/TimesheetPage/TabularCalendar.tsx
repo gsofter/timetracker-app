@@ -20,7 +20,7 @@ interface IProject {
 interface ITabularCalendar {
   weekStart: Moment;
   setWeekStart: Function;
-  records: [ITimeRecord];
+  records: ITimeRecord[];
   projects: Array<IProject>;
   handleRemoveDuration: Function;
 }
@@ -42,7 +42,7 @@ const TabularCalendar = ({
       p => records.findIndex(e => e.projectId === p.projectId) !== -1,
     );
     setTrackedProjects(trackedProjects);
-  }, [weekStart]);
+  }, [weekStart, records]);
 
   const onClickBack = event => {
     const newWeekStart = moment(weekStart).add('-1', 'week');
