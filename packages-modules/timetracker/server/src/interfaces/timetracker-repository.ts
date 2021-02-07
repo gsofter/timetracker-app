@@ -8,6 +8,12 @@ export interface ITimeTrackerRepository {
     getTimeRecords(userId: string, orgId: string): Promise<Array<ITimeRecord>>
 
     /**
+     * Get Duration TimeRecords
+     */
+    getDurationTimeRecords(userId: string, orgId: string, startTime: Date, endTime: Date): Promise<Array<ITimeRecord>>
+
+
+    /**
      * Get Timesheets
      */
     getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>>
@@ -42,6 +48,11 @@ export interface ITimeTrackerRepository {
      * Remove a time record
      */
     removeTimeRecord(userId: string, orgId: string, recordId: string) : Promise<Boolean>
+
+    /**
+     * Remove duration time records
+     */
+    removeDurationTimeRecords(userId: string, orgId: string, startTime: Date, endTime: Date, projectId: string) : Promise<Boolean>
 
     /**
      * Remove a time sheet

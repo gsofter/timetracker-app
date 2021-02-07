@@ -5,21 +5,27 @@ import { Button, Input, Modal, Row, Col, Divider, Select, Switch } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { formatDuration } from '../../services/timeRecordService';
+import { ITimeRecord } from '@admin-layout/timetracker-module-core';
 
 export interface ITimesheetInputProps {
-  workDur?: any;
-  startTime?: Date;
-  endTime?: Date;
-  date?: Date;
-  taskName?: string;
+  records: ITimeRecord[];
 }
 
 export const TimesheetInput = (props: ITimesheetInputProps) => {
+  const { records } = props;
   const { css } = useFela();
-  const { workDur, taskName } = props;
   const [isModalVisible, setIsModalVisible] = useState(false);
   const handleMore = event => {
     setIsModalVisible(true);
+  };
+
+  const totalDuration = () => {
+    let totalDur = 0;
+    records.forEach(r => {
+      const dur = Math.floor((moment(r.endTime).valueOf() - moment(r.startTime).valueOf()) / 1000);
+      totalDur = totalDur + dur;
+    });
+    return totalDur;
   };
 
   return (
@@ -32,7 +38,7 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
         className={css(styles.modal)}
       >
         <p className="date"> 02/05/2021 </p>
-        <p> {taskName} </p>
+        <p> {records !== undefined ? '' : ''} </p>
         <Divider />
         <Row>
           <Col sm={6}> Description: </Col>
@@ -53,14 +59,22 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
         </Row>
       </Modal>
       <div className={css(styles.timesheet)}>
-        {workDur !== undefined ? (
+        {records && records.length > 0 ? (
+          <>
+            <Input value={formatDuration(totalDuration())} />
+            <Button icon={<MoreOutlined />} onClick={handleMore} />
+          </>
+        ) : (
+          <Input />
+        )}
+        {/* {workDur !== undefined ? (
           <>
             <Input value={formatDuration(Math.floor(workDur / 1000))} />
             <Button icon={<MoreOutlined />} onClick={handleMore} />
           </>
         ) : (
           <Input value={workDur} />
-        )}
+        )} */}
       </div>
     </>
   );

@@ -387,7 +387,7 @@ function SelectableCalendar({
         />
       ) : (
         // TODO: make custom calendar
-        <TabularCalendar events={events} projects={resourceMap} />
+        <TabularCalendar projects={resourceMap} />
       )}
     </PageContainer>
   );

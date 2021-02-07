@@ -22,6 +22,7 @@ input TimeRecordRequest {
 
 extend type Query {
   getTimeRecords: [TimeRecord]
+  getDurationTimeRecords(startTime: DateTime, endTime: DateTime): [TimeRecord]
   getPlayingTimeRecord: TimeRecord
 }
 
@@ -29,4 +30,5 @@ extend type Mutation {
   createTimeRecord(request: TimeRecordRequest): String
   updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
   removeTimeRecord(recordId: String): Boolean
+  removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean
 }

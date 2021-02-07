@@ -47,6 +47,7 @@ export type IMutation = {
   createTimeRecord?: Maybe<Scalars['String']>;
   createTimesheet?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
+  removeDurationTimeRecords?: Maybe<Scalars['Boolean']>;
   removeScheduleEvent?: Maybe<Scalars['Boolean']>;
   removeTimeRecord?: Maybe<Scalars['Boolean']>;
   removeTimelineEvent?: Maybe<Scalars['Boolean']>;
@@ -87,6 +88,13 @@ export type IMutationcreateTimeRecordArgs = {
 
 export type IMutationcreateTimesheetArgs = {
   request?: Maybe<ITimesheetCreateRequest>;
+};
+
+
+export type IMutationremoveDurationTimeRecordsArgs = {
+  startTime?: Maybe<Scalars['DateTime']>;
+  endTime?: Maybe<Scalars['DateTime']>;
+  projectId?: Maybe<Scalars['String']>;
 };
 
 
@@ -140,6 +148,7 @@ export type IQuery = {
   /**  Counter from Datasource  */
   counterCache?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
+  getDurationTimeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
   getPlayingTimeRecord?: Maybe<ITimeRecord>;
   getScheduleEvents?: Maybe<Array<Maybe<ISchedule>>>;
   getTimeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
@@ -147,6 +156,12 @@ export type IQuery = {
   getTimesheets?: Maybe<Array<Maybe<ITimesheet>>>;
   /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
+};
+
+
+export type IQuerygetDurationTimeRecordsArgs = {
+  startTime?: Maybe<Scalars['DateTime']>;
+  endTime?: Maybe<Scalars['DateTime']>;
 };
 
 
@@ -542,9 +557,9 @@ export type IResolversTypes = {
   Query: ResolverTypeWrapper<{}>,
   Counter: ResolverTypeWrapper<ICounter>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   TimeRecord: ResolverTypeWrapper<ITimeRecord>,
   String: ResolverTypeWrapper<Scalars['String']>,
-  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   Schedule: ResolverTypeWrapper<ISchedule>,
   Timeline: ResolverTypeWrapper<ITimeline>,
@@ -571,9 +586,9 @@ export type IResolversParentTypes = {
   Query: {},
   Counter: ICounter,
   Int: Scalars['Int'],
+  DateTime: Scalars['DateTime'],
   TimeRecord: ITimeRecord,
   String: Scalars['String'],
-  DateTime: Scalars['DateTime'],
   Boolean: Scalars['Boolean'],
   Schedule: ISchedule,
   Timeline: ITimeline,
@@ -634,6 +649,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   createTimeRecord?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType, RequireFields<IMutationcreateTimeRecordArgs, never>>,
   createTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationcreateTimesheetArgs, never>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  removeDurationTimeRecords?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveDurationTimeRecordsArgs, never>>,
   removeScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveScheduleEventArgs, never>>,
   removeTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimeRecordArgs, never>>,
   removeTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimelineEventArgs, never>>,
@@ -649,6 +665,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   counter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   counterCache?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  getDurationTimeRecords?: Resolver<Maybe<Array<Maybe<IResolversTypes['TimeRecord']>>>, ParentType, ContextType, RequireFields<IQuerygetDurationTimeRecordsArgs, never>>,
   getPlayingTimeRecord?: Resolver<Maybe<IResolversTypes['TimeRecord']>, ParentType, ContextType>,
   getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, never>>,
   getTimeRecords?: Resolver<Maybe<Array<Maybe<IResolversTypes['TimeRecord']>>>, ParentType, ContextType>,
