@@ -273,7 +273,11 @@ const TabularCalendarWrapper = ({ projects }) => {
   const handleRemoveDuration = pId => {
     console.log('handleRemoveDuration => ', weekStart);
     removeMutation({
-      variables: { startTime: weekStart, endTime: weekStart.add(1, 'week'), projectId: pId },
+      variables: {
+        startTime: weekStart,
+        endTime: moment(weekStart).add(1, 'week'),
+        projectId: pId,
+      },
     })
       .then(() => {
         message.success('Removed');
