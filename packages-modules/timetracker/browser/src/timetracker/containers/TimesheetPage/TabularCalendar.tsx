@@ -3,12 +3,14 @@ import { Table, Row, Col, Button, Input, Spin, Select, message, Dropdown, Menu }
 import moment, { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
-import { ITimeRecord } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
 import { TimesheetInput } from '../../components/TimesheetInput';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import {
   useGetDurationTimeRecordsQuery,
   useRemoveDurationTimeRecordsMutation,
+  useUpdateTimeRecordMutation,
+  useCreateTimeRecordMutation,
 } from '../../../generated-models';
 import { formatDuration } from '../../services/timeRecordService';
 
@@ -23,6 +25,8 @@ interface ITabularCalendar {
   records: ITimeRecord[];
   projects: Array<IProject>;
   handleRemoveDuration: Function;
+  updateTimeRecord: Function;
+  createTimeRecord: Function;
 }
 
 const TabularCalendar = ({
@@ -31,6 +35,8 @@ const TabularCalendar = ({
   records,
   projects,
   handleRemoveDuration,
+  updateTimeRecord,
+  createTimeRecord,
 }: ITabularCalendar) => {
   const [headerColumns, setHeaderColumns] = useState([]);
   const { css } = useFela();
@@ -173,8 +179,14 @@ const TabularCalendar = ({
                         moment(r.startTime).format('YYYY-MM-DD') === curDay.format('YYYY-MM-DD'),
                     );
                     return (
-                      <td>
-                        <TimesheetInput records={curDayRecords} />
+                      <td key={curDay.format('YYYY-MM-DD')}>
+                        <TimesheetInput
+                          dateStr={curDay.format('YYYY-MM-DD')}
+                          projectId={p.projectId}
+                          records={curDayRecords}
+                          createTimeRecord={createTimeRecord}
+                          updateTimeRecord={updateTimeRecord}
+                        />
                       </td>
                     );
                   })}
@@ -268,6 +280,8 @@ const TabularCalendarWrapper = ({ projects }) => {
     refetch();
   }, [weekStart]);
 
+  const [createMutation] = useCreateTimeRecordMutation();
+  const [updateMutation] = useUpdateTimeRecordMutation();
   const [removeMutation] = useRemoveDurationTimeRecordsMutation();
 
   const handleRemoveDuration = pId => {
@@ -287,6 +301,31 @@ const TabularCalendarWrapper = ({ projects }) => {
         console.log(err.message);
       });
   };
+
+  // create time record
+  const createTimeRecord = (request: ITimeRecordRequest) => {
+    createMutation({ variables: { request } })
+      .then(() => {
+        message.success('TimeRecord created');
+        refetch();
+      })
+      .catch(error => {
+        message.error(error.message);
+      });
+  };
+
+  // update time record
+  const updateTimeRecord = (recordId: string, request: ITimeRecordRequest) => {
+    updateMutation({ variables: { recordId, request } })
+      .then(() => {
+        message.success('TimeRecord Updated');
+        refetch();
+      })
+      .catch(error => {
+        message.error(error.message);
+      });
+  };
+
   if (!data || loading) return null;
   return (
     <Spin spinning={!data || loading}>
@@ -296,6 +335,8 @@ const TabularCalendarWrapper = ({ projects }) => {
         records={filterEvents(data?.getDurationTimeRecords)}
         projects={projects}
         handleRemoveDuration={handleRemoveDuration}
+        createTimeRecord={createTimeRecord}
+        updateTimeRecord={updateTimeRecord}
       />
     </Spin>
   );

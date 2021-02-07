@@ -1,21 +1,28 @@
 import React, { useState } from 'react';
 import { useFela } from 'react-fela';
 import CSS from 'csstype';
-import { Button, Input, Modal, Row, Col, Divider, Select, Switch } from 'antd';
+import { Button } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { formatDuration } from '../../services/timeRecordService';
-import { ITimeRecord } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
+import * as _ from 'lodash';
+import DurationInput from '../DurationInput';
+import TimesheetEditModal from './TimesheetEditModal';
 
 export interface ITimesheetInputProps {
+  dateStr: string;
+  projectId: string;
   records: ITimeRecord[];
+  updateTimeRecord: Function;
+  createTimeRecord: Function;
 }
 
 export const TimesheetInput = (props: ITimesheetInputProps) => {
-  const { records } = props;
+  const { dateStr, records, projectId, createTimeRecord, updateTimeRecord } = props;
   const { css } = useFela();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const handleMore = event => {
+    console.log('handleMore');
     setIsModalVisible(true);
   };
 
@@ -28,53 +35,54 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
     return totalDur;
   };
 
+  const handleChangeDuration = dur => {
+    if (records.length === 0) {
+      // empty
+      const newRequest: ITimeRecordRequest = {
+        startTime: moment(dateStr).add('9', 'hours'),
+        endTime: moment(dateStr)
+          .add('9', 'hours')
+          .add(dur, 'seconds'),
+        projectId: projectId,
+      };
+
+      createTimeRecord(newRequest);
+    } else if (records.length === 1) {
+      console.log('duration', dur);
+      const updatedEndTime = moment(records[0].startTime).add(dur, 'seconds');
+      const updateRequest = {
+        ..._.omit(records[0], ['id', '__typename']),
+        endTime: updatedEndTime,
+      };
+      updateTimeRecord(records[0].id, updateRequest);
+    }
+  };
+
+  const handleSaveRecord = (id: string, request: ITimeRecordRequest) => {
+    updateTimeRecord(id, request);
+    setIsModalVisible(false);
+  };
+
   return (
     <>
-      <Modal
-        title="Edit Timesheet"
-        visible={isModalVisible}
-        onOk={() => setIsModalVisible(false)}
-        onCancel={() => setIsModalVisible(false)}
-        className={css(styles.modal)}
-      >
-        <p className="date"> 02/05/2021 </p>
-        <p> {records !== undefined ? '' : ''} </p>
-        <Divider />
-        <Row>
-          <Col sm={6}> Description: </Col>
-          <Col sm={18}>
-            <Input />
-          </Col>
-        </Row>
-        <Divider />
-        <Row>
-          <Col sm={6}> Tags: </Col>
-          <Col sm={18}>
-            <Select mode="tags" style={{ width: '100%' }} />
-          </Col>
-          <Col sm={6}>Billable</Col>
-          <Col sm={18}>
-            <Switch />
-          </Col>
-        </Row>
-      </Modal>
+      {records && records.length >= 1 ? (
+        <TimesheetEditModal
+          show={isModalVisible}
+          records={records}
+          handleClose={() => setIsModalVisible(false)}
+          handleOk={() => setIsModalVisible(false)}
+          handleSaveRecord={handleSaveRecord}
+        />
+      ) : null}
       <div className={css(styles.timesheet)}>
         {records && records.length > 0 ? (
           <>
-            <Input value={formatDuration(totalDuration())} />
+            <DurationInput duration={totalDuration() as Number} onChange={handleChangeDuration} />
             <Button icon={<MoreOutlined />} onClick={handleMore} />
           </>
         ) : (
-          <Input />
+          <DurationInput onChange={handleChangeDuration} />
         )}
-        {/* {workDur !== undefined ? (
-          <>
-            <Input value={formatDuration(Math.floor(workDur / 1000))} />
-            <Button icon={<MoreOutlined />} onClick={handleMore} />
-          </>
-        ) : (
-          <Input value={workDur} />
-        )} */}
       </div>
     </>
   );
