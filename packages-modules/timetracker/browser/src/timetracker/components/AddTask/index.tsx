@@ -1,6 +1,4 @@
 import React, { useContext, useEffect, useState } from 'react';
-import { ProjectsListPopup } from '../ProjectsListPopup';
-import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
 import _, { parseInt, range } from 'lodash';
 import {
@@ -111,7 +109,6 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   };
 
   const handleChangeRange = (range, str) => {
-    console.log('handleChangeRange.range =>', range, str);
     const start = range[0];
     const end = range[1];
     setManualStart(start);
