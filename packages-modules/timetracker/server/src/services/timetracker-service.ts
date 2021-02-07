@@ -21,6 +21,10 @@ export class TimeTrackerService implements ITimeTrackerService {
         return this.trackerRepository.getTimeRecords(userId, orgId);
     }
 
+    public async getDurationTimeRecords(userId: string, orgId: string, startTime:Date, endTime: Date) : Promise<Array<ITimeRecord>> {
+        return this.trackerRepository.getDurationTimeRecords(userId, orgId, startTime, endTime);
+    }
+
     public async getTimesheets(userId: string, orgId: string) : Promise<Array<ITimesheet>> {
         return this.trackerRepository.getTimesheets(userId , orgId);
     }
@@ -49,7 +53,12 @@ export class TimeTrackerService implements ITimeTrackerService {
         return this.trackerRepository.removeTimeRecord(userId, orgId, recordId)
     }
 
+    public async removeDurationTimeRecords(userId: string, orgId: string, startTime: Date, endTime: Date, projectId: string) {
+        return this.trackerRepository.removeDurationTimeRecords(userId, orgId, startTime, endTime, projectId)
+    }
+
     public async removeTimesheet(userId: string, orgId: string, sheetId: string) {
         return this.trackerRepository.removeTimesheet(userId, orgId, sheetId)
     }
+    
 }

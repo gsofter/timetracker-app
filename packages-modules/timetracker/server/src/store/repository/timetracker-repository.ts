@@ -41,6 +41,30 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     }
   }
 
+  public async getDurationTimeRecords(userId: string, orgId: string, startTime: Date, endTime: Date): Promise<Array<ITimeRecord>> {
+    const trackDoc = await this.timeTrackerModel.find({
+      userId,
+      orgId,
+      $and: [
+        {
+          'timeRecords.startTime': {
+            $gte: new Date(startTime.toISOString())
+          },
+        },
+        {
+          'timeRecords.startTime': {
+            $lte: new Date(endTime.toISOString())
+          },
+        }
+      ]
+    });
+    if (trackDoc && trackDoc.length > 0) {
+      return trackDoc[0].timeRecords.filter(r => r.endTime !== null && r.endTime);
+    } else {
+      return [];
+    }
+  }
+
   public async getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>> {
     const trackDoc = await this.timeTrackerModel.find({
       userId,
@@ -123,6 +147,27 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
       const trackerDoc = await this.timeTrackerModel.find({userId, orgId });
       if(trackerDoc && trackerDoc.length > 0) {
         const timeRecords = trackerDoc[0].timeRecords.filter(tr => tr.id !== recordId);
+        await this.timeTrackerModel.update({
+          userId,
+          orgId,
+        }, {
+          timeRecords
+        });
+        return true;
+      }
+      return false
+    } catch (err) {
+      throw new Error(err.message);
+    }
+  }
+
+  public async removeDurationTimeRecords(userId: string, orgId: string, startTime: Date, endTime: Date, projectId: string) {
+    try {
+      const trackerDoc = await this.timeTrackerModel.find({userId, orgId });
+      if(trackerDoc && trackerDoc.length > 0) {
+        const timeRecords = trackerDoc[0].timeRecords.filter(tr => (tr.startTime < startTime || tr.startTime > endTime));
+        console.log('timeRecords ===> ', timeRecords)
+        console.log('projectId ====>', projectId)
         await this.timeTrackerModel.update({
           userId,
           orgId,

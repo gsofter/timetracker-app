@@ -1,0 +1,3 @@
+mutation RemoveDurationTimeRecords($startTime: DateTime, $endTime: DateTime, $projectId: String) {
+  removeDurationTimeRecords(startTime: $startTime, endTime: $endTime, projectId: $projectId)
+}

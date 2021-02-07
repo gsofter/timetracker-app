@@ -1,10 +1,16 @@
 import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
-import { Table, Row, Col, Button, Input } from 'antd';
+import { Table, Row, Col, Button, Input, Spin, Select, message, Dropdown, Menu } from 'antd';
 import moment, { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
 import { ITimeRecord } from '@admin-layout/timetracker-module-core';
 import { TimesheetInput } from '../../components/TimesheetInput';
+import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
+import {
+  useGetDurationTimeRecordsQuery,
+  useRemoveDurationTimeRecordsMutation,
+} from '../../../generated-models';
+import { formatDuration } from '../../services/timeRecordService';
 
 interface IProject {
   projectId: string;
@@ -12,188 +18,88 @@ interface IProject {
 }
 
 interface ITabularCalendar {
-  events: [ITimeRecord];
+  weekStart: Moment;
+  setWeekStart: Function;
+  records: ITimeRecord[];
   projects: Array<IProject>;
+  handleRemoveDuration: Function;
 }
 
-const generateWeekHeaderColumnItem = (date: Moment, clsName) => {
-  const isToday = date.format('YYYY-MM-DD') === moment().format('YYYY-MM-DD');
-  return {
-    title: (
-      <div className={clsName}>
-        <div className={cls('day', { today: isToday })}>
-          <span>{date.format('DD')}</span>
-        </div>
-        <div className="extra">
-          <div className="week">
-            <span>{date.format('ddd')}</span>
-          </div>
-          <div className="month">
-            <span>{date.format('MMM')}</span>
-          </div>
-        </div>
-      </div>
-    ),
-    dataIndex: date.format('YYYY-MM-DD'),
-    key: date.format('YYYY-MM-DD'),
-    align: 'center',
-    render: (workDur, record, index) => {
-      return workDur === 0 && record.key !== 'all' ? (
-        <TimesheetInput />
-      ) : record.key === 'all' ? (
-        <span style={{ fontWeight: 'bold' }}>
-          {moment.duration(workDur).hours()}:{moment.duration(workDur).minutes()}:
-          {moment.duration(workDur).seconds()}
-        </span>
-      ) : (
-        <TimesheetInput workDur={workDur} />
-      );
-    },
-    // render: ({ text }) => <div> {text} </div>,
-  };
-};
-
-const TabularCalendar = ({ events, projects }: ITabularCalendar) => {
-  const [weekStart, setWeekStart] = useState(
-    moment()
-      .startOf('week')
-      .add(1, 'day')
-      .valueOf(),
-  );
+const TabularCalendar = ({
+  weekStart,
+  setWeekStart,
+  records,
+  projects,
+  handleRemoveDuration,
+}: ITabularCalendar) => {
   const [headerColumns, setHeaderColumns] = useState([]);
   const { css } = useFela();
   const [data, setData] = useState([]);
+  const [trackedProjects, setTrackedProjects] = useState([]);
+  const [newRows, setNewRows] = useState([]);
   useEffect(() => {
-    // add date header columns
-    const newHeaderColumns: Array<{
-      title: ReactNode;
-      key: string;
-      dataIndex: string;
-      render?: Function;
-      align: string;
-      fixed?: string;
-    }> = Array(7)
-      .fill(0)
-      .map((value, index) => {
-        return generateWeekHeaderColumnItem(
-          moment(weekStart).add(index, 'day'),
-          css(styles.dateHeader),
-        );
-      });
-
-    let demoData = projects.map(p => {
-      let res = {
-        key: p.projectId,
-        projectTitle: p.projectTitle,
-        total: 0,
-      };
-      for (let weekDay of [0, 1, 2, 3, 4, 5, 6]) {
-        const weekDayStr = moment(weekStart)
-          .add(weekDay, 'day')
-          .format('YYYY-MM-DD');
-        res[weekDayStr] = 0;
-      }
-      return res;
-    });
-
-    const weekEnd = moment(weekStart)
-      .add(7, 'day')
-      .valueOf();
-    for (let ev of events) {
-      // skip for the event outside of current week
-      if (ev.startTime > moment(weekEnd) || ev.endTime < moment(weekStart)) continue;
-      const evStartVal = ev.startTime.valueOf();
-      const evEndVal = ev.endTime.valueOf();
-
-      for (let h of newHeaderColumns) {
-        const dayStartVal = moment(h.dataIndex).valueOf();
-        const dayEndVal = moment(h.dataIndex)
-          .add(1, 'day')
-          .valueOf();
-        // skip for the event outside of current day
-        if (evStartVal > dayEndVal || evEndVal < dayStartVal) continue;
-
-        const workStart = Math.max(dayStartVal, evStartVal);
-        const workEnd = Math.min(dayEndVal, evEndVal);
-        const workDur = workEnd - workStart;
-        const demoDataId = demoData.findIndex(d => d.key === ev.projectId);
-        if (demoDataId !== -1) {
-          demoData[demoDataId][h.dataIndex] += workDur;
-          demoData[demoDataId].total += workDur;
-        }
-      }
-    }
-
-    // add row for 'All'
-    let allRowData = {
-      key: 'all',
-      projectTitle: 'All',
-      total: 0,
-    };
-    for (let h of newHeaderColumns) {
-      let hSumWorkHours = 0;
-      for (let i = 0; i < demoData.length; i++) {
-        hSumWorkHours += demoData[i][h.dataIndex];
-      }
-      allRowData[h.dataIndex] = hSumWorkHours;
-      allRowData.total += hSumWorkHours;
-    }
-
-    demoData.unshift(allRowData);
-
-    // add column for 'ProjectTitle'
-    newHeaderColumns.unshift({
-      title: <div> &nbsp; </div>,
-      dataIndex: 'projectTitle',
-      key: 'projectTitle',
-      align: 'center',
-    });
-
-    // add column for 'total'
-    newHeaderColumns.push({
-      title: <div> Total </div>,
-      dataIndex: 'total',
-      key: 'total',
-      align: 'center',
-      render: (workDur, record, index) => {
-        return (
-          <span
-            style={
-              record.key === 'all' ? { fontWeight: 'bold', color: 'green' } : { fontWeight: 'bold' }
-            }
-          >
-            {moment.duration(workDur).hours()}:{moment.duration(workDur).minutes()}:
-            {moment.duration(workDur).seconds()}
-          </span>
-        );
-      },
-    });
-    setHeaderColumns(newHeaderColumns);
-    setData(demoData);
-  }, [weekStart]);
+    const trackedProjects = projects.filter(
+      p => records.findIndex(e => e.projectId === p.projectId) !== -1,
+    );
+    setTrackedProjects(trackedProjects);
+  }, [weekStart, records]);
 
   const onClickBack = event => {
-    const newWeekStart = moment(weekStart)
-      .add('-1', 'week')
-      .valueOf();
+    const newWeekStart = moment(weekStart).add('-1', 'week');
     setWeekStart(newWeekStart);
   };
 
   const onClickNext = event => {
-    const newWeekStart = moment(weekStart)
-      .add('1', 'week')
-      .valueOf();
+    const newWeekStart = moment(weekStart).add('1', 'week');
     setWeekStart(newWeekStart);
   };
 
   const onClickToday = event => {
-    const newWeekStart = moment()
-      .startOf('week')
-      .add(1, 'day')
-      .valueOf();
+    const newWeekStart = moment().startOf('week');
     setWeekStart(newWeekStart);
   };
 
+  const onClickAddNewRow = () => {
+    // setNewRows()
+  };
+
+  const getProjectTotalDuration = projectId => {
+    const pRecords = records.filter(r => r.projectId === projectId);
+    let totalDur = 0;
+    pRecords.forEach(pr => {
+      const dur = Math.floor(
+        (moment(pr.endTime).valueOf() - moment(pr.startTime).valueOf()) / 1000,
+      );
+      totalDur = totalDur + dur;
+    });
+    return totalDur;
+  };
+
+  const handleSelectNewProject = projectId => {
+    setNewRows([...newRows, projectId]);
+  };
+
+  const handleRemoveNewRow = rowId => {
+    setNewRows(newRows.filter(pId => pId !== rowId));
+  };
+
+  const projectDropdownMenus = (
+    <Menu className={css(styles.projectDown)}>
+      {projects
+        .filter(
+          p =>
+            trackedProjects.findIndex(tp => tp.projectId === p.projectId) === -1 &&
+            newRows.findIndex(pId => pId === p.projectId) === -1,
+        )
+        .map(pr => {
+          return (
+            <Menu.Item key={pr.projectId} onClick={() => handleSelectNewProject(pr.projectId)}>
+              {pr.projectTitle}
+            </Menu.Item>
+          );
+        })}
+    </Menu>
+  );
   return (
     <div>
       <Row className="toolBar">
@@ -223,14 +129,175 @@ const TabularCalendar = ({ events, projects }: ITabularCalendar) => {
           <Button> Month </Button>
         </Col>
       </Row>
-      <Table
-        columns={headerColumns}
-        dataSource={data}
-        bordered
-        pagination={false}
-        scroll={{ x: '100%' }}
-      ></Table>
+
+      <table className={css(styles.calendarTable)}>
+        <thead>
+          <th> ProjectName </th>
+          {Array(7)
+            .fill(0)
+            .map((val, index) => {
+              const curDay = moment(weekStart).add(index, 'day');
+              return (
+                <th>
+                  <div className={css(styles.dateHeader)}>
+                    <div className={cls('day')}>
+                      <span>{curDay.format('DD')}</span>
+                    </div>
+                    <div className="extra">
+                      <div className="week">
+                        <span>{curDay.format('ddd')}</span>
+                      </div>
+                      <div className="month">
+                        <span>{curDay.format('MMM')}</span>
+                      </div>
+                    </div>
+                  </div>
+                </th>
+              );
+            })}
+          <th> Total </th>
+          <th> Action </th>
+        </thead>
+        <tbody>
+          {trackedProjects.map(p => {
+            return (
+              <tr>
+                <td> {p.projectTitle}</td>
+                {Array(7)
+                  .fill(0)
+                  .map((val, index) => {
+                    const curDay = moment(weekStart).add(index, 'day');
+                    const curDayRecords = records.filter(
+                      r =>
+                        r.projectId === p.projectId &&
+                        moment(r.startTime).format('YYYY-MM-DD') === curDay.format('YYYY-MM-DD'),
+                    );
+                    return (
+                      <td>
+                        <TimesheetInput records={curDayRecords} />
+                      </td>
+                    );
+                  })}
+                <td> {formatDuration(getProjectTotalDuration(p.projectId))}</td>
+                <td>
+                  <Button
+                    icon={<CloseOutlined />}
+                    onClick={() => handleRemoveDuration(p.projectId)}
+                  />
+                </td>
+              </tr>
+            );
+          })}
+          {newRows.map(pId => {
+            const project = projects.find(p => p.projectId === pId);
+            return (
+              <tr>
+                <td> {project.projectTitle}</td>
+                <td>
+                  <Input />
+                </td>
+                <td>
+                  <Input />
+                </td>
+                <td>
+                  <Input />
+                </td>
+                <td>
+                  <Input />
+                </td>
+                <td>
+                  <Input />
+                </td>
+                <td>
+                  <Input />
+                </td>
+                <td>
+                  <Input />
+                </td>
+                <td>
+                  <Button icon={<CloseOutlined />} onClick={event => handleRemoveNewRow(pId)} />
+                </td>
+              </tr>
+            );
+          })}
+          <tr>
+            <td>
+              <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
+                <Button icon={<PlusOutlined />}> Select Project</Button>
+              </Dropdown>
+            </td>
+          </tr>
+          <tr>
+            <td> Total </td>
+            <td> 00:00 </td>
+            <td> 00:00 </td>
+            <td> 00:00 </td>
+            <td> 00:00 </td>
+            <td> 00:00 </td>
+            <td> 00:00 </td>
+            <td> 00:00 </td>
+            <td> 00:00 </td>
+          </tr>
+        </tbody>
+      </table>
     </div>
+  );
+};
+
+const TabularCalendarWrapper = ({ projects }) => {
+  const filterEvents = events => {
+    return events.map(ev => ({
+      ...ev,
+      startTime: moment(ev.startTime).toDate(),
+      endTime: moment(ev.endTime).toDate(),
+    }));
+  };
+  const [weekStart, setWeekStart] = useState(moment().startOf('week'));
+  const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
+    variables: {
+      startTime: weekStart,
+      endTime: moment(weekStart).add(1, 'week'),
+    },
+  });
+
+  useEffect(() => {
+    setWeekStart(moment().startOf('week'));
+  }, []);
+
+  useEffect(() => {
+    refetch();
+  }, [weekStart]);
+
+  const [removeMutation] = useRemoveDurationTimeRecordsMutation();
+
+  const handleRemoveDuration = pId => {
+    console.log('handleRemoveDuration => ', weekStart);
+    removeMutation({
+      variables: {
+        startTime: weekStart,
+        endTime: moment(weekStart).add(1, 'week'),
+        projectId: pId,
+      },
+    })
+      .then(() => {
+        message.success('Removed');
+        refetch();
+      })
+      .catch(err => {
+        console.log(err.message);
+      });
+  };
+  if (!data || loading) return null;
+  return (
+    <Spin spinning={!data || loading}>
+      <TabularCalendar
+        weekStart={weekStart}
+        setWeekStart={setWeekStart}
+        records={filterEvents(data?.getDurationTimeRecords)}
+        projects={projects}
+        handleRemoveDuration={handleRemoveDuration}
+      />
+    </Spin>
   );
 };
 
@@ -278,6 +345,11 @@ const styles: { [property: string]: (props) => CSSProperties } = {
   boldText: props => ({
     fontWeight: 'bold',
   }),
+
+  calendarTable: props => ({
+    width: '100%',
+    background: 'white',
+  }),
 };
 
-export default TabularCalendar;
+export default TabularCalendarWrapper;

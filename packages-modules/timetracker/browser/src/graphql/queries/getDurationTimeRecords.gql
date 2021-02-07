@@ -1,0 +1,11 @@
+query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime) {
+  getDurationTimeRecords(startTime: $startTime, endTime: $endTime) {
+    id
+    startTime
+    endTime
+    taskName
+    tags
+    projectId
+    isBillable
+  }
+}
