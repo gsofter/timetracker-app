@@ -18,10 +18,11 @@ const formatDurationInput = (dur: string) => {
   let sec = digits.slice(len - 2, len);
   let second = formatTimeString(sec);
 
-  let min = len > 2 ? digits.slice(len - 4, len - 2) : '00';
+  let min =
+    len === 3 ? digits.slice(len - 3, len - 2) : len >= 4 ? digits.slice(len - 4, len - 2) : '00';
   let minute = formatTimeString(min);
 
-  let hr = len > 4 ? digits.slice(len - 6, len - 4) : '00';
+  let hr = len === 5 ? digits.slice(len - 5, len - 4) : len > 5 ? digits.slice(0, len - 4) : '00';
   let hour = hr.length === 0 ? '00' : hr.length === 1 ? '0' + hr : hr;
 
   return hour + ':' + minute + ':' + second;

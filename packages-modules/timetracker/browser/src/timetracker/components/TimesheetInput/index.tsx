@@ -11,8 +11,8 @@ import TimesheetEditModal from './TimesheetEditModal';
 
 export interface ITimesheetInputProps {
   dateStr: string;
-  projectId: string;
-  records: ITimeRecord[];
+  projectId?: string;
+  records?: ITimeRecord[];
   updateTimeRecord: Function;
   createTimeRecord: Function;
 }
@@ -36,7 +36,7 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
   };
 
   const handleChangeDuration = dur => {
-    if (records.length === 0) {
+    if (records === undefined || records.length === 0) {
       // empty
       const newRequest: ITimeRecordRequest = {
         startTime: moment(dateStr).add('9', 'hours'),

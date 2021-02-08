@@ -34,11 +34,11 @@ const localizerM = momentLocalizer(moment);
 const { RangePicker } = TimePicker;
 const allViews: View[] = ['day', 'week', 'month'];
 const resourceMap = [
-  { projectId: '1', projectTitle: 'Project1' },
-  { projectId: '2', projectTitle: 'Project2' },
-  { projectId: '3', projectTitle: 'Project3' },
-  { projectId: '4', projectTitle: 'Project4' },
-  { projectId: '5', projectTitle: 'Project5' },
+  { projectId: '1', projectTitle: 'AAA' },
+  { projectId: '2', projectTitle: 'BBB' },
+  { projectId: '3', projectTitle: 'CCC' },
+  { projectId: '4', projectTitle: 'DDD' },
+  { projectId: '5', projectTitle: 'EEE' },
 ];
 
 enum VIEW_MODE {
