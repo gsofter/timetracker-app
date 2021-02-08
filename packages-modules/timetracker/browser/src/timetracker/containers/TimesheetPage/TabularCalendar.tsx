@@ -48,6 +48,9 @@ const TabularCalendar = ({
       p => records.findIndex(e => e.projectId === p.projectId) !== -1,
     );
     setTrackedProjects(trackedProjects);
+
+    const rows = newRows.filter(pId => trackedProjects.findIndex(p => p.projectId === pId) === -1);
+    setNewRows(rows);
   }, [weekStart, records]);
 
   const onClickBack = event => {
@@ -205,27 +208,21 @@ const TabularCalendar = ({
             return (
               <tr>
                 <td> {project.projectTitle}</td>
-                <td>
-                  <Input />
-                </td>
-                <td>
-                  <Input />
-                </td>
-                <td>
-                  <Input />
-                </td>
-                <td>
-                  <Input />
-                </td>
-                <td>
-                  <Input />
-                </td>
-                <td>
-                  <Input />
-                </td>
-                <td>
-                  <Input />
-                </td>
+                {Array(7)
+                  .fill(0)
+                  .map((val, index) => {
+                    const curDay = moment(weekStart).add(index, 'day');
+                    return (
+                      <td key={curDay.format('YYYY-MM-DD')}>
+                        <TimesheetInput
+                          dateStr={curDay.format('YYYY-MM-DD')}
+                          projectId={pId}
+                          createTimeRecord={createTimeRecord}
+                          updateTimeRecord={updateTimeRecord}
+                        />
+                      </td>
+                    );
+                  })}
                 <td>
                   <Button icon={<CloseOutlined />} onClick={event => handleRemoveNewRow(pId)} />
                 </td>
