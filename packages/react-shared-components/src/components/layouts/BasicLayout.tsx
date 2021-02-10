@@ -107,38 +107,44 @@ const generateMenuPath = (path, params) => {
   return null;
 };
 
-const menuFooterRender = (props, mode = 'horizontal') => {
+const handleMenuPopup = () => {
+  let element, name, arr;
+  element = document.getElementById("userMenu$Menu");
+  if(element){
+    name = "userMenuMenuStyle";
+    arr = element.className.split(" ");
+    if (arr.indexOf(name) == -1) {
+      element.className += " " + name;
+    }
+  }
+}
+
+const menuFooterRender = (props) => {
   const { menuData, ...rest } = props;
   const newMenuData = getMenuSeparation(props?.menuData).bottomMenus
   const newProps = { ...rest, menuData: newMenuData };
   const menuProps = {
-    inlineCollapsed: true,
-    mode:"inline",
-    getPopupContainer:
-      (trigger => {
-        console.log('element', trigger);
-
-        // return trigger.parentElement
-        return document.getElementById('area');
-      })
-
+    triggerSubMenuAction: 'click',
   }
-  return (
-    <>
-      <div id="area" />
+   
+
+    return (
+      <div id="area" onClick={handleMenuPopup}>
       <BaseMenu
         {...newProps}
         mode="horizontal"
         handleOpenChange={props.onOpenChange}
-        menuProps={menuProps}
+        menuProps={menuProps}                               
+        forceSubMenuRender={true}
         style={{
           width: '100%',
         }}
+         
         className={`ant-pro-sider-menu`}
-      />
-    </>
-  );
-}
+        />
+      </div>
+    );
+  }
 
 const menuContentRender = (props, menudom) => {
   const { menuData, ...rest } = props;
