@@ -16,6 +16,13 @@ export default () => {
           .ant-picker-dropdown, .ant-select-dropdown {
             
           }
+          @media only screen and (min-width: 768px) {
+            .userMenuMenuStyle {
+              position: fixed;
+              bottom: 40px;
+              display: inline-table;
+            }
+          }
         `,
   );
 
