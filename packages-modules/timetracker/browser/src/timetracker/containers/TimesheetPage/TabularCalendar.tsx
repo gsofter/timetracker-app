@@ -201,6 +201,8 @@ const TabularCalendar = ({
                           records={curDayRecords}
                           createTimeRecord={createTimeRecord}
                           updateTimeRecord={updateTimeRecord}
+                          projects={projects}
+                          projectTitle={p.projectTitle}
                         />
                       </td>
                     );
@@ -235,6 +237,7 @@ const TabularCalendar = ({
                           projectId={pId}
                           createTimeRecord={createTimeRecord}
                           updateTimeRecord={updateTimeRecord}
+                          projects={projects}
                         />
                       </td>
                     );
