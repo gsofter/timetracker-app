@@ -21,6 +21,8 @@ import moment from 'moment';
 import { useFela } from 'react-fela';
 import CSS from 'csstype';
 import * as _ from 'lodash';
+import { formatDuration } from '../../services/timeRecordService';
+import DurationInput from '../DurationInput';
 
 const { RangePicker } = TimePicker;
 
@@ -30,6 +32,8 @@ interface ITimesheetEditModalProps {
   handleOk: () => void;
   handleClose: () => void;
   handleSaveRecord: Function;
+  projects: any[];
+  projectTitle?: string;
 }
 
 export default function TimesheetEditModal({
@@ -38,15 +42,28 @@ export default function TimesheetEditModal({
   handleOk,
   handleClose,
   handleSaveRecord,
+  projects,
+  projectTitle,
 }: ITimesheetEditModalProps) {
   const [startTime, setStartTime] = useState(moment());
   const [endTime, setEndTime] = useState(moment());
+  const [duration, setDuration] = useState(0);
+  const [taskName, setTaskName] = useState('');
+  const [isBillable, setIsBillable] = useState(false);
   const { css } = useFela();
 
   useEffect(() => {
     setStartTime(records[0].startTime);
     setEndTime(records[0].endTime);
+    setDuration(totalDuration());
+    setTaskName(records[0].taskName);
+    setIsBillable(records[0].isBillable);
   }, [records]);
+
+  useEffect(() => {
+    setDuration(Math.floor((moment(endTime).valueOf() - moment(startTime).valueOf()) / 1000));
+  }, [startTime, endTime]);
+
   const renderDateString = () => {
     if (records.length > 0) return moment(records[0].startTime).format('YYYY-MM-DD');
   };
@@ -76,18 +93,29 @@ export default function TimesheetEditModal({
     handleSaveRecord(records[0].id, updateRequest);
   };
 
+  const handleChangeDuration = duration => {
+    setEndTime(moment(startTime).add(duration, 'seconds'));
+  };
+
+  const handleChangeTaskName = event => {
+    setTaskName(event.target.value);
+  };
+
+  const handleChangeBillable = checked => {
+    setIsBillable(isBillable);
+  };
   const renderDurationRange = () => {
     if (records.length === 1) {
       return (
         <Row>
           <Col>
-            <Input value={totalDuration()} />
+            <DurationInput duration={duration} onChange={handleChangeDuration} />
           </Col>
           <Col>
             <RangePicker
-              defaultValue={[moment(startTime), moment(endTime)]}
+              value={[moment(startTime), moment(endTime)]}
               onChange={handleChangeRange}
-              format="HH:mm"
+              format="HH:mm:ss"
               bordered={false}
             />
           </Col>
@@ -103,13 +131,15 @@ export default function TimesheetEditModal({
       className={css(styles.modal)}
     >
       <Form>
-        <p className="date"> {renderDateString} </p>
+        <p className="date"> {renderDateString()} </p>
+        <h3 className="project-name"> {projectTitle}</h3>
+        <Divider />
         {renderDurationRange()}
         <Divider />
         <Row>
           <Col sm={6}> Description: </Col>
           <Col sm={18}>
-            <Input />
+            <Input value={taskName} onChange={handleChangeTaskName} />
           </Col>
         </Row>
         <Divider />
@@ -120,14 +150,20 @@ export default function TimesheetEditModal({
           </Col>
           <Col sm={6}>Billable</Col>
           <Col sm={18}>
-            {records.length === 1 ? <Switch /> : <Alert type="warning" message="Not Available" />}
+            {records.length === 1 ? (
+              <Switch checked={isBillable} onChange={handleChangeBillable} />
+            ) : (
+              <Alert type="warning" message="Not Available" />
+            )}
           </Col>
         </Row>
+        <Divider />
         <Row>
           <Col>
             <Button type="primary" onClick={handleSave}>
               Save
             </Button>
+            <Button onClick={handleClose}>Cancel</Button>
           </Col>
         </Row>
       </Form>
