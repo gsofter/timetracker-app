@@ -109,7 +109,7 @@ const generateMenuPath = (path, params) => {
 
 const handleMenuPopup = () => {
   let element, name, arr;
-  element = document.getElementById("userMenu$Menu");
+  element = document.getElementById("usermenu$Menu");
   if(element){
     name = "userMenuMenuStyle";
     arr = element.className.split(" ");
