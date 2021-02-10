@@ -1,5 +1,17 @@
 import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
-import { Table, Row, Col, Button, Input, Spin, Select, message, Dropdown, Menu } from 'antd';
+import {
+  Table,
+  Row,
+  Col,
+  Button,
+  Input,
+  Spin,
+  Select,
+  message,
+  Dropdown,
+  Menu,
+  Popconfirm,
+} from 'antd';
 import moment, { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
@@ -195,10 +207,14 @@ const TabularCalendar = ({
                   })}
                 <td> {formatDuration(getProjectTotalDuration(p.projectId))}</td>
                 <td>
-                  <Button
-                    icon={<CloseOutlined />}
-                    onClick={() => handleRemoveDuration(p.projectId)}
-                  />
+                  <Popconfirm
+                    title="Are you sure to remove event"
+                    okText="OK"
+                    cancelText="Cancel"
+                    onConfirm={() => handleRemoveDuration(p.projectId)}
+                  >
+                    <Button icon={<CloseOutlined />} />
+                  </Popconfirm>
                 </td>
               </tr>
             );
@@ -224,7 +240,14 @@ const TabularCalendar = ({
                     );
                   })}
                 <td>
-                  <Button icon={<CloseOutlined />} onClick={event => handleRemoveNewRow(pId)} />
+                  <Popconfirm
+                    title="Are you sure to remove event"
+                    okText="OK"
+                    cancelText="Cancel"
+                    onConfirm={() => handleRemoveNewRow(pId)}
+                  >
+                    <Button icon={<CloseOutlined />} />
+                  </Popconfirm>
                 </td>
               </tr>
             );

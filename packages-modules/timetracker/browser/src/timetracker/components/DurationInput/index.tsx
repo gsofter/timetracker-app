@@ -39,7 +39,7 @@ export default function DurationInput(props: IDurationInputProps) {
   const [inputStr, setInputStr] = useState('');
   useEffect(() => {
     if (duration === undefined) setInputStr('');
-    else setInputStr(formatDurationInput(Number(duration).toString()));
+    else setInputStr(formatDuration(duration as number));
   }, [duration]);
 
   const handleChangeDuration = event => {

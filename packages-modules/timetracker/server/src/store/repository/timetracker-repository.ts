@@ -165,9 +165,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     try {
       const trackerDoc = await this.timeTrackerModel.find({userId, orgId });
       if(trackerDoc && trackerDoc.length > 0) {
-        const timeRecords = trackerDoc[0].timeRecords.filter(tr => (tr.startTime < startTime || tr.startTime > endTime));
-        console.log('timeRecords ===> ', timeRecords)
-        console.log('projectId ====>', projectId)
+        const timeRecords = trackerDoc[0].timeRecords.filter(tr => (tr.startTime < startTime || tr.startTime > endTime || tr.projectId !== projectId));
         await this.timeTrackerModel.update({
           userId,
           orgId,
