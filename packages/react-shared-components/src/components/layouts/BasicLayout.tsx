@@ -107,17 +107,6 @@ const generateMenuPath = (path, params) => {
   return null;
 };
 
-const handleMenuPopup = () => {
-  let element, name, arr;
-  element = document.getElementById("usermenu$Menu");
-  if(element){
-    name = "userMenuMenuStyle";
-    arr = element.className.split(" ");
-    if (arr.indexOf(name) == -1) {
-      element.className += " " + name;
-    }
-  }
-}
 
 const menuFooterRender = (props) => {
   const { menuData, ...rest } = props;
@@ -126,16 +115,31 @@ const menuFooterRender = (props) => {
   const menuProps = {
     triggerSubMenuAction: 'click',
   }
-   
+  
+  const handleMenuPopup = () => {
+    let element, name, arr;
+    element = document.getElementById("userMenu$Menu");
+    if(element){
+      name = props.collapsed  ? "userMenuMenuCollapsed" : "userMenuMenuStyle" ;
+      arr = element.className.split(" ");
+      if (arr.indexOf(name) == -1) {
+        element.className += " " + name;
+      }
+      if(props.collapsed){
+        element.classList.remove("userMenuMenuStyle");
+      }else{
+        element.classList.remove("userMenuMenuCollapsed") 
+      }
+    }
+  }
 
-    return (
-      <div id="area" onClick={handleMenuPopup}>
+  return (
+    <div id="area" onClick={handleMenuPopup}>
       <BaseMenu
         {...newProps}
         mode="horizontal"
         handleOpenChange={props.onOpenChange}
-        menuProps={menuProps}                               
-        forceSubMenuRender={true}
+        menuProps={menuProps}
         style={{
           width: '100%',
         }}

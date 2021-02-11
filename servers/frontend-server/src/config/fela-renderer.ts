@@ -18,8 +18,13 @@ export default () => {
           }
           @media only screen and (min-width: 768px) {
             .userMenuMenuStyle {
-              position: fixed;
-              bottom: 40px;
+              position: relative;
+              bottom: 150px;
+              display: inline-table;
+            }
+            .userMenuMenuCollapsed {
+              position: relative;
+              bottom: 50px;
               display: inline-table;
             }
           }
