@@ -1,145 +1,129 @@
-import React, { useEffect, useState } from 'react';
-import TimesheetComponent from './Timesheet';
-import {
-  useCreateTimesheetMutation,
-  useUpdateTimesheetMutation,
-  useRemoveTimesheetMutation,
-  useGetTimesheetsQuery,
-  useGetTimeRecordsQuery,
-} from '../../../generated-models';
-import { ITimesheetCreateRequest } from '@admin-layout/timetracker-module-core';
-import { message, Form } from 'antd';
+import React, { useState } from 'react';
+import { PageContainer } from '@admin-layout/components';
+import { momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import TabularCalendar from './TabularCalendar';
+import TimesheetCalendar from './TimesheetCalendar';
+import { Row, Col, Switch } from 'antd';
+import CSS from 'csstype';
+enum VIEW_MODE {
+  CALENDAR_VIEW,
+  TABULAR_VIEW,
+}
 
-const Timesheet = props => {
-  const [selectedEvent, setSelectedEvent] = useState(-1);
-  const [selectedUser, setSelectedUser] = useState('');
-  const [selectedProject, setSelectedProject] = useState('');
-  const [addMutation, { loading: loadingAdd }] = useCreateTimesheetMutation();
-  const [updateMutation, { loading: loadingUpdate }] = useUpdateTimesheetMutation();
-  const [removeMutation, { loading: loadingRemove }] = useRemoveTimesheetMutation();
-  const [showModal, setShowModal] = useState(false);
-  const [form] = Form.useForm();
-  // create event handler
-  const handleAddTimesheetEvent = (request: ITimesheetCreateRequest) => {
-    addMutation({ variables: { request } })
-      .then(() => {
-        message.success('A new event has been created!');
-        closeModal();
-        refetch();
-      })
-      .catch(err => {
-        console.log(err.message);
-        message.error('Event creation failed!');
-      });
-  };
+export interface IProject {
+  id: string;
+  name: string;
+  tasks: any;
+}
 
-  // update event handler
-  const handleUpdateTimesheetEvent = (sheetId: string, request: ITimesheetCreateRequest) => {
-    updateMutation({ variables: { sheetId, request } })
-      .then(() => {
-        message.success('A new event has been updated!');
-        refetch();
-        closeModal();
-      })
-      .catch(err => {
-        console.log(err.message);
-        message.error('Event update failed!');
-      });
-  };
+const members = [
+  {
+    id: 'user1',
+    name: 'userA',
+  },
+  { id: 'user2', name: 'userB' },
+];
 
-  // remove event handler
-  const handleRemoveTimesheetEvent = () => {
-    removeMutation({ variables: { sheetId: selectedEvent.toString() } })
-      .then(() => {
-        message.success('Event has removed');
-        refetch();
-        closeModal();
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
-  };
+const projects: Array<IProject> = [
+  {
+    id: 'project1',
+    name: 'projectA',
+    tasks: [
+      { id: 'task1', name: 'PATaskA' },
+      { id: 'task2', name: 'PATaskB' },
+    ],
+  },
+  {
+    id: 'project2',
+    name: 'projectB',
+    tasks: [
+      { id: 'task1', name: 'PBTaskA' },
+      { id: 'task2', name: 'PBTaskB' },
+    ],
+  },
+];
 
-  // event selection handler
-  const handleSelectEvent = event => {
-    form.setFieldsValue({
-      title: event.title,
-      user: event.userId,
-      date: moment(event.start),
-      timeRange: [moment(event.start), moment(event.end)],
-      project: event.projectId,
-      reason: event.reason,
-      note: event.note,
-    });
-    setSelectedEvent(event.id);
-    openModal();
-  };
+const tags = [
+  { id: 'tag1', name: 'TagA', active: true },
+  { id: 'tag2', name: 'TagB', active: true },
+];
 
-  // new slot selection handler
-  const handleSelectSlot = ({ start, end }) => {
-    form.setFieldsValue({
-      dateRange: [moment(start), moment(end)],
-    });
-    openModal();
+const TimesheetPage = () => {
+  const [viewMode, setViewMode] = useState(VIEW_MODE.CALENDAR_VIEW);
+  const handleChangeViewMode = checked => {
+    setViewMode(checked ? VIEW_MODE.CALENDAR_VIEW : VIEW_MODE.TABULAR_VIEW);
   };
-
-  const openModal = () => {
-    setShowModal(true);
-  };
-  const closeModal = () => {
-    setSelectedEvent(-1);
-    form.resetFields();
-    setShowModal(false);
-  };
-  const { data, loading, error, refetch } = useGetTimeRecordsQuery();
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
-
-  const filterEvents = events => {
-    return events
-      .map(ev => ({
-        ...ev,
-        startTime: moment(ev.startTime).toDate(),
-        endTime: moment(ev.endTime).toDate(),
-      }))
-      .filter(ev => {
-        return (
-          (ev.userId === selectedUser || selectedUser === '') &&
-          (ev.projectId === selectedProject || selectedProject === '')
-        );
-      });
-  };
-
-  const handleChangeUser = value => {
-    setSelectedUser(value);
-  };
-
-  const handleChangeProject = value => {
-    setSelectedProject(value);
-  };
-
-  return !data || loading ? null : (
-    <TimesheetComponent
-      events={filterEvents(data.getTimeRecords)}
-      form={form}
-      loading={loadingAdd || loadingUpdate || loadingRemove}
-      showModal={showModal}
-      selectedUser={selectedUser}
-      selectedProject={selectedProject}
-      selectedEvent={selectedEvent}
-      handleAddTimesheetEvent={handleAddTimesheetEvent}
-      handleUpdateTimesheetEvent={handleUpdateTimesheetEvent}
-      handleRemoveTimesheetEvent={handleRemoveTimesheetEvent}
-      handleOpenModal={openModal}
-      handleCloseModal={closeModal}
-      handleSelectSlot={handleSelectSlot}
-      handleSelectEvent={handleSelectEvent}
-      handleChangeUser={handleChangeUser}
-      handleChangeProject={handleChangeProject}
-    />
+  return (
+    <PageContainer>
+      <Row align="middle" justify="space-between" style={{ marginBottom: '10px' }}>
+        <Col>
+          <Switch
+            checkedChildren="Calendar View"
+            unCheckedChildren="Tabular View"
+            checked={viewMode === VIEW_MODE.CALENDAR_VIEW}
+            onChange={handleChangeViewMode}
+          />
+        </Col>
+      </Row>
+      {viewMode === VIEW_MODE.CALENDAR_VIEW ? (
+        <TimesheetCalendar projects={projects} />
+      ) : (
+        <TabularCalendar projects={projects} members={members} tags={tags} />
+      )}
+    </PageContainer>
   );
 };
 
-export default Timesheet;
+export default TimesheetPage;
+
+const styles: { [property: string]: (props) => CSS.Properties } = {
+  dateHeader: props => ({
+    display: 'flex',
+    flexDirection: 'row',
+    justifyContent: 'center',
+    alignItems: 'center',
+    '@media (max-width: 768px)': {
+      flexDirection: 'column',
+    },
+    '& .day': {
+      fontSize: '3em',
+      fontWeight: '500',
+      '@media (max-width: 768px)': {
+        fontSize: '14px',
+      },
+    },
+    '& .extra': {
+      display: 'flex',
+      flexDirection: 'column',
+      '& .week': {
+        fontSize: '1em',
+        '@media (max-width: 768px)': {
+          fontSize: '12px',
+        },
+      },
+
+      '& .month': {
+        fontSize: '1em',
+        '@media (max-width: 768px)': {
+          fontSize: '12px',
+        },
+        color: '#bbb',
+      },
+    },
+    '& .today': {
+      color: '#1890ff',
+    },
+  }),
+  greenText: props => ({
+    color: 'green',
+  }),
+  boldText: props => ({
+    fontWeight: 'bold',
+  }),
+
+  calendarTable: props => ({
+    width: '100%',
+    background: 'white',
+  }),
+};

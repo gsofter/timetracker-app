@@ -25,11 +25,8 @@ import {
   useCreateTimeRecordMutation,
 } from '../../../generated-models';
 import { formatDuration } from '../../services/timeRecordService';
-
-interface IProject {
-  projectId: string;
-  projectTitle: string;
-}
+import TextArea from 'antd/lib/input/TextArea';
+import { IProject } from '../TimesheetPage';
 
 interface ITabularCalendar {
   weekStart: Moment;
@@ -53,15 +50,15 @@ const TabularCalendar = ({
   const [headerColumns, setHeaderColumns] = useState([]);
   const { css } = useFela();
   const [data, setData] = useState([]);
-  const [trackedProjects, setTrackedProjects] = useState([]);
+  const [trackedProjects, setTrackedProjects] = useState<Array<IProject>>([]);
   const [newRows, setNewRows] = useState([]);
   useEffect(() => {
     const trackedProjects = projects.filter(
-      p => records.findIndex(e => e.projectId === p.projectId) !== -1,
+      p => records.findIndex(r => r.projectId === p.id) !== -1,
     );
     setTrackedProjects(trackedProjects);
 
-    const rows = newRows.filter(pId => trackedProjects.findIndex(p => p.projectId === pId) === -1);
+    const rows = newRows.filter(pId => trackedProjects.findIndex(p => p.id === pId) === -1);
     setNewRows(rows);
   }, [weekStart, records]);
 
@@ -96,6 +93,31 @@ const TabularCalendar = ({
     return totalDur;
   };
 
+  const getDayTotalDuration = curDay => {
+    const formatStr = 'YYYY-MM-DD';
+    const dayStr = moment(curDay).format(formatStr);
+    const dRecords = records.filter(r => moment(r.startTime).format(formatStr) === dayStr);
+    let totalDur = 0;
+    dRecords.forEach(pr => {
+      const dur = Math.floor(
+        (moment(pr.endTime).valueOf() - moment(pr.startTime).valueOf()) / 1000,
+      );
+      totalDur = totalDur + dur;
+    });
+    return totalDur;
+  };
+
+  const getTotalDuration = () => {
+    let totalDur = 0;
+    records.forEach(pr => {
+      const dur = Math.floor(
+        (moment(pr.endTime).valueOf() - moment(pr.startTime).valueOf()) / 1000,
+      );
+      totalDur = totalDur + dur;
+    });
+    return totalDur;
+  };
+
   const handleSelectNewProject = projectId => {
     setNewRows([...newRows, projectId]);
   };
@@ -109,13 +131,13 @@ const TabularCalendar = ({
       {projects
         .filter(
           p =>
-            trackedProjects.findIndex(tp => tp.projectId === p.projectId) === -1 &&
-            newRows.findIndex(pId => pId === p.projectId) === -1,
+            trackedProjects.findIndex(tp => tp.id === p.id) === -1 &&
+            newRows.findIndex(pId => pId === p.id) === -1,
         )
         .map(pr => {
           return (
-            <Menu.Item key={pr.projectId} onClick={() => handleSelectNewProject(pr.projectId)}>
-              {pr.projectTitle}
+            <Menu.Item key={pr.id} onClick={() => handleSelectNewProject(pr.id)}>
+              {pr.name}
             </Menu.Item>
           );
         })}
@@ -183,37 +205,37 @@ const TabularCalendar = ({
           {trackedProjects.map(p => {
             return (
               <tr>
-                <td> {p.projectTitle}</td>
+                <td> {p.name}</td>
                 {Array(7)
                   .fill(0)
                   .map((val, index) => {
                     const curDay = moment(weekStart).add(index, 'day');
                     const curDayRecords = records.filter(
                       r =>
-                        r.projectId === p.projectId &&
+                        r.projectId === p.id &&
                         moment(r.startTime).format('YYYY-MM-DD') === curDay.format('YYYY-MM-DD'),
                     );
                     return (
                       <td key={curDay.format('YYYY-MM-DD')}>
                         <TimesheetInput
                           dateStr={curDay.format('YYYY-MM-DD')}
-                          projectId={p.projectId}
+                          projectId={p.id}
                           records={curDayRecords}
                           createTimeRecord={createTimeRecord}
                           updateTimeRecord={updateTimeRecord}
                           projects={projects}
-                          projectTitle={p.projectTitle}
+                          projectTitle={p.name}
                         />
                       </td>
                     );
                   })}
-                <td> {formatDuration(getProjectTotalDuration(p.projectId))}</td>
+                <td> {formatDuration(getProjectTotalDuration(p.id))}</td>
                 <td>
                   <Popconfirm
                     title="Are you sure to remove event"
                     okText="OK"
                     cancelText="Cancel"
-                    onConfirm={() => handleRemoveDuration(p.projectId)}
+                    onConfirm={() => handleRemoveDuration(p.id)}
                   >
                     <Button icon={<CloseOutlined />} />
                   </Popconfirm>
@@ -222,10 +244,10 @@ const TabularCalendar = ({
             );
           })}
           {newRows.map(pId => {
-            const project = projects.find(p => p.projectId === pId);
+            const project = projects.find(p => p.id === pId);
             return (
               <tr>
-                <td> {project.projectTitle}</td>
+                <td> {project.name}</td>
                 {Array(7)
                   .fill(0)
                   .map((val, index) => {
@@ -264,14 +286,13 @@ const TabularCalendar = ({
           </tr>
           <tr>
             <td> Total </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
+            {Array(7)
+              .fill(0)
+              .map((val, index) => {
+                const curDay = moment(weekStart).add(index, 'day');
+                return <td>{formatDuration(getDayTotalDuration(curDay))} </td>;
+              })}
+            <td>{formatDuration(getTotalDuration())} </td>
           </tr>
         </tbody>
       </table>
@@ -279,7 +300,13 @@ const TabularCalendar = ({
   );
 };
 
-const TabularCalendarWrapper = ({ projects }) => {
+interface ITabularCalendarWrapperProps {
+  projects: any;
+  tags: any;
+  members: any;
+}
+
+const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
   const filterEvents = events => {
     return events.map(ev => ({
       ...ev,

@@ -21,9 +21,8 @@ import moment from 'moment';
 import { useFela } from 'react-fela';
 import CSS from 'csstype';
 import * as _ from 'lodash';
-import { formatDuration } from '../../services/timeRecordService';
 import DurationInput from '../DurationInput';
-
+import { IProject } from '../../containers/TimesheetPage';
 const { RangePicker } = TimePicker;
 
 interface ITimesheetEditModalProps {
@@ -32,7 +31,6 @@ interface ITimesheetEditModalProps {
   handleOk: () => void;
   handleClose: () => void;
   handleSaveRecord: Function;
-  projects: any[];
   projectTitle?: string;
 }
 
@@ -42,7 +40,6 @@ export default function TimesheetEditModal({
   handleOk,
   handleClose,
   handleSaveRecord,
-  projects,
   projectTitle,
 }: ITimesheetEditModalProps) {
   const [startTime, setStartTime] = useState(moment());
@@ -89,6 +86,8 @@ export default function TimesheetEditModal({
       ..._.omit(records[0], ['__typename', 'id']),
       startTime,
       endTime,
+      isBillable,
+      taskName,
     };
     handleSaveRecord(records[0].id, updateRequest);
   };
@@ -102,7 +101,7 @@ export default function TimesheetEditModal({
   };
 
   const handleChangeBillable = checked => {
-    setIsBillable(isBillable);
+    setIsBillable(checked);
   };
   const renderDurationRange = () => {
     if (records.length === 1) {
@@ -129,6 +128,7 @@ export default function TimesheetEditModal({
       visible={show}
       onCancel={handleClose}
       className={css(styles.modal)}
+      footer={false}
     >
       <Form>
         <p className="date"> {renderDateString()} </p>
@@ -136,18 +136,19 @@ export default function TimesheetEditModal({
         <Divider />
         {renderDurationRange()}
         <Divider />
-        <Row>
+        <Row className="form-row">
           <Col sm={6}> Description: </Col>
           <Col sm={18}>
             <Input value={taskName} onChange={handleChangeTaskName} />
           </Col>
         </Row>
-        <Divider />
-        <Row>
+        <Row className="form-row">
           <Col sm={6}> Tags: </Col>
           <Col sm={18}>
             <Select mode="tags" style={{ width: '100%' }} />
           </Col>
+        </Row>
+        <Row className="form-row">
           <Col sm={6}>Billable</Col>
           <Col sm={18}>
             {records.length === 1 ? (
@@ -158,13 +159,12 @@ export default function TimesheetEditModal({
           </Col>
         </Row>
         <Divider />
-        <Row>
-          <Col>
-            <Button type="primary" onClick={handleSave}>
-              Save
-            </Button>
-            <Button onClick={handleClose}>Cancel</Button>
-          </Col>
+        <Row className="footer">
+          <Button type="primary" onClick={handleSave}>
+            Save
+          </Button>
+          <div className="spacer"> </div>
+          <Button onClick={handleClose}>Cancel</Button>
         </Row>
       </Form>
     </Modal>
@@ -181,6 +181,18 @@ const styles: { [key: string]: (arg) => CSS.Properties } = {
     display: 'block',
     '& .date': {
       color: '#eee',
+    },
+
+    '& .form-row': {
+      marginTop: '10px',
+    },
+
+    '& .footer': {
+      display: 'flex',
+      flexDirection: 'row',
+      '& .spacer': {
+        flexGrow: '1',
+      },
     },
   }),
 };

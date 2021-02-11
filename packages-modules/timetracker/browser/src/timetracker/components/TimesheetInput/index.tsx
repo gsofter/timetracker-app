@@ -20,15 +20,7 @@ export interface ITimesheetInputProps {
 }
 
 export const TimesheetInput = (props: ITimesheetInputProps) => {
-  const {
-    dateStr,
-    records,
-    projectId,
-    createTimeRecord,
-    updateTimeRecord,
-    projectTitle,
-    projects,
-  } = props;
+  const { dateStr, records, projectId, createTimeRecord, updateTimeRecord, projectTitle } = props;
   const { css } = useFela();
   const [isModalVisible, setIsModalVisible] = useState(false);
   const handleMore = event => {
@@ -82,7 +74,6 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
           handleClose={() => setIsModalVisible(false)}
           handleOk={() => setIsModalVisible(false)}
           handleSaveRecord={handleSaveRecord}
-          projects={projects}
           projectTitle={projectTitle}
         />
       ) : null}
