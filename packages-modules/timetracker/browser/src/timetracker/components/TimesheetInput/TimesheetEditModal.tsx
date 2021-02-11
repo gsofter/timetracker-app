@@ -89,6 +89,8 @@ export default function TimesheetEditModal({
       ..._.omit(records[0], ['__typename', 'id']),
       startTime,
       endTime,
+      isBillable,
+      taskName,
     };
     handleSaveRecord(records[0].id, updateRequest);
   };
@@ -102,7 +104,7 @@ export default function TimesheetEditModal({
   };
 
   const handleChangeBillable = checked => {
-    setIsBillable(isBillable);
+    setIsBillable(checked);
   };
   const renderDurationRange = () => {
     if (records.length === 1) {
@@ -129,6 +131,7 @@ export default function TimesheetEditModal({
       visible={show}
       onCancel={handleClose}
       className={css(styles.modal)}
+      footer={false}
     >
       <Form>
         <p className="date"> {renderDateString()} </p>
@@ -142,7 +145,6 @@ export default function TimesheetEditModal({
             <Input value={taskName} onChange={handleChangeTaskName} />
           </Col>
         </Row>
-        <Divider />
         <Row>
           <Col sm={6}> Tags: </Col>
           <Col sm={18}>
@@ -158,13 +160,12 @@ export default function TimesheetEditModal({
           </Col>
         </Row>
         <Divider />
-        <Row>
-          <Col>
-            <Button type="primary" onClick={handleSave}>
-              Save
-            </Button>
-            <Button onClick={handleClose}>Cancel</Button>
-          </Col>
+        <Row className="footer">
+          <Button type="primary" onClick={handleSave}>
+            Save
+          </Button>
+          <div className="spacer"> </div>
+          <Button onClick={handleClose}>Cancel</Button>
         </Row>
       </Form>
     </Modal>
@@ -181,6 +182,14 @@ const styles: { [key: string]: (arg) => CSS.Properties } = {
     display: 'block',
     '& .date': {
       color: '#eee',
+    },
+
+    '& .footer': {
+      display: 'flex',
+      flexDirection: 'row',
+      '& .spacer': {
+        flexGrow: '1',
+      },
     },
   }),
 };

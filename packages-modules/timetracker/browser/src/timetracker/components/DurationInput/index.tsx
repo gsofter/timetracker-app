@@ -12,6 +12,11 @@ const formatTimeString = (str: string) => {
   return parseInt(str) >= 60 ? '00' : str;
 };
 
+/**
+ * Convert input string to time formatted
+ * @param dur
+ * @returns string
+ */
 const formatDurationInput = (dur: string) => {
   const digits = parseDigits(dur) as string;
   const len = digits.length;
@@ -62,10 +67,12 @@ export default function DurationInput(props: IDurationInputProps) {
     if (event.target.value === '') setInputStr('');
     else {
       const newDur = formatDurationInput(event.target.value);
-      const originDur = formatDurationInput(duration.toString());
+      const originDur = formatDuration(duration as number);
       if (newDur === originDur) {
-        // no need to change
+        // no need to submit change
+        setInputStr(formatDurationInput(event.target.value));
       } else {
+        // need to submit change
         setInputStr(formatDurationInput(event.target.value));
         onChange(stringToDuration(formatDurationInput(event.target.value)));
       }
