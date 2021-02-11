@@ -139,17 +139,19 @@ export default function TimesheetEditModal({
         <Divider />
         {renderDurationRange()}
         <Divider />
-        <Row>
+        <Row className="form-row">
           <Col sm={6}> Description: </Col>
           <Col sm={18}>
             <Input value={taskName} onChange={handleChangeTaskName} />
           </Col>
         </Row>
-        <Row>
+        <Row className="form-row">
           <Col sm={6}> Tags: </Col>
           <Col sm={18}>
             <Select mode="tags" style={{ width: '100%' }} />
           </Col>
+        </Row>
+        <Row className="form-row">
           <Col sm={6}>Billable</Col>
           <Col sm={18}>
             {records.length === 1 ? (
@@ -182,6 +184,10 @@ const styles: { [key: string]: (arg) => CSS.Properties } = {
     display: 'block',
     '& .date': {
       color: '#eee',
+    },
+
+    '& .form-row': {
+      marginTop: '10px',
     },
 
     '& .footer': {

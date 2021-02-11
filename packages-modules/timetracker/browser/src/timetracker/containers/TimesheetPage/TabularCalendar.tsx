@@ -96,6 +96,31 @@ const TabularCalendar = ({
     return totalDur;
   };
 
+  const getDayTotalDuration = curDay => {
+    const formatStr = 'YYYY-MM-DD';
+    const dayStr = moment(curDay).format(formatStr);
+    const dRecords = records.filter(r => moment(r.startTime).format(formatStr) === dayStr);
+    let totalDur = 0;
+    dRecords.forEach(pr => {
+      const dur = Math.floor(
+        (moment(pr.endTime).valueOf() - moment(pr.startTime).valueOf()) / 1000,
+      );
+      totalDur = totalDur + dur;
+    });
+    return totalDur;
+  };
+
+  const getTotalDuration = () => {
+    let totalDur = 0;
+    records.forEach(pr => {
+      const dur = Math.floor(
+        (moment(pr.endTime).valueOf() - moment(pr.startTime).valueOf()) / 1000,
+      );
+      totalDur = totalDur + dur;
+    });
+    return totalDur;
+  };
+
   const handleSelectNewProject = projectId => {
     setNewRows([...newRows, projectId]);
   };
@@ -264,14 +289,13 @@ const TabularCalendar = ({
           </tr>
           <tr>
             <td> Total </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
-            <td> 00:00 </td>
+            {Array(7)
+              .fill(0)
+              .map((val, index) => {
+                const curDay = moment(weekStart).add(index, 'day');
+                return <td>{formatDuration(getDayTotalDuration(curDay))} </td>;
+              })}
+            <td>{formatDuration(getTotalDuration())} </td>
           </tr>
         </tbody>
       </table>
