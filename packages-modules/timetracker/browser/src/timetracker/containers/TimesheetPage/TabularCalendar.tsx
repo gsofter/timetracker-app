@@ -25,11 +25,8 @@ import {
   useCreateTimeRecordMutation,
 } from '../../../generated-models';
 import { formatDuration } from '../../services/timeRecordService';
-
-interface IProject {
-  projectId: string;
-  projectTitle: string;
-}
+import TextArea from 'antd/lib/input/TextArea';
+import { IProject } from '../TimesheetPage';
 
 interface ITabularCalendar {
   weekStart: Moment;
@@ -57,11 +54,11 @@ const TabularCalendar = ({
   const [newRows, setNewRows] = useState([]);
   useEffect(() => {
     const trackedProjects = projects.filter(
-      p => records.findIndex(e => e.projectId === p.projectId) !== -1,
+      p => records.findIndex(r => r.projectId === p.id) !== -1,
     );
     setTrackedProjects(trackedProjects);
 
-    const rows = newRows.filter(pId => trackedProjects.findIndex(p => p.projectId === pId) === -1);
+    const rows = newRows.filter(pId => trackedProjects.findIndex(p => p.id === pId) === -1);
     setNewRows(rows);
   }, [weekStart, records]);
 
@@ -134,13 +131,13 @@ const TabularCalendar = ({
       {projects
         .filter(
           p =>
-            trackedProjects.findIndex(tp => tp.projectId === p.projectId) === -1 &&
-            newRows.findIndex(pId => pId === p.projectId) === -1,
+            trackedProjects.findIndex(tp => tp.projectId === p.id) === -1 &&
+            newRows.findIndex(pId => pId === p.id) === -1,
         )
         .map(pr => {
           return (
-            <Menu.Item key={pr.projectId} onClick={() => handleSelectNewProject(pr.projectId)}>
-              {pr.projectTitle}
+            <Menu.Item key={pr.id} onClick={() => handleSelectNewProject(pr.id)}>
+              {pr.name}
             </Menu.Item>
           );
         })}
@@ -247,10 +244,10 @@ const TabularCalendar = ({
             );
           })}
           {newRows.map(pId => {
-            const project = projects.find(p => p.projectId === pId);
+            const project = projects.find(p => p.id === pId);
             return (
               <tr>
-                <td> {project.projectTitle}</td>
+                <td> {project.name}</td>
                 {Array(7)
                   .fill(0)
                   .map((val, index) => {
@@ -303,7 +300,13 @@ const TabularCalendar = ({
   );
 };
 
-const TabularCalendarWrapper = ({ projects }) => {
+interface ITabularCalendarWrapperProps {
+  projects: any;
+  tags: any;
+  members: any;
+}
+
+const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
   const filterEvents = events => {
     return events.map(ev => ({
       ...ev,

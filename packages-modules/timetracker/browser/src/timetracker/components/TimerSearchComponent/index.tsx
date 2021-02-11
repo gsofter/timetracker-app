@@ -35,7 +35,12 @@ export const TimerSearchComponent: React.FC<ITimerSearchComponent> = ({
           {showCallendar && (
             <Space direction="vertical" size={12}>
               <RangePicker
-                defaultValue={[moment('2020-09-03', dateFormat), moment('2020-11-22', dateFormat)]}
+                defaultValue={[
+                  moment().startOf('week'),
+                  moment()
+                    .startOf('week')
+                    .add(1, 'week'),
+                ]}
               />
             </Space>
           )}

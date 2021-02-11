@@ -27,19 +27,13 @@ import { useFela } from 'react-fela';
 import { PageContainer } from '@admin-layout/components';
 import TabularCalendar from './TabularCalendar';
 import { ITimesheetCreateRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
+import { IProject } from '../TimesheetPage';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
 const localizerM = momentLocalizer(moment);
 const { RangePicker } = TimePicker;
 const allViews: View[] = ['day', 'week', 'month'];
-const resourceMap = [
-  { projectId: '1', projectTitle: 'AAA' },
-  { projectId: '2', projectTitle: 'BBB' },
-  { projectId: '3', projectTitle: 'CCC' },
-  { projectId: '4', projectTitle: 'DDD' },
-  { projectId: '5', projectTitle: 'EEE' },
-];
 
 enum VIEW_MODE {
   CALENDAR_VIEW,
@@ -54,6 +48,7 @@ interface ITimesheetProps {
   selectedUser: any;
   selectedEvent: any;
   loading: boolean;
+  projects: Array<IProject>;
   handleAddTimesheetEvent: Function;
   handleUpdateTimesheetEvent: Function;
   handleRemoveTimesheetEvent: () => void;
@@ -67,6 +62,7 @@ interface ITimesheetProps {
 
 function SelectableCalendar({
   events,
+  projects,
   handleAddTimesheetEvent,
   handleUpdateTimesheetEvent,
   handleRemoveTimesheetEvent,
@@ -149,11 +145,6 @@ function SelectableCalendar({
     else handleUpdateTimesheetEvent(selectedEvent, request);
   };
 
-  const onChangeViewMode = checked => {
-    console.log('onChangeViewMode.checked => ', checked);
-    setViewMode(checked ? VIEW_MODE.CALENDAR_VIEW : VIEW_MODE.TABULAR_VIEW);
-  };
-
   const renderModalBody = (): JSX.Element => {
     return (
       <>
@@ -168,13 +159,6 @@ function SelectableCalendar({
             <Avatar style={{ backgroundColor: '#3174ad' }} icon={<UserOutlined />} />
             <span style={{ marginLeft: '10px' }}>Cdmbase</span>
           </div>
-          <Form.Item
-            label="Title"
-            name="title"
-            rules={[{ required: true, message: 'Required field' }]}
-          >
-            <Input />
-          </Form.Item>
           <Form.Item
             label="User"
             name="user"
@@ -191,15 +175,24 @@ function SelectableCalendar({
             rules={[{ required: true, message: 'Required field' }]}
           >
             <Select>
-              {resourceMap.map(res => {
+              {projects.map(res => {
                 return (
-                  <Select.Option value={res.projectId} key={res.projectId}>
-                    {res.projectTitle}
+                  <Select.Option value={res.id} key={res.id}>
+                    {res.name}
                   </Select.Option>
                 );
               })}
             </Select>
           </Form.Item>
+
+          <Form.Item
+            label="Task"
+            name="task"
+            rules={[{ required: true, message: 'Required field' }]}
+          >
+            <Input />
+          </Form.Item>
+
           <Row gutter={10}>
             <Col>
               <Form.Item
@@ -267,7 +260,7 @@ function SelectableCalendar({
   };
 
   return (
-    <PageContainer>
+    <>
       <Row align="middle" justify="space-between" style={{ marginBottom: '10px' }}>
         <Col>
           <div style={{ textAlign: 'center' }}>
@@ -313,11 +306,13 @@ function SelectableCalendar({
             <Form.Item label="Projects">
               <Select onChange={handleChangeProject} value={selectedProject}>
                 <Select.Option value="">All</Select.Option>
-                <Select.Option value="1">Project1</Select.Option>
-                <Select.Option value="2">Project2</Select.Option>
-                <Select.Option value="3">Project3</Select.Option>
-                <Select.Option value="4">Project4</Select.Option>
-                <Select.Option value="5">Project5</Select.Option>
+                {projects.map(res => {
+                  return (
+                    <Select.Option value={res.id} key={res.id}>
+                      {res.name}
+                    </Select.Option>
+                  );
+                })}
               </Select>
             </Form.Item>
           </Form>
@@ -348,48 +343,34 @@ function SelectableCalendar({
           </div>
         </Col>
       </Row>
-      <Row align="middle" justify="space-between" style={{ marginBottom: '10px' }}>
-        <Col>
-          <Switch
-            checkedChildren="Calendar View"
-            unCheckedChildren="Tabular View"
-            checked={viewMode === VIEW_MODE.CALENDAR_VIEW}
-            onChange={onChangeViewMode}
-          />
-        </Col>
-      </Row>
-      {viewMode === VIEW_MODE.CALENDAR_VIEW ? (
-        <DnDCalendar
-          selectable={true}
-          localizer={localizer}
-          events={events}
-          defaultView="week"
-          views={allViews}
-          defaultDate={new Date()}
-          onSelectEvent={handleSelectEvent}
-          onSelectSlot={handleSelectSlot}
-          startAccessor="startTime"
-          endAccessor="endTime"
-          titleAccessor="taskName"
-          toolbar={true}
-          resizable={true}
-          onEventDrop={onEventDrop}
-          onEventResize={onEventResize}
-          components={{
-            event: EventComponent,
-            agenda: {
-              event: EventAgenda,
-            },
-          }}
-          // resources={isViewGroup ? resourceMap : undefined}
-          // resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
-          // resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
-        />
-      ) : (
-        // TODO: make custom calendar
-        <TabularCalendar projects={resourceMap} />
-      )}
-    </PageContainer>
+      <DnDCalendar
+        selectable={true}
+        localizer={localizer}
+        events={events}
+        defaultView="week"
+        views={allViews}
+        defaultDate={new Date()}
+        onSelectEvent={handleSelectEvent}
+        onSelectSlot={handleSelectSlot}
+        startAccessor="startTime"
+        endAccessor="endTime"
+        titleAccessor="taskName"
+        toolbar={true}
+        resizable={true}
+        onEventDrop={onEventDrop}
+        onEventResize={onEventResize}
+        components={{
+          event: EventComponent,
+          agenda: {
+            event: EventAgenda,
+          },
+        }}
+        // resources={isViewGroup ? resourceMap : undefined}
+        // resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
+        // resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
+      />
+      )
+    </>
   );
 }
 

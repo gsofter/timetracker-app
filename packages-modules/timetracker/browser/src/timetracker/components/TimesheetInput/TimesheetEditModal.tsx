@@ -21,9 +21,8 @@ import moment from 'moment';
 import { useFela } from 'react-fela';
 import CSS from 'csstype';
 import * as _ from 'lodash';
-import { formatDuration } from '../../services/timeRecordService';
 import DurationInput from '../DurationInput';
-
+import { IProject } from '../../containers/TimesheetPage';
 const { RangePicker } = TimePicker;
 
 interface ITimesheetEditModalProps {
@@ -32,7 +31,6 @@ interface ITimesheetEditModalProps {
   handleOk: () => void;
   handleClose: () => void;
   handleSaveRecord: Function;
-  projects: any[];
   projectTitle?: string;
 }
 
@@ -42,7 +40,6 @@ export default function TimesheetEditModal({
   handleOk,
   handleClose,
   handleSaveRecord,
-  projects,
   projectTitle,
 }: ITimesheetEditModalProps) {
   const [startTime, setStartTime] = useState(moment());
