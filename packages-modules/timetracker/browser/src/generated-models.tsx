@@ -19,6 +19,8 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 
+
+
 export const CreateTimeRecordDocument = gql`
     mutation CreateTimeRecord($request: TimeRecordRequest) {
   createTimeRecord(request: $request)
@@ -91,6 +93,44 @@ export function useCreateTimesheetMutation(baseOptions?: ApolloReactHooks.Mutati
 export type CreateTimesheetMutationHookResult = ReturnType<typeof useCreateTimesheetMutation>;
 export type CreateTimesheetMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.ICreateTimesheetMutation>;
 export type CreateTimesheetMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.ICreateTimesheetMutation, SchemaTypes.ICreateTimesheetMutationVariables>;
+export const RemoveDurationTimeRecordsDocument = gql`
+    mutation RemoveDurationTimeRecords($startTime: DateTime, $endTime: DateTime, $projectId: String) {
+  removeDurationTimeRecords(startTime: $startTime, endTime: $endTime, projectId: $projectId)
+}
+    `;
+export type IRemoveDurationTimeRecordsMutationFn = ApolloReactCommon.MutationFunction<SchemaTypes.IRemoveDurationTimeRecordsMutation, SchemaTypes.IRemoveDurationTimeRecordsMutationVariables>;
+export type RemoveDurationTimeRecordsComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<SchemaTypes.IRemoveDurationTimeRecordsMutation, SchemaTypes.IRemoveDurationTimeRecordsMutationVariables>, 'mutation'>;
+
+    export const RemoveDurationTimeRecordsComponent = (props: RemoveDurationTimeRecordsComponentProps) => (
+      <ApolloReactComponents.Mutation<SchemaTypes.IRemoveDurationTimeRecordsMutation, SchemaTypes.IRemoveDurationTimeRecordsMutationVariables> mutation={RemoveDurationTimeRecordsDocument} {...props} />
+    );
+    
+
+/**
+ * __useRemoveDurationTimeRecordsMutation__
+ *
+ * To run a mutation, you first call `useRemoveDurationTimeRecordsMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useRemoveDurationTimeRecordsMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [removeDurationTimeRecordsMutation, { data, loading, error }] = useRemoveDurationTimeRecordsMutation({
+ *   variables: {
+ *      startTime: // value for 'startTime'
+ *      endTime: // value for 'endTime'
+ *      projectId: // value for 'projectId'
+ *   },
+ * });
+ */
+export function useRemoveDurationTimeRecordsMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SchemaTypes.IRemoveDurationTimeRecordsMutation, SchemaTypes.IRemoveDurationTimeRecordsMutationVariables>) {
+        return ApolloReactHooks.useMutation<SchemaTypes.IRemoveDurationTimeRecordsMutation, SchemaTypes.IRemoveDurationTimeRecordsMutationVariables>(RemoveDurationTimeRecordsDocument, baseOptions);
+      }
+export type RemoveDurationTimeRecordsMutationHookResult = ReturnType<typeof useRemoveDurationTimeRecordsMutation>;
+export type RemoveDurationTimeRecordsMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IRemoveDurationTimeRecordsMutation>;
+export type RemoveDurationTimeRecordsMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IRemoveDurationTimeRecordsMutation, SchemaTypes.IRemoveDurationTimeRecordsMutationVariables>;
 export const RemoveTimeRecordDocument = gql`
     mutation RemoveTimeRecord($recordId: String) {
   removeTimeRecord(recordId: $recordId)
@@ -237,6 +277,52 @@ export function useUpdateTimesheetMutation(baseOptions?: ApolloReactHooks.Mutati
 export type UpdateTimesheetMutationHookResult = ReturnType<typeof useUpdateTimesheetMutation>;
 export type UpdateTimesheetMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IUpdateTimesheetMutation>;
 export type UpdateTimesheetMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IUpdateTimesheetMutation, SchemaTypes.IUpdateTimesheetMutationVariables>;
+export const GetDurationTimeRecordsDocument = gql`
+    query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime) {
+  getDurationTimeRecords(startTime: $startTime, endTime: $endTime) {
+    id
+    startTime
+    endTime
+    taskName
+    tags
+    projectId
+    isBillable
+  }
+}
+    `;
+export type GetDurationTimeRecordsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetDurationTimeRecordsQuery, SchemaTypes.IGetDurationTimeRecordsQueryVariables>, 'query'>;
+
+    export const GetDurationTimeRecordsComponent = (props: GetDurationTimeRecordsComponentProps) => (
+      <ApolloReactComponents.Query<SchemaTypes.IGetDurationTimeRecordsQuery, SchemaTypes.IGetDurationTimeRecordsQueryVariables> query={GetDurationTimeRecordsDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetDurationTimeRecordsQuery__
+ *
+ * To run a query within a React component, call `useGetDurationTimeRecordsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDurationTimeRecordsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDurationTimeRecordsQuery({
+ *   variables: {
+ *      startTime: // value for 'startTime'
+ *      endTime: // value for 'endTime'
+ *   },
+ * });
+ */
+export function useGetDurationTimeRecordsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchemaTypes.IGetDurationTimeRecordsQuery, SchemaTypes.IGetDurationTimeRecordsQueryVariables>) {
+        return ApolloReactHooks.useQuery<SchemaTypes.IGetDurationTimeRecordsQuery, SchemaTypes.IGetDurationTimeRecordsQueryVariables>(GetDurationTimeRecordsDocument, baseOptions);
+      }
+export function useGetDurationTimeRecordsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchemaTypes.IGetDurationTimeRecordsQuery, SchemaTypes.IGetDurationTimeRecordsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SchemaTypes.IGetDurationTimeRecordsQuery, SchemaTypes.IGetDurationTimeRecordsQueryVariables>(GetDurationTimeRecordsDocument, baseOptions);
+        }
+export type GetDurationTimeRecordsQueryHookResult = ReturnType<typeof useGetDurationTimeRecordsQuery>;
+export type GetDurationTimeRecordsLazyQueryHookResult = ReturnType<typeof useGetDurationTimeRecordsLazyQuery>;
+export type GetDurationTimeRecordsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetDurationTimeRecordsQuery, SchemaTypes.IGetDurationTimeRecordsQueryVariables>;
 export const GetPlayingTimeRecordDocument = gql`
     query GetPlayingTimeRecord {
   getPlayingTimeRecord {

@@ -18,7 +18,7 @@ export const resolver = (options) => ({
       removeTimesheet: (root, args, { timeTrackerService }) => {
         options.logger.trace('(Mutation.removeTimesheet) args %j', args)
         return timeTrackerService.removeTimesheet(DEFAULT_USER, DEFAULT_ORG, args.sheetId);
-      } 
+      }
     },
     Subscription: {
   

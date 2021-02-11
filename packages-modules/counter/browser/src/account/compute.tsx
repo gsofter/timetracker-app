@@ -13,7 +13,7 @@ import {
 export const accountPageStore: any[] = [
     {
         path: '//:orgName/usermenu',
-        key: 'userMenu',
+        key: 'usermenu',
         tab: 'User Account',
         exact: false,
         name: 'User',
@@ -25,7 +25,7 @@ export const accountPageStore: any[] = [
     },
     {
         path: '//:orgName/usermenu/billing',
-        key: 'userMenu.billing',
+        key: 'usermenu.billing',
         exact: true,
         name: 'Billing Setting',
         component: Billing,
@@ -35,7 +35,7 @@ export const accountPageStore: any[] = [
     },
     {
         exact: true,
-        key: 'userMenu.billing.home',
+        key: 'usermenu.billing.home',
         name: 'Home',
         path: '//:orgName/usermenu/billing/home',
         component: Billing,
@@ -44,7 +44,7 @@ export const accountPageStore: any[] = [
     },
     {
         path: '//:orgName/usermenu/profile',
-        key: 'userMenu.account.profile',
+        key: 'usermenu.account.profile',
         tab: 'Profile Setting',
         component: Account,
         position: IMenuPosition.BOTTOM,
@@ -54,7 +54,7 @@ export const accountPageStore: any[] = [
     },
     {
         path: '//:orgName/usermenu/account',
-        key: 'userMenu.account',
+        key: 'usermenu.account',
         tab: 'Accounts',
         name: 'Account',
         component: AccountSetting,
@@ -65,7 +65,7 @@ export const accountPageStore: any[] = [
     },
     {
         path: '//:orgName/usermenu/account/collaborators',
-        key: 'userMenu.account.collaborators',
+        key: 'usermenu.account.collaborators',
         tab: 'Collaborators',
         name: 'Collaborators',
         position: IMenuPosition.BOTTOM,
@@ -76,7 +76,7 @@ export const accountPageStore: any[] = [
     },
     {
         path: '//:orgName/usermenu/account/git-integration',
-        key: 'userMenu.account.git-integration',
+        key: 'usermenu.account.git-integration',
         tab: 'Integration',
         name: 'Integration',
         position: IMenuPosition.BOTTOM,
@@ -87,7 +87,7 @@ export const accountPageStore: any[] = [
     },
     {
         path: '//:orgName/usermenu/account/tokens',
-        key: 'userMenu.account.tokens',
+        key: 'usermenu.account.tokens',
         tab: 'Tokens',
         name: 'Tokens',
         position: IMenuPosition.BOTTOM,
@@ -98,7 +98,7 @@ export const accountPageStore: any[] = [
     },
     {
         path: '//:orgName/usermenu/account/referrals',
-        key: 'userMenu.account.referrals',
+        key: 'usermenu.account.referrals',
         // tab: 'Referrals',
         // name: 'Referrals',
         position: IMenuPosition.BOTTOM,
@@ -110,7 +110,7 @@ export const accountPageStore: any[] = [
     },
     {
         path: '//:orgName/usermenu/organization',
-        key: 'userMenu.organization',
+        key: 'usermenu.organization',
         tab: 'Create Organization',
         component: Organization,
         position: IMenuPosition.BOTTOM,
@@ -121,7 +121,7 @@ export const accountPageStore: any[] = [
 
 ];
 
-const selectedRoutesAndMenus = ['userMenu', 'userMenu.billing', 'userMenu.billing.home', 'userMenu.account', 'userMenu.account.referrals', 'userMenu.account.tokens', 'userMenu.account.git-integration', 'userMenu.account.collaborators', 'userMenu.account.profile', 'userMenu.organization'];
+const selectedRoutesAndMenus = ['usermenu', 'usermenu.billing', 'usermenu.billing.home', 'usermenu.account', 'usermenu.account.referrals', 'usermenu.account.tokens', 'usermenu.account.git-integration', 'usermenu.account.collaborators', 'usermenu.account.profile', 'usermenu.organization'];
 
 // get menus
 const filteredMenus = getFilteredMenus(accountPageStore, selectedRoutesAndMenus);

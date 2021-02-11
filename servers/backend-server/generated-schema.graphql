@@ -157,78 +157,31 @@ extend type Mutation {
   updateTimelineEvent(eventId: String, request: TimelineCreateRequest): Boolean
   removeTimelineEvent(eventId: String): Boolean
 }
-
-# scalar DateTime
-
-type Timesheet {
-  id: String
-  title: String
-  allDay: Boolean
-  start: DateTime
-  end: DateTime
-  desc: String
-  userId: String
-  resourceId: String
-  projectId: String
-  tooltip: String
-  isBillable: Boolean
-  submittedOn: DateTime
-  reason: String
-  note: String
-  approvedOn: DateTime
-}
-
-input TimesheetCreateRequest {
-  title: String
-  allDay: Boolean
-  start: DateTime
-  end: DateTime
-  desc: String
-  userId: String
-  resourceId: String
-  projectId: String
-  tooltip: String
-  isBillable: Boolean
-  submittedOn: DateTime
-  reason: String
-  note: String
-  approvedOn: DateTime
-}
-
-extend type Query {
-  getTimesheetEvents(userId: String): [Timesheet]
-}
-
-extend type Mutation {
-  addTimesheetEvent(request: TimesheetCreateRequest): Boolean
-  updateTimesheetEvent(eventId: String, request: TimesheetCreateRequest): Boolean
-  removeTimesheetEvent(eventId: String): Boolean
-}
 ,type TimeRecord {
   id: String
-  start: DateTime
-  end: DateTime
-  task: String
+  startTime: DateTime
+  endTime: DateTime
+  taskId: String
+  taskName: String
   tags: [String]
-  totalTime: Int
   isBillable: Boolean
   projectId: String
   clientId: String
 }
 
 input TimeRecordRequest {
-  start: DateTime
-  end: DateTime
-  task: String
+  startTime: DateTime
+  endTime: DateTime
+  taskName: String
   tags: [String]
   isBillable: Boolean
   projectId: String
   clientId: String
-  totalTime: Int
 }
 
 extend type Query {
   getTimeRecords: [TimeRecord]
+  getDurationTimeRecords(startTime: DateTime, endTime: DateTime): [TimeRecord]
   getPlayingTimeRecord: TimeRecord
 }
 
@@ -236,6 +189,7 @@ extend type Mutation {
   createTimeRecord(request: TimeRecordRequest): String
   updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
   removeTimeRecord(recordId: String): Boolean
+  removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean
 }
 
 # scalar DateTime

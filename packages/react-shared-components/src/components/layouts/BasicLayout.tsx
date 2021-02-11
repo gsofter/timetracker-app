@@ -108,7 +108,6 @@ const generateMenuPath = (path, params) => {
 };
 
 
-
 const menuFooterRender = (props) => {
   const { menuData, ...rest } = props;
   const newMenuData = getMenuSeparation(props?.menuData).bottomMenus
