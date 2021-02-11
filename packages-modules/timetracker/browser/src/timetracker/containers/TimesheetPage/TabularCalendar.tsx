@@ -50,7 +50,7 @@ const TabularCalendar = ({
   const [headerColumns, setHeaderColumns] = useState([]);
   const { css } = useFela();
   const [data, setData] = useState([]);
-  const [trackedProjects, setTrackedProjects] = useState([]);
+  const [trackedProjects, setTrackedProjects] = useState<Array<IProject>>([]);
   const [newRows, setNewRows] = useState([]);
   useEffect(() => {
     const trackedProjects = projects.filter(
@@ -131,7 +131,7 @@ const TabularCalendar = ({
       {projects
         .filter(
           p =>
-            trackedProjects.findIndex(tp => tp.projectId === p.id) === -1 &&
+            trackedProjects.findIndex(tp => tp.id === p.id) === -1 &&
             newRows.findIndex(pId => pId === p.id) === -1,
         )
         .map(pr => {
@@ -205,37 +205,37 @@ const TabularCalendar = ({
           {trackedProjects.map(p => {
             return (
               <tr>
-                <td> {p.projectTitle}</td>
+                <td> {p.name}</td>
                 {Array(7)
                   .fill(0)
                   .map((val, index) => {
                     const curDay = moment(weekStart).add(index, 'day');
                     const curDayRecords = records.filter(
                       r =>
-                        r.projectId === p.projectId &&
+                        r.projectId === p.id &&
                         moment(r.startTime).format('YYYY-MM-DD') === curDay.format('YYYY-MM-DD'),
                     );
                     return (
                       <td key={curDay.format('YYYY-MM-DD')}>
                         <TimesheetInput
                           dateStr={curDay.format('YYYY-MM-DD')}
-                          projectId={p.projectId}
+                          projectId={p.id}
                           records={curDayRecords}
                           createTimeRecord={createTimeRecord}
                           updateTimeRecord={updateTimeRecord}
                           projects={projects}
-                          projectTitle={p.projectTitle}
+                          projectTitle={p.name}
                         />
                       </td>
                     );
                   })}
-                <td> {formatDuration(getProjectTotalDuration(p.projectId))}</td>
+                <td> {formatDuration(getProjectTotalDuration(p.id))}</td>
                 <td>
                   <Popconfirm
                     title="Are you sure to remove event"
                     okText="OK"
                     cancelText="Cancel"
-                    onConfirm={() => handleRemoveDuration(p.projectId)}
+                    onConfirm={() => handleRemoveDuration(p.id)}
                   >
                     <Button icon={<CloseOutlined />} />
                   </Popconfirm>
