@@ -118,7 +118,7 @@ const menuFooterRender = (props) => {
   
   const handleMenuPopup = () => {
     let element, name, arr;
-    element = document.getElementById("userMenu$Menu");
+    element = document.getElementById("usermenu$Menu");
     if(element){
       name = props.collapsed  ? "userMenuMenuCollapsed" : "userMenuMenuStyle" ;
       arr = element.className.split(" ");
