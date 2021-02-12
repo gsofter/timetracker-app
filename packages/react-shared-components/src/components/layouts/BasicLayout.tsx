@@ -118,17 +118,17 @@ const menuFooterRender = (props) => {
   
   const handleMenuPopup = () => {
     let element, name, arr;
-    element = document.getElementById("userMenu$Menu");
+    element = document.getElementById("usermenu$Menu");
     if(element){
-      name = props.collapsed  ? "usermenucollapsed" : "usermenustyle" ;
+      name = props.collapsed  ? "usermenuCollapsed" : "usermenuStyle" ;
       arr = element.className.split(" ");
       if (arr.indexOf(name) == -1) {
         element.className += " " + name;
       }
       if(props.collapsed){
-        element.classList.remove("usermenustyle");
+        element.classList.remove("usermenuStyle");
       }else{
-        element.classList.remove("usermenucollapsed") 
+        element.classList.remove("usermenuCollapsed") 
       }
     }
   }
