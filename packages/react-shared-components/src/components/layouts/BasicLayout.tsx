@@ -120,15 +120,10 @@ const menuFooterRender = (props) => {
     let element, name, arr;
     element = document.getElementById("usermenu$Menu");
     if(element){
-      name = props.collapsed  ? "userMenuMenuCollapsed" : "userMenuMenuStyle" ;
-      arr = element.className.split(" ");
+      name = props.collapsed  ? "usermenuCollapsed" : "usermenuStyle" ;
+      arr = element.parentNode.className.split(" ");
       if (arr.indexOf(name) == -1) {
-        element.className += " " + name;
-      }
-      if(props.collapsed){
-        element.classList.remove("userMenuMenuStyle");
-      }else{
-        element.classList.remove("userMenuMenuCollapsed") 
+        element.parentNode.setAttribute("id", name)
       }
     }
   }
