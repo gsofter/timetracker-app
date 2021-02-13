@@ -120,15 +120,15 @@ const menuFooterRender = (props) => {
     let element, name, arr;
     element = document.getElementById("usermenu$Menu");
     if(element){
-      name = props.collapsed  ? "usermenuCollapsed" : "usermenuStyle" ;
+      name = props.collapsed  ? "userMenuMenuCollapsed" : "userMenuMenuStyle" ;
       arr = element.className.split(" ");
       if (arr.indexOf(name) == -1) {
         element.className += " " + name;
       }
       if(props.collapsed){
-        element.classList.remove("usermenuStyle");
+        element.classList.remove("userMenuMenuStyle");
       }else{
-        element.classList.remove("usermenuCollapsed") 
+        element.classList.remove("userMenuMenuCollapsed") 
       }
     }
   }
@@ -166,7 +166,7 @@ const menuContentRender = (props, menudom) => {
         width: '100%',
       }}
       className={`ant-pro-sider-menu`}
-      />
+    />
   );
 }
 
@@ -279,10 +279,8 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
             );
         }}
         footerRender={() => defaultFooterDom}
-        
         menuDataRender={menuDataRender}
         menuExtraRender={menuExtraRender}
-
         postMenuData={menuData => {
           menuDataRef.current = menuData || [];
           return menuData || [];
