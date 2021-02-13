@@ -134,7 +134,9 @@ const menuFooterRender = (props) => {
   }
 
   return (
-    <div id="area" onClick={handleMenuPopup}>
+    <div id="area" className='removeBoxShadow' style={{
+      overflow: 'hidden',
+    }} onClick={handleMenuPopup}>
       <BaseMenu
         {...newProps}
         mode="horizontal"
@@ -184,6 +186,12 @@ const menuContentRender = (props) => {
       style={{marginLeft: '17px', borderTop: '0px'}}/> : 
       <Divider plain>Admin</Divider>}
       
+      <div
+        style={{
+          overflow: 'hidden',
+        }}
+        className="removeBoxShadow"
+      >
       <BaseMenu
         {...lowerMenuProps}
         mode="inline"
@@ -192,8 +200,8 @@ const menuContentRender = (props) => {
           width: '100%',
         }}
         className={`ant-pro-sider-menu`}
-      />
-
+        />
+        </div>
     </>
   );
 }
