@@ -150,28 +150,8 @@ const menuFooterRender = (props) => {
     );
   }
 
-const menuContentRender = (props, menudom) => {
-  const { menuData, ...rest } = props;
-  const newMenuData = getMenuSeparation(props?.menuData).lowerMenus;
-  const newProps = { ...rest, menuData: newMenuData };
-  if(props.layout === "side" || props.layout === "mix" ){
-    return ;
-  }
-  return (
-    <BaseMenu
-      {...newProps}
-      mode="inline"
-      handleOpenChange={props.onOpenChange}
-      style={{
-        width: '100%',
-      }}
-      className={`ant-pro-sider-menu`}
-    />
-  );
-}
 
-
-const menuExtraRender = (props) => {
+const menuContentRender = (props) => {
   const { menuData, ...rest } = props;
   const newMenuData = getMenuSeparation(props?.menuData).middleMenus
   const lowerMenus = getMenuSeparation(props?.menuData).lowerMenus
@@ -280,7 +260,6 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
         }}
         footerRender={() => defaultFooterDom}
         menuDataRender={menuDataRender}
-        menuExtraRender={menuExtraRender}
         postMenuData={menuData => {
           menuDataRef.current = menuData || [];
           return menuData || [];
