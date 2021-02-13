@@ -17,15 +17,13 @@ export default () => {
             
           }
           @media only screen and (min-width: 768px) {
-            .userMenuMenuStyle {
-              position: relative;
-              bottom: 150px;
-              display: inline-table;
+            #usermenuStyle{
+              position: fixed;
+              top: 78% !important;
             }
-            .userMenuMenuCollapsed {
-              position: relative;
-              bottom: 50px;
-              display: inline-table;
+            #usermenuCollapsed {
+              position: fixed;
+              top: 80% !important;
             }
           }
         `,
