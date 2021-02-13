@@ -21,9 +21,9 @@ const ProLayout: React.SFC<BasicLayoutProps> = (props) => {
 
     return (
       <I18nPropvider locale={language} >
-        <div className={classNames(felaStyles)}>
+        <span className={classNames(felaStyles)}>
           <BasicLayout routeParams={params} {...props}/>
-        </div>
+        </span>
       </I18nPropvider>
 
     )

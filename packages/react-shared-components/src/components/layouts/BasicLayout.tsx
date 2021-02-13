@@ -154,7 +154,9 @@ const menuContentRender = (props, menudom) => {
   const { menuData, ...rest } = props;
   const newMenuData = getMenuSeparation(props?.menuData).lowerMenus;
   const newProps = { ...rest, menuData: newMenuData };
-
+  if(props.layout === "side" || props.layout === "mix" ){
+    return ;
+  }
   return (
     <BaseMenu
       {...newProps}
@@ -172,7 +174,9 @@ const menuContentRender = (props, menudom) => {
 const menuExtraRender = (props) => {
   const { menuData, ...rest } = props;
   const newMenuData = getMenuSeparation(props?.menuData).middleMenus
+  const lowerMenus = getMenuSeparation(props?.menuData).lowerMenus
   const newProps = { ...rest, menuData: newMenuData };
+  const lowerMenuProps = { ...rest, menuData: lowerMenus };
 
   return (
     <>
@@ -199,6 +203,17 @@ const menuExtraRender = (props) => {
       <DashOutlined className="ant-divider" 
       style={{marginLeft: '17px', borderTop: '0px'}}/> : 
       <Divider plain>Admin</Divider>}
+      
+      <BaseMenu
+        {...lowerMenuProps}
+        mode="inline"
+        handleOpenChange={props.onOpenChange}
+        style={{
+          width: '100%',
+        }}
+        className={`ant-pro-sider-menu`}
+      />
+
     </>
   );
 }
