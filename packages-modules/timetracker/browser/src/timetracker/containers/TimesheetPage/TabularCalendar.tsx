@@ -153,7 +153,13 @@ const TabularCalendar = ({
           </Button>,
         ]}
       >
-        <p> Ready to submit approval? </p>
+        <p>
+          Ready to submit from {moment(weekStart).format('MMM DD')} -
+          {moment(weekStart)
+            .add(1, 'week')
+            .format('MMM DD')}
+          &nbsp; approval?
+        </p>
       </Modal>
       <Row className="toolBar">
         <Col xs={24} md={6} className="control">
