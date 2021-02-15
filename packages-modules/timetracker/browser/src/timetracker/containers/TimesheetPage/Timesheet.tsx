@@ -24,10 +24,8 @@ import {
 } from 'antd';
 import { Modal } from './Modal';
 import { useFela } from 'react-fela';
-import { PageContainer } from '@admin-layout/components';
-import TabularCalendar from './TabularCalendar';
 import { ITimesheetCreateRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
-import { IProject } from '../TimesheetPage';
+import { IProject } from '@admin-layout/timetracker-module-core';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);

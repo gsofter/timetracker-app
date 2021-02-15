@@ -1,21 +1,9 @@
 import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
-import {
-  Table,
-  Row,
-  Col,
-  Button,
-  Input,
-  Spin,
-  Select,
-  message,
-  Dropdown,
-  Menu,
-  Popconfirm,
-} from 'antd';
+import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm, Modal } from 'antd';
 import moment, { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
-import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord, ITimeRecordRequest, IProject } from '@admin-layout/timetracker-module-core';
 import { TimesheetInput } from '../../components/TimesheetInput';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import {
@@ -25,8 +13,6 @@ import {
   useCreateTimeRecordMutation,
 } from '../../../generated-models';
 import { formatDuration } from '../../services/timeRecordService';
-import TextArea from 'antd/lib/input/TextArea';
-import { IProject } from '../TimesheetPage';
 
 interface ITabularCalendar {
   weekStart: Moment;
@@ -47,11 +33,10 @@ const TabularCalendar = ({
   updateTimeRecord,
   createTimeRecord,
 }: ITabularCalendar) => {
-  const [headerColumns, setHeaderColumns] = useState([]);
   const { css } = useFela();
-  const [data, setData] = useState([]);
   const [trackedProjects, setTrackedProjects] = useState<Array<IProject>>([]);
   const [newRows, setNewRows] = useState([]);
+  const [showApprovalModal, setShowApprovalModal] = useState(false);
   useEffect(() => {
     const trackedProjects = projects.filter(
       p => records.findIndex(r => r.projectId === p.id) !== -1,
@@ -126,6 +111,15 @@ const TabularCalendar = ({
     setNewRows(newRows.filter(pId => pId !== rowId));
   };
 
+  const handleSubmitApproval = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    setShowApprovalModal(true);
+  };
+
+  const handleCloseApproval = () => {
+    setShowApprovalModal(false);
+  };
+
   const projectDropdownMenus = (
     <Menu className={css(styles.projectDown)}>
       {projects
@@ -144,7 +138,23 @@ const TabularCalendar = ({
     </Menu>
   );
   return (
-    <div>
+    <div className={css(styles.root)}>
+      <Modal
+        title="Submit Week for Approval"
+        visible={showApprovalModal}
+        onCancel={handleCloseApproval}
+        className={css(styles.modal)}
+        footer={[
+          <Button key="back" onClick={handleCloseApproval}>
+            Close
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleSubmitApproval}>
+            Submit
+          </Button>,
+        ]}
+      >
+        <p> Ready to submit approval? </p>
+      </Modal>
       <Row className="toolBar">
         <Col xs={24} md={6} className="control">
           <Button onClick={onClickToday}> Today </Button>
@@ -293,15 +303,22 @@ const TabularCalendar = ({
                 return <td>{formatDuration(getDayTotalDuration(curDay))} </td>;
               })}
             <td>{formatDuration(getTotalDuration())} </td>
+            <td></td>
           </tr>
         </tbody>
       </table>
+      <Row className="table-footer">
+        <div className="spacer"></div>
+        <Button type="primary" onClick={handleSubmitApproval}>
+          Submit For Approval
+        </Button>
+      </Row>
     </div>
   );
 };
 
 interface ITabularCalendarWrapperProps {
-  projects: any;
+  projects: IProject[];
   tags: any;
   members: any;
 }
@@ -393,6 +410,30 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
 };
 
 const styles: { [property: string]: (props) => CSSProperties } = {
+  root: props => ({
+    display: 'block',
+    '& .table-footer': {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    '& .spacer': {
+      flexGrow: '1',
+    },
+    '& .flex-row': {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+  }),
+  modal: props => ({
+    display: 'inherited',
+    '& .flex-row': {
+      display: 'flex',
+      flexDirection: 'row',
+    },
+    '& .spacer': {
+      flexGrow: 1,
+    },
+  }),
   dateHeader: props => ({
     display: 'flex',
     flexDirection: 'row',
@@ -440,6 +481,18 @@ const styles: { [property: string]: (props) => CSSProperties } = {
   calendarTable: props => ({
     width: '100%',
     background: 'white',
+    '& .spacer': {
+      flexGrow: 1,
+    },
+    '& thead': {
+      backgroundColor: `rgba(0, 0, 0, 0.1)`,
+      textAlign: 'center',
+    },
+
+    '& tbody > tr > td:first-child': {
+      paddingLeft: '10px',
+      paddingRight: '10px',
+    },
   }),
 };
 
