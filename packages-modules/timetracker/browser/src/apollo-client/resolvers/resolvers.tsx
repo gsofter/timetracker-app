@@ -4,9 +4,9 @@ import { GET_PROJECTS_CLIENT, GET_TAGS_CLIENT, GET_MEMBERS_CLIENT } from '../que
 export const defaults = {
   getProjects: [
     {
-      id: 'ID0001',
-      name: 'ProjectA',
-      clientId: 'ClientA',
+      id: '1',
+      name: 'ProjectB',
+      clientId: 'ClientB',
       teams: ['teamA', 'teamB'],
       orgName: 'OrgA',
       tasks: [
@@ -18,9 +18,9 @@ export const defaults = {
       __typename: 'Project',
     },
     {
-      id: 'ID0002',
-      name: 'ProjectA',
-      clientId: 'ClientA',
+      id: '2',
+      name: 'ProjectB',
+      clientId: 'ClientB',
       teams: ['teamA', 'teamB'],
       orgName: 'OrgA',
       tasks: [

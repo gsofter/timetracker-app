@@ -3,7 +3,7 @@ import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm, Modal } fr
 import moment, { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
-import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord, ITimeRecordRequest, IProject } from '@admin-layout/timetracker-module-core';
 import { TimesheetInput } from '../../components/TimesheetInput';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import {
@@ -13,7 +13,6 @@ import {
   useCreateTimeRecordMutation,
 } from '../../../generated-models';
 import { formatDuration } from '../../services/timeRecordService';
-import { IProject } from '../TimesheetPage';
 
 interface ITabularCalendar {
   weekStart: Moment;
@@ -319,7 +318,7 @@ const TabularCalendar = ({
 };
 
 interface ITabularCalendarWrapperProps {
-  projects: any;
+  projects: IProject[];
   tags: any;
   members: any;
 }

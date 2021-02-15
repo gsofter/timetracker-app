@@ -1,20 +1,16 @@
-import React, { useState } from 'react';
+import * as _ from 'lodash';
+import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@admin-layout/components';
-import { momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
 import TabularCalendar from './TabularCalendar';
 import TimesheetCalendar from './TimesheetCalendar';
+import { useGetProjectsQuery } from '../../../generated-models';
 import { Row, Col, Switch } from 'antd';
+import { IProject } from '@admin-layout/timetracker-module-core';
 import CSS from 'csstype';
+
 enum VIEW_MODE {
   CALENDAR_VIEW,
   TABULAR_VIEW,
-}
-
-export interface IProject {
-  id: string;
-  name: string;
-  tasks: any;
 }
 
 const members = [

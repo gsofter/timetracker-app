@@ -9,7 +9,7 @@ import {
 import { ITimesheetCreateRequest } from '@admin-layout/timetracker-module-core';
 import { message, Form } from 'antd';
 import moment from 'moment';
-import { IProject } from '../TimesheetPage';
+import { IProject } from '@admin-layout/timetracker-module-core';
 
 export interface ITimesheetCalendarProps {
   projects: Array<IProject>;

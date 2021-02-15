@@ -5,7 +5,6 @@ import moment, { Moment } from 'moment';
 
 import { PageContainer } from '@admin-layout/components';
 import PageHeader from '../../components/PageHeader';
-import vocabulary from '../../en';
 import { TimerSearchComponent } from '../../components/TimerSearchComponent/index';
 import { AddTask } from '../../components/AddTask';
 import { CustomScrollbar } from '../../components/CustomScrollbar';
