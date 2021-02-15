@@ -145,18 +145,16 @@ const TabularCalendar = ({
         visible={showApprovalModal}
         onCancel={handleCloseApproval}
         className={css(styles.modal)}
-        footer={false}
+        footer={[
+          <Button key="back" onClick={handleCloseApproval}>
+            Close
+          </Button>,
+          <Button key="submit" type="primary" onClick={handleSubmitApproval}>
+            Submit
+          </Button>,
+        ]}
       >
-        <div>
-          <p> Ready to submit approval? </p>
-          <div className="flex-row">
-            <Button onClick={handleCloseApproval}> Cancel </Button>
-            <div className="spacer"> </div>
-            <Button type="primary" onClick={handleSubmitApproval}>
-              Submit
-            </Button>
-          </div>
-        </div>
+        <p> Ready to submit approval? </p>
       </Modal>
       <Row className="toolBar">
         <Col xs={24} md={6} className="control">
