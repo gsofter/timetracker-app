@@ -9,7 +9,7 @@ import {
   ClockCircleOutlined,
   BarsOutlined,
 } from '@ant-design/icons';
-import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord, ITimeRecordRequest, IProject } from '@admin-layout/timetracker-module-core';
 import {
   Input,
   Button,
@@ -19,7 +19,6 @@ import {
   Dropdown,
   Menu,
   Select,
-  Radio,
   DatePicker,
   TimePicker,
 } from 'antd';
@@ -36,21 +35,17 @@ const { RangePicker } = TimePicker;
 const { Title } = Typography;
 
 export interface IAddTask {
-  createTimeRecord: (ITimeRecordRequest) => void;
   currentTimeRecord: ITimeRecord;
+  timer: any;
+  isRecording: boolean;
+  projects: IProject[];
+  createTimeRecord: (ITimeRecordRequest) => void;
   handleStart: () => void;
   handleStop: () => void;
   setCurrentTimeRecord: Function;
   resetTimerValues: Function;
   removePlayingTimeRecord: Function;
-  timer: any;
-  isRecording: boolean;
 }
-
-const projects = [
-  { id: '1', name: 'AAA' },
-  { id: '2', name: 'BBB' },
-];
 
 enum MODE {
   MANUAL,
@@ -71,6 +66,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   const {
     isRecording,
     currentTimeRecord,
+    projects,
     handleStart,
     handleStop,
     setCurrentTimeRecord,
@@ -173,12 +169,11 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
           onChange={handleTagsChange}
           tokenSeparators={[',']}
         >
-          <Select.Option key="1" value="1">
-            AAAA
-          </Select.Option>
-          <Select.Option key="2" value="2">
-            BBBB
-          </Select.Option>
+          {projects.map(p => (
+            <Select.Option key={p.id} value={p.id}>
+              {p.name}
+            </Select.Option>
+          ))}
         </Select>
       </Menu.Item>
     </Menu>

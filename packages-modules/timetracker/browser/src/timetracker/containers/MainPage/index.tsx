@@ -18,7 +18,7 @@ import {
   useRemoveTimeRecordMutation,
   useUpdateTimeRecordMutation,
 } from '../../../generated-models';
-import { ITimeRecordRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
+import { ITimeRecordRequest, ITimeRecord, IProject } from '@admin-layout/timetracker-module-core';
 import { message } from 'antd';
 import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
@@ -28,18 +28,23 @@ interface ITimeTracker {
   isMobile: any;
   currentTeam: any;
   pagination: any;
+  timeRecords: [ITimeRecord];
+  timer: any;
+  currentTimeRecord: ITimeRecord;
+  isRecording: boolean;
   createTimeRecord: (ITimeRecordRequest) => void;
   removeTimeRecord: (string) => void;
   updateTimeRecord: (string, ITimeRecordRequest) => void;
   removePlayingTimeRecord: Function;
   resetTimerValues: Function;
-  timeRecords: [ITimeRecord];
-  timer: any;
   setCurrentTimeRecord: Function;
   setIsRecording: Function;
-  currentTimeRecord: ITimeRecord;
-  isRecording: boolean;
 }
+
+const projects: Array<IProject> = [
+  { id: '1', name: 'Project1' },
+  { id: '2', name: 'Project2' },
+];
 
 const TimeTracker = (props: ITimeTracker) => {
   const { css } = useFela();
@@ -123,6 +128,7 @@ const TimeTracker = (props: ITimeTracker) => {
           >
             <div className="task-container">
               <AddTask
+                projects={projects}
                 createTimeRecord={createTimeRecord}
                 currentTimeRecord={currentTimeRecord}
                 timer={timer}
@@ -159,6 +165,7 @@ const TimeTracker = (props: ITimeTracker) => {
                         removeTimeRecord={removeTimeRecord}
                         updateTimeRecord={updateTimeRecord}
                         handlePlayTimer={handlePlayTimer}
+                        projects={projects}
                       />
                     ))}
                   </div>

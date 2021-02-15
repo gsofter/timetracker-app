@@ -2,22 +2,9 @@ import React, { useState, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import { useFela } from 'react-fela';
-import {
-  DatePicker,
-  Space,
-  Popconfirm,
-  Button,
-  TimePicker,
-  Row,
-  Col,
-  Input,
-  Popover,
-  Checkbox,
-  Typography,
-  Dropdown,
-  Menu,
-} from 'antd';
-import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
+import { Button, TimePicker, Row, Col, Input, Typography, Dropdown, Menu } from 'antd';
+import { ITimeRecord, ITimeRecordRequest, IProject } from '@admin-layout/timetracker-module-core';
+
 const { RangePicker } = TimePicker;
 import CSS from 'csstype';
 import {
@@ -38,6 +25,7 @@ import BillableCheck from '../BillableCheck';
 export interface ITaskList {
   timeRecord?: ITimeRecord;
   timeRecords: [ITimeRecord];
+  projects: IProject[];
   removeTimeRecord: (recordId: string) => void;
   updateTimeRecord: (recordId: string, request: ITimeRecordRequest) => void;
   handlePlayTimer: (timeRecord: ITimeRecord) => void;
@@ -53,10 +41,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   const [selectedProject, setSelectedProject] = useState(timeRecord.projectId ?? '');
   const [taskName, setTaskName] = useState(timeRecord.taskName ?? '');
   const [isBillable, setIsBillable] = useState(timeRecord.isBillable);
-  const projects = [
-    { id: '1', name: 'AAA' },
-    { id: '2', name: 'BBB' },
-  ];
+  const { projects } = props;
   const debounceTimeLimit = 800;
 
   const handleSelectProject = (projectId: string) => {
