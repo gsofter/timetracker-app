@@ -1,17 +1,5 @@
 import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
-import {
-  Table,
-  Row,
-  Col,
-  Button,
-  Input,
-  Spin,
-  Select,
-  message,
-  Dropdown,
-  Menu,
-  Popconfirm,
-} from 'antd';
+import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm } from 'antd';
 import moment, { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
@@ -25,7 +13,6 @@ import {
   useCreateTimeRecordMutation,
 } from '../../../generated-models';
 import { formatDuration } from '../../services/timeRecordService';
-import TextArea from 'antd/lib/input/TextArea';
 import { IProject } from '../TimesheetPage';
 
 interface ITabularCalendar {
@@ -47,9 +34,7 @@ const TabularCalendar = ({
   updateTimeRecord,
   createTimeRecord,
 }: ITabularCalendar) => {
-  const [headerColumns, setHeaderColumns] = useState([]);
   const { css } = useFela();
-  const [data, setData] = useState([]);
   const [trackedProjects, setTrackedProjects] = useState<Array<IProject>>([]);
   const [newRows, setNewRows] = useState([]);
   useEffect(() => {

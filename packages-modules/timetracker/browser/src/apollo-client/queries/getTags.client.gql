@@ -1,0 +1,6 @@
+query GetTags {
+  getTags @client {
+    id
+    name
+  }
+}

@@ -27,7 +27,7 @@ const members = [
 
 const projects: Array<IProject> = [
   {
-    id: 'project1',
+    id: '1',
     name: 'projectA',
     tasks: [
       { id: 'task1', name: 'PATaskA' },
@@ -35,7 +35,7 @@ const projects: Array<IProject> = [
     ],
   },
   {
-    id: 'project2',
+    id: '2',
     name: 'projectB',
     tasks: [
       { id: 'task1', name: 'PBTaskA' },

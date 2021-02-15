@@ -1,0 +1,6 @@
+query GetMembers {
+  getMembers @client {
+    id
+    name
+  }
+}

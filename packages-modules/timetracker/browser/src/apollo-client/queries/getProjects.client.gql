@@ -1,0 +1,12 @@
+query GetProjects {
+  getProjects @client {
+    id
+    name
+    clientId
+    teams
+    tasks {
+      id
+      name
+    }
+  }
+}
