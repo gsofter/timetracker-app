@@ -1,0 +1,31 @@
+type Task {
+  id: String
+  name: String
+}
+
+type Member {
+  id: ID!
+  name: String
+}
+
+type Tag {
+  id: ID!
+  name: String
+}
+
+type Project {
+  id: String
+  name: String
+  clientId: [String]
+  orgName: String
+  teams: [String]
+  tasks: [Task]
+  updatedAt: DateTime
+  createdAt: DateTime
+}
+
+extend type Query {
+  getProjects: [Project]
+  getTags: [Tag]
+  getMembers: [Member]
+}
