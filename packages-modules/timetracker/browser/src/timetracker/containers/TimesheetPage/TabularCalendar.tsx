@@ -135,6 +135,14 @@ const TabularCalendar = ({
     setShowApprovalModal(false);
   };
 
+  const isProjectSelectable = () => {
+    const selectables = projects.filter(
+      p =>
+        trackedProjects.findIndex(tp => tp.id === p.id) === -1 &&
+        newRows.findIndex(pId => pId === p.id) === -1,
+    );
+    return selectables.length > 0 ? true : false;
+  };
   const projectDropdownMenus = (
     <Menu className={css(styles.projectDown)}>
       {projects
@@ -295,6 +303,7 @@ const TabularCalendar = ({
                       </td>
                     );
                   })}
+                <td>00:00:00</td>
                 <td>
                   <Popconfirm
                     title="Are you sure to remove event"
@@ -310,8 +319,14 @@ const TabularCalendar = ({
           })}
           <tr>
             <td>
-              <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
-                <Button icon={<PlusOutlined />}> Select Project</Button>
+              <Dropdown
+                overlay={projectDropdownMenus}
+                trigger={['click']}
+                disabled={!isProjectSelectable()}
+              >
+                <Button icon={<PlusOutlined />} disabled={!isProjectSelectable()}>
+                  Select Project
+                </Button>
               </Dropdown>
             </td>
             <td></td>

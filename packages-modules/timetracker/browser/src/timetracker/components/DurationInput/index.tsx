@@ -60,13 +60,20 @@ export default function DurationInput(props: IDurationInputProps) {
   const onBlur = event => {
     const newDur = formatDurationInput(event.target.value);
     const originDur = formatDuration(duration as number);
-    if (newDur === originDur) {
-      // no need to submit change
-      setInputStr(formatDurationInput(event.target.value));
-    } else {
+    if (event.target.value === '' && duration === undefined) setInputStr('');
+    else if (event.target.value === '' && duration !== undefined) {
       // need to submit change
       setInputStr(formatDurationInput(event.target.value));
       onChange(stringToDuration(formatDurationInput(event.target.value)));
+    } else {
+      if (newDur === originDur) {
+        // no need to submit change
+        setInputStr(formatDurationInput(event.target.value));
+      } else {
+        // need to submit change
+        setInputStr(formatDurationInput(event.target.value));
+        onChange(stringToDuration(formatDurationInput(event.target.value)));
+      }
     }
   };
 
