@@ -52,30 +52,21 @@ export default function DurationInput(props: IDurationInputProps) {
   };
 
   const onPressEnter = event => {
-    console.log('onEnter', event.target.value);
     if (event.target.value === '') setInputStr('');
     else setInputStr(formatDurationInput(event.target.value));
-    console.log(
-      'stringToDuration(formatDurationInput(event.target.value)',
-      stringToDuration(formatDurationInput(event.target.value)),
-    );
     onChange(stringToDuration(formatDurationInput(event.target.value)));
   };
 
   const onBlur = event => {
-    console.log('onEnter', event.target.value);
-    if (event.target.value === '') setInputStr('');
-    else {
-      const newDur = formatDurationInput(event.target.value);
-      const originDur = formatDuration(duration as number);
-      if (newDur === originDur) {
-        // no need to submit change
-        setInputStr(formatDurationInput(event.target.value));
-      } else {
-        // need to submit change
-        setInputStr(formatDurationInput(event.target.value));
-        onChange(stringToDuration(formatDurationInput(event.target.value)));
-      }
+    const newDur = formatDurationInput(event.target.value);
+    const originDur = formatDuration(duration as number);
+    if (newDur === originDur) {
+      // no need to submit change
+      setInputStr(formatDurationInput(event.target.value));
+    } else {
+      // need to submit change
+      setInputStr(formatDurationInput(event.target.value));
+      onChange(stringToDuration(formatDurationInput(event.target.value)));
     }
   };
 
