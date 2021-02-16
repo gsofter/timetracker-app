@@ -19,11 +19,7 @@ export default () => {
           @media only screen and (min-width: 768px) {
             #usermenuStyle{
               position: fixed;
-              top: 78% !important;
-            }
-            #usermenuCollapsed {
-              position: fixed;
-              top: 80% !important;
+              top: calc(100% - 140px)!important;
             }
           }
         `,
