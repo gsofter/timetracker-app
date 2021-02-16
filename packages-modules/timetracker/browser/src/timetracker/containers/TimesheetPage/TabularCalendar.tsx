@@ -67,7 +67,13 @@ const TabularCalendar = ({
   };
 
   const getProjectTotalDuration = projectId => {
-    const pRecords = records.filter(r => r.projectId === projectId);
+    const pRecords = records
+      .filter(r => r.projectId === projectId)
+      .filter(
+        r =>
+          moment(r.startTime) >= moment(weekStart) &&
+          moment(r.endTime) <= moment(weekStart).add(1, 'week'),
+      );
     let totalDur = 0;
     pRecords.forEach(pr => {
       const dur = Math.floor(
@@ -81,7 +87,9 @@ const TabularCalendar = ({
   const getDayTotalDuration = curDay => {
     const formatStr = 'YYYY-MM-DD';
     const dayStr = moment(curDay).format(formatStr);
-    const dRecords = records.filter(r => moment(r.startTime).format(formatStr) === dayStr);
+    const dRecords = records
+      .filter(r => moment(r.startTime).format(formatStr) === dayStr)
+      .filter(r => projects.findIndex(p => p.id === r.projectId) !== -1);
     let totalDur = 0;
     dRecords.forEach(pr => {
       const dur = Math.floor(
@@ -93,8 +101,15 @@ const TabularCalendar = ({
   };
 
   const getTotalDuration = () => {
+    const dRecords = records
+      .filter(
+        r =>
+          moment(r.startTime) >= moment(weekStart) &&
+          moment(r.endTime) <= moment(weekStart).add(1, 'week'),
+      )
+      .filter(r => projects.findIndex(p => p.id === r.projectId) !== -1);
     let totalDur = 0;
-    records.forEach(pr => {
+    dRecords.forEach(pr => {
       const dur = Math.floor(
         (moment(pr.endTime).valueOf() - moment(pr.startTime).valueOf()) / 1000,
       );
@@ -153,7 +168,13 @@ const TabularCalendar = ({
           </Button>,
         ]}
       >
-        <p> Ready to submit approval? </p>
+        <p>
+          Ready to submit from {moment(weekStart).format('MMM DD')} -
+          {moment(weekStart)
+            .add(1, 'week')
+            .format('MMM DD')}
+          &nbsp; approval?
+        </p>
       </Modal>
       <Row className="toolBar">
         <Col xs={24} md={6} className="control">
@@ -293,8 +314,17 @@ const TabularCalendar = ({
                 <Button icon={<PlusOutlined />}> Select Project</Button>
               </Dropdown>
             </td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
+            <td></td>
           </tr>
-          <tr>
+          <tr className="total">
             <td> Total </td>
             {Array(7)
               .fill(0)
@@ -481,17 +511,26 @@ const styles: { [property: string]: (props) => CSSProperties } = {
   calendarTable: props => ({
     width: '100%',
     background: 'white',
+    border: '1px solid #bbb',
     '& .spacer': {
       flexGrow: 1,
     },
     '& thead': {
-      backgroundColor: `rgba(0, 0, 0, 0.1)`,
+      backgroundColor: 'rgba(0, 0, 0, 0.1)',
       textAlign: 'center',
     },
 
     '& tbody > tr > td:first-child': {
       paddingLeft: '10px',
       paddingRight: '10px',
+    },
+    '& .total': {
+      background: 'rgba(0,0,0,.1)',
+      fontWeight: 'bold',
+    },
+    '& .total > td': {
+      paddingTop: '20px',
+      paddingBottom: '20px',
     },
   }),
 };

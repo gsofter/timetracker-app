@@ -1,4 +1,4 @@
-import { ITimeRecord, ITimeRecordRequest, ITimesheetCreateRequest, ITimesheet } from '@admin-layout/timetracker-module-core'
+import { ITimeRecord, ITimeRecordRequest, ITimesheetCreateRequest, ITimesheet, ITimesheetState } from '@admin-layout/timetracker-module-core'
 export interface ITimeTrackerService {
     
     /**
@@ -41,6 +41,10 @@ export interface ITimeTrackerService {
      */
     updateTimesheet(userId: string, orgId: string, sheetId: string, request: ITimesheetCreateRequest) : Promise<Boolean>
 
+     /**
+     * Update timesheet status
+     */
+    updateTimesheetStatus(userId: string, orgId: string, request: ITimesheetCreateRequest) : Promise<Boolean>
 
     /**
      * Remove a time record

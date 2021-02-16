@@ -1,5 +1,11 @@
 // import { ITimeRecordCreateRequest, ITimeRecord } from '@admin-layout/timetracker-module-core'
-import { ITimeRecord, ITimeRecordRequest, ITimesheetCreateRequest, ITimesheet} from '@admin-layout/timetracker-module-core'
+import { 
+    ITimeRecord, 
+    ITimeRecordRequest, 
+    ITimesheetCreateRequest, 
+    ITimesheet, 
+    ITimesheetState
+} from '@admin-layout/timetracker-module-core'
 export interface ITimeTrackerRepository {
     
     /**
@@ -42,6 +48,11 @@ export interface ITimeTrackerRepository {
      * Update a new time record
      */
     updateTimesheet(userId: string, orgId: string, sheetId: string, request: ITimesheetCreateRequest) : Promise<Boolean>
+
+    /**
+     * Update timesheet status
+     */
+    updateTimesheetStatus(userId: string, orgId: string, request: ITimesheetCreateRequest) : Promise<Boolean>
 
 
     /**
