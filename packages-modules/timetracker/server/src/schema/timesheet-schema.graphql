@@ -13,20 +13,20 @@ type Timesheet {
   startDate: Date # (only Date without time)
   endDate: Date # (only Date without time)
   state: TimesheetState
-  submittedOn: Date
-  approvedOn: Date
+  submittedOn: DateTime
+  approvedOn: DateTime
   updatedBy: String # ---> userId
-  updatedOn: Date
+  updatedOn: DateTime
 }
 
 input TimesheetCreateRequest {
   startDate: Date
   endDate: Date
   state: TimesheetState
-  submittedOn: Date
-  approvedOn: Date
+  submittedOn: DateTime
+  approvedOn: DateTime
   updatedBy: String # ---> userId
-  updatedOn: Date
+  updatedOn: DateTime
 }
 
 extend type Query {
@@ -37,4 +37,5 @@ extend type Mutation {
   createTimesheet(request: TimesheetCreateRequest): Boolean
   updateTimesheet(sheetId: String, request: TimesheetCreateRequest): Boolean
   removeTimesheet(sheetId: String): Boolean
+  updateTimesheetStatus(request: TimesheetCreateRequest): Boolean
 }

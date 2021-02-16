@@ -1,3 +1,4 @@
+import { request } from 'express';
 import { DEFAULT_USER, DEFAULT_ORG } from '../constants'
 export const resolver = (options) => ({
     Query: {
@@ -18,7 +19,11 @@ export const resolver = (options) => ({
       removeTimesheet: (root, args, { timeTrackerService }) => {
         options.logger.trace('(Mutation.removeTimesheet) args %j', args)
         return timeTrackerService.removeTimesheet(DEFAULT_USER, DEFAULT_ORG, args.sheetId);
-      }
+      },
+      updateTimesheetStatus: (root, args, { timeTrackerService }) => {
+        options.logger.trace('(Mutation.updateTimesheetStatus) args %j', args)
+        return timeTrackerService.updateTimesheetStatus(DEFAULT_USER, DEFAULT_ORG, request);
+      },
     },
     Subscription: {
   
