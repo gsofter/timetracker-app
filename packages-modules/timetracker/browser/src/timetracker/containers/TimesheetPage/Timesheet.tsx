@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
@@ -42,11 +42,13 @@ interface ITimesheetProps {
   form: any;
   events: [ITimeRecord];
   showModal: boolean;
-  selectedProject: any;
+  selectedProject: string;
+  selectedTask: string;
   selectedUser: any;
   selectedEvent: any;
   loading: boolean;
   projects: Array<IProject>;
+  tasks: Array<{ id: string; name: string }>;
   members: Array<{ id: string; name: string }>;
   handleAddTimeRecordEvent: Function;
   handleUpdateTimeRecordEvent: Function;
@@ -56,6 +58,7 @@ interface ITimesheetProps {
   handleSelectSlot: (any) => void;
   handleSelectEvent: (any) => void;
   handleChangeProject: (any) => void;
+  handleChangeTask: (any) => void;
   handleChangeUser: (any) => void;
 }
 
@@ -63,20 +66,23 @@ function SelectableCalendar({
   events,
   projects,
   members,
+  form,
+  tasks,
+  showModal,
+  loading,
+  selectedProject,
+  selectedEvent,
+  selectedUser,
+  selectedTask,
   handleAddTimeRecordEvent,
   handleUpdateTimeRecordEvent,
   handleRemoveTimeRecordEvent,
-  form,
-  showModal,
-  loading,
   handleOpenModal,
   handleCloseModal,
   handleSelectSlot,
   handleSelectEvent,
-  selectedProject,
-  selectedEvent,
   handleChangeProject,
-  selectedUser,
+  handleChangeTask,
   handleChangeUser,
 }: ITimesheetProps & { localizer: DateLocalizer }) {
   const [isViewGroup, setIsViewGroup] = useState(false);
@@ -178,7 +184,7 @@ function SelectableCalendar({
             name="project"
             rules={[{ required: true, message: 'Required field' }]}
           >
-            <Select>
+            <Select onChange={handleChangeProject}>
               {projects.map(res => {
                 return (
                   <Select.Option value={res.id} key={res.id}>
@@ -194,7 +200,18 @@ function SelectableCalendar({
             name="task"
             rules={[{ required: true, message: 'Required field' }]}
           >
-            <Input />
+            <Select
+              disabled={selectedProject === '' || !!!selectedProject}
+              onChange={handleChangeTask}
+            >
+              {tasks.map(task => {
+                return (
+                  <Select.Option value={task.id} key={task.id}>
+                    {task.name}
+                  </Select.Option>
+                );
+              })}
+            </Select>
           </Form.Item>
 
           <Row gutter={10}>

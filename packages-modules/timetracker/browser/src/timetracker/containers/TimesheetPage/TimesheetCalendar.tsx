@@ -23,6 +23,8 @@ const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
   const [selectedEvent, setSelectedEvent] = useState(-1);
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedProject, setSelectedProject] = useState('');
+  const [selectedTask, setSelectedTask] = useState('');
+  const [selectableTasks, setSelectableTasks] = useState([]);
   const [addMutation, { loading: loadingAdd }] = useCreateTimeRecordMutation();
   const [updateMutation, { loading: loadingUpdate }] = useUpdateTimeRecordMutation();
   const [removeMutation, { loading: loadingRemove }] = useRemoveTimeRecordMutation();
@@ -126,6 +128,12 @@ const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
 
   const handleChangeProject = value => {
     setSelectedProject(value);
+    const selProject = projects.find(p => p.id === value);
+    setSelectableTasks(selProject.tasks);
+  };
+
+  const handleChangeTask = value => {
+    setSelectedTask(value);
   };
 
   return !data || loading ? null : (
@@ -134,10 +142,12 @@ const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
       form={form}
       loading={loadingAdd || loadingUpdate || loadingRemove}
       projects={projects}
+      tasks={selectableTasks}
       members={members}
       showModal={showModal}
       selectedUser={selectedUser}
       selectedProject={selectedProject}
+      selectedTask={selectedTask}
       selectedEvent={selectedEvent}
       handleAddTimeRecordEvent={handleAddTimeRecordEvent}
       handleUpdateTimeRecordEvent={handleUpdateTimeRecordEvent}
@@ -147,6 +157,7 @@ const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
       handleSelectSlot={handleSelectSlot}
       handleSelectEvent={handleSelectEvent}
       handleChangeUser={handleChangeUser}
+      handleChangeTask={handleChangeTask}
       handleChangeProject={handleChangeProject}
     />
   );
