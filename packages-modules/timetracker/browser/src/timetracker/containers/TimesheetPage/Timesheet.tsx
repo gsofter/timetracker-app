@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
@@ -42,44 +42,51 @@ interface ITimesheetProps {
   form: any;
   events: [ITimeRecord];
   showModal: boolean;
-  selectedProject: any;
+  selectedProject: string;
+  selectedTask: string;
   selectedUser: any;
   selectedEvent: any;
   loading: boolean;
   projects: Array<IProject>;
-  handleAddTimesheetEvent: Function;
-  handleUpdateTimesheetEvent: Function;
-  handleRemoveTimesheetEvent: () => void;
+  tasks: Array<{ id: string; name: string }>;
+  members: Array<{ id: string; name: string }>;
+  handleAddTimeRecordEvent: Function;
+  handleUpdateTimeRecordEvent: Function;
+  handleRemoveTimeRecordEvent: () => void;
   handleOpenModal: () => void;
   handleCloseModal: () => void;
   handleSelectSlot: (any) => void;
   handleSelectEvent: (any) => void;
   handleChangeProject: (any) => void;
+  handleChangeTask: (any) => void;
   handleChangeUser: (any) => void;
 }
 
 function SelectableCalendar({
   events,
   projects,
-  handleAddTimesheetEvent,
-  handleUpdateTimesheetEvent,
-  handleRemoveTimesheetEvent,
+  members,
   form,
+  tasks,
   showModal,
   loading,
+  selectedProject,
+  selectedEvent,
+  selectedUser,
+  selectedTask,
+  handleAddTimeRecordEvent,
+  handleUpdateTimeRecordEvent,
+  handleRemoveTimeRecordEvent,
   handleOpenModal,
   handleCloseModal,
   handleSelectSlot,
   handleSelectEvent,
-  selectedProject,
-  selectedEvent,
   handleChangeProject,
-  selectedUser,
+  handleChangeTask,
   handleChangeUser,
 }: ITimesheetProps & { localizer: DateLocalizer }) {
   const [isViewGroup, setIsViewGroup] = useState(false);
   const [localizer, setLocalizer] = useState(momentLocalizer(moment));
-  const [viewMode, setViewMode] = useState(VIEW_MODE.CALENDAR_VIEW);
   const resetModal = (e: any) => {
     e.preventDefault();
     form.resetFields();
@@ -87,12 +94,12 @@ function SelectableCalendar({
 
   const onEventDrop = ({ event, start, end, allDay }) => {
     const updateRequest = { start: moment(start), end: moment(end) };
-    handleUpdateTimesheetEvent(event.id, updateRequest);
+    handleUpdateTimeRecordEvent(event.id, updateRequest);
   };
 
   const onEventResize = ({ event, start, end }) => {
     const updateRequest = { start: moment(start), end: moment(end) };
-    handleUpdateTimesheetEvent(event.id, updateRequest);
+    handleUpdateTimeRecordEvent(event.id, updateRequest);
   };
 
   const EventComponent = ({ start, end, title }) => {
@@ -139,8 +146,8 @@ function SelectableCalendar({
       //   reason: values.reason,
       //   note: values.note,
     };
-    if (selectedEvent === -1) handleAddTimesheetEvent(request);
-    else handleUpdateTimesheetEvent(selectedEvent, request);
+    if (selectedEvent === -1) handleAddTimeRecordEvent(request);
+    else handleUpdateTimeRecordEvent(selectedEvent, request);
   };
 
   const renderModalBody = (): JSX.Element => {
@@ -163,8 +170,13 @@ function SelectableCalendar({
             rules={[{ required: true, message: 'Required field' }]}
           >
             <Select>
-              <Select.Option value="1">User1</Select.Option>
-              <Select.Option value="123">User2</Select.Option>
+              {members.map(member => {
+                return (
+                  <Select.Option value={member.id} key={member.id}>
+                    {member.name}
+                  </Select.Option>
+                );
+              })}
             </Select>
           </Form.Item>
           <Form.Item
@@ -172,7 +184,7 @@ function SelectableCalendar({
             name="project"
             rules={[{ required: true, message: 'Required field' }]}
           >
-            <Select>
+            <Select onChange={handleChangeProject}>
               {projects.map(res => {
                 return (
                   <Select.Option value={res.id} key={res.id}>
@@ -188,7 +200,18 @@ function SelectableCalendar({
             name="task"
             rules={[{ required: true, message: 'Required field' }]}
           >
-            <Input />
+            <Select
+              disabled={selectedProject === '' || !!!selectedProject}
+              onChange={handleChangeTask}
+            >
+              {tasks.map(task => {
+                return (
+                  <Select.Option value={task.id} key={task.id}>
+                    {task.name}
+                  </Select.Option>
+                );
+              })}
+            </Select>
           </Form.Item>
 
           <Row gutter={10}>
@@ -236,7 +259,7 @@ function SelectableCalendar({
                 title="Are you sure to remove event"
                 okText="OK"
                 cancelText="Cancel"
-                onConfirm={handleRemoveTimesheetEvent}
+                onConfirm={handleRemoveTimeRecordEvent}
               >
                 <Button
                   type="primary"
@@ -288,8 +311,13 @@ function SelectableCalendar({
             <Form.Item label="Members">
               <Select onChange={handleChangeUser} value={selectedUser}>
                 <Select.Option value="">All</Select.Option>
-                <Select.Option value="1">User1</Select.Option>
-                <Select.Option value="2">User2</Select.Option>
+                {members.map(member => {
+                  return (
+                    <Select.Option value={member.id} key={member.id}>
+                      {member.name}
+                    </Select.Option>
+                  );
+                })}
               </Select>
             </Form.Item>
           </Form>

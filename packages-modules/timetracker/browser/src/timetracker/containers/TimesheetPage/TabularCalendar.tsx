@@ -135,6 +135,14 @@ const TabularCalendar = ({
     setShowApprovalModal(false);
   };
 
+  const isProjectSelectable = () => {
+    const selectables = projects.filter(
+      p =>
+        trackedProjects.findIndex(tp => tp.id === p.id) === -1 &&
+        newRows.findIndex(pId => pId === p.id) === -1,
+    );
+    return selectables.length > 0 ? true : false;
+  };
   const projectDropdownMenus = (
     <Menu className={css(styles.projectDown)}>
       {projects
@@ -206,31 +214,33 @@ const TabularCalendar = ({
 
       <table className={css(styles.calendarTable)}>
         <thead>
-          <th> ProjectName </th>
-          {Array(7)
-            .fill(0)
-            .map((val, index) => {
-              const curDay = moment(weekStart).add(index, 'day');
-              return (
-                <th>
-                  <div className={css(styles.dateHeader)}>
-                    <div className={cls('day')}>
-                      <span>{curDay.format('DD')}</span>
-                    </div>
-                    <div className="extra">
-                      <div className="week">
-                        <span>{curDay.format('ddd')}</span>
+          <tr>
+            <th> ProjectName </th>
+            {Array(7)
+              .fill(0)
+              .map((val, index) => {
+                const curDay = moment(weekStart).add(index, 'day');
+                return (
+                  <th>
+                    <div className={css(styles.dateHeader)}>
+                      <div className={cls('day')}>
+                        <span>{curDay.format('DD')}</span>
                       </div>
-                      <div className="month">
-                        <span>{curDay.format('MMM')}</span>
+                      <div className="extra">
+                        <div className="week">
+                          <span>{curDay.format('ddd')}</span>
+                        </div>
+                        <div className="month">
+                          <span>{curDay.format('MMM')}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </th>
-              );
-            })}
-          <th> Total </th>
-          <th> Action </th>
+                  </th>
+                );
+              })}
+            <th> Total </th>
+            <th> Action </th>
+          </tr>
         </thead>
         <tbody>
           {trackedProjects.map(p => {
@@ -295,6 +305,7 @@ const TabularCalendar = ({
                       </td>
                     );
                   })}
+                <td>00:00:00</td>
                 <td>
                   <Popconfirm
                     title="Are you sure to remove event"
@@ -310,8 +321,14 @@ const TabularCalendar = ({
           })}
           <tr>
             <td>
-              <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
-                <Button icon={<PlusOutlined />}> Select Project</Button>
+              <Dropdown
+                overlay={projectDropdownMenus}
+                trigger={['click']}
+                disabled={!isProjectSelectable()}
+              >
+                <Button icon={<PlusOutlined />} disabled={!isProjectSelectable()}>
+                  Select Project
+                </Button>
               </Dropdown>
             </td>
             <td></td>

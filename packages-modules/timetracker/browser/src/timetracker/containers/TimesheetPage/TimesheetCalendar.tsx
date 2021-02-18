@@ -5,27 +5,33 @@ import {
   useUpdateTimesheetMutation,
   useRemoveTimesheetMutation,
   useGetTimeRecordsQuery,
+  useCreateTimeRecordMutation,
+  useUpdateTimeRecordMutation,
+  useRemoveTimeRecordMutation,
 } from '../../../generated-models';
-import { ITimesheetCreateRequest } from '@admin-layout/timetracker-module-core';
+import { ITimesheetCreateRequest, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
 import { message, Form } from 'antd';
 import moment from 'moment';
 import { IProject } from '@admin-layout/timetracker-module-core';
 
 export interface ITimesheetCalendarProps {
   projects: Array<IProject>;
+  members: Array<{ id: string; name: string }>;
 }
 
-const TimesheetCalendar = ({ projects }: ITimesheetCalendarProps) => {
+const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
   const [selectedEvent, setSelectedEvent] = useState(-1);
   const [selectedUser, setSelectedUser] = useState('');
   const [selectedProject, setSelectedProject] = useState('');
-  const [addMutation, { loading: loadingAdd }] = useCreateTimesheetMutation();
-  const [updateMutation, { loading: loadingUpdate }] = useUpdateTimesheetMutation();
-  const [removeMutation, { loading: loadingRemove }] = useRemoveTimesheetMutation();
+  const [selectedTask, setSelectedTask] = useState('');
+  const [selectableTasks, setSelectableTasks] = useState([]);
+  const [addMutation, { loading: loadingAdd }] = useCreateTimeRecordMutation();
+  const [updateMutation, { loading: loadingUpdate }] = useUpdateTimeRecordMutation();
+  const [removeMutation, { loading: loadingRemove }] = useRemoveTimeRecordMutation();
   const [showModal, setShowModal] = useState(false);
   const [form] = Form.useForm();
   // create event handler
-  const handleAddTimesheetEvent = (request: ITimesheetCreateRequest) => {
+  const handleAddTimeRecordEvent = (request: ITimeRecordRequest) => {
     addMutation({ variables: { request } })
       .then(() => {
         message.success('A new event has been created!');
@@ -39,8 +45,8 @@ const TimesheetCalendar = ({ projects }: ITimesheetCalendarProps) => {
   };
 
   // update event handler
-  const handleUpdateTimesheetEvent = (sheetId: string, request: ITimesheetCreateRequest) => {
-    updateMutation({ variables: { sheetId, request } })
+  const handleUpdateTimeRecordEvent = (recordId: string, request: ITimeRecordRequest) => {
+    updateMutation({ variables: { recordId, request } })
       .then(() => {
         message.success('A new event has been updated!');
         refetch();
@@ -53,8 +59,8 @@ const TimesheetCalendar = ({ projects }: ITimesheetCalendarProps) => {
   };
 
   // remove event handler
-  const handleRemoveTimesheetEvent = () => {
-    removeMutation({ variables: { sheetId: selectedEvent.toString() } })
+  const handleRemoveTimeRecordEvent = () => {
+    removeMutation({ variables: { recordId: selectedEvent.toString() } })
       .then(() => {
         message.success('Event has removed');
         refetch();
@@ -122,6 +128,12 @@ const TimesheetCalendar = ({ projects }: ITimesheetCalendarProps) => {
 
   const handleChangeProject = value => {
     setSelectedProject(value);
+    const selProject = projects.find(p => p.id === value);
+    setSelectableTasks(selProject.tasks);
+  };
+
+  const handleChangeTask = value => {
+    setSelectedTask(value);
   };
 
   return !data || loading ? null : (
@@ -130,18 +142,22 @@ const TimesheetCalendar = ({ projects }: ITimesheetCalendarProps) => {
       form={form}
       loading={loadingAdd || loadingUpdate || loadingRemove}
       projects={projects}
+      tasks={selectableTasks}
+      members={members}
       showModal={showModal}
       selectedUser={selectedUser}
       selectedProject={selectedProject}
+      selectedTask={selectedTask}
       selectedEvent={selectedEvent}
-      handleAddTimesheetEvent={handleAddTimesheetEvent}
-      handleUpdateTimesheetEvent={handleUpdateTimesheetEvent}
-      handleRemoveTimesheetEvent={handleRemoveTimesheetEvent}
+      handleAddTimeRecordEvent={handleAddTimeRecordEvent}
+      handleUpdateTimeRecordEvent={handleUpdateTimeRecordEvent}
+      handleRemoveTimeRecordEvent={handleRemoveTimeRecordEvent}
       handleOpenModal={openModal}
       handleCloseModal={closeModal}
       handleSelectSlot={handleSelectSlot}
       handleSelectEvent={handleSelectEvent}
       handleChangeUser={handleChangeUser}
+      handleChangeTask={handleChangeTask}
       handleChangeProject={handleChangeProject}
     />
   );
