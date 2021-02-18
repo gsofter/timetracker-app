@@ -214,31 +214,33 @@ const TabularCalendar = ({
 
       <table className={css(styles.calendarTable)}>
         <thead>
-          <th> ProjectName </th>
-          {Array(7)
-            .fill(0)
-            .map((val, index) => {
-              const curDay = moment(weekStart).add(index, 'day');
-              return (
-                <th>
-                  <div className={css(styles.dateHeader)}>
-                    <div className={cls('day')}>
-                      <span>{curDay.format('DD')}</span>
-                    </div>
-                    <div className="extra">
-                      <div className="week">
-                        <span>{curDay.format('ddd')}</span>
+          <tr>
+            <th> ProjectName </th>
+            {Array(7)
+              .fill(0)
+              .map((val, index) => {
+                const curDay = moment(weekStart).add(index, 'day');
+                return (
+                  <th>
+                    <div className={css(styles.dateHeader)}>
+                      <div className={cls('day')}>
+                        <span>{curDay.format('DD')}</span>
                       </div>
-                      <div className="month">
-                        <span>{curDay.format('MMM')}</span>
+                      <div className="extra">
+                        <div className="week">
+                          <span>{curDay.format('ddd')}</span>
+                        </div>
+                        <div className="month">
+                          <span>{curDay.format('MMM')}</span>
+                        </div>
                       </div>
                     </div>
-                  </div>
-                </th>
-              );
-            })}
-          <th> Total </th>
-          <th> Action </th>
+                  </th>
+                );
+              })}
+            <th> Total </th>
+            <th> Action </th>
+          </tr>
         </thead>
         <tbody>
           {trackedProjects.map(p => {

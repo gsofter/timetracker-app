@@ -63,7 +63,7 @@ const TimesheetPage = () => {
         </Col>
       </Row>
       {viewMode === VIEW_MODE.CALENDAR_VIEW ? (
-        <TimesheetCalendar projects={projects} />
+        <TimesheetCalendar projects={projects} members={members} />
       ) : (
         <TabularCalendar projects={projects} members={members} tags={tags} />
       )}

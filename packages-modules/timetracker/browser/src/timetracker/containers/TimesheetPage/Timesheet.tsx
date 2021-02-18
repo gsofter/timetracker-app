@@ -47,9 +47,10 @@ interface ITimesheetProps {
   selectedEvent: any;
   loading: boolean;
   projects: Array<IProject>;
-  handleAddTimesheetEvent: Function;
-  handleUpdateTimesheetEvent: Function;
-  handleRemoveTimesheetEvent: () => void;
+  members: Array<{ id: string; name: string }>;
+  handleAddTimeRecordEvent: Function;
+  handleUpdateTimeRecordEvent: Function;
+  handleRemoveTimeRecordEvent: () => void;
   handleOpenModal: () => void;
   handleCloseModal: () => void;
   handleSelectSlot: (any) => void;
@@ -61,9 +62,10 @@ interface ITimesheetProps {
 function SelectableCalendar({
   events,
   projects,
-  handleAddTimesheetEvent,
-  handleUpdateTimesheetEvent,
-  handleRemoveTimesheetEvent,
+  members,
+  handleAddTimeRecordEvent,
+  handleUpdateTimeRecordEvent,
+  handleRemoveTimeRecordEvent,
   form,
   showModal,
   loading,
@@ -79,7 +81,6 @@ function SelectableCalendar({
 }: ITimesheetProps & { localizer: DateLocalizer }) {
   const [isViewGroup, setIsViewGroup] = useState(false);
   const [localizer, setLocalizer] = useState(momentLocalizer(moment));
-  const [viewMode, setViewMode] = useState(VIEW_MODE.CALENDAR_VIEW);
   const resetModal = (e: any) => {
     e.preventDefault();
     form.resetFields();
@@ -87,12 +88,12 @@ function SelectableCalendar({
 
   const onEventDrop = ({ event, start, end, allDay }) => {
     const updateRequest = { start: moment(start), end: moment(end) };
-    handleUpdateTimesheetEvent(event.id, updateRequest);
+    handleUpdateTimeRecordEvent(event.id, updateRequest);
   };
 
   const onEventResize = ({ event, start, end }) => {
     const updateRequest = { start: moment(start), end: moment(end) };
-    handleUpdateTimesheetEvent(event.id, updateRequest);
+    handleUpdateTimeRecordEvent(event.id, updateRequest);
   };
 
   const EventComponent = ({ start, end, title }) => {
@@ -139,8 +140,8 @@ function SelectableCalendar({
       //   reason: values.reason,
       //   note: values.note,
     };
-    if (selectedEvent === -1) handleAddTimesheetEvent(request);
-    else handleUpdateTimesheetEvent(selectedEvent, request);
+    if (selectedEvent === -1) handleAddTimeRecordEvent(request);
+    else handleUpdateTimeRecordEvent(selectedEvent, request);
   };
 
   const renderModalBody = (): JSX.Element => {
@@ -163,8 +164,13 @@ function SelectableCalendar({
             rules={[{ required: true, message: 'Required field' }]}
           >
             <Select>
-              <Select.Option value="1">User1</Select.Option>
-              <Select.Option value="123">User2</Select.Option>
+              {members.map(member => {
+                return (
+                  <Select.Option value={member.id} key={member.id}>
+                    {member.name}
+                  </Select.Option>
+                );
+              })}
             </Select>
           </Form.Item>
           <Form.Item
@@ -236,7 +242,7 @@ function SelectableCalendar({
                 title="Are you sure to remove event"
                 okText="OK"
                 cancelText="Cancel"
-                onConfirm={handleRemoveTimesheetEvent}
+                onConfirm={handleRemoveTimeRecordEvent}
               >
                 <Button
                   type="primary"
@@ -288,8 +294,13 @@ function SelectableCalendar({
             <Form.Item label="Members">
               <Select onChange={handleChangeUser} value={selectedUser}>
                 <Select.Option value="">All</Select.Option>
-                <Select.Option value="1">User1</Select.Option>
-                <Select.Option value="2">User2</Select.Option>
+                {members.map(member => {
+                  return (
+                    <Select.Option value={member.id} key={member.id}>
+                      {member.name}
+                    </Select.Option>
+                  );
+                })}
               </Select>
             </Form.Item>
           </Form>
