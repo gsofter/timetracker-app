@@ -2,9 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
-import momentZ from 'moment-timezone';
 import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
-import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
@@ -17,15 +15,14 @@ import {
   Select,
   DatePicker,
   TimePicker,
-  Checkbox,
   Avatar,
   Popconfirm,
-  Switch,
+  Modal,
 } from 'antd';
-import { Modal } from './Modal';
 import { useFela } from 'react-fela';
 import { ITimesheetCreateRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
 import { IProject } from '@admin-layout/timetracker-module-core';
+import Spacer from '../../components/Spacer';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -53,8 +50,8 @@ interface ITimesheetProps {
   handleAddTimeRecordEvent: Function;
   handleUpdateTimeRecordEvent: Function;
   handleRemoveTimeRecordEvent: () => void;
-  handleOpenModal: () => void;
-  handleCloseModal: () => void;
+  handleOpenAddTimeModal: () => void;
+  handleCloseAddTimeModal: () => void;
   handleSelectSlot: (any) => void;
   handleSelectEvent: (any) => void;
   handleChangeProject: (any) => void;
@@ -72,21 +69,18 @@ function SelectableCalendar({
   loading,
   selectedProject,
   selectedEvent,
-  selectedUser,
-  selectedTask,
   handleAddTimeRecordEvent,
   handleUpdateTimeRecordEvent,
   handleRemoveTimeRecordEvent,
-  handleOpenModal,
-  handleCloseModal,
+  handleOpenAddTimeModal,
+  handleCloseAddTimeModal,
   handleSelectSlot,
   handleSelectEvent,
   handleChangeProject,
   handleChangeTask,
   handleChangeUser,
+  localizer,
 }: ITimesheetProps & { localizer: DateLocalizer }) {
-  const [isViewGroup, setIsViewGroup] = useState(false);
-  const [localizer, setLocalizer] = useState(momentLocalizer(moment));
   const resetModal = (e: any) => {
     e.preventDefault();
     form.resetFields();
@@ -123,16 +117,6 @@ function SelectableCalendar({
     );
   };
 
-  const handleSelectTimezone = timezone => {
-    // tslint:disable-next-line
-    // console.log('New Timezone Selected:', timezone);
-    setLocalizer(momentLocalizer(moment.tz.setDefault(timezone)));
-  };
-
-  const onChangeViewGroup = event => {
-    setIsViewGroup(event.target.checked);
-  };
-
   const onFinish = values => {
     const request: ITimesheetCreateRequest = {
       //   title: values.title,
@@ -151,6 +135,7 @@ function SelectableCalendar({
   };
 
   const renderModalBody = (): JSX.Element => {
+    const { css } = useFela();
     return (
       <>
         <Form
@@ -159,6 +144,7 @@ function SelectableCalendar({
           layout="vertical"
           onFinish={onFinish}
           form={form}
+          className={css(stylesheet.form)}
         >
           <div style={{ margin: '15px 0px' }}>
             <Avatar style={{ backgroundColor: '#3174ad' }} icon={<UserOutlined />} />
@@ -246,34 +232,36 @@ function SelectableCalendar({
           </Form.Item>
 
           <Form.Item>
-            <Button htmlType="button" onClick={resetModal}>
-              Reset
-            </Button>
-            &nbsp;
-            <Button type="primary" htmlType="submit" loading={loading}>
-              Submit
-            </Button>
-            &nbsp;
-            {selectedEvent !== -1 ? (
-              <Popconfirm
-                title="Are you sure to remove event"
-                okText="OK"
-                cancelText="Cancel"
-                onConfirm={handleRemoveTimeRecordEvent}
-              >
-                <Button
-                  type="primary"
-                  htmlType="button"
-                  loading={loading}
-                  icon={<DeleteOutlined />}
-                  danger
+            <Row className="footer">
+              <Button htmlType="button" onClick={resetModal}>
+                Reset
+              </Button>
+              &nbsp;
+              {selectedEvent !== -1 ? (
+                <Popconfirm
+                  title="Are you sure to remove event"
+                  okText="OK"
+                  cancelText="Cancel"
+                  onConfirm={handleRemoveTimeRecordEvent}
                 >
-                  Remove
-                </Button>
-              </Popconfirm>
-            ) : (
-              ''
-            )}
+                  <Button
+                    type="primary"
+                    htmlType="button"
+                    loading={loading}
+                    icon={<DeleteOutlined />}
+                    danger
+                  >
+                    Remove
+                  </Button>
+                </Popconfirm>
+              ) : (
+                ''
+              )}
+              <Spacer />
+              <Button type="primary" htmlType="submit" loading={loading}>
+                Submit
+              </Button>
+            </Row>
           </Form.Item>
         </Form>
       </>
@@ -282,93 +270,15 @@ function SelectableCalendar({
 
   return (
     <>
-      <Row align="middle" justify="space-between" style={{ marginBottom: '10px' }}>
-        <Col>
-          <div style={{ textAlign: 'center' }}>
-            <h3>View & edit timesheets</h3>
-          </div>
-        </Col>
-      </Row>
-      <Row align="middle" gutter={[24, 16]}>
-        <Col md={6} xs={16} style={{ top: '-10px' }}>
-          <span>Select Timezone</span>
-          <TimezonePicker
-            value="Asia/Yerevan"
-            onChange={handleSelectTimezone}
-            inputProps={{
-              placeholder: 'Select Timezone...',
-              name: 'timezone',
-            }}
-          />
-        </Col>
-        <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
-            <Form.Item label="Members">
-              <Select onChange={handleChangeUser} value={selectedUser}>
-                <Select.Option value="">All</Select.Option>
-                {members.map(member => {
-                  return (
-                    <Select.Option value={member.id} key={member.id}>
-                      {member.name}
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-          </Form>
-        </Col>
-        <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
-            <Form.Item label="Projects">
-              <Select onChange={handleChangeProject} value={selectedProject}>
-                <Select.Option value="">All</Select.Option>
-                {projects.map(res => {
-                  return (
-                    <Select.Option value={res.id} key={res.id}>
-                      {res.name}
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-          </Form>
-        </Col>
-        <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
-            <Form.Item label="View by group">
-              <Checkbox onChange={onChangeViewGroup} checked={isViewGroup} />
-            </Form.Item>
-          </Form>
-        </Col>
-        <Col md={4} xs={16}>
-          <div>
-            <span style={{ fontWeight: 'bold' }}>
-              <a onClick={handleOpenModal}>Add Time</a>
-            </span>
-            <Modal
-              modalTitle={selectedEvent === -1 ? 'Add Timesheet' : 'Edit Timesheet'}
-              showModal={showModal}
-              handleClose={handleCloseModal}
-              modalBody={renderModalBody()}
-            />
-          </div>
-        </Col>
-      </Row>
+      <Modal
+        title={selectedEvent === -1 ? 'Add Timesheet' : 'Edit Timesheet'}
+        visible={showModal}
+        onCancel={handleCloseAddTimeModal}
+        footer={false}
+      >
+        {renderModalBody()}
+      </Modal>
+
       <DnDCalendar
         selectable={true}
         localizer={localizer}
@@ -395,7 +305,6 @@ function SelectableCalendar({
         // resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
         // resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
       />
-      )
     </>
   );
 }
@@ -469,6 +378,14 @@ const stylesheet: any = {
       cursor: 'pointer',
       width: '100%',
       textAlign: 'left',
+    },
+  }),
+
+  form: props => ({
+    display: 'block',
+    '& .footer': {
+      display: 'flex',
+      flexDirection: 'row',
     },
   }),
 };
