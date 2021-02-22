@@ -53,8 +53,8 @@ interface ITimesheetProps {
   handleAddTimeRecordEvent: Function;
   handleUpdateTimeRecordEvent: Function;
   handleRemoveTimeRecordEvent: () => void;
-  handleOpenModal: () => void;
-  handleCloseModal: () => void;
+  handleOpenAddTimeModal: () => void;
+  handleCloseAddTimeModal: () => void;
   handleSelectSlot: (any) => void;
   handleSelectEvent: (any) => void;
   handleChangeProject: (any) => void;
@@ -73,20 +73,18 @@ function SelectableCalendar({
   selectedProject,
   selectedEvent,
   selectedUser,
-  selectedTask,
   handleAddTimeRecordEvent,
   handleUpdateTimeRecordEvent,
   handleRemoveTimeRecordEvent,
-  handleOpenModal,
-  handleCloseModal,
+  handleOpenAddTimeModal,
+  handleCloseAddTimeModal,
   handleSelectSlot,
   handleSelectEvent,
   handleChangeProject,
   handleChangeTask,
   handleChangeUser,
+  localizer,
 }: ITimesheetProps & { localizer: DateLocalizer }) {
-  const [isViewGroup, setIsViewGroup] = useState(false);
-  const [localizer, setLocalizer] = useState(momentLocalizer(moment));
   const resetModal = (e: any) => {
     e.preventDefault();
     form.resetFields();
@@ -121,16 +119,6 @@ function SelectableCalendar({
         </span>
       </>
     );
-  };
-
-  const handleSelectTimezone = timezone => {
-    // tslint:disable-next-line
-    // console.log('New Timezone Selected:', timezone);
-    setLocalizer(momentLocalizer(moment.tz.setDefault(timezone)));
-  };
-
-  const onChangeViewGroup = event => {
-    setIsViewGroup(event.target.checked);
   };
 
   const onFinish = values => {
@@ -282,93 +270,13 @@ function SelectableCalendar({
 
   return (
     <>
-      <Row align="middle" justify="space-between" style={{ marginBottom: '10px' }}>
-        <Col>
-          <div style={{ textAlign: 'center' }}>
-            <h3>View & edit timesheets</h3>
-          </div>
-        </Col>
-      </Row>
-      <Row align="middle" gutter={[24, 16]}>
-        <Col md={6} xs={16} style={{ top: '-10px' }}>
-          <span>Select Timezone</span>
-          <TimezonePicker
-            value="Asia/Yerevan"
-            onChange={handleSelectTimezone}
-            inputProps={{
-              placeholder: 'Select Timezone...',
-              name: 'timezone',
-            }}
-          />
-        </Col>
-        <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
-            <Form.Item label="Members">
-              <Select onChange={handleChangeUser} value={selectedUser}>
-                <Select.Option value="">All</Select.Option>
-                {members.map(member => {
-                  return (
-                    <Select.Option value={member.id} key={member.id}>
-                      {member.name}
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-          </Form>
-        </Col>
-        <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
-            <Form.Item label="Projects">
-              <Select onChange={handleChangeProject} value={selectedProject}>
-                <Select.Option value="">All</Select.Option>
-                {projects.map(res => {
-                  return (
-                    <Select.Option value={res.id} key={res.id}>
-                      {res.name}
-                    </Select.Option>
-                  );
-                })}
-              </Select>
-            </Form.Item>
-          </Form>
-        </Col>
-        <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
-            <Form.Item label="View by group">
-              <Checkbox onChange={onChangeViewGroup} checked={isViewGroup} />
-            </Form.Item>
-          </Form>
-        </Col>
-        <Col md={4} xs={16}>
-          <div>
-            <span style={{ fontWeight: 'bold' }}>
-              <a onClick={handleOpenModal}>Add Time</a>
-            </span>
-            <Modal
-              modalTitle={selectedEvent === -1 ? 'Add Timesheet' : 'Edit Timesheet'}
-              showModal={showModal}
-              handleClose={handleCloseModal}
-              modalBody={renderModalBody()}
-            />
-          </div>
-        </Col>
-      </Row>
+      <Modal
+        modalTitle={selectedEvent === -1 ? 'Add Timesheet' : 'Edit Timesheet'}
+        showModal={showModal}
+        handleClose={handleCloseAddTimeModal}
+        modalBody={renderModalBody()}
+      />
+
       <DnDCalendar
         selectable={true}
         localizer={localizer}
@@ -395,7 +303,6 @@ function SelectableCalendar({
         // resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
         // resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
       />
-      )
     </>
   );
 }
