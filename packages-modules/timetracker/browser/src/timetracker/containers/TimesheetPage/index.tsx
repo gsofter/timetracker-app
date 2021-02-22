@@ -9,6 +9,7 @@ import { IProject } from '@admin-layout/timetracker-module-core';
 import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
+import momentZ from 'moment-timezone';
 import CSS from 'csstype';
 
 enum VIEW_MODE {
@@ -54,6 +55,11 @@ const TimesheetPage = () => {
   const [selectedProject, setSelectedProject] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
   const [openAddTimeModal, setOpenAddTimeModal] = useState(false);
+
+  const { data, loading } = useGetProjectsQuery();
+  useEffect(() => {
+    console.log('data', data);
+  }, [loading]);
 
   const handleChangeViewMode = checked => {
     setViewMode(checked ? VIEW_MODE.CALENDAR_VIEW : VIEW_MODE.TABULAR_VIEW);
@@ -154,11 +160,15 @@ const TimesheetPage = () => {
           </Form>
         </Col>
         <Col md={4} xs={16}>
-          <div>
-            <span style={{ fontWeight: 'bold' }}>
-              <a onClick={handleOpenAddTimeModal}>Add Time</a>
-            </span>
-          </div>
+          {viewMode === VIEW_MODE.CALENDAR_VIEW ? (
+            <div>
+              <span style={{ fontWeight: 'bold' }}>
+                <a onClick={handleOpenAddTimeModal}>Add Time</a>
+              </span>
+            </div>
+          ) : (
+            ''
+          )}
         </Col>
       </Row>
       {viewMode === VIEW_MODE.CALENDAR_VIEW ? (

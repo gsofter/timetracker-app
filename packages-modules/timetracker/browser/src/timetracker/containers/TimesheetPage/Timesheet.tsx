@@ -2,9 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment from 'moment';
-import momentZ from 'moment-timezone';
 import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
-import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
@@ -17,15 +15,14 @@ import {
   Select,
   DatePicker,
   TimePicker,
-  Checkbox,
   Avatar,
   Popconfirm,
-  Switch,
+  Modal,
 } from 'antd';
-import { Modal } from './Modal';
 import { useFela } from 'react-fela';
 import { ITimesheetCreateRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
 import { IProject } from '@admin-layout/timetracker-module-core';
+import Spacer from '../../components/Spacer';
 
 const { TextArea } = Input;
 const DnDCalendar = withDragAndDrop(Calendar);
@@ -72,7 +69,6 @@ function SelectableCalendar({
   loading,
   selectedProject,
   selectedEvent,
-  selectedUser,
   handleAddTimeRecordEvent,
   handleUpdateTimeRecordEvent,
   handleRemoveTimeRecordEvent,
@@ -139,6 +135,7 @@ function SelectableCalendar({
   };
 
   const renderModalBody = (): JSX.Element => {
+    const { css } = useFela();
     return (
       <>
         <Form
@@ -147,6 +144,7 @@ function SelectableCalendar({
           layout="vertical"
           onFinish={onFinish}
           form={form}
+          className={css(stylesheet.form)}
         >
           <div style={{ margin: '15px 0px' }}>
             <Avatar style={{ backgroundColor: '#3174ad' }} icon={<UserOutlined />} />
@@ -234,34 +232,36 @@ function SelectableCalendar({
           </Form.Item>
 
           <Form.Item>
-            <Button htmlType="button" onClick={resetModal}>
-              Reset
-            </Button>
-            &nbsp;
-            <Button type="primary" htmlType="submit" loading={loading}>
-              Submit
-            </Button>
-            &nbsp;
-            {selectedEvent !== -1 ? (
-              <Popconfirm
-                title="Are you sure to remove event"
-                okText="OK"
-                cancelText="Cancel"
-                onConfirm={handleRemoveTimeRecordEvent}
-              >
-                <Button
-                  type="primary"
-                  htmlType="button"
-                  loading={loading}
-                  icon={<DeleteOutlined />}
-                  danger
+            <Row className="footer">
+              <Button htmlType="button" onClick={resetModal}>
+                Reset
+              </Button>
+              &nbsp;
+              {selectedEvent !== -1 ? (
+                <Popconfirm
+                  title="Are you sure to remove event"
+                  okText="OK"
+                  cancelText="Cancel"
+                  onConfirm={handleRemoveTimeRecordEvent}
                 >
-                  Remove
-                </Button>
-              </Popconfirm>
-            ) : (
-              ''
-            )}
+                  <Button
+                    type="primary"
+                    htmlType="button"
+                    loading={loading}
+                    icon={<DeleteOutlined />}
+                    danger
+                  >
+                    Remove
+                  </Button>
+                </Popconfirm>
+              ) : (
+                ''
+              )}
+              <Spacer />
+              <Button type="primary" htmlType="submit" loading={loading}>
+                Submit
+              </Button>
+            </Row>
           </Form.Item>
         </Form>
       </>
@@ -271,11 +271,13 @@ function SelectableCalendar({
   return (
     <>
       <Modal
-        modalTitle={selectedEvent === -1 ? 'Add Timesheet' : 'Edit Timesheet'}
-        showModal={showModal}
-        handleClose={handleCloseAddTimeModal}
-        modalBody={renderModalBody()}
-      />
+        title={selectedEvent === -1 ? 'Add Timesheet' : 'Edit Timesheet'}
+        visible={showModal}
+        onCancel={handleCloseAddTimeModal}
+        footer={false}
+      >
+        {renderModalBody()}
+      </Modal>
 
       <DnDCalendar
         selectable={true}
@@ -376,6 +378,14 @@ const stylesheet: any = {
       cursor: 'pointer',
       width: '100%',
       textAlign: 'left',
+    },
+  }),
+
+  form: props => ({
+    display: 'block',
+    '& .footer': {
+      display: 'flex',
+      flexDirection: 'row',
     },
   }),
 };
