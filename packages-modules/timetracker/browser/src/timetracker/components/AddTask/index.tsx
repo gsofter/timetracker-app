@@ -30,6 +30,7 @@ import classNames from 'classnames';
 // import TimeField from 'react-simple-timefield';
 import { useRifm } from 'rifm';
 import { formatDuration } from '../../services/timeRecordService';
+import { TRACKER_MODE } from '../../containers/MainPage';
 
 const { RangePicker } = TimePicker;
 const { Title } = Typography;
@@ -39,17 +40,13 @@ export interface IAddTask {
   timer: any;
   isRecording: boolean;
   projects: IProject[];
+  mode: TRACKER_MODE;
+  setMode: Function;
   createTimeRecord: (ITimeRecordRequest) => void;
   handleStart: () => void;
   handleStop: () => void;
   setCurrentTimeRecord: Function;
-  resetTimerValues: Function;
   removePlayingTimeRecord: Function;
-}
-
-enum MODE {
-  MANUAL,
-  TRACK,
 }
 
 const formatDurationInput = (dur: string) => {
@@ -67,15 +64,15 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     isRecording,
     currentTimeRecord,
     projects,
+    mode,
+    setMode,
     handleStart,
     handleStop,
     setCurrentTimeRecord,
-    resetTimerValues,
     removePlayingTimeRecord,
     createTimeRecord,
   } = props;
   const { css } = useFela(props);
-  const [mode, setMode] = useState(MODE.TRACK);
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
   const [manualDur, setManualDur] = useState(moment().format('HH:mm:ss'));
@@ -230,7 +227,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
               />
             </Col>
 
-            {mode === MODE.TRACK ? (
+            {mode === TRACKER_MODE.TRACK ? (
               <>
                 <Col span={14} sm={10} xxl={14} className="flex-center">
                   <Title level={5} style={{ marginBottom: '0px' }}>
@@ -307,12 +304,12 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
             <Col span={1}>
               <div className={classNames('mode', { hidden: isRecording }, 'flex-col')}>
                 <ClockCircleOutlined
-                  className={classNames({ selected: mode === MODE.TRACK })}
-                  onClick={() => handleChangeMode(MODE.TRACK)}
+                  className={classNames({ selected: mode === TRACKER_MODE.TRACK })}
+                  onClick={() => handleChangeMode(TRACKER_MODE.TRACK)}
                 />
                 <BarsOutlined
-                  className={classNames({ selected: mode === MODE.MANUAL })}
-                  onClick={() => handleChangeMode(MODE.MANUAL)}
+                  className={classNames({ selected: mode === TRACKER_MODE.MANUAL })}
+                  onClick={() => handleChangeMode(TRACKER_MODE.MANUAL)}
                 />
               </div>
             </Col>

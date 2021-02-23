@@ -43,6 +43,11 @@ interface ITimeTracker {
   setIsRecording: Function;
 }
 
+export enum TRACKER_MODE {
+  MANUAL,
+  TRACK,
+}
+
 const TimeTracker = (props: ITimeTracker) => {
   const { css } = useFela();
   const {
@@ -59,7 +64,7 @@ const TimeTracker = (props: ITimeTracker) => {
     removePlayingTimeRecord,
     resetTimerValues,
   } = props;
-
+  const [mode, setMode] = useState(TRACKER_MODE.TRACK);
   const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
     for (let i = 0; i < timeRecords.length; i++) {
@@ -104,6 +109,7 @@ const TimeTracker = (props: ITimeTracker) => {
 
   const handlePlayTimer = (timeRecord: ITimeRecord) => {
     if (isRecording) stopTimer();
+    setMode(TRACKER_MODE.TRACK);
     const newTimeRecord: ITimeRecordRequest = {
       ..._.omit(timeRecord, ['id', '__typename']),
       startTime: moment(),
@@ -127,14 +133,15 @@ const TimeTracker = (props: ITimeTracker) => {
             <div className="task-container">
               <AddTask
                 projects={projects}
-                createTimeRecord={createTimeRecord}
-                currentTimeRecord={currentTimeRecord}
+                isRecording={isRecording}
                 timer={timer}
                 handleStart={startTimer}
                 handleStop={stopTimer}
-                isRecording={isRecording}
+                mode={mode}
+                setMode={setMode}
+                createTimeRecord={createTimeRecord}
+                currentTimeRecord={currentTimeRecord}
                 setCurrentTimeRecord={setCurrentTimeRecord}
-                resetTimerValues={resetTimerValues}
                 removePlayingTimeRecord={removePlayingTimeRecord}
               />
             </div>
