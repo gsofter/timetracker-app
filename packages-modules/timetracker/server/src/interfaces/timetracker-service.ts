@@ -1,4 +1,4 @@
-import { ITimeRecord, ITimeRecordRequest, ITimesheetCreateRequest, ITimesheet, ITimesheetState } from '@admin-layout/timetracker-module-core'
+import { ITimeRecord, ITimeRecordRequest, ITimesheetCreateRequest, ITimesheet } from '@admin-layout/timetracker-module-core'
 export interface ITimeTrackerService {
     
     /**
