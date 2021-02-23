@@ -267,8 +267,20 @@ type Project {
   createdAt: DateTime
 }
 
+enum StartYearWeekType {
+  FIRST_FOURDAY_WEEK
+  FIRST_FULL_WEEK
+  FIRST_DAY_WEEK
+}
+
+type Settings {
+  startWeekDay: Int
+  startYearWeek: StartYearWeekType
+}
+
 extend type Query {
   getProjects: [Project]
   getTags: [Tag]
   getMembers: [Member]
+  getSettings: Settings
 }

@@ -24,6 +24,7 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 
+
 export const GetMembersDocument = gql`
     query GetMembers {
   getMembers @client {
@@ -108,6 +109,45 @@ export function useGetProjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQuery
 export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
 export type GetProjectsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetProjectsQuery, SchemaTypes.IGetProjectsQueryVariables>;
+export const GetSettingsDocument = gql`
+    query GetSettings {
+  getSettings @client {
+    startWeekDay
+    startYearWeek
+  }
+}
+    `;
+export type GetSettingsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetSettingsQuery, SchemaTypes.IGetSettingsQueryVariables>, 'query'>;
+
+    export const GetSettingsComponent = (props: GetSettingsComponentProps) => (
+      <ApolloReactComponents.Query<SchemaTypes.IGetSettingsQuery, SchemaTypes.IGetSettingsQueryVariables> query={GetSettingsDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetSettingsQuery__
+ *
+ * To run a query within a React component, call `useGetSettingsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetSettingsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetSettingsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetSettingsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchemaTypes.IGetSettingsQuery, SchemaTypes.IGetSettingsQueryVariables>) {
+        return ApolloReactHooks.useQuery<SchemaTypes.IGetSettingsQuery, SchemaTypes.IGetSettingsQueryVariables>(GetSettingsDocument, baseOptions);
+      }
+export function useGetSettingsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchemaTypes.IGetSettingsQuery, SchemaTypes.IGetSettingsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SchemaTypes.IGetSettingsQuery, SchemaTypes.IGetSettingsQueryVariables>(GetSettingsDocument, baseOptions);
+        }
+export type GetSettingsQueryHookResult = ReturnType<typeof useGetSettingsQuery>;
+export type GetSettingsLazyQueryHookResult = ReturnType<typeof useGetSettingsLazyQuery>;
+export type GetSettingsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetSettingsQuery, SchemaTypes.IGetSettingsQueryVariables>;
 export const GetTagsDocument = gql`
     query GetTags {
   getTags @client {

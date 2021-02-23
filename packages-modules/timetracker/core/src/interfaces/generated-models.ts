@@ -177,6 +177,7 @@ export type IQuery = {
   getPlayingTimeRecord?: Maybe<ITimeRecord>;
   getProjects?: Maybe<Array<Maybe<IProject>>>;
   getScheduleEvents?: Maybe<Array<Maybe<ISchedule>>>;
+  getSettings?: Maybe<ISettings>;
   getTags?: Maybe<Array<Maybe<ITag>>>;
   getTimeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
   getTimelineEvents?: Maybe<Array<Maybe<ITimeline>>>;
@@ -238,6 +239,18 @@ export type IScheduleCreateRequest = {
   reason?: Maybe<Scalars['String']>;
   note?: Maybe<Scalars['String']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
+};
+
+export type ISettings = {
+   __typename?: 'Settings';
+  startWeekDay?: Maybe<Scalars['Int']>;
+  startYearWeek?: Maybe<IStartYearWeekType>;
+};
+
+export const enum IStartYearWeekType {
+  FIRST_FOURDAY_WEEK = 'FIRST_FOURDAY_WEEK',
+  FIRST_FULL_WEEK = 'FIRST_FULL_WEEK',
+  FIRST_DAY_WEEK = 'FIRST_DAY_WEEK'
 };
 
 export type ISubscription = {
@@ -381,6 +394,17 @@ export type IGetProjectsQuery = (
       & Pick<ITask, 'id' | 'name'>
     )>>> }
   )>>> }
+);
+
+export type IGetSettingsQueryVariables = {};
+
+
+export type IGetSettingsQuery = (
+  { __typename?: 'Query' }
+  & { getSettings?: Maybe<(
+    { __typename?: 'Settings' }
+    & Pick<ISettings, 'startWeekDay' | 'startYearWeek'>
+  )> }
 );
 
 export type IGetTagsQueryVariables = {};
@@ -542,6 +566,15 @@ export const GetProjectsDocument = gql`
 }
     `;
 export type GetProjectsQueryResult = ApolloReactCommon.QueryResult<IGetProjectsQuery, IGetProjectsQueryVariables>;
+export const GetSettingsDocument = gql`
+    query GetSettings {
+  getSettings @client {
+    startWeekDay
+    startYearWeek
+  }
+}
+    `;
+export type GetSettingsQueryResult = ApolloReactCommon.QueryResult<IGetSettingsQuery, IGetSettingsQueryVariables>;
 export const GetTagsDocument = gql`
     query GetTags {
   getTags @client {
@@ -737,6 +770,8 @@ export type IResolversTypes = {
   Project: ResolverTypeWrapper<IProject>,
   Task: ResolverTypeWrapper<ITask>,
   Schedule: ResolverTypeWrapper<ISchedule>,
+  Settings: ResolverTypeWrapper<ISettings>,
+  StartYearWeekType: IStartYearWeekType,
   Tag: ResolverTypeWrapper<ITag>,
   Timeline: ResolverTypeWrapper<ITimeline>,
   Timesheet: ResolverTypeWrapper<ITimesheet>,
@@ -770,6 +805,8 @@ export type IResolversParentTypes = {
   Project: IProject,
   Task: ITask,
   Schedule: ISchedule,
+  Settings: ISettings,
+  StartYearWeekType: IStartYearWeekType,
   Tag: ITag,
   Timeline: ITimeline,
   Timesheet: ITimesheet,
@@ -868,6 +905,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   getPlayingTimeRecord?: Resolver<Maybe<IResolversTypes['TimeRecord']>, ParentType, ContextType>,
   getProjects?: Resolver<Maybe<Array<Maybe<IResolversTypes['Project']>>>, ParentType, ContextType>,
   getScheduleEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<IQuerygetScheduleEventsArgs, never>>,
+  getSettings?: Resolver<Maybe<IResolversTypes['Settings']>, ParentType, ContextType>,
   getTags?: Resolver<Maybe<Array<Maybe<IResolversTypes['Tag']>>>, ParentType, ContextType>,
   getTimeRecords?: Resolver<Maybe<Array<Maybe<IResolversTypes['TimeRecord']>>>, ParentType, ContextType>,
   getTimelineEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Timeline']>>>, ParentType, ContextType, RequireFields<IQuerygetTimelineEventsArgs, never>>,
@@ -890,6 +928,12 @@ export type IScheduleResolvers<ContextType = any, ParentType extends IResolversP
   reason?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   note?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type ISettingsResolvers<ContextType = any, ParentType extends IResolversParentTypes['Settings'] = IResolversParentTypes['Settings']> = {
+  startWeekDay?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  startYearWeek?: Resolver<Maybe<IResolversTypes['StartYearWeekType']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -979,6 +1023,7 @@ export type IResolvers<ContextType = any> = {
   Project?: IProjectResolvers<ContextType>,
   Query?: IQueryResolvers<ContextType>,
   Schedule?: IScheduleResolvers<ContextType>,
+  Settings?: ISettingsResolvers<ContextType>,
   Subscription?: ISubscriptionResolvers<ContextType>,
   Tag?: ITagResolvers<ContextType>,
   Task?: ITaskResolvers<ContextType>,

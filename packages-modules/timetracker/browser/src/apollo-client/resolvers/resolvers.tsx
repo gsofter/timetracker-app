@@ -1,5 +1,11 @@
 import moment from 'moment';
-import { GET_PROJECTS_CLIENT, GET_TAGS_CLIENT, GET_MEMBERS_CLIENT } from '../queries';
+import {
+  GET_PROJECTS_CLIENT,
+  GET_TAGS_CLIENT,
+  GET_MEMBERS_CLIENT,
+  GET_SETTINGS_CLIENT,
+} from '../queries';
+import { IStartYearWeekType } from '@admin-layout/timetracker-module-core';
 
 export const defaults = {
   getProjects: [
@@ -127,7 +133,14 @@ export const defaults = {
     },
     { id: 'user2', name: 'userB', __typename: 'Member' },
   ],
+
+  getSettings: {
+    startWeekDay: 0, // 0: Sunday, 1: Monday, ..., 6: Saturday
+    startYearWeek: IStartYearWeekType.FIRST_FOURDAY_WEEK,
+    __typename: 'Settings',
+  },
 };
+
 export const resolvers = {
   Query: {
     getProjects: (_, args, { cache }) => {
@@ -143,6 +156,11 @@ export const resolvers = {
     getMembers: (_, args, { cache }) => {
       const data = cache.readQuery({ query: GET_MEMBERS_CLIENT });
       return data.getMembers;
+    },
+
+    getSettings: (_, args, { cache }) => {
+      const data = cache.readQuery({ query: GET_SETTINGS_CLIENT });
+      return data.getSettings;
     },
   },
 };
