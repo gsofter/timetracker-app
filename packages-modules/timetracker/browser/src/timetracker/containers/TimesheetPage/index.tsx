@@ -3,9 +3,13 @@ import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@admin-layout/components';
 import TabularCalendar from './TabularCalendar';
 import TimesheetCalendar from './TimesheetCalendar';
-import { useGetProjectsQuery } from '../../../generated-models';
+import {
+  useGetProjectsQuery,
+  useGetMembersQuery,
+  useGetTagsQuery,
+} from '../../../generated-models';
 import { Row, Col, Switch, Form, Select, Checkbox } from 'antd';
-import { IProject } from '@admin-layout/timetracker-module-core';
+import { IProject, ITag, IMember } from '@admin-layout/timetracker-module-core';
 import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
@@ -49,17 +53,18 @@ const tags = [
   { id: 'tag2', name: 'TagB', active: true },
 ];
 
-const TimesheetPage = () => {
+interface ITimesheetProps {
+  projects: Array<IProject>;
+  tags: Array<ITag>;
+  members: Array<IMember>;
+}
+
+const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
   const [viewMode, setViewMode] = useState(VIEW_MODE.CALENDAR_VIEW);
   const [localizer, setLocalizer] = useState(momentLocalizer(moment));
   const [selectedProject, setSelectedProject] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
   const [openAddTimeModal, setOpenAddTimeModal] = useState(false);
-
-  const { data, loading } = useGetProjectsQuery();
-  useEffect(() => {
-    console.log('data', data);
-  }, [loading]);
 
   const handleChangeViewMode = checked => {
     setViewMode(checked ? VIEW_MODE.CALENDAR_VIEW : VIEW_MODE.TABULAR_VIEW);
@@ -188,6 +193,21 @@ const TimesheetPage = () => {
         <TabularCalendar projects={projects} members={members} tags={tags} />
       )}
     </PageContainer>
+  );
+};
+
+const TimesheetPage = () => {
+  const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
+  const { data: membersData, loading: loadingMembers } = useGetMembersQuery();
+  const { data: tagsData, loading: loadingTags } = useGetTagsQuery();
+  return loadingProjects || loadingMembers || loadingTags ? (
+    <></>
+  ) : (
+    <Timesheet
+      projects={_.get(projectsData, 'getProjects', [])}
+      members={_.get(membersData, 'getMembers', [])}
+      tags={_.get(tagsData, 'getTags', [])}
+    ></Timesheet>
   );
 };
 

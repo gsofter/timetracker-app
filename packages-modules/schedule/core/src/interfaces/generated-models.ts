@@ -19,10 +19,10 @@ export type Scalars = {
 };
 
 
-/** Database counter */
+/**  Database counter  */
 export type ICounter = {
    __typename?: 'Counter';
-  /** Current amount */
+  /**  Current amount  */
   amount: Scalars['Int'];
 };
 
@@ -44,9 +44,9 @@ export type IMember = {
 
 export type IMutation = {
    __typename?: 'Mutation';
-  /** Increase counter value returns current counter amount */
+  /**  Increase counter value returns current counter amount  */
   addCounter?: Maybe<ICounter>;
-  /** add Counter */
+  /**  add Counter  */
   addMoleculerCounter?: Maybe<ICounter>;
   addScheduleEvent?: Maybe<Scalars['Boolean']>;
   addTimelineEvent?: Maybe<Scalars['Boolean']>;
@@ -58,12 +58,13 @@ export type IMutation = {
   removeTimeRecord?: Maybe<Scalars['Boolean']>;
   removeTimelineEvent?: Maybe<Scalars['Boolean']>;
   removeTimesheet?: Maybe<Scalars['Boolean']>;
-  /** sync cached counter with current value */
+  /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
   updateScheduleEvent?: Maybe<Scalars['Boolean']>;
   updateTimeRecord?: Maybe<Scalars['Boolean']>;
   updateTimelineEvent?: Maybe<Scalars['Boolean']>;
   updateTimesheet?: Maybe<Scalars['Boolean']>;
+  updateTimesheetStatus?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -147,6 +148,11 @@ export type IMutationupdateTimesheetArgs = {
   request?: Maybe<ITimesheetCreateRequest>;
 };
 
+
+export type IMutationupdateTimesheetStatusArgs = {
+  request?: Maybe<ITimesheetCreateRequest>;
+};
+
 export type IProject = {
    __typename?: 'Project';
   id?: Maybe<Scalars['String']>;
@@ -161,9 +167,9 @@ export type IProject = {
 
 export type IQuery = {
    __typename?: 'Query';
-  /** Counter */
+  /**  Counter  */
   counter?: Maybe<ICounter>;
-  /** Counter from Datasource */
+  /**  Counter from Datasource  */
   counterCache?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
   getDurationTimeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
@@ -175,7 +181,7 @@ export type IQuery = {
   getTimeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
   getTimelineEvents?: Maybe<Array<Maybe<ITimeline>>>;
   getTimesheets?: Maybe<Array<Maybe<ITimesheet>>>;
-  /** Moleculer Counter */
+  /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
 };
 
@@ -236,7 +242,7 @@ export type IScheduleCreateRequest = {
 
 export type ISubscription = {
    __typename?: 'Subscription';
-  /** Subscription fired when anyone increases counter */
+  /**  Subscription fired when anyone increases counter  */
   counterUpdated?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
   moleculerCounterUpdate?: Maybe<ICounter>;
@@ -706,6 +712,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   updateTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimeRecordArgs, never>>,
   updateTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimelineEventArgs, never>>,
   updateTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimesheetArgs, never>>,
+  updateTimesheetStatus?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimesheetStatusArgs, never>>,
 };
 
 export type IProjectResolvers<ContextType = any, ParentType extends IResolversParentTypes['Project'] = IResolversParentTypes['Project']> = {
