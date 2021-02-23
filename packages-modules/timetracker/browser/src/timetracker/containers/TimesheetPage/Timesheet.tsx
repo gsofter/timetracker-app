@@ -20,8 +20,13 @@ import {
   Modal,
 } from 'antd';
 import { useFela } from 'react-fela';
-import { ITimesheetCreateRequest, ITimeRecord } from '@admin-layout/timetracker-module-core';
-import { IProject } from '@admin-layout/timetracker-module-core';
+import {
+  ITimesheetCreateRequest,
+  ITimeRecord,
+  IProject,
+  ITask,
+  IMember,
+} from '@admin-layout/timetracker-module-core';
 import Spacer from '../../components/Spacer';
 
 const { TextArea } = Input;
@@ -45,8 +50,8 @@ interface ITimesheetProps {
   selectedEvent: any;
   loading: boolean;
   projects: Array<IProject>;
-  tasks: Array<{ id: string; name: string }>;
-  members: Array<{ id: string; name: string }>;
+  tasks: Array<ITask>;
+  members: Array<IMember>;
   handleAddTimeRecordEvent: Function;
   handleUpdateTimeRecordEvent: Function;
   handleRemoveTimeRecordEvent: () => void;
@@ -72,7 +77,6 @@ function SelectableCalendar({
   handleAddTimeRecordEvent,
   handleUpdateTimeRecordEvent,
   handleRemoveTimeRecordEvent,
-  handleOpenAddTimeModal,
   handleCloseAddTimeModal,
   handleSelectSlot,
   handleSelectEvent,

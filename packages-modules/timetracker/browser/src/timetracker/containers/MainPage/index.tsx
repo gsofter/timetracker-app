@@ -17,6 +17,7 @@ import {
   useGetPlayingTimeRecordQuery,
   useRemoveTimeRecordMutation,
   useUpdateTimeRecordMutation,
+  useGetProjectsQuery,
 } from '../../../generated-models';
 import { ITimeRecordRequest, ITimeRecord, IProject } from '@admin-layout/timetracker-module-core';
 import { message } from 'antd';
@@ -32,6 +33,7 @@ interface ITimeTracker {
   timer: any;
   currentTimeRecord: ITimeRecord;
   isRecording: boolean;
+  projects: Array<IProject>;
   createTimeRecord: (ITimeRecordRequest) => void;
   removeTimeRecord: (string) => void;
   updateTimeRecord: (string, ITimeRecordRequest) => void;
@@ -41,24 +43,20 @@ interface ITimeTracker {
   setIsRecording: Function;
 }
 
-const projects: Array<IProject> = [
-  { id: '1', name: 'Project1' },
-  { id: '2', name: 'Project2' },
-];
-
 const TimeTracker = (props: ITimeTracker) => {
   const { css } = useFela();
   const {
     timeRecords,
-    createTimeRecord,
-    removeTimeRecord,
-    removePlayingTimeRecord,
-    updateTimeRecord,
     isMobile,
     timer,
-    setCurrentTimeRecord,
-    currentTimeRecord,
     isRecording,
+    projects,
+    currentTimeRecord,
+    createTimeRecord,
+    removeTimeRecord,
+    updateTimeRecord,
+    setCurrentTimeRecord,
+    removePlayingTimeRecord,
     resetTimerValues,
   } = props;
 
@@ -186,7 +184,7 @@ const TimeTrackerWrapper = props => {
   const [createMutation] = useCreateTimeRecordMutation();
   const [removeMutation] = useRemoveTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
-
+  const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   // create time record
   const createTimeRecord = (request: ITimeRecordRequest) => {
     createMutation({ variables: { request } })
@@ -276,6 +274,7 @@ const TimeTrackerWrapper = props => {
   return data && !loading ? (
     <TimeTracker
       {...props}
+      projects={_.get(projectsData, 'getProjects', [])}
       createTimeRecord={createTimeRecord}
       removeTimeRecord={removeTimeRecord}
       removePlayingTimeRecord={removePlayingTimeRecord}

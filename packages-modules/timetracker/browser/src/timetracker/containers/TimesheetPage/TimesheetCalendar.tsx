@@ -6,14 +6,13 @@ import {
   useUpdateTimeRecordMutation,
   useRemoveTimeRecordMutation,
 } from '../../../generated-models';
-import { ITimesheetCreateRequest, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
 import { message, Form } from 'antd';
 import moment from 'moment';
-import { IProject } from '@admin-layout/timetracker-module-core';
+import { ITimeRecordRequest, IProject, IMember } from '@admin-layout/timetracker-module-core';
 
 export interface ITimesheetCalendarProps {
   projects: Array<IProject>;
-  members: Array<{ id: string; name: string }>;
+  members: Array<IMember>;
   selectedUser: string;
   selectedProject: string;
   localizer: any;
