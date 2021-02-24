@@ -1,0 +1,6 @@
+query GetSettings {
+  getSettings @client {
+    startWeekDay
+    startYearWeek
+  }
+}

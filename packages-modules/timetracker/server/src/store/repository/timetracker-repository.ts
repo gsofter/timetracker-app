@@ -8,7 +8,6 @@ import {
   ITimeRecord,
   ITimesheet,
   ITimesheetCreateRequest,
-  ITimesheetState,
 } from '@admin-layout/timetracker-module-core';
 @injectable()
 export class TimeTrackerRepository implements ITimeTrackerRepository {

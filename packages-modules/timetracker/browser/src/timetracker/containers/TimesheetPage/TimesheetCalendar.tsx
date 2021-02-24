@@ -1,41 +1,52 @@
 import React, { useEffect, useState } from 'react';
 import TimesheetComponent from './Timesheet';
 import {
-  useCreateTimesheetMutation,
-  useUpdateTimesheetMutation,
-  useRemoveTimesheetMutation,
   useGetTimeRecordsQuery,
   useCreateTimeRecordMutation,
   useUpdateTimeRecordMutation,
   useRemoveTimeRecordMutation,
 } from '../../../generated-models';
-import { ITimesheetCreateRequest, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
 import { message, Form } from 'antd';
 import moment from 'moment';
-import { IProject } from '@admin-layout/timetracker-module-core';
+import { ITimeRecordRequest, IProject, IMember } from '@admin-layout/timetracker-module-core';
 
 export interface ITimesheetCalendarProps {
   projects: Array<IProject>;
-  members: Array<{ id: string; name: string }>;
+  members: Array<IMember>;
+  selectedUser: string;
+  selectedProject: string;
+  localizer: any;
+  showAddTimeModal: boolean;
+  handleChangeUser: (value: string) => void;
+  handleChangeProject: (value: string) => void;
+  handleOpenAddTimeModal: () => void;
+  handleCloseAddTimeModal: () => void;
 }
 
-const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
+const TimesheetCalendar = ({
+  projects,
+  members,
+  selectedUser,
+  selectedProject,
+  showAddTimeModal,
+  handleChangeUser,
+  handleChangeProject,
+  handleOpenAddTimeModal,
+  handleCloseAddTimeModal,
+}: ITimesheetCalendarProps) => {
   const [selectedEvent, setSelectedEvent] = useState(-1);
-  const [selectedUser, setSelectedUser] = useState('');
-  const [selectedProject, setSelectedProject] = useState('');
   const [selectedTask, setSelectedTask] = useState('');
   const [selectableTasks, setSelectableTasks] = useState([]);
   const [addMutation, { loading: loadingAdd }] = useCreateTimeRecordMutation();
   const [updateMutation, { loading: loadingUpdate }] = useUpdateTimeRecordMutation();
   const [removeMutation, { loading: loadingRemove }] = useRemoveTimeRecordMutation();
-  const [showModal, setShowModal] = useState(false);
   const [form] = Form.useForm();
   // create event handler
   const handleAddTimeRecordEvent = (request: ITimeRecordRequest) => {
     addMutation({ variables: { request } })
       .then(() => {
         message.success('A new event has been created!');
-        closeModal();
+        handleCloseAddTimeModal();
         refetch();
       })
       .catch(err => {
@@ -50,7 +61,7 @@ const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
       .then(() => {
         message.success('A new event has been updated!');
         refetch();
-        closeModal();
+        handleCloseAddTimeModal();
       })
       .catch(err => {
         console.log(err.message);
@@ -64,7 +75,7 @@ const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
       .then(() => {
         message.success('Event has removed');
         refetch();
-        closeModal();
+        handleCloseAddTimeModal();
       })
       .catch(err => {
         console.log(err.message);
@@ -83,7 +94,7 @@ const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
       note: event.note,
     });
     setSelectedEvent(event.id);
-    openModal();
+    handleOpenAddTimeModal();
   };
 
   // new slot selection handler
@@ -91,17 +102,9 @@ const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
     form.setFieldsValue({
       dateRange: [moment(start), moment(end)],
     });
-    openModal();
+    handleOpenAddTimeModal();
   };
 
-  const openModal = () => {
-    setShowModal(true);
-  };
-  const closeModal = () => {
-    setSelectedEvent(-1);
-    form.resetFields();
-    setShowModal(false);
-  };
   const { data, loading, error, refetch } = useGetTimeRecordsQuery();
   useEffect(() => {
     refetch();
@@ -122,16 +125,6 @@ const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
       });
   };
 
-  const handleChangeUser = value => {
-    setSelectedUser(value);
-  };
-
-  const handleChangeProject = value => {
-    setSelectedProject(value);
-    const selProject = projects.find(p => p.id === value);
-    setSelectableTasks(selProject.tasks);
-  };
-
   const handleChangeTask = value => {
     setSelectedTask(value);
   };
@@ -144,7 +137,7 @@ const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
       projects={projects}
       tasks={selectableTasks}
       members={members}
-      showModal={showModal}
+      showModal={showAddTimeModal}
       selectedUser={selectedUser}
       selectedProject={selectedProject}
       selectedTask={selectedTask}
@@ -152,8 +145,8 @@ const TimesheetCalendar = ({ projects, members }: ITimesheetCalendarProps) => {
       handleAddTimeRecordEvent={handleAddTimeRecordEvent}
       handleUpdateTimeRecordEvent={handleUpdateTimeRecordEvent}
       handleRemoveTimeRecordEvent={handleRemoveTimeRecordEvent}
-      handleOpenModal={openModal}
-      handleCloseModal={closeModal}
+      handleOpenAddTimeModal={handleOpenAddTimeModal}
+      handleCloseAddTimeModal={handleCloseAddTimeModal}
       handleSelectSlot={handleSelectSlot}
       handleSelectEvent={handleSelectEvent}
       handleChangeUser={handleChangeUser}

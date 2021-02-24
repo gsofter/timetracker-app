@@ -27,10 +27,10 @@ export type ClientCounter = {
   counter?: Maybe<Scalars['Int']>;
 };
 
-/** Database counter */
+/**  Database counter  */
 export type Counter = {
    __typename?: 'Counter';
-  /** Current amount */
+  /**  Current amount  */
   amount: Scalars['Int'];
 };
 
@@ -52,10 +52,10 @@ export type Member = {
 
 export type Mutation = {
    __typename?: 'Mutation';
-  /** Increase counter value returns current counter amount */
+  /**  Increase counter value returns current counter amount  */
   addCounter?: Maybe<Counter>;
   addCounterState?: Maybe<ClientCounter>;
-  /** add Counter */
+  /**  add Counter  */
   addMoleculerCounter?: Maybe<Counter>;
   addScheduleEvent?: Maybe<Scalars['Boolean']>;
   addTimelineEvent?: Maybe<Scalars['Boolean']>;
@@ -67,12 +67,13 @@ export type Mutation = {
   removeTimeRecord?: Maybe<Scalars['Boolean']>;
   removeTimelineEvent?: Maybe<Scalars['Boolean']>;
   removeTimesheet?: Maybe<Scalars['Boolean']>;
-  /** sync cached counter with current value */
+  /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
   updateScheduleEvent?: Maybe<Scalars['Boolean']>;
   updateTimeRecord?: Maybe<Scalars['Boolean']>;
   updateTimelineEvent?: Maybe<Scalars['Boolean']>;
   updateTimesheet?: Maybe<Scalars['Boolean']>;
+  updateTimesheetStatus?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -161,6 +162,11 @@ export type MutationUpdateTimesheetArgs = {
   request?: Maybe<TimesheetCreateRequest>;
 };
 
+
+export type MutationUpdateTimesheetStatusArgs = {
+  request?: Maybe<TimesheetCreateRequest>;
+};
+
 export type Project = {
    __typename?: 'Project';
   id?: Maybe<Scalars['String']>;
@@ -175,9 +181,9 @@ export type Project = {
 
 export type Query = {
    __typename?: 'Query';
-  /** Counter */
+  /**  Counter  */
   counter?: Maybe<Counter>;
-  /** Counter from Datasource */
+  /**  Counter from Datasource  */
   counterCache?: Maybe<Counter>;
   counterState?: Maybe<ClientCounter>;
   dummy?: Maybe<Scalars['Int']>;
@@ -190,7 +196,7 @@ export type Query = {
   getTimeRecords?: Maybe<Array<Maybe<TimeRecord>>>;
   getTimelineEvents?: Maybe<Array<Maybe<Timeline>>>;
   getTimesheets?: Maybe<Array<Maybe<Timesheet>>>;
-  /** Moleculer Counter */
+  /**  Moleculer Counter  */
   moleculerCounter?: Maybe<Counter>;
 };
 
@@ -251,7 +257,7 @@ export type ScheduleCreateRequest = {
 
 export type Subscription = {
    __typename?: 'Subscription';
-  /** Subscription fired when anyone increases counter */
+  /**  Subscription fired when anyone increases counter  */
   counterUpdated?: Maybe<Counter>;
   dummy?: Maybe<Scalars['Int']>;
   moleculerCounterUpdate?: Maybe<Counter>;
@@ -657,6 +663,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateTimeRecord?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateTimeRecordArgs, never>>,
   updateTimelineEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateTimelineEventArgs, never>>,
   updateTimesheet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateTimesheetArgs, never>>,
+  updateTimesheetStatus?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateTimesheetStatusArgs, never>>,
 };
 
 export type ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project'] = ResolversParentTypes['Project']> = {

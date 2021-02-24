@@ -1,18 +1,21 @@
 import moment from 'moment';
-import { GET_PROJECTS_CLIENT, GET_TAGS_CLIENT, GET_MEMBERS_CLIENT } from '../queries';
+import {
+  GET_PROJECTS_CLIENT,
+  GET_TAGS_CLIENT,
+  GET_MEMBERS_CLIENT,
+  GET_SETTINGS_CLIENT,
+} from '../queries';
+import { IStartYearWeekType } from '@admin-layout/timetracker-module-core';
 
 export const defaults = {
   getProjects: [
     {
       id: '1',
-      name: 'ProjectB',
-      clientId: 'ClientB',
+      name: 'ProjectA',
+      clientId: 'ClientA',
       teams: ['teamA', 'teamB'],
       orgName: 'OrgA',
-      tasks: [
-        { id: 'task1', name: 'PATaskA' },
-        { id: 'task2', name: 'PATaskB' },
-      ],
+      tasks: [{ id: 'task1', name: 'PATaskA', __typename: 'Task' }],
       updatedAt: moment().add('-1', 'day'),
       createdAt: moment().add('-1', 'day'),
       __typename: 'Project',
@@ -23,10 +26,95 @@ export const defaults = {
       clientId: 'ClientB',
       teams: ['teamA', 'teamB'],
       orgName: 'OrgA',
-      tasks: [
-        { id: 'task1', name: 'PATaskA' },
-        { id: 'task2', name: 'PATaskB' },
-      ],
+      tasks: [{ id: 'task2', name: 'PBTaskA', __typename: 'Task' }],
+      updatedAt: moment().add('-1', 'day'),
+      createdAt: moment().add('-1', 'day'),
+      __typename: 'Project',
+    },
+    {
+      id: '3',
+      name: 'ProjectC',
+      clientId: 'ClientA',
+      teams: ['teamA', 'teamB'],
+      orgName: 'OrgA',
+      tasks: [{ id: 'task3', name: 'PCTaskA', __typename: 'Task' }],
+      updatedAt: moment().add('-1', 'day'),
+      createdAt: moment().add('-1', 'day'),
+      __typename: 'Project',
+    },
+    {
+      id: '4',
+      name: 'ProjectD',
+      clientId: 'ClientA',
+      teams: ['teamA', 'teamB'],
+      orgName: 'OrgA',
+      tasks: [{ id: 'task4', name: 'PDTaskA', __typename: 'Task' }],
+      updatedAt: moment().add('-1', 'day'),
+      createdAt: moment().add('-1', 'day'),
+      __typename: 'Project',
+    },
+    {
+      id: '5',
+      name: 'ProjectE',
+      clientId: 'ClientA',
+      teams: ['teamA', 'teamB'],
+      orgName: 'OrgD',
+      tasks: [{ id: 'task5', name: 'PETaskA', __typename: 'Task' }],
+      updatedAt: moment().add('-1', 'day'),
+      createdAt: moment().add('-1', 'day'),
+      __typename: 'Project',
+    },
+    {
+      id: '6',
+      name: 'ProjectF',
+      clientId: 'ClientA',
+      teams: ['teamA', 'teamB'],
+      orgName: 'OrgD',
+      tasks: [{ id: 'task6', name: 'PETaskA', __typename: 'Task' }],
+      updatedAt: moment().add('-1', 'day'),
+      createdAt: moment().add('-1', 'day'),
+      __typename: 'Project',
+    },
+    {
+      id: '7',
+      name: 'ProjectG',
+      clientId: 'ClientB',
+      teams: ['teamA', 'teamB'],
+      orgName: 'OrgD',
+      tasks: [{ id: 'task7', name: 'PFTaskA', __typename: 'Task' }],
+      updatedAt: moment().add('-1', 'day'),
+      createdAt: moment().add('-1', 'day'),
+      __typename: 'Project',
+    },
+    {
+      id: '8',
+      name: 'ProjectH',
+      clientId: 'ClientA',
+      teams: ['teamA', 'teamB'],
+      orgName: 'OrgD',
+      tasks: [{ id: 'task8', name: 'PETaskA', __typename: 'Task' }],
+      updatedAt: moment().add('-1', 'day'),
+      createdAt: moment().add('-1', 'day'),
+      __typename: 'Project',
+    },
+    {
+      id: '9',
+      name: 'ProjectI',
+      clientId: 'ClientH',
+      teams: ['teamA', 'teamB'],
+      orgName: 'OrgD',
+      tasks: [{ id: 'task9', name: 'PETaskA', __typename: 'Task' }],
+      updatedAt: moment().add('-1', 'day'),
+      createdAt: moment().add('-1', 'day'),
+      __typename: 'Project',
+    },
+    {
+      id: '10',
+      name: 'ProjectJ',
+      clientId: 'ClientI',
+      teams: ['teamA', 'teamB'],
+      orgName: 'OrgD',
+      tasks: [{ id: 'task9', name: 'PITaskA', __typename: 'Task' }],
       updatedAt: moment().add('-1', 'day'),
       createdAt: moment().add('-1', 'day'),
       __typename: 'Project',
@@ -45,7 +133,14 @@ export const defaults = {
     },
     { id: 'user2', name: 'userB', __typename: 'Member' },
   ],
+
+  getSettings: {
+    startWeekDay: 0, // 0: Sunday, 1: Monday, ..., 6: Saturday
+    startYearWeek: IStartYearWeekType.FIRST_FOURDAY_WEEK,
+    __typename: 'Settings',
+  },
 };
+
 export const resolvers = {
   Query: {
     getProjects: (_, args, { cache }) => {
@@ -61,6 +156,11 @@ export const resolvers = {
     getMembers: (_, args, { cache }) => {
       const data = cache.readQuery({ query: GET_MEMBERS_CLIENT });
       return data.getMembers;
+    },
+
+    getSettings: (_, args, { cache }) => {
+      const data = cache.readQuery({ query: GET_SETTINGS_CLIENT });
+      return data.getSettings;
     },
   },
 };
