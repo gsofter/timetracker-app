@@ -25,6 +25,7 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 
+
 export const GetMembersDocument = gql`
     query GetMembers {
   getMembers @client {
@@ -489,6 +490,48 @@ export function useGetDurationTimeRecordsLazyQuery(baseOptions?: ApolloReactHook
 export type GetDurationTimeRecordsQueryHookResult = ReturnType<typeof useGetDurationTimeRecordsQuery>;
 export type GetDurationTimeRecordsLazyQueryHookResult = ReturnType<typeof useGetDurationTimeRecordsLazyQuery>;
 export type GetDurationTimeRecordsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetDurationTimeRecordsQuery, SchemaTypes.IGetDurationTimeRecordsQueryVariables>;
+export const GetDurationTimesheetDocument = gql`
+    query GetDurationTimesheet($start: DateTime, $end: DateTime) {
+  getDurationTimesheet(start: $start, end: $end) {
+    startDate
+    endDate
+    state
+  }
+}
+    `;
+export type GetDurationTimesheetComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>, 'query'>;
+
+    export const GetDurationTimesheetComponent = (props: GetDurationTimesheetComponentProps) => (
+      <ApolloReactComponents.Query<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables> query={GetDurationTimesheetDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetDurationTimesheetQuery__
+ *
+ * To run a query within a React component, call `useGetDurationTimesheetQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDurationTimesheetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetDurationTimesheetQuery({
+ *   variables: {
+ *      start: // value for 'start'
+ *      end: // value for 'end'
+ *   },
+ * });
+ */
+export function useGetDurationTimesheetQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>) {
+        return ApolloReactHooks.useQuery<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>(GetDurationTimesheetDocument, baseOptions);
+      }
+export function useGetDurationTimesheetLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>(GetDurationTimesheetDocument, baseOptions);
+        }
+export type GetDurationTimesheetQueryHookResult = ReturnType<typeof useGetDurationTimesheetQuery>;
+export type GetDurationTimesheetLazyQueryHookResult = ReturnType<typeof useGetDurationTimesheetLazyQuery>;
+export type GetDurationTimesheetQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>;
 export const GetPlayingTimeRecordDocument = gql`
     query GetPlayingTimeRecord {
   getPlayingTimeRecord {

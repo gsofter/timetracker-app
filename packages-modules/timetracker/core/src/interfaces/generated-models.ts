@@ -11,8 +11,8 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
-  Date: any;
   AnyObject: any;
+  Date: any;
   Time: any;
   JSON: any;
   JSONObject: any;
@@ -173,6 +173,7 @@ export type IQuery = {
   counterCache?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
   getDurationTimeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
+  getDurationTimesheet?: Maybe<ITimesheet>;
   getMembers?: Maybe<Array<Maybe<IMember>>>;
   getPlayingTimeRecord?: Maybe<ITimeRecord>;
   getProjects?: Maybe<Array<Maybe<IProject>>>;
@@ -190,6 +191,12 @@ export type IQuery = {
 export type IQuerygetDurationTimeRecordsArgs = {
   endTime?: Maybe<Scalars['DateTime']>;
   startTime?: Maybe<Scalars['DateTime']>;
+};
+
+
+export type IQuerygetDurationTimesheetArgs = {
+  end?: Maybe<Scalars['DateTime']>;
+  start?: Maybe<Scalars['DateTime']>;
 };
 
 
@@ -248,9 +255,9 @@ export type ISettings = {
 };
 
 export const enum IStartYearWeekType {
+  FIRST_DAY_WEEK = 'FIRST_DAY_WEEK',
   FIRST_FOURDAY_WEEK = 'FIRST_FOURDAY_WEEK',
-  FIRST_FULL_WEEK = 'FIRST_FULL_WEEK',
-  FIRST_DAY_WEEK = 'FIRST_DAY_WEEK'
+  FIRST_FULL_WEEK = 'FIRST_FULL_WEEK'
 };
 
 export type ISubscription = {
@@ -334,9 +341,9 @@ export type ITimeRecordRequest = {
 export type ITimesheet = {
    __typename?: 'Timesheet';
   approvedOn?: Maybe<Scalars['DateTime']>;
-  endDate?: Maybe<Scalars['Date']>;
+  endDate?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
-  startDate?: Maybe<Scalars['Date']>;
+  startDate?: Maybe<Scalars['DateTime']>;
   state?: Maybe<ITimesheetState>;
   submittedOn?: Maybe<Scalars['DateTime']>;
   updatedBy?: Maybe<Scalars['String']>;
@@ -345,8 +352,8 @@ export type ITimesheet = {
 
 export type ITimesheetCreateRequest = {
   approvedOn?: Maybe<Scalars['DateTime']>;
-  endDate?: Maybe<Scalars['Date']>;
-  startDate?: Maybe<Scalars['Date']>;
+  endDate?: Maybe<Scalars['DateTime']>;
+  startDate?: Maybe<Scalars['DateTime']>;
   state?: Maybe<ITimesheetState>;
   submittedOn?: Maybe<Scalars['DateTime']>;
   updatedBy?: Maybe<Scalars['String']>;
@@ -506,6 +513,20 @@ export type IGetDurationTimeRecordsQuery = (
   )>>> }
 );
 
+export type IGetDurationTimesheetQueryVariables = {
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
+};
+
+
+export type IGetDurationTimesheetQuery = (
+  { __typename?: 'Query' }
+  & { getDurationTimesheet?: Maybe<(
+    { __typename?: 'Timesheet' }
+    & Pick<ITimesheet, 'startDate' | 'endDate' | 'state'>
+  )> }
+);
+
 export type IGetPlayingTimeRecordQueryVariables = {};
 
 
@@ -647,6 +668,16 @@ export const GetDurationTimeRecordsDocument = gql`
 }
     `;
 export type GetDurationTimeRecordsQueryResult = ApolloReactCommon.QueryResult<IGetDurationTimeRecordsQuery, IGetDurationTimeRecordsQueryVariables>;
+export const GetDurationTimesheetDocument = gql`
+    query GetDurationTimesheet($start: DateTime, $end: DateTime) {
+  getDurationTimesheet(start: $start, end: $end) {
+    startDate
+    endDate
+    state
+  }
+}
+    `;
+export type GetDurationTimesheetQueryResult = ApolloReactCommon.QueryResult<IGetDurationTimesheetQuery, IGetDurationTimesheetQueryVariables>;
 export const GetPlayingTimeRecordDocument = gql`
     query GetPlayingTimeRecord {
   getPlayingTimeRecord {
@@ -765,8 +796,10 @@ export type IResolversTypes = {
   TimeRecord: ResolverTypeWrapper<ITimeRecord>,
   String: ResolverTypeWrapper<Scalars['String']>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  Member: ResolverTypeWrapper<IMember>,
+  Timesheet: ResolverTypeWrapper<ITimesheet>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
+  TimesheetState: ITimesheetState,
+  Member: ResolverTypeWrapper<IMember>,
   Project: ResolverTypeWrapper<IProject>,
   Task: ResolverTypeWrapper<ITask>,
   Schedule: ResolverTypeWrapper<ISchedule>,
@@ -774,9 +807,6 @@ export type IResolversTypes = {
   StartYearWeekType: IStartYearWeekType,
   Tag: ResolverTypeWrapper<ITag>,
   Timeline: ResolverTypeWrapper<ITimeline>,
-  Timesheet: ResolverTypeWrapper<ITimesheet>,
-  Date: ResolverTypeWrapper<Scalars['Date']>,
-  TimesheetState: ITimesheetState,
   Mutation: ResolverTypeWrapper<{}>,
   ScheduleCreateRequest: IScheduleCreateRequest,
   TimelineCreateRequest: ITimelineCreateRequest,
@@ -784,6 +814,7 @@ export type IResolversTypes = {
   TimesheetCreateRequest: ITimesheetCreateRequest,
   Subscription: ResolverTypeWrapper<{}>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
   Time: ResolverTypeWrapper<Scalars['Time']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
@@ -800,8 +831,10 @@ export type IResolversParentTypes = {
   TimeRecord: ITimeRecord,
   String: Scalars['String'],
   Boolean: Scalars['Boolean'],
-  Member: IMember,
+  Timesheet: ITimesheet,
   ID: Scalars['ID'],
+  TimesheetState: ITimesheetState,
+  Member: IMember,
   Project: IProject,
   Task: ITask,
   Schedule: ISchedule,
@@ -809,9 +842,6 @@ export type IResolversParentTypes = {
   StartYearWeekType: IStartYearWeekType,
   Tag: ITag,
   Timeline: ITimeline,
-  Timesheet: ITimesheet,
-  Date: Scalars['Date'],
-  TimesheetState: ITimesheetState,
   Mutation: {},
   ScheduleCreateRequest: IScheduleCreateRequest,
   TimelineCreateRequest: ITimelineCreateRequest,
@@ -819,6 +849,7 @@ export type IResolversParentTypes = {
   TimesheetCreateRequest: ITimesheetCreateRequest,
   Subscription: {},
   AnyObject: Scalars['AnyObject'],
+  Date: Scalars['Date'],
   Time: Scalars['Time'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
@@ -901,6 +932,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   counterCache?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   getDurationTimeRecords?: Resolver<Maybe<Array<Maybe<IResolversTypes['TimeRecord']>>>, ParentType, ContextType, RequireFields<IQuerygetDurationTimeRecordsArgs, never>>,
+  getDurationTimesheet?: Resolver<Maybe<IResolversTypes['Timesheet']>, ParentType, ContextType, RequireFields<IQuerygetDurationTimesheetArgs, never>>,
   getMembers?: Resolver<Maybe<Array<Maybe<IResolversTypes['Member']>>>, ParentType, ContextType>,
   getPlayingTimeRecord?: Resolver<Maybe<IResolversTypes['TimeRecord']>, ParentType, ContextType>,
   getProjects?: Resolver<Maybe<Array<Maybe<IResolversTypes['Project']>>>, ParentType, ContextType>,
@@ -992,9 +1024,9 @@ export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolver
 
 export type ITimesheetResolvers<ContextType = any, ParentType extends IResolversParentTypes['Timesheet'] = IResolversParentTypes['Timesheet']> = {
   approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  endDate?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  endDate?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   id?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType>,
-  startDate?: Resolver<Maybe<IResolversTypes['Date']>, ParentType, ContextType>,
+  startDate?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   state?: Resolver<Maybe<IResolversTypes['TimesheetState']>, ParentType, ContextType>,
   submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   updatedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,

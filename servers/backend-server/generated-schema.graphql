@@ -204,8 +204,8 @@ enum TimesheetState {
 
 type Timesheet {
   id: ID
-  startDate: Date # (only Date without time)
-  endDate: Date # (only Date without time)
+  startDate: DateTime # (only Date without time)
+  endDate: DateTime # (only Date without time)
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
@@ -214,8 +214,8 @@ type Timesheet {
 }
 
 input TimesheetCreateRequest {
-  startDate: Date
-  endDate: Date
+  startDate: DateTime
+  endDate: DateTime
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
@@ -225,6 +225,7 @@ input TimesheetCreateRequest {
 
 extend type Query {
   getTimesheets(userId: String): [Timesheet]
+  getDurationTimesheet(start: DateTime, end: DateTime): Timesheet
 }
 
 extend type Mutation {

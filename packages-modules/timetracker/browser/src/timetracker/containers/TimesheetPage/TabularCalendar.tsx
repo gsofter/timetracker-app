@@ -1,27 +1,40 @@
-import React, { CSSProperties, ReactNode, useEffect, useState } from 'react';
-import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm, Modal } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm, Modal, Tag } from 'antd';
 import moment, { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
-import { ITimeRecord, ITimeRecordRequest, IProject } from '@admin-layout/timetracker-module-core';
+import {
+  ITimeRecord,
+  ITimeRecordRequest,
+  ITimesheetCreateRequest,
+  IProject,
+  ITimesheetState,
+  ITimesheet,
+} from '@admin-layout/timetracker-module-core';
 import { TimesheetInput } from '../../components/TimesheetInput';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import {
   useGetDurationTimeRecordsQuery,
+  useGetDurationTimesheetQuery,
   useRemoveDurationTimeRecordsMutation,
   useUpdateTimeRecordMutation,
   useCreateTimeRecordMutation,
+  useCreateTimesheetMutation,
 } from '../../../generated-models';
 import { formatDuration } from '../../services/timeRecordService';
+import CSS from 'csstype';
+import * as _ from 'lodash';
 
 interface ITabularCalendar {
   weekStart: Moment;
   setWeekStart: Function;
   records: ITimeRecord[];
   projects: Array<IProject>;
+  timesheet: ITimesheet | null;
   handleRemoveDuration: Function;
   updateTimeRecord: Function;
   createTimeRecord: Function;
+  createTimesheet: Function;
 }
 
 const TabularCalendar = ({
@@ -29,9 +42,11 @@ const TabularCalendar = ({
   setWeekStart,
   records,
   projects,
+  timesheet,
   handleRemoveDuration,
   updateTimeRecord,
   createTimeRecord,
+  createTimesheet,
 }: ITabularCalendar) => {
   const { css } = useFela();
   const [trackedProjects, setTrackedProjects] = useState<Array<IProject>>([]);
@@ -127,6 +142,18 @@ const TabularCalendar = ({
   };
 
   const handleSubmitApproval = (event: React.MouseEvent<HTMLButtonElement>) => {
+    event.preventDefault();
+    const approvalRequest: ITimesheetCreateRequest = {
+      startDate: moment(weekStart),
+      endDate: moment(weekStart).add(1, 'week'),
+      state: ITimesheetState.SUBMITTED,
+      submittedOn: moment(),
+    };
+    createTimesheet(approvalRequest);
+    setShowApprovalModal(false);
+  };
+
+  const openSubmitApproval = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     setShowApprovalModal(true);
   };
@@ -355,8 +382,9 @@ const TabularCalendar = ({
         </tbody>
       </table>
       <Row className="table-footer">
+        {timesheet ? <Tag color="blue"> {timesheet.state} </Tag> : ''}
         <div className="spacer"></div>
-        <Button type="primary" onClick={handleSubmitApproval}>
+        <Button type="primary" onClick={openSubmitApproval} disabled={timesheet !== null}>
           Submit For Approval
         </Button>
       </Row>
@@ -386,18 +414,34 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
     },
   });
 
+  const {
+    data: approvalData,
+    loading: loadingApproval,
+    refetch: refetchApproval,
+  } = useGetDurationTimesheetQuery({
+    variables: {
+      start: moment(weekStart),
+      end: moment(weekStart).add(1, 'week'),
+    },
+  });
+
+  const reloadData = () => {
+    refetch();
+    refetchApproval();
+  };
+
   useEffect(() => {
     setWeekStart(moment().startOf('week'));
   }, []);
 
   useEffect(() => {
-    refetch();
+    reloadData();
   }, [weekStart]);
 
   const [createMutation] = useCreateTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
   const [removeMutation] = useRemoveDurationTimeRecordsMutation();
-
+  const [createTimesheetMutation] = useCreateTimesheetMutation();
   const handleRemoveDuration = pId => {
     console.log('handleRemoveDuration => ', weekStart);
     removeMutation({
@@ -440,6 +484,18 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
       });
   };
 
+  // create timeSheet
+  const createTimesheet = (request: ITimesheetCreateRequest) => {
+    createTimesheetMutation({ variables: { request } })
+      .then(() => {
+        refetchApproval();
+        message.success('Timesheet Created');
+      })
+      .catch(error => {
+        message.error(error.message);
+      });
+  };
+
   if (!data || loading) return null;
   return (
     <Spin spinning={!data || loading}>
@@ -448,20 +504,24 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
         setWeekStart={setWeekStart}
         records={filterEvents(data?.getDurationTimeRecords)}
         projects={projects}
+        timesheet={_.get(approvalData, 'getDurationTimesheet', null)}
         handleRemoveDuration={handleRemoveDuration}
         createTimeRecord={createTimeRecord}
         updateTimeRecord={updateTimeRecord}
+        createTimesheet={createTimesheet}
       />
     </Spin>
   );
 };
 
-const styles: { [property: string]: (props) => CSSProperties } = {
+const styles: { [property: string]: (props) => CSS.Properties } = {
   root: props => ({
     display: 'block',
     '& .table-footer': {
       display: 'flex',
       flexDirection: 'row',
+      paddingTop: '10px',
+      paddingBottom: '10px',
     },
     '& .spacer': {
       flexGrow: '1',

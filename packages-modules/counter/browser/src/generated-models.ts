@@ -14,8 +14,8 @@ export type Scalars = {
   Int: number;
   Float: number;
   DateTime: any;
-  Date: any;
   AnyObject: any;
+  Date: any;
   Time: any;
   JSON: any;
   JSONObject: any;
@@ -188,10 +188,12 @@ export type Query = {
   counterState?: Maybe<ClientCounter>;
   dummy?: Maybe<Scalars['Int']>;
   getDurationTimeRecords?: Maybe<Array<Maybe<TimeRecord>>>;
+  getDurationTimesheet?: Maybe<Timesheet>;
   getMembers?: Maybe<Array<Maybe<Member>>>;
   getPlayingTimeRecord?: Maybe<TimeRecord>;
   getProjects?: Maybe<Array<Maybe<Project>>>;
   getScheduleEvents?: Maybe<Array<Maybe<Schedule>>>;
+  getSettings?: Maybe<Settings>;
   getTags?: Maybe<Array<Maybe<Tag>>>;
   getTimeRecords?: Maybe<Array<Maybe<TimeRecord>>>;
   getTimelineEvents?: Maybe<Array<Maybe<Timeline>>>;
@@ -204,6 +206,12 @@ export type Query = {
 export type QueryGetDurationTimeRecordsArgs = {
   startTime?: Maybe<Scalars['DateTime']>;
   endTime?: Maybe<Scalars['DateTime']>;
+};
+
+
+export type QueryGetDurationTimesheetArgs = {
+  start?: Maybe<Scalars['DateTime']>;
+  end?: Maybe<Scalars['DateTime']>;
 };
 
 
@@ -254,6 +262,18 @@ export type ScheduleCreateRequest = {
   note?: Maybe<Scalars['String']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
 };
+
+export type Settings = {
+   __typename?: 'Settings';
+  startWeekDay?: Maybe<Scalars['Int']>;
+  startYearWeek?: Maybe<StartYearWeekType>;
+};
+
+export enum StartYearWeekType {
+  FirstFourdayWeek = 'FIRST_FOURDAY_WEEK',
+  FirstFullWeek = 'FIRST_FULL_WEEK',
+  FirstDayWeek = 'FIRST_DAY_WEEK'
+}
 
 export type Subscription = {
    __typename?: 'Subscription';
@@ -336,8 +356,8 @@ export type TimeRecordRequest = {
 export type Timesheet = {
    __typename?: 'Timesheet';
   id?: Maybe<Scalars['ID']>;
-  startDate?: Maybe<Scalars['Date']>;
-  endDate?: Maybe<Scalars['Date']>;
+  startDate?: Maybe<Scalars['DateTime']>;
+  endDate?: Maybe<Scalars['DateTime']>;
   state?: Maybe<TimesheetState>;
   submittedOn?: Maybe<Scalars['DateTime']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
@@ -346,8 +366,8 @@ export type Timesheet = {
 };
 
 export type TimesheetCreateRequest = {
-  startDate?: Maybe<Scalars['Date']>;
-  endDate?: Maybe<Scalars['Date']>;
+  startDate?: Maybe<Scalars['DateTime']>;
+  endDate?: Maybe<Scalars['DateTime']>;
   state?: Maybe<TimesheetState>;
   submittedOn?: Maybe<Scalars['DateTime']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
@@ -544,16 +564,17 @@ export type ResolversTypes = {
   TimeRecord: ResolverTypeWrapper<TimeRecord>,
   String: ResolverTypeWrapper<Scalars['String']>,
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
-  Member: ResolverTypeWrapper<Member>,
+  Timesheet: ResolverTypeWrapper<Timesheet>,
   ID: ResolverTypeWrapper<Scalars['ID']>,
+  TimesheetState: TimesheetState,
+  Member: ResolverTypeWrapper<Member>,
   Project: ResolverTypeWrapper<Project>,
   Task: ResolverTypeWrapper<Task>,
   Schedule: ResolverTypeWrapper<Schedule>,
+  Settings: ResolverTypeWrapper<Settings>,
+  StartYearWeekType: StartYearWeekType,
   Tag: ResolverTypeWrapper<Tag>,
   Timeline: ResolverTypeWrapper<Timeline>,
-  Timesheet: ResolverTypeWrapper<Timesheet>,
-  Date: ResolverTypeWrapper<Scalars['Date']>,
-  TimesheetState: TimesheetState,
   Mutation: ResolverTypeWrapper<{}>,
   ScheduleCreateRequest: ScheduleCreateRequest,
   TimelineCreateRequest: TimelineCreateRequest,
@@ -561,6 +582,7 @@ export type ResolversTypes = {
   TimesheetCreateRequest: TimesheetCreateRequest,
   Subscription: ResolverTypeWrapper<{}>,
   AnyObject: ResolverTypeWrapper<Scalars['AnyObject']>,
+  Date: ResolverTypeWrapper<Scalars['Date']>,
   Time: ResolverTypeWrapper<Scalars['Time']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
@@ -578,16 +600,17 @@ export type ResolversParentTypes = {
   TimeRecord: TimeRecord,
   String: Scalars['String'],
   Boolean: Scalars['Boolean'],
-  Member: Member,
+  Timesheet: Timesheet,
   ID: Scalars['ID'],
+  TimesheetState: TimesheetState,
+  Member: Member,
   Project: Project,
   Task: Task,
   Schedule: Schedule,
+  Settings: Settings,
+  StartYearWeekType: StartYearWeekType,
   Tag: Tag,
   Timeline: Timeline,
-  Timesheet: Timesheet,
-  Date: Scalars['Date'],
-  TimesheetState: TimesheetState,
   Mutation: {},
   ScheduleCreateRequest: ScheduleCreateRequest,
   TimelineCreateRequest: TimelineCreateRequest,
@@ -595,6 +618,7 @@ export type ResolversParentTypes = {
   TimesheetCreateRequest: TimesheetCreateRequest,
   Subscription: {},
   AnyObject: Scalars['AnyObject'],
+  Date: Scalars['Date'],
   Time: Scalars['Time'],
   JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
@@ -684,10 +708,12 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   counterState?: Resolver<Maybe<ResolversTypes['ClientCounter']>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   getDurationTimeRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimeRecord']>>>, ParentType, ContextType, RequireFields<QueryGetDurationTimeRecordsArgs, never>>,
+  getDurationTimesheet?: Resolver<Maybe<ResolversTypes['Timesheet']>, ParentType, ContextType, RequireFields<QueryGetDurationTimesheetArgs, never>>,
   getMembers?: Resolver<Maybe<Array<Maybe<ResolversTypes['Member']>>>, ParentType, ContextType>,
   getPlayingTimeRecord?: Resolver<Maybe<ResolversTypes['TimeRecord']>, ParentType, ContextType>,
   getProjects?: Resolver<Maybe<Array<Maybe<ResolversTypes['Project']>>>, ParentType, ContextType>,
   getScheduleEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<QueryGetScheduleEventsArgs, never>>,
+  getSettings?: Resolver<Maybe<ResolversTypes['Settings']>, ParentType, ContextType>,
   getTags?: Resolver<Maybe<Array<Maybe<ResolversTypes['Tag']>>>, ParentType, ContextType>,
   getTimeRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimeRecord']>>>, ParentType, ContextType>,
   getTimelineEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Timeline']>>>, ParentType, ContextType, RequireFields<QueryGetTimelineEventsArgs, never>>,
@@ -710,6 +736,12 @@ export type ScheduleResolvers<ContextType = any, ParentType extends ResolversPar
   reason?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   note?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   approvedOn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type SettingsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Settings'] = ResolversParentTypes['Settings']> = {
+  startWeekDay?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  startYearWeek?: Resolver<Maybe<ResolversTypes['StartYearWeekType']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -768,8 +800,8 @@ export type TimeRecordResolvers<ContextType = any, ParentType extends ResolversP
 
 export type TimesheetResolvers<ContextType = any, ParentType extends ResolversParentTypes['Timesheet'] = ResolversParentTypes['Timesheet']> = {
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  startDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>,
-  endDate?: Resolver<Maybe<ResolversTypes['Date']>, ParentType, ContextType>,
+  startDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  endDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   state?: Resolver<Maybe<ResolversTypes['TimesheetState']>, ParentType, ContextType>,
   submittedOn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   approvedOn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
@@ -800,6 +832,7 @@ export type Resolvers<ContextType = any> = {
   Project?: ProjectResolvers<ContextType>,
   Query?: QueryResolvers<ContextType>,
   Schedule?: ScheduleResolvers<ContextType>,
+  Settings?: SettingsResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
   Tag?: TagResolvers<ContextType>,
   Task?: TaskResolvers<ContextType>,
