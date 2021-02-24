@@ -45,13 +45,13 @@
     "@admin-layout/react-shared-components": "file:../../../packages/react-shared-components",
     "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser",
     "@admin-layout/components": "file:../../../packages/components",
-    "@common-stack/client-core": "0.0.249",
+    "@common-stack/client-core": "0.0.251",
     "@common-stack/client-react": "0.0.249",
     "@common-stack/core": "0.0.249"
   },
   "peerDependencies": {
-    "@common-stack/client-react": ">=0.0.249",
-    "@common-stack/core": ">=0.0.249",
+    "@common-stack/client-react": ">=0.0.251",
+    "@common-stack/core": ">=0.0.251",
     "antd": "^4.5.2"
   },
   "typings": "lib/index.d.ts",

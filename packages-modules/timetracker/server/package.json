@@ -46,7 +46,7 @@
     "@admin-layout/timetracker-module-core": "file:../core"
   },
   "peerDependencies": {
-    "@common-stack/server-core": ">=0.0.249"
+    "@common-stack/server-core": ">=0.0.251"
   },
   "typings": "lib/index.d.ts",
   "typescript": {
