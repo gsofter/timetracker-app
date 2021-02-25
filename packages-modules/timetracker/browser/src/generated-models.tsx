@@ -261,7 +261,11 @@ export type CreateTimesheetMutationResult = ApolloReactCommon.MutationResult<Sch
 export type CreateTimesheetMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.ICreateTimesheetMutation, SchemaTypes.ICreateTimesheetMutationVariables>;
 export const RemoveDurationTimeRecordsDocument = gql`
     mutation RemoveDurationTimeRecords($startTime: DateTime, $endTime: DateTime, $projectId: String) {
-  removeDurationTimeRecords(startTime: $startTime, endTime: $endTime, projectId: $projectId)
+  removeDurationTimeRecords(
+    startTime: $startTime
+    endTime: $endTime
+    projectId: $projectId
+  )
 }
     `;
 export type IRemoveDurationTimeRecordsMutationFn = ApolloReactCommon.MutationFunction<SchemaTypes.IRemoveDurationTimeRecordsMutation, SchemaTypes.IRemoveDurationTimeRecordsMutationVariables>;

@@ -66,12 +66,12 @@
     "zen:watch:debug": "npm run zen:watch -- -v"
   },
   "dependencies": {
+    "@admin-layout/activity-module-browser": "file:packages-modules/activity/browser",
+    "@admin-layout/activity-module-server": "file:packages-modules/activity/server",
     "@admin-layout/components": "file:packages/components",
     "@admin-layout/core": "file:packages/admin-core",
     "@admin-layout/counter-module-browser": "file:packages-modules/counter/browser",
     "@admin-layout/counter-module-server": "file:packages-modules/counter/server",
-    "@admin-layout/activity-module-browser": "file:packages-modules/activity/browser",
-    "@admin-layout/activity-module-server": "file:packages-modules/activity/server",
     "@admin-layout/platform-browser": "file:packages/admin-platform/browser",
     "@admin-layout/platform-server": "file:packages/admin-platform/server",
     "@admin-layout/react-shared-components": "file:packages/react-shared-components",
@@ -79,15 +79,18 @@
     "@admin-layout/schedule-module-core": "file:packages-modules/schedule/core",
     "@admin-layout/schedule-module-server": "file:packages-modules/schedule/server",
     "@admin-layout/timetracker-module-browser": "file:packages-modules/timetracker/browser",
-    "@admin-layout/timetracker-module-server": "file:packages-modules/timetracker/server",
     "@admin-layout/timetracker-module-core": "file:packages-modules/timetracker/core",
+    "@admin-layout/timetracker-module-server": "file:packages-modules/timetracker/server",
     "@cdm-logger/client": "^5.0.7",
     "@cdm-logger/core": "^6.0.0",
     "@cdm-logger/server": "^6.0.0",
+    "@vscode/monaco-editor": "^0.21.2",
     "admin-layout-backend-server": "file:servers/backend-server",
     "admin-layout-frontend-server": "file:servers/frontend-server",
     "admin-layout-moleculer-server": "file:servers/moleculer-server",
-    "dataloader": "^2.0.0"
+    "dataloader": "^2.0.0",
+    "graphql": "^14.5.8",
+    "graphql-tools": "^4.0.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",

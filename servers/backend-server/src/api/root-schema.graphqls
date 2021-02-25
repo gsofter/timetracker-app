@@ -2,8 +2,12 @@ scalar AnyObject
 scalar Date
 scalar Time
 scalar DateTime
+scalar URI
+scalar URIInput
 scalar JSON
 scalar JSONObject
+
+
 type FieldError {
   field: String!
   message: String!
@@ -30,4 +34,46 @@ schema {
     query: Query
     mutation: Mutation
     subscription: Subscription
+}
+
+
+
+"""
+ AuthUser fields based on JSON Web Token extraction.
+"""
+type AuthUserRaw {
+  given_name: String
+  family_name: String
+  nickname: String
+  name: String
+  email: String
+  email_verified: Boolean
+  picture: String
+  locale: String
+  updated_at: String
+  iss: String
+  sub: String
+  aud: String
+  iat: Int
+  exp: Int
+  at_hash: String
+  nonce: String
+}
+
+type AuthUser {
+    id: ID!
+
+    # Must be unique
+    # Make it required if Auth0 is the only authorization method in your app
+    auth0UserId: String
+
+    # These are some example properties that we read from Auth0
+    # They are optional because Auth0 might not have the information
+    username: String
+    email: String
+    emailVerified: String
+    givenName: String
+    familyName: String
+    picture: String
+
 }

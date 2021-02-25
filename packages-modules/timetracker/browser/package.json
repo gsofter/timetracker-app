@@ -46,7 +46,9 @@
     "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser",
     "@admin-layout/react-shared-components": "file:../../../packages/react-shared-components",
     "@admin-layout/timetracker-module-core": "file:../core",
-    "@cdmbase/react-big-scheduler": "^0.2.8",
+    "react-dnd": "^11.1.3",
+    "react-dnd-html5-backend": "^11.1.3",
+    "react-big-calendar": "0.28.6",
     "react-compound-timer": "^1.2.0",
     "react-custom-scrollbars": "^4.2.1",
     "react-date-range": "1.0.0-beta",
@@ -60,7 +62,7 @@
     "yup": "0.27.0"
   },
   "devDependencies": {
-    "@types/react-big-calendar": "^0.24.8"
+    "@types/react-big-calendar": "^0.30.0"
   },
   "peerDependencies": {
     "@common-stack/client-react": ">=0.0.251",

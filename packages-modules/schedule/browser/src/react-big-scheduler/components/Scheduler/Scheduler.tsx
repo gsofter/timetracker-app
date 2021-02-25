@@ -14,7 +14,7 @@ import { PageContainer } from '@admin-layout/components';
 import { DeleteOutlined } from '@ant-design/icons';
 
 const { RangePicker } = DatePicker;
-const DnDCalendar = withDragAndDrop(Calendar);
+const DnDCalendar: any = withDragAndDrop(Calendar as any);
 const localizer = momentLocalizer(moment);
 
 const allViews: View[] = ['agenda', 'day', 'week', 'month'];
