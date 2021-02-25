@@ -105,7 +105,7 @@
     "fela-plugin-unit": "^11.0.2",
     "fela-plugin-validator": "^11.0.2",
     "fela-preset-web": "^11.0.2",
-    "graphql": "^14.5.8",
+    "graphql": "^14.7.0",
     "graphql-tag": "^2.10.1",
     "history": "^4.10.1",
     "immutability-helper": "^3.0.1",
@@ -138,7 +138,6 @@
     "rxjs-hooks": "^0.5.2",
     "serialize-javascript": "^2.1.2",
     "sourcemapped-stacktrace": "^1.1.11",
-    "subscriptions-transport-ws": "0.9.16",
     "universal-cookie-express": "^4.0.1"
   },
   "devDependencies": {

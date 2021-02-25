@@ -87,7 +87,9 @@
     "admin-layout-backend-server": "file:servers/backend-server",
     "admin-layout-frontend-server": "file:servers/frontend-server",
     "admin-layout-moleculer-server": "file:servers/moleculer-server",
-    "dataloader": "^2.0.0"
+    "dataloader": "^2.0.0",
+    "graphql": "^14.7.0",
+    "graphql-tools": "^4.0.6"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",
@@ -280,7 +282,7 @@
   },
   "engines": {
     "node": ">=12.18.4 < 14.0.0",
-    "npm": ">=6.x < 7.x"
+    "npm": ">=6.x <= 7.x"
   },
   "cacheDirectories": [
     ".cache"
