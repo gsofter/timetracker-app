@@ -43,7 +43,7 @@
   "license": "ISC",
   "dependencies": {
     "@common-stack/core": "0.0.251",
-    "@common-stack/server-core": "0.0.249"
+    "@common-stack/server-core": "0.0.251"
   },
   "peerDependencies": {
     "@common-stack/server-core": ">=0.0.251"
