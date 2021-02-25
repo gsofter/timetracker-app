@@ -30,7 +30,7 @@ import {
 import Spacer from '../../components/Spacer';
 
 const { TextArea } = Input;
-const DnDCalendar = withDragAndDrop(Calendar);
+const DnDCalendar = withDragAndDrop(Calendar as any);
 const localizerM = momentLocalizer(moment);
 const { RangePicker } = TimePicker;
 const allViews: View[] = ['day', 'week', 'month'];
