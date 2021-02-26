@@ -1,5 +1,5 @@
 {
-  "name": "admin-stack",
+  "name": "admin-layout",
   "version": "0.6.1",
   "private": true,
   "homepage": "https://github.com/cdmbase/admin-layout#readme",
@@ -93,7 +93,8 @@
     "admin-layout-backend-server": "file:servers/backend-server",
     "admin-layout-frontend-server": "file:servers/frontend-server",
     "admin-layout-moleculer-server": "file:servers/moleculer-server",
-    "dataloader": "^2.0.0"
+    "dataloader": "^2.0.0",
+    "graphql": "^14.7.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",

@@ -22,7 +22,7 @@ const resourceMap = [
   { resourceId: '3', resourceTitle: 'Project3', stackItems: true },
   { resourceId: '4', resourceTitle: 'Project4', stackItems: true },
   { resourceId: '5', resourceTitle: 'Project5', stackItems: true },
-];
+] as any;
 
 const keys = {
   groupIdKey: 'resourceId',
@@ -34,7 +34,7 @@ const keys = {
   itemTimeStartKey: 'start',
   itemTimeEndKey: 'end',
   groupLabelKey: 'resourceTitle',
-};
+} as any;
 
 const SM_SCREEN_SIZE = 768;
 
@@ -298,7 +298,7 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
         onItemMove={handleItemMove}
         onItemResize={handleItemResize}
         itemHeightRatio={0.75}
-        fullUpdate={true}
+        // fullUpdate={true}
         itemTouchSendsClick={false}
         stackItems
         visibleTimeStart={visibleTimeStart}
@@ -322,7 +322,7 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
                     <span className="month">{curTime.format('MMM')}</span>
                   </div>
                 </div>
-              );
+              ) as any;
             }}
             style={{ height: 100 }}
             intervalRenderer={({ getIntervalProps, intervalContext, data }) => {

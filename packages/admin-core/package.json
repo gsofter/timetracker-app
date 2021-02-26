@@ -1,5 +1,5 @@
 {
-  "name": "@admin-stack/core",
+  "name": "@admin-layout/core",
   "version": "0.0.1",
   "description": "Sample core for higher packages to depend on",
   "license": "ISC",

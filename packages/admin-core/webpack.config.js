@@ -11,8 +11,7 @@ var webpack_opts = {
   output: {
     path: path.join(__dirname, 'lib'),
     filename: 'index.js',
-    libraryTarget: "commonjs2",
-    library: "@admin-layout/core",
+    libraryTarget: "commonjs2"
   },
   resolve: {
     extensions: ['.ts', '.js'],
