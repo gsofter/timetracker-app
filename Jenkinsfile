@@ -2,7 +2,11 @@
 def GIT_BRANCH_NAME=getGitBranchName()
 
 pipeline {
-  agent any
+  agent {
+    kubernetes{
+      label 'jenkins-slave-v3'
+    }
+  }
   parameters {
     string(name: 'REPOSITORY_SERVER', defaultValue: 'gcr.io/stack-test-186501', description: 'Registry server URL to pull/push images', trim: true)
     string(name: 'NAMESPACE', defaultValue: 'admin-layout', description: 'In which namespace micro services needs to be deploy', trim: true)
@@ -20,6 +24,7 @@ pipeline {
 
     // by default first value of the choice will be choosen
     choice choices: ['auto', 'force'], description: 'Choose merge strategy', name: 'NPM_PUBLISH_STRATEGY'
+    choice choices: ['0.2.0', '0.1.22'], description: 'Choose Idestack chart version', name: 'IDESTACK_CHART_VERSION'
     choice choices: ['buildOnly', 'buildAndPublish', 'dev', 'stage', 'prod', 'allenv'], description: 'Where to deploy micro services?', name: 'ENV_CHOICE'
     booleanParam (defaultValue: false, description: 'Tick to enable debug mode', name: 'DEBUG')
     string(name: 'BUILD_TIME_OUT', defaultValue: '120', description: 'Build timeout in minutes', trim: true)
@@ -79,7 +84,7 @@ pipeline {
           sh """
             echo "what is docker git version $GIT_BRANCH_NAME -- ${params.ENV_CHOICE}"
             npm install
-            npm run lerna
+            yarn lerna
           """
        }
     }
@@ -92,7 +97,7 @@ pipeline {
       }
       steps{
         sh """
-          npm run build
+          yarn build
         """
       }
     }
@@ -107,8 +112,8 @@ pipeline {
           git checkout develop
           git merge ${env.GIT_PR_BRANCH_NAME} -m 'auto merging'
           npm install
-          npm run lerna
-          npm run build
+          yarn lerna
+          yarn build
         """
         script {
           GIT_BRANCH_NAME = 'develop'
@@ -134,7 +139,7 @@ pipeline {
             git diff-index --quiet HEAD || git commit -am 'auto build\r\n[skip ci]'
             git fetch origin develop
             git checkout develop
-            npm run devpublish:${params.NPM_PUBLISH_STRATEGY}
+            yarn devpublish:${params.NPM_PUBLISH_STRATEGY}
             git push origin develop
             git checkout devpublish
           """
@@ -186,9 +191,8 @@ pipeline {
       }
 
       steps {
-       withKubeConfig([credentialsId: 'kubernetes-dev-cluster', serverUrl: 'https://35.225.221.114']) {
+       withKubeConfig([credentialsId: 'kubernetes-preproduction-1-cluster', serverUrl: 'https://35.243.206.245']) {
          sh """
-            helm init --stable-repo-url=https://charts.helm.sh/stable --client-only
             helm repo add stable https://charts.helm.sh/stable
             helm repo add incubator https://charts.helm.sh/incubator
             helm repo add kube-orchestration https://"""+ GITHUB_HELM_REPO_TOKEN +"""@raw.githubusercontent.com/cdmbase/kube-orchestration/develop
@@ -229,9 +233,8 @@ pipeline {
 
       steps {
         load "./jenkins_variables.groovy"
-        withKubeConfig([credentialsId: 'kubernetes-staging-cluster', serverUrl: 'https://35.193.45.188']) {
+        withKubeConfig([credentialsId: 'kubernetes-dev-cluster', serverUrl: 'https://35.225.221.114']) {
           sh """
-            helm init --stable-repo-url=https://charts.helm.sh/stable --client-only
             helm repo add stable https://charts.helm.sh/stable
             helm repo add incubator https://charts.helm.sh/incubator
             helm repo add kube-orchestration https://"""+ GITHUB_HELM_REPO_TOKEN +"""@raw.githubusercontent.com/cdmbase/kube-orchestration/develop
@@ -387,6 +390,7 @@ def generateStage(server, environmentType) {
             --set frontend.pullPolicy=Always \
             --set backend.pullPolicy=Always \
             --set ingress.domain=${env.DOMAIN_NAME} \
+            --version=${IDESTACK_CHART_VERSION} \
               kube-orchestration/idestack
             """
 
@@ -421,7 +425,7 @@ def generateBuildStage(server) {
       def name = getName(pwd() + params.DEPLOYMENT_PATH + "/${server}/package.json")
       def version = getVersion(pwd() + params.DEPLOYMENT_PATH + "/${server}/package.json")
         sh """
-            lerna exec --scope=*${server} npm run docker:${env.BUILD_COMMAND}
+            lerna exec --scope=*${server} yarn docker:${env.BUILD_COMMAND}
             docker tag ${name}:${version} ${REPOSITORY_SERVER}/${name}:${version}
             docker push ${REPOSITORY_SERVER}/${name}:${version}
             docker rmi ${REPOSITORY_SERVER}/${name}:${version}
