@@ -111,16 +111,24 @@ const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
         </Col>
       </Row>
       <Row align="middle" gutter={[24, 16]}>
-        <Col md={6} xs={16} style={{ top: '-10px' }}>
-          <span>Select Timezone</span>
-          <TimezonePicker
-            value="Asia/Yerevan"
-            onChange={handleSelectTimezone}
-            inputProps={{
-              placeholder: 'Select Timezone...',
-              name: 'timezone',
-            }}
-          />
+        <Col md={4} xs={16}>
+          <Form
+            labelCol={{ span: 20 }}
+            wrapperCol={{ span: 20 }}
+            layout="vertical"
+            className="sm-screen-size"
+          >
+            <Form.Item label="Timezone Picker">
+              <TimezonePicker
+                value="Asia/Yerevan"
+                onChange={handleSelectTimezone}
+                inputProps={{
+                  placeholder: 'Select Timezone...',
+                  name: 'timezone',
+                }}
+              />
+            </Form.Item>
+          </Form>
         </Col>
         <Col md={4} xs={16}>
           <Form

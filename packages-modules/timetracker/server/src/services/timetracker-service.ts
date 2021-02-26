@@ -40,6 +40,10 @@ export class TimeTrackerService implements ITimeTrackerService {
     return this.trackerRepository.getTimesheets(userId, orgId);
   }
 
+  public async getDurationTimesheet(userId: string, orgId: string, start: Date, end: Date): Promise<ITimesheet> {
+    return this.trackerRepository.getDurationTimesheet(userId, orgId, start, end);
+  }
+
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
     return this.trackerRepository.getPlayingTimeRecord(userId, orgId);
   }

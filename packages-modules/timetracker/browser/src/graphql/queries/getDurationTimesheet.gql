@@ -1,0 +1,7 @@
+query GetDurationTimesheet($start: DateTime, $end: DateTime) {
+  getDurationTimesheet(start: $start, end: $end) {
+    startDate
+    endDate
+    state
+  }
+}

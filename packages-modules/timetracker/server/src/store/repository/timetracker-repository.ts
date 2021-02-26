@@ -8,7 +8,10 @@ import {
   ITimeRecord,
   ITimesheet,
   ITimesheetCreateRequest,
+  ITimeTracker,
+  ITimesheetState
 } from '@admin-layout/timetracker-module-core';
+
 @injectable()
 export class TimeTrackerRepository implements ITimeTrackerRepository {
   private timeTrackerModel: TimeTrackerModelType;
@@ -82,6 +85,33 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
       return [];
     }
   }
+
+  public async getDurationTimesheet(userId: string, orgId: string, start: Date, end:Date): Promise<ITimesheet> {
+    const trackDoc = await this.timeTrackerModel.aggregate([
+      { 
+        $project: {
+          userId, orgId,
+          timesheets : { 
+            $filter: {
+              input: '$timesheets',
+              as: 'timesheets',
+              cond:{ 
+                $and: [
+                  { $eq: ["$$timesheets.startDate", start ] },
+                  { $eq: ["$$timesheets.endDate", end ]},
+              ]} 
+            }
+          }
+        }
+      }
+    ]) as [ITimeTracker];
+
+    console.log('trackDoc ==>', trackDoc)
+    if(trackDoc && trackDoc[0].timesheets.length > 0)  
+      return trackDoc[0].timesheets[0]
+    return null;
+  }
+
 
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
     console.log('getPlayingTimeRecord.userId', userId);

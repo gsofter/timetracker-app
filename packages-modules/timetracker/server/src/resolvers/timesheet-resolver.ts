@@ -1,12 +1,19 @@
 import { request } from 'express';
 import { DEFAULT_USER, DEFAULT_ORG } from '../constants'
+import { ITimesheet } from '@admin-layout/timetracker-module-core'
+
 export const resolver = (options) => ({
     Query: {
       getTimesheets: (root, args, { timeTrackerService }) => {
         options.logger.trace('(Query.getTimeSheets) args %j', args)
         return timeTrackerService.getTimesheets(DEFAULT_USER, DEFAULT_ORG);
       },
+      getDurationTimesheet: (root, args, { timeTrackerService }) => {
+        options.logger.trace('(Query.getTimeSheets) args %j', args)
+        return timeTrackerService.getDurationTimesheet(DEFAULT_USER, DEFAULT_ORG, args.start, args.end);
+      },
     },
+    
     Mutation: {
       createTimesheet: (root, args, { timeTrackerService }) => {
         options.logger.trace('(Mutation.createTimesheet) args %j', args)

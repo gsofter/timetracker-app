@@ -17,6 +17,11 @@ export interface ITimeTrackerService {
     getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>>
 
     /**
+     * Get Timesheet for duration
+     */
+    getDurationTimesheet(userId: string, orgId: string, start: Date, end: Date): Promise<ITimesheet>
+
+    /**
      * Get Playing TimeRecord
      */
     getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>
