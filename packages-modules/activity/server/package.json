@@ -41,7 +41,6 @@
   },
   "author": "CDMBase LLC",
   "license": "ISC",
-
   "peerDependencies": {
     "@common-stack/server-core": ">=0.0.251"
   },

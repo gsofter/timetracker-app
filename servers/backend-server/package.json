@@ -100,7 +100,7 @@
     "envalid": "6.0.1",
     "esm": "^3.2.25",
     "express": "^4.17.1",
-    "graphql": "^14.5.8",
+    "graphql": "^14.7.0",
     "graphql-bigint": "^1.0.0",
     "graphql-iso-date": "^3.6.1",
     "graphql-nats-subscriptions": "^1.4.2",
@@ -120,7 +120,7 @@
     "reflect-metadata": "^0.1.13",
     "rxjs": "^6.5.3",
     "rxjs-compat": "^6.5.3",
-    "subscriptions-transport-ws": "0.9.16",
+    "subscriptions-transport-ws": "0.9.18",
     "universal-cookie-express": "^4.0.1",
     "ws": "^7.2.1"
   },
