@@ -246,13 +246,13 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
         }}
         menuContentRender={menuContentRender}
         menuFooterRender={menuFooterRender}
-        breadcrumbRender={(routers = []) => [
-          {
-            path: '/',
-            breadcrumbName: formatMessage({ id: 'menu.home' }),
-          },
-          ...routers,
-        ]}
+        // breadcrumbRender={(routers = []) => [
+        //   {
+        //     path: '/',
+        //     breadcrumbName: formatMessage({ id: 'menu.home' }),
+        //   },
+        //   // ...routers,
+        // ]}
         itemRender={(route, params, routes, paths) => {
           const first = routes.indexOf(route) === 0;
           return first ? (
