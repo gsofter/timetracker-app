@@ -12,11 +12,6 @@
   },
   "license": "MIT",
   "author": "CDMBase LLC",
-  "workspaces": [
-    "packages-modules/**",
-    "packages/**",
-    "servers/*"
-  ],
   "scripts": {
     "build": "npm run build:packages",
     "build:clean": "lerna exec npm run build:clean",
@@ -91,11 +86,15 @@
     "@cdm-logger/core": "^6.0.0",
     "@cdm-logger/server": "^6.0.0",
     "admin-layout-backend-server": "file:servers/backend-server",
+    "admin-layout-desktop": "file:portable-devices/desktop",
     "admin-layout-frontend-server": "file:servers/frontend-server",
     "admin-layout-moleculer-server": "file:servers/moleculer-server",
     "dataloader": "^2.0.0",
     "graphql": "^14.7.0",
-    "graphql-tools": "^4.0.8"
+    "graphql-tag": "^2.11.0",
+    "graphql-tools": "^4.0.8",
+    "react": "^16.14.0",
+    "react-dom": "^16.14.0"
   },
   "devDependencies": {
     "@babel/cli": "^7.7.7",
@@ -134,7 +133,7 @@
     "@graphql-codegen/typescript-operations": "1.13.5",
     "@graphql-codegen/typescript-react-apollo": "1.13.5",
     "@graphql-codegen/typescript-resolvers": "1.13.5",
-    "@hot-loader/react-dom": "^16.11.0",
+    "@hot-loader/react-dom": "^16.14.0",
     "@larix/zen": "0.1.35",
     "@shelf/jest-mongodb": "^1.1.5",
     "@types/async": "^3.0.3",

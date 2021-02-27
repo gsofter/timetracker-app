@@ -1,12 +1,24 @@
 import * as React from 'react';
 import { Layout } from 'antd';
 import { Route, Switch } from 'react-router';
-import counterModules from '@admin-layout/counter-module-browser';
 import { Feature, FeatureWithRouterFactory } from '@common-stack/client-react';
-
+import LayoutModule, { ProLayout } from '@admin-layout/react-shared-components';
+import CounterModule from '@admin-layout/counter-module-browser';
+import PlatformModule from '@admin-layout/platform-browser';
+import ScheduleModule from '@admin-layout/schedule-module-browser';
+import ActivityModule from '@admin-layout/activity-module-browser';
+import TimeTrackerModule from '@admin-layout/timetracker-module-browser';
 import { SiderMenu } from './layout';
 
-const features = new Feature(FeatureWithRouterFactory, counterModules);
+const features = new Feature(
+    FeatureWithRouterFactory,
+    LayoutModule,
+    PlatformModule,
+    CounterModule,
+    ScheduleModule,
+    TimeTrackerModule,
+    ActivityModule,
+);
 
 console.log(features.getMenus());
 
@@ -19,8 +31,8 @@ export const MainRoute = props => (
             segments={features.sidebarSegments}
         />
         <Layout>
-            <Layout.Content style={{height: '100%'}}>
-                <section className="flex-grow" style={{height: '100%'}}>
+            <Layout.Content style={{ height: '100%' }}>
+                <section className="flex-grow" style={{ height: '100%' }}>
                     {features.getRoutes()}
                 </section>
             </Layout.Content>

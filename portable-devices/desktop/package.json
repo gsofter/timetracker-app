@@ -1,8 +1,8 @@
 {
-  "name": "admin-layout-desktop-server",
+  "name": "admin-layout-desktop",
   "version": "0.0.1",
   "private": true,
-  "description": "Sample Desktop server",
+  "description": "Sample Desktop",
   "homepage": "https://github.com/cdmbase/fullstack-pro#readme",
   "bugs": {
     "url": "https://github.com/cdmbase/fullstack-pro/issues"
@@ -38,9 +38,14 @@
     "@common-stack/client-react": "0.0.251",
     "@common-stack/core": "0.0.251",
     "@common-stack/server-core": "0.0.251",
-    "@admin-layout/core": "file:../../packages/sample-core",
+    "@admin-layout/platform-browser": "file:../../packages/admin-platform/browser",
+    "@admin-layout/core": "file:../../packages/admin-core",
+    "@admin-layout/components": "file:../../packages/components",
     "@admin-layout/counter-module-browser": "file:../../packages-modules/counter/browser",
-    "@admin-layout/platform-browser": "file:../../packages/sample-platform/browser",
+    "@admin-layout/activity-module-browser": "file:../../packages-modules/activity/browser",
+    "@admin-layout/react-shared-components": "file:../../packages/react-shared-components",
+    "@admin-layout/schedule-module-browser": "file:../../packages-modules/schedule/browser",
+    "@admin-layout/timetracker-module-browser": "file:../../packages-modules/timetracker/browser",
     "antd": "^4.5.2",
     "apollo-cache-inmemory": "^1.6.5",
     "apollo-client": "^2.6.8",
