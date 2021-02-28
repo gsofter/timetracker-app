@@ -31,7 +31,1181 @@ schema {
     mutation: Mutation
     subscription: Subscription
 }
-""" Database counter """
+
+enum ConfigCollectionName{
+    accounts
+    organizations
+    workspaces
+    teams
+    projects
+    clients
+}
+
+enum ConfigFragmentName {
+    resources
+    settings
+    policies
+    applicationPolicies
+    roles
+    contributionRoles
+
+    """ Team Members Document with role value """
+    teamMembers
+    """ Organization Members Document with role value """
+    orgMembers
+}
+
+"""
+ A segment of a key path that locates a nested JSON value in a root JSON value. Exactly one field in each
+ KeyPathSegment must be non-null.
+
+ For example, in {"a": [0, {"b": 3}]}, the value 3 is located at the key path ["a", 1, "b"].
+"""
+input KeyPathSegment {
+    """ The name of the property in the object at this location to descend into. """
+    property: String
+    """ The index of the array at this location to descend into. """
+    index: Int
+}
+
+union SettingsSubject = UserSettings | LocalUserSettings | RemoteUserSettings | OrganizationResourceSettings | GlobalSettings | OrganizationSettings | MemorySettings | DefaultSettings
+
+""" 
+ The configuration for all of the relevant settings subjects, plus the merged settings.
+"""
+type SettingsCascade {
+    """
+     The other settings subjects that are applied with lower precedence that this subject to
+     form the final merged settings. For example, a user in 2 organizations would have the following
+     settings subjects: site (global settings), org 1, org 2 and the user.
+    """
+    subjects: [SettingsSubject]
+
+    """
+     The effective final merged settings as (stringified) JSON, merged from all of the subjects.
+    """
+    final: String
+
+    """
+     The effective final merged settings as Object, merged from all of the subjects.
+    """
+    finalConfiguration: Preferences
+}
+"""
+ Settings is a version of a configuration settings file.
+""" 
+type Settings {
+    """ 
+     The time when this was created. 
+    """
+    createdAt: String
+
+    """
+     The stringified JSON contents of the settings. The contents may include "//"-style comments and trailing
+     commas in the JSON.
+    """ 
+    contents: String!
+}
+
+"""
+ ISettingsSubject is something that can have settings: a site ("global settings", which is different from "site
+ configuration"), an organization, or a user.
+"""
+interface ISettingsSubject {
+    """ The ID. """
+    id: ID
+
+    """ The latest settings. """
+    latestSettings: Settings 
+
+    """ The URL to the settings. """
+    settingsURL: URI!
+
+    """ Whether the viewer can modify the subject's settings. """
+    viewerCanAdminister: Boolean!
+
+    """
+     All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
+     that were merged to produce the final merged settings.
+    """
+    settingsCascade: SettingsCascade!
+}
+
+"""
+ UserSettings is a combination of LocalUserSettings and RemoteUserSettings
+""" 
+type UserSettings implements ISettingsSubject {
+    # """ User ID """
+    # userId: ID!
+    """ The ID. """
+    id: ID
+    """
+     The latest settings for the user.
+
+     Only the user and site admins can access this field.
+    """
+    latestSettings: Settings
+    """
+     The URL to the user's settings.
+    """
+    settingsURL: URI!
+    """
+     Whether the viewer has admin privileges on this user. The user has admin privileges on their own user, and
+     site admins have admin privileges on all users.
+    """
+    viewerCanAdminister: Boolean!
+    """
+     All settings for this user, and the individual levels in the settings cascade (global > organization > user)
+     that were merged to produce the final merged settings.
+
+     Only the user and site admins can access this field.
+    """
+    settingsCascade: SettingsCascade!   
+}
+
+type LocalUserSettings implements ISettingsSubject {
+    """ The ID. """
+    id: ID
+    """ The latest settings. """
+    latestSettings: Settings 
+    
+    """ The URL to the settings. """
+    settingsURL: URI!
+    
+    """ Whether the viewer can modify the subject's settings."""
+    viewerCanAdminister: Boolean!
+    
+    """ 
+     All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
+     that were merged to produce the final merged settings.
+    """
+    settingsCascade: SettingsCascade!       
+}
+
+type RemoteUserSettings implements ISettingsSubject {
+    """ The ID. """
+    id: ID
+    """ The latest settings. """
+    latestSettings: Settings 
+    
+    """ The URL to the settings. """
+    settingsURL: URI!
+    
+    """ Whether the viewer can modify the subject's settings."""
+    viewerCanAdminister: Boolean!
+    
+    """ 
+     All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
+     that were merged to produce the final merged settings.
+    """
+    settingsCascade: SettingsCascade!       
+}
+
+type DefaultSettings implements ISettingsSubject {
+    """ The ID. """
+    id: ID
+    """ The latest settings. """
+    latestSettings: Settings 
+    
+    """ The URL to the settings. """
+    settingsURL: URI!
+    
+    """ Whether the viewer can modify the subject's settings."""
+    viewerCanAdminister: Boolean!
+    
+    """ 
+     All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
+     that were merged to produce the final merged settings.
+    """
+    settingsCascade: SettingsCascade!       
+}
+
+type OrganizationResourceSettings implements ISettingsSubject {
+    """ The ID. """
+    id: ID
+    """ The latest settings. """
+    latestSettings: Settings 
+    
+    """ The URL to the settings. """
+    settingsURL: URI!
+    
+    """ Whether the viewer can modify the subject's settings."""
+    viewerCanAdminister: Boolean!
+    
+    """ 
+     All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
+     that were merged to produce the final merged settings.
+    """
+    settingsCascade: SettingsCascade!       
+}
+
+type OrganizationSettings implements ISettingsSubject {
+    """ The ID. """
+    id: ID
+    """ The latest settings. """
+    latestSettings: Settings 
+    
+    """ The URL to the settings. """
+    settingsURL: URI!
+    
+    """ Whether the viewer can modify the subject's settings."""
+    viewerCanAdminister: Boolean!
+    
+    """ 
+     All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
+     that were merged to produce the final merged settings.
+    """
+    settingsCascade: SettingsCascade!       
+}
+
+type GlobalSettings implements ISettingsSubject {
+    """ The ID. """
+    id: ID
+    """ The latest settings. """
+    latestSettings: Settings 
+
+    """ The URL to the settings. """
+    settingsURL: URI!
+    """ Whether the viewer can modify the subject's settings. """
+    viewerCanAdminister: Boolean!
+
+    """ 
+     All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
+     that were merged to produce the final merged settings.
+    """
+    settingsCascade: SettingsCascade!   
+}
+
+type MemorySettings implements ISettingsSubject {
+    """ The ID. """
+    id: ID
+    """ The latest settings. """
+    latestSettings: Settings 
+    
+    """ The URL to the settings. """
+    settingsURL: URI!
+    
+    """ Whether the viewer can modify the subject's settings."""
+    viewerCanAdminister: Boolean!
+    
+    """ 
+     All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
+     that were merged to produce the final merged settings.
+    """
+    settingsCascade: SettingsCascade!       
+}
+
+
+type PreferencesResponse {
+  preferences: [PreferencesType]
+}
+
+type PreferencesType {
+  type: String,
+  data: [ContributionSettings],
+}
+
+type PreferenceItem {
+    name: String,
+    type: String,
+    default: String,
+    description: String,
+    categoryType: String,
+    settings: String,
+    enum: [String],
+    enumDescriptions: [String]
+}
+
+
+input ViewerSettingsInput {
+    target: Int!
+    """
+     To get the Resource or Organization resource of which we need to get the settings.
+     If we pass the <resource> URI, we can construct the orgUri in background to merge as a parent
+     configuration to the resource configuration.
+    """
+    settingsResource: URI
+    """
+     User resource to identify the core user settings. 
+     For guest user, we don't have to define it.
+    """
+    userResource: URI
+}
+
+type ViewerSettingsSubject {
+    """ The URL to the settings. """
+    settingsURL: URI!
+
+    """
+     Graphql typed settings
+    """
+    settings: Preferences
+}
+
+extend type Query {
+    """ 
+        Default Preferences 
+        @deprecated not used
+    """
+    defaultPreferences: PreferencesResponse
+
+    """
+     The settings for the viewer. The viewer is either an anonymous visitor (in which case viewer settings is
+     global settings) or an authenticated user (in which case viewer settings are the user's settings).
+    """
+    viewerSettings(input: ViewerSettingsInput): ViewerSettingsSubject!
+    """
+     The default settings for the requested ConfigurationTarget
+     Note: Due to bug in graphql we using  `target: Int` argument instead of  `target:ConfigurationTarget`
+     https://github.com/apollographql/apollo-server/issues/2556
+    """
+    defaultViewerSettingsSubject(target: Int): DefaultSettings!
+
+}
+
+extend type Mutation {
+
+    setSettingsValueByResource(uri: URI, key: String, value: String): Boolean
+}
+
+
+
+"""
+ A configuration settings can have one of the following possible scopes.
+ Configuration scopes determine when a settings is available to the user through the Settings editor and
+ whether the setting is applicable. If no scope is declared, the default is `window`.
+"""
+enum ConfigurationScope {
+    """
+     Application specific configuration, which can be configured only in local user settings.
+    """
+    APPLICATION
+    """
+     Machine specific configuration, which can be configured only in local and remote user settings.
+    """
+    MACHINE
+    """
+     Window specific configuration, which can be configured in the user or organization settings.
+    """
+    WINDOW
+    """
+     Resource specific configuration, which can be configured in the user, organization or workspace settings.
+    """
+    RESOURCE
+}
+
+type IConfigurationChangeEvent {
+    source: ConfigurationTarget
+    affectedKeys: [String]
+    sourceConfig: AnyObject
+    changedConfiguration: Configuration
+    changedConfigurationByResource: OrganizationResourceConfiguration
+}
+
+type ConfigurationExtensionInfo {
+    id: String
+}
+
+type ConfigurationData {
+    defaults: IConfigurationModel
+    user: IConfigurationModel
+    organization: IConfigurationModel
+    resources: [IConfigurationModel]
+    isComplete: Boolean
+}
+
+type Overrides {
+    contents: AnyObject
+    identifiers: [String]
+}
+
+type ConfigurationOverrides {
+    resource: URI
+    overrideIdentifier: String
+}
+
+
+input ConfigurationOverrides_Input {
+    resource: URI
+    overrideIdentifier: String
+}
+
+enum ConfigurationTarget {
+    """
+     Targets the user configuration file for writing.
+    """
+    USER
+    USER_LOCAL
+    USER_REMOTE
+    """
+     Targets the organization configuration file for writing. This only works if a organization is opened.
+    """
+    ORGANIZATION
+    """
+     Targets the resource configuration file for writing. This only works if a organization is opened.
+    """
+    ORGANIZATION_RESOURCE
+    DEFAULT
+    MEMORY
+}
+
+interface IConfigurationService {
+    updateValue(key: String!, value: AnyObject!, overrides: ConfigurationOverrides_Input!, target: ConfigurationTarget, donotNotifyError: Boolean): Boolean
+}
+
+
+# Backward support
+type ConfigurationModel {
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides]
+}
+
+type OrganizationConfiguration implements IConfigurationModel {
+    """ The ID. """
+    id: ID
+    resource: URI!
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides]
+}
+type OrganizationResourceConfiguration implements IConfigurationModel {
+    """ The ID. """
+    id: ID
+    resource: URI!
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides]
+}
+type DefaultConfiguration implements IConfigurationModel {
+    """ The ID. """
+    id: ID
+    """
+     The URL to the user's settings.
+    """
+    resource: URI!
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides]
+}
+
+type UserConfiguration implements IConfigurationModel {
+    """ The ID. """
+    id: ID
+    """
+     The URL to the user's settings.
+    """
+    resource: URI!
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides]
+}
+
+union Configuration = DefaultConfiguration | UserConfiguration | OrganizationConfiguration | OrganizationResourceConfiguration
+
+interface IConfigurationModel {
+    resource: URI
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides]
+}
+
+input ConfigurationInput {
+    target: Int!
+    resource: URIInput
+}
+
+type ConfigurationUpdateEvent{
+    resource: URI!,
+    contents: AnyObject
+    overrides: ConfigurationOverrides
+    target: Int
+}
+extend type Query {
+    getConfigurationData: ConfigurationData @addAccountContext
+
+    getConfiguration(input: [ConfigurationInput]): [Configuration] @addAccountContext
+
+}
+
+extend type Mutation {
+    initiateConfigurationValue(resource: URI): Boolean
+    updateConfigurationValue(key: String!, value: AnyObject!, overrides: ConfigurationOverrides_Input, target: Int, donotNotifyError: Boolean): Boolean @addAccountContext
+    updateConfigurationValueByUri(resource: URI, key: String!, value: AnyObject!, overrides: ConfigurationOverrides_Input, target: Int, donotNotifyError: Boolean): Boolean @addAccountContext
+}
+
+extend type Subscription {
+    SubscribeToConfigurationUpdate(orgName: String!): ConfigurationUpdateEvent
+}
+
+
+type Position {
+  line: Int,
+  character: Int
+}
+
+type Range {
+    """
+     @lsp
+     The range's start position.
+    """
+    start: Position
+    """
+     @lsp
+     The range's end position.
+    """
+    end: Position
+    """
+     @editor - Line number on which the range starts (starts at 1).
+    """
+    startLineNumber: Int
+    """
+     @editor - Column on which the range starts in the line `startLineNumber` (starts at 1).
+    """
+    startColumn: Int
+    """
+     @editor - Line number on which the range ends.
+    """
+    endLineNumber: Int
+    """
+     @editor - Column on which the range ends in the line `endLineNumber`
+    """
+    endColumn: Int
+}
+
+enum SettingValueType {
+    Null
+    Enum
+    String 
+    Integer
+    Number 
+    Boolean 
+    Exclude 
+    Complex 
+    NullableInteger 
+    NullableNumber
+}
+
+type SettingsGroup {
+    id: String
+    range: Range
+    title: String
+    titleRange: Range
+    sections: [SettingsSection]
+    contributedByExtension: Boolean
+}
+
+type SettingsSection {
+    titleRange: Range
+    title: String
+    settings: [ContributionSettings]
+}
+
+type ContributionSettings {
+    """ name of the settings"""
+    name: String
+    range: Range 
+    key: String
+    keyRange: Range 
+    """ @deprecated """
+    default: String
+    value: AnyObject 
+    valueRange: Range 
+    description: [String]
+    descriptionIsMarkdown: Boolean
+    descriptionRanges: [Range]
+    overrides: [ContributionSettings]
+    overrideOf: ContributionSettings
+    deprecationMessage: String
+    scope: ConfigurationScope
+    type: [String]
+    enum: [String]
+    enumDescriptions: [String]
+    enumDescriptionsAreMarkdown: Boolean
+    tags: [String]
+    extensionInfo: ConfigurationExtensionInfo
+}
+
+
+extend type Query {
+    defaultSetting: ContributionSettings
+}
+
+extend type Preferences {
+  defaultSetting: [SettingsGroup]
+}
+
+
+
+
+type OrganizationIdentifier {
+    id: String
+    configPath: URI
+}
+
+
+type OrganizationResourceData {
+    """
+     The associated URI for this workspace folder.
+    """
+    uri: URI
+    """
+     The name of this workspace folder. Defaults to the basename its [uri-path](#Uri.path)
+    """
+    name: String
+    """
+     The ordinal number of this workspace folder.
+    """
+    index: Int
+}
+
+type OrganizationData {
+    """
+     The unique identifier of the workspace.
+    """
+    id: String!
+    """
+     Resources in the organization.
+    """
+    resources: [OrganizationResourceData]
+    """
+     The location of the organization configuration
+    """
+    configuration: URI
+    """
+     Organization name
+    """
+    name: String
+}
+
+type SubscribedOrganizationData {
+    """
+     Resources in the organization.
+    """
+    resources: [OrganizationResourceData]
+    orgNameFilter: String
+}
+
+"""
+ Subscription event for context
+"""
+enum OrganizationContextPubSubEvents {
+    OrganizationContextUpdated
+    OrganizationPolicyUpdated
+    OrganizationConfigurationUpdated
+    OrganizationPermissionUpdated
+}
+
+
+input OrganizationResourceCreationData_Input {
+    uri: URI!
+    name: String
+}
+
+input OrganizationConfigValue_Input {
+    section: String
+    overrides: ConfigurationOverrides_Input
+}
+
+
+extend type Query {
+
+    getOrganizationResourceContext(orgId: String): OrganizationData @addAccountContext
+
+    getOrganizationConfigValue(value: OrganizationConfigValue_Input): AnyObject
+}
+
+extend type Mutation {
+    updateOrganizationContextAddResources(orgId: String, resourcesToAdd: [OrganizationResourceCreationData_Input]!, index: Int ): [OrganizationResourceData] @addAccountContext
+
+    updateOrganizationContextRemoveResources(resourcesToRemove: [URI!]!): [OrganizationResourceData] @addAccountContext
+
+    updateOrganizationContextUpdateResources(resourcesToAdd: [OrganizationResourceCreationData_Input]!, resourcesToRemove: [URI]!, index: Int): [OrganizationResourceData] @addAccountContext
+}
+
+extend type Subscription {
+    SubscribeToOrganizationContext(orgNameFilter: String): SubscribedOrganizationData
+}
+
+
+
+type Preferences {
+    dummy: Int
+}
+
+
+
+
+
+
+
+enum PermissionType {
+    Allow
+    Deny
+    NotSet
+}
+
+
+enum PermissionAction{
+    View
+    Create
+    Edit
+    Delete
+    Manage
+}
+
+enum PermissionResource{
+    Roles
+    Permissions
+    Settings
+}
+
+type PermissionSubject {
+    """ The URL to the roles. """
+    roleURL: URI!
+    """
+     The time when this was created.
+    """
+    createdAt: String
+
+    """
+     The stringified JSON contents of the permissions.
+    """
+    permissions: AnyObject!
+
+}
+
+extend type Query {
+    """
+     Return the permissions groups
+    """
+    defaultPermissions(target: Int): [SettingsGroup]
+
+    """
+     Shortcut way to send merged defautPermissions with applicaiton role's permission.
+    """
+    mergedApplicationPermissions(roleName: String): [ContributionSettings]
+
+    """
+     Get the available roles and its descriptions
+    """
+
+    getViewerPermissions(input: RoleInput): PermissionSubject
+
+}
+
+extend type Subscription {
+    SubscribeToPermissionUpdate(orgName: String): ConfigurationUpdateEvent
+}
+
+
+
+enum PreDefinedRole {
+    OWNER
+    ADMIN
+    MAINTAINER
+    MEMBER
+    PROJECT_ADMIN
+    BILLING_LEADER
+    DIRECT_MEMBER
+    VIEWER
+    GUEST
+    CONTRIBUTORS
+}
+
+
+enum ApplicationRoles {
+    OWNER
+    ADMIN
+    CONTRIBUTORS
+    PROJECT_ADMIN
+    PROJECT_VIEWER
+    GUEST
+}
+
+interface IResourceUserRole {
+    role: String
+    name: String
+    isSelf: Boolean
+    orgName: String
+}
+
+type ResourceUser implements IResourceUserRole {
+    role: String
+    name: String
+    isSelf: Boolean
+    orgName: String
+}
+
+type DefaultRole implements IConfigurationModel {
+    resource: URI
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides]
+}
+
+type OrganizationRole implements IConfigurationModel {
+    resource: URI
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides] 
+}
+
+type ResourceRole implements IConfigurationModel {
+    resource: URI
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides] 
+}
+
+type ApplicationRolePermission implements IConfigurationModel {
+    resource: URI
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides] 
+}
+
+union AccessRole = DefaultRole | OrganizationRole | ResourceRole | ApplicationRolePermission
+
+
+input RoleInput {
+    target: Int!
+    resource: URIInput
+    roleName: String
+}
+
+extend type Query {
+    getRole(input: RoleInput): AccessRole @addAccountContext
+    getRoles(input: [RoleInput]): [AccessRole] @addAccountContext
+
+    getContributionRoles: [ContributionRoles] @addAccountContext
+}
+
+extend type Mutation {
+    updateRoleValue(key: String!, value: AnyObject!, overrides: ConfigurationOverrides_Input, target: Int, donotNotifyError: Boolean): Boolean @addAccountContext
+    addContributionRole(name: String!, description: String): Boolean @addAccountContext
+}
+
+
+
+"""
+ Contributed Roles added by the user to customize the role's permissions
+"""
+type ContributionRoles {
+    id: String
+    name: String
+    target: Int
+    description: String
+    permissions: AccessRole
+}
+
+
+
+type DefaultPolicy implements IConfigurationModel {
+    resource: URI
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides]
+}
+
+type OrganizationPolicy implements IConfigurationModel {
+    resource: URI
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides]
+}
+
+type ResourcePolicy implements IConfigurationModel {
+    resource: URI
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides]
+}
+
+type ApplicationPolicy implements IConfigurationModel {
+    resource: URI
+    target: Int
+    contents: AnyObject
+    keys: [String]
+    overrides: [Overrides]
+}
+
+type PolicySubject {
+    """ The URL to the policies. """
+    policyURL: URI!
+    """
+     The time when this was created.
+    """
+    createdAt: String
+
+    """
+     The stringified JSON contents of the permissions.
+    """
+    policies: AnyObject!
+
+}
+
+
+union ConfigurationPolicy = DefaultPolicy | OrganizationPolicy | ResourcePolicy | ApplicationPolicy
+
+extend type Query {
+    getConfigurationPolicies(input: [ConfigurationInput]): [ConfigurationPolicy] @addAccountContext
+
+    """
+     Return the Policies groups
+    """
+    defaultPolicies(target: Int): [SettingsGroup]
+
+    """
+     Get the available policies and its descriptions
+    """
+    getViewerPolicies(input: ConfigurationInput): PolicySubject
+}
+
+extend type Mutation {
+    initiatePolicyValue(resource: URI): Boolean
+    updateConfigurationPolicyValue(key: String!, value: AnyObject!, overrides: ConfigurationOverrides_Input, target: Int, donotNotifyError: Boolean): Boolean @addAccountContext
+    updateConfigurationPolicyValueByUri(resource: URI, key: String!, value: AnyObject!, overrides: ConfigurationOverrides_Input, target: Int, donotNotifyError: Boolean): Boolean @addAccountContext
+}
+
+extend type Subscription {
+    SubscribeToPolicyUpdate(orgName: String): ConfigurationUpdateEvent
+}
+
+
+"""
+ A basic environment service that can be used in various processes,
+ such as main, renderer and shared process. Use subclasses of this
+ service for specific environment.
+"""
+type Environment {
+    args: AnyObject
+}
+
+
+input EnvironmentPayload {
+    args: AnyObject
+}
+
+extend type Query {
+    getEnvironment: Environment
+},directive @isAuthenticated on QUERY | FIELD_DEFINITION
+directive @hasScope(scope: [String]) on QUERY | FIELD
+directive @profile on QUERY | FIELD_DEFINITION
+
+input IdToken {
+    idToken: String!
+}
+
+input AuthProvider {
+    auth0: IdToken
+}
+
+input UserInfo {
+  email: String,
+  sub: String,
+  email_verified: Boolean,
+  first_name: String
+  last_name: String
+  user_name: String
+  phone_number: String
+  work_email: String
+  country: String
+  company_name: String
+}
+
+"""
+ Profile based on Auth0Profile
+"""
+interface IAuth0UserProfile {
+    name: String!
+    nickname: String!
+    picture: String!
+    user_id: String!
+    username: String
+    given_name: String
+    family_name: String
+    email: String
+    email_verified: Boolean
+    clientID: String!
+    gender: String
+    locale: String
+    identities: [IAuth0Identity]
+    created_at: String!
+    updated_at: String!
+    sub: String!
+    user_metadata: AnyObject
+    app_metadata: AnyObject
+}
+
+interface IAuth0Identity {
+    connection: String
+    isSocial: Boolean
+    provider: String
+    user_id: String
+}
+
+type UserProfile implements IAuth0UserProfile {
+    name: String!
+    nickname: String!
+    picture: String!
+    user_id: String!
+    username: String
+    given_name: String
+    family_name: String
+    email: String
+    email_verified: Boolean
+    clientID: String!
+    gender: String
+    locale: String
+    identities: [IAuth0Identity]
+    accessToken: String
+    created_at: String!
+    updated_at: String!
+    sub: String!
+    user_metadata: AnyObject
+    app_metadata: AnyObject
+
+}
+
+type LoginError {
+    timeStamp: DateTime
+    error: AnyObject
+}
+
+type UserState {
+  id: String
+  auth0UserId: String
+  profile: UserProfile
+  isProfileFetching: Boolean
+  isTokenExpired: Boolean
+  isLoggingInToProceed: Boolean
+  loginError: LoginError
+}
+
+interface IUser {
+   id: ID!
+   username: String
+   email: String
+}
+
+enum Role {
+  ADMIN
+  REVIEWER
+  USER
+  UNKNOWN
+}
+
+interface IAuthUser {
+  given_name: String
+  family_name: String
+  nickname: String
+  name: String
+  email: String
+  picture: String
+  locale: String
+  updated_at: String
+  iss: String
+  sub: String
+  aud: String
+  iat: Int
+  exp: Int
+  at_hash: String
+  nonce: String
+}
+
+"""
+ AuthUser fields based on JSON Web Token extraction.
+"""
+type AuthUserRaw implements IAuthUser {
+  given_name: String
+  family_name: String
+  nickname: String
+  name: String
+  email: String
+  email_verified: Boolean
+  picture: String
+  locale: String
+  updated_at: String
+  iss: String
+  sub: String
+  aud: String
+  iat: Int
+  exp: Int
+  at_hash: String
+  nonce: String
+}
+
+type AuthUser implements IUser {
+    id: ID!
+
+    # Must be unique
+    # Make it required if Auth0 is the only authorization method in your app
+    auth0UserId: String
+
+    # These are some example properties that we read from Auth0
+    # They are optional because Auth0 might not have the information
+    username: String
+    email: String
+    emailVerified: String
+    givenName: String
+    familyName: String
+    picture: String
+
+}
+
+input AuthUser_Input {
+    auth0UserId: String
+    username: String
+    email: String
+    emailVerified: String
+    givenName: String
+    familyName: String
+    picture: String
+}
+
+type UserPreviousValues {
+  auth0UserId: String
+  createdAt: DateTime!
+  emailSubscription: Boolean
+  id: ID!
+  updatedAt: DateTime!
+}
+
+enum UserOrderBy {
+  auth0UserId_ASC
+  auth0UserId_DESC
+  createdAt_ASC
+  createdAt_DESC
+  emailSubscription_ASC
+  emailSubscription_DESC
+  id_ASC
+  id_DESC
+  updatedAt_ASC
+  updatedAt_DESC
+}
+
+extend type Mutation {
+    createAuth0User(authProvider: AuthProvider, userInfo: UserInfo): AuthUser
+    onAuth0UserCreated: Boolean
+}
+
+extend type Query {
+    fetchAuth0User(auth0UserId: String!): AuthUser @profile @isAuthenticated
+}
+,""" Database counter """
 type Counter {
   """ Current amount """
   amount: Int!
@@ -284,4 +1458,800 @@ extend type Query {
   getTags: [Tag]
   getMembers: [Member]
   getSettings: Settings
+}
+,"""
+The User Account.
+
+@property
+id: User ID
+@property
+email: The user email
+@property
+emailVerified: ture if email is verified, otherwise false
+@property
+featureFlags: Any super power given to the user via a super user
+@property
+identities: An array of objects with information about the user's identities.
+More than one will exists in case accounts are linked.
+@property
+inactive: true if the user is not currently being billed for service.
+@property
+isBillingLeader: true if user is BillingLeader
+@property
+userOgs: the orgs and roles for this user on each.
+
+"""
+type UserAccount {
+    id: String
+    email: String
+    alias: [String]
+    username: String
+    emailVerified: Boolean
+    notificationEmail: String
+}
+
+input UserAccountCreateRequest {
+    email: String!
+    username: String!
+    alias: [String]
+    emailVerified: Boolean
+    notificationEmail: String
+}
+
+type UserAccountCreatedEvent {
+    createdUser: UserAccountCreatedDetailedEvent
+    sourceUser: AuthUserRaw
+}
+
+type UserAccountCreatedDetailedEvent {
+    id: String!
+    email: String!
+    username: String!
+    emailVerified: Boolean
+    notificationEmail: String
+    alias: [String]
+}
+
+
+input UserAccount_Input {
+    id: String
+    email: String
+    alias: [String]
+    username: String
+}
+
+input UserAccountUpdateRequest {
+    id: String!
+    paylaod: UserAccount_Input
+}
+
+input UserAccountRemoveRequest {
+    id: String
+}
+
+input UserAccountWhere {
+    id: String
+    email: String
+    alias: [String]
+    username: String
+}
+
+type UserAccountRemovedEvent {
+    id: String
+    email: String!
+    username: String!
+    notificationEmail: String
+}
+
+extend type Query {
+    getUserAccount(userId: String!) : UserAccount
+    getUsers(where:UserAccountWhere):[UserAccount]
+    getAccounts(where:UserAccountWhere):[UserAccount]
+}
+
+
+
+"""
+ Teams are groups of organization members that reflect yoru company or group's structure
+ with cascading access permissions and mentions.
+ @property
+ name: The name of the team
+ @property
+ description: Description of the team.
+ @property
+ orgId: The organization to which the team belongs.
+ @property
+ parentTeam: The parent team of the team.
+ @property
+ tags: Arbitrary tags that the team uses.
+ @property
+ invitations: The outstanding invitations to join the team.
+ @property
+ teamMembers: Team members.
+"""
+type AccountTeam {
+    id: ID
+    _id: String
+    name: String
+    orgName: String
+    tags: [String]
+    settingsUri: URI
+    parentTeam: AccountTeam
+    updatedAt: String
+    createdAt: String
+    description: String
+    invitations: [TeamInvitation]
+    teamMembers: [TeamMember]
+}
+
+input AccountTeam_Input {
+    id: ID
+    _id: String
+    name: String
+    orgName: String
+    tags: [String]
+    description: String
+    parentTeam: AccountTeam_Input
+    invitations: [TeamInvitation_Input]
+    teamMembers: [TeamMember_Input]
+}
+"""
+ TeamMember: A member of a team.
+"""
+type TeamMember {
+    id: String
+    email: String
+    name: String
+    userId: String
+    role: ApplicationRoles
+}
+
+input TeamMember_Input {
+    id: String
+    email: String
+    userId: String
+    role: ApplicationRoles
+}
+"""
+ Inivitation to become a team member.
+ You may invite a user to your team either by ther `username` (only for
+ verified users) or by their email. If you opt to invite by email then an email
+ will be sent to this person containing a code that they need to accept the
+ invitation. If the person doesn't already have an account they will be
+ instructed to create one; their account need not have the email address that
+ you invited listed as the secret code is confirmation enough.
+ @property
+ email: The email of the inventee
+ @property
+ fullName: The name of the invitee, derived from an RFC5322 email string
+ @property
+ invitedBy: The teamMemberId of the person that sent the invitation
+ @property
+ teamId: The team invited to
+ @property
+ tokenExpiration: The datestamp of when the invitation will expire.
+ @property
+ inviteCount: How many invites have been sent to this email address?
+ @property
+ acceptedAt: The datetime the invitation was accepted.
+ @property
+ createdAt: The datetime the invitation was created.
+ @property
+ updatedAt: The datetime the invitation was last updated.
+"""
+type TeamInvitation {
+    id: ID!
+    email: String
+    teamId: String
+    role: ApplicationRoles
+    active: Boolean
+    fullName: String
+    inviteCount: Int
+    invitedBy: String
+    createdAt: DateTime
+    updatedAt: DateTime
+    acceptedAt: DateTime
+    tokenExpiration: DateTime
+}
+
+
+""" all input for the `acceptInvitationToTeam` mutation."""
+input AcceptInvitationToTeam_Input {
+    """
+    An arbitrary string value with no semantic meaning. Will be included in the
+    payload verbatim. May be used to track mutations by the client.
+    """
+    code: String
+    invitationId: String!
+}
+
+""" The output of our `acceptInvitationToTeam`. """
+input TeamInvitation_Input {
+    email: String
+    teamId: String
+    role: ApplicationRoles
+    active: Boolean
+    fullName: String
+    inviteCount: Int
+    invitedBy: String
+    createdAt: DateTime
+    updatedAt: DateTime
+    acceptedAt: DateTime
+    tokenExpiration: DateTime
+}
+
+extend enum ApplicationRoles {
+    TEAM_MEMBER
+    TEAM_MAINTAINER
+}
+
+input TeamCreationRequest {
+    name: String!
+    orgName: String!
+    tags: [String]
+    emails: [String]
+    parentTeam: String
+    description: String
+}
+
+input TeamRemoveRequest {
+    teamId: String
+    emails: [String]
+    invitedBy: String
+    id: String!
+    requestedUserId: String
+}
+
+input TeamUpdateRequest {
+    id: String!
+    payload: AccountTeam_Input
+    requestedUserId: String
+}
+
+
+input TeamCreateRequest {
+    name: String!
+    orgName: String!
+    tags: [String]
+    emails: [String]
+    teamMembers: [TeamMember_Input]
+    parentTeam: String
+    description: String
+    invitation: TeamInvitation_Input
+}
+
+input TeamInvitationRequest {
+    teamId: String
+    emails: [String]
+    invitedBy: String
+}
+
+
+type InvitationDecode {
+    orgName: String,
+    teamName: String,
+    email: String,
+    invitationId: String,
+}
+
+extend enum PermissionAction{
+    Invite
+}
+
+extend enum PermissionResource{
+    Teams
+    Members
+}
+
+extend type Query {
+    teams: [AccountTeam]
+    getOrganizationTeams(orgName: String) : [AccountTeam] @addAccountContext
+    team(teamId: ID!): AccountTeam
+    getTeam(orgName: String!, teamName: String!): AccountTeam
+    organizations: [Organization]
+    teamInvitation(id: ID!): TeamInvitation!
+    decodeInvitation(token: String!): InvitationDecode @addAccountContext
+}
+
+extend type Mutation {
+    resendInvitation(id: ID!): Boolean @addAccountContext
+    acceptInvitation(id: ID!): Boolean @addAccountContext
+    """
+     If someone invited you by your email address then you must include the code
+     that was emailed to you, otherwise you may accept the invitation directly
+     using the UUID. If successful, you will be a member of the organization.
+    """
+    acceptInvitationToTeam(
+        """
+         The exclusive input argument for this mutation. An object type, make sure to see documentation for this object's fields.
+        """
+        input: AcceptInvitationToTeam_Input
+    ): Boolean
+    declineInvitation(id: ID!): Boolean @addAccountContext
+    createTeam(request: TeamCreationRequest!): AccountTeam @addAccountContext
+    removeTeam(teamId: String!): Boolean
+    sendInvitation(request: TeamInvitationRequest!): Boolean
+    addTeamMembers(orgName: String!, teamName: String!, memberIds: [String]!): Boolean @addAccountContext
+    removeTeamMember(orgName: String!, teamName: String!, memberId: String!): Boolean
+    changeMemberRole(orgName: String!, teamName: String!, memberId: String!, role: String!): Boolean
+}
+
+
+"""
+ OrganizationInvitationRole: The possible organization invitation roles.
+
+ @property
+ ADMIN: The user is invited to be an admin of the organization
+ BILLING_MANAGER: The user is invited to be a billing manager of the organization.
+ DIRECT_MEMBER: The user is invited to be a direct member of the organization.
+ REINSTATE: The user's previous role will be reinstated.
+"""
+enum OrgainizationInvitationRole {
+    ADMIN
+    REINSTATE
+    DIRECT_MEMBER
+    BILLING_MANAGER
+}
+
+enum OrgUserRole {
+    BILLING_LEADER
+    MEMBER
+    ADMIN
+    OWNER
+}
+"""
+ The user/org M:F join, denormalized on the user/org tables.
+"""
+
+
+type UserOrg {
+    userId: String!
+    role: ApplicationRoles
+    inactive: Boolean
+}
+
+input UserOrg_Input {
+    userId: String!
+    role: ApplicationRoles
+    inactive: Boolean
+}
+
+interface IOrgUser {
+    userId: String!
+    role: ApplicationRoles
+    inactive: Boolean
+}
+
+type OrgUser implements IOrgUser{
+    userId: String!
+    role: ApplicationRoles
+    inactive: Boolean
+    orgName: String!
+    # Todo: Will be removed once #837 will be completed
+    isSelf: Boolean!
+    crossCheckEmail: String
+}
+
+input OrgUser_Input {
+    userId: String
+    role: ApplicationRoles
+    inactive: Boolean
+    crossCheckEmail: String
+}
+
+extend enum ApplicationRoles {
+    """ organization member """
+    ORGANIZATION_MANAGER
+    MEMBER
+}
+"""
+ Organization: A groups of people can collaborate accross many
+ workspaces/projects at the same time in organization accounts.
+
+ @property
+ name: The name of the organization
+ @property
+ namespace: The parent namespace which will be used in workspaces
+ @property
+ picture: The org avatar
+ @property
+ isBillingLeader: true if the viewer is the billing leader for the org
+ @property
+ mainBilingLeaderId: The billing leader of the organization (or the first, if more than 1)
+ @property
+ billingEmail: The billing email for the organization.
+ @property
+ periodStart: The datetime the curren billing cycle starts.
+ @property
+ periodStop: The datetime the current billing cycle ends.
+ @property
+ stripeId: The customerId from stripe.
+ @property
+ stripeSubscriptionId: The subscriptionId from stripe.
+"""
+type Organization {
+    id: ID
+    name: String
+    description: String
+    picture: String
+    stripeId: String
+    namespace: String
+    orgUserCount: Int
+    createdAt: DateTime
+    updatedAt: DateTime
+    orgMembers: [OrgUser]
+    periodStart: DateTime
+    periodStop: DateTime
+    billingLeaders: [String]
+    billingEmail: String
+    isBillingLeader: Boolean
+    mainBilingLeaderId: String
+    stripeSubscriptionId: String
+    invitations: [OrganizationInvitation]
+}
+
+type OrganizationMember {
+    id: String
+    user: AuthUser
+    isBillingLeader: Boolean
+    organization: Organization
+}
+
+input OrganizationInvitation_Input {
+    email: String
+    teamId: String
+    role: ApplicationRoles
+    active: Boolean
+    fullName: String
+    inviteCount: Int
+    invitedBy: String
+    createdAt: DateTime
+    updatedAt: DateTime
+    acceptedAt: DateTime
+    tokenExpiration: DateTime
+}
+
+input OrganizationNotificationValues {
+    notifyOrgManagersOnUserJoined: Boolean
+    notifyOrgOwnerOnUserJoined: Boolean
+}
+
+input Organization_Input {
+    id: ID
+    name: String!
+    description: String
+    picture: String
+    stripeId: String
+    namespace: String
+    orgUserCount: Int
+    createdAt: DateTime
+    updatedAt: DateTime
+    orgMembers: [OrgUser_Input]
+    periodStart: DateTime
+    periodStop: DateTime
+    billingLeaders: [String]
+    billingEmail: String
+    isBillingLeader: Boolean
+    mainBilingLeaderId: String
+    stripeSubscriptionId: String
+    invitations: [OrganizationInvitation_Input]
+}
+
+input OrganizationCreateRequest {
+    name: String
+    description: String
+    namespace: String
+    picture: String
+    orgMembers: [OrgUser_Input]
+    billingLeaders: [String]
+    mainBillingLeaderId: String
+    periodStart: DateTime
+    periodStop: DateTime
+    stripeId: String
+    stripeSubscriptionId: String
+    invitations: [OrganizationInvitation_Input]
+}
+
+input OrganizationUpdateRequest {
+    id: String
+    requestedUserId: String
+    payload: Organization_Input
+}
+
+input OrganizationRemoveRequest {
+    orgName: String
+    requestedUserId: String
+}
+
+type OrgMember {
+    _id: String
+    userId: String
+    role: ApplicationRoles
+    inactive: Boolean
+    name: String
+    crossCheckEmail: String
+    teamNames: [String]
+}
+
+enum InviteStatus {
+    PENDING
+    ACCEPTED
+    DECLINED
+}
+
+type InviteMember {
+    id: String
+    email: String
+    teamId: String
+    teamName: String
+    role: ApplicationRoles
+    status: InviteStatus
+}
+
+input OrgDetailWhere{
+    id: String,
+    name: String
+}
+
+extend enum PermissionResource {
+    Organization
+}
+
+input OrganizationInvitationRequest {
+    teamId: String
+    emails: [String]
+    invitedBy: String
+    orgName: String
+}
+
+type OrganizationInvitation {
+    id: ID!
+    email: String
+    teamId: String
+    role: ApplicationRoles
+    active: Boolean
+    fullName: String
+    inviteCount: Int
+    invitedBy: String
+    createdAt: DateTime
+    updatedAt: DateTime
+    acceptedAt: DateTime
+    tokenExpiration: DateTime
+}
+
+type OrganizationInvitationDecode {
+    orgName: String,
+    teamName: String,
+    email: String,
+    invitationId: String,
+    invitedBy: String,
+}
+
+extend type Query {
+    getUserOrganizations(userId: String) : [Organization]
+    getManageableOrganizations: [Organization] @addAccountContext
+    getUserOrganizationsWithRole(userId: String) : [Organization]
+    getOrganizationDetail(where:OrgDetailWhere!):Organization
+    getOrganizationDetailUnsecured(where:OrgDetailWhere!):Organization
+    getOrganizationMembers: [OrgMember] @addAccountContext
+    getOrgInvitationMembers: [InviteMember] @addAccountContext
+    getOrganizationInvitation(id: ID!): OrganizationInvitation
+    decodeOrganizationInvitation(token: String!): OrganizationInvitationDecode @addAccountContext
+}
+
+extend type Mutation {
+    resendOrganizationInvitation(id: ID!): Boolean @addAccountContext
+    acceptOrganizationInvitation(id: ID!, notification: OrganizationNotificationValues): Boolean @addAccountContext
+    createOrganization(organization: OrganizationCreateRequest!): Organization @addAccountContext
+    removeOrganization(organization: OrganizationRemoveRequest!): Boolean @addAccountContext
+    updateOrganization(organization: OrganizationUpdateRequest!): Organization @addAccountContext
+    removeOrgMember(memberId: String!): Boolean @addAccountContext
+    sendOrganizationInvitation(request: OrganizationInvitationRequest): Boolean
+    changeOrgMemberRole(userId: String!, role:ApplicationRoles!):Boolean @addAccountContext
+    declineOrganizationInvitation(id: ID!): Boolean @addAccountContext
+    updateOrgMemberTeams(userId: String!, orgName: String!, addToTeams: [String], removeFromTeams: [String]):Boolean @addAccountContext
+}
+
+
+type Preference_Default {
+  organization: String
+}
+
+type Preference_Notification {
+  billing: Boolean
+  primaryEmail: String
+  onChangeAccountSettings: Boolean
+}
+
+type Preference_Account {
+  default: Preference_Default
+  notification: Preference_Notification
+}
+
+enum Visibility {
+  private
+  public
+}
+
+enum ClientTypes {
+  Business
+  Individuals
+}
+
+enum PortalLanguage {
+    English
+    Hindi
+    Gujarati
+    Spanish
+    Russian
+}
+
+type Preference_Teams {
+  visibility: Visibility
+}
+
+type Preference_Project {
+  visibility: String
+  tags: String
+}
+
+type Preference_Organization {
+  teams: Preference_Teams
+  project: Preference_Project
+}
+
+extend type Preferences {
+  account: Preference_Account
+  organization: Preference_Organization
+}
+
+
+
+
+
+
+directive @addAccountContext  on FIELD_DEFINITION 
+directive @addNamespaceContext on FIELD_DEFINITION 
+
+
+type ClientPhone {
+    workPhone: String
+    mobile: String
+}
+
+type SocialConnect {
+    facebook: String
+    twitter: String
+}
+
+type Client {
+    id: ID
+    name: String!
+    companyName: String
+    email: String
+    clientPhone: ClientPhone
+    website: String
+    currency: String!
+    socialConnect: SocialConnect
+    orgName: String
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
+input ClientPhone_Input {
+    workPhone: String
+    mobile: String
+}
+
+input SocialConnect_Input {
+    facebook: String
+    twitter: String
+}
+
+input ClientAddRequest {
+    name: String!
+    companyName: String
+    email: String
+    clientPhone: ClientPhone_Input
+    website: String
+    currency: String!
+    socialConnect: SocialConnect_Input
+    orgName: String
+}
+
+input UpdatedClient_Input {
+    name: String!
+    companyName: String
+    email: String
+    clientPhone: ClientPhone_Input
+    website: String
+    currency: String!
+    socialConnect: SocialConnect_Input
+    orgName: String
+}
+
+input ClientUpdateRequest {
+    id: String
+    payload: UpdatedClient_Input
+}
+
+extend type Mutation {
+    addClient(client: ClientAddRequest!): Boolean
+    removeOrgClient(clientId: String!): Boolean
+    updateOrgClient(updateRequest: ClientUpdateRequest): Client
+}
+
+extend type Query {
+    getOrganizationClients: [Client]
+}
+
+
+type Projects {
+    id: ID
+    name: String!
+    clientId: String
+    teams: [String]
+    status: String
+    type: ProjectType
+    """ Predefined Project template  """
+    templateId: String
+    orgName: String
+    updatedAt: String
+    createdAt: String
+}
+
+enum ProjectType {
+    internal
+    others
+    asana
+}
+
+input ProjectAddRequest {
+    name: String!
+    clientId: String
+    teams: [String]
+    orgName: String
+}
+
+input UpdateProject_Input {
+    name: String!
+    clientId: String
+    teams: [String]
+}
+
+type Project_Output {
+    id: String
+    name: String!
+    clientId: String
+    teams: [String]
+    status: String
+    orgName: String
+}
+
+extend type Mutation {
+    addOrgProject(project: ProjectAddRequest!): Boolean
+    updateOrgProject(id: String!, project: UpdateProject_Input): Boolean
+    updateProjectStatus(id: String!, status: String): Boolean
+}
+
+extend type Query {
+    getProjects: [Project_Output]
+}
+
+type AsanaUser {
+    user_id: String
+    username: String
+}
+
+type AsanaConnectionState {
+    status: String
+    user: AsanaUser
+}
+
+type AsanaConnection {
+    asana: AsanaConnectionState
+}
+
+extend type Query {
+    getAsanaConnectionState: AsanaConnection
 }

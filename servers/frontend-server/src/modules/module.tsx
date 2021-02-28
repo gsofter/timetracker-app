@@ -7,11 +7,15 @@ import PlatformModule from '@admin-layout/platform-browser';
 import ScheduleModule from '@admin-layout/schedule-module-browser';
 import ActivityModule from '@admin-layout/activity-module-browser';
 import TimeTrackerModule from '@admin-layout/timetracker-module-browser';
+import AccountsModule from "@adminide-stack/account-api-browser";
+import AuthModule from "@adminide-stack/user-auth0-browser";
 
 const features = new Feature(
   FeatureWithRouterFactory,
   LayoutModule,
   PlatformModule,
+  AccountsModule,
+  AuthModule,
   CounterModule,
   ScheduleModule,
   TimeTrackerModule,

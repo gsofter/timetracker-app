@@ -23,8 +23,16 @@ import { ServerError } from './Error';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
 import { ClientTypes } from '@common-stack/client-core';
-
-
+import { ProvideAuth as CoreProvideAuth, ErrorBoundary } from '@adminide-stack/react-shared-components';
+import { useProvideAuth } from '@adminide-stack/user-auth0-browser';
+import {
+  SlotFillProvider,
+  InversifyProvider, Lifecycle,
+} from '@workbench-stack/components';
+const ProvideAuth = ({ children }) => {
+  const auth = useProvideAuth();
+  return <CoreProvideAuth auth={auth}>{children}</CoreProvideAuth>;
+};
 const client = createApolloClient();
 // attaching the context to client as a workaround.
 container.bind(ClientTypes.ApolloClient).toConstantValue(client);
@@ -95,11 +103,11 @@ export class Main extends React.Component<any, MainState> {
     const renderer = createRenderer();
     let persistor = persistStore(store);
     rehydrate(renderer);
-    return this.state.error ? (
-      <RedBox error={this.state.error} />
-    ) : (
-        modules.getWrappedRoot(
-            <Provider store={store}>
+    return (
+      <ErrorBoundary>
+        <SlotFillProvider>
+          <Provider store={store}>
+            <ProvideAuth>
               <ApolloProvider client={client}>
                 <RendererProvider renderer={renderer}>
                   <PersistGate persistor={persistor}>
@@ -111,9 +119,11 @@ export class Main extends React.Component<any, MainState> {
                   </PersistGate>
                 </RendererProvider>
               </ApolloProvider>
-            </Provider>
-        )
-      );
+            </ProvideAuth>
+          </Provider>
+        </SlotFillProvider>
+      </ErrorBoundary>
+    );
   }
 }
 

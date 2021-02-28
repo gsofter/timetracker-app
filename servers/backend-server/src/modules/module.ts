@@ -5,6 +5,9 @@ import ScheduleModule from '@admin-layout/schedule-module-server';
 import TimeTrackerModule from '@admin-layout/timetracker-module-server';
 import { config } from '../config';
 import { TaggedType } from '@common-stack/core';
+import AuthModule from '@adminide-stack/user-auth0-server';
+import OrganizationModule from '@adminide-stack/account-api-server';
+import PlatformModule from '@adminide-stack/platform-server/lib/module';
 
 export const settings = {
     // mongoConnection: generateMongo(config.MONGO_URL),
@@ -26,4 +29,12 @@ const DefaultFeature = new Feature({
 });
 
 
-export default new Feature(DefaultFeature, CounterModule, ScheduleModule, TimeTrackerModule);
+export default new Feature<any>(
+    DefaultFeature,
+    PlatformModule,
+    AuthModule,
+    CounterModule,
+    ScheduleModule,
+    TimeTrackerModule,
+    OrganizationModule,
+);
