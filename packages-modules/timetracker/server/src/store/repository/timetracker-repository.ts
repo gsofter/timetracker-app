@@ -227,6 +227,10 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
             timeRecords,
           },
         );
+
+        if (trackerDoc && trackerDoc.length > 0) {
+          console.log('trackerDoc length', trackerDoc.length);
+        }
         return true;
       }
       return false;
