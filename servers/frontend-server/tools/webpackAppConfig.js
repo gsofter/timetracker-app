@@ -18,6 +18,7 @@ const dependencyPlatforms = {
     "graphql-tag": ['server', 'web'],
     'immutability-helper': ['ios', 'android', 'web'],
     'isomorphic-fetch': 'server',
+    '@adminide-stack/account-api-server': 'server',
     'moleculer': 'server',
     'ioredis': 'server',
     "@common-stack/server-core": 'server',

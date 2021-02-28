@@ -7,7 +7,7 @@ import {
   ITimeRecord,
   ITimeRecordRequest,
   ITimesheetCreateRequest,
-  IProject,
+  IProjects as IProject,
   ITimesheetState,
   ITimesheet,
 } from '@admin-layout/timetracker-module-core';

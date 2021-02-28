@@ -8,7 +8,7 @@ import {
 } from '../../../generated-models';
 import { message, Form } from 'antd';
 import moment from 'moment';
-import { ITimeRecordRequest, IProject, IMember } from '@admin-layout/timetracker-module-core';
+import { ITimeRecordRequest, IProjects as  IProject, ITeamMember as IMember } from '@admin-layout/timetracker-module-core';
 
 export interface ITimesheetCalendarProps {
   projects: Array<IProject>;
