@@ -6,6 +6,7 @@ const Home = React.lazy(() => import('./containers/Home'));
 const TimeTracker = React.lazy(() => import('./containers/MainPage'));
 const Timesheet = React.lazy(() => import('./containers/TimesheetPage'));
 const ProjectsPage = React.lazy(() => import('./containers/ProjectsPage'));
+const TimeReportPage = React.lazy(() => import('./containers/TimeReportPage'));
 const ClientsPage = React.lazy(() => import('./containers/ClientsPage'));
 export const timePageStore: any[] = [
   {
@@ -39,12 +40,21 @@ export const timePageStore: any[] = [
   },
   {
     exact: true,
+    key: 'timeTracker.timeReport',
+    name: 'TimeReport',
+    component: TimeReportPage,
+    position: IMenuPosition.MIDDLE,
+    path: '//:orgName/time-tracker/timereport',
+    priority: 4,
+  },
+  {
+    exact: true,
     key: 'timeTracker.projects',
     name: 'Projects',
     component: ProjectsPage,
     position: IMenuPosition.MIDDLE,
     path: '//:orgName/time-tracker/projects',
-    priority: 4,
+    priority: 5,
   },
   {
     exact: true,
@@ -53,7 +63,7 @@ export const timePageStore: any[] = [
     component: ClientsPage,
     position: IMenuPosition.MIDDLE,
     path: '//:orgName/time-tracker/clients',
-    priority: 5,
+    priority: 6,
   },
 ];
 
@@ -63,6 +73,7 @@ const selectedRoutesAndMenus = [
   'timeTracker.projects',
   'timeTracker.clients',
   'timeTracker.timesheet',
+  'timeTracker.timeReport',
 ];
 
 // get routes

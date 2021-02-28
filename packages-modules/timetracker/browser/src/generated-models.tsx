@@ -626,6 +626,11 @@ export const GetTimesheetsDocument = gql`
     id
     startDate
     endDate
+    state
+    submittedOn
+    approvedOn
+    updatedBy
+    updatedOn
   }
 }
     `;

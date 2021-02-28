@@ -3,5 +3,10 @@ query GetTimesheets($userId: String) {
     id
     startDate
     endDate
+    state
+    submittedOn
+    approvedOn
+    updatedBy
+    updatedOn
   }
 }

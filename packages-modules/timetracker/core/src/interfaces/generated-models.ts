@@ -558,7 +558,7 @@ export type IGetTimesheetsQuery = (
   { __typename?: 'Query' }
   & { getTimesheets?: Maybe<Array<Maybe<(
     { __typename?: 'Timesheet' }
-    & Pick<ITimesheet, 'id' | 'startDate' | 'endDate'>
+    & Pick<ITimesheet, 'id' | 'startDate' | 'endDate' | 'state' | 'submittedOn' | 'approvedOn' | 'updatedBy' | 'updatedOn'>
   )>>> }
 );
 
@@ -712,6 +712,11 @@ export const GetTimesheetsDocument = gql`
     id
     startDate
     endDate
+    state
+    submittedOn
+    approvedOn
+    updatedBy
+    updatedOn
   }
 }
     `;

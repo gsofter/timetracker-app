@@ -77,7 +77,6 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     const trackDoc = await this.timeTrackerModel.find({
       userId,
       orgId,
-      timeRecords: { $elemMatch: { endTime: { $ne: null } } },
     });
     if (trackDoc && trackDoc.length > 0) {
       return trackDoc[0].timesheets;
