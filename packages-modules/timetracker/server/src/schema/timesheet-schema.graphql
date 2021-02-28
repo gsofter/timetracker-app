@@ -1,5 +1,6 @@
 # scalar DateTime
 enum TimesheetState {
+  OPEN
   APPROVED_PENDING
   APPROVED
   APPROVED_FINALIZED # --- which means no going back

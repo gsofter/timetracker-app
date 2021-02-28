@@ -105,7 +105,6 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
       }
     ]) as [ITimeTracker];
 
-    console.log('trackDoc ==>', trackDoc)
     if(trackDoc && trackDoc[0].timesheets.length > 0)  
       return trackDoc[0].timesheets[0]
     return null;
