@@ -5,7 +5,7 @@ import { getFilteredMenus, getFilteredRoutes } from '../utils';
 
 export const accountPageStore: any[] = [
   {
-    path: '//:orgName/organization',
+    path: '/:orgName/organization',
     key: 'organization',
     name: 'Organization Menu',
     component: Organization,
