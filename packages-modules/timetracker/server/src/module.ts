@@ -5,6 +5,7 @@ import { schema } from './schema'
 import { timeTrackerModule } from './containers'
 import { resolvers } from './resolvers'
 import { TYPES } from './constants';
+import { mainLoadConfigurationPre } from './initialization';
 
 const createServiceFunc = (container: interfaces.Container) => ({
     timeTrackerService: container.get(TYPES.ITimeTrackerService),
@@ -16,4 +17,5 @@ export default new Feature({
     createResolversFunc: resolvers,
     createContainerFunc: [timeTrackerModule],
     createServiceFunc: createServiceFunc,
+    preStartFunc: [mainLoadConfigurationPre],
 });
