@@ -61,29 +61,29 @@ export type AccessRole = DefaultRole | OrganizationRole | ResourceRole | Applica
  */
 export type AccountTeam = {
    __typename?: 'AccountTeam';
-  _id?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
-  invitations?: Maybe<Array<Maybe<TeamInvitation>>>;
+  _id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   orgName?: Maybe<Scalars['String']>;
-  parentTeam?: Maybe<AccountTeam>;
-  settingsUri?: Maybe<Scalars['URI']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
-  teamMembers?: Maybe<Array<Maybe<TeamMember>>>;
+  settingsUri?: Maybe<Scalars['URI']>;
+  parentTeam?: Maybe<AccountTeam>;
   updatedAt?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  invitations?: Maybe<Array<Maybe<TeamInvitation>>>;
+  teamMembers?: Maybe<Array<Maybe<TeamMember>>>;
 };
 
 export type AccountTeam_Input = {
-  _id?: Maybe<Scalars['String']>;
-  description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
-  invitations?: Maybe<Array<Maybe<TeamInvitation_Input>>>;
+  _id?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   orgName?: Maybe<Scalars['String']>;
-  parentTeam?: Maybe<AccountTeam_Input>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  description?: Maybe<Scalars['String']>;
+  parentTeam?: Maybe<AccountTeam_Input>;
+  invitations?: Maybe<Array<Maybe<TeamInvitation_Input>>>;
   teamMembers?: Maybe<Array<Maybe<TeamMember_Input>>>;
 };
 
@@ -186,28 +186,28 @@ export type AuthUserRaw = IAuthUser & {
 
 export type Client = {
    __typename?: 'Client';
-  clientPhone?: Maybe<ClientPhone>;
-  companyName?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  currency: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   name: Scalars['String'];
-  orgName?: Maybe<Scalars['String']>;
-  socialConnect?: Maybe<SocialConnect>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
+  companyName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  clientPhone?: Maybe<ClientPhone>;
   website?: Maybe<Scalars['String']>;
+  currency: Scalars['String'];
+  socialConnect?: Maybe<SocialConnect>;
+  orgName?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type ClientAddRequest = {
-  clientPhone?: Maybe<ClientPhone_Input>;
-  companyName?: Maybe<Scalars['String']>;
-  currency: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  orgName?: Maybe<Scalars['String']>;
-  socialConnect?: Maybe<SocialConnect_Input>;
+  companyName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  clientPhone?: Maybe<ClientPhone_Input>;
   website?: Maybe<Scalars['String']>;
+  currency: Scalars['String'];
+  socialConnect?: Maybe<SocialConnect_Input>;
+  orgName?: Maybe<Scalars['String']>;
 };
 
 export type ClientCounter = {
@@ -217,13 +217,13 @@ export type ClientCounter = {
 
 export type ClientPhone = {
    __typename?: 'ClientPhone';
-  mobile?: Maybe<Scalars['String']>;
   workPhone?: Maybe<Scalars['String']>;
+  mobile?: Maybe<Scalars['String']>;
 };
 
 export type ClientPhone_Input = {
-  mobile?: Maybe<Scalars['String']>;
   workPhone?: Maybe<Scalars['String']>;
+  mobile?: Maybe<Scalars['String']>;
 };
 
 export enum ClientTypes {
@@ -527,32 +527,32 @@ export type IdToken = {
 
 export type InvitationDecode = {
    __typename?: 'InvitationDecode';
-  email?: Maybe<Scalars['String']>;
-  invitationId?: Maybe<Scalars['String']>;
   orgName?: Maybe<Scalars['String']>;
   teamName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  invitationId?: Maybe<Scalars['String']>;
 };
 
 export type InviteMember = {
    __typename?: 'InviteMember';
-  email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
-  role?: Maybe<ApplicationRoles>;
-  status?: Maybe<InviteStatus>;
+  email?: Maybe<Scalars['String']>;
   teamId?: Maybe<Scalars['String']>;
   teamName?: Maybe<Scalars['String']>;
+  role?: Maybe<ApplicationRoles>;
+  status?: Maybe<InviteStatus>;
 };
 
 export enum InviteStatus {
+  Pending = 'PENDING',
   Accepted = 'ACCEPTED',
-  Declined = 'DECLINED',
-  Pending = 'PENDING'
+  Declined = 'DECLINED'
 }
 
 export type IOrgUser = {
-  inactive?: Maybe<Scalars['Boolean']>;
-  role?: Maybe<ApplicationRoles>;
   userId: Scalars['String'];
+  role?: Maybe<ApplicationRoles>;
+  inactive?: Maybe<Scalars['Boolean']>;
 };
 
 export type IResourceUserRole = {
@@ -768,9 +768,9 @@ export type MutationAddScheduleEventArgs = {
 
 
 export type MutationAddTeamMembersArgs = {
-  memberIds: Array<Maybe<Scalars['String']>>;
   orgName: Scalars['String'];
   teamName: Scalars['String'];
+  memberIds: Array<Maybe<Scalars['String']>>;
 };
 
 
@@ -780,16 +780,16 @@ export type MutationAddTimelineEventArgs = {
 
 
 export type MutationChangeMemberRoleArgs = {
-  memberId: Scalars['String'];
   orgName: Scalars['String'];
-  role: Scalars['String'];
   teamName: Scalars['String'];
+  memberId: Scalars['String'];
+  role: Scalars['String'];
 };
 
 
 export type MutationChangeOrgMemberRoleArgs = {
-  role: ApplicationRoles;
   userId: Scalars['String'];
+  role: ApplicationRoles;
 };
 
 
@@ -872,9 +872,9 @@ export type MutationRemoveTeamArgs = {
 
 
 export type MutationRemoveTeamMemberArgs = {
-  memberId: Scalars['String'];
   orgName: Scalars['String'];
   teamName: Scalars['String'];
+  memberId: Scalars['String'];
 };
 
 
@@ -964,10 +964,10 @@ export type MutationUpdateOrgClientArgs = {
 
 
 export type MutationUpdateOrgMemberTeamsArgs = {
-  addToTeams?: Maybe<Array<Maybe<Scalars['String']>>>;
-  orgName: Scalars['String'];
-  removeFromTeams?: Maybe<Array<Maybe<Scalars['String']>>>;
   userId: Scalars['String'];
+  orgName: Scalars['String'];
+  addToTeams?: Maybe<Array<Maybe<Scalars['String']>>>;
+  removeFromTeams?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 
@@ -1055,9 +1055,9 @@ export type MutationUpdateTimesheetStatusArgs = {
  */
 export enum OrgainizationInvitationRole {
   Admin = 'ADMIN',
-  BillingManager = 'BILLING_MANAGER',
+  Reinstate = 'REINSTATE',
   DirectMember = 'DIRECT_MEMBER',
-  Reinstate = 'REINSTATE'
+  BillingManager = 'BILLING_MANAGER'
 }
 
 /**
@@ -1087,45 +1087,45 @@ export enum OrgainizationInvitationRole {
  */
 export type Organization = {
    __typename?: 'Organization';
-  billingEmail?: Maybe<Scalars['String']>;
-  billingLeaders?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
-  invitations?: Maybe<Array<Maybe<OrganizationInvitation>>>;
-  isBillingLeader?: Maybe<Scalars['Boolean']>;
-  mainBilingLeaderId?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
-  namespace?: Maybe<Scalars['String']>;
-  orgMembers?: Maybe<Array<Maybe<OrgUser>>>;
-  orgUserCount?: Maybe<Scalars['Int']>;
-  periodStart?: Maybe<Scalars['DateTime']>;
-  periodStop?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
   picture?: Maybe<Scalars['String']>;
   stripeId?: Maybe<Scalars['String']>;
-  stripeSubscriptionId?: Maybe<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
+  orgUserCount?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  orgMembers?: Maybe<Array<Maybe<OrgUser>>>;
+  periodStart?: Maybe<Scalars['DateTime']>;
+  periodStop?: Maybe<Scalars['DateTime']>;
+  billingLeaders?: Maybe<Array<Maybe<Scalars['String']>>>;
+  billingEmail?: Maybe<Scalars['String']>;
+  isBillingLeader?: Maybe<Scalars['Boolean']>;
+  mainBilingLeaderId?: Maybe<Scalars['String']>;
+  stripeSubscriptionId?: Maybe<Scalars['String']>;
+  invitations?: Maybe<Array<Maybe<OrganizationInvitation>>>;
 };
 
 export type Organization_Input = {
-  billingEmail?: Maybe<Scalars['String']>;
-  billingLeaders?: Maybe<Array<Maybe<Scalars['String']>>>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  description?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
-  invitations?: Maybe<Array<Maybe<OrganizationInvitation_Input>>>;
-  isBillingLeader?: Maybe<Scalars['Boolean']>;
-  mainBilingLeaderId?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  namespace?: Maybe<Scalars['String']>;
-  orgMembers?: Maybe<Array<Maybe<OrgUser_Input>>>;
-  orgUserCount?: Maybe<Scalars['Int']>;
-  periodStart?: Maybe<Scalars['DateTime']>;
-  periodStop?: Maybe<Scalars['DateTime']>;
+  description?: Maybe<Scalars['String']>;
   picture?: Maybe<Scalars['String']>;
   stripeId?: Maybe<Scalars['String']>;
-  stripeSubscriptionId?: Maybe<Scalars['String']>;
+  namespace?: Maybe<Scalars['String']>;
+  orgUserCount?: Maybe<Scalars['Int']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  orgMembers?: Maybe<Array<Maybe<OrgUser_Input>>>;
+  periodStart?: Maybe<Scalars['DateTime']>;
+  periodStop?: Maybe<Scalars['DateTime']>;
+  billingLeaders?: Maybe<Array<Maybe<Scalars['String']>>>;
+  billingEmail?: Maybe<Scalars['String']>;
+  isBillingLeader?: Maybe<Scalars['Boolean']>;
+  mainBilingLeaderId?: Maybe<Scalars['String']>;
+  stripeSubscriptionId?: Maybe<Scalars['String']>;
+  invitations?: Maybe<Array<Maybe<OrganizationInvitation_Input>>>;
 };
 
 export type OrganizationConfiguration = IConfigurationModel & {
@@ -1153,18 +1153,18 @@ export enum OrganizationContextPubSubEvents {
 }
 
 export type OrganizationCreateRequest = {
-  billingLeaders?: Maybe<Array<Maybe<Scalars['String']>>>;
-  description?: Maybe<Scalars['String']>;
-  invitations?: Maybe<Array<Maybe<OrganizationInvitation_Input>>>;
-  mainBillingLeaderId?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
   namespace?: Maybe<Scalars['String']>;
+  picture?: Maybe<Scalars['String']>;
   orgMembers?: Maybe<Array<Maybe<OrgUser_Input>>>;
+  billingLeaders?: Maybe<Array<Maybe<Scalars['String']>>>;
+  mainBillingLeaderId?: Maybe<Scalars['String']>;
   periodStart?: Maybe<Scalars['DateTime']>;
   periodStop?: Maybe<Scalars['DateTime']>;
-  picture?: Maybe<Scalars['String']>;
   stripeId?: Maybe<Scalars['String']>;
   stripeSubscriptionId?: Maybe<Scalars['String']>;
+  invitations?: Maybe<Array<Maybe<OrganizationInvitation_Input>>>;
 };
 
 export type OrganizationData = {
@@ -1187,56 +1187,56 @@ export type OrganizationIdentifier = {
 
 export type OrganizationInvitation = {
    __typename?: 'OrganizationInvitation';
-  acceptedAt?: Maybe<Scalars['DateTime']>;
-  active?: Maybe<Scalars['Boolean']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  email?: Maybe<Scalars['String']>;
-  fullName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  email?: Maybe<Scalars['String']>;
+  teamId?: Maybe<Scalars['String']>;
+  role?: Maybe<ApplicationRoles>;
+  active?: Maybe<Scalars['Boolean']>;
+  fullName?: Maybe<Scalars['String']>;
   inviteCount?: Maybe<Scalars['Int']>;
   invitedBy?: Maybe<Scalars['String']>;
-  role?: Maybe<ApplicationRoles>;
-  teamId?: Maybe<Scalars['String']>;
-  tokenExpiration?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  acceptedAt?: Maybe<Scalars['DateTime']>;
+  tokenExpiration?: Maybe<Scalars['DateTime']>;
 };
 
 export type OrganizationInvitation_Input = {
-  acceptedAt?: Maybe<Scalars['DateTime']>;
-  active?: Maybe<Scalars['Boolean']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
   email?: Maybe<Scalars['String']>;
+  teamId?: Maybe<Scalars['String']>;
+  role?: Maybe<ApplicationRoles>;
+  active?: Maybe<Scalars['Boolean']>;
   fullName?: Maybe<Scalars['String']>;
   inviteCount?: Maybe<Scalars['Int']>;
   invitedBy?: Maybe<Scalars['String']>;
-  role?: Maybe<ApplicationRoles>;
-  teamId?: Maybe<Scalars['String']>;
-  tokenExpiration?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  acceptedAt?: Maybe<Scalars['DateTime']>;
+  tokenExpiration?: Maybe<Scalars['DateTime']>;
 };
 
 export type OrganizationInvitationDecode = {
    __typename?: 'OrganizationInvitationDecode';
+  orgName?: Maybe<Scalars['String']>;
+  teamName?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   invitationId?: Maybe<Scalars['String']>;
   invitedBy?: Maybe<Scalars['String']>;
-  orgName?: Maybe<Scalars['String']>;
-  teamName?: Maybe<Scalars['String']>;
 };
 
 export type OrganizationInvitationRequest = {
+  teamId?: Maybe<Scalars['String']>;
   emails?: Maybe<Array<Maybe<Scalars['String']>>>;
   invitedBy?: Maybe<Scalars['String']>;
   orgName?: Maybe<Scalars['String']>;
-  teamId?: Maybe<Scalars['String']>;
 };
 
 export type OrganizationMember = {
    __typename?: 'OrganizationMember';
   id?: Maybe<Scalars['String']>;
+  user?: Maybe<AuthUser>;
   isBillingLeader?: Maybe<Scalars['Boolean']>;
   organization?: Maybe<Organization>;
-  user?: Maybe<AuthUser>;
 };
 
 export type OrganizationNotificationValues = {
@@ -1329,8 +1329,8 @@ export type OrganizationSettings = ISettingsSubject & {
 
 export type OrganizationUpdateRequest = {
   id?: Maybe<Scalars['String']>;
-  payload?: Maybe<Organization_Input>;
   requestedUserId?: Maybe<Scalars['String']>;
+  payload?: Maybe<Organization_Input>;
 };
 
 export type OrgDetailWhere = {
@@ -1341,35 +1341,35 @@ export type OrgDetailWhere = {
 export type OrgMember = {
    __typename?: 'OrgMember';
   _id?: Maybe<Scalars['String']>;
-  crossCheckEmail?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  role?: Maybe<ApplicationRoles>;
   inactive?: Maybe<Scalars['Boolean']>;
   name?: Maybe<Scalars['String']>;
-  role?: Maybe<ApplicationRoles>;
+  crossCheckEmail?: Maybe<Scalars['String']>;
   teamNames?: Maybe<Array<Maybe<Scalars['String']>>>;
-  userId?: Maybe<Scalars['String']>;
 };
 
 export type OrgUser = IOrgUser & {
    __typename?: 'OrgUser';
-  crossCheckEmail?: Maybe<Scalars['String']>;
-  inactive?: Maybe<Scalars['Boolean']>;
-  isSelf: Scalars['Boolean'];
-  orgName: Scalars['String'];
-  role?: Maybe<ApplicationRoles>;
   userId: Scalars['String'];
+  role?: Maybe<ApplicationRoles>;
+  inactive?: Maybe<Scalars['Boolean']>;
+  orgName: Scalars['String'];
+  isSelf: Scalars['Boolean'];
+  crossCheckEmail?: Maybe<Scalars['String']>;
 };
 
 export type OrgUser_Input = {
-  crossCheckEmail?: Maybe<Scalars['String']>;
-  inactive?: Maybe<Scalars['Boolean']>;
-  role?: Maybe<ApplicationRoles>;
   userId?: Maybe<Scalars['String']>;
+  role?: Maybe<ApplicationRoles>;
+  inactive?: Maybe<Scalars['Boolean']>;
+  crossCheckEmail?: Maybe<Scalars['String']>;
 };
 
 export enum OrgUserRole {
-  Admin = 'ADMIN',
   BillingLeader = 'BILLING_LEADER',
   Member = 'MEMBER',
+  Admin = 'ADMIN',
   Owner = 'OWNER'
 }
 
@@ -1425,10 +1425,10 @@ export type PolicySubject = {
 
 export enum PortalLanguage {
   English = 'English',
-  Gujarati = 'Gujarati',
   Hindi = 'Hindi',
-  Russian = 'Russian',
-  Spanish = 'Spanish'
+  Gujarati = 'Gujarati',
+  Spanish = 'Spanish',
+  Russian = 'Russian'
 }
 
 export type Position = {
@@ -1464,20 +1464,20 @@ export type Preference_Default = {
 export type Preference_Notification = {
    __typename?: 'Preference_Notification';
   billing?: Maybe<Scalars['Boolean']>;
-  onChangeAccountSettings?: Maybe<Scalars['Boolean']>;
   primaryEmail?: Maybe<Scalars['String']>;
+  onChangeAccountSettings?: Maybe<Scalars['Boolean']>;
 };
 
 export type Preference_Organization = {
    __typename?: 'Preference_Organization';
-  project?: Maybe<Preference_Project>;
   teams?: Maybe<Preference_Teams>;
+  project?: Maybe<Preference_Project>;
 };
 
 export type Preference_Project = {
    __typename?: 'Preference_Project';
-  tags?: Maybe<Scalars['String']>;
   visibility?: Maybe<Scalars['String']>;
+  tags?: Maybe<Scalars['String']>;
 };
 
 export type Preference_Teams = {
@@ -1518,40 +1518,40 @@ export type PreferencesType = {
 
 export type Project_Output = {
    __typename?: 'Project_Output';
-  clientId?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  orgName?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
+  clientId?: Maybe<Scalars['String']>;
   teams?: Maybe<Array<Maybe<Scalars['String']>>>;
+  status?: Maybe<Scalars['String']>;
+  orgName?: Maybe<Scalars['String']>;
 };
 
 export type ProjectAddRequest = {
-  clientId?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  orgName?: Maybe<Scalars['String']>;
+  clientId?: Maybe<Scalars['String']>;
   teams?: Maybe<Array<Maybe<Scalars['String']>>>;
+  orgName?: Maybe<Scalars['String']>;
 };
 
 export type Projects = {
    __typename?: 'Projects';
-  clientId?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['ID']>;
   name: Scalars['String'];
-  orgName?: Maybe<Scalars['String']>;
-  status?: Maybe<Scalars['String']>;
+  clientId?: Maybe<Scalars['String']>;
   teams?: Maybe<Array<Maybe<Scalars['String']>>>;
+  status?: Maybe<Scalars['String']>;
+  type?: Maybe<ProjectType>;
   /**  Predefined Project template   */
   templateId?: Maybe<Scalars['String']>;
-  type?: Maybe<ProjectType>;
+  orgName?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['String']>;
 };
 
 export enum ProjectType {
-  Asana = 'asana',
   Internal = 'internal',
-  Others = 'others'
+  Others = 'others',
+  Asana = 'asana'
 }
 
 export type Query = {
@@ -1605,6 +1605,8 @@ export type Query = {
   getRole?: Maybe<AccessRole>;
   getRoles?: Maybe<Array<Maybe<AccessRole>>>;
   getScheduleEvents?: Maybe<Array<Maybe<Schedule>>>;
+  getSettings?: Maybe<Settings>;
+  getTags?: Maybe<Array<Maybe<Tag>>>;
   getTeam?: Maybe<AccountTeam>;
   getTimeRecords?: Maybe<Array<Maybe<TimeRecord>>>;
   getTimelineEvents?: Maybe<Array<Maybe<Timeline>>>;
@@ -1982,6 +1984,12 @@ export type SocialConnect_Input = {
   twitter?: Maybe<Scalars['String']>;
 };
 
+export enum StartYearWeekType {
+  FirstFourdayWeek = 'FIRST_FOURDAY_WEEK',
+  FirstFullWeek = 'FIRST_FULL_WEEK',
+  FirstDayWeek = 'FIRST_DAY_WEEK'
+}
+
 export type SubscribedOrganizationData = {
    __typename?: 'SubscribedOrganizationData';
   /** Resources in the organization. */
@@ -2021,24 +2029,36 @@ export type SubscriptionSubscribeToPolicyUpdateArgs = {
   orgName?: Maybe<Scalars['String']>;
 };
 
+export type Tag = {
+   __typename?: 'Tag';
+  id: Scalars['ID'];
+  name?: Maybe<Scalars['String']>;
+};
+
+export type Task = {
+   __typename?: 'Task';
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
 export type TeamCreateRequest = {
-  description?: Maybe<Scalars['String']>;
-  emails?: Maybe<Array<Maybe<Scalars['String']>>>;
-  invitation?: Maybe<TeamInvitation_Input>;
   name: Scalars['String'];
   orgName: Scalars['String'];
-  parentTeam?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  emails?: Maybe<Array<Maybe<Scalars['String']>>>;
   teamMembers?: Maybe<Array<Maybe<TeamMember_Input>>>;
+  parentTeam?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  invitation?: Maybe<TeamInvitation_Input>;
 };
 
 export type TeamCreationRequest = {
-  description?: Maybe<Scalars['String']>;
-  emails?: Maybe<Array<Maybe<Scalars['String']>>>;
   name: Scalars['String'];
   orgName: Scalars['String'];
-  parentTeam?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
+  emails?: Maybe<Array<Maybe<Scalars['String']>>>;
+  parentTeam?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
 };
 
 /**
@@ -2070,64 +2090,64 @@ export type TeamCreationRequest = {
  */
 export type TeamInvitation = {
    __typename?: 'TeamInvitation';
-  acceptedAt?: Maybe<Scalars['DateTime']>;
-  active?: Maybe<Scalars['Boolean']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  email?: Maybe<Scalars['String']>;
-  fullName?: Maybe<Scalars['String']>;
   id: Scalars['ID'];
+  email?: Maybe<Scalars['String']>;
+  teamId?: Maybe<Scalars['String']>;
+  role?: Maybe<ApplicationRoles>;
+  active?: Maybe<Scalars['Boolean']>;
+  fullName?: Maybe<Scalars['String']>;
   inviteCount?: Maybe<Scalars['Int']>;
   invitedBy?: Maybe<Scalars['String']>;
-  role?: Maybe<ApplicationRoles>;
-  teamId?: Maybe<Scalars['String']>;
-  tokenExpiration?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  acceptedAt?: Maybe<Scalars['DateTime']>;
+  tokenExpiration?: Maybe<Scalars['DateTime']>;
 };
 
 /**  The output of our `acceptInvitationToTeam`.  */
 export type TeamInvitation_Input = {
-  acceptedAt?: Maybe<Scalars['DateTime']>;
-  active?: Maybe<Scalars['Boolean']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
   email?: Maybe<Scalars['String']>;
+  teamId?: Maybe<Scalars['String']>;
+  role?: Maybe<ApplicationRoles>;
+  active?: Maybe<Scalars['Boolean']>;
   fullName?: Maybe<Scalars['String']>;
   inviteCount?: Maybe<Scalars['Int']>;
   invitedBy?: Maybe<Scalars['String']>;
-  role?: Maybe<ApplicationRoles>;
-  teamId?: Maybe<Scalars['String']>;
-  tokenExpiration?: Maybe<Scalars['DateTime']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
+  acceptedAt?: Maybe<Scalars['DateTime']>;
+  tokenExpiration?: Maybe<Scalars['DateTime']>;
 };
 
 export type TeamInvitationRequest = {
+  teamId?: Maybe<Scalars['String']>;
   emails?: Maybe<Array<Maybe<Scalars['String']>>>;
   invitedBy?: Maybe<Scalars['String']>;
-  teamId?: Maybe<Scalars['String']>;
 };
 
 /** TeamMember: A member of a team. */
 export type TeamMember = {
    __typename?: 'TeamMember';
-  email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
-  role?: Maybe<ApplicationRoles>;
   userId?: Maybe<Scalars['String']>;
+  role?: Maybe<ApplicationRoles>;
 };
 
 export type TeamMember_Input = {
-  email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
-  role?: Maybe<ApplicationRoles>;
+  email?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
+  role?: Maybe<ApplicationRoles>;
 };
 
 export type TeamRemoveRequest = {
-  emails?: Maybe<Array<Maybe<Scalars['String']>>>;
-  id: Scalars['String'];
-  invitedBy?: Maybe<Scalars['String']>;
-  requestedUserId?: Maybe<Scalars['String']>;
   teamId?: Maybe<Scalars['String']>;
+  emails?: Maybe<Array<Maybe<Scalars['String']>>>;
+  invitedBy?: Maybe<Scalars['String']>;
+  id: Scalars['String'];
+  requestedUserId?: Maybe<Scalars['String']>;
 };
 
 export type TeamUpdateRequest = {
@@ -2234,19 +2254,19 @@ export type TimeTracker = {
 };
 
 export type UpdatedClient_Input = {
-  clientPhone?: Maybe<ClientPhone_Input>;
-  companyName?: Maybe<Scalars['String']>;
-  currency: Scalars['String'];
-  email?: Maybe<Scalars['String']>;
   name: Scalars['String'];
-  orgName?: Maybe<Scalars['String']>;
-  socialConnect?: Maybe<SocialConnect_Input>;
+  companyName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  clientPhone?: Maybe<ClientPhone_Input>;
   website?: Maybe<Scalars['String']>;
+  currency: Scalars['String'];
+  socialConnect?: Maybe<SocialConnect_Input>;
+  orgName?: Maybe<Scalars['String']>;
 };
 
 export type UpdateProject_Input = {
-  clientId?: Maybe<Scalars['String']>;
   name: Scalars['String'];
+  clientId?: Maybe<Scalars['String']>;
   teams?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
@@ -2275,29 +2295,29 @@ export type UpdateProject_Input = {
  */
 export type UserAccount = {
    __typename?: 'UserAccount';
-  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
-  email?: Maybe<Scalars['String']>;
-  emailVerified?: Maybe<Scalars['Boolean']>;
   id?: Maybe<Scalars['String']>;
-  notificationEmail?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
   username?: Maybe<Scalars['String']>;
+  emailVerified?: Maybe<Scalars['Boolean']>;
+  notificationEmail?: Maybe<Scalars['String']>;
 };
 
 export type UserAccount_Input = {
-  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
-  email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
   username?: Maybe<Scalars['String']>;
 };
 
 export type UserAccountCreatedDetailedEvent = {
    __typename?: 'UserAccountCreatedDetailedEvent';
-  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
-  email: Scalars['String'];
-  emailVerified?: Maybe<Scalars['Boolean']>;
   id: Scalars['String'];
-  notificationEmail?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
   username: Scalars['String'];
+  emailVerified?: Maybe<Scalars['Boolean']>;
+  notificationEmail?: Maybe<Scalars['String']>;
+  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
 };
 
 export type UserAccountCreatedEvent = {
@@ -2307,19 +2327,19 @@ export type UserAccountCreatedEvent = {
 };
 
 export type UserAccountCreateRequest = {
-  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
   email: Scalars['String'];
+  username: Scalars['String'];
+  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
   emailVerified?: Maybe<Scalars['Boolean']>;
   notificationEmail?: Maybe<Scalars['String']>;
-  username: Scalars['String'];
 };
 
 export type UserAccountRemovedEvent = {
    __typename?: 'UserAccountRemovedEvent';
-  email: Scalars['String'];
   id?: Maybe<Scalars['String']>;
-  notificationEmail?: Maybe<Scalars['String']>;
+  email: Scalars['String'];
   username: Scalars['String'];
+  notificationEmail?: Maybe<Scalars['String']>;
 };
 
 export type UserAccountRemoveRequest = {
@@ -2332,9 +2352,9 @@ export type UserAccountUpdateRequest = {
 };
 
 export type UserAccountWhere = {
-  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
-  email?: Maybe<Scalars['String']>;
   id?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
   username?: Maybe<Scalars['String']>;
 };
 
@@ -2379,15 +2399,15 @@ export enum UserOrderBy {
 /** The user/org M:F join, denormalized on the user/org tables. */
 export type UserOrg = {
    __typename?: 'UserOrg';
-  inactive?: Maybe<Scalars['Boolean']>;
-  role?: Maybe<ApplicationRoles>;
   userId: Scalars['String'];
+  role?: Maybe<ApplicationRoles>;
+  inactive?: Maybe<Scalars['Boolean']>;
 };
 
 export type UserOrg_Input = {
-  inactive?: Maybe<Scalars['Boolean']>;
-  role?: Maybe<ApplicationRoles>;
   userId: Scalars['String'];
+  role?: Maybe<ApplicationRoles>;
+  inactive?: Maybe<Scalars['Boolean']>;
 };
 
 export type UserPreviousValues = {
@@ -2688,9 +2708,9 @@ export type ResolversTypes = {
   Preference_Default: ResolverTypeWrapper<Preference_Default>,
   Preference_Notification: ResolverTypeWrapper<Preference_Notification>,
   Preference_Organization: ResolverTypeWrapper<Preference_Organization>,
-  Preference_Project: ResolverTypeWrapper<Preference_Project>,
   Preference_Teams: ResolverTypeWrapper<Preference_Teams>,
   Visibility: Visibility,
+  Preference_Project: ResolverTypeWrapper<Preference_Project>,
   AuthUser: ResolverTypeWrapper<AuthUser>,
   IUser: ResolversTypes['AuthUser'],
   UserAccountWhere: UserAccountWhere,
@@ -2725,10 +2745,10 @@ export type ResolversTypes = {
   TimesheetState: TimesheetState,
   Environment: ResolverTypeWrapper<Environment>,
   Organization: ResolverTypeWrapper<Organization>,
-  OrganizationInvitation: ResolverTypeWrapper<OrganizationInvitation>,
-  ApplicationRoles: ApplicationRoles,
   OrgUser: ResolverTypeWrapper<OrgUser>,
   IOrgUser: ResolversTypes['OrgUser'],
+  ApplicationRoles: ApplicationRoles,
+  OrganizationInvitation: ResolverTypeWrapper<OrganizationInvitation>,
   InviteMember: ResolverTypeWrapper<InviteMember>,
   InviteStatus: InviteStatus,
   Client: ResolverTypeWrapper<Client>,
@@ -2746,6 +2766,7 @@ export type ResolversTypes = {
   Project_Output: ResolverTypeWrapper<Project_Output>,
   RoleInput: RoleInput,
   Schedule: ResolverTypeWrapper<Schedule>,
+  Tag: ResolverTypeWrapper<Tag>,
   Timeline: ResolverTypeWrapper<Timeline>,
   PermissionSubject: ResolverTypeWrapper<PermissionSubject>,
   PolicySubject: ResolverTypeWrapper<PolicySubject>,
@@ -2764,8 +2785,8 @@ export type ResolversTypes = {
   IdToken: IdToken,
   UserInfo: UserInfo,
   OrganizationCreateRequest: OrganizationCreateRequest,
-  OrganizationInvitation_Input: OrganizationInvitation_Input,
   OrgUser_Input: OrgUser_Input,
+  OrganizationInvitation_Input: OrganizationInvitation_Input,
   TeamCreationRequest: TeamCreationRequest,
   TimeRecordRequest: TimeRecordRequest,
   TimesheetCreateRequest: TimesheetCreateRequest,
@@ -2815,6 +2836,8 @@ export type ResolversTypes = {
   UserPreviousValues: ResolverTypeWrapper<UserPreviousValues>,
   UserOrderBy: UserOrderBy,
   TimeTracker: ResolverTypeWrapper<TimeTracker>,
+  StartYearWeekType: StartYearWeekType,
+  Task: ResolverTypeWrapper<Task>,
   UserAccountCreateRequest: UserAccountCreateRequest,
   UserAccountCreatedEvent: ResolverTypeWrapper<UserAccountCreatedEvent>,
   UserAccountCreatedDetailedEvent: ResolverTypeWrapper<UserAccountCreatedDetailedEvent>,
@@ -2878,9 +2901,9 @@ export type ResolversParentTypes = {
   Preference_Default: Preference_Default,
   Preference_Notification: Preference_Notification,
   Preference_Organization: Preference_Organization,
-  Preference_Project: Preference_Project,
   Preference_Teams: Preference_Teams,
   Visibility: Visibility,
+  Preference_Project: Preference_Project,
   AuthUser: AuthUser,
   IUser: ResolversParentTypes['AuthUser'],
   UserAccountWhere: UserAccountWhere,
@@ -2915,10 +2938,10 @@ export type ResolversParentTypes = {
   TimesheetState: TimesheetState,
   Environment: Environment,
   Organization: Organization,
-  OrganizationInvitation: OrganizationInvitation,
-  ApplicationRoles: ApplicationRoles,
   OrgUser: OrgUser,
   IOrgUser: ResolversParentTypes['OrgUser'],
+  ApplicationRoles: ApplicationRoles,
+  OrganizationInvitation: OrganizationInvitation,
   InviteMember: InviteMember,
   InviteStatus: InviteStatus,
   Client: Client,
@@ -2936,6 +2959,7 @@ export type ResolversParentTypes = {
   Project_Output: Project_Output,
   RoleInput: RoleInput,
   Schedule: Schedule,
+  Tag: Tag,
   Timeline: Timeline,
   PermissionSubject: PermissionSubject,
   PolicySubject: PolicySubject,
@@ -2954,8 +2978,8 @@ export type ResolversParentTypes = {
   IdToken: IdToken,
   UserInfo: UserInfo,
   OrganizationCreateRequest: OrganizationCreateRequest,
-  OrganizationInvitation_Input: OrganizationInvitation_Input,
   OrgUser_Input: OrgUser_Input,
+  OrganizationInvitation_Input: OrganizationInvitation_Input,
   TeamCreationRequest: TeamCreationRequest,
   TimeRecordRequest: TimeRecordRequest,
   TimesheetCreateRequest: TimesheetCreateRequest,
@@ -3005,6 +3029,8 @@ export type ResolversParentTypes = {
   UserPreviousValues: UserPreviousValues,
   UserOrderBy: UserOrderBy,
   TimeTracker: TimeTracker,
+  StartYearWeekType: StartYearWeekType,
+  Task: Task,
   UserAccountCreateRequest: UserAccountCreateRequest,
   UserAccountCreatedEvent: UserAccountCreatedEvent,
   UserAccountCreatedDetailedEvent: UserAccountCreatedDetailedEvent,
@@ -3054,18 +3080,18 @@ export type AccessRoleResolvers<ContextType = any, ParentType extends ResolversP
 };
 
 export type AccountTeamResolvers<ContextType = any, ParentType extends ResolversParentTypes['AccountTeam'] = ResolversParentTypes['AccountTeam']> = {
-  _id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  invitations?: Resolver<Maybe<Array<Maybe<ResolversTypes['TeamInvitation']>>>, ParentType, ContextType>,
+  _id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   orgName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  parentTeam?: Resolver<Maybe<ResolversTypes['AccountTeam']>, ParentType, ContextType>,
-  settingsUri?: Resolver<Maybe<ResolversTypes['URI']>, ParentType, ContextType>,
   tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
-  teamMembers?: Resolver<Maybe<Array<Maybe<ResolversTypes['TeamMember']>>>, ParentType, ContextType>,
+  settingsUri?: Resolver<Maybe<ResolversTypes['URI']>, ParentType, ContextType>,
+  parentTeam?: Resolver<Maybe<ResolversTypes['AccountTeam']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  invitations?: Resolver<Maybe<Array<Maybe<ResolversTypes['TeamInvitation']>>>, ParentType, ContextType>,
+  teamMembers?: Resolver<Maybe<Array<Maybe<ResolversTypes['TeamMember']>>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -3141,17 +3167,17 @@ export type AuthUserRawResolvers<ContextType = any, ParentType extends Resolvers
 };
 
 export type ClientResolvers<ContextType = any, ParentType extends ResolversParentTypes['Client'] = ResolversParentTypes['Client']> = {
-  clientPhone?: Resolver<Maybe<ResolversTypes['ClientPhone']>, ParentType, ContextType>,
-  companyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
-  currency?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  orgName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  socialConnect?: Resolver<Maybe<ResolversTypes['SocialConnect']>, ParentType, ContextType>,
-  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  companyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  clientPhone?: Resolver<Maybe<ResolversTypes['ClientPhone']>, ParentType, ContextType>,
   website?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  currency?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  socialConnect?: Resolver<Maybe<ResolversTypes['SocialConnect']>, ParentType, ContextType>,
+  orgName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -3161,8 +3187,8 @@ export type ClientCounterResolvers<ContextType = any, ParentType extends Resolve
 };
 
 export type ClientPhoneResolvers<ContextType = any, ParentType extends ResolversParentTypes['ClientPhone'] = ResolversParentTypes['ClientPhone']> = {
-  mobile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   workPhone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  mobile?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -3371,28 +3397,28 @@ export type IConfigurationModelResolvers<ContextType = any, ParentType extends R
 };
 
 export type InvitationDecodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['InvitationDecode'] = ResolversParentTypes['InvitationDecode']> = {
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  invitationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   orgName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   teamName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  invitationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type InviteMemberResolvers<ContextType = any, ParentType extends ResolversParentTypes['InviteMember'] = ResolversParentTypes['InviteMember']> = {
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
-  status?: Resolver<Maybe<ResolversTypes['InviteStatus']>, ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   teamId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   teamName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
+  status?: Resolver<Maybe<ResolversTypes['InviteStatus']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type IOrgUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['IOrgUser'] = ResolversParentTypes['IOrgUser']> = {
   __resolveType: TypeResolveFn<'OrgUser', ParentType, ContextType>,
-  inactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
+  inactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
 };
 
 export type IResourceUserRoleResolvers<ContextType = any, ParentType extends ResolversParentTypes['IResourceUserRole'] = ResolversParentTypes['IResourceUserRole']> = {
@@ -3462,10 +3488,10 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   addMoleculerCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType, RequireFields<MutationAddMoleculerCounterArgs, never>>,
   addOrgProject?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddOrgProjectArgs, 'project'>>,
   addScheduleEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddScheduleEventArgs, never>>,
-  addTeamMembers?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddTeamMembersArgs, 'memberIds' | 'orgName' | 'teamName'>>,
+  addTeamMembers?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddTeamMembersArgs, 'orgName' | 'teamName' | 'memberIds'>>,
   addTimelineEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationAddTimelineEventArgs, never>>,
-  changeMemberRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationChangeMemberRoleArgs, 'memberId' | 'orgName' | 'role' | 'teamName'>>,
-  changeOrgMemberRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationChangeOrgMemberRoleArgs, 'role' | 'userId'>>,
+  changeMemberRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationChangeMemberRoleArgs, 'orgName' | 'teamName' | 'memberId' | 'role'>>,
+  changeOrgMemberRole?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationChangeOrgMemberRoleArgs, 'userId' | 'role'>>,
   createAuth0User?: Resolver<Maybe<ResolversTypes['AuthUser']>, ParentType, ContextType, RequireFields<MutationCreateAuth0UserArgs, never>>,
   createOrganization?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType, RequireFields<MutationCreateOrganizationArgs, 'organization'>>,
   createTeam?: Resolver<Maybe<ResolversTypes['AccountTeam']>, ParentType, ContextType, RequireFields<MutationCreateTeamArgs, 'request'>>,
@@ -3483,7 +3509,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   removeOrganization?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveOrganizationArgs, 'organization'>>,
   removeScheduleEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveScheduleEventArgs, never>>,
   removeTeam?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveTeamArgs, 'teamId'>>,
-  removeTeamMember?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveTeamMemberArgs, 'memberId' | 'orgName' | 'teamName'>>,
+  removeTeamMember?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveTeamMemberArgs, 'orgName' | 'teamName' | 'memberId'>>,
   removeTimeRecord?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveTimeRecordArgs, never>>,
   removeTimelineEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveTimelineEventArgs, never>>,
   removeTimesheet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationRemoveTimesheetArgs, never>>,
@@ -3498,7 +3524,7 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateConfigurationValue?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateConfigurationValueArgs, 'key' | 'value'>>,
   updateConfigurationValueByUri?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateConfigurationValueByUriArgs, 'key' | 'value'>>,
   updateOrgClient?: Resolver<Maybe<ResolversTypes['Client']>, ParentType, ContextType, RequireFields<MutationUpdateOrgClientArgs, never>>,
-  updateOrgMemberTeams?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateOrgMemberTeamsArgs, 'orgName' | 'userId'>>,
+  updateOrgMemberTeams?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateOrgMemberTeamsArgs, 'userId' | 'orgName'>>,
   updateOrgProject?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateOrgProjectArgs, 'id'>>,
   updateOrganization?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType, RequireFields<MutationUpdateOrganizationArgs, 'organization'>>,
   updateOrganizationContextAddResources?: Resolver<Maybe<Array<Maybe<ResolversTypes['OrganizationResourceData']>>>, ParentType, ContextType, RequireFields<MutationUpdateOrganizationContextAddResourcesArgs, 'resourcesToAdd'>>,
@@ -3514,24 +3540,24 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
 };
 
 export type OrganizationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Organization'] = ResolversParentTypes['Organization']> = {
-  billingEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  billingLeaders?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
-  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
-  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  invitations?: Resolver<Maybe<Array<Maybe<ResolversTypes['OrganizationInvitation']>>>, ParentType, ContextType>,
-  isBillingLeader?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  mainBilingLeaderId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  namespace?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  orgMembers?: Resolver<Maybe<Array<Maybe<ResolversTypes['OrgUser']>>>, ParentType, ContextType>,
-  orgUserCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
-  periodStart?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
-  periodStop?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  description?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   picture?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   stripeId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  stripeSubscriptionId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  namespace?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  orgUserCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  orgMembers?: Resolver<Maybe<Array<Maybe<ResolversTypes['OrgUser']>>>, ParentType, ContextType>,
+  periodStart?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  periodStop?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  billingLeaders?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
+  billingEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  isBillingLeader?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  mainBilingLeaderId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  stripeSubscriptionId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  invitations?: Resolver<Maybe<Array<Maybe<ResolversTypes['OrganizationInvitation']>>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -3560,35 +3586,35 @@ export type OrganizationIdentifierResolvers<ContextType = any, ParentType extend
 };
 
 export type OrganizationInvitationResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrganizationInvitation'] = ResolversParentTypes['OrganizationInvitation']> = {
-  acceptedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
-  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  fullName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  teamId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
+  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  fullName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   inviteCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   invitedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
-  teamId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  tokenExpiration?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  acceptedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  tokenExpiration?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type OrganizationInvitationDecodeResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrganizationInvitationDecode'] = ResolversParentTypes['OrganizationInvitationDecode']> = {
+  orgName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  teamName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   invitationId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   invitedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  orgName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  teamName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type OrganizationMemberResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrganizationMember'] = ResolversParentTypes['OrganizationMember']> = {
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  user?: Resolver<Maybe<ResolversTypes['AuthUser']>, ParentType, ContextType>,
   isBillingLeader?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   organization?: Resolver<Maybe<ResolversTypes['Organization']>, ParentType, ContextType>,
-  user?: Resolver<Maybe<ResolversTypes['AuthUser']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -3647,22 +3673,22 @@ export type OrganizationSettingsResolvers<ContextType = any, ParentType extends 
 
 export type OrgMemberResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrgMember'] = ResolversParentTypes['OrgMember']> = {
   _id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  crossCheckEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
   inactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
+  crossCheckEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   teamNames?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
-  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type OrgUserResolvers<ContextType = any, ParentType extends ResolversParentTypes['OrgUser'] = ResolversParentTypes['OrgUser']> = {
-  crossCheckEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  inactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  isSelf?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
-  orgName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
+  inactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  orgName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  isSelf?: Resolver<ResolversTypes['Boolean'], ParentType, ContextType>,
+  crossCheckEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -3705,20 +3731,20 @@ export type Preference_DefaultResolvers<ContextType = any, ParentType extends Re
 
 export type Preference_NotificationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Preference_Notification'] = ResolversParentTypes['Preference_Notification']> = {
   billing?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  onChangeAccountSettings?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   primaryEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  onChangeAccountSettings?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type Preference_OrganizationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Preference_Organization'] = ResolversParentTypes['Preference_Organization']> = {
-  project?: Resolver<Maybe<ResolversTypes['Preference_Project']>, ParentType, ContextType>,
   teams?: Resolver<Maybe<ResolversTypes['Preference_Teams']>, ParentType, ContextType>,
+  project?: Resolver<Maybe<ResolversTypes['Preference_Project']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type Preference_ProjectResolvers<ContextType = any, ParentType extends ResolversParentTypes['Preference_Project'] = ResolversParentTypes['Preference_Project']> = {
-  tags?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   visibility?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  tags?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -3759,26 +3785,26 @@ export type PreferencesTypeResolvers<ContextType = any, ParentType extends Resol
 };
 
 export type Project_OutputResolvers<ContextType = any, ParentType extends ResolversParentTypes['Project_Output'] = ResolversParentTypes['Project_Output']> = {
-  clientId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  orgName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  clientId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   teams?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
+  status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  orgName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type ProjectsResolvers<ContextType = any, ParentType extends ResolversParentTypes['Projects'] = ResolversParentTypes['Projects']> = {
-  clientId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
   name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  orgName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  clientId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   teams?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
-  templateId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   type?: Resolver<Maybe<ResolversTypes['ProjectType']>, ParentType, ContextType>,
+  templateId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  orgName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  createdAt?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -3819,6 +3845,8 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getRole?: Resolver<Maybe<ResolversTypes['AccessRole']>, ParentType, ContextType, RequireFields<QueryGetRoleArgs, never>>,
   getRoles?: Resolver<Maybe<Array<Maybe<ResolversTypes['AccessRole']>>>, ParentType, ContextType, RequireFields<QueryGetRolesArgs, never>>,
   getScheduleEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Schedule']>>>, ParentType, ContextType, RequireFields<QueryGetScheduleEventsArgs, never>>,
+  getSettings?: Resolver<Maybe<ResolversTypes['Settings']>, ParentType, ContextType>,
+  getTags?: Resolver<Maybe<Array<Maybe<ResolversTypes['Tag']>>>, ParentType, ContextType>,
   getTeam?: Resolver<Maybe<ResolversTypes['AccountTeam']>, ParentType, ContextType, RequireFields<QueryGetTeamArgs, 'orgName' | 'teamName'>>,
   getTimeRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimeRecord']>>>, ParentType, ContextType>,
   getTimelineEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Timeline']>>>, ParentType, ContextType, RequireFields<QueryGetTimelineEventsArgs, never>>,
@@ -3957,28 +3985,40 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   moleculerCounterUpdate?: SubscriptionResolver<Maybe<ResolversTypes['Counter']>, "moleculerCounterUpdate", ParentType, ContextType>,
 };
 
-export type TeamInvitationResolvers<ContextType = any, ParentType extends ResolversParentTypes['TeamInvitation'] = ResolversParentTypes['TeamInvitation']> = {
-  acceptedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
-  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  fullName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+export type TagResolvers<ContextType = any, ParentType extends ResolversParentTypes['Tag'] = ResolversParentTypes['Tag']> = {
   id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type TaskResolvers<ContextType = any, ParentType extends ResolversParentTypes['Task'] = ResolversParentTypes['Task']> = {
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type TeamInvitationResolvers<ContextType = any, ParentType extends ResolversParentTypes['TeamInvitation'] = ResolversParentTypes['TeamInvitation']> = {
+  id?: Resolver<ResolversTypes['ID'], ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  teamId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
+  active?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  fullName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   inviteCount?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   invitedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
-  teamId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  tokenExpiration?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  acceptedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  tokenExpiration?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type TeamMemberResolvers<ContextType = any, ParentType extends ResolversParentTypes['TeamMember'] = ResolversParentTypes['TeamMember']> = {
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4046,22 +4086,22 @@ export interface UriInputScalarConfig extends GraphQLScalarTypeConfig<ResolversT
 }
 
 export type UserAccountResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserAccount'] = ResolversParentTypes['UserAccount']> = {
-  alias?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  emailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  notificationEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  alias?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
   username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  emailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  notificationEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type UserAccountCreatedDetailedEventResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserAccountCreatedDetailedEvent'] = ResolversParentTypes['UserAccountCreatedDetailedEvent']> = {
-  alias?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  emailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   id?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
-  notificationEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  emailVerified?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  notificationEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  alias?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4072,10 +4112,10 @@ export type UserAccountCreatedEventResolvers<ContextType = any, ParentType exten
 };
 
 export type UserAccountRemovedEventResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserAccountRemovedEvent'] = ResolversParentTypes['UserAccountRemovedEvent']> = {
-  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  notificationEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   username?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  notificationEmail?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4090,9 +4130,9 @@ export type UserConfigurationResolvers<ContextType = any, ParentType extends Res
 };
 
 export type UserOrgResolvers<ContextType = any, ParentType extends ResolversParentTypes['UserOrg'] = ResolversParentTypes['UserOrg']> = {
-  inactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
-  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
   userId?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  role?: Resolver<Maybe<ResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
+  inactive?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4248,6 +4288,8 @@ export type Resolvers<ContextType = any> = {
   SocialConnect?: SocialConnectResolvers<ContextType>,
   SubscribedOrganizationData?: SubscribedOrganizationDataResolvers<ContextType>,
   Subscription?: SubscriptionResolvers<ContextType>,
+  Tag?: TagResolvers<ContextType>,
+  Task?: TaskResolvers<ContextType>,
   TeamInvitation?: TeamInvitationResolvers<ContextType>,
   TeamMember?: TeamMemberResolvers<ContextType>,
   Time?: GraphQLScalarType,

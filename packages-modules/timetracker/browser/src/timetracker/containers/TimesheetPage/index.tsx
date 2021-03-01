@@ -29,7 +29,7 @@ const members = [
   { id: 'user2', name: 'userB' },
 ];
 
-const projects: Array<IProject> = [
+const projects = [
   {
     id: '1',
     name: 'projectA',

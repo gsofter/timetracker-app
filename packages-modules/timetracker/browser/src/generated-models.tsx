@@ -23,6 +23,7 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 
+
 export const GetTagsDocument = gql`
     query GetTags {
   getTags @client {
@@ -450,6 +451,49 @@ export function useGetPlayingTimeRecordLazyQuery(baseOptions?: ApolloReactHooks.
 export type GetPlayingTimeRecordQueryHookResult = ReturnType<typeof useGetPlayingTimeRecordQuery>;
 export type GetPlayingTimeRecordLazyQueryHookResult = ReturnType<typeof useGetPlayingTimeRecordLazyQuery>;
 export type GetPlayingTimeRecordQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetPlayingTimeRecordQuery, SchemaTypes.IGetPlayingTimeRecordQueryVariables>;
+export const GetProjectsDocument = gql`
+    query GetProjects {
+  getProjects {
+    id
+    name
+    clientId
+    teams
+    status
+    orgName
+  }
+}
+    `;
+export type GetProjectsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetProjectsQuery, SchemaTypes.IGetProjectsQueryVariables>, 'query'>;
+
+    export const GetProjectsComponent = (props: GetProjectsComponentProps) => (
+      <ApolloReactComponents.Query<SchemaTypes.IGetProjectsQuery, SchemaTypes.IGetProjectsQueryVariables> query={GetProjectsDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetProjectsQuery__
+ *
+ * To run a query within a React component, call `useGetProjectsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetProjectsQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetProjectsQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetProjectsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchemaTypes.IGetProjectsQuery, SchemaTypes.IGetProjectsQueryVariables>) {
+        return ApolloReactHooks.useQuery<SchemaTypes.IGetProjectsQuery, SchemaTypes.IGetProjectsQueryVariables>(GetProjectsDocument, baseOptions);
+      }
+export function useGetProjectsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchemaTypes.IGetProjectsQuery, SchemaTypes.IGetProjectsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SchemaTypes.IGetProjectsQuery, SchemaTypes.IGetProjectsQueryVariables>(GetProjectsDocument, baseOptions);
+        }
+export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
+export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
+export type GetProjectsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetProjectsQuery, SchemaTypes.IGetProjectsQueryVariables>;
 export const GetTimeRecordsDocument = gql`
     query GetTimeRecords {
   getTimeRecords {

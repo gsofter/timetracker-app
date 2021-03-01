@@ -5,7 +5,12 @@ import {
   GET_MEMBERS_CLIENT,
   GET_SETTINGS_CLIENT,
 } from '../queries';
-import { IStartYearWeekType } from '@admin-layout/timetracker-core';
+import { 
+  IStartYearWeekType,
+  GetProjectsDocument,
+  GetTagsDocument,
+
+} from '@admin-layout/timetracker-core';
 
 export const defaults = {
   getProjects: [
