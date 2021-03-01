@@ -1,6 +1,6 @@
 /* tslint:disable */
 
-import * as SchemaTypes from '@admin-layout/timetracker-module-core';
+import * as SchemaTypes from '@admin-layout/timetracker-core';
 
 import gql from 'graphql-tag';
 import * as React from 'react';

@@ -1,5 +1,5 @@
 {
-    "name": "@admin-layout/timetracker-module-core",
+    "name": "@admin-layout/timetracker-core",
     "version": "0.0.1",
     "description": "Sample core for higher packages to depend on",
     "main": "lib/index.js",

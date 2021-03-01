@@ -1,6 +1,6 @@
 import { request } from 'express';
 import { DEFAULT_USER, DEFAULT_ORG } from '../constants'
-import { ITimesheet } from '@admin-layout/timetracker-module-core'
+import { ITimesheet } from '@admin-layout/timetracker-core'
 
 export const resolver = (options) => ({
     Query: {

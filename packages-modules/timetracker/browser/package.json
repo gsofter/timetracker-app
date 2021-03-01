@@ -43,9 +43,7 @@
   "license": "ISC",
   "dependencies": {
     "@admin-layout/components": "file:../../../packages/components",
-    "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser",
-    "@admin-layout/react-shared-components": "file:../../../packages/react-shared-components",
-    "@admin-layout/timetracker-module-core": "file:../core",
+    "@admin-layout/timetracker-core": "file:../core",
     "@adminide-stack/core": "^0.0.18-alpha.359",
     "react-compound-timer": "^1.2.0",
     "react-custom-scrollbars": "^4.2.1",

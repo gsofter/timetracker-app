@@ -80,7 +80,7 @@
     "@admin-layout/schedule-module-core": "file:packages-modules/schedule/core",
     "@admin-layout/schedule-module-server": "file:packages-modules/schedule/server",
     "@admin-layout/timetracker-module-browser": "file:packages-modules/timetracker/browser",
-    "@admin-layout/timetracker-module-core": "file:packages-modules/timetracker/core",
+    "@admin-layout/timetracker-core": "file:packages-modules/timetracker/core",
     "@admin-layout/timetracker-module-server": "file:packages-modules/timetracker/server",
     "@cdm-logger/client": "^5.0.7",
     "@cdm-logger/core": "^6.0.0",

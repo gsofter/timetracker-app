@@ -9,7 +9,7 @@ import {
   ClockCircleOutlined,
   BarsOutlined,
 } from '@ant-design/icons';
-import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
 import {
   Input,
   Button,

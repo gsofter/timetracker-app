@@ -10,7 +10,7 @@ import {
   IProjects as IProject,
   ITimesheetState,
   ITimesheet,
-} from '@admin-layout/timetracker-module-core';
+} from '@admin-layout/timetracker-core';
 import { TimesheetInput } from '../../components/TimesheetInput';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import {

@@ -3,7 +3,7 @@ import classNames from 'classnames';
 import moment from 'moment';
 import { useFela } from 'react-fela';
 import { Button, TimePicker, Row, Col, Input, Typography, Dropdown, Menu } from 'antd';
-import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
 
 const { RangePicker } = TimePicker;
 import CSS from 'csstype';

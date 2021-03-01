@@ -1,5 +1,5 @@
 import store from 'store';
-import { ITimeRecord } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord } from '@admin-layout/timetracker-core';
 export const saveTimeRecord = (timeRecord: ITimeRecord) => {
   store.set('playing_record', timeRecord);
 };

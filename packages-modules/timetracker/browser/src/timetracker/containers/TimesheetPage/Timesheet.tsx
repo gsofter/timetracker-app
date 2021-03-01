@@ -26,7 +26,7 @@ import {
   IProjects as IProject,
   ITask,
   ITeamMember as IMember,
-} from '@admin-layout/timetracker-module-core';
+} from '@admin-layout/timetracker-core';
 import Spacer from '../../components/Spacer';
 
 const { TextArea } = Input;

@@ -5,7 +5,7 @@ import { Loading } from '../../components/Loading';
 import { useFela } from 'react-fela';
 import _ from 'lodash';
 import { PlusCircleOutlined, TagOutlined, StopFilled, PlayCircleFilled } from '@ant-design/icons';
-import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-core';
 import { Input, Button, Checkbox, Typography, Row, Col } from 'antd';
 import CSS from 'csstype';
 import Timer from 'react-compound-timer';
