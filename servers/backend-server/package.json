@@ -65,6 +65,7 @@
     "@admin-layout/timetracker-module-server": "file:../../packages-modules/timetracker/server",
     "@adminide-stack/core": "^0.0.18-alpha.390",
     "@adminide-stack/platform-server": "^0.0.18-alpha.390",
+    "@adminide-stack/account-api-server": "^0.0.18-alpha.395",
     "@adminide-stack/user-auth0-server": "^0.0.18-alpha.391",
     "@casl/ability": "^4.1.5",
     "@cdm-logger/server": "^6.0.0",

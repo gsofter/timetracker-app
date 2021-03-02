@@ -59,7 +59,6 @@
     "@admin-layout/schedule-module-browser": "file:../../packages-modules/schedule/browser",
     "@admin-layout/timetracker-module-browser": "file:../../packages-modules/timetracker/browser",
     "@adminide-stack/account-api-browser": "^0.0.18-alpha.396",
-    "@adminide-stack/account-api-server": "^0.0.18-alpha.395",
     "@adminide-stack/extension-module-browser": "^0.0.18-alpha.396",
     "@adminide-stack/platform-browser": "^0.0.18-alpha.390",
     "@adminide-stack/react-shared-components": "^0.0.18-alpha.390",
