@@ -1,6 +1,8 @@
 const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
 var dotenv = require('dotenv-safe')
+const MonacoWebpackPlugin = require('@vscode/monaco-editor-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const options = {
     stack: [
@@ -24,6 +26,7 @@ const options = {
     nodeDebugger: false,
     overridesConfig: "./tools/webpackAppConfig.js",
     plugins: [
+        new MonacoWebpackPlugin(),
         new Dotenv({
             path: process.env.ENV_FILE
         }),
@@ -34,6 +37,10 @@ const options = {
             //     }))
             // )
         ),
+        new LodashModuleReplacementPlugin({
+            // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
+            flattening: true
+        }),
     ],
     defines: {
         __DEV__: process.env.NODE_ENV === 'development',
@@ -43,6 +50,7 @@ const options = {
 let config = {
     target: 'electron-renderer',
     plugins: [
+        new MonacoWebpackPlugin(),
         new Dotenv({
             path: process.env.ENV_FILE
         }),
