@@ -1,5 +1,6 @@
 const path = require('path');
 var nodeExternals = require('webpack-node-externals');
+const MonacoWebpackPlugin = require('@vscode/monaco-editor-webpack-plugin');
 const debug = process.env.DEBUGGING || false;
 const {merge} = require('webpack-merge');
 const webpack = require('webpack');
@@ -32,11 +33,18 @@ const config = {
             enabled: true,
             webpackConfig: {
                 plugins: [
+                    new MonacoWebpackPlugin(),
+                    new CopyWebpackPlugin([{
+                        from: '../../node_modules/@adminide-stack/extension-module-browser/lib/*.worker.js',
+                        to: '[name].js',
+                    }, { // add source map
+                        from: '../../node_modules/@adminide-stack/extension-module-browser/lib/*.worker.js.map',
+                        to: '[name].js.map',
+                    }]),
                     new LodashModuleReplacementPlugin({
                         // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
-                        flattening: true,
-                        shorthands: true
-                      }),
+                        flattening: true
+                    }),
                 ],
                 // for additional webpack configuration.
                 resolve: process.env.NODE_ENV !== 'production'
@@ -69,9 +77,8 @@ const config = {
                     }]),
                     new LodashModuleReplacementPlugin({
                         // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
-                        flattening: true,
-                        shorthands: true
-                      }),
+                        flattening: true
+                    }),
                 ],
                 externals: [
                     nodeExternals(),
