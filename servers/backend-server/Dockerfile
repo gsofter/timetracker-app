@@ -12,6 +12,7 @@ ADD package.json /tmp/package.json
 RUN set -ex \
 	&& cd /tmp \
 	&& npm install \
+	&& rm -f /tmp/.npmrc \
 	&& mkdir -p /home/app \
 	&& cp -a /tmp/node_modules /home/app/ \
 	&& rm -Rf /tmp/*

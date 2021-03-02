@@ -7,8 +7,14 @@ FROM node:12.18.4-alpine
 COPY .npmrc /tmp/.npmrc  
 ADD package.json /tmp/package.json
 RUN set -ex \
+    && apk add --no-cache \
+	curl \
+	ca-certificates \
+	build-base \
+	python \
 	&& cd /tmp \
 	&& npm install \
+	&& rm -f /tmp/.npmrc \
 	&& mkdir -p /home/app \
 	&& cp -a /tmp/node_modules /home/app/ \
 	&& rm -Rf /tmp/*
