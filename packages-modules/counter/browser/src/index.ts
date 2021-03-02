@@ -6,6 +6,13 @@ import ConnectedReactRouter from './connected-react-router';
 import Organization from './organization';
 import Fela from './fela';
 
-export default new Feature(Common, ConnectedReactRouter, ApolloCounter, Fela, Account, Organization);
+export default new Feature(
+    // Common,
+    //  ConnectedReactRouter, 
+    //  ApolloCounter, 
+    //  Fela, 
+    //  Account, 
+    Organization
+);
 
 

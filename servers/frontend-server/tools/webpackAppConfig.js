@@ -6,6 +6,7 @@ const dependencyPlatforms = {
     "@admin-layout/platform-browser": "noddl",
     "@cdm-logger/server": "noddl",
     "@admin-layout/counter": "noddl",
+    "@adminide-stack/core": 'nodll',
     "@adminide-stack/user-auth0-server": "noddl",
     "bunyan": 'server',
     "export-dir": 'server',

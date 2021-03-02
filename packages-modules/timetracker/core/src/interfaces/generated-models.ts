@@ -2655,6 +2655,17 @@ export type IGetTimesheetsQuery = (
   )>>> }
 );
 
+export type IGetMembersQueryVariables = {};
+
+
+export type IGetMembersQuery = (
+  { __typename?: 'Query' }
+  & { getOrganizationMembers?: Maybe<Array<Maybe<(
+    { __typename?: 'OrgMember' }
+    & Pick<IOrgMember, 'userId' | 'role' | 'name' | 'teamNames'>
+  )>>> }
+);
+
 
 export const GetTagsDocument = gql`
     query GetTags {
@@ -2789,6 +2800,17 @@ export const GetTimesheetsDocument = gql`
 }
     `;
 export type GetTimesheetsQueryResult = ApolloReactCommon.QueryResult<IGetTimesheetsQuery, IGetTimesheetsQueryVariables>;
+export const GetMembersDocument = gql`
+    query GetMembers {
+  getOrganizationMembers {
+    userId
+    role
+    name
+    teamNames
+  }
+}
+    `;
+export type GetMembersQueryResult = ApolloReactCommon.QueryResult<IGetMembersQuery, IGetMembersQueryVariables>;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;

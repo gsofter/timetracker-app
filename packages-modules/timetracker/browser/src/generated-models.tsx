@@ -24,6 +24,7 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 
+
 export const GetTagsDocument = gql`
     query GetTags {
   getTags @client {
@@ -579,3 +580,44 @@ export function useGetTimesheetsLazyQuery(baseOptions?: ApolloReactHooks.LazyQue
 export type GetTimesheetsQueryHookResult = ReturnType<typeof useGetTimesheetsQuery>;
 export type GetTimesheetsLazyQueryHookResult = ReturnType<typeof useGetTimesheetsLazyQuery>;
 export type GetTimesheetsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetTimesheetsQuery, SchemaTypes.IGetTimesheetsQueryVariables>;
+export const GetMembersDocument = gql`
+    query GetMembers {
+  getOrganizationMembers {
+    userId
+    role
+    name
+    teamNames
+  }
+}
+    `;
+export type GetMembersComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetMembersQuery, SchemaTypes.IGetMembersQueryVariables>, 'query'>;
+
+    export const GetMembersComponent = (props: GetMembersComponentProps) => (
+      <ApolloReactComponents.Query<SchemaTypes.IGetMembersQuery, SchemaTypes.IGetMembersQueryVariables> query={GetMembersDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetMembersQuery__
+ *
+ * To run a query within a React component, call `useGetMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetMembersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetMembersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchemaTypes.IGetMembersQuery, SchemaTypes.IGetMembersQueryVariables>) {
+        return ApolloReactHooks.useQuery<SchemaTypes.IGetMembersQuery, SchemaTypes.IGetMembersQueryVariables>(GetMembersDocument, baseOptions);
+      }
+export function useGetMembersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchemaTypes.IGetMembersQuery, SchemaTypes.IGetMembersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SchemaTypes.IGetMembersQuery, SchemaTypes.IGetMembersQueryVariables>(GetMembersDocument, baseOptions);
+        }
+export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>;
+export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>;
+export type GetMembersQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetMembersQuery, SchemaTypes.IGetMembersQueryVariables>;

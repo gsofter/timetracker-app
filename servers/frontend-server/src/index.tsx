@@ -9,6 +9,7 @@ import Main from './app/Main';
 // tslint:disable-next-line
 import 'backend_reload';
 import 'antd/dist/antd.css';
+import 'react-table/react-table.css';
 
 const rootEl = document.getElementById('root');
 let frontendReloadCount = 0;

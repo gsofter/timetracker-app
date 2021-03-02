@@ -25,7 +25,7 @@ const { apolloClient, services } = createClientContainer();
 
 export const epicMiddleware = createEpicMiddleware({
     dependencies: {
-        apolloClient: createApolloClient(),
+        apolloClient,
         routes: modules.getConfiguredRoutes(),
         services,
     },

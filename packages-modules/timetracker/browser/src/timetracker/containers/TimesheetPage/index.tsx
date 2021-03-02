@@ -212,7 +212,7 @@ const TimesheetPage = () => {
     <></>
   ) : (
     <Timesheet
-      projects={_.get(projectsData, 'getProjects', [])}
+      projects={_.get(projectsData, 'getProjects', [] as any)}
       members={_.get(membersData, 'getMembers', [])}
       tags={_.get(tagsData, 'getTags', [])}
     ></Timesheet>
