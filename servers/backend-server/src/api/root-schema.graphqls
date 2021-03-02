@@ -2,8 +2,12 @@ scalar AnyObject
 scalar Date
 scalar Time
 scalar DateTime
+scalar URI
+scalar URIInput
 scalar JSON
 scalar JSONObject
+
+
 type FieldError {
   field: String!
   message: String!

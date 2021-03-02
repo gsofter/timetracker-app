@@ -5,7 +5,7 @@ import { getFilteredMenus, getFilteredRoutes } from '../utils';
 
 export const accountPageStore: any[] = [
   {
-    path: '//:orgName/organization',
+    path: '/:orgName/organization',
     key: 'organization',
     name: 'Organization Menu',
     component: Organization,
@@ -13,9 +13,18 @@ export const accountPageStore: any[] = [
     exact: true,
     priority: 2,
   },
+  {
+    path: '/:orgName/dashboard',
+    key: 'dashboard',
+    name: 'Dashboard',
+    component: Organization,
+    position: IMenuPosition.LOWER,
+    exact: true,
+    priority: 2,
+  },
 ];
 
-const selectedRoutesAndMenus = ['organization'];
+const selectedRoutesAndMenus = [ 'dashboard'];
 
 // get menus
 const filteredMenus = getFilteredMenus(accountPageStore, selectedRoutesAndMenus);

@@ -8,7 +8,7 @@ import {
   ITimesheet,
   ITimesheetCreateRequest,
   ITimesheetState,
-} from '@admin-layout/timetracker-module-core';
+} from '@admin-layout/timetracker-core';
 import { TYPES, DEFAULT_USER } from '../constants';
 @injectable()
 export class TimeTrackerService implements ITimeTrackerService {

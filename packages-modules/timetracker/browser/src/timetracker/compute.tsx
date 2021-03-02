@@ -16,7 +16,7 @@ export const timePageStore: any[] = [
     position: IMenuPosition.MIDDLE,
     tab: 'Time Tracker',
     name: 'Time Tracker',
-    path: '//:orgName/time-tracker',
+    path: '/:orgName/time-tracker',
     priority: 1,
   },
   {
@@ -25,7 +25,7 @@ export const timePageStore: any[] = [
     name: 'Timer',
     component: TimeTracker,
     position: IMenuPosition.MIDDLE,
-    path: '//:orgName/time-tracker/timer',
+    path: '/:orgName/time-tracker/timer',
     priority: 2,
   },
   {
@@ -34,7 +34,7 @@ export const timePageStore: any[] = [
     name: 'Timesheet',
     component: Timesheet,
     position: IMenuPosition.MIDDLE,
-    path: '//:orgName/time-tracker/timesheet',
+    path: '/:orgName/time-tracker/timesheet',
     priority: 3,
   },
   {
@@ -43,7 +43,7 @@ export const timePageStore: any[] = [
     name: 'Projects',
     component: ProjectsPage,
     position: IMenuPosition.MIDDLE,
-    path: '//:orgName/time-tracker/projects',
+    path: '/:orgName/time-tracker/projects',
     priority: 4,
   },
   {
@@ -52,7 +52,7 @@ export const timePageStore: any[] = [
     name: 'Clients',
     component: ClientsPage,
     position: IMenuPosition.MIDDLE,
-    path: '//:orgName/time-tracker/clients',
+    path: '/:orgName/time-tracker/clients',
     priority: 5,
   },
 ];

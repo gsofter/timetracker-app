@@ -43,7 +43,7 @@
   "license": "ISC",
   "dependencies": {
     "humanize-duration": "^3.24.0",
-    "@admin-layout/timetracker-module-core": "file:../core"
+    "@admin-layout/timetracker-core": "file:../core"
   },
   "peerDependencies": {
     "@common-stack/server-core": ">=0.0.251"

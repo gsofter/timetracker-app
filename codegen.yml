@@ -117,6 +117,9 @@ generates:
       withHOC: false
       withComponent: false
     plugins:
+      - add: |
+          /* tslint:disable */
+          import { URI,  UriComponents } from '@vscode/monaco-editor/esm/vs/base/common/uri';
       - typescript
       - typescript-operations
       - typescript-react-apollo
@@ -134,7 +137,7 @@ generates:
       withHooks: true
     preset: import-types-preset
     presetConfig:
-      typesPath: '@admin-layout/timetracker-module-core'
+      typesPath: '@admin-layout/timetracker-core'
       importTypesNamespace: SchemaTypes
     plugins:
       - add: |
@@ -156,6 +159,9 @@ generates:
       withHOC: false
       withComponent: false
     plugins:
+      - add: |
+          /* tslint:disable */
+          import { URI,  UriComponents } from '@vscode/monaco-editor/esm/vs/base/common/uri';
       - typescript
       - typescript-operations
       - typescript-react-apollo

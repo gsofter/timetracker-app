@@ -1,28 +1,12 @@
-type Task {
-  id: String
-  name: String
-}
 
-type Member {
-  id: ID!
-  name: String
-}
 
 type Tag {
   id: ID!
   name: String
 }
 
-type Project {
-  id: String
-  name: String
-  clientId: [String]
-  orgName: String
-  teams: [String]
-  tasks: [Task]
-  updatedAt: DateTime
-  createdAt: DateTime
-}
+
+
 
 enum StartYearWeekType {
   FIRST_FOURDAY_WEEK
@@ -30,14 +14,13 @@ enum StartYearWeekType {
   FIRST_DAY_WEEK
 }
 
-type Settings {
-  startWeekDay: Int
-  startYearWeek: StartYearWeekType
+
+type Task {
+  id: String
+  name: String
 }
 
 extend type Query {
-  getProjects: [Project]
   getTags: [Tag]
-  getMembers: [Member]
   getSettings: Settings
 }

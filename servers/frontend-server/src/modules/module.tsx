@@ -3,19 +3,25 @@ import { Feature, FeatureWithRouterFactory, renderRoutes2 } from '@common-stack/
 import { ThemeProvider } from '@admin-layout/components';
 import LayoutModule, { ProLayout } from '@admin-layout/react-shared-components';
 import CounterModule from '@admin-layout/counter-module-browser';
-import PlatformModule from '@admin-layout/platform-browser';
+import PlatformModule from '@adminide-stack/platform-browser';
 import ScheduleModule from '@admin-layout/schedule-module-browser';
 import ActivityModule from '@admin-layout/activity-module-browser';
 import TimeTrackerModule from '@admin-layout/timetracker-module-browser';
+import AccountsModule from "@adminide-stack/account-api-browser";
+import AuthModule from "@adminide-stack/user-auth0-browser";
+import ExtensionModule from '@adminide-stack/extension-module-browser';
 
 const features = new Feature(
   FeatureWithRouterFactory,
   LayoutModule,
-  PlatformModule,
+  AuthModule,
+  AccountsModule,
   CounterModule,
   ScheduleModule,
   TimeTrackerModule,
   ActivityModule,
+  PlatformModule,
+  ExtensionModule,
 );
 
 const configuredRoutes =  features.getConfiguredRoutes();

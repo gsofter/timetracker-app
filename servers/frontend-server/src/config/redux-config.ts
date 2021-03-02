@@ -13,15 +13,21 @@ import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { createEpicMiddleware } from 'redux-observable';
 import { createApolloClient } from './apollo-client';
 import { rootEpic } from '../config/epic-config';
+import { createClientContainer } from './client.service';
+import { initialRedirectState } from '@adminide-stack/user-auth0-browser';
 
 export const history = require('./router-history');
 
 const reduxLogger = createLogger({
     collapsed: true,
 });
+const { apolloClient, services } = createClientContainer();
+
 export const epicMiddleware = createEpicMiddleware({
     dependencies: {
-        apolloClient: createApolloClient(),
+        apolloClient,
+        routes: modules.getConfiguredRoutes(),
+        services,
     },
 });
 
@@ -35,7 +41,6 @@ export const persistConfig = {
     storage,
     stateReconciler: autoMergeLevel2,
     whitelist: [
-        'user',
     ],
 };
 
@@ -74,7 +79,10 @@ export const createReduxStore = (url = '/') => {
     const persistedReducer = persistReducer(persistConfig, rootReducer);
 
     // If we have preloaded state, save it.
-    const initialState = __CLIENT__ ? { ...window.__PRELOADED_STATE__ } : {};
+    const initialState = __CLIENT__
+        // ? { ...window.__PRELOADED_STATE__, redirectRoutes: initialRedirectState } //#952 TODO we need cookie to have id_token for SSR to work properly
+        ? { redirectRoutes: initialRedirectState } 
+        : { redirectRoutes: initialRedirectState };
     // Delete it once we have it stored in a variable
     if (__CLIENT__) {
         delete window.__PRELOADED_STATE__;
@@ -83,7 +91,7 @@ export const createReduxStore = (url = '/') => {
     const store =
         createStore(
             persistedReducer,
-            initialState,
+            initialState as any,
             composeEnhancers(...enhancers()),
         );
     if (__CLIENT__) {

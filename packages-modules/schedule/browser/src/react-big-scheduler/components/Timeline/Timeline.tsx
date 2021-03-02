@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import TimelineComponent, { TimelineHeaders, DateHeader } from 'react-calendar-timeline';
+import TimelineComponent, { TimelineHeaders, DateHeader, TimelineKeys } from 'react-calendar-timeline';
 import moment from 'moment';
 import { UserOutlined, ScheduleOutlined } from '@ant-design/icons';
 import TimezonePicker from 'react-timezone';
@@ -24,8 +24,9 @@ const resourceMap = [
   { resourceId: '5', resourceTitle: 'Project5', stackItems: true },
 ] as any;
 
-const keys = {
+const keys: TimelineKeys & { groupLabelKey?: any } = {
   groupIdKey: 'resourceId',
+  groupRightTitleKey: 'rightTitle',
   groupTitleKey: 'resourceTitle',
   itemIdKey: 'id',
   itemTitleKey: 'title',
@@ -298,7 +299,7 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
         onItemMove={handleItemMove}
         onItemResize={handleItemResize}
         itemHeightRatio={0.75}
-        // fullUpdate={true}
+        // fullUpdate={true} its removed
         itemTouchSendsClick={false}
         stackItems
         visibleTimeStart={visibleTimeStart}
