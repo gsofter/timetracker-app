@@ -40,11 +40,7 @@ env['GRAPHQL_SUBSCRIPTION_URL'] = env['GRAPHQL_SUBSCRIPTION_URL'] || env['GRAPHQ
 export default env;
 
 if (isBrowser) {
-<<<<<<< HEAD
     process[lowerCase('env')] = env; // to avoid webpack to replace `process` with actual value.
-=======
-    process['env'] = env;
->>>>>>> 3f3e1e93fd50475f5f310406340f45e7d3f55f1e
     process.APP_ENV = env;
 }
 global.process = process;
