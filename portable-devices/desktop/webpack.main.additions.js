@@ -14,7 +14,7 @@ let config = {
     plugins: [
         new MonacoWebpackPlugin(),
     ],
-    // entry: './src/main/app.ts',
+    entry: './src/main/app.ts',
     // output: {
     //     filename: 'main.js',
     // },

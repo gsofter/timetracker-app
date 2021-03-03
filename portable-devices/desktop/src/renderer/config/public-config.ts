@@ -1,5 +1,4 @@
-
-import { lowerCase } from 'lodash';
+import { lowerCase } from "lodash-es";
 
 /**
  * This file opens up in public site, so make sure it is
@@ -27,27 +26,29 @@ const publicEnv = [
 ];
 
 const isBrowser = typeof window !== 'undefined';
-const base = (isBrowser ? (window.__ENV__ || __ENV__) : process.env) || {};
+// const base = (isBrowser ? ( window.__ENV__ || __ENV__) : process.env) || {};
+const base = {
+    AUTH0_CLIENT_ID: 'T9XM292l33Xb12RVPvRIfrb5hYTZsRme',
+    AUTH0_DOMAIN: 'dev - cdebase.auth0.com',
+    AUTH0_ISSUER: 'https://dev-cdebase.auth0.com/',
+    AUTH0_API_AUDIENCE: 'https://dev-cdebase.auth0.com/api/v2/',
+    STRIPE_ENDPOINT_SECRET: 'werwerw',
+    CLIENT_URL: 'http://localhost:3011'
+}
 const env: any = {};
 for (const v of publicEnv) {
     env[v] = base[v];
 }
 
-// add subscription url for temporary
-env['GRAPHQL_URL'] = env.GRAPHQL_URL || __GRAPHQL_URL__;
-env['GRAPHQL_SUBSCRIPTION_URL'] = env['GRAPHQL_SUBSCRIPTION_URL'] || env['GRAPHQL_URL'].replace(/^http/, 'ws');
 export default env;
 
 if (isBrowser) {
     process[lowerCase('env')] = env; // to avoid webpack to replace `process` with actual value.
     process.APP_ENV = env;
 }
-global.process = process;
-
-export const PUBLIC_SETTINGS: __PUBLIC_SETTINGS__ & any= {
+export const PUBLIC_SETTINGS: __PUBLIC_SETTINGS__ = {
     apolloLogging: false,
     GRAPHQL_URL: process.env.GRAPHQL_URL || env.GRAPHQL_URL || __GRAPHQL_URL__,
-    GRAPHQL_SUBSCRIPTION_URL: env.GRAPHQL_SUBSCRIPTION_URL,
     LOCAL_GRAPHQL_URL: process.env.LOCAL_GRAPHQL_URL || __GRAPHQL_URL__,
-    LOG_LEVEL: process.env.LOG_LEVEL || 'debug',
+    LOG_LEVEL: process.env.LOG_LEVEL || 'trace',
 };

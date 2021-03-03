@@ -3,7 +3,7 @@
  * This module executes inside of electron's main process. You can start
  * electron renderer process from here and communicate with the other processes
  */
-import { app, BrowserWindow } from 'electron';
+import { app, BrowserWindow, ipcMain } from 'electron';
 import * as path from 'path';
 import { config } from '../config';
 import { format as formatUrl } from 'url';
@@ -13,15 +13,24 @@ const isDevelopment = config.isDevelopment;
 
 // Global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow: BrowserWindow | undefined;
+app.commandLine.appendSwitch('auth-server-whitelist', 'https://dev-cdebase.auth0.com/co/authenticate');
 
 const createMainWindow = () => {
   // Create the browser window.
-  const window = new BrowserWindow({webPreferences: {nodeIntegration: true,  webSecurity: false}});
+  const window = new BrowserWindow({
+    webPreferences: {
+      nodeIntegration: true,
+      webSecurity: false,
+    }
+  });
   if (isDevelopment) {
+    app.commandLine.appendSwitch('auth-server-whitelist', 'https://dev-cdebase.auth0.com/co/authenticate');
+    app.commandLine.appendSwitch("disable-features", "OutOfBlinkCors");
+    app.commandLine.appendSwitch('disable-site-isolation-trials');
     window.webContents.openDevTools()
   }
 
-console.log('---ISDEVEO', config.isDev, config.isDevelopment);
+  console.log('---ISDEVEO', config.isDev, config.isDevelopment);
   if (isDevelopment) {
     // window.loadURL(`http://localhost:${config.ELECTRON_WEBPACK_WDS_PORT}`);
     window.loadURL(formatUrl({
@@ -55,6 +64,11 @@ console.log('---ISDEVEO', config.isDev, config.isDevelopment);
   return window;
 };
 
+ipcMain.on('get-env', (event) => {
+  console.log('---CALLLED --- get-env')
+  event.sender.send('get-env-reply', JSON.stringify(process.env));
+});
+
 // Quit application when all windows are closed
 app.on('window-all-closed', () => {
   // On macOS it is common for applications to stay open until the user explicitly quits
@@ -72,5 +86,5 @@ app.on('activate', () => {
 
 // Create main BrowserWindow when electron is ready
 app.on('ready', () => {
-  mainWindow = createMainWindow()
+  mainWindow = createMainWindow();
 });
