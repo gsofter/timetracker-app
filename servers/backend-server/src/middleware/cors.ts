@@ -10,6 +10,7 @@ const corsWhitelist = [
     BACKEND_URL,
     CLIENT_URL,
     config.GRAPHQL_URL,
+    '*CDEBase.io'
 ];
 logger.info('Cors whitelist: %j', corsWhitelist);
 const corsOptions = {

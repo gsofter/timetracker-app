@@ -9,6 +9,7 @@ const BACKEND_URL = config.BACKEND_URL;
 const corsWhitelist = [
     CLIENT_URL,
     BACKEND_URL,
+    '*CDEBase.io'
 ];
 logger.info('corsWhitelist (%j)', corsWhitelist);
 
