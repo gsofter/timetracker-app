@@ -248,7 +248,7 @@ const TabularCalendar = ({
               .map((val, index) => {
                 const curDay = moment(weekStart).add(index, 'day');
                 return (
-                  <th>
+                  <th key={index}>
                     <div className={css(styles.dateHeader)}>
                       <div className={cls('day')}>
                         <span>{curDay.format('DD')}</span>
