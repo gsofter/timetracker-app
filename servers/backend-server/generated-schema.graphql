@@ -1373,7 +1373,6 @@ extend type Mutation {
 
 # scalar DateTime
 enum TimesheetState {
-  OPEN
   APPROVED_PENDING
   APPROVED
   APPROVED_FINALIZED # --- which means no going back
@@ -1384,8 +1383,8 @@ enum TimesheetState {
 
 type Timesheet {
   id: ID
-  startDate: DateTime
-  endDate: DateTime
+  startDate: DateTime # (only Date without time)
+  endDate: DateTime # (only Date without time)
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
