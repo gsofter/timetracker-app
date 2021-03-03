@@ -9,7 +9,11 @@ import {
   useGetTagsQuery,
 } from '../../../generated-models';
 import { Row, Col, Switch, Form, Select, Checkbox } from 'antd';
-import { IProject, ITag, IMember } from '@admin-layout/timetracker-module-core';
+import {
+  IProjects as IProject,
+  ITag,
+  ITeamMember as IMember,
+} from '@admin-layout/timetracker-core';
 import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
@@ -20,6 +24,38 @@ enum VIEW_MODE {
   CALENDAR_VIEW,
   TABULAR_VIEW,
 }
+
+const members = [
+  {
+    id: 'user1',
+    name: 'userA',
+  },
+  { id: 'user2', name: 'userB' },
+];
+
+const projects = [
+  {
+    id: '1',
+    name: 'projectA',
+    tasks: [
+      { id: 'task1', name: 'PATaskA' },
+      { id: 'task2', name: 'PATaskB' },
+    ],
+  },
+  {
+    id: '2',
+    name: 'projectB',
+    tasks: [
+      { id: 'task1', name: 'PBTaskA' },
+      { id: 'task2', name: 'PBTaskB' },
+    ],
+  },
+];
+
+const tags = [
+  { id: 'tag1', name: 'TagA', active: true },
+  { id: 'tag2', name: 'TagB', active: true },
+];
 
 interface ITimesheetProps {
   projects: Array<IProject>;
@@ -180,7 +216,7 @@ const TimesheetPage = () => {
     <></>
   ) : (
     <Timesheet
-      projects={_.get(projectsData, 'getProjects', [])}
+      projects={_.get(projectsData, 'getProjects', [] as any)}
       members={_.get(membersData, 'getMembers', [])}
       tags={_.get(tagsData, 'getTags', [])}
     ></Timesheet>

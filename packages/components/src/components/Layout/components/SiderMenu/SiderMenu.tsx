@@ -7,7 +7,6 @@ import { MenuUnfoldOutlined, MenuFoldOutlined } from '@ant-design/icons';
 import { WithFalse } from '../typings';
 import BaseMenu, { BaseMenuProps } from './BaseMenu';
 import MenuCounter from './Counter';
-import { getMenuSeparation } from '../utils/seperatedMenus';
 
 const { Sider } = Layout;
 
@@ -119,22 +118,17 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props => {
   const headerDom = defaultRenderLogoAndTitle(props);
 
   const extraDom = menuExtraRender && menuExtraRender(props);
-  const menuDom = () => { // @sri converted to function inorder to filter menus.
-    const { menuData, ...rest } = props;
-    const newMenuData = getMenuSeparation(menuData).lowerMenus;
-    const newProps = { ...rest, menuData: newMenuData };
-    return menuContentRender !== false && flatMenuKeys && (
-      <BaseMenu
-        {...newProps}
-        mode="inline"
-        handleOpenChange={onOpenChange}
-        style={{
-          width: '100%',
-        }}
-        className={`${baseClassName}-menu`}
-      />
-    );
-  }
+  const menuDom = menuContentRender !== false && flatMenuKeys && (
+    <BaseMenu
+      {...props}
+      mode="inline"
+      handleOpenChange={onOpenChange}
+      style={{
+        width: '100%',
+      }}
+      className={`${baseClassName}-menu`}
+    />
+  );
 
   return (
     <>
@@ -226,7 +220,7 @@ const SiderMenu: React.FC<SiderMenuProps & PrivateSiderMenuProps> = props => {
             overflowX: 'hidden',
           }}
         >
-          {menuContentRender ? menuContentRender(props, menuDom()) : menuDom()}
+          {menuContentRender ? menuContentRender(props, menuDom) : menuDom}
         </div>
 
         {menuFooterRender && (

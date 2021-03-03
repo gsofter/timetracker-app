@@ -1,0 +1,10 @@
+query GetProjects {
+  getProjects {
+    id
+    name
+    clientId
+    teams
+    status
+    orgName
+  }
+}

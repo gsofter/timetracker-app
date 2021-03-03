@@ -16,13 +16,12 @@ import {
   ITimeRecord,
   ITimeRecordRequest,
   RemoveDurationTimeRecordsDocument,
-} from '@admin-layout/timetracker-module-core';
+} from '@admin-layout/timetracker-core';
 import moment from 'moment';
 import { useFela } from 'react-fela';
 import CSS from 'csstype';
 import * as _ from 'lodash';
 import DurationInput from '../DurationInput';
-import { IProject } from '@admin-layout/timetracker-module-core';
 const { RangePicker } = TimePicker;
 
 interface ITimesheetEditModalProps {

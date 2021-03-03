@@ -23,14 +23,14 @@ import { useFela } from 'react-fela';
 import {
   ITimesheetCreateRequest,
   ITimeRecord,
-  IProject,
+  IProjects as IProject,
   ITask,
-  IMember,
-} from '@admin-layout/timetracker-module-core';
+  ITeamMember as IMember,
+} from '@admin-layout/timetracker-core';
 import Spacer from '../../components/Spacer';
 
 const { TextArea } = Input;
-const DnDCalendar = withDragAndDrop(Calendar);
+const DnDCalendar: any = withDragAndDrop(Calendar as any);
 const localizerM = momentLocalizer(moment);
 const { RangePicker } = TimePicker;
 const allViews: View[] = ['day', 'week', 'month'];

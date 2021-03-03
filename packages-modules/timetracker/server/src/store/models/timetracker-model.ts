@@ -1,5 +1,5 @@
 import { Schema, Model, Document, Connection } from 'mongoose'
-import { ITimeTracker } from '@admin-layout/timetracker-module-core'
+import { ITimeTracker } from '@admin-layout/timetracker-core'
 
 interface ITimeTrackerModel extends ITimeTracker , Document {
     id: any;

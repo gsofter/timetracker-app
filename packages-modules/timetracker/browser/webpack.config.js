@@ -52,7 +52,7 @@ var webpack_opts = {
         cacheDirectory: true,
         presets: [
           require.resolve('@babel/preset-env'),
-          require.resolve('@babel/preset-react'),          
+          require.resolve('@babel/preset-react'),
         ],
         plugins: [require.resolve('@babel/plugin-proposal-class-properties')],
       },
@@ -90,9 +90,10 @@ var webpack_opts = {
     ]
   },
   externals: [
-    nodeExternals({ 
-      whitelist: ['antd/lib/**/*.css'],
-      modulesDir: "../../../node_modules" }),
+    nodeExternals({
+      allowlist: ['antd/lib/**/*.css'],
+      modulesDir: "../../../node_modules"
+    }),
     nodeExternals()
   ]
 };

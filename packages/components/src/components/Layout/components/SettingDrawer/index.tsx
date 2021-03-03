@@ -23,6 +23,7 @@ import LayoutSetting, { renderLayoutSettingItem } from './LayoutChange';
 import RegionalSetting from './RegionalChange';
 import { useFela } from 'react-fela';
 import { styleSheet } from './styles';
+import { useIntl } from 'react-intl';
 
 interface BodyProps {
   title: string;
@@ -523,6 +524,7 @@ const SettingDrawer: React.FC<SettingDrawerProps> = (props) => {
     setSettingState(nextState);
   };
 
+  
   const formatMessage = getFormatMessage();
   const themeList = getThemeList(settingState);
 

@@ -1,10 +1,4 @@
-import { Settings as ProSettings } from '@admin-layout/components';
-
-
-type DefaultSettings = Partial<ProSettings> & {
-
-}
-
+import { DefaultSettings } from '../interfaces';
 
 const proSettings: DefaultSettings = {
     navTheme: 'dark',
@@ -16,6 +10,7 @@ const proSettings: DefaultSettings = {
     colorWeak: false,
     title: 'CDMBase LLC',
     iconfontUrl: '',
+    language: 'en-US'
 }
 
 export type { DefaultSettings };

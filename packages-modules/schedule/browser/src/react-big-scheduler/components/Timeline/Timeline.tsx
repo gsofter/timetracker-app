@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import TimelineComponent, { TimelineHeaders, DateHeader } from 'react-calendar-timeline';
+import TimelineComponent, { TimelineHeaders, DateHeader, TimelineKeys } from 'react-calendar-timeline';
 import moment from 'moment';
 import { UserOutlined, ScheduleOutlined } from '@ant-design/icons';
 import TimezonePicker from 'react-timezone';
@@ -22,10 +22,11 @@ const resourceMap = [
   { resourceId: '3', resourceTitle: 'Project3', stackItems: true },
   { resourceId: '4', resourceTitle: 'Project4', stackItems: true },
   { resourceId: '5', resourceTitle: 'Project5', stackItems: true },
-];
+] as any;
 
-const keys = {
+const keys: TimelineKeys & { groupLabelKey?: any } = {
   groupIdKey: 'resourceId',
+  groupRightTitleKey: 'rightTitle',
   groupTitleKey: 'resourceTitle',
   itemIdKey: 'id',
   itemTitleKey: 'title',
@@ -34,7 +35,7 @@ const keys = {
   itemTimeStartKey: 'start',
   itemTimeEndKey: 'end',
   groupLabelKey: 'resourceTitle',
-};
+} as any;
 
 const SM_SCREEN_SIZE = 768;
 
@@ -298,7 +299,7 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
         onItemMove={handleItemMove}
         onItemResize={handleItemResize}
         itemHeightRatio={0.75}
-        fullUpdate={true}
+        // fullUpdate={true} its removed
         itemTouchSendsClick={false}
         stackItems
         visibleTimeStart={visibleTimeStart}
@@ -322,7 +323,7 @@ function TimelineCalendar({ handleAddSchedule, events: propEvents }: ITimelineCa
                     <span className="month">{curTime.format('MMM')}</span>
                   </div>
                 </div>
-              );
+              ) as any;
             }}
             style={{ height: 100 }}
             intervalRenderer={({ getIntervalProps, intervalContext, data }) => {

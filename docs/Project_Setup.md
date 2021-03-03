@@ -14,7 +14,7 @@ cd admin-layout
 
     b. install `node-gyp` globally. For installation check [this document](https://github.com/nodejs/node-gyp#installation).
 
-    c. Node version supported is `12.18.4` and `npm` version is `6.14.6`.
+    c. Node version supported is `12.18.4` and `npm` version is `6.14.6`. You can Download Node from [here](https://nodejs.org/dist/v12.18.4/)
 
     d. Insall and build packages using following command. Run from the root folder of this project.
 ```
@@ -59,7 +59,7 @@ npm run watch-packages
 If you also need to watch along with it, you can use as many scopes as required like below. 
 
 ```
-npm run watch-packages -- --scope=@admin-layout/counter-module* --scope=@packageb
+npm run watch-packages -- --scope=@sample-stack/counter-module* --scope=@packageb
 ```
 
 To run build with watch for all the packages. Note: This will run watch on all packages under `packages-modules` and may saturate the resources in your laptop instead run above `watch-packages` command.

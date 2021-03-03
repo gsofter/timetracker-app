@@ -19,7 +19,7 @@ import {
   useUpdateTimeRecordMutation,
   useGetProjectsQuery,
 } from '../../../generated-models';
-import { ITimeRecordRequest, ITimeRecord, IProject } from '@admin-layout/timetracker-module-core';
+import { ITimeRecordRequest, ITimeRecord, IProjects as IProject } from '@admin-layout/timetracker-core';
 import { message } from 'antd';
 import * as _ from 'lodash';
 import Timer from 'react-compound-timer';

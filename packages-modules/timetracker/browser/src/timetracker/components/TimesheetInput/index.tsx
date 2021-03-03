@@ -4,7 +4,7 @@ import CSS from 'csstype';
 import { Button } from 'antd';
 import { MoreOutlined } from '@ant-design/icons';
 import moment from 'moment';
-import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import DurationInput from '../DurationInput';
 import TimesheetEditModal from './TimesheetEditModal';

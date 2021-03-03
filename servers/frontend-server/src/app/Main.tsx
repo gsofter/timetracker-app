@@ -5,55 +5,51 @@ import { RendererProvider } from 'react-fela';
 import { ApolloProvider } from 'react-apollo';
 import { Provider } from 'react-redux';
 import createRenderer from '../config/fela-renderer';
-import { rehydrate, render } from 'fela-dom';
-import { createApolloClient, cache } from '../config/apollo-client';
-import { epic$, rootEpic } from '../config/epic-config';
-import { IntlProvider } from 'react-intl';
+import { rehydrate } from 'fela-dom';
+import { epic$ } from '../config/epic-config';
+
 import {
   createReduxStore,
   storeReducer,
   history,
   persistConfig,
-  epicMiddleware
 } from '../config/redux-config';
-import modules, { MainRoute, container } from '../modules';
+import { createClientContainer } from '../config/client.service';
+
+import {
+  SlotFillProvider,
+  InversifyProvider, Lifecycle,
+} from '@workbench-stack/components';
+import { PluginArea } from '@common-stack/client-react';
+import modules, { MainRoute } from '../modules';
 import { ConnectedRouter } from 'connected-react-router';
-import RedBox from './RedBox';
 import { ServerError } from './Error';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
+import { useProvideAuth } from '@adminide-stack/user-auth0-browser';
+import { ProvideAuth as CoreProvideAuth, ErrorBoundary } from '@adminide-stack/react-shared-components';
 import { ClientTypes } from '@common-stack/client-core';
 
+const ProvideAuth = ({ children }) => {
+  const auth = useProvideAuth();
+  return <CoreProvideAuth auth={auth}>{children}</CoreProvideAuth>;
+};
 
-const client = createApolloClient();
-// attaching the context to client as a workaround.
-container.bind(ClientTypes.ApolloClient).toConstantValue(client);
-container.bind(ClientTypes.InMemoryCache).toConstantValue(cache);
-const services = modules.createService({}, {});
-(client as any).container = services;
+const { apolloClient: client, container } = createClientContainer();
 
 
 let store;
-if (
-  (module as any).hot &&
-  (module as any).hot.data &&
-  (module as any).hot.data.store
-) {
+if ((module as any).hot && (module as any).hot.data && (module as any).hot.data.store) {
   // console.log('Restoring Redux store:', JSON.stringify((module as any).hot.data.store.getState()));
   store = (module as any).hot.data.store;
   // replace the reducers always as we don't have ablity to find
   // new reducer added through our `modules`
-  store.replaceReducer(
-    persistReducer(
-      persistConfig,
-      storeReducer((module as any).hot.data.history || history)
-    )
-  );
+  store.replaceReducer(persistReducer(persistConfig, storeReducer((module as any).hot.data.history || history)));
 } else {
   store = createReduxStore();
 }
 if ((module as any).hot) {
-  (module as any).hot.dispose((data) => {
+  (module as any).hot.dispose(data => {
     // console.log("Saving Redux store:", JSON.stringify(store.getState()));
     data.store = store;
     data.history = history;
@@ -77,43 +73,39 @@ export interface MainState {
 }
 
 export class Main extends React.Component<any, MainState> {
-  constructor(props: any) {
-    super(props);
-    const serverError: any = window.__SERVER_ERROR__;
-    if (serverError) {
-      this.state = { error: new ServerError(serverError) };
-    } else {
-      this.state = {};
-    }
-  }
 
-  public componentDidCatch(error: ServerError, info: any) {
-    this.setState({ error, info });
-  }
-
-  public render() {
+  render() {
     const renderer = createRenderer();
     let persistor = persistStore(store);
     rehydrate(renderer);
-    return this.state.error ? (
-      <RedBox error={this.state.error} />
-    ) : (
-        modules.getWrappedRoot(
-            <Provider store={store}>
+    return (
+      <ErrorBoundary>
+        <SlotFillProvider>
+          <Provider store={store}>
+            <ProvideAuth>
               <ApolloProvider client={client}>
-                <RendererProvider renderer={renderer}>
-                  <PersistGate persistor={persistor}>
-                    {modules.getWrappedRoot(
-                      <ConnectedRouter history={history}>
-                        <MainRoute />
-                      </ConnectedRouter>
-                    )}
-                  </PersistGate>
-                </RendererProvider>
+                <InversifyProvider container={container} modules={modules}>
+                  <Lifecycle setPhaseReady={true}>
+                    <RendererProvider renderer={renderer}>
+                      <PersistGate persistor={persistor}>
+                        <PluginArea />
+                        {modules.getWrappedRoot(
+                          (
+                            <ConnectedRouter history={history}>
+                              <MainRoute />
+                            </ConnectedRouter>
+                          ),
+                        )}
+                      </PersistGate>
+                    </RendererProvider>
+                  </Lifecycle>
+                </InversifyProvider>
               </ApolloProvider>
-            </Provider>
-        )
-      );
+            </ProvideAuth>
+          </Provider>
+        </SlotFillProvider>
+      </ErrorBoundary>
+    );
   }
 }
 

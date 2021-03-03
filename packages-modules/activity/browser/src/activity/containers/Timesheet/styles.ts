@@ -13,16 +13,24 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
       '& .card-outer': {
         display: 'flex',
         justifyContent: 'space-between',
+        flexWrap: 'wrap',
       },
       '& .no-activity': {
+        flexWrap: 'wrap',
         background: '#ddd',
-        flex: '1',
+        width: '170px',
         height: '50px',
         display: 'flex',
         justifyContent: 'center',
         alignItems: 'center',
         margin: '100px 10px',
         borderRadius: '2px',
+        '@media (max-width: 668px)': {
+          width: '120px !important',
+        },
+        '@media (min-width: 992px)': {
+          width: '140px !important',
+        },
         '& p': {
           padding: '0px',
           margin: '0px',
@@ -30,10 +38,16 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
         },
       },
       '& .activity-card': {
-        flex: '1',
+        width: '170px',
         padding: '30px 0px',
         textAlign: 'center',
         margin: '0px 10px',
+        '@media (max-width: 668px)': {
+          width: '120px !important',
+        },
+        '@media (min-width: 992px)': {
+          width: '140px !important',
+        },
         '& h4': {
           padding: '5px 10px',
           boxSizing: 'border-box',
@@ -80,6 +94,9 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
       },
       '& .ant-progress-bg': {
         height: '4px !important',
+      },
+      '@media (max-width: 768px)': {
+        padding: '10px !important',
       },
     };
   },

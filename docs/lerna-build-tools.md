@@ -38,7 +38,7 @@ The outlier packages with different versions will get a normal, local node_modul
 - `npm run build` - It invokes `npm run build` in each packages parallely. 
 - `npm run watch` - Automatically builds the packages that are changed. Recommended to run this when actively coding, so you would know anything (compilation errors) breaks instantly. You may also see `Error: ENOSPC: System limit for number of file watchers reached` if you OS is not configured with high open files. Check [Not Enough Watchers](#not-enough-watchers) section for futher information.
 - `npm run watch-packages` - Abutomatically builds the dependent packages mostly under `packages` folder. 
-- `npm run watch-packages -- --scope @admin-layout/counter-module-*` - By adding package module you like to watch along with the dependent packages. If you have more packages to watch keep adding with `-- --scope packageA* --scope packageB`
+- `npm run watch-packages -- --scope @sample-stack/counter-module-*` - By adding package module you like to watch along with the dependent packages. If you have more packages to watch keep adding with `-- --scope packageA* --scope packageB`
 
 
 
@@ -56,8 +56,8 @@ respectively.
 example: run them in different command tabs for all (package1, package2, pacakge3) packages to watch.
 
 ```
-lerna exec --scope=@admin-layout/counter-module-browser npm run watch
-lerna exec --scope=@admin-layout/counter-module-server npm run watch
+lerna exec --scope=@sample-stack/counter-module-browser npm run watch
+lerna exec --scope=@sample-stack/counter-module-server npm run watch
 ```
 
 Adding packages as dependencies to sibling packages
@@ -66,5 +66,5 @@ When you add sibling package to one of the packages, you need to run `npm run le
 
 Updating specific packages
 ---
-lerna exec "ncu -u --newest --timeout 60000 -f /@sample-stack*/"
+lerna exec "ncu -u --newest --timeout 60000 -f /@admin-layout*/"
 

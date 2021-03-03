@@ -78,7 +78,7 @@ var webpack_opts = {
   },
   externals: [
     nodeExternals({ 
-      whitelist: ['antd/lib/**/*.css'],
+      allowlist: ['antd/lib/**/*.css'],
       modulesDir: "../../../node_modules" }),
     nodeExternals()
   ]

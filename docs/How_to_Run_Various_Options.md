@@ -21,7 +21,7 @@ npm run watch-packages
 If you also need to watch along with it, you can as many scopes as required like below. 
 
 ```
-npm run watch-packages -- --scope=@admin-layout/counter-module* --scope=@packageb
+npm run watch-packages -- --scope=@sample-stack/counter-module* --scope=@packageb
 ```
 
 

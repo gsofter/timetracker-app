@@ -20,7 +20,7 @@ import { startTimerSocket } from '../../configSocket';
 import { CustomSwipe } from '../../components/CustomSwipe';
 import DemoData from '../../demoData';
 import { DatePicker, Space, Popconfirm, Button, TimePicker } from 'antd';
-import { ITimeRecord } from '@admin-layout/timetracker-module-core';
+import { ITimeRecord } from '@admin-layout/timetracker-core';
 const { RangePicker } = TimePicker;
 
 export interface ITaskList {

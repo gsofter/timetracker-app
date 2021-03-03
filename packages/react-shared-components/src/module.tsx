@@ -7,13 +7,10 @@ import { ProLayout } from './components/layouts';
 export default new Feature({
     routeConfig: [
         {
-            ['/']: {
-                // key: 'layout',
-                // tab: 'User Menu',
-                // path: '//:orgName',
+            ['/:orgName']: {
                 exact: false,
                 component: ProLayout,
-            } as any
+            },
         }
     ],
     reducer: { settings: settingsReducer },

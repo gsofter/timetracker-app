@@ -13,7 +13,6 @@ export class CounterMockMoleculerService extends Service {
     constructor(broker: ServiceBroker, { container, settings }: { container: Container } & { settings: any  }) {
         super(broker);
         const { subTopic } = settings;
-        console.log('---SUBTOPIC ', subTopic);
         const topic = NATS_MOLECULER_COUNTER_SERIVCE;
         this.counterMock = container.get<ICounterService>(TYPES.CounterMockService);
         this.parseServiceSchema({

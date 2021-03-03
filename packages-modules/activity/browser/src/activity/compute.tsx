@@ -14,7 +14,7 @@ export const activityPage: any[] = [
     position: IMenuPosition.MIDDLE,
     tab: 'Activity',
     name: 'Activity',
-    path: '//:orgName/activity',
+    path: '/:orgName/activity',
     priority: 1,
   },
   {
@@ -23,7 +23,7 @@ export const activityPage: any[] = [
     name: 'Activity',
     component: Timesheet,
     position: IMenuPosition.MIDDLE,
-    path: '//:orgName/activity/activityTime',
+    path: '/:orgName/activity/activityTime',
     priority: 2,
   },
 ];

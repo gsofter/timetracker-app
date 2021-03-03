@@ -1,11 +1,11 @@
-// import { ITimeRecordCreateRequest, ITimeRecord } from '@admin-layout/timetracker-module-core'
+// import { ITimeRecordCreateRequest, ITimeRecord } from '@admin-layout/timetracker-core'
 import { 
     ITimeRecord, 
     ITimeRecordRequest, 
     ITimesheetCreateRequest, 
     ITimesheet, 
     ITimesheetState
-} from '@admin-layout/timetracker-module-core'
+} from '@admin-layout/timetracker-core'
 export interface ITimeTrackerRepository {
     
     /**

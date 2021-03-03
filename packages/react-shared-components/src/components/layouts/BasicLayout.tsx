@@ -6,8 +6,8 @@ import {
   DefaultFooter,
   SettingDrawer,
   BaseMenu,
-  getMenuSeparation,
 } from '@admin-layout/components';
+import { getMenuSeparation } from './seperatedMenus';
 import React, { useEffect, useMemo, useRef } from 'react';
 import * as _ from 'lodash';
 import { Link, generatePath } from 'react-router-dom';
@@ -24,6 +24,7 @@ import { IOrgNameInContextFragment } from '@admin-layout/core';
 import { useDispatch } from 'react-redux';
 import RightContent from '../GlobalHeader/RightContent';
 import { CHANGE_SETTINGS_ACTION } from '../../constants/constants';
+import { DashOutlined } from '@ant-design/icons';
 
 
 const noMatch = (
@@ -52,6 +53,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
   route: ProLayoutProps['route'] & {
     authority: string[];
   };
+  formatMessage: any;
 }
 
 export type BasicLayoutContent = { [K in 'location']: BasicLayoutProps[K] } & {
@@ -105,28 +107,53 @@ const generateMenuPath = (path, params) => {
   return null;
 };
 
-const menuFooterRender = (props, mode = 'horizontal') => {
+
+const menuFooterRender = (props) => {
   const { menuData, ...rest } = props;
   const newMenuData = getMenuSeparation(props?.menuData).bottomMenus
   const newProps = { ...rest, menuData: newMenuData };
+  const menuProps = {
+    triggerSubMenuAction: 'click',
+  }
+  
+  const handleMenuPopup = () => {
+    let element, name, arr;
+    element = document.getElementById("usermenu$Menu");
+    if(element){
+      name =  "usermenuStyle";
+      arr = element.parentNode.className.split(" ");
+      if (arr.indexOf(name) == -1) {
+        element.parentNode.setAttribute("id", name)
+      }
+    }
+  }
 
   return (
-    <BaseMenu
-      {...newProps}
-      mode="horizontal"
-      handleOpenChange={props.onOpenChange}
-      style={{
-        width: '100%',
-      }}
-      className={`ant-pro-sider-menu`}
-    />
-  );
-}
+    <div id="area" className='removeBoxShadow' style={{
+      overflow: 'hidden',
+    }} onClick={handleMenuPopup}>
+      <BaseMenu
+        {...newProps}
+        mode="horizontal"
+        handleOpenChange={props.onOpenChange}
+        menuProps={menuProps}
+        style={{
+          width: '100%',
+        }}
+         
+        className={`ant-pro-sider-menu`}
+        />
+      </div>
+    );
+  }
 
-const menuExtraRender = (props) => {
+
+const menuContentRender = (props) => {
   const { menuData, ...rest } = props;
   const newMenuData = getMenuSeparation(props?.menuData).middleMenus
+  const lowerMenus = getMenuSeparation(props?.menuData).lowerMenus
   const newProps = { ...rest, menuData: newMenuData };
+  const lowerMenuProps = { ...rest, menuData: lowerMenus };
 
   return (
     <>
@@ -135,6 +162,7 @@ const menuExtraRender = (props) => {
           flex: 1,
           overflowY: 'auto',
           overflowX: 'hidden',
+          marginBottom: '16px',
         }}
         className="removeBoxShadow"
       >
@@ -148,7 +176,27 @@ const menuExtraRender = (props) => {
           className={`ant-pro-sider-menu`}
         />
       </div>
-      <Divider plain>Admin</Divider>
+      {props.collapsed && true ? 
+      <DashOutlined className="ant-divider" 
+      style={{marginLeft: '17px', borderTop: '0px'}}/> : 
+      <Divider plain>Admin</Divider>}
+      
+      <div
+        style={{
+          overflow: 'hidden',
+        }}
+        className="removeBoxShadow"
+      >
+      <BaseMenu
+        {...lowerMenuProps}
+        mode="inline"
+        handleOpenChange={props.onOpenChange}
+        style={{
+          width: '100%',
+        }}
+        className={`ant-pro-sider-menu`}
+        />
+        </div>
     </>
   );
 }
@@ -176,7 +224,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
     [location.pathname],
   );
 
-  // const { formatMessage } = useIntl();
+  const { formatMessage } = useIntl();
   const history = useHistory();
 
   const dispatch = useDispatch();
@@ -184,6 +232,7 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
   return (
     <>
       <ProLayout
+        formatMessage={formatMessage}
         {...props}
         {...settings}
         onMenuHeaderClick={() => history.push('/')}
@@ -195,14 +244,15 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
             <Link to={generateMenuPath(menuItemProps.path, props.routeParams)}>{defaultDom}</Link>
           );
         }}
+        menuContentRender={menuContentRender}
         menuFooterRender={menuFooterRender}
-        breadcrumbRender={(routers = []) => [
-          {
-            path: '/',
-            breadcrumbName: 'Home',
-          },
-          ...routers,
-        ]}
+        // breadcrumbRender={(routers = []) => [
+        //   {
+        //     path: '/',
+        //     breadcrumbName: formatMessage({ id: 'menu.home' }),
+        //   },
+        //   // ...routers,
+        // ]}
         itemRender={(route, params, routes, paths) => {
           const first = routes.indexOf(route) === 0;
           return first ? (
@@ -213,16 +263,16 @@ const BasicLayout: React.FC<BasicLayoutProps & RouteParams & ReduxState> = props
         }}
         footerRender={() => defaultFooterDom}
         menuDataRender={menuDataRender}
-        menuExtraRender={menuExtraRender}
         postMenuData={menuData => {
           menuDataRef.current = menuData || [];
           return menuData || [];
         }}
-        rightContentRender={p => {
+        rightContentRender={rightProps => {
           return (
             <RightContent
-              upperMenus={getMenuSeparation(p?.menuData).upperMenus}
+              upperMenus={getMenuSeparation(rightProps?.menuData).upperMenus}
               orgName={props?.routeParams?.orgName}
+              {...rightProps}
             />
           );
         }}
