@@ -78,7 +78,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
       userId,
       orgId,
     });
-    if (trackDoc && trackDoc.length > 0) {
+    if (!!!trackDoc && trackDoc.length > 0) {
       return trackDoc[0].timesheets;
     } else {
       return [];
@@ -105,8 +105,14 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
       }
     ]) as [ITimeTracker];
 
-    if(trackDoc && trackDoc[0].timesheets.length > 0)  
-      return trackDoc[0].timesheets[0]
+    console.log('trackDoc   =>', trackDoc);
+    console.log('timesheets =>', trackDoc[0].timesheets);
+
+    if(trackDoc && trackDoc.length > 0)  
+      if(!!trackDoc[0].timesheets && trackDoc[0].timesheets.length > 0)
+        return trackDoc[0].timesheets[0]
+      else
+        return null;
     return null;
   }
 

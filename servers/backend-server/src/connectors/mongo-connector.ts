@@ -19,6 +19,10 @@ export class MongoConnector {
         this.opts = _.defaultsDeep(opts, {
             useNewUrlParser: true,
             useUnifiedTopology: true,
+            db: { // https://github.com/Automattic/mongoose/issues/3928#issuecomment-204793105
+                native_parser: true,
+                readPreference: 'primaryPreferred'
+            }
         });
         this.uri = uri;
         this.logger = logger.child({className: 'MongoConnector'});

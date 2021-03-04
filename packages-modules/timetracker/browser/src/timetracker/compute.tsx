@@ -5,9 +5,6 @@ import { FileOutlined } from '@ant-design/icons';
 const Home = React.lazy(() => import('./containers/Home'));
 const TimeTracker = React.lazy(() => import('./containers/MainPage'));
 const Timesheet = React.lazy(() => import('./containers/TimesheetPage'));
-const ProjectsPage = React.lazy(() => import('./containers/ProjectsPage'));
-const TimeReportPage = React.lazy(() => import('./containers/TimeReportPage'));
-const ClientsPage = React.lazy(() => import('./containers/ClientsPage'));
 export const timePageStore: any[] = [
   {
     exact: false,
@@ -38,43 +35,9 @@ export const timePageStore: any[] = [
     path: '/:orgName/time-tracker/timesheet',
     priority: 3,
   },
-  {
-    exact: true,
-    key: 'timeTracker.timeReport',
-    name: 'TimeReport',
-    component: TimeReportPage,
-    position: IMenuPosition.MIDDLE,
-    path: '//:orgName/time-tracker/timereport',
-    priority: 4,
-  },
-  {
-    exact: true,
-    key: 'timeTracker.projects',
-    name: 'Projects',
-    component: ProjectsPage,
-    position: IMenuPosition.MIDDLE,
-    path: '/:orgName/time-tracker/projects',
-    priority: 4,
-  },
-  {
-    exact: true,
-    key: 'timeTracker.clients',
-    name: 'Clients',
-    component: ClientsPage,
-    position: IMenuPosition.MIDDLE,
-    path: '/:orgName/time-tracker/clients',
-    priority: 5,
-  },
 ];
 
-const selectedRoutesAndMenus = [
-  'timeTracker',
-  'timeTracker.timer',
-  'timeTracker.projects',
-  'timeTracker.clients',
-  'timeTracker.timesheet',
-  'timeTracker.timeReport',
-];
+const selectedRoutesAndMenus = ['timeTracker', 'timeTracker.timer', 'timeTracker.timesheet'];
 
 // get routes
 const filteredRoutes = getFilteredRoutes(timePageStore, selectedRoutesAndMenus);
