@@ -6,7 +6,7 @@ import {
   ITimesheet,
   ITimesheetState,
   ITimesheetCreateRequest,
-} from '@admin-layout/timetracker-module-core';
+} from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import CSS from 'csstype';
 import TimeReportTable from './TimeReportTable';

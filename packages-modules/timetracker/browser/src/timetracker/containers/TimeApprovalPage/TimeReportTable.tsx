@@ -1,10 +1,10 @@
 import React from 'react';
 import { Table, Button, Dropdown, Menu } from 'antd';
-import { ITimesheet, ITimesheetState } from '@admin-layout/timetracker-module-core';
+import { ITimesheet, ITimesheetState } from '@admin-layout/timetracker-core';
 import { MoreOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useFela } from 'react-fela';
-import { ITimesheetCreateRequest } from '@admin-layout/timetracker-module-core';
+import { ITimesheetCreateRequest } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import { VIEW_MODE } from './index';
 
