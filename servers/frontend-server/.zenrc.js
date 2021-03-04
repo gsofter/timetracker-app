@@ -6,7 +6,7 @@ const {merge} = require('webpack-merge');
 const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+// const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const config = {
     builders: {
@@ -41,10 +41,10 @@ const config = {
                         from: '../../node_modules/@adminide-stack/extension-module-browser/lib/*.worker.js.map',
                         to: '[name].js.map',
                     }]),
-                    new LodashModuleReplacementPlugin({
-                        // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
-                        flattening: true
-                    }),
+                    // new LodashModuleReplacementPlugin({
+                    //     // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
+                    //     flattening: true
+                    // }),
                 ],
                 // for additional webpack configuration.
                 resolve: process.env.NODE_ENV !== 'production'
@@ -75,10 +75,10 @@ const config = {
                         from: '../../tools/esm-wrapper.js',
                         to: 'index.js',
                     }]),
-                    new LodashModuleReplacementPlugin({
-                        // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
-                        flattening: true
-                    }),
+                    // new LodashModuleReplacementPlugin({
+                    //     // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
+                    //     flattening: true
+                    // }),
                 ],
                 externals: [
                     nodeExternals(),
