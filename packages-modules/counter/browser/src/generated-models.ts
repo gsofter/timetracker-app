@@ -2237,6 +2237,7 @@ export type TimesheetCreateRequest = {
 };
 
 export enum TimesheetState {
+  Open = 'OPEN',
   ApprovedPending = 'APPROVED_PENDING',
   Approved = 'APPROVED',
   ApprovedFinalized = 'APPROVED_FINALIZED',
