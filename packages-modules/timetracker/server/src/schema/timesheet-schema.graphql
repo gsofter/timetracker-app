@@ -1,5 +1,6 @@
 # scalar DateTime
 enum TimesheetState {
+  OPEN
   APPROVED_PENDING
   APPROVED
   APPROVED_FINALIZED # --- which means no going back
@@ -10,8 +11,8 @@ enum TimesheetState {
 
 type Timesheet {
   id: ID
-  startDate: DateTime # (only Date without time)
-  endDate: DateTime # (only Date without time)
+  startDate: DateTime
+  endDate: DateTime
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime

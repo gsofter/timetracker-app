@@ -6,6 +6,7 @@ interface ITimeTrackerModel extends ITimeTracker , Document {
 }
 
 enum TimesheetState {
+    OPEN,
     APPROVED_PENDING,
     APPROVED,
     APPROVED_FINALIZED,

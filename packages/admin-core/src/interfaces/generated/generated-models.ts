@@ -2242,6 +2242,7 @@ export type ITimesheetCreateRequest = {
 };
 
 export const enum ITimesheetState {
+  OPEN = 'OPEN',
   APPROVED_PENDING = 'APPROVED_PENDING',
   APPROVED = 'APPROVED',
   APPROVED_FINALIZED = 'APPROVED_FINALIZED',

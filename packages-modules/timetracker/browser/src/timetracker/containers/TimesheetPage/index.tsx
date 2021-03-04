@@ -9,7 +9,11 @@ import {
   useGetTagsQuery,
 } from '../../../generated-models';
 import { Row, Col, Switch, Form, Select, Checkbox } from 'antd';
-import { IProjects as IProject, ITag, ITeamMember as IMember } from '@admin-layout/timetracker-core';
+import {
+  IProjects as IProject,
+  ITag,
+  ITeamMember as IMember,
+} from '@admin-layout/timetracker-core';
 import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';

@@ -2231,6 +2231,7 @@ export const enum ITimesheetState {
   APPROVED_PENDING = 'APPROVED_PENDING',
   DENYED = 'DENYED',
   DENYED_FINALIZED = 'DENYED_FINALIZED',
+  OPEN = 'OPEN',
   SUBMITTED = 'SUBMITTED'
 };
 
@@ -2651,7 +2652,7 @@ export type IGetTimesheetsQuery = (
   { __typename?: 'Query' }
   & { getTimesheets?: Maybe<Array<Maybe<(
     { __typename?: 'Timesheet' }
-    & Pick<ITimesheet, 'id' | 'startDate' | 'endDate'>
+    & Pick<ITimesheet, 'id' | 'startDate' | 'endDate' | 'state' | 'submittedOn' | 'approvedOn' | 'updatedBy' | 'updatedOn'>
   )>>> }
 );
 
@@ -2796,6 +2797,11 @@ export const GetTimesheetsDocument = gql`
     id
     startDate
     endDate
+    state
+    submittedOn
+    approvedOn
+    updatedBy
+    updatedOn
   }
 }
     `;

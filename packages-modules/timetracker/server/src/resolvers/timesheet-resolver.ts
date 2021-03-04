@@ -6,7 +6,7 @@ export const resolver = (options) => ({
     Query: {
       getTimesheets: (root, args, { timeTrackerService }) => {
         options.logger.trace('(Query.getTimeSheets) args %j', args)
-        return timeTrackerService.getTimesheets(DEFAULT_USER, DEFAULT_ORG);
+        return timeTrackerService.getTimesheets(args.userId, DEFAULT_ORG);
       },
       getDurationTimesheet: (root, args, { timeTrackerService }) => {
         options.logger.trace('(Query.getTimeSheets) args %j', args)
