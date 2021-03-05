@@ -9,7 +9,11 @@ import {
   ClockCircleOutlined,
   BarsOutlined,
 } from '@ant-design/icons';
-import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
+import {
+  ITimeRecord,
+  ITimeRecordRequest,
+  IProjects as IProject,
+} from '@admin-layout/timetracker-core';
 import {
   Input,
   Button,
@@ -27,10 +31,10 @@ import Timer from 'react-compound-timer';
 import moment from 'moment';
 import BillableCheck from '../BillableCheck';
 import classNames from 'classnames';
-// import TimeField from 'react-simple-timefield';
-import { useRifm } from 'rifm';
 import { formatDuration } from '../../services/timeRecordService';
 import { TRACKER_MODE } from '../../containers/MainPage';
+import DurationInput from '../DurationInput';
+import momentZ from 'moment-timezone';
 
 const { RangePicker } = TimePicker;
 const { Title } = Typography;
@@ -114,18 +118,10 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     console.log('handleChangeDurDate.date =>', date);
   };
 
-  const handleChangeDur = value => {
-    console.log('handleChangeDur.value', value);
-    setManualDur(value);
+  const handleChangeDur = duration => {
+    console.log();
+    setManualEnd(moment(manualStart).add(duration, 'seconds'));
   };
-
-  const rifm = useRifm({
-    value: manualDur,
-    onChange: handleChangeDur,
-    format: formatDurationInput,
-    accept: /\d+/g,
-    mask: manualDur.length < 9,
-  });
 
   const handleAddManual = () => {
     const newRecordReq: ITimeRecordRequest = {
@@ -276,6 +272,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                     defaultValue={[moment(), moment()]}
                     bordered={false}
                     onChange={handleChangeRange}
+                    value={[manualStart, manualEnd]}
                   />
                   <DatePicker
                     defaultValue={moment()}
@@ -291,7 +288,12 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                       format="HH:mm:ss"
                       onChange={handleChangeDur}
                     ></TimeField> */}
-                    <Input value={rifm.value} onChange={rifm.onChange} accept={'/d/g'} />
+                    <DurationInput
+                      duration={Math.floor(
+                        (moment(manualEnd).valueOf() - moment(manualStart).valueOf()) / 1000,
+                      )}
+                      onChange={handleChangeDur}
+                    />
                   </div>
                 </Col>
                 <Col span={3} className="flex-center">

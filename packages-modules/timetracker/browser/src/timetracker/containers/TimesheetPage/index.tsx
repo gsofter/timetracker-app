@@ -25,38 +25,6 @@ enum VIEW_MODE {
   TABULAR_VIEW,
 }
 
-const members = [
-  {
-    id: 'user1',
-    name: 'userA',
-  },
-  { id: 'user2', name: 'userB' },
-];
-
-const projects = [
-  {
-    id: '1',
-    name: 'projectA',
-    tasks: [
-      { id: 'task1', name: 'PATaskA' },
-      { id: 'task2', name: 'PATaskB' },
-    ],
-  },
-  {
-    id: '2',
-    name: 'projectB',
-    tasks: [
-      { id: 'task1', name: 'PBTaskA' },
-      { id: 'task2', name: 'PBTaskB' },
-    ],
-  },
-];
-
-const tags = [
-  { id: 'tag1', name: 'TagA', active: true },
-  { id: 'tag2', name: 'TagB', active: true },
-];
-
 interface ITimesheetProps {
   projects: Array<IProject>;
   tags: Array<ITag>;

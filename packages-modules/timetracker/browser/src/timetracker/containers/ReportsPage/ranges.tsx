@@ -14,7 +14,7 @@ import {
 } from 'date-fns';
 import { FC } from 'react';
 
-const defineds = (weekStartsOn) => ({
+const defineds = weekStartsOn => ({
   startOfWeek: startOfWeek(new Date(), { weekStartsOn }),
   endOfWeek: endOfWeek(new Date(), { weekStartsOn }),
   startOfLastWeek: startOfWeek(addDays(new Date(), -7), { weekStartsOn }),
@@ -43,7 +43,7 @@ const staticRangeHandler = {
 };
 
 function createStaticRanges(ranges) {
-  return ranges.map((range) => ({ ...staticRangeHandler, ...range }));
+  return ranges.map(range => ({ ...staticRangeHandler, ...range }));
 }
 
 export interface IstaticRanges {
@@ -126,10 +126,8 @@ export interface IinputRnges {
   weekStartsOn?: any;
   firstDayOfWeek?: any;
 }
-export const inputRanges = (
-  daysUpToToday,
-  daysStartingToday,
-  weekStartsOn) => [
+
+export const inputRanges = (daysUpToToday, daysStartingToday, weekStartsOn) => [
   {
     label: daysUpToToday,
     range(value) {
@@ -148,12 +146,7 @@ export const inputRanges = (
       if (!range.startDate) {
         return '∞';
       }
-      return (
-        differenceInCalendarDays(
-          defineds(weekStartsOn).endOfToday,
-          range.startDate,
-        ) + 1
-      );
+      return differenceInCalendarDays(defineds(weekStartsOn).endOfToday, range.startDate) + 1;
     },
   },
   {
@@ -172,12 +165,7 @@ export const inputRanges = (
       if (!range.endDate) {
         return '∞';
       }
-      return (
-        differenceInCalendarDays(
-          range.endDate,
-          defineds(weekStartsOn).startOfToday,
-        ) + 1
-      );
+      return differenceInCalendarDays(range.endDate, defineds(weekStartsOn).startOfToday) + 1;
     },
   },
 ];
