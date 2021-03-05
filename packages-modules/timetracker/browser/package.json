@@ -45,6 +45,8 @@
     "@admin-layout/components": "file:../../../packages/components",
     "@admin-layout/timetracker-module-core": "file:../core",
     "@adminide-stack/core": "^0.0.18-alpha.359",
+    "chart.js": "^2.9.4",
+    "react-chartjs-2": "^2.11.1",
     "react-compound-timer": "^1.2.0",
     "react-custom-scrollbars": "^4.2.1",
     "react-date-range": "1.0.0-beta",

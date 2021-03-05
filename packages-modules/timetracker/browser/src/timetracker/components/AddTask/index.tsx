@@ -34,6 +34,7 @@ import classNames from 'classnames';
 import { formatDuration } from '../../services/timeRecordService';
 import { TRACKER_MODE } from '../../containers/MainPage';
 import DurationInput from '../DurationInput';
+import momentZ from 'moment-timezone';
 
 const { RangePicker } = TimePicker;
 const { Title } = Typography;
