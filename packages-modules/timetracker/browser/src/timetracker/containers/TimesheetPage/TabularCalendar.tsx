@@ -51,6 +51,7 @@ const TabularCalendar = ({
 }: ITabularCalendar) => {
   const { css } = useFela();
   const [trackedProjects, setTrackedProjects] = useState<Array<IProject>>([]);
+  const [showUnkownProject, setShowUnkownProject] = useState(false);
   const [newRows, setNewRows] = useState([]);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   useEffect(() => {
@@ -59,6 +60,8 @@ const TabularCalendar = ({
     );
     setTrackedProjects(trackedProjects);
 
+    if (records.findIndex(r => r.projectId === '') === -1) setShowUnkownProject(false);
+    else setShowUnkownProject(true);
     const rows = newRows.filter(pId => trackedProjects.findIndex(p => p.id === pId) === -1);
     setNewRows(rows);
   }, [weekStart, records]);
@@ -313,33 +316,38 @@ const TabularCalendar = ({
             );
           })}
 
-          <tr>
-            <td> Unknown </td>
-            {Array(7)
-              .fill(0)
-              .map((val, index) => {
-                const curDay = moment(weekStart).add(index, 'day');
-                const curDayRecords = records.filter(
-                  r =>
-                    projects.findIndex(p => p.id === r.projectId) === -1 && // doesn't include in projects list
-                    moment(r.startTime).format('YYYY-MM-DD') === curDay.format('YYYY-MM-DD'), // cur day records
-                );
-                return (
-                  <td key={curDay.format('YYYY-MM-DD')}>
-                    <TimesheetInput
-                      dateStr={curDay.format('YYYY-MM-DD')}
-                      projectId={''}
-                      records={curDayRecords}
-                      createTimeRecord={createTimeRecord}
-                      updateTimeRecord={updateTimeRecord}
-                      projects={projects}
-                      projectTitle={''}
-                    />
-                  </td>
-                );
-              })}
-            <td> {formatDuration(getProjectTotalDuration(''))}</td>
-          </tr>
+          {showUnkownProject ? (
+            <tr>
+              <td> Unknown </td>
+              {Array(7)
+                .fill(0)
+                .map((val, index) => {
+                  const curDay = moment(weekStart).add(index, 'day');
+                  const curDayRecords = records.filter(
+                    r =>
+                      projects.findIndex(p => p.id === r.projectId) === -1 && // doesn't include in projects list
+                      moment(r.startTime).format('YYYY-MM-DD') === curDay.format('YYYY-MM-DD'), // cur day records
+                  );
+                  return (
+                    <td key={curDay.format('YYYY-MM-DD')}>
+                      <TimesheetInput
+                        dateStr={curDay.format('YYYY-MM-DD')}
+                        projectId={''}
+                        records={curDayRecords}
+                        createTimeRecord={createTimeRecord}
+                        updateTimeRecord={updateTimeRecord}
+                        projects={projects}
+                        projectTitle={''}
+                      />
+                    </td>
+                  );
+                })}
+              <td> {formatDuration(getProjectTotalDuration(''))}</td>
+            </tr>
+          ) : (
+            <> </>
+          )}
+
           {newRows.map(pId => {
             const project = projects.find(p => p.id === pId);
             return (
