@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { formatDuration, stringToDuration } from '../../services/timeRecordService';
 import { Input } from 'antd';
-import { useRifm } from 'rifm';
 
 const parseDigits = string => (string.match(/\d+/g) || []).join('');
 
@@ -76,14 +75,6 @@ export default function DurationInput(props: IDurationInputProps) {
       }
     }
   };
-
-  const rifm = useRifm({
-    value: inputStr,
-    onChange: handleChangeDuration,
-    format: formatDurationInput,
-    accept: /\d+/g,
-    mask: formatDuration(duration as number).length < 9,
-  });
 
   return (
     <Input
