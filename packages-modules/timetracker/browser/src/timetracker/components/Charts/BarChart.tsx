@@ -1,7 +1,7 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
 
-const BarChart = ({ labels, title, data }) => {
+export const BarChart = ({ labels, title, data }) => {
   const barData = {
     labels,
     datasets: [
@@ -36,5 +36,3 @@ const BarChart = ({ labels, title, data }) => {
 
   return <Bar data={barData} options={barOptions} width={350} />;
 };
-
-export default BarChart;
