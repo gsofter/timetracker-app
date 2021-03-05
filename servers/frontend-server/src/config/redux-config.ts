@@ -11,24 +11,23 @@ import modules from '../modules';
 import { persistReducer, WebStorage } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { createEpicMiddleware } from 'redux-observable';
-import { createApolloClient } from './apollo-client';
-import { rootEpic } from '../config/epic-config';
 import { createClientContainer } from './client.service';
+import { rootEpic } from '../config/epic-config';
 import { initialRedirectState } from '@adminide-stack/user-auth0-browser';
-
+    
 export const history = require('./router-history');
 
 const reduxLogger = createLogger({
     collapsed: true,
 });
-const { apolloClient, services } = createClientContainer();
 
+const { apolloClient, services } = createClientContainer();
 export const epicMiddleware = createEpicMiddleware({
     dependencies: {
         apolloClient,
         routes: modules.getConfiguredRoutes(),
         services,
-    },
+    }, 
 });
 
 export const storeReducer = (hist) => combineReducers({
@@ -40,6 +39,7 @@ export const persistConfig = {
     key: 'root',
     storage,
     stateReconciler: autoMergeLevel2,
+    // Don't add `user` state to persist as it creates problems.
     whitelist: [
     ],
 };

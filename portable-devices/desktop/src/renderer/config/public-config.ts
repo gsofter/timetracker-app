@@ -28,13 +28,14 @@ const publicEnv = [
 const isBrowser = typeof window !== 'undefined';
 // const base = (isBrowser ? ( window.__ENV__ || __ENV__) : process.env) || {};
 const base = {
-    AUTH0_CLIENT_ID: 'T9XM292l33Xb12RVPvRIfrb5hYTZsRme',
-    AUTH0_DOMAIN: 'dev - cdebase.auth0.com',
+    AUTH0_CLIENT_ID: 'GVh8k85SAftTTRbotGxsc986piXsR825',
+    AUTH0_DOMAIN: 'dev-cdebase.auth0.com',
     AUTH0_ISSUER: 'https://dev-cdebase.auth0.com/',
     AUTH0_API_AUDIENCE: 'https://dev-cdebase.auth0.com/api/v2/',
     STRIPE_ENDPOINT_SECRET: 'werwerw',
-    CLIENT_URL: 'http://localhost:3011'
+    CLIENT_URL: 'http://localhost:9080/#'
 }
+
 const env: any = {};
 for (const v of publicEnv) {
     env[v] = base[v];

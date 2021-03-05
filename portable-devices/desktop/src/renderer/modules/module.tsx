@@ -11,6 +11,8 @@ import AccountsModule from "@adminide-stack/account-api-browser";
 import AuthModule from "@adminide-stack/user-auth0-browser";
 import ExtensionModule from '@adminide-stack/extension-module-browser';
 
+
+
 const features = new Feature(
   FeatureWithRouterFactory,
   LayoutModule,
@@ -19,15 +21,19 @@ const features = new Feature(
   CounterModule,
   ScheduleModule,
   TimeTrackerModule,
-//   ActivityModule,
+  //   ActivityModule,
   PlatformModule,
   ExtensionModule,
 );
 
-const configuredRoutes =  features.getConfiguredRoutes();
+const configuredRoutes = features.getConfiguredRoutes();
 
-const routes = renderRoutes2({ routes: configuredRoutes});
-// console.log(sharedModule);
+const routes = renderRoutes2({ routes: configuredRoutes });
+
+console.log('----WINDOW___', window.location.hash);
+console.log('--_ROUTEST---', routes);
+
+
 export const MainRoute = props => {
   return (
     <React.Suspense fallback={<span>Loading....</span>}>
@@ -37,4 +43,6 @@ export const MainRoute = props => {
     </React.Suspense>
   );
 };
+
+
 export default features;
