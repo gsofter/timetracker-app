@@ -480,7 +480,6 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
   const [removeMutation] = useRemoveDurationTimeRecordsMutation();
   const [createTimesheetMutation] = useCreateTimesheetMutation();
   const handleRemoveDuration = pId => {
-    console.log('handleRemoveDuration => ', weekStart);
     removeMutation({
       variables: {
         startTime: weekStart,
