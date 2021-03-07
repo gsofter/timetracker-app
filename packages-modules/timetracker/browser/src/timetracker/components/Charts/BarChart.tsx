@@ -27,10 +27,16 @@ export const BarChart = ({ labels, title, data }) => {
       yAxes: [
         {
           ticks: {
-            stepSize: 2500,
+            beginAtZero: true,
+            stepSize: 60,
           },
         },
       ],
+    },
+    tooltip: {
+      custom: function(tooltipModel) {
+        console.log(tooltipModel);
+      },
     },
   };
 
