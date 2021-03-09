@@ -7,12 +7,14 @@ import {
   useGetProjectsQuery,
   useGetMembersQuery,
   useGetTagsQuery,
+  useGetOrganizationMembersQuery,
 } from '../../../generated-models';
 import { Row, Col, Switch, Form, Select, Checkbox } from 'antd';
 import {
   IProjects as IProject,
   ITag,
   ITeamMember as IMember,
+  IOrgMember,
 } from '@admin-layout/timetracker-core';
 import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
@@ -28,7 +30,7 @@ enum VIEW_MODE {
 interface ITimesheetProps {
   projects: Array<IProject>;
   tags: Array<ITag>;
-  members: Array<IMember>;
+  members: Array<IOrgMember>;
 }
 
 const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
@@ -114,7 +116,7 @@ const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
                 <Select.Option value="">All</Select.Option>
                 {members.map(member => {
                   return (
-                    <Select.Option value={member.id} key={member.id}>
+                    <Select.Option value={member._id} key={member._id}>
                       {member.name}
                     </Select.Option>
                   );
@@ -178,14 +180,14 @@ const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
 
 const TimesheetPage = () => {
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
-  const { data: membersData, loading: loadingMembers } = useGetMembersQuery();
+  const { data: membersData, loading: loadingMembers } = useGetOrganizationMembersQuery();
   const { data: tagsData, loading: loadingTags } = useGetTagsQuery();
   return loadingProjects || loadingMembers || loadingTags ? (
     <></>
   ) : (
     <Timesheet
       projects={_.get(projectsData, 'getProjects', [] as any)}
-      members={_.get(membersData, 'getMembers', [])}
+      members={_.get(membersData, 'getOrganizationMembers', [])}
       tags={_.get(tagsData, 'getTags', [])}
     ></Timesheet>
   );

@@ -25,7 +25,7 @@ import {
   ITimeRecord,
   IProjects as IProject,
   ITask,
-  ITeamMember as IMember,
+  IOrgMember as IMember,
 } from '@admin-layout/timetracker-core';
 import Spacer from '../../components/Spacer';
 
@@ -162,7 +162,7 @@ function SelectableCalendar({
             <Select>
               {members.map(member => {
                 return (
-                  <Select.Option value={member.id} key={member.id}>
+                  <Select.Option value={member._id} key={member._id}>
                     {member.name}
                   </Select.Option>
                 );

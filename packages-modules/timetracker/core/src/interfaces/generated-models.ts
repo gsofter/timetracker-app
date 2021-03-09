@@ -2610,6 +2610,17 @@ export type IGetDurationTimesheetQuery = (
   )> }
 );
 
+export type IGetOrganizationMembersQueryVariables = {};
+
+
+export type IGetOrganizationMembersQuery = (
+  { __typename?: 'Query' }
+  & { getOrganizationMembers?: Maybe<Array<Maybe<(
+    { __typename?: 'OrgMember' }
+    & Pick<IOrgMember, '_id' | 'userId' | 'role' | 'name' | 'teamNames'>
+  )>>> }
+);
+
 export type IGetPlayingTimeRecordQueryVariables = {};
 
 
@@ -2750,6 +2761,18 @@ export const GetDurationTimesheetDocument = gql`
 }
     `;
 export type GetDurationTimesheetQueryResult = ApolloReactCommon.QueryResult<IGetDurationTimesheetQuery, IGetDurationTimesheetQueryVariables>;
+export const GetOrganizationMembersDocument = gql`
+    query GetOrganizationMembers {
+  getOrganizationMembers {
+    _id
+    userId
+    role
+    name
+    teamNames
+  }
+}
+    `;
+export type GetOrganizationMembersQueryResult = ApolloReactCommon.QueryResult<IGetOrganizationMembersQuery, IGetOrganizationMembersQueryVariables>;
 export const GetPlayingTimeRecordDocument = gql`
     query GetPlayingTimeRecord {
   getPlayingTimeRecord {
