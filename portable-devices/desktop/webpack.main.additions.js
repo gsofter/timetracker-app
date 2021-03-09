@@ -12,7 +12,7 @@ const MonacoWebpackPlugin = require('@vscode/monaco-editor-webpack-plugin');
 let config = {
     target: 'electron-main',
     plugins: [
-        new MonacoWebpackPlugin(),
+        // new MonacoWebpackPlugin(),
     ],
     entry: './src/main/app.ts',
     // output: {

@@ -33,7 +33,7 @@ const base = {
     AUTH0_ISSUER: 'https://dev-cdebase.auth0.com/',
     AUTH0_API_AUDIENCE: 'https://dev-cdebase.auth0.com/api/v2/',
     STRIPE_ENDPOINT_SECRET: 'werwerw',
-    CLIENT_URL: 'http://localhost:9080/#'
+    CLIENT_URL: 'http://localhost:9080'
 }
 
 const env: any = {};
