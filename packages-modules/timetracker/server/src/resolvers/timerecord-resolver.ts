@@ -1,35 +1,35 @@
 import { DEFAULT_USER, DEFAULT_ORG } from '../constants'
 export const resolver = (options) => ({
   Query: {
-    getTimeRecords: (root, args, { timeTrackerService }) => {
+    getTimeRecords: (root, args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Query.getTimeRecords) args %j', args)
-      return timeTrackerService.getTimeRecords(DEFAULT_USER, DEFAULT_ORG);
+      return timeTrackerService.getTimeRecords(user._id || user.sub, userContext.orgId);
     },
-    getDurationTimeRecords: (root, args, { timeTrackerService }) => {
+    getDurationTimeRecords: (root, args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Query.getDurationTimeRecords) args %j', args)
-      return timeTrackerService.getDurationTimeRecords(DEFAULT_USER, DEFAULT_ORG, args.startTime, args.endTime);
+      return timeTrackerService.getDurationTimeRecords(user._id || user.sub, userContext.orgId, args.startTime, args.endTime);
     },
-    getPlayingTimeRecord: (root, args, { timeTrackerService }) => {
+    getPlayingTimeRecord: (root, args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Query.getPlayingTimeRecord) args %j', args)
-      return timeTrackerService.getPlayingTimeRecord(DEFAULT_USER, DEFAULT_ORG);
+      return timeTrackerService.getPlayingTimeRecord(user._id || user.sub, userContext.orgId);
     }
   },
   Mutation: {
-    createTimeRecord: (root,  args, { timeTrackerService }) => {
+    createTimeRecord: (root,  args, { timeTrackerService, user, userContext}) => {
       options.logger.trace('(Mutation.createTimeRecord) args %j', args)
-      return timeTrackerService.createTimeRecord(DEFAULT_USER, DEFAULT_ORG, args.request);
+      return timeTrackerService.createTimeRecord(user._id || user.sub, userContext.orgId, args.request);
     },
-    updateTimeRecord: (root,  args, { timeTrackerService }) => {
+    updateTimeRecord: (root,  args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Mutation.updateTimeRecord) args %j', args)
-      return timeTrackerService.updateTimeRecord(DEFAULT_USER,DEFAULT_ORG, args.recordId, args.request);
+      return timeTrackerService.updateTimeRecord(user._id || user.sub, userContext.orgId, args.recordId, args.request);
     },
-    removeTimeRecord: (root,  args, { timeTrackerService }) => {
+    removeTimeRecord: (root,  args, { timeTrackerService, user, userContext}) => {
       options.logger.trace('(Mutation.revmoeTimeRecord) args %j', args)
-      return timeTrackerService.removeTimeRecord(DEFAULT_USER,DEFAULT_ORG, args.recordId);
+      return timeTrackerService.removeTimeRecord(user._id || user.sub, userContext.orgId, args.recordId);
     },
-    removeDurationTimeRecords: (root,  args, { timeTrackerService }) => {
+    removeDurationTimeRecords: (root,  args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Mutation.removeDurationTimeRecords) args %j', args)
-      return timeTrackerService.removeDurationTimeRecords(DEFAULT_USER,DEFAULT_ORG, args.startTime, args.endTime, args.projectId);
+      return timeTrackerService.removeDurationTimeRecords(user._id || user.sub, userContext.orgId, args.startTime, args.endTime, args.projectId);
     }
   },
   Subscription: {

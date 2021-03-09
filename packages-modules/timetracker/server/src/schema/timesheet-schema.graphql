@@ -31,13 +31,13 @@ input TimesheetCreateRequest {
 }
 
 extend type Query {
-  getTimesheets(userId: String): [Timesheet]
-  getDurationTimesheet(start: DateTime, end: DateTime): Timesheet
+  getTimesheets(userId: String): [Timesheet] @addAccountContext
+  getDurationTimesheet(start: DateTime, end: DateTime): Timesheet @addAccountContext
 }
 
 extend type Mutation {
-  createTimesheet(request: TimesheetCreateRequest): Boolean
-  updateTimesheet(sheetId: String, request: TimesheetCreateRequest): Boolean
-  removeTimesheet(sheetId: String): Boolean
-  updateTimesheetStatus(request: TimesheetCreateRequest): Boolean
+  createTimesheet(request: TimesheetCreateRequest): Boolean @addAccountContext
+  updateTimesheet(sheetId: String, request: TimesheetCreateRequest): Boolean @addAccountContext
+  removeTimesheet(sheetId: String): Boolean @addAccountContext
+  updateTimesheetStatus(request: TimesheetCreateRequest): Boolean @addAccountContext
 }

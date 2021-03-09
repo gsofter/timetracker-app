@@ -29,5 +29,7 @@ export const DoughnutChart = ({ data, labels, title }) => {
     ],
   };
 
+  const chartOptions = {};
+
   return <Doughnut data={chartData} />;
 };
