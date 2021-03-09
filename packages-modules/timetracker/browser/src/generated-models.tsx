@@ -25,6 +25,7 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 
+
 export const GetTagsDocument = gql`
     query GetTags {
   getTags @client {
@@ -408,6 +409,48 @@ export function useGetDurationTimesheetLazyQuery(baseOptions?: ApolloReactHooks.
 export type GetDurationTimesheetQueryHookResult = ReturnType<typeof useGetDurationTimesheetQuery>;
 export type GetDurationTimesheetLazyQueryHookResult = ReturnType<typeof useGetDurationTimesheetLazyQuery>;
 export type GetDurationTimesheetQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>;
+export const GetOrganizationMembersDocument = gql`
+    query GetOrganizationMembers {
+  getOrganizationMembers {
+    _id
+    userId
+    role
+    name
+    teamNames
+  }
+}
+    `;
+export type GetOrganizationMembersComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetOrganizationMembersQuery, SchemaTypes.IGetOrganizationMembersQueryVariables>, 'query'>;
+
+    export const GetOrganizationMembersComponent = (props: GetOrganizationMembersComponentProps) => (
+      <ApolloReactComponents.Query<SchemaTypes.IGetOrganizationMembersQuery, SchemaTypes.IGetOrganizationMembersQueryVariables> query={GetOrganizationMembersDocument} {...props} />
+    );
+    
+
+/**
+ * __useGetOrganizationMembersQuery__
+ *
+ * To run a query within a React component, call `useGetOrganizationMembersQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetOrganizationMembersQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useGetOrganizationMembersQuery({
+ *   variables: {
+ *   },
+ * });
+ */
+export function useGetOrganizationMembersQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchemaTypes.IGetOrganizationMembersQuery, SchemaTypes.IGetOrganizationMembersQueryVariables>) {
+        return ApolloReactHooks.useQuery<SchemaTypes.IGetOrganizationMembersQuery, SchemaTypes.IGetOrganizationMembersQueryVariables>(GetOrganizationMembersDocument, baseOptions);
+      }
+export function useGetOrganizationMembersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchemaTypes.IGetOrganizationMembersQuery, SchemaTypes.IGetOrganizationMembersQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SchemaTypes.IGetOrganizationMembersQuery, SchemaTypes.IGetOrganizationMembersQueryVariables>(GetOrganizationMembersDocument, baseOptions);
+        }
+export type GetOrganizationMembersQueryHookResult = ReturnType<typeof useGetOrganizationMembersQuery>;
+export type GetOrganizationMembersLazyQueryHookResult = ReturnType<typeof useGetOrganizationMembersLazyQuery>;
+export type GetOrganizationMembersQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetOrganizationMembersQuery, SchemaTypes.IGetOrganizationMembersQueryVariables>;
 export const GetPlayingTimeRecordDocument = gql`
     query GetPlayingTimeRecord {
   getPlayingTimeRecord {
