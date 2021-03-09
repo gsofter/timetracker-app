@@ -2242,3 +2242,118 @@ type AsanaConnection {
 extend type Query {
     getAsanaConnectionState: AsanaConnection
 }
+
+type InvoiceType {
+    id: ID
+    comment: String
+    currency: String
+    discount: Float
+    from: CustomerInvoice
+    invoiceDate: String
+    dueDate: String
+    invoiceNumber: String
+    invoiceVendor: CustomerInvoice
+    logo: String
+    overdue: Boolean
+    paymentStatus: Boolean
+    projects: [ProjectInvoice]
+    sendingStatus: Boolean
+    status: String
+    subTotal: Float
+    taxTotal: Float
+    timezoneOffset: Int
+    to: CustomerInvoice
+    total: Float
+    orgName: String
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
+type CustomerInvoice {
+    id: ID
+    city: String
+    companyName: String
+    country: String
+    email: String
+    language: String
+    phone: String
+    state: String
+    username: String
+    zip: String
+}
+
+type ProjectInvoice {
+    id: ID
+    hours: Int
+    projectName: String
+    rate: Float
+    subTotal: Float
+    tax: Float
+}
+
+input CustomerInvoice_Input {
+    city: String
+    companyName: String
+    country: String
+    email: String
+    language: String
+    phone: String
+    state: String
+    username: String
+    zip: String
+}
+
+input ProjectInvoice_Input {
+    hours: Int
+    projectName: String
+    rate: Float
+    subTotal: Float
+    tax: Float
+}
+
+input InvoiceCreateRequest {
+    comment: String
+    currency: String
+    discount: Float
+    from: CustomerInvoice_Input
+    invoiceDate: String
+    dueDate: String
+    invoiceVendor: CustomerInvoice_Input
+    logo: String
+    paymentStatus: Boolean
+    projects: [ProjectInvoice_Input]
+    subTotal: Float
+    taxTotal: Float
+    timezoneOffset: Int
+    to: CustomerInvoice_Input
+    total: Float
+}
+
+input InvoiceUpdateRequest {
+    comment: String
+    currency: String
+    discount: Float
+    from: CustomerInvoice_Input
+    invoiceDate: String
+    dueDate: String
+    invoiceNumber: String
+    invoiceVendor: CustomerInvoice_Input
+    logo: String
+    paymentStatus: Boolean
+    projects: [ProjectInvoice_Input]
+    subTotal: Float
+    taxTotal: Float
+    timezoneOffset: Int
+    to: CustomerInvoice_Input
+    total: Float
+}
+
+extend type Mutation {
+    createInvoice(invoice: InvoiceCreateRequest!): Boolean
+    updateInvoice(id: String, invoice: InvoiceUpdateRequest): Boolean
+    removeInvoice(id: String): Boolean
+}
+
+extend type Query {
+    getInvoices: [InvoiceType]
+}

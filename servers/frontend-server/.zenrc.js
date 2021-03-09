@@ -34,13 +34,6 @@ const config = {
             webpackConfig: {
                 plugins: [
                     new MonacoWebpackPlugin(),
-                    new CopyWebpackPlugin([{
-                        from: '../../node_modules/@adminide-stack/extension-module-browser/lib/*.worker.js',
-                        to: '[name].js',
-                    }, { // add source map
-                        from: '../../node_modules/@adminide-stack/extension-module-browser/lib/*.worker.js.map',
-                        to: '[name].js.map',
-                    }]),
                     new LodashModuleReplacementPlugin({
                         // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
                         flattening: true
