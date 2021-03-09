@@ -9,7 +9,7 @@ const config = {
             entry: './src/index.ts',
             stack: ['server'],
             tsLoaderOptions: {
-                "configFileName": "./tsconfig.json"
+                // "configFile": "./tsconfig.json"
             },
             defines: {
                 __SERVER__: true
@@ -20,10 +20,12 @@ const config = {
                     filename: 'main.js',
                 },
                 plugins: [
-                    new CopyWebpackPlugin([{
-                        from: '../../tools/esm-wrapper.js',
-                        to: 'index.js',
-                    }]),
+                    new CopyWebpackPlugin({
+                        patterns: [{
+                            from: '../../tools/esm-wrapper.js',
+                            to: 'index.js',
+                        }],
+                    }),
                 ],
                 externals: [
                     nodeExternals({}),
