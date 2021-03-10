@@ -4,7 +4,6 @@ process.env.ENV_FILE !== null && (require('dotenv')).config({ path: process.env.
 import { logger } from '@cdm-logger/server';
 import './main';
 
-console.log('---PROCES ___ENV', process.env);
 process.on('uncaughtException', ex => {
     logger.error(ex);
     process.exit(1);
