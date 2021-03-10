@@ -1,5 +1,6 @@
 import React from 'react';
 import { Doughnut } from 'react-chartjs-2';
+import { formatDuration } from '../../services/timeRecordService';
 
 export const DoughnutChart = ({ data, labels, title }) => {
   const chartData = {
@@ -29,7 +30,18 @@ export const DoughnutChart = ({ data, labels, title }) => {
     ],
   };
 
-  const chartOptions = {};
+  const chartOptions = {
+    tooltips: {
+      enabled: true,
 
-  return <Doughnut data={chartData} />;
+      callbacks: {
+        label: function(tooltipItem, data) {
+          const duration = data.datasets[tooltipItem.datasetIndex].data[0];
+          return formatDuration(duration);
+        },
+      },
+    },
+  };
+
+  return <Doughnut data={chartData} options={chartOptions} />;
 };
