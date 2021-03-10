@@ -1,14 +1,11 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Table } from 'antd';
 import moment from 'moment';
 import { PageContainer } from '@admin-layout/components';
 import { BarChart, DoughnutChart } from '../../components/Charts';
-import {
-  useGetTimesheetsQuery,
-  useGetDurationTimeRecordsQuery,
-  useGetProjectsQuery,
-} from '../../../generated-models';
+import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../../../generated-models';
 import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
+import { formatDuration } from '../../services/timeRecordService';
 
 const ReportsPage = () => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
@@ -89,13 +86,6 @@ const ReportsPage = () => {
             ),
           0,
         );
-
-        console.log(
-          `${moment(weekStart)
-            .add(index, 'day')
-            .format('YYYY-MM-DD')} => ${totalDuration}`,
-        );
-
         return totalDuration;
       });
     return dataSet;
@@ -127,6 +117,42 @@ const ReportsPage = () => {
     return projectDurArray;
   };
 
+  const generateTableColumns = () => {
+    return [
+      {
+        key: 'projectName',
+        dataIndex: 'projectName',
+        title: 'Project Name',
+      },
+      {
+        key: 'duration',
+        dataIndex: 'duration',
+        title: 'Duration',
+        render: value => {
+          return <span> {formatDuration(value)}</span>;
+        },
+      },
+    ];
+  };
+
+  const generateDatasource = () => {
+    const projects = getProjects();
+    const timeRecords = getRecords();
+    const projectDurArray = projects.map((project, index) => {
+      const pRecords = timeRecords.filter(record => record.projectId === project.id);
+      const pTotalDur = pRecords.reduce(
+        (totalDur, pRecord) =>
+          totalDur +
+          Math.floor(
+            (moment(pRecord.endTime).valueOf() - moment(pRecord.startTime).valueOf()) / 1000,
+          ),
+        0,
+      );
+      return { projectName: project.name, duration: pTotalDur };
+    });
+    return projectDurArray;
+  };
+
   return (
     <PageContainer>
       <Row>
@@ -135,6 +161,22 @@ const ReportsPage = () => {
           <Button onClick={onClickBack}> Back </Button>
           <Button onClick={onClickNext}> Next </Button>
         </Col>
+        <Col xs={24} md={12} style={{ textAlign: 'center' }}>
+          <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
+          <span className="duration-end">
+            {moment(weekStart).format('MM') ===
+            moment(weekStart)
+              .add(6, 'day')
+              .format('MM')
+              ? moment(weekStart)
+                  .add(6, 'day')
+                  .format('DD')
+              : moment(weekStart)
+                  .add(6, 'day')
+                  .format('MMMM DD')}
+          </span>
+        </Col>
+        <Col xs={24} md={6} className="control"></Col>
       </Row>
       <Row>
         <Col sm={24}>
@@ -142,9 +184,11 @@ const ReportsPage = () => {
         </Col>
       </Row>
 
-      <Row>
-        <Col sm={12}></Col>
-        <Col sm={12}>
+      <Row style={{ marginTop: '30px' }}>
+        <Col xs={24} sm={12}>
+          <Table dataSource={generateDatasource()} columns={generateTableColumns()} />
+        </Col>
+        <Col xs={24} sm={12}>
           <DoughnutChart
             title="Reports"
             data={generateProjectDurations()}
