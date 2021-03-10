@@ -123,6 +123,7 @@ const createApolloClient = () => {
         }
     }
     _apolloClient = new ApolloClient<any>(params);
+
     cache.writeData({
         data: {
             ...clientState.defaults,

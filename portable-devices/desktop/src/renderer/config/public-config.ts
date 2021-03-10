@@ -1,4 +1,4 @@
-import { lowerCase } from "lodash-es";
+import { lowerCase } from 'lodash';
 
 /**
  * This file opens up in public site, so make sure it is
@@ -33,7 +33,8 @@ const base = {
     AUTH0_ISSUER: 'https://dev-cdebase.auth0.com/',
     AUTH0_API_AUDIENCE: 'https://dev-cdebase.auth0.com/api/v2/',
     STRIPE_ENDPOINT_SECRET: 'werwerw',
-    CLIENT_URL: 'http://localhost:9080'
+    CLIENT_URL: 'http://localhost',
+    CONNECTION_ID: 'default'
 }
 
 const env: any = {};

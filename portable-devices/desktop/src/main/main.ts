@@ -1,4 +1,3 @@
-
 /**
  * This module executes inside of electron's main process. You can start
  * electron renderer process from here and communicate with the other processes
@@ -70,7 +69,6 @@ const createMainWindow = () => {
     window.webContents.openDevTools()
   }
 
-  console.log('---ISDEVEO', config.isDev, config.isDevelopment);
   if (isDevelopment) {
     // window.loadURL(`http://localhost:${config.ELECTRON_WEBPACK_WDS_PORT}`);
     window.loadURL(formatUrl({
