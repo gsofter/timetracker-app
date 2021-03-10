@@ -128,6 +128,9 @@ const ReportsPage = () => {
         key: 'duration',
         dataIndex: 'duration',
         title: 'Duration',
+        render: value => {
+          return <span> {formatDuration(value)}</span>;
+        },
       },
     ];
   };
@@ -181,7 +184,7 @@ const ReportsPage = () => {
         </Col>
       </Row>
 
-      <Row>
+      <Row style={{ marginTop: '30px' }}>
         <Col xs={24} sm={12}>
           <Table dataSource={generateDatasource()} columns={generateTableColumns()} />
         </Col>
