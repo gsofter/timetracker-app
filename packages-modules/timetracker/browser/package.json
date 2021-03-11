@@ -43,8 +43,8 @@
   "license": "ISC",
   "dependencies": {
     "@admin-layout/components": "file:../../../packages/components",
-    "@admin-layout/timetracker-module-core": "file:../core",
-    "@adminide-stack/core": "^0.0.18-alpha.359",
+    "@admin-layout/timetracker-core": "file:../core",
+    "@adminide-stack/core": "^0.0.18-alpha.407",
     "chart.js": "^2.9.4",
     "react-chartjs-2": "^2.11.1",
     "react-compound-timer": "^1.2.0",
