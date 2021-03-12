@@ -1,6 +1,8 @@
 query GetTimesheets($userId: String) {
   getTimesheets(userId: $userId) {
     id
+    userId
+    orgId
     startDate
     endDate
     state

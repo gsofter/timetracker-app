@@ -24,7 +24,7 @@ export const resolver = (options) => ({
       return timeTrackerService.updateTimeRecord(user._id || user.sub, userContext.orgId, args.recordId, args.request);
     },
     removeTimeRecord: (root,  args, { timeTrackerService, user, userContext}) => {
-      options.logger.trace('(Mutation.revmoeTimeRecord) args %j', args)
+      options.logger.trace('(Mutation.removeTimeRecord) args %j', args)
       return timeTrackerService.removeTimeRecord(user._id || user.sub, userContext.orgId, args.recordId);
     },
     removeDurationTimeRecords: (root,  args, { timeTrackerService, user, userContext }) => {

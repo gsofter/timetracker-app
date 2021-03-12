@@ -1,24 +1,25 @@
 import React from 'react';
 import { Table, Button, Dropdown, Menu } from 'antd';
-import { ITimesheet, ITimesheetState } from '@admin-layout/timetracker-core';
+import { ITimesheetResponse, ITimesheetState } from '@admin-layout/timetracker-core';
 import { MoreOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { useFela } from 'react-fela';
-import { ITimesheetCreateRequest } from '@admin-layout/timetracker-core';
+import { ITimesheetCreateRequest, IOrgMember } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import { VIEW_MODE } from './index';
 
 interface ITimesheetProps {
-  timesheets: Array<ITimesheet>;
+  timesheets: Array<ITimesheetResponse>;
   viewMode: VIEW_MODE;
+  members: Array<IOrgMember>;
   updateTimesheet: (id: string, request: ITimesheetCreateRequest) => void;
 }
 
-const TimeReport = ({ timesheets, viewMode, updateTimesheet }: ITimesheetProps) => {
+const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimesheetProps) => {
   const { css } = useFela();
-  const handleSubmit = (id: string, record: ITimesheet) => {
+  const handleSubmit = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id']),
+      ..._.omit(record, ['__typename', 'id', 'userId', 'orgId']),
       submittedOn: moment(),
       state: ITimesheetState.SUBMITTED,
       updatedOn: moment(),
@@ -26,9 +27,9 @@ const TimeReport = ({ timesheets, viewMode, updateTimesheet }: ITimesheetProps) 
     updateTimesheet(id, request);
   };
 
-  const handleUnSubmit = (id: string, record: ITimesheet) => {
+  const handleUnSubmit = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id']),
+      ..._.omit(record, ['__typename', 'id', 'userId', 'orgId']),
       approvedOn: null,
       submittedOn: null,
       state: ITimesheetState.OPEN,
@@ -37,9 +38,9 @@ const TimeReport = ({ timesheets, viewMode, updateTimesheet }: ITimesheetProps) 
     updateTimesheet(id, request);
   };
 
-  const handleApprove = (id: string, record: ITimesheet) => {
+  const handleApprove = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id']),
+      ..._.omit(record, ['__typename', 'id', 'userId', 'orgId']),
       approvedOn: moment(),
       state: ITimesheetState.APPROVED,
       updatedOn: moment(),
@@ -47,9 +48,9 @@ const TimeReport = ({ timesheets, viewMode, updateTimesheet }: ITimesheetProps) 
     updateTimesheet(id, request);
   };
 
-  const handleDeny = (id: string, record: ITimesheet) => {
+  const handleDeny = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id']),
+      ..._.omit(record, ['__typename', 'id', 'userId', 'orgId']),
       state: ITimesheetState.DENYED,
       updatedOn: moment(),
     };
@@ -58,9 +59,14 @@ const TimeReport = ({ timesheets, viewMode, updateTimesheet }: ITimesheetProps) 
 
   const columns = [
     {
-      title: 'Member',
-      dataIndex: 'member',
-      key: 'member',
+      title: 'User',
+      dataIndex: 'userId',
+      key: 'userId',
+      render: value => {
+        console.log('value =>', value);
+        const member = members.find(m => m.userId === value);
+        return <> {member !== undefined ? member.name : ''} </>;
+      },
     },
     {
       title: 'Start Date',

@@ -1404,9 +1404,22 @@ input TimesheetCreateRequest {
   updatedOn: DateTime
 }
 
+type TimesheetResponse {
+  id: ID
+  startDate: DateTime
+  endDate: DateTime
+  state: TimesheetState
+  submittedOn: DateTime
+  approvedOn: DateTime
+  updatedBy: String # ---> userId
+  updatedOn: DateTime
+  userId: String
+  orgId: String
+}
+
 extend type Query {
-  getTimesheets(userId: String): [Timesheet] @addAccountContext
-  getDurationTimesheet(start: DateTime, end: DateTime): Timesheet @addAccountContext
+  getTimesheets(userId: String): [TimesheetResponse] @addAccountContext
+  getDurationTimesheet(start: DateTime, end: DateTime): TimesheetResponse @addAccountContext
 }
 
 extend type Mutation {

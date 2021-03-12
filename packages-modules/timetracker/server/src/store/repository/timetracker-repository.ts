@@ -11,6 +11,7 @@ import {
   ITimeTracker,
   ITimesheetState
 } from '@admin-layout/timetracker-core';
+import * as _ from 'lodash';
 
 @injectable()
 export class TimeTrackerRepository implements ITimeTrackerRepository {
@@ -78,8 +79,24 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
       userId,
       orgId,
     });
-    if (!!!trackDoc && trackDoc.length > 0) {
-      return trackDoc[0].timesheets;
+    if (trackDoc !== null && trackDoc !== undefined && trackDoc.length > 0) {
+      let timesheets = [...trackDoc[0].timesheets];
+      const res = timesheets.map(sheet => {  
+        return {
+          id: sheet.id,
+          startDate: sheet.startDate,
+          endDate: sheet.endDate, 
+          state: sheet.state,
+          submittedOn: sheet.submittedOn,
+          approvedOn: sheet.approvedOn,
+          updatedBy: sheet.updatedBy,
+          updatedOn: sheet.updatedOn,
+          userId: trackDoc[0].userId, 
+          orgId: trackDoc[0].orgId,
+        }
+      })
+      console.log('res', res)
+      return res;
     } else {
       return [];
     }
