@@ -185,11 +185,7 @@ function SelectableCalendar({
             </Select>
           </Form.Item>
 
-          <Form.Item
-            label="Task"
-            name="task"
-            rules={[{ required: true, message: 'Required field' }]}
-          >
+          <Form.Item label="Task" name="task">
             <Select
               disabled={selectedProject === '' || !!!selectedProject}
               onChange={handleChangeTask}
