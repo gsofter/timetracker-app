@@ -1,4 +1,4 @@
-import { DEFAULT_USER, DEFAULT_ORG } from '../constants'
+import * as _ from 'lodash';
 export const resolver = (options) => ({
   Query: {
     getTimeRecords: (root, args, { timeTrackerService, user, userContext }) => {
@@ -17,19 +17,31 @@ export const resolver = (options) => ({
   Mutation: {
     createTimeRecord: (root,  args, { timeTrackerService, user, userContext}) => {
       options.logger.trace('(Mutation.createTimeRecord) args %j', args)
-      return timeTrackerService.createTimeRecord(user._id || user.sub, userContext.orgId, args.request);
+      let userId = args.request.userId;
+      if(userId === undefined)
+        userId = user._id || user.sub
+      return timeTrackerService.createTimeRecord(userId, userContext.orgId, _.omit(args.request, [userId]));
     },
     updateTimeRecord: (root,  args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Mutation.updateTimeRecord) args %j', args)
-      return timeTrackerService.updateTimeRecord(user._id || user.sub, userContext.orgId, args.recordId, args.request);
+      let userId = args.request.userId;
+      if(userId === undefined)
+        userId = user._id || user.sub
+      return timeTrackerService.updateTimeRecord(userId, userContext.orgId, args.recordId, _.omit(args.request, [userId]));
     },
     removeTimeRecord: (root,  args, { timeTrackerService, user, userContext}) => {
       options.logger.trace('(Mutation.removeTimeRecord) args %j', args)
-      return timeTrackerService.removeTimeRecord(user._id || user.sub, userContext.orgId, args.recordId);
+      let userId = args.request.userId;
+      if(userId === undefined)
+        userId = user._id || user.sub
+      return timeTrackerService.removeTimeRecord(userId, userContext.orgId, args.recordId);
     },
     removeDurationTimeRecords: (root,  args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Mutation.removeDurationTimeRecords) args %j', args)
-      return timeTrackerService.removeDurationTimeRecords(user._id || user.sub, userContext.orgId, args.startTime, args.endTime, args.projectId);
+      let userId = args.request.userId;
+      if(userId === undefined)
+        userId = user._id || user.sub
+      return timeTrackerService.removeDurationTimeRecords(userId, userContext.orgId, args.startTime, args.endTime, args.projectId);
     }
   },
   Subscription: {

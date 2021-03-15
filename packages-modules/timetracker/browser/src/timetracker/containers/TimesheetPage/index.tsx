@@ -38,7 +38,7 @@ const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
   const [localizer, setLocalizer] = useState(momentLocalizer(moment));
   const [selectedProject, setSelectedProject] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
-  const [openAddTimeModal, setOpenAddTimeModal] = useState(false);
+  const [isShowTimeModal, setIsShowTimeModal] = useState(false);
 
   const handleChangeViewMode = checked => {
     setViewMode(checked ? VIEW_MODE.CALENDAR_VIEW : VIEW_MODE.TABULAR_VIEW);
@@ -55,14 +55,6 @@ const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
 
   const handleChangeUser = value => {
     setSelectedUser(value);
-  };
-
-  const handleOpenAddTimeModal = () => {
-    setOpenAddTimeModal(true);
-  };
-
-  const handleCloseAddTimeModal = () => {
-    setOpenAddTimeModal(false);
   };
 
   return (
@@ -146,30 +138,18 @@ const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
             </Form.Item>
           </Form>
         </Col>
-        <Col md={4} xs={16}>
-          {viewMode === VIEW_MODE.CALENDAR_VIEW ? (
-            <div>
-              <span style={{ fontWeight: 'bold' }}>
-                <a onClick={handleOpenAddTimeModal}>Add Time</a>
-              </span>
-            </div>
-          ) : (
-            ''
-          )}
-        </Col>
       </Row>
       {viewMode === VIEW_MODE.CALENDAR_VIEW ? (
         <TimesheetCalendar
           localizer={localizer}
           projects={projects}
           members={members}
-          showAddTimeModal={openAddTimeModal}
+          isShowTimeModal={isShowTimeModal}
           selectedUser={selectedUser}
           selectedProject={selectedProject}
           handleChangeProject={handleChangeProject}
           handleChangeUser={handleChangeUser}
-          handleOpenAddTimeModal={handleOpenAddTimeModal}
-          handleCloseAddTimeModal={handleCloseAddTimeModal}
+          setIsShowTimeModal={setIsShowTimeModal}
         />
       ) : (
         <TabularCalendar projects={projects} members={members} tags={tags} />

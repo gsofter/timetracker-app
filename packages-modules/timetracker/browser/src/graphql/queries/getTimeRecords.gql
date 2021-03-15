@@ -7,5 +7,6 @@ query GetTimeRecords {
     tags
     projectId
     isBillable
+    userId
   }
 }

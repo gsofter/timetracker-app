@@ -2202,9 +2202,12 @@ export type TimeRecord = {
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
   clientId?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
 };
 
 export type TimeRecordRequest = {
+  userId?: Maybe<Scalars['String']>;
   startTime?: Maybe<Scalars['DateTime']>;
   endTime?: Maybe<Scalars['DateTime']>;
   taskName?: Maybe<Scalars['String']>;
@@ -4071,6 +4074,8 @@ export type TimeRecordResolvers<ContextType = any, ParentType extends ResolversP
   isBillable?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   projectId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   clientId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  orgId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

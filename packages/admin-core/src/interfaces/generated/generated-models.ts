@@ -2207,9 +2207,12 @@ export type ITimeRecord = {
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
   clientId?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
 };
 
 export type ITimeRecordRequest = {
+  userId?: Maybe<Scalars['String']>;
   startTime?: Maybe<Scalars['DateTime']>;
   endTime?: Maybe<Scalars['DateTime']>;
   taskName?: Maybe<Scalars['String']>;
@@ -4016,6 +4019,8 @@ export type ITimeRecordResolvers<ContextType = MyContext, ParentType extends IRe
   isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   projectId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   clientId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  orgId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
