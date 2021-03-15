@@ -7,7 +7,6 @@ import { Provider } from 'react-redux';
 import createRenderer from '../config/fela-renderer';
 import { rehydrate } from 'fela-dom';
 import { epic$ } from '../config/epic-config';
-
 import {
   createReduxStore,
   storeReducer,
@@ -15,7 +14,6 @@ import {
   persistConfig,
 } from '../config/redux-config';
 import { createClientContainer } from '../config/client.service';
-
 import {
   SlotFillProvider,
   InversifyProvider, Lifecycle,
@@ -28,7 +26,6 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
 import { useProvideAuth } from '@adminide-stack/user-auth0-browser';
 import { ProvideAuth as CoreProvideAuth, ErrorBoundary } from '@adminide-stack/react-shared-components';
-import { ClientTypes } from '@common-stack/client-core';
 
 const ProvideAuth = ({ children }) => {
   const auth = useProvideAuth();

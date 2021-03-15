@@ -17,6 +17,7 @@
   "scripts": {
     "prebuild": "npm run build:clean",
     "build": "cross-env NODE_ENV=production zen build",
+    "build:dev": "cross-env NODE_ENV=development zen build",
     "build:clean": "rimraf dist .awcache",
     "build:debug": "cross-env DEBUGGING=true NODE_ENV=production zen build",
     "build:debug:verbose": "npm run build:debug -- -v",

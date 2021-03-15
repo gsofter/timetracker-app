@@ -19,6 +19,9 @@ app.commandLine.appendSwitch('auth-server-whitelist', 'https://dev-cdebase.auth0
 const createMainWindow = () => {
   // Create the browser window.
   const window = new BrowserWindow({
+    show: false,
+    width: 1024,
+    height: 728,
     webPreferences: {
       nodeIntegration: true,
       webSecurity: false,
