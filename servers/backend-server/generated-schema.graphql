@@ -1346,6 +1346,8 @@ extend type Mutation {
   isBillable: Boolean
   projectId: String
   clientId: String
+  userId: String
+  orgId: String
 }
 
 input TimeRecordRequest {
@@ -1356,6 +1358,7 @@ input TimeRecordRequest {
   isBillable: Boolean
   projectId: String
   clientId: String
+  userId: String
 }
 
 extend type Query {

@@ -2186,11 +2186,13 @@ export type ITimeRecord = {
   endTime?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['String']>;
   isBillable?: Maybe<Scalars['Boolean']>;
+  orgId?: Maybe<Scalars['String']>;
   projectId?: Maybe<Scalars['String']>;
   startTime?: Maybe<Scalars['DateTime']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   taskId?: Maybe<Scalars['String']>;
   taskName?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type ITimeRecordRequest = {
@@ -2201,6 +2203,7 @@ export type ITimeRecordRequest = {
   startTime?: Maybe<Scalars['DateTime']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   taskName?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type ITimesheet = {
@@ -2606,7 +2609,7 @@ export type IGetDurationTimeRecordsQuery = (
   { __typename?: 'Query' }
   & { getDurationTimeRecords?: Maybe<Array<Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable'>
+    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId'>
   )>>> }
 );
 
@@ -2664,7 +2667,7 @@ export type IGetTimeRecordsQuery = (
   { __typename?: 'Query' }
   & { getTimeRecords?: Maybe<Array<Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable'>
+    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId'>
   )>>> }
 );
 
@@ -2761,6 +2764,7 @@ export const GetDurationTimeRecordsDocument = gql`
     tags
     projectId
     isBillable
+    userId
   }
 }
     `;
@@ -2824,6 +2828,7 @@ export const GetTimeRecordsDocument = gql`
     tags
     projectId
     isBillable
+    userId
   }
 }
     `;
@@ -4300,11 +4305,13 @@ export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolver
   endTime?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  orgId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   projectId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   startTime?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   tags?: Resolver<Maybe<Array<Maybe<IResolversTypes['String']>>>, ParentType, ContextType>,
   taskId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   taskName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

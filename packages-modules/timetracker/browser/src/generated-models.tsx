@@ -331,6 +331,7 @@ export const GetDurationTimeRecordsDocument = gql`
     tags
     projectId
     isBillable
+    userId
   }
 }
     `;
@@ -548,6 +549,7 @@ export const GetTimeRecordsDocument = gql`
     tags
     projectId
     isBillable
+    userId
   }
 }
     `;
