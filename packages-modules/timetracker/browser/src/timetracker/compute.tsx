@@ -2,12 +2,23 @@ import * as React from 'react';
 import { IMenuPosition } from '@common-stack/client-react';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 import { FileOutlined } from '@ant-design/icons';
+import { useParams } from 'react-router';
+import {
+  WithConfigurationEnhanced,
+  ResourceSettings,
+} from '@adminide-stack/react-shared-components';
+import {
+  generateResourceUri,
+  ConfigurationTarget,
+  IPreDefineAccountPermissions,
+} from '@adminide-stack/core';
+
+
 const Home = React.lazy(() => import('./containers/Home'));
 const TimeTracker = React.lazy(() => import('./containers/MainPage'));
 const Timesheet = React.lazy(() => import('./containers/TimesheetPage'));
-const TimeApproval = React.lazy(() => import('./containers/TimeApprovalPage'));
-const TimeReport = React.lazy(() => import('./containers/ReportsPage'));
-
+const ProjectsPage = React.lazy(() => import('./containers/ProjectsPage'));
+const ClientsPage = React.lazy(() => import('./containers/ClientsPage'));
 export const timePageStore: any[] = [
   {
     exact: false,
@@ -40,30 +51,59 @@ export const timePageStore: any[] = [
   },
   {
     exact: true,
-    key: 'timeTracker.timeapproval',
-    name: 'Approvals',
-    component: TimeApproval,
+    key: 'timeTracker.projects',
+    name: 'Projects',
+    component: ProjectsPage,
     position: IMenuPosition.MIDDLE,
-    path: '/:orgName/time-tracker/timeapproval',
+    path: '/:orgName/time-tracker/projects',
     priority: 4,
   },
   {
     exact: true,
-    key: 'timeTracker.report',
-    name: 'Report',
-    component: TimeReport,
+    key: 'timeTracker.clients',
+    name: 'Clients',
+    component: ClientsPage,
     position: IMenuPosition.MIDDLE,
-    path: '/:orgName/time-tracker/report',
+    path: '/:orgName/time-tracker/clients',
     priority: 5,
-  },
+  },{
+    name: 'Settings',
+    key: 'timetracker-settings',
+    path: '/:orgName/time-tracker/settings',
+    hideInMenu: true,
+    tab: 'Settings',
+    authority: [IPreDefineAccountPermissions.manageTeams],
+    component: (props) => {
+        const { orgName, teamName } = useParams() as any;
+        const generatedTeamUri = generateResourceUri(
+            IConfigCollectionName.teams,
+            { name: teamName, orgName: orgName },
+            'settings',
+        );
+        return (
+            <WithConfigurationEnhanced
+                settingsUri={generatedTeamUri}
+                permissionKeys={[IPreDefineAccountPermissions.manageTeams]}
+                configKey="organization.teams.visibility"
+                resourceName="Teams"
+            >
+                <ResourceSettings
+                    settingsUri={generatedTeamUri}
+                    target={ConfigurationTarget.ORGANIZATION_RESOURCE}
+                    showSidebar={false}
+                />
+            </WithConfigurationEnhanced>
+        );
+    },
+},
 ];
 
 const selectedRoutesAndMenus = [
   'timeTracker',
   'timeTracker.timer',
+  'timeTracker.projects',
+  'timeTracker.clients',
   'timeTracker.timesheet',
-  'timeTracker.timeapproval',
-  'timeTracker.report',
 ];
 
 // get routes
