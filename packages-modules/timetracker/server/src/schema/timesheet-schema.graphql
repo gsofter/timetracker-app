@@ -30,14 +30,27 @@ input TimesheetCreateRequest {
   updatedOn: DateTime
 }
 
+type TimesheetResponse {
+  id: ID
+  startDate: DateTime
+  endDate: DateTime
+  state: TimesheetState
+  submittedOn: DateTime
+  approvedOn: DateTime
+  updatedBy: String # ---> userId
+  updatedOn: DateTime
+  userId: String
+  orgId: String
+}
+
 extend type Query {
-  getTimesheets(userId: String): [Timesheet]
-  getDurationTimesheet(start: DateTime, end: DateTime): Timesheet
+  getTimesheets(userId: String): [TimesheetResponse] @addAccountContext
+  getDurationTimesheet(start: DateTime, end: DateTime): TimesheetResponse @addAccountContext
 }
 
 extend type Mutation {
-  createTimesheet(request: TimesheetCreateRequest): Boolean
-  updateTimesheet(sheetId: String, request: TimesheetCreateRequest): Boolean
-  removeTimesheet(sheetId: String): Boolean
-  updateTimesheetStatus(request: TimesheetCreateRequest): Boolean
+  createTimesheet(request: TimesheetCreateRequest): Boolean @addAccountContext
+  updateTimesheet(sheetId: String, request: TimesheetCreateRequest): Boolean @addAccountContext
+  removeTimesheet(sheetId: String): Boolean @addAccountContext
+  updateTimesheetStatus(request: TimesheetCreateRequest): Boolean @addAccountContext
 }

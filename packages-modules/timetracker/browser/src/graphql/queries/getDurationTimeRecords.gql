@@ -7,5 +7,6 @@ query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime) {
     tags
     projectId
     isBillable
+    userId
   }
 }

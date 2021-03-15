@@ -29,7 +29,7 @@ export type Scalars = {
 
 
 
-/**  all input for the `acceptInvitationToTeam` mutation. */
+/** all input for the `acceptInvitationToTeam` mutation. */
 export type AcceptInvitationToTeam_Input = {
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
@@ -111,7 +111,7 @@ export enum ApplicationRoles {
   Contributors = 'CONTRIBUTORS',
   Guest = 'GUEST',
   Member = 'MEMBER',
-  /**  organization member  */
+  /** organization member */
   OrganizationManager = 'ORGANIZATION_MANAGER',
   Owner = 'OWNER',
   ProjectAdmin = 'PROJECT_ADMIN',
@@ -252,9 +252,9 @@ export enum ConfigFragmentName {
   ApplicationPolicies = 'applicationPolicies',
   Roles = 'roles',
   ContributionRoles = 'contributionRoles',
-  /**  Team Members Document with role value  */
+  /** Team Members Document with role value */
   TeamMembers = 'teamMembers',
-  /**  Organization Members Document with role value  */
+  /** Organization Members Document with role value */
   OrgMembers = 'orgMembers'
 }
 
@@ -348,12 +348,12 @@ export type ContributionRoles = {
 
 export type ContributionSettings = {
    __typename?: 'ContributionSettings';
-  /**  name of the settings */
+  /** name of the settings */
   name?: Maybe<Scalars['String']>;
   range?: Maybe<Range>;
   key?: Maybe<Scalars['String']>;
   keyRange?: Maybe<Range>;
-  /**  @deprecated  */
+  /** @deprecated */
   default?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['AnyObject']>;
   valueRange?: Maybe<Range>;
@@ -372,10 +372,10 @@ export type ContributionSettings = {
   extensionInfo?: Maybe<ConfigurationExtensionInfo>;
 };
 
-/**  Database counter  */
+/** Database counter */
 export type Counter = {
    __typename?: 'Counter';
-  /**  Current amount  */
+  /** Current amount */
   amount: Scalars['Int'];
 };
 
@@ -383,7 +383,7 @@ export type Counter = {
 
 export type DefaultConfiguration = IConfigurationModel & {
    __typename?: 'DefaultConfiguration';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
   /** The URL to the user's settings. */
   resource: Scalars['URI'];
@@ -413,13 +413,13 @@ export type DefaultRole = IConfigurationModel & {
 
 export type DefaultSettings = ISettingsSubject & {
    __typename?: 'DefaultSettings';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
-  /**  The latest settings.  */
+  /** The latest settings. */
   latestSettings?: Maybe<Settings>;
-  /**  The URL to the settings.  */
+  /** The URL to the settings. */
   settingsURL: Scalars['URI'];
-  /**  Whether the viewer can modify the subject's settings. */
+  /** Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -450,13 +450,13 @@ export type FieldError = {
 
 export type GlobalSettings = ISettingsSubject & {
    __typename?: 'GlobalSettings';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
-  /**  The latest settings.  */
+  /** The latest settings. */
   latestSettings?: Maybe<Settings>;
-  /**  The URL to the settings.  */
+  /** The URL to the settings. */
   settingsURL: Scalars['URI'];
-  /**  Whether the viewer can modify the subject's settings.  */
+  /** Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -567,13 +567,13 @@ export type IResourceUserRole = {
  * configuration"), an organization, or a user.
  */
 export type ISettingsSubject = {
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
-  /**  The latest settings.  */
+  /** The latest settings. */
   latestSettings?: Maybe<Settings>;
-  /**  The URL to the settings.  */
+  /** The URL to the settings. */
   settingsURL: Scalars['URI'];
-  /**  Whether the viewer can modify the subject's settings.  */
+  /** Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -597,21 +597,21 @@ export type IUser = {
  * For example, in {"a": [0, {"b": 3}]}, the value 3 is located at the key path ["a", 1, "b"].
  */
 export type KeyPathSegment = {
-  /**  The name of the property in the object at this location to descend into.  */
+  /** The name of the property in the object at this location to descend into. */
   property?: Maybe<Scalars['String']>;
-  /**  The index of the array at this location to descend into.  */
+  /** The index of the array at this location to descend into. */
   index?: Maybe<Scalars['Int']>;
 };
 
 export type LocalUserSettings = ISettingsSubject & {
    __typename?: 'LocalUserSettings';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
-  /**  The latest settings.  */
+  /** The latest settings. */
   latestSettings?: Maybe<Settings>;
-  /**  The URL to the settings.  */
+  /** The URL to the settings. */
   settingsURL: Scalars['URI'];
-  /**  Whether the viewer can modify the subject's settings. */
+  /** Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -628,13 +628,13 @@ export type LoginError = {
 
 export type MemorySettings = ISettingsSubject & {
    __typename?: 'MemorySettings';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
-  /**  The latest settings.  */
+  /** The latest settings. */
   latestSettings?: Maybe<Settings>;
-  /**  The URL to the settings.  */
+  /** The URL to the settings. */
   settingsURL: Scalars['URI'];
-  /**  Whether the viewer can modify the subject's settings. */
+  /** Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -655,10 +655,10 @@ export type Mutation = {
   acceptOrganizationInvitation?: Maybe<Scalars['Boolean']>;
   addClient?: Maybe<Scalars['Boolean']>;
   addContributionRole?: Maybe<Scalars['Boolean']>;
-  /**  Increase counter value returns current counter amount  */
+  /** Increase counter value returns current counter amount */
   addCounter?: Maybe<Counter>;
   addCounterState?: Maybe<ClientCounter>;
-  /**  add Counter  */
+  /** add Counter */
   addMoleculerCounter?: Maybe<Counter>;
   addOrgProject?: Maybe<Scalars['Boolean']>;
   addScheduleEvent?: Maybe<Scalars['Boolean']>;
@@ -692,7 +692,7 @@ export type Mutation = {
   sendInvitation?: Maybe<Scalars['Boolean']>;
   sendOrganizationInvitation?: Maybe<Scalars['Boolean']>;
   setSettingsValueByResource?: Maybe<Scalars['Boolean']>;
-  /**  sync cached counter with current value  */
+  /** sync cached counter with current value */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
   updateConfigurationPolicyValue?: Maybe<Scalars['Boolean']>;
   updateConfigurationPolicyValueByUri?: Maybe<Scalars['Boolean']>;
@@ -1130,7 +1130,7 @@ export type Organization_Input = {
 
 export type OrganizationConfiguration = IConfigurationModel & {
    __typename?: 'OrganizationConfiguration';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
   resource: Scalars['URI'];
   target?: Maybe<Scalars['Int']>;
@@ -1260,7 +1260,7 @@ export type OrganizationRemoveRequest = {
 
 export type OrganizationResourceConfiguration = IConfigurationModel & {
    __typename?: 'OrganizationResourceConfiguration';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
   resource: Scalars['URI'];
   target?: Maybe<Scalars['Int']>;
@@ -1286,13 +1286,13 @@ export type OrganizationResourceData = {
 
 export type OrganizationResourceSettings = ISettingsSubject & {
    __typename?: 'OrganizationResourceSettings';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
-  /**  The latest settings.  */
+  /** The latest settings. */
   latestSettings?: Maybe<Settings>;
-  /**  The URL to the settings.  */
+  /** The URL to the settings. */
   settingsURL: Scalars['URI'];
-  /**  Whether the viewer can modify the subject's settings. */
+  /** Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -1312,13 +1312,13 @@ export type OrganizationRole = IConfigurationModel & {
 
 export type OrganizationSettings = ISettingsSubject & {
    __typename?: 'OrganizationSettings';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
-  /**  The latest settings.  */
+  /** The latest settings. */
   latestSettings?: Maybe<Settings>;
-  /**  The URL to the settings.  */
+  /** The URL to the settings. */
   settingsURL: Scalars['URI'];
-  /**  Whether the viewer can modify the subject's settings. */
+  /** Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -1399,7 +1399,7 @@ export enum PermissionResource {
 
 export type PermissionSubject = {
    __typename?: 'PermissionSubject';
-  /**  The URL to the roles.  */
+  /** The URL to the roles. */
   roleURL: Scalars['URI'];
   /** The time when this was created. */
   createdAt?: Maybe<Scalars['String']>;
@@ -1415,7 +1415,7 @@ export enum PermissionType {
 
 export type PolicySubject = {
    __typename?: 'PolicySubject';
-  /**  The URL to the policies.  */
+  /** The URL to the policies. */
   policyURL: Scalars['URI'];
   /** The time when this was created. */
   createdAt?: Maybe<Scalars['String']>;
@@ -1541,7 +1541,7 @@ export type Projects = {
   teams?: Maybe<Array<Maybe<Scalars['String']>>>;
   status?: Maybe<Scalars['String']>;
   type?: Maybe<ProjectType>;
-  /**  Predefined Project template   */
+  /** Predefined Project template */
   templateId?: Maybe<Scalars['String']>;
   orgName?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
@@ -1556,9 +1556,9 @@ export enum ProjectType {
 
 export type Query = {
    __typename?: 'Query';
-  /**  Counter  */
+  /** Counter */
   counter?: Maybe<Counter>;
-  /**  Counter from Datasource  */
+  /** Counter from Datasource */
   counterCache?: Maybe<Counter>;
   counterState?: Maybe<ClientCounter>;
   decodeInvitation?: Maybe<InvitationDecode>;
@@ -1568,7 +1568,7 @@ export type Query = {
   /** Return the Policies groups */
   defaultPolicies?: Maybe<Array<Maybe<SettingsGroup>>>;
   /**
-   * Default Preferences 
+   * Default Preferences
    * @deprecated not used
    */
   defaultPreferences?: Maybe<PreferencesResponse>;
@@ -1588,7 +1588,7 @@ export type Query = {
   getConfigurationPolicies?: Maybe<Array<Maybe<ConfigurationPolicy>>>;
   getContributionRoles?: Maybe<Array<Maybe<ContributionRoles>>>;
   getDurationTimeRecords?: Maybe<Array<Maybe<TimeRecord>>>;
-  getDurationTimesheet?: Maybe<Timesheet>;
+  getDurationTimesheet?: Maybe<TimesheetResponse>;
   getEnvironment?: Maybe<Environment>;
   getManageableOrganizations?: Maybe<Array<Maybe<Organization>>>;
   getOrgInvitationMembers?: Maybe<Array<Maybe<InviteMember>>>;
@@ -1610,7 +1610,7 @@ export type Query = {
   getTeam?: Maybe<AccountTeam>;
   getTimeRecords?: Maybe<Array<Maybe<TimeRecord>>>;
   getTimelineEvents?: Maybe<Array<Maybe<Timeline>>>;
-  getTimesheets?: Maybe<Array<Maybe<Timesheet>>>;
+  getTimesheets?: Maybe<Array<Maybe<TimesheetResponse>>>;
   getUserAccount?: Maybe<UserAccount>;
   getUserOrganizations?: Maybe<Array<Maybe<Organization>>>;
   getUserOrganizationsWithRole?: Maybe<Array<Maybe<Organization>>>;
@@ -1621,7 +1621,7 @@ export type Query = {
   getViewerPolicies?: Maybe<PolicySubject>;
   /** Shortcut way to send merged defautPermissions with applicaiton role's permission. */
   mergedApplicationPermissions?: Maybe<Array<Maybe<ContributionSettings>>>;
-  /**  Moleculer Counter  */
+  /** Moleculer Counter */
   moleculerCounter?: Maybe<Counter>;
   organizations?: Maybe<Array<Maybe<Organization>>>;
   team?: Maybe<AccountTeam>;
@@ -1826,13 +1826,13 @@ export type Range = {
 
 export type RemoteUserSettings = ISettingsSubject & {
    __typename?: 'RemoteUserSettings';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
-  /**  The latest settings.  */
+  /** The latest settings. */
   latestSettings?: Maybe<Settings>;
-  /**  The URL to the settings.  */
+  /** The URL to the settings. */
   settingsURL: Scalars['URI'];
-  /**  Whether the viewer can modify the subject's settings. */
+  /** Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -1917,7 +1917,7 @@ export type ScheduleCreateRequest = {
 /** Settings is a version of a configuration settings file. */
 export type Settings = {
    __typename?: 'Settings';
-  /** The time when this was created.  */
+  /** The time when this was created. */
   createdAt?: Maybe<Scalars['String']>;
   /**
    * The stringified JSON contents of the settings. The contents may include "//"-style comments and trailing
@@ -2003,7 +2003,7 @@ export type Subscription = {
   SubscribeToOrganizationContext?: Maybe<SubscribedOrganizationData>;
   SubscribeToPermissionUpdate?: Maybe<ConfigurationUpdateEvent>;
   SubscribeToPolicyUpdate?: Maybe<ConfigurationUpdateEvent>;
-  /**  Subscription fired when anyone increases counter  */
+  /** Subscription fired when anyone increases counter */
   counterUpdated?: Maybe<Counter>;
   dummy?: Maybe<Scalars['Int']>;
   moleculerCounterUpdate?: Maybe<Counter>;
@@ -2104,7 +2104,7 @@ export type TeamInvitation = {
   tokenExpiration?: Maybe<Scalars['DateTime']>;
 };
 
-/**  The output of our `acceptInvitationToTeam`.  */
+/** The output of our `acceptInvitationToTeam`. */
 export type TeamInvitation_Input = {
   email?: Maybe<Scalars['String']>;
   teamId?: Maybe<Scalars['String']>;
@@ -2202,9 +2202,12 @@ export type TimeRecord = {
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
   clientId?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
 };
 
 export type TimeRecordRequest = {
+  userId?: Maybe<Scalars['String']>;
   startTime?: Maybe<Scalars['DateTime']>;
   endTime?: Maybe<Scalars['DateTime']>;
   taskName?: Maybe<Scalars['String']>;
@@ -2234,6 +2237,20 @@ export type TimesheetCreateRequest = {
   approvedOn?: Maybe<Scalars['DateTime']>;
   updatedBy?: Maybe<Scalars['String']>;
   updatedOn?: Maybe<Scalars['DateTime']>;
+};
+
+export type TimesheetResponse = {
+   __typename?: 'TimesheetResponse';
+  id?: Maybe<Scalars['ID']>;
+  startDate?: Maybe<Scalars['DateTime']>;
+  endDate?: Maybe<Scalars['DateTime']>;
+  state?: Maybe<TimesheetState>;
+  submittedOn?: Maybe<Scalars['DateTime']>;
+  approvedOn?: Maybe<Scalars['DateTime']>;
+  updatedBy?: Maybe<Scalars['String']>;
+  updatedOn?: Maybe<Scalars['DateTime']>;
+  userId?: Maybe<Scalars['String']>;
+  orgId?: Maybe<Scalars['String']>;
 };
 
 export enum TimesheetState {
@@ -2361,7 +2378,7 @@ export type UserAccountWhere = {
 
 export type UserConfiguration = IConfigurationModel & {
    __typename?: 'UserConfiguration';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
   /** The URL to the user's settings. */
   resource: Scalars['URI'];
@@ -2445,7 +2462,7 @@ export type UserProfile = IAuth0UserProfile & {
 /** UserSettings is a combination of LocalUserSettings and RemoteUserSettings */
 export type UserSettings = ISettingsSubject & {
    __typename?: 'UserSettings';
-  /**  The ID.  */
+  /** The ID. */
   id?: Maybe<Scalars['ID']>;
   /**
    * The latest settings for the user.
@@ -2489,7 +2506,7 @@ export type ViewerSettingsInput = {
    */
   settingsResource?: Maybe<Scalars['URI']>;
   /**
-   * User resource to identify the core user settings. 
+   * User resource to identify the core user settings.
    * For guest user, we don't have to define it.
    */
   userResource?: Maybe<Scalars['URI']>;
@@ -2497,7 +2514,7 @@ export type ViewerSettingsInput = {
 
 export type ViewerSettingsSubject = {
    __typename?: 'ViewerSettingsSubject';
-  /**  The URL to the settings.  */
+  /** The URL to the settings. */
   settingsURL: Scalars['URI'];
   /** Graphql typed settings */
   settings?: Maybe<Preferences>;
@@ -2742,7 +2759,7 @@ export type ResolversTypes = {
   ApplicationRolePermission: ResolverTypeWrapper<ApplicationRolePermission>,
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   TimeRecord: ResolverTypeWrapper<TimeRecord>,
-  Timesheet: ResolverTypeWrapper<Timesheet>,
+  TimesheetResponse: ResolverTypeWrapper<TimesheetResponse>,
   TimesheetState: TimesheetState,
   Environment: ResolverTypeWrapper<Environment>,
   Organization: ResolverTypeWrapper<Organization>,
@@ -2836,6 +2853,7 @@ export type ResolversTypes = {
   AuthUser_Input: AuthUser_Input,
   UserPreviousValues: ResolverTypeWrapper<UserPreviousValues>,
   UserOrderBy: UserOrderBy,
+  Timesheet: ResolverTypeWrapper<Timesheet>,
   TimeTracker: ResolverTypeWrapper<TimeTracker>,
   StartYearWeekType: StartYearWeekType,
   Task: ResolverTypeWrapper<Task>,
@@ -2935,7 +2953,7 @@ export type ResolversParentTypes = {
   ApplicationRolePermission: ApplicationRolePermission,
   DateTime: Scalars['DateTime'],
   TimeRecord: TimeRecord,
-  Timesheet: Timesheet,
+  TimesheetResponse: TimesheetResponse,
   TimesheetState: TimesheetState,
   Environment: Environment,
   Organization: Organization,
@@ -3029,6 +3047,7 @@ export type ResolversParentTypes = {
   AuthUser_Input: AuthUser_Input,
   UserPreviousValues: UserPreviousValues,
   UserOrderBy: UserOrderBy,
+  Timesheet: Timesheet,
   TimeTracker: TimeTracker,
   StartYearWeekType: StartYearWeekType,
   Task: Task,
@@ -3829,7 +3848,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getConfigurationPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['ConfigurationPolicy']>>>, ParentType, ContextType, RequireFields<QueryGetConfigurationPoliciesArgs, never>>,
   getContributionRoles?: Resolver<Maybe<Array<Maybe<ResolversTypes['ContributionRoles']>>>, ParentType, ContextType>,
   getDurationTimeRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimeRecord']>>>, ParentType, ContextType, RequireFields<QueryGetDurationTimeRecordsArgs, never>>,
-  getDurationTimesheet?: Resolver<Maybe<ResolversTypes['Timesheet']>, ParentType, ContextType, RequireFields<QueryGetDurationTimesheetArgs, never>>,
+  getDurationTimesheet?: Resolver<Maybe<ResolversTypes['TimesheetResponse']>, ParentType, ContextType, RequireFields<QueryGetDurationTimesheetArgs, never>>,
   getEnvironment?: Resolver<Maybe<ResolversTypes['Environment']>, ParentType, ContextType>,
   getManageableOrganizations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Organization']>>>, ParentType, ContextType>,
   getOrgInvitationMembers?: Resolver<Maybe<Array<Maybe<ResolversTypes['InviteMember']>>>, ParentType, ContextType>,
@@ -3851,7 +3870,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getTeam?: Resolver<Maybe<ResolversTypes['AccountTeam']>, ParentType, ContextType, RequireFields<QueryGetTeamArgs, 'orgName' | 'teamName'>>,
   getTimeRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimeRecord']>>>, ParentType, ContextType>,
   getTimelineEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Timeline']>>>, ParentType, ContextType, RequireFields<QueryGetTimelineEventsArgs, never>>,
-  getTimesheets?: Resolver<Maybe<Array<Maybe<ResolversTypes['Timesheet']>>>, ParentType, ContextType, RequireFields<QueryGetTimesheetsArgs, never>>,
+  getTimesheets?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimesheetResponse']>>>, ParentType, ContextType, RequireFields<QueryGetTimesheetsArgs, never>>,
   getUserAccount?: Resolver<Maybe<ResolversTypes['UserAccount']>, ParentType, ContextType, RequireFields<QueryGetUserAccountArgs, 'userId'>>,
   getUserOrganizations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Organization']>>>, ParentType, ContextType, RequireFields<QueryGetUserOrganizationsArgs, never>>,
   getUserOrganizationsWithRole?: Resolver<Maybe<Array<Maybe<ResolversTypes['Organization']>>>, ParentType, ContextType, RequireFields<QueryGetUserOrganizationsWithRoleArgs, never>>,
@@ -4055,6 +4074,8 @@ export type TimeRecordResolvers<ContextType = any, ParentType extends ResolversP
   isBillable?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   projectId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   clientId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  orgId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4067,6 +4088,20 @@ export type TimesheetResolvers<ContextType = any, ParentType extends ResolversPa
   approvedOn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   updatedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   updatedOn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type TimesheetResponseResolvers<ContextType = any, ParentType extends ResolversParentTypes['TimesheetResponse'] = ResolversParentTypes['TimesheetResponse']> = {
+  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
+  startDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  endDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  state?: Resolver<Maybe<ResolversTypes['TimesheetState']>, ParentType, ContextType>,
+  submittedOn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  approvedOn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  updatedBy?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  updatedOn?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  orgId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4297,6 +4332,7 @@ export type Resolvers<ContextType = any> = {
   Timeline?: TimelineResolvers<ContextType>,
   TimeRecord?: TimeRecordResolvers<ContextType>,
   Timesheet?: TimesheetResolvers<ContextType>,
+  TimesheetResponse?: TimesheetResponseResolvers<ContextType>,
   TimeTracker?: TimeTrackerResolvers<ContextType>,
   URI?: GraphQLScalarType,
   URIInput?: GraphQLScalarType,

@@ -8,6 +8,8 @@ type TimeRecord {
   isBillable: Boolean
   projectId: String
   clientId: String
+  userId: String
+  orgId: String
 }
 
 input TimeRecordRequest {
@@ -18,17 +20,19 @@ input TimeRecordRequest {
   isBillable: Boolean
   projectId: String
   clientId: String
+  userId: String
 }
 
 extend type Query {
-  getTimeRecords: [TimeRecord]
-  getDurationTimeRecords(startTime: DateTime, endTime: DateTime): [TimeRecord]
-  getPlayingTimeRecord: TimeRecord
+  getTimeRecords: [TimeRecord] @addAccountContext
+  getDurationTimeRecords(startTime: DateTime, endTime: DateTime): [TimeRecord] @addAccountContext
+  getPlayingTimeRecord: TimeRecord @addAccountContext
 }
 
 extend type Mutation {
-  createTimeRecord(request: TimeRecordRequest): String
-  updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
-  removeTimeRecord(recordId: String): Boolean
+  createTimeRecord(request: TimeRecordRequest): String @addAccountContext
+  updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean @addAccountContext
+  removeTimeRecord(recordId: String): Boolean @addAccountContext
   removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean
+    @addAccountContext
 }

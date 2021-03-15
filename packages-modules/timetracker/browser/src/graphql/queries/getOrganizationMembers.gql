@@ -1,0 +1,9 @@
+query GetOrganizationMembers {
+  getOrganizationMembers {
+    _id
+    userId
+    role
+    name
+    teamNames
+  }
+}

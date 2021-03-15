@@ -1,7 +1,9 @@
 import React from 'react';
 import { Bar } from 'react-chartjs-2';
+import { formatDuration } from '../../services/timeRecordService';
+import moment from 'moment';
 
-const BarChart = ({ labels, title, data }) => {
+export const BarChart = ({ labels, title, data }) => {
   const barData = {
     labels,
     datasets: [
@@ -27,14 +29,27 @@ const BarChart = ({ labels, title, data }) => {
       yAxes: [
         {
           ticks: {
-            stepSize: 2500,
+            beginAtZero: true,
+            stepSize: 3600,
+            suggestedMin: 0,
+            suggestedMax: 3600,
+            callback: value => {
+              return formatDuration(value);
+            },
           },
         },
       ],
+    },
+    tooltips: {
+      enabled: true,
+
+      callbacks: {
+        label: function(tooltipItem, data) {
+          return formatDuration(tooltipItem.yLabel);
+        },
+      },
     },
   };
 
   return <Bar data={barData} options={barOptions} width={350} />;
 };
-
-export default BarChart;

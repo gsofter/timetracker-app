@@ -1346,6 +1346,8 @@ extend type Mutation {
   isBillable: Boolean
   projectId: String
   clientId: String
+  userId: String
+  orgId: String
 }
 
 input TimeRecordRequest {
@@ -1356,19 +1358,21 @@ input TimeRecordRequest {
   isBillable: Boolean
   projectId: String
   clientId: String
+  userId: String
 }
 
 extend type Query {
-  getTimeRecords: [TimeRecord]
-  getDurationTimeRecords(startTime: DateTime, endTime: DateTime): [TimeRecord]
-  getPlayingTimeRecord: TimeRecord
+  getTimeRecords: [TimeRecord] @addAccountContext
+  getDurationTimeRecords(startTime: DateTime, endTime: DateTime): [TimeRecord] @addAccountContext
+  getPlayingTimeRecord: TimeRecord @addAccountContext
 }
 
 extend type Mutation {
-  createTimeRecord(request: TimeRecordRequest): String
-  updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean
-  removeTimeRecord(recordId: String): Boolean
+  createTimeRecord(request: TimeRecordRequest): String @addAccountContext
+  updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean @addAccountContext
+  removeTimeRecord(recordId: String): Boolean @addAccountContext
   removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean
+    @addAccountContext
 }
 
 # scalar DateTime
@@ -1403,16 +1407,29 @@ input TimesheetCreateRequest {
   updatedOn: DateTime
 }
 
+type TimesheetResponse {
+  id: ID
+  startDate: DateTime
+  endDate: DateTime
+  state: TimesheetState
+  submittedOn: DateTime
+  approvedOn: DateTime
+  updatedBy: String # ---> userId
+  updatedOn: DateTime
+  userId: String
+  orgId: String
+}
+
 extend type Query {
-  getTimesheets(userId: String): [Timesheet]
-  getDurationTimesheet(start: DateTime, end: DateTime): Timesheet
+  getTimesheets(userId: String): [TimesheetResponse] @addAccountContext
+  getDurationTimesheet(start: DateTime, end: DateTime): TimesheetResponse @addAccountContext
 }
 
 extend type Mutation {
-  createTimesheet(request: TimesheetCreateRequest): Boolean
-  updateTimesheet(sheetId: String, request: TimesheetCreateRequest): Boolean
-  removeTimesheet(sheetId: String): Boolean
-  updateTimesheetStatus(request: TimesheetCreateRequest): Boolean
+  createTimesheet(request: TimesheetCreateRequest): Boolean @addAccountContext
+  updateTimesheet(sheetId: String, request: TimesheetCreateRequest): Boolean @addAccountContext
+  removeTimesheet(sheetId: String): Boolean @addAccountContext
+  updateTimesheetStatus(request: TimesheetCreateRequest): Boolean @addAccountContext
 }
 
 type TimeTracker {

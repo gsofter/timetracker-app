@@ -18,16 +18,19 @@ import {
   Avatar,
   Popconfirm,
   Modal,
+  Checkbox,
 } from 'antd';
+import { PlusOutlined } from '@ant-design/icons';
 import { useFela } from 'react-fela';
 import {
   ITimesheetCreateRequest,
   ITimeRecord,
   IProjects as IProject,
   ITask,
-  ITeamMember as IMember,
+  IOrgMember as IMember,
+  ITimeRecordRequest,
 } from '@admin-layout/timetracker-core';
-import Spacer from '../../components/Spacer';
+import TimesheetModal from './TimesheetModal';
 
 const { TextArea } = Input;
 const DnDCalendar: any = withDragAndDrop(Calendar as any);
@@ -41,22 +44,24 @@ enum VIEW_MODE {
 }
 
 interface ITimesheetProps {
+  userId: string;
   form: any;
   events: [ITimeRecord];
-  showModal: boolean;
+  isShowModal: boolean;
   selectedProject: string;
   selectedTask: string;
   selectedUser: any;
-  selectedEvent: any;
+  selectedEvent: ITimeRecord;
   loading: boolean;
   projects: Array<IProject>;
   tasks: Array<ITask>;
   members: Array<IMember>;
-  handleAddTimeRecordEvent: Function;
-  handleUpdateTimeRecordEvent: Function;
+  setSelectedEvent: Function;
+  handleAddTimeRecordEvent: (request: ITimeRecordRequest) => void;
+  handleUpdateTimeRecordEvent: (recordId: string, request: ITimeRecordRequest) => void;
   handleRemoveTimeRecordEvent: () => void;
-  handleOpenAddTimeModal: () => void;
-  handleCloseAddTimeModal: () => void;
+  handleOpenNewTimeModal: () => void;
+  handleCloseTimeModal: () => void;
   handleSelectSlot: (any) => void;
   handleSelectEvent: (any) => void;
   handleChangeProject: (any) => void;
@@ -65,24 +70,24 @@ interface ITimesheetProps {
 }
 
 function SelectableCalendar({
+  userId,
   events,
   projects,
   members,
   form,
   tasks,
-  showModal,
+  isShowModal,
   loading,
   selectedProject,
   selectedEvent,
+  setSelectedEvent,
   handleAddTimeRecordEvent,
   handleUpdateTimeRecordEvent,
   handleRemoveTimeRecordEvent,
-  handleCloseAddTimeModal,
+  handleCloseTimeModal,
   handleSelectSlot,
   handleSelectEvent,
-  handleChangeProject,
-  handleChangeTask,
-  handleChangeUser,
+  handleOpenNewTimeModal,
   localizer,
 }: ITimesheetProps & { localizer: DateLocalizer }) {
   const resetModal = (e: any) => {
@@ -91,12 +96,12 @@ function SelectableCalendar({
   };
 
   const onEventDrop = ({ event, start, end, allDay }) => {
-    const updateRequest = { start: moment(start), end: moment(end) };
+    const updateRequest = { startTime: moment(start), endTime: moment(end) };
     handleUpdateTimeRecordEvent(event.id, updateRequest);
   };
 
   const onEventResize = ({ event, start, end }) => {
-    const updateRequest = { start: moment(start), end: moment(end) };
+    const updateRequest = { startTime: moment(start), endTime: moment(end) };
     handleUpdateTimeRecordEvent(event.id, updateRequest);
   };
 
@@ -121,167 +126,28 @@ function SelectableCalendar({
     );
   };
 
-  const onFinish = values => {
-    const request: ITimesheetCreateRequest = {
-      //   title: values.title,
-      startDate: moment(
-        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[0].format('hh:mm:ss'),
-      ).toDate(),
-      endDate: moment(
-        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[1].format('hh:mm:ss'),
-      ).toDate(),
-      //   projectId: values.project,
-      //   reason: values.reason,
-      //   note: values.note,
-    };
-    if (selectedEvent === -1) handleAddTimeRecordEvent(request);
-    else handleUpdateTimeRecordEvent(selectedEvent, request);
-  };
-
-  const renderModalBody = (): JSX.Element => {
-    const { css } = useFela();
-    return (
-      <>
-        <Form
-          labelCol={{ span: 24 }}
-          wrapperCol={{ span: 24 }}
-          layout="vertical"
-          onFinish={onFinish}
-          form={form}
-          className={css(stylesheet.form)}
-        >
-          <div style={{ margin: '15px 0px' }}>
-            <Avatar style={{ backgroundColor: '#3174ad' }} icon={<UserOutlined />} />
-            <span style={{ marginLeft: '10px' }}>Cdmbase</span>
-          </div>
-          <Form.Item
-            label="User"
-            name="user"
-            rules={[{ required: true, message: 'Required field' }]}
-          >
-            <Select>
-              {members.map(member => {
-                return (
-                  <Select.Option value={member.id} key={member.id}>
-                    {member.name}
-                  </Select.Option>
-                );
-              })}
-            </Select>
-          </Form.Item>
-          <Form.Item
-            label="Projects"
-            name="project"
-            rules={[{ required: true, message: 'Required field' }]}
-          >
-            <Select onChange={handleChangeProject}>
-              {projects.map(res => {
-                return (
-                  <Select.Option value={res.id} key={res.id}>
-                    {res.name}
-                  </Select.Option>
-                );
-              })}
-            </Select>
-          </Form.Item>
-
-          <Form.Item
-            label="Task"
-            name="task"
-            rules={[{ required: true, message: 'Required field' }]}
-          >
-            <Select
-              disabled={selectedProject === '' || !!!selectedProject}
-              onChange={handleChangeTask}
-            >
-              {tasks.map(task => {
-                return (
-                  <Select.Option value={task.id} key={task.id}>
-                    {task.name}
-                  </Select.Option>
-                );
-              })}
-            </Select>
-          </Form.Item>
-
-          <Row gutter={10}>
-            <Col>
-              <Form.Item
-                label="Pick a date"
-                name="date"
-                rules={[{ required: true, message: 'Required field' }]}
-              >
-                <DatePicker />
-              </Form.Item>
-            </Col>
-            <Col>
-              <Form.Item
-                label="Select time range"
-                name="timeRange"
-                rules={[{ required: true, message: 'Required field' }]}
-              >
-                <RangePicker />
-              </Form.Item>
-            </Col>
-          </Row>
-          <Form.Item
-            label="REASON *"
-            name="reason"
-            rules={[{ required: true, message: 'Required field' }]}
-          >
-            <TextArea rows={3} placeholder="Reason for time" />
-          </Form.Item>
-          <Form.Item label="Note" name="note">
-            <TextArea placeholder="Notes for time" />
-          </Form.Item>
-
-          <Form.Item>
-            <Row className="footer">
-              <Button htmlType="button" onClick={resetModal}>
-                Reset
-              </Button>
-              &nbsp;
-              {selectedEvent !== -1 ? (
-                <Popconfirm
-                  title="Are you sure to remove event"
-                  okText="OK"
-                  cancelText="Cancel"
-                  onConfirm={handleRemoveTimeRecordEvent}
-                >
-                  <Button
-                    type="primary"
-                    htmlType="button"
-                    loading={loading}
-                    icon={<DeleteOutlined />}
-                    danger
-                  >
-                    Remove
-                  </Button>
-                </Popconfirm>
-              ) : (
-                ''
-              )}
-              <Spacer />
-              <Button type="primary" htmlType="submit" loading={loading}>
-                Submit
-              </Button>
-            </Row>
-          </Form.Item>
-        </Form>
-      </>
-    );
-  };
-
   return (
     <>
-      <Modal
-        title={selectedEvent === -1 ? 'Add Timesheet' : 'Edit Timesheet'}
-        visible={showModal}
-        onCancel={handleCloseAddTimeModal}
-        footer={false}
-      >
-        {renderModalBody()}
-      </Modal>
+      <TimesheetModal
+        userId={userId}
+        event={selectedEvent}
+        isShowModal={isShowModal}
+        members={members}
+        projects={projects}
+        loading={loading}
+        handleAddTimeRecordEvent={handleAddTimeRecordEvent}
+        handleUpdateTimeRecordEvent={handleUpdateTimeRecordEvent}
+        handleRemoveTimeRecordEvent={handleRemoveTimeRecordEvent}
+        handleCloseTimeModal={handleCloseTimeModal}
+      />
+
+      <Row style={{ marginBottom: '20px' }}>
+        <Col xs={24}>
+          <Button type="primary" onClick={handleOpenNewTimeModal}>
+            <PlusOutlined /> Add timesheet
+          </Button>
+        </Col>
+      </Row>
 
       <DnDCalendar
         selectable={true}

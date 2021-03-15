@@ -1,11 +1,16 @@
 import React from 'react';
 import { PageContainer } from '@admin-layout/components';
 import { Tabs, message } from 'antd';
-import { useGetTimesheetsQuery, useUpdateTimesheetMutation } from '../../../generated-models';
+import {
+  useGetTimesheetsQuery,
+  useUpdateTimesheetMutation,
+  useGetOrganizationMembersQuery,
+} from '../../../generated-models';
 import {
   ITimesheet,
   ITimesheetState,
   ITimesheetCreateRequest,
+  IOrgMember,
 } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import CSS from 'csstype';
@@ -27,6 +32,7 @@ const handleChangeTabView = key => {
 
 const TimeReportWrapper = () => {
   const { data, loading, refetch } = useGetTimesheetsQuery();
+  const { data: membersData, loading: loadingMembers } = useGetOrganizationMembersQuery();
 
   const [updateMutation] = useUpdateTimesheetMutation();
   const updateTimesheet = (sheetId: string, request: ITimesheetCreateRequest) => {
@@ -48,6 +54,7 @@ const TimeReportWrapper = () => {
           <TimeReportTable
             timesheets={[]}
             viewMode={VIEW_MODE.OPEN}
+            members={_.get(membersData, 'getOrganizationMembers', [])}
             updateTimesheet={updateTimesheet}
           />
         </TabPane>
@@ -57,6 +64,7 @@ const TimeReportWrapper = () => {
               timesheet => timesheet.state === ITimesheetState.SUBMITTED,
             )}
             viewMode={VIEW_MODE.SUBMITTED}
+            members={_.get(membersData, 'getOrganizationMembers', [])}
             updateTimesheet={updateTimesheet}
           />
         </TabPane>
@@ -66,6 +74,7 @@ const TimeReportWrapper = () => {
               timesheet => timesheet.state === ITimesheetState.APPROVED,
             )}
             viewMode={VIEW_MODE.APPROVED}
+            members={_.get(membersData, 'getOrganizationMembers', [])}
             updateTimesheet={updateTimesheet}
           />
         </TabPane>
@@ -75,6 +84,7 @@ const TimeReportWrapper = () => {
               timesheet => timesheet.state === ITimesheetState.DENYED,
             )}
             viewMode={VIEW_MODE.DENYED}
+            members={_.get(membersData, 'getOrganizationMembers', [])}
             updateTimesheet={updateTimesheet}
           />
         </TabPane>
@@ -82,6 +92,7 @@ const TimeReportWrapper = () => {
           <TimeReportTable
             timesheets={_.get(data, 'getTimesheets', [])}
             viewMode={VIEW_MODE.ALL}
+            members={_.get(membersData, 'getOrganizationMembers', [])}
             updateTimesheet={updateTimesheet}
           />
         </TabPane>
