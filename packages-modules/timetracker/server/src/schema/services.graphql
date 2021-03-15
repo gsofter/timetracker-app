@@ -1,0 +1,6 @@
+
+
+extend enum ConfigCollectionName{
+    timetracker
+}
+
