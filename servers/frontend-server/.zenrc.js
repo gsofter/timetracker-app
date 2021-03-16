@@ -2,7 +2,7 @@ const path = require('path');
 var nodeExternals = require('webpack-node-externals');
 const MonacoWebpackPlugin = require('@vscode/monaco-editor-webpack-plugin');
 const debug = process.env.DEBUGGING || false;
-const {merge} = require('webpack-merge');
+const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
@@ -17,7 +17,7 @@ const config = {
             },
             stack: ['web', 'react'],
             tsLoaderOptions: {
-                configFileName: "./tsconfig.json"
+                // "configFile": "./tsconfig.json"
             },
             webpackDevPort: 3011,
             openBrowser: true,
@@ -34,13 +34,7 @@ const config = {
             webpackConfig: {
                 plugins: [
                     new MonacoWebpackPlugin(),
-                    new CopyWebpackPlugin([{
-                        from: '../../node_modules/@adminide-stack/extension-module-browser/lib/*.worker.js',
-                        to: '[name].js',
-                    }, { // add source map
-                        from: '../../node_modules/@adminide-stack/extension-module-browser/lib/*.worker.js.map',
-                        to: '[name].js.map',
-                    }]),
+                    // Bug: will make timesheet component fail
                     // new LodashModuleReplacementPlugin({
                     //     // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
                     //     flattening: true
@@ -60,7 +54,7 @@ const config = {
             entry: './src/backend/app.ts',
             stack: ['server'],
             tsLoaderOptions: {
-                configFileName: "./tsconfig.json"
+                // configFileName: "./tsconfig.json"
             },
             defines: {
                 __SERVER__: true,
@@ -71,10 +65,13 @@ const config = {
                     filename: 'main.js',
                 },
                 plugins: [
-                    new CopyWebpackPlugin([{
-                        from: '../../tools/esm-wrapper.js',
-                        to: 'index.js',
-                    }]),
+                    new CopyWebpackPlugin({
+                        patterns: [{
+                            from: '../../tools/esm-wrapper.js',
+                            to: 'index.js',
+                        }]
+                    }),
+                    // BUG if we add it
                     // new LodashModuleReplacementPlugin({
                     //     // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831
                     //     flattening: true

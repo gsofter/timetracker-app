@@ -1,11 +1,13 @@
-import 'antd/dist/antd.css';
+import 'reflect-metadata';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import './config/public-config';
 import Main from './app/Main';
-
 // Virtual (module as any), generated in-memory by zenjs, contains count of backend rebuilds
 // tslint:disable-next-line
 // import 'backend_reload';
+import 'antd/dist/antd.css';
+import 'react-table/react-table.css';
 
 const rootEl = document.getElementById('app');
 let frontendReloadCount = 0;
