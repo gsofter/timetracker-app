@@ -9,7 +9,7 @@ import {
   ITimesheet,
   ITimesheetCreateRequest,
   ITimeTracker,
-  ITimesheetState
+  ITimesheetState,
 } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 
@@ -33,25 +33,45 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   }
 
   public async getTimeRecords(userId: string, orgId: string): Promise<Array<ITimeRecord>> {
-    const trackDoc = await this.timeTrackerModel.find({
-      userId,
-      orgId,
-      timeRecords: { $elemMatch: { endTime: { $ne: null } } },
-    });
+    const trackDoc = (await this.timeTrackerModel.aggregate([
+      {
+        $project: {
+          orgId,
+          timeRecords: {
+            $filter: {
+              input: '$timeRecords',
+              as: 'timeRecords',
+              cond: {
+                $and: [
+                  { $eq: ['$$timeRecords.userId', userId] },
+                  { $ne: ['$$timeRecords.endTime', null] },
+                ],
+              },
+            },
+          },
+        },
+      },
+    ]));
+
+    // console.log('getTimeRecords.trackDoc => ', trackDoc);
+    // console.log('getTimeRecords.trackDoc[0].timeRecords => ', trackDoc[0].timeRecords);
     if (trackDoc && trackDoc.length > 0 && trackDoc[0].timeRecords.length > 0) {
-      const res = trackDoc[0].timeRecords.map(tr => {  
-        return {
-          id: tr.id,
-          userId: trackDoc[0].userId,
-          orgId: trackDoc[0].orgId,
-          projectId: tr.projectId,
-          startTime: tr.startTime,
-          endTime: tr.endTime,
-          isBillable: tr.isBillable,
-          tags: tr.tags,
-          taskId: tr.taskId
-        }
-      }).filter(tr => tr.endTime !== null && tr.endTime);
+      const res = trackDoc[0].timeRecords
+        .map(tr => {
+          return {
+            id: tr._id,
+            userId: tr.userId,
+            orgId: trackDoc[0].orgId,
+            projectId: tr.projectId,
+            startTime: tr.startTime,
+            endTime: tr.endTime,
+            isBillable: tr.isBillable,
+            tags: tr.tags,
+            taskId: tr.taskId,
+            taskName: tr.taskName
+          };
+        })
+        .filter(tr => tr.endTime !== null && tr.endTime);
       return res;
     } else {
       return [];
@@ -65,7 +85,6 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     endTime: Date,
   ): Promise<Array<ITimeRecord>> {
     const trackDoc = await this.timeTrackerModel.find({
-      userId,
       orgId,
       $and: [
         {
@@ -77,6 +96,9 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
           'timeRecords.startTime': {
             $lte: new Date(endTime.toISOString()),
           },
+        },
+        {
+          'timeRecords.userId': userId,
         },
       ],
     });
@@ -90,68 +112,69 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   public async getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>> {
     const trackDoc = await this.timeTrackerModel.find({
       userId,
-      orgId,
+      'timesheets.userId': userId,
     });
+
     if (trackDoc !== null && trackDoc !== undefined && trackDoc.length > 0) {
       let timesheets = [...trackDoc[0].timesheets];
-      const res = timesheets.map(sheet => {  
+      const res = timesheets.map(sheet => {
         return {
           id: sheet.id,
           startDate: sheet.startDate,
-          endDate: sheet.endDate, 
+          endDate: sheet.endDate,
           state: sheet.state,
           submittedOn: sheet.submittedOn,
           approvedOn: sheet.approvedOn,
           updatedBy: sheet.updatedBy,
           updatedOn: sheet.updatedOn,
-          userId: trackDoc[0].userId, 
+          userId: sheet.userId,
           orgId: trackDoc[0].orgId,
-        }
-      })
+        };
+      });
       return res;
     } else {
       return [];
     }
   }
 
-  public async getDurationTimesheet(userId: string, orgId: string, start: Date, end:Date): Promise<ITimesheet> {
-    const trackDoc = await this.timeTrackerModel.aggregate([
-      { 
-        $project: {
-          userId, orgId,
-          timesheets : { 
-            $filter: {
-              input: '$timesheets',
-              as: 'timesheets',
-              cond:{ 
-                $and: [
-                  { $eq: ["$$timesheets.startDate", start ] },
-                  { $eq: ["$$timesheets.endDate", end ]},
-              ]} 
-            }
-          }
-        }
-      }
-    ]) as [ITimeTracker];
+  public async getDurationTimesheet(
+    userId: string,
+    orgId: string,
+    start: Date,
+    end: Date,
+  ): Promise<ITimesheet> {
+    const trackDoc = await this.timeTrackerModel.find({
+      orgId,
+      $and: [
+        { $eq: ['timesheets.startDate', start] },
+        { $eq: ['timesheets.endDate', end] },
+        {
+          'timesheets.userId': userId,
+        },
+      ],
+    });
 
     console.log('trackDoc   =>', trackDoc);
     console.log('timesheets =>', trackDoc[0].timesheets);
 
-    if(trackDoc && trackDoc.length > 0)  
-      if(!!trackDoc[0].timesheets && trackDoc[0].timesheets.length > 0)
-        return trackDoc[0].timesheets[0]
-      else
-        return null;
+    if (trackDoc && trackDoc.length > 0)
+      if (!!trackDoc[0].timesheets && trackDoc[0].timesheets.length > 0)
+        return trackDoc[0].timesheets[0];
+      else return null;
     return null;
   }
 
-
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
-    console.log('getPlayingTimeRecord.userId', userId);
     const trackDoc = await this.timeTrackerModel.find({
-      userId,
       orgId,
-      timeRecords: { $elemMatch: { endTime: null } },
+      $and: [
+        {
+          timeRecords: { $elemMatch: { endTime: null } },
+        },
+        {
+          timeRecords: { $elemMatch: { userId: userId } },
+        },
+      ],
     });
     console.log('getPlayingTimeRecord.trackDoc', trackDoc);
     if (trackDoc && trackDoc.length > 0) {
@@ -163,8 +186,8 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
     try {
       const response = await this.timeTrackerModel.update(
-        { userId: userId, orgId: orgId },
-        { userId: userId, $push: { timeRecords: request } },
+        { orgId: orgId },
+        { orgId: orgId, $push: { timeRecords: request } },
         { upsert: true },
       );
       return response.id;
@@ -176,7 +199,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   public async createTimesheet(userId: string, orgId: string, request: ITimesheetCreateRequest) {
     try {
       const response = await this.timeTrackerModel.update(
-        { userId: userId },
+        { orgId: orgId },
         { $push: { timesheets: request } },
         { upsert: true },
       );
@@ -193,8 +216,11 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     request: ITimeRecordRequest,
   ) {
     try {
+      if(recordId === null || recordId === undefined)
+        throw new Error('TimeRecord id not specified!')
+
       const response = await this.timeTrackerModel.update(
-        { userId: userId, orgId: orgId, timeRecords: { $elemMatch: { _id: recordId } } },
+        { orgId: orgId, timeRecords: { $elemMatch: { _id: recordId } } },
         { $set: { 'timeRecords.$': request } },
       );
       return true;
@@ -211,7 +237,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   ) {
     try {
       const response = await this.timeTrackerModel.update(
-        { userId: userId, orgId: orgId, timesheets: { $elemMatch: { _id: sheetId } } },
+        { orgId: orgId, timesheets: { $elemMatch: { _id: sheetId } } },
         { $set: { 'timesheets.$': request } },
       );
       return true;
@@ -226,22 +252,27 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     request: ITimesheetCreateRequest,
   ) {
     try {
-      const response = await this.timeTrackerModel.update({
-        userId,
-        orgId,
-        $and: [
-          {
-            $elemMatch: { 'timesheets.startDate': new Date(request.startDate.toISOString()) }
+      const response = await this.timeTrackerModel.update(
+        {
+          orgId,
+          $and: [
+            {
+              $elemMatch: { 'timesheets.startDate': new Date(request.startDate.toISOString()) },
+            },
+            {
+              $elemMatch: { 'timesheets.endDate': new Date(request.endDate.toISOString()) },
+            },
+            {
+              $elemMatch: { 'timesheets.userId': userId },
+            },
+          ],
+        },
+        {
+          $set: {
+            'timesheets.$': request,
           },
-          {
-            $elemMatch: { 'timesheets.endDate': new Date(request.endDate.toISOString()) }
-          },
-        ],
-      }, {
-        '$set': {
-          'timesheets.$': request
-        }
-      });
+        },
+      );
       return true;
     } catch (err) {
       throw new Error(err.message);
@@ -250,12 +281,11 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
   public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
     try {
-      const trackerDoc = await this.timeTrackerModel.find({ userId, orgId });
+      const trackerDoc = await this.timeTrackerModel.find({ orgId });
       if (trackerDoc && trackerDoc.length > 0) {
         const timeRecords = trackerDoc[0].timeRecords.filter(tr => tr.id !== recordId);
         await this.timeTrackerModel.update(
           {
-            userId,
             orgId,
           },
           {
@@ -282,14 +312,13 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     projectId: string,
   ) {
     try {
-      const trackerDoc = await this.timeTrackerModel.find({ userId, orgId });
+      const trackerDoc = await this.timeTrackerModel.find({ orgId });
       if (trackerDoc && trackerDoc.length > 0) {
         const timeRecords = trackerDoc[0].timeRecords.filter(
           tr => tr.startTime < startTime || tr.startTime > endTime || tr.projectId !== projectId,
         );
         await this.timeTrackerModel.update(
           {
-            userId,
             orgId,
           },
           {
@@ -308,7 +337,6 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     try {
       await this.timeTrackerModel.update(
         {
-          userId,
           orgId,
         },
         {

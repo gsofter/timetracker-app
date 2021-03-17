@@ -13,6 +13,7 @@ type TimeRecord {
 }
 
 input TimeRecordRequest {
+  userId: String
   startTime: DateTime
   endTime: DateTime
   taskName: String
@@ -20,7 +21,6 @@ input TimeRecordRequest {
   isBillable: Boolean
   projectId: String
   clientId: String
-  userId: String
 }
 
 extend type Query {

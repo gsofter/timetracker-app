@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { createRef } from 'react';
 import { Scrollbars } from 'react-custom-scrollbars';
 
 export interface ICustomScrollbar {
@@ -7,7 +7,8 @@ export interface ICustomScrollbar {
 
 export const CustomScrollbar: React.FC<ICustomScrollbar> = (props: any) => {
   const { children } = props;
-  const handleScrollFrame = (values) => {
+  const scrollBars = createRef();
+  const handleScrollFrame = values => {
     const {
       incPaginationAction,
       isFetchingTimeEntriesList,
@@ -28,7 +29,7 @@ export const CustomScrollbar: React.FC<ICustomScrollbar> = (props: any) => {
     const top = Scrollbars.current.getScrollTop();
 
     let startTime = performance.now();
-    const animate = (timestamp) => {
+    const animate = timestamp => {
       const runtime = timestamp - startTime;
       const progress = runtime / 300;
       const procent = progress >= 0 ? Math.min(progress, 1) : 0;
@@ -42,11 +43,5 @@ export const CustomScrollbar: React.FC<ICustomScrollbar> = (props: any) => {
     requestAnimationFrame(animate);
   };
 
-  return (
-    <Scrollbars
-      ref={scrollbars}
-      children={children}
-      onScrollFrame={handleScrollFrame}
-    />
-  );
+  return <Scrollbars children={children} onScrollFrame={handleScrollFrame} />;
 };

@@ -11,6 +11,7 @@ enum TimesheetState {
 
 type Timesheet {
   id: ID
+  userId: String
   startDate: DateTime
   endDate: DateTime
   state: TimesheetState
@@ -21,6 +22,7 @@ type Timesheet {
 }
 
 input TimesheetCreateRequest {
+  userId: String
   startDate: DateTime
   endDate: DateTime
   state: TimesheetState

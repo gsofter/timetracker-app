@@ -1351,6 +1351,7 @@ extend type Mutation {
 }
 
 input TimeRecordRequest {
+  userId: String
   startTime: DateTime
   endTime: DateTime
   taskName: String
@@ -1358,7 +1359,6 @@ input TimeRecordRequest {
   isBillable: Boolean
   projectId: String
   clientId: String
-  userId: String
 }
 
 extend type Query {
@@ -1388,6 +1388,7 @@ enum TimesheetState {
 
 type Timesheet {
   id: ID
+  userId: String
   startDate: DateTime
   endDate: DateTime
   state: TimesheetState
@@ -1398,6 +1399,7 @@ type Timesheet {
 }
 
 input TimesheetCreateRequest {
+  userId: String
   startDate: DateTime
   endDate: DateTime
   state: TimesheetState
