@@ -1,7 +1,7 @@
 import { ConfigurationScope } from '@adminide-stack/core';
 import { localize } from '@vscode/monaco-editor/esm/vs/nls';
 import { IConfigurationNode } from '@adminide-stack/core';
-
+import { IConfigurationContributionNames  } from '@admin-layout/timetracker-core';
 
 // const localize = (id, defaultMessage) => defineMessages({
 //     id,
@@ -184,7 +184,7 @@ export const TimeTrackerProperties = {
 };
 
 export const TimeTrackerContribution: IConfigurationNode = {
-    'id': 'timeTracker',
+    'id': IConfigurationContributionNames.timeTracker,
     'type': 'object',
     'properties': TimeTrackerProperties as any,
 }

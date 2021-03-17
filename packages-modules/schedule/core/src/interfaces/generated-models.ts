@@ -30,7 +30,7 @@ export type Scalars = {
 
 
 
-/** all input for the `acceptInvitationToTeam` mutation. */
+/**  all input for the `acceptInvitationToTeam` mutation. */
 export type IAcceptInvitationToTeam_Input = {
   /**
    * An arbitrary string value with no semantic meaning. Will be included in the
@@ -112,7 +112,7 @@ export const enum IApplicationRoles {
   CONTRIBUTORS = 'CONTRIBUTORS',
   GUEST = 'GUEST',
   MEMBER = 'MEMBER',
-  /** organization member */
+  /**  organization member  */
   ORGANIZATION_MANAGER = 'ORGANIZATION_MANAGER',
   OWNER = 'OWNER',
   PROJECT_ADMIN = 'PROJECT_ADMIN',
@@ -248,9 +248,9 @@ export const enum IConfigFragmentName {
   applicationPolicies = 'applicationPolicies',
   roles = 'roles',
   contributionRoles = 'contributionRoles',
-  /** Team Members Document with role value */
+  /**  Team Members Document with role value  */
   teamMembers = 'teamMembers',
-  /** Organization Members Document with role value */
+  /**  Organization Members Document with role value  */
   orgMembers = 'orgMembers'
 };
 
@@ -344,12 +344,12 @@ export type IContributionRoles = {
 
 export type IContributionSettings = {
    __typename?: 'ContributionSettings';
-  /** name of the settings */
+  /**  name of the settings */
   name?: Maybe<Scalars['String']>;
   range?: Maybe<IRange>;
   key?: Maybe<Scalars['String']>;
   keyRange?: Maybe<IRange>;
-  /** @deprecated */
+  /**  @deprecated  */
   default?: Maybe<Scalars['String']>;
   value?: Maybe<Scalars['AnyObject']>;
   valueRange?: Maybe<IRange>;
@@ -368,18 +368,44 @@ export type IContributionSettings = {
   extensionInfo?: Maybe<IConfigurationExtensionInfo>;
 };
 
-/** Database counter */
+/**  Database counter  */
 export type ICounter = {
    __typename?: 'Counter';
-  /** Current amount */
+  /**  Current amount  */
   amount: Scalars['Int'];
+};
+
+export type ICustomerInvoice = {
+   __typename?: 'CustomerInvoice';
+  id?: Maybe<Scalars['ID']>;
+  city?: Maybe<Scalars['String']>;
+  companyName?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  language?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+  zip?: Maybe<Scalars['String']>;
+};
+
+export type ICustomerInvoice_Input = {
+  city?: Maybe<Scalars['String']>;
+  companyName?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  language?: Maybe<Scalars['String']>;
+  phone?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
+  zip?: Maybe<Scalars['String']>;
 };
 
 
 
 export type IDefaultConfiguration = IIConfigurationModel & {
    __typename?: 'DefaultConfiguration';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
   /** The URL to the user's settings. */
   resource: Scalars['URI'];
@@ -409,13 +435,13 @@ export type IDefaultRole = IIConfigurationModel & {
 
 export type IDefaultSettings = IISettingsSubject & {
    __typename?: 'DefaultSettings';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
-  /** The latest settings. */
+  /**  The latest settings.  */
   latestSettings?: Maybe<ISettings>;
-  /** The URL to the settings. */
+  /**  The URL to the settings.  */
   settingsURL: Scalars['URI'];
-  /** Whether the viewer can modify the subject's settings. */
+  /**  Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -446,13 +472,13 @@ export type IFieldError = {
 
 export type IGlobalSettings = IISettingsSubject & {
    __typename?: 'GlobalSettings';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
-  /** The latest settings. */
+  /**  The latest settings.  */
   latestSettings?: Maybe<ISettings>;
-  /** The URL to the settings. */
+  /**  The URL to the settings.  */
   settingsURL: Scalars['URI'];
-  /** Whether the viewer can modify the subject's settings. */
+  /**  Whether the viewer can modify the subject's settings.  */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -545,6 +571,70 @@ export const enum IInviteStatus {
   DECLINED = 'DECLINED'
 };
 
+export type IInvoiceCreateRequest = {
+  comment?: Maybe<Scalars['String']>;
+  currency?: Maybe<Scalars['String']>;
+  discount?: Maybe<Scalars['Float']>;
+  from?: Maybe<ICustomerInvoice_Input>;
+  invoiceDate?: Maybe<Scalars['String']>;
+  dueDate?: Maybe<Scalars['String']>;
+  invoiceVendor?: Maybe<ICustomerInvoice_Input>;
+  logo?: Maybe<Scalars['String']>;
+  paymentStatus?: Maybe<Scalars['Boolean']>;
+  projects?: Maybe<Array<Maybe<IProjectInvoice_Input>>>;
+  subTotal?: Maybe<Scalars['Float']>;
+  taxTotal?: Maybe<Scalars['Float']>;
+  timezoneOffset?: Maybe<Scalars['Int']>;
+  to?: Maybe<ICustomerInvoice_Input>;
+  total?: Maybe<Scalars['Float']>;
+};
+
+export type IInvoiceType = {
+   __typename?: 'InvoiceType';
+  id?: Maybe<Scalars['ID']>;
+  comment?: Maybe<Scalars['String']>;
+  currency?: Maybe<Scalars['String']>;
+  discount?: Maybe<Scalars['Float']>;
+  from?: Maybe<ICustomerInvoice>;
+  invoiceDate?: Maybe<Scalars['String']>;
+  dueDate?: Maybe<Scalars['String']>;
+  invoiceNumber?: Maybe<Scalars['String']>;
+  invoiceVendor?: Maybe<ICustomerInvoice>;
+  logo?: Maybe<Scalars['String']>;
+  overdue?: Maybe<Scalars['Boolean']>;
+  paymentStatus?: Maybe<Scalars['Boolean']>;
+  projects?: Maybe<Array<Maybe<IProjectInvoice>>>;
+  sendingStatus?: Maybe<Scalars['Boolean']>;
+  status?: Maybe<Scalars['String']>;
+  subTotal?: Maybe<Scalars['Float']>;
+  taxTotal?: Maybe<Scalars['Float']>;
+  timezoneOffset?: Maybe<Scalars['Int']>;
+  to?: Maybe<ICustomerInvoice>;
+  total?: Maybe<Scalars['Float']>;
+  orgName?: Maybe<Scalars['String']>;
+  createdAt?: Maybe<Scalars['DateTime']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+};
+
+export type IInvoiceUpdateRequest = {
+  comment?: Maybe<Scalars['String']>;
+  currency?: Maybe<Scalars['String']>;
+  discount?: Maybe<Scalars['Float']>;
+  from?: Maybe<ICustomerInvoice_Input>;
+  invoiceDate?: Maybe<Scalars['String']>;
+  dueDate?: Maybe<Scalars['String']>;
+  invoiceNumber?: Maybe<Scalars['String']>;
+  invoiceVendor?: Maybe<ICustomerInvoice_Input>;
+  logo?: Maybe<Scalars['String']>;
+  paymentStatus?: Maybe<Scalars['Boolean']>;
+  projects?: Maybe<Array<Maybe<IProjectInvoice_Input>>>;
+  subTotal?: Maybe<Scalars['Float']>;
+  taxTotal?: Maybe<Scalars['Float']>;
+  timezoneOffset?: Maybe<Scalars['Int']>;
+  to?: Maybe<ICustomerInvoice_Input>;
+  total?: Maybe<Scalars['Float']>;
+};
+
 export type IIOrgUser = {
   userId: Scalars['String'];
   role?: Maybe<IApplicationRoles>;
@@ -563,13 +653,13 @@ export type IIResourceUserRole = {
  * configuration"), an organization, or a user.
  */
 export type IISettingsSubject = {
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
-  /** The latest settings. */
+  /**  The latest settings.  */
   latestSettings?: Maybe<ISettings>;
-  /** The URL to the settings. */
+  /**  The URL to the settings.  */
   settingsURL: Scalars['URI'];
-  /** Whether the viewer can modify the subject's settings. */
+  /**  Whether the viewer can modify the subject's settings.  */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -593,21 +683,21 @@ export type IIUser = {
  * For example, in {"a": [0, {"b": 3}]}, the value 3 is located at the key path ["a", 1, "b"].
  */
 export type IKeyPathSegment = {
-  /** The name of the property in the object at this location to descend into. */
+  /**  The name of the property in the object at this location to descend into.  */
   property?: Maybe<Scalars['String']>;
-  /** The index of the array at this location to descend into. */
+  /**  The index of the array at this location to descend into.  */
   index?: Maybe<Scalars['Int']>;
 };
 
 export type ILocalUserSettings = IISettingsSubject & {
    __typename?: 'LocalUserSettings';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
-  /** The latest settings. */
+  /**  The latest settings.  */
   latestSettings?: Maybe<ISettings>;
-  /** The URL to the settings. */
+  /**  The URL to the settings.  */
   settingsURL: Scalars['URI'];
-  /** Whether the viewer can modify the subject's settings. */
+  /**  Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -624,13 +714,13 @@ export type ILoginError = {
 
 export type IMemorySettings = IISettingsSubject & {
    __typename?: 'MemorySettings';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
-  /** The latest settings. */
+  /**  The latest settings.  */
   latestSettings?: Maybe<ISettings>;
-  /** The URL to the settings. */
+  /**  The URL to the settings.  */
   settingsURL: Scalars['URI'];
-  /** Whether the viewer can modify the subject's settings. */
+  /**  Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -651,9 +741,9 @@ export type IMutation = {
   acceptOrganizationInvitation?: Maybe<Scalars['Boolean']>;
   addClient?: Maybe<Scalars['Boolean']>;
   addContributionRole?: Maybe<Scalars['Boolean']>;
-  /** Increase counter value returns current counter amount */
+  /**  Increase counter value returns current counter amount  */
   addCounter?: Maybe<ICounter>;
-  /** add Counter */
+  /**  add Counter  */
   addMoleculerCounter?: Maybe<ICounter>;
   addOrgProject?: Maybe<Scalars['Boolean']>;
   addScheduleEvent?: Maybe<Scalars['Boolean']>;
@@ -662,6 +752,7 @@ export type IMutation = {
   changeMemberRole?: Maybe<Scalars['Boolean']>;
   changeOrgMemberRole?: Maybe<Scalars['Boolean']>;
   createAuth0User?: Maybe<IAuthUser>;
+  createInvoice?: Maybe<Scalars['Boolean']>;
   createOrganization?: Maybe<IOrganization>;
   createTeam?: Maybe<IAccountTeam>;
   createTimeRecord?: Maybe<Scalars['String']>;
@@ -673,6 +764,7 @@ export type IMutation = {
   initiatePolicyValue?: Maybe<Scalars['Boolean']>;
   onAuth0UserCreated?: Maybe<Scalars['Boolean']>;
   removeDurationTimeRecords?: Maybe<Scalars['Boolean']>;
+  removeInvoice?: Maybe<Scalars['Boolean']>;
   removeOrgClient?: Maybe<Scalars['Boolean']>;
   removeOrgMember?: Maybe<Scalars['Boolean']>;
   removeOrganization?: Maybe<Scalars['Boolean']>;
@@ -687,12 +779,13 @@ export type IMutation = {
   sendInvitation?: Maybe<Scalars['Boolean']>;
   sendOrganizationInvitation?: Maybe<Scalars['Boolean']>;
   setSettingsValueByResource?: Maybe<Scalars['Boolean']>;
-  /** sync cached counter with current value */
+  /**  sync cached counter with current value  */
   syncCachedCounter?: Maybe<Scalars['Boolean']>;
   updateConfigurationPolicyValue?: Maybe<Scalars['Boolean']>;
   updateConfigurationPolicyValueByUri?: Maybe<Scalars['Boolean']>;
   updateConfigurationValue?: Maybe<Scalars['Boolean']>;
   updateConfigurationValueByUri?: Maybe<Scalars['Boolean']>;
+  updateInvoice?: Maybe<Scalars['Boolean']>;
   updateOrgClient?: Maybe<IClient>;
   updateOrgMemberTeams?: Maybe<Scalars['Boolean']>;
   updateOrgProject?: Maybe<Scalars['Boolean']>;
@@ -789,6 +882,11 @@ export type IMutationcreateAuth0UserArgs = {
 };
 
 
+export type IMutationcreateInvoiceArgs = {
+  invoice: IInvoiceCreateRequest;
+};
+
+
 export type IMutationcreateOrganizationArgs = {
   organization: IOrganizationCreateRequest;
 };
@@ -833,6 +931,11 @@ export type IMutationremoveDurationTimeRecordsArgs = {
   startTime?: Maybe<Scalars['DateTime']>;
   endTime?: Maybe<Scalars['DateTime']>;
   projectId?: Maybe<Scalars['String']>;
+};
+
+
+export type IMutationremoveInvoiceArgs = {
+  id?: Maybe<Scalars['String']>;
 };
 
 
@@ -945,6 +1048,12 @@ export type IMutationupdateConfigurationValueByUriArgs = {
   overrides?: Maybe<IConfigurationOverrides_Input>;
   target?: Maybe<Scalars['Int']>;
   donotNotifyError?: Maybe<Scalars['Boolean']>;
+};
+
+
+export type IMutationupdateInvoiceArgs = {
+  id?: Maybe<Scalars['String']>;
+  invoice?: Maybe<IInvoiceUpdateRequest>;
 };
 
 
@@ -1120,7 +1229,7 @@ export type IOrganization_Input = {
 
 export type IOrganizationConfiguration = IIConfigurationModel & {
    __typename?: 'OrganizationConfiguration';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
   resource: Scalars['URI'];
   target?: Maybe<Scalars['Int']>;
@@ -1250,7 +1359,7 @@ export type IOrganizationRemoveRequest = {
 
 export type IOrganizationResourceConfiguration = IIConfigurationModel & {
    __typename?: 'OrganizationResourceConfiguration';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
   resource: Scalars['URI'];
   target?: Maybe<Scalars['Int']>;
@@ -1276,13 +1385,13 @@ export type IOrganizationResourceData = {
 
 export type IOrganizationResourceSettings = IISettingsSubject & {
    __typename?: 'OrganizationResourceSettings';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
-  /** The latest settings. */
+  /**  The latest settings.  */
   latestSettings?: Maybe<ISettings>;
-  /** The URL to the settings. */
+  /**  The URL to the settings.  */
   settingsURL: Scalars['URI'];
-  /** Whether the viewer can modify the subject's settings. */
+  /**  Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -1302,13 +1411,13 @@ export type IOrganizationRole = IIConfigurationModel & {
 
 export type IOrganizationSettings = IISettingsSubject & {
    __typename?: 'OrganizationSettings';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
-  /** The latest settings. */
+  /**  The latest settings.  */
   latestSettings?: Maybe<ISettings>;
-  /** The URL to the settings. */
+  /**  The URL to the settings.  */
   settingsURL: Scalars['URI'];
-  /** Whether the viewer can modify the subject's settings. */
+  /**  Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -1389,7 +1498,7 @@ export const enum IPermissionResource {
 
 export type IPermissionSubject = {
    __typename?: 'PermissionSubject';
-  /** The URL to the roles. */
+  /**  The URL to the roles.  */
   roleURL: Scalars['URI'];
   /** The time when this was created. */
   createdAt?: Maybe<Scalars['String']>;
@@ -1405,7 +1514,7 @@ export const enum IPermissionType {
 
 export type IPolicySubject = {
    __typename?: 'PolicySubject';
-  /** The URL to the policies. */
+  /**  The URL to the policies.  */
   policyURL: Scalars['URI'];
   /** The time when this was created. */
   createdAt?: Maybe<Scalars['String']>;
@@ -1523,6 +1632,24 @@ export type IProjectAddRequest = {
   orgName?: Maybe<Scalars['String']>;
 };
 
+export type IProjectInvoice = {
+   __typename?: 'ProjectInvoice';
+  id?: Maybe<Scalars['ID']>;
+  hours?: Maybe<Scalars['Int']>;
+  projectName?: Maybe<Scalars['String']>;
+  rate?: Maybe<Scalars['Float']>;
+  subTotal?: Maybe<Scalars['Float']>;
+  tax?: Maybe<Scalars['Float']>;
+};
+
+export type IProjectInvoice_Input = {
+  hours?: Maybe<Scalars['Int']>;
+  projectName?: Maybe<Scalars['String']>;
+  rate?: Maybe<Scalars['Float']>;
+  subTotal?: Maybe<Scalars['Float']>;
+  tax?: Maybe<Scalars['Float']>;
+};
+
 export type IProjects = {
    __typename?: 'Projects';
   id?: Maybe<Scalars['ID']>;
@@ -1531,7 +1658,7 @@ export type IProjects = {
   teams?: Maybe<Array<Maybe<Scalars['String']>>>;
   status?: Maybe<Scalars['String']>;
   type?: Maybe<IProjectType>;
-  /** Predefined Project template */
+  /**  Predefined Project template   */
   templateId?: Maybe<Scalars['String']>;
   orgName?: Maybe<Scalars['String']>;
   updatedAt?: Maybe<Scalars['String']>;
@@ -1546,9 +1673,9 @@ export const enum IProjectType {
 
 export type IQuery = {
    __typename?: 'Query';
-  /** Counter */
+  /**  Counter  */
   counter?: Maybe<ICounter>;
-  /** Counter from Datasource */
+  /**  Counter from Datasource  */
   counterCache?: Maybe<ICounter>;
   decodeInvitation?: Maybe<IInvitationDecode>;
   decodeOrganizationInvitation?: Maybe<IOrganizationInvitationDecode>;
@@ -1557,7 +1684,7 @@ export type IQuery = {
   /** Return the Policies groups */
   defaultPolicies?: Maybe<Array<Maybe<ISettingsGroup>>>;
   /**
-   * Default Preferences
+   * Default Preferences 
    * @deprecated not used
    */
   defaultPreferences?: Maybe<IPreferencesResponse>;
@@ -1579,6 +1706,7 @@ export type IQuery = {
   getDurationTimeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
   getDurationTimesheet?: Maybe<ITimesheetResponse>;
   getEnvironment?: Maybe<IEnvironment>;
+  getInvoices?: Maybe<Array<Maybe<IInvoiceType>>>;
   getManageableOrganizations?: Maybe<Array<Maybe<IOrganization>>>;
   getOrgInvitationMembers?: Maybe<Array<Maybe<IInviteMember>>>;
   getOrganizationClients?: Maybe<Array<Maybe<IClient>>>;
@@ -1610,7 +1738,7 @@ export type IQuery = {
   getViewerPolicies?: Maybe<IPolicySubject>;
   /** Shortcut way to send merged defautPermissions with applicaiton role's permission. */
   mergedApplicationPermissions?: Maybe<Array<Maybe<IContributionSettings>>>;
-  /** Moleculer Counter */
+  /**  Moleculer Counter  */
   moleculerCounter?: Maybe<ICounter>;
   organizations?: Maybe<Array<Maybe<IOrganization>>>;
   team?: Maybe<IAccountTeam>;
@@ -1815,13 +1943,13 @@ export type IRange = {
 
 export type IRemoteUserSettings = IISettingsSubject & {
    __typename?: 'RemoteUserSettings';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
-  /** The latest settings. */
+  /**  The latest settings.  */
   latestSettings?: Maybe<ISettings>;
-  /** The URL to the settings. */
+  /**  The URL to the settings.  */
   settingsURL: Scalars['URI'];
-  /** Whether the viewer can modify the subject's settings. */
+  /**  Whether the viewer can modify the subject's settings. */
   viewerCanAdminister: Scalars['Boolean'];
   /**
    * All settings for this subject, and the individual levels in the settings cascade (global > organization > user)
@@ -1906,7 +2034,7 @@ export type IScheduleCreateRequest = {
 /** Settings is a version of a configuration settings file. */
 export type ISettings = {
    __typename?: 'Settings';
-  /** The time when this was created. */
+  /** The time when this was created.  */
   createdAt?: Maybe<Scalars['String']>;
   /**
    * The stringified JSON contents of the settings. The contents may include "//"-style comments and trailing
@@ -1992,7 +2120,7 @@ export type ISubscription = {
   SubscribeToOrganizationContext?: Maybe<ISubscribedOrganizationData>;
   SubscribeToPermissionUpdate?: Maybe<IConfigurationUpdateEvent>;
   SubscribeToPolicyUpdate?: Maybe<IConfigurationUpdateEvent>;
-  /** Subscription fired when anyone increases counter */
+  /**  Subscription fired when anyone increases counter  */
   counterUpdated?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
   moleculerCounterUpdate?: Maybe<ICounter>;
@@ -2093,7 +2221,7 @@ export type ITeamInvitation = {
   tokenExpiration?: Maybe<Scalars['DateTime']>;
 };
 
-/** The output of our `acceptInvitationToTeam`. */
+/**  The output of our `acceptInvitationToTeam`.  */
 export type ITeamInvitation_Input = {
   email?: Maybe<Scalars['String']>;
   teamId?: Maybe<Scalars['String']>;
@@ -2196,7 +2324,6 @@ export type ITimeRecord = {
 };
 
 export type ITimeRecordRequest = {
-  userId?: Maybe<Scalars['String']>;
   startTime?: Maybe<Scalars['DateTime']>;
   endTime?: Maybe<Scalars['DateTime']>;
   taskName?: Maybe<Scalars['String']>;
@@ -2204,6 +2331,7 @@ export type ITimeRecordRequest = {
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
   clientId?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type ITimesheet = {
@@ -2367,7 +2495,7 @@ export type IUserAccountWhere = {
 
 export type IUserConfiguration = IIConfigurationModel & {
    __typename?: 'UserConfiguration';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
   /** The URL to the user's settings. */
   resource: Scalars['URI'];
@@ -2451,7 +2579,7 @@ export type IUserProfile = IIAuth0UserProfile & {
 /** UserSettings is a combination of LocalUserSettings and RemoteUserSettings */
 export type IUserSettings = IISettingsSubject & {
    __typename?: 'UserSettings';
-  /** The ID. */
+  /**  The ID.  */
   id?: Maybe<Scalars['ID']>;
   /**
    * The latest settings for the user.
@@ -2495,7 +2623,7 @@ export type IViewerSettingsInput = {
    */
   settingsResource?: Maybe<Scalars['URI']>;
   /**
-   * User resource to identify the core user settings.
+   * User resource to identify the core user settings. 
    * For guest user, we don't have to define it.
    */
   userResource?: Maybe<Scalars['URI']>;
@@ -2503,7 +2631,7 @@ export type IViewerSettingsInput = {
 
 export type IViewerSettingsSubject = {
    __typename?: 'ViewerSettingsSubject';
-  /** The URL to the settings. */
+  /**  The URL to the settings.  */
   settingsURL: Scalars['URI'];
   /** Graphql typed settings */
   settings?: Maybe<IPreferences>;
@@ -2822,6 +2950,10 @@ export type IResolversTypes = {
   TimesheetResponse: ResolverTypeWrapper<ITimesheetResponse>,
   TimesheetState: ITimesheetState,
   Environment: ResolverTypeWrapper<IEnvironment>,
+  InvoiceType: ResolverTypeWrapper<IInvoiceType>,
+  Float: ResolverTypeWrapper<Scalars['Float']>,
+  CustomerInvoice: ResolverTypeWrapper<ICustomerInvoice>,
+  ProjectInvoice: ResolverTypeWrapper<IProjectInvoice>,
   Organization: ResolverTypeWrapper<IOrganization>,
   OrgUser: ResolverTypeWrapper<IOrgUser>,
   IOrgUser: IResolversTypes['OrgUser'],
@@ -2862,6 +2994,9 @@ export type IResolversTypes = {
   AuthProvider: IAuthProvider,
   IdToken: IIdToken,
   UserInfo: IUserInfo,
+  InvoiceCreateRequest: IInvoiceCreateRequest,
+  CustomerInvoice_Input: ICustomerInvoice_Input,
+  ProjectInvoice_Input: IProjectInvoice_Input,
   OrganizationCreateRequest: IOrganizationCreateRequest,
   OrgUser_Input: IOrgUser_Input,
   OrganizationInvitation_Input: IOrganizationInvitation_Input,
@@ -2871,6 +3006,7 @@ export type IResolversTypes = {
   OrganizationRemoveRequest: IOrganizationRemoveRequest,
   TeamInvitationRequest: ITeamInvitationRequest,
   OrganizationInvitationRequest: IOrganizationInvitationRequest,
+  InvoiceUpdateRequest: IInvoiceUpdateRequest,
   ClientUpdateRequest: IClientUpdateRequest,
   UpdatedClient_Input: IUpdatedClient_Input,
   UpdateProject_Input: IUpdateProject_Input,
@@ -3015,6 +3151,10 @@ export type IResolversParentTypes = {
   TimesheetResponse: ITimesheetResponse,
   TimesheetState: ITimesheetState,
   Environment: IEnvironment,
+  InvoiceType: IInvoiceType,
+  Float: Scalars['Float'],
+  CustomerInvoice: ICustomerInvoice,
+  ProjectInvoice: IProjectInvoice,
   Organization: IOrganization,
   OrgUser: IOrgUser,
   IOrgUser: IResolversParentTypes['OrgUser'],
@@ -3055,6 +3195,9 @@ export type IResolversParentTypes = {
   AuthProvider: IAuthProvider,
   IdToken: IIdToken,
   UserInfo: IUserInfo,
+  InvoiceCreateRequest: IInvoiceCreateRequest,
+  CustomerInvoice_Input: ICustomerInvoice_Input,
+  ProjectInvoice_Input: IProjectInvoice_Input,
   OrganizationCreateRequest: IOrganizationCreateRequest,
   OrgUser_Input: IOrgUser_Input,
   OrganizationInvitation_Input: IOrganizationInvitation_Input,
@@ -3064,6 +3207,7 @@ export type IResolversParentTypes = {
   OrganizationRemoveRequest: IOrganizationRemoveRequest,
   TeamInvitationRequest: ITeamInvitationRequest,
   OrganizationInvitationRequest: IOrganizationInvitationRequest,
+  InvoiceUpdateRequest: IInvoiceUpdateRequest,
   ClientUpdateRequest: IClientUpdateRequest,
   UpdatedClient_Input: IUpdatedClient_Input,
   UpdateProject_Input: IUpdateProject_Input,
@@ -3347,6 +3491,20 @@ export type ICounterResolvers<ContextType = any, ParentType extends IResolversPa
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type ICustomerInvoiceResolvers<ContextType = any, ParentType extends IResolversParentTypes['CustomerInvoice'] = IResolversParentTypes['CustomerInvoice']> = {
+  id?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType>,
+  city?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  companyName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  country?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  language?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  phone?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  state?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  username?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  zip?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export interface IDateScalarConfig extends GraphQLScalarTypeConfig<IResolversTypes['Date'], any> {
   name: 'Date'
 }
@@ -3488,6 +3646,33 @@ export type IInviteMemberResolvers<ContextType = any, ParentType extends IResolv
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type IInvoiceTypeResolvers<ContextType = any, ParentType extends IResolversParentTypes['InvoiceType'] = IResolversParentTypes['InvoiceType']> = {
+  id?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType>,
+  comment?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  currency?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  discount?: Resolver<Maybe<IResolversTypes['Float']>, ParentType, ContextType>,
+  from?: Resolver<Maybe<IResolversTypes['CustomerInvoice']>, ParentType, ContextType>,
+  invoiceDate?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  dueDate?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  invoiceNumber?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  invoiceVendor?: Resolver<Maybe<IResolversTypes['CustomerInvoice']>, ParentType, ContextType>,
+  logo?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  overdue?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  paymentStatus?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  projects?: Resolver<Maybe<Array<Maybe<IResolversTypes['ProjectInvoice']>>>, ParentType, ContextType>,
+  sendingStatus?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  status?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  subTotal?: Resolver<Maybe<IResolversTypes['Float']>, ParentType, ContextType>,
+  taxTotal?: Resolver<Maybe<IResolversTypes['Float']>, ParentType, ContextType>,
+  timezoneOffset?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  to?: Resolver<Maybe<IResolversTypes['CustomerInvoice']>, ParentType, ContextType>,
+  total?: Resolver<Maybe<IResolversTypes['Float']>, ParentType, ContextType>,
+  orgName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  createdAt?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  updatedAt?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type IIOrgUserResolvers<ContextType = any, ParentType extends IResolversParentTypes['IOrgUser'] = IResolversParentTypes['IOrgUser']> = {
   __resolveType: TypeResolveFn<'OrgUser', ParentType, ContextType>,
   userId?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
@@ -3566,6 +3751,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   changeMemberRole?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationchangeMemberRoleArgs, 'orgName' | 'teamName' | 'memberId' | 'role'>>,
   changeOrgMemberRole?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationchangeOrgMemberRoleArgs, 'userId' | 'role'>>,
   createAuth0User?: Resolver<Maybe<IResolversTypes['AuthUser']>, ParentType, ContextType, RequireFields<IMutationcreateAuth0UserArgs, never>>,
+  createInvoice?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationcreateInvoiceArgs, 'invoice'>>,
   createOrganization?: Resolver<Maybe<IResolversTypes['Organization']>, ParentType, ContextType, RequireFields<IMutationcreateOrganizationArgs, 'organization'>>,
   createTeam?: Resolver<Maybe<IResolversTypes['AccountTeam']>, ParentType, ContextType, RequireFields<IMutationcreateTeamArgs, 'request'>>,
   createTimeRecord?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType, RequireFields<IMutationcreateTimeRecordArgs, never>>,
@@ -3577,6 +3763,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   initiatePolicyValue?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationinitiatePolicyValueArgs, never>>,
   onAuth0UserCreated?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   removeDurationTimeRecords?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveDurationTimeRecordsArgs, never>>,
+  removeInvoice?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveInvoiceArgs, never>>,
   removeOrgClient?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveOrgClientArgs, 'clientId'>>,
   removeOrgMember?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveOrgMemberArgs, 'memberId'>>,
   removeOrganization?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveOrganizationArgs, 'organization'>>,
@@ -3596,6 +3783,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   updateConfigurationPolicyValueByUri?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateConfigurationPolicyValueByUriArgs, 'key' | 'value'>>,
   updateConfigurationValue?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateConfigurationValueArgs, 'key' | 'value'>>,
   updateConfigurationValueByUri?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateConfigurationValueByUriArgs, 'key' | 'value'>>,
+  updateInvoice?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateInvoiceArgs, never>>,
   updateOrgClient?: Resolver<Maybe<IResolversTypes['Client']>, ParentType, ContextType, RequireFields<IMutationupdateOrgClientArgs, never>>,
   updateOrgMemberTeams?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateOrgMemberTeamsArgs, 'userId' | 'orgName'>>,
   updateOrgProject?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateOrgProjectArgs, 'id'>>,
@@ -3867,6 +4055,16 @@ export type IProject_OutputResolvers<ContextType = any, ParentType extends IReso
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type IProjectInvoiceResolvers<ContextType = any, ParentType extends IResolversParentTypes['ProjectInvoice'] = IResolversParentTypes['ProjectInvoice']> = {
+  id?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType>,
+  hours?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  projectName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  rate?: Resolver<Maybe<IResolversTypes['Float']>, ParentType, ContextType>,
+  subTotal?: Resolver<Maybe<IResolversTypes['Float']>, ParentType, ContextType>,
+  tax?: Resolver<Maybe<IResolversTypes['Float']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type IProjectsResolvers<ContextType = any, ParentType extends IResolversParentTypes['Projects'] = IResolversParentTypes['Projects']> = {
   id?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType>,
   name?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
@@ -3902,6 +4100,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   getDurationTimeRecords?: Resolver<Maybe<Array<Maybe<IResolversTypes['TimeRecord']>>>, ParentType, ContextType, RequireFields<IQuerygetDurationTimeRecordsArgs, never>>,
   getDurationTimesheet?: Resolver<Maybe<IResolversTypes['TimesheetResponse']>, ParentType, ContextType, RequireFields<IQuerygetDurationTimesheetArgs, never>>,
   getEnvironment?: Resolver<Maybe<IResolversTypes['Environment']>, ParentType, ContextType>,
+  getInvoices?: Resolver<Maybe<Array<Maybe<IResolversTypes['InvoiceType']>>>, ParentType, ContextType>,
   getManageableOrganizations?: Resolver<Maybe<Array<Maybe<IResolversTypes['Organization']>>>, ParentType, ContextType>,
   getOrgInvitationMembers?: Resolver<Maybe<Array<Maybe<IResolversTypes['InviteMember']>>>, ParentType, ContextType>,
   getOrganizationClients?: Resolver<Maybe<Array<Maybe<IResolversTypes['Client']>>>, ParentType, ContextType>,
@@ -4304,6 +4503,7 @@ export type IResolvers<ContextType = any> = {
   ContributionRoles?: IContributionRolesResolvers<ContextType>,
   ContributionSettings?: IContributionSettingsResolvers<ContextType>,
   Counter?: ICounterResolvers<ContextType>,
+  CustomerInvoice?: ICustomerInvoiceResolvers<ContextType>,
   Date?: GraphQLScalarType,
   DateTime?: GraphQLScalarType,
   DefaultConfiguration?: IDefaultConfigurationResolvers<ContextType>,
@@ -4319,6 +4519,7 @@ export type IResolvers<ContextType = any> = {
   IConfigurationModel?: IIConfigurationModelResolvers,
   InvitationDecode?: IInvitationDecodeResolvers<ContextType>,
   InviteMember?: IInviteMemberResolvers<ContextType>,
+  InvoiceType?: IInvoiceTypeResolvers<ContextType>,
   IOrgUser?: IIOrgUserResolvers,
   IResourceUserRole?: IIResourceUserRoleResolvers,
   ISettingsSubject?: IISettingsSubjectResolvers,
@@ -4359,6 +4560,7 @@ export type IResolvers<ContextType = any> = {
   PreferencesResponse?: IPreferencesResponseResolvers<ContextType>,
   PreferencesType?: IPreferencesTypeResolvers<ContextType>,
   Project_Output?: IProject_OutputResolvers<ContextType>,
+  ProjectInvoice?: IProjectInvoiceResolvers<ContextType>,
   Projects?: IProjectsResolvers<ContextType>,
   Query?: IQueryResolvers<ContextType>,
   Range?: IRangeResolvers<ContextType>,
