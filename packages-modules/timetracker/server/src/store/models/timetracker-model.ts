@@ -1,8 +1,9 @@
 import { Schema, Model, Document, Connection } from 'mongoose'
-import { ITimeTracker } from '@admin-layout/timetracker-core'
+import { ITimeTracker, ITimeRecord, ITimesheet  } from '@admin-layout/timetracker-core'
+export declare type Maybe<T> = T | null;
 
-interface ITimeTrackerModel extends ITimeTracker , Document {
-    id: any;
+interface ITimeTrackerModel extends ITimeTracker, Document {
+  id: any;
 }
 
 enum TimesheetState {
@@ -17,8 +18,9 @@ enum TimesheetState {
 
 // ===> TimeRecord
 const TimeRecordSchema = new Schema({
+    userId: { type: String },
     startTime: { type: Date },
-    endTime: { type: Date },
+    endTime: { type: Date, default: null },
     taskName: { type: String },
     taskId: { type: String }, // ----> task
     tags: { type: [String] },
@@ -26,7 +28,9 @@ const TimeRecordSchema = new Schema({
     projectId: { type: String }, // ----> project
 })
 
+// ===> Timesheet
 const TimesheetSchema = new Schema({
+    userId: { type: String },
     startDate: { type: Date },
     endDate: { type: Date },
     state: { type: TimesheetState },
@@ -37,7 +41,6 @@ const TimesheetSchema = new Schema({
 })
 
 const TimeTrackerSchema = new Schema({
-    userId: { type: String },
     orgId: { type: String },
     timeRecords: [TimeRecordSchema],
     timesheets: [TimesheetSchema],

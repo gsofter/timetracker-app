@@ -21,6 +21,7 @@ import { momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import momentZ from 'moment-timezone';
 import CSS from 'csstype';
+import { useSelector } from 'react-redux';
 
 enum VIEW_MODE {
   CALENDAR_VIEW,

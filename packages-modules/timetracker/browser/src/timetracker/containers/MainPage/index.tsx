@@ -19,12 +19,16 @@ import {
   useUpdateTimeRecordMutation,
   useGetProjectsQuery,
 } from '../../../generated-models';
-import { ITimeRecordRequest, ITimeRecord, IProjects as IProject } from '@admin-layout/timetracker-core';
+import {
+  ITimeRecordRequest,
+  ITimeRecord,
+  IProjects as IProject,
+} from '@admin-layout/timetracker-core';
 import { message } from 'antd';
 import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
 import { formatDuration } from '../../services/timeRecordService';
-
+import { useSelector } from 'react-redux';
 interface ITimeTracker {
   isMobile: any;
   currentTeam: any;
@@ -65,6 +69,7 @@ const TimeTracker = (props: ITimeTracker) => {
     resetTimerValues,
   } = props;
   const [mode, setMode] = useState(TRACKER_MODE.TRACK);
+  const userId = useSelector<any>(state => state.user.auth0UserId) as string;
   const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
     for (let i = 0; i < timeRecords.length; i++) {
@@ -78,6 +83,7 @@ const TimeTracker = (props: ITimeTracker) => {
   const startTimer = () => {
     const newTimeRecord: ITimeRecordRequest = {
       ...currentTimeRecord,
+      userId,
       startTime: moment(),
       endTime: null,
     };
@@ -90,6 +96,7 @@ const TimeTracker = (props: ITimeTracker) => {
     const startTime = moment(currentTimeRecord.startTime);
 
     const newTimeRecord: ITimeRecordRequest = {
+      userId: userId,
       startTime: startTime,
       endTime: endTime,
       taskName: currentTimeRecord.taskName,

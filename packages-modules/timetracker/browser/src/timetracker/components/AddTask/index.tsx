@@ -35,6 +35,7 @@ import { formatDuration } from '../../services/timeRecordService';
 import { TRACKER_MODE } from '../../containers/MainPage';
 import DurationInput from '../DurationInput';
 import momentZ from 'moment-timezone';
+import { useSelector } from 'react-redux';
 
 const { RangePicker } = TimePicker;
 const { Title } = Typography;
@@ -77,6 +78,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     createTimeRecord,
   } = props;
   const { css } = useFela(props);
+  const userId = useSelector<any>(state => state.user.auth0UserId) as string;
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
   const [manualDur, setManualDur] = useState(moment().format('HH:mm:ss'));
@@ -125,6 +127,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
 
   const handleAddManual = () => {
     const newRecordReq: ITimeRecordRequest = {
+      userId: userId,
       startTime: manualStart,
       endTime: manualEnd,
       isBillable: currentTimeRecord.isBillable,
