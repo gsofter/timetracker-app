@@ -19,7 +19,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
   const { css } = useFela();
   const handleSubmit = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'userId', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId']),
       submittedOn: moment(),
       state: ITimesheetState.SUBMITTED,
       updatedOn: moment(),
@@ -29,7 +29,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
 
   const handleUnSubmit = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'userId', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId']),
       approvedOn: null,
       submittedOn: null,
       state: ITimesheetState.OPEN,
@@ -40,7 +40,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
 
   const handleApprove = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'userId', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId']),
       approvedOn: moment(),
       state: ITimesheetState.APPROVED,
       updatedOn: moment(),
@@ -50,7 +50,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
 
   const handleDeny = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'userId', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId']),
       state: ITimesheetState.DENYED,
       updatedOn: moment(),
     };

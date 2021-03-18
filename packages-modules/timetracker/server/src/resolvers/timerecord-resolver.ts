@@ -20,27 +20,23 @@ export const resolver = (options) => ({
       let userId = args.request.userId;
       if(userId === undefined)
         userId = user._id || user.sub
-      return timeTrackerService.createTimeRecord(userId, userContext.orgId, _.omit(args.request, [userId]));
+      return timeTrackerService.createTimeRecord(userId, userContext.orgId, args.request);
     },
     updateTimeRecord: (root,  args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Mutation.updateTimeRecord) args %j', args)
       let userId = args.request.userId;
       if(userId === undefined)
         userId = user._id || user.sub
-      return timeTrackerService.updateTimeRecord(userId, userContext.orgId, args.recordId, _.omit(args.request, [userId]));
+      return timeTrackerService.updateTimeRecord(userId, userContext.orgId, args.recordId, args.request);
     },
     removeTimeRecord: (root,  args, { timeTrackerService, user, userContext}) => {
       options.logger.trace('(Mutation.removeTimeRecord) args %j', args)
-      let userId = args.request.userId;
-      if(userId === undefined)
-        userId = user._id || user.sub
+      let userId = user._id || user.sub
       return timeTrackerService.removeTimeRecord(userId, userContext.orgId, args.recordId);
     },
     removeDurationTimeRecords: (root,  args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Mutation.removeDurationTimeRecords) args %j', args)
-      let userId = args.request.userId;
-      if(userId === undefined)
-        userId = user._id || user.sub
+      let userId = user._id || user.sub
       return timeTrackerService.removeDurationTimeRecords(userId, userContext.orgId, args.startTime, args.endTime, args.projectId);
     }
   },

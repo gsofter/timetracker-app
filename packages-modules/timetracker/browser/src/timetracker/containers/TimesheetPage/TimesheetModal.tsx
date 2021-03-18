@@ -66,11 +66,12 @@ const TimesheetModal = ({
 
   const onFinish = values => {
     const request: ITimeRecordRequest = {
+      userId,
       startTime: moment(
-        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[0].format('hh:mm:ss'),
+        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[0].format('HH:mm:ss'),
       ).toDate(),
       endTime: moment(
-        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[1].format('hh:mm:ss'),
+        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[1].format('HH:mm:ss'),
       ).toDate(),
       projectId: values.projectId,
       isBillable: values.isBillable,

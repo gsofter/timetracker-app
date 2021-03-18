@@ -8,6 +8,7 @@ import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-core'
 import * as _ from 'lodash';
 import DurationInput from '../DurationInput';
 import TimesheetEditModal from './TimesheetEditModal';
+import { useSelector } from 'react-redux';
 
 export interface ITimesheetInputProps {
   dateStr: string;
@@ -23,6 +24,7 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
   const { dateStr, records, projectId, createTimeRecord, updateTimeRecord, projectTitle } = props;
   const { css } = useFela();
   const [isModalVisible, setIsModalVisible] = useState(false);
+  const userId = useSelector<any>(state => state.user.auth0UserId) as string;
   const handleMore = event => {
     console.log('handleMore');
     setIsModalVisible(true);
@@ -32,7 +34,7 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
     let totalDur = 0;
     records.forEach(r => {
       const dur = Math.floor((moment(r.endTime).valueOf() - moment(r.startTime).valueOf()) / 1000);
-      totalDur = totalDur + dur;
+      totalDur = totalDur + Math.abs(dur);
     });
     return totalDur;
   };
@@ -41,6 +43,7 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
     if (records === undefined || records.length === 0) {
       // empty
       const newRequest: ITimeRecordRequest = {
+        userId,
         startTime: moment(dateStr).add('9', 'hours'),
         endTime: moment(dateStr)
           .add('9', 'hours')
@@ -50,7 +53,6 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
 
       createTimeRecord(newRequest);
     } else if (records.length === 1) {
-      console.log('duration', dur);
       const updatedEndTime = moment(records[0].startTime).add(dur, 'seconds');
       const updateRequest = {
         ..._.omit(records[0], ['id', '__typename']),

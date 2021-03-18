@@ -81,8 +81,10 @@ const ReportsPage = () => {
         const totalDuration = dayRecords.reduce(
           (totalDur, record) =>
             totalDur +
-            Math.floor(
-              (moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
+            Math.abs(
+              Math.floor(
+                (moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
+              ),
             ),
           0,
         );
@@ -107,8 +109,10 @@ const ReportsPage = () => {
       const pTotalDur = pRecords.reduce(
         (totalDur, pRecord) =>
           totalDur +
-          Math.floor(
-            (moment(pRecord.endTime).valueOf() - moment(pRecord.startTime).valueOf()) / 1000,
+          Math.abs(
+            Math.floor(
+              (moment(pRecord.endTime).valueOf() - moment(pRecord.startTime).valueOf()) / 1000,
+            ),
           ),
         0,
       );
@@ -143,8 +147,10 @@ const ReportsPage = () => {
       const pTotalDur = pRecords.reduce(
         (totalDur, pRecord) =>
           totalDur +
-          Math.floor(
-            (moment(pRecord.endTime).valueOf() - moment(pRecord.startTime).valueOf()) / 1000,
+          Math.abs(
+            Math.floor(
+              (moment(pRecord.endTime).valueOf() - moment(pRecord.startTime).valueOf()) / 1000,
+            ),
           ),
         0,
       );
