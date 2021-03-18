@@ -6,7 +6,8 @@ import { parse } from "@babel/core";
  * @param seconds 
  * @return hh:mm:ss
  */
-export const formatDuration = (seconds: number) => {
+export const formatDuration = (sec: number) => {
+  const seconds = Math.abs(sec);
   const hour = Math.floor(seconds / 3600);
   const minute = Math.floor((seconds % 3600) / 60);
   const second = seconds % 60;
