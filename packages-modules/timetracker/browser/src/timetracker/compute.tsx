@@ -2,6 +2,7 @@ import * as React from 'react';
 import { IMenuPosition } from '@common-stack/client-react';
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 import { FileOutlined } from '@ant-design/icons';
+import { userIsAuthenticatedRedir } from '@adminide-stack/user-auth0-browser';
 const Home = React.lazy(() => import('./containers/Home'));
 const TimeTracker = React.lazy(() => import('./containers/MainPage'));
 const Timesheet = React.lazy(() => import('./containers/TimesheetPage'));
@@ -13,7 +14,7 @@ export const timePageStore: any[] = [
     exact: false,
     icon: <FileOutlined />,
     key: 'timeTracker',
-    component: Home,
+    component: userIsAuthenticatedRedir(Home),
     position: IMenuPosition.MIDDLE,
     tab: 'Time Tracker',
     name: 'Time Tracker',
@@ -24,7 +25,7 @@ export const timePageStore: any[] = [
     exact: true,
     key: 'timeTracker.timer',
     name: 'Timer',
-    component: TimeTracker,
+    component: userIsAuthenticatedRedir(TimeTracker),
     position: IMenuPosition.MIDDLE,
     path: '/:orgName/time-tracker/timer',
     priority: 2,
@@ -42,7 +43,7 @@ export const timePageStore: any[] = [
     exact: true,
     key: 'timeTracker.timeapproval',
     name: 'Approvals',
-    component: TimeApproval,
+    component: userIsAuthenticatedRedir(TimeApproval),
     position: IMenuPosition.MIDDLE,
     path: '/:orgName/time-tracker/timeapproval',
     priority: 4,
@@ -51,7 +52,7 @@ export const timePageStore: any[] = [
     exact: true,
     key: 'timeTracker.report',
     name: 'Report',
-    component: TimeReport,
+    component: userIsAuthenticatedRedir(TimeReport),
     position: IMenuPosition.MIDDLE,
     path: '/:orgName/time-tracker/report',
     priority: 5,
