@@ -2129,15 +2129,33 @@ type SocialConnect {
     twitter: String
 }
 
+type NameType {
+    salutation: String
+    firstName: String
+    lastName: String
+}
+
+type AddressType {
+    attention: String,
+    address: String,
+    city: String,
+    state: String,
+    country: String,
+    zip: String,
+}
+
 type Client {
     id: ID
-    name: String!
+    name: NameType!
     companyName: String
+    displayName: String!
     email: String
     clientPhone: ClientPhone
     website: String
     currency: String!
     socialConnect: SocialConnect
+    billingAddress: AddressType
+    shippingAddress: AddressType
     orgName: String
     createdAt: DateTime
     updatedAt: DateTime
@@ -2153,25 +2171,46 @@ input SocialConnect_Input {
     twitter: String
 }
 
+input Name_Input {
+    salutation: String
+    firstName: String
+    lastName: String
+}
+
+input AddressType_Input {
+    attention: String,
+    address: String,
+    city: String,
+    state: String,
+    country: String,
+    zip: String,
+}
+
 input ClientAddRequest {
-    name: String!
+    name: Name_Input!
     companyName: String
+    displayName: String!
     email: String
     clientPhone: ClientPhone_Input
     website: String
     currency: String!
     socialConnect: SocialConnect_Input
+    billingAddress: AddressType_Input
+    shippingAddress: AddressType_Input
     orgName: String
 }
 
 input UpdatedClient_Input {
-    name: String!
+    name: Name_Input
     companyName: String
+    displayName: String
     email: String
     clientPhone: ClientPhone_Input
     website: String
     currency: String!
     socialConnect: SocialConnect_Input
+    billingAddress: AddressType_Input
+    shippingAddress: AddressType_Input
     orgName: String
 }
 
@@ -2266,11 +2305,13 @@ type InvoiceType {
     comment: String
     currency: String
     discount: Float
-    from: CustomerInvoice
+    from: MemberInvoice
     invoiceDate: String
+    terms: String
     dueDate: String
     invoiceNumber: String
-    invoiceVendor: CustomerInvoice
+    orderNumber: String
+    invoiceVendor: MemberInvoice
     logo: String
     overdue: Boolean
     paymentStatus: Boolean
@@ -2278,7 +2319,9 @@ type InvoiceType {
     sendingStatus: Boolean
     status: String
     subTotal: Float
-    taxTotal: Float
+    tax: Float
+    subject: String
+    conditions: String
     timezoneOffset: Int
     to: CustomerInvoice
     total: Float
@@ -2288,16 +2331,22 @@ type InvoiceType {
 }
 
 type CustomerInvoice {
-    id: ID
-    city: String
-    companyName: String
-    country: String
-    email: String
-    language: String
-    phone: String
-    state: String
+    id: String
     username: String
-    zip: String
+    companyName: String
+    email: String
+    phone: ClientPhone
+    billingAddress: AddressType
+    shippingAddress: AddressType
+}
+
+type MemberInvoice {
+    id: String
+    name: String
+    companyName: String
+    email: String
+    phone: ClientPhone
+    address: AddressType
 }
 
 type ProjectInvoice {
@@ -2306,19 +2355,25 @@ type ProjectInvoice {
     projectName: String
     rate: Float
     subTotal: Float
-    tax: Float
 }
 
 input CustomerInvoice_Input {
-    city: String
-    companyName: String
-    country: String
-    email: String
-    language: String
-    phone: String
-    state: String
+    id: String
     username: String
-    zip: String
+    companyName: String
+    email: String
+    phone: ClientPhone_Input
+    billingAddress: AddressType_Input
+    shippingAddress: AddressType_Input
+}
+
+input MemberInvoice_Input {
+    id: String
+    name: String
+    companyName: String
+    email: String
+    phone: ClientPhone_Input
+    address: AddressType_Input
 }
 
 input ProjectInvoice_Input {
@@ -2326,22 +2381,26 @@ input ProjectInvoice_Input {
     projectName: String
     rate: Float
     subTotal: Float
-    tax: Float
 }
 
 input InvoiceCreateRequest {
     comment: String
     currency: String
     discount: Float
-    from: CustomerInvoice_Input
+    from: MemberInvoice_Input
     invoiceDate: String
+    terms: String
     dueDate: String
-    invoiceVendor: CustomerInvoice_Input
+    invoiceNumber: String
+    orderNumber: String
+    invoiceVendor: MemberInvoice_Input
     logo: String
     paymentStatus: Boolean
     projects: [ProjectInvoice_Input]
     subTotal: Float
-    taxTotal: Float
+    tax: Float
+    subject: String
+    conditions: String
     timezoneOffset: Int
     to: CustomerInvoice_Input
     total: Float
@@ -2351,16 +2410,20 @@ input InvoiceUpdateRequest {
     comment: String
     currency: String
     discount: Float
-    from: CustomerInvoice_Input
+    from: MemberInvoice_Input
     invoiceDate: String
+    terms: String
     dueDate: String
     invoiceNumber: String
-    invoiceVendor: CustomerInvoice_Input
+    orderNumber: String
+    invoiceVendor: MemberInvoice_Input
     logo: String
     paymentStatus: Boolean
     projects: [ProjectInvoice_Input]
     subTotal: Float
-    taxTotal: Float
+    tax: Float
+    subject: String
+    conditions: String
     timezoneOffset: Int
     to: CustomerInvoice_Input
     total: Float
@@ -2374,4 +2437,5 @@ extend type Mutation {
 
 extend type Query {
     getInvoices: [InvoiceType]
+    getDefaultInvoiceNumber: String
 }
