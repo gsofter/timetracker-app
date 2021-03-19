@@ -8,21 +8,21 @@ export interface ICustomScrollbar {
 export const CustomScrollbar: React.FC<ICustomScrollbar> = (props: any) => {
   const { children } = props;
   const scrollBars = createRef();
-  const handleScrollFrame = values => {
-    const {
-      incPaginationAction,
-      isFetchingTimeEntriesList,
-      getTimeEntriesListPaginationAction,
-      pagination,
-    } = props;
-    const { top } = values;
-    if (top > 0.7) {
-      if (!isFetchingTimeEntriesList && !pagination.disabled) {
-        incPaginationAction();
-        getTimeEntriesListPaginationAction();
-      }
-    }
-  };
+  // const handleScrollFrame = values => {
+  //   const {
+  //     incPaginationAction,
+  //     isFetchingTimeEntriesList,
+  //     getTimeEntriesListPaginationAction,
+  //     pagination,
+  //   } = props;
+  //   const { top } = values;
+  //   if (top > 0.7) {
+  //     if (!isFetchingTimeEntriesList && !pagination.disabled) {
+  //       incPaginationAction();
+  //       getTimeEntriesListPaginationAction();
+  //     }
+  //   }
+  // };
   const animateScroll = () => {
     const { scrollTo, scrollToAction } = props;
 
@@ -43,5 +43,6 @@ export const CustomScrollbar: React.FC<ICustomScrollbar> = (props: any) => {
     requestAnimationFrame(animate);
   };
 
-  return <Scrollbars children={children} onScrollFrame={handleScrollFrame} />;
+  return <Scrollbars children={children} />;
+  // return <Scrollbars children={children} onScrollFrame={handleScrollFrame} />;
 };
