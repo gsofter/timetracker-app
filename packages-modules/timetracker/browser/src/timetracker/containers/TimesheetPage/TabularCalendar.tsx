@@ -24,7 +24,7 @@ import {
 import { formatDuration } from '../../services/timeRecordService';
 import CSS from 'csstype';
 import * as _ from 'lodash';
-import { findIndex } from 'lodash';
+import { useSelector } from 'react-redux';
 
 interface ITabularCalendar {
   weekStart: Moment;
@@ -54,6 +54,7 @@ const TabularCalendar = ({
   const [showUnkownProject, setShowUnkownProject] = useState(false);
   const [newRows, setNewRows] = useState([]);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
+  const userId = useSelector<any>(state => state.user.auth0UserId) as string;
   useEffect(() => {
     const trackedProjects = projects.filter(
       p => records.findIndex(r => r.projectId === p.id) !== -1,
@@ -148,6 +149,7 @@ const TabularCalendar = ({
   const handleSubmitApproval = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const approvalRequest: ITimesheetCreateRequest = {
+      userId,
       startDate: moment(weekStart),
       endDate: moment(weekStart).add(1, 'week'),
       state: ITimesheetState.SUBMITTED,

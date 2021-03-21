@@ -30,7 +30,7 @@ const TimeRecordSchema = new Schema({
 
 // ===> Timesheet
 const TimesheetSchema = new Schema({
-    userId: { type: String },
+    userId: { type: String, index: true },
     startDate: { type: Date },
     endDate: { type: Date },
     state: { type: TimesheetState },
@@ -41,7 +41,7 @@ const TimesheetSchema = new Schema({
 })
 
 const TimeTrackerSchema = new Schema({
-    orgId: { type: String },
+    orgId: { type: String, index: true },
     timeRecords: [TimeRecordSchema],
     timesheets: [TimesheetSchema],
 });
