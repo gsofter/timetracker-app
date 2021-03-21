@@ -19,10 +19,12 @@ var webpack_opts = {
     extensions: ['.ts', '.js', '.json']
   },
   plugins: [
-    new CopyWebpackPlugin([{
-      from: '../../tools/esm-wrapper.js',
-      to: 'index.js',
-    }]),
+    new CopyWebpackPlugin({
+      patterns: [{
+        from: '../../tools/esm-wrapper.js',
+        to: 'index.js',
+      }]
+    }),
     new webpack.LoaderOptionsPlugin({
       options: {
         test: /\.ts$/,
@@ -42,7 +44,7 @@ var webpack_opts = {
     rules: [
       {
         test: /\.ts$/,
-        use: 'awesome-typescript-loader',
+        use: 'ts-loader',
         exclude: /(node_modules)/
       }
     ]
