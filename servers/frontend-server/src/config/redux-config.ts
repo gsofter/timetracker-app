@@ -13,16 +13,17 @@ import { createEpicMiddleware } from 'redux-observable';
 import { createClientContainer } from './client.service';
 import { rootEpic } from '../config/epic-config';
 import { initialRedirectState } from '@adminide-stack/user-auth0-browser';
-    
+
 export const history = require('./router-history');
 
-const { apolloClient, services } = createClientContainer();
+const { apolloClient, services, logger } = createClientContainer();
 export const epicMiddleware = createEpicMiddleware({
     dependencies: {
         apolloClient,
         routes: modules.getConfiguredRoutes(),
         services,
-    }, 
+        logger
+    },
 });
 
 export const storeReducer = (hist) => combineReducers({
@@ -78,7 +79,7 @@ export const createReduxStore = (url = '/') => {
     // If we have preloaded state, save it.
     const initialState = __CLIENT__
         // ? { ...window.__PRELOADED_STATE__, redirectRoutes: initialRedirectState } //#952 TODO we need cookie to have id_token for SSR to work properly
-        ? { redirectRoutes: initialRedirectState } 
+        ? { redirectRoutes: initialRedirectState }
         : { redirectRoutes: initialRedirectState };
     // Delete it once we have it stored in a variable
     if (__CLIENT__) {

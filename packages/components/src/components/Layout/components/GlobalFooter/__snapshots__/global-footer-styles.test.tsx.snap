@@ -1,0 +1,38 @@
+// Jest Snapshot v1, https://goo.gl/fbAQLP
+
+exports[`Test styles should return a Component 1`] = `
+".a .ant-pro-global-footer {
+  margin: 48px 0 24px 0;
+}
+.b .ant-pro-global-footer {
+  padding: 0 16px;
+}
+.c .ant-pro-global-footer {
+  text-align: center;
+}
+.d .ant-pro-global-footer-links {
+  margin-bottom: 8px;
+}
+.e .ant-pro-global-footer-links a {
+  color: #8c8c8c;
+}
+.f .ant-pro-global-footer-links a {
+  transition: all 0.3s;
+}
+.g .ant-pro-global-footer-links a:not(:last-child) {
+  margin-right: 40px;
+}
+.h .ant-pro-global-footer-links a:hover {
+  color: #595959;
+}
+.i .ant-pro-global-footer-copyright {
+  color: #8c8c8c;
+}
+.j .ant-pro-global-footer-copyright {
+  font-size: 14px;
+}
+
+
+<div className=ant-pro a b c d e f g h i j />;
+"
+`;
