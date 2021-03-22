@@ -2131,15 +2131,33 @@ type SocialConnect {
     twitter: String
 }
 
+type NameType {
+    salutation: String
+    firstName: String
+    lastName: String
+}
+
+type AddressType {
+    attention: String,
+    address: String,
+    city: String,
+    state: String,
+    country: String,
+    zip: String,
+}
+
 type Client {
     id: ID
-    name: String!
+    name: NameType!
     companyName: String
+    displayName: String!
     email: String
     clientPhone: ClientPhone
     website: String
     currency: String!
     socialConnect: SocialConnect
+    billingAddress: AddressType
+    shippingAddress: AddressType
     orgName: String
     createdAt: DateTime
     updatedAt: DateTime
@@ -2155,25 +2173,46 @@ input SocialConnect_Input {
     twitter: String
 }
 
+input Name_Input {
+    salutation: String
+    firstName: String
+    lastName: String
+}
+
+input AddressType_Input {
+    attention: String,
+    address: String,
+    city: String,
+    state: String,
+    country: String,
+    zip: String,
+}
+
 input ClientAddRequest {
-    name: String!
+    name: Name_Input!
     companyName: String
+    displayName: String!
     email: String
     clientPhone: ClientPhone_Input
     website: String
     currency: String!
     socialConnect: SocialConnect_Input
+    billingAddress: AddressType_Input
+    shippingAddress: AddressType_Input
     orgName: String
 }
 
 input UpdatedClient_Input {
-    name: String!
+    name: Name_Input
     companyName: String
+    displayName: String
     email: String
     clientPhone: ClientPhone_Input
     website: String
     currency: String!
     socialConnect: SocialConnect_Input
+    billingAddress: AddressType_Input
+    shippingAddress: AddressType_Input
     orgName: String
 }
 
@@ -2261,4 +2300,144 @@ type AsanaConnection {
 
 extend type Query {
     getAsanaConnectionState: AsanaConnection
+}
+
+type InvoiceType {
+    id: ID
+    comment: String
+    currency: String
+    discount: Float
+    from: MemberInvoice
+    invoiceDate: String
+    terms: String
+    dueDate: String
+    invoiceNumber: String
+    orderNumber: String
+    invoiceVendor: MemberInvoice
+    logo: String
+    overdue: Boolean
+    paymentStatus: Boolean
+    projects: [ProjectInvoice]
+    sendingStatus: Boolean
+    status: String
+    subTotal: Float
+    tax: Float
+    subject: String
+    conditions: String
+    timezoneOffset: Int
+    to: CustomerInvoice
+    total: Float
+    orgName: String
+    createdAt: DateTime
+    updatedAt: DateTime
+}
+
+type CustomerInvoice {
+    id: String
+    username: String
+    companyName: String
+    email: String
+    phone: ClientPhone
+    billingAddress: AddressType
+    shippingAddress: AddressType
+}
+
+type MemberInvoice {
+    id: String
+    name: String
+    companyName: String
+    email: String
+    phone: ClientPhone
+    address: AddressType
+}
+
+type ProjectInvoice {
+    id: ID
+    hours: Int
+    projectName: String
+    rate: Float
+    subTotal: Float
+}
+
+input CustomerInvoice_Input {
+    id: String
+    username: String
+    companyName: String
+    email: String
+    phone: ClientPhone_Input
+    billingAddress: AddressType_Input
+    shippingAddress: AddressType_Input
+}
+
+input MemberInvoice_Input {
+    id: String
+    name: String
+    companyName: String
+    email: String
+    phone: ClientPhone_Input
+    address: AddressType_Input
+}
+
+input ProjectInvoice_Input {
+    hours: Int
+    projectName: String
+    rate: Float
+    subTotal: Float
+}
+
+input InvoiceCreateRequest {
+    comment: String
+    currency: String
+    discount: Float
+    from: MemberInvoice_Input
+    invoiceDate: String
+    terms: String
+    dueDate: String
+    invoiceNumber: String
+    orderNumber: String
+    invoiceVendor: MemberInvoice_Input
+    logo: String
+    paymentStatus: Boolean
+    projects: [ProjectInvoice_Input]
+    subTotal: Float
+    tax: Float
+    subject: String
+    conditions: String
+    timezoneOffset: Int
+    to: CustomerInvoice_Input
+    total: Float
+}
+
+input InvoiceUpdateRequest {
+    comment: String
+    currency: String
+    discount: Float
+    from: MemberInvoice_Input
+    invoiceDate: String
+    terms: String
+    dueDate: String
+    invoiceNumber: String
+    orderNumber: String
+    invoiceVendor: MemberInvoice_Input
+    logo: String
+    paymentStatus: Boolean
+    projects: [ProjectInvoice_Input]
+    subTotal: Float
+    tax: Float
+    subject: String
+    conditions: String
+    timezoneOffset: Int
+    to: CustomerInvoice_Input
+    total: Float
+}
+
+extend type Mutation {
+    createInvoice(invoice: InvoiceCreateRequest!): Boolean
+    updateInvoice(id: String, invoice: InvoiceUpdateRequest): Boolean
+    removeInvoice(id: String): Boolean
+}
+
+extend type Query {
+    getInvoices: [InvoiceType]
+    getDefaultInvoiceNumber: String
 }

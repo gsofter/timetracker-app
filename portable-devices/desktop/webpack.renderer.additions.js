@@ -1,6 +1,10 @@
 const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
 var dotenv = require('dotenv-safe')
+const MonacoWebpackPlugin = require('@vscode/monaco-editor-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const HtmlWebpackPlugin = require('html-webpack-plugin')
+const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const options = {
     stack: [
@@ -23,18 +27,6 @@ const options = {
     frontendRefreshOnBackendChange: true,
     nodeDebugger: false,
     overridesConfig: "./tools/webpackAppConfig.js",
-    plugins: [
-        new Dotenv({
-            path: process.env.ENV_FILE
-        }),
-        new webpack.DefinePlugin(
-            // Object.assign(
-            //     ...Object.entries(buildConfig).map(([k, v]) => ({
-            //         [k]: typeof v !== 'string' ? v : `'${v.replace(/\\/g, '\\\\')}'`
-            //     }))
-            // )
-        ),
-    ],
     defines: {
         __DEV__: process.env.NODE_ENV === 'development',
         __GRAPHQL_URL__: '"http://localhost:8091/graphql"',
@@ -42,7 +34,41 @@ const options = {
 }
 let config = {
     target: 'electron-renderer',
+    output: {
+        filename: 'main.js',
+    },
+    module: {
+        rules: [
+            {
+                test: /\.html$/,
+                loader: 'html-loader'
+            }],
+    },
     plugins: [
+        new CopyWebpackPlugin({
+            patterns: [{
+                from: '../../tools/esm-wrapper.js',
+                to: 'index.js',
+            }]
+        }),
+        new HtmlWebpackPlugin({
+            inject: false,
+            title: 'Clock IT',
+            templateContent: `
+            <!DOCTYPE html>
+    <html>
+      <head>
+        <meta charset="utf-8">
+      <title>Clockify App</title><script>require("source-map-support/source-map-support.js").install()</script><link href="styles.css" rel="stylesheet"></head>
+      <body>
+        <div id="app"></div>
+        <script src="main.js">
+        </script>
+        </body>
+    </html>
+            
+            `
+        }),
         new Dotenv({
             path: process.env.ENV_FILE
         }),

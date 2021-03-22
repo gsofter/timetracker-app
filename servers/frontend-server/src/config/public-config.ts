@@ -1,5 +1,6 @@
 /// <reference path='../../../../typings/index.d.ts' />
 import { lowerCase } from 'lodash';
+import { logger } from '@cdm-logger/client';
 
 /**
  * This file opens up in public site, so make sure it is
@@ -43,7 +44,13 @@ if (isBrowser) {
     process[lowerCase('env')] = env; // to avoid webpack to replace `process` with actual value.
     process.APP_ENV = env;
 }
-global.process = process;
+try {
+    global.process = process;
+    logger.info('Process Update Success!');
+} catch (e) {
+    logger.warn(e);
+    logger.info('Encountered above issue while running "global.process = process", will automatically try again in next render');
+}
 
 export const PUBLIC_SETTINGS: __PUBLIC_SETTINGS__ & any= {
     apolloLogging: false,

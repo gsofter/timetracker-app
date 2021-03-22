@@ -1,0 +1,9 @@
+
+
+extend enum ConfigCollectionName{
+    timetrackers
+}
+
+extend enum ConfigurationContributionNames {
+    timeTracker
+}

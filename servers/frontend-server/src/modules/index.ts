@@ -18,4 +18,4 @@ container.bind(ClientTypes.Logger).toConstantValue(logger);
 container.bind(ClientTypes.UtilityClass).toConstantValue(utility);
 
 export default modules;
-export { MainRoute, container };
+export { MainRoute, container, logger };
