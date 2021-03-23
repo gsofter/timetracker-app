@@ -15,6 +15,8 @@ import { IPreDefineAccountPermissions, ConfigurationTarget } from '@adminide-sta
 const Home = React.lazy(() => import('./containers/Home'));
 const TimeTracker = React.lazy(() => import('./containers/MainPage'));
 const Timesheet = React.lazy(() => import('./containers/TimesheetPage'));
+const TimeApproval = React.lazy(() => import('./containers/TimeApprovalPage'));
+const Reports = React.lazy(() => import('./containers/ReportsPage'));
 
 const OrganizationSettings = () => (
   <WithPermissionEnhanced
@@ -60,10 +62,28 @@ export const timePageStore: any[] = [
     exact: true,
     key: 'timeTracker.timesheet',
     name: 'Timesheet',
-    component: Timesheet,
+    component: userIsAuthenticatedRedir(Timesheet),
     position: IMenuPosition.MIDDLE,
     path: '/:orgName/time-tracker/timesheet',
     priority: 3,
+  },
+  {
+    exact: true,
+    key: 'timeTracker.timeapproval',
+    name: 'Approvals',
+    component: userIsAuthenticatedRedir(TimeApproval),
+    position: IMenuPosition.MIDDLE,
+    path: '/:orgName/time-tracker/timeapproval',
+    priority: 4,
+  },
+  {
+    exact: true,
+    key: 'timeTracker.report',
+    name: 'Report',
+    component: userIsAuthenticatedRedir(Reports),
+    position: IMenuPosition.MIDDLE,
+    path: '/:orgName/time-tracker/report',
+    priority: 5,
   },
   {
     name: 'Settings',
@@ -83,6 +103,8 @@ const selectedRoutesAndMenus = [
   'timeTracker.projects',
   'timeTracker.clients',
   'timeTracker.timesheet',
+  'timeTracker.timeApproval',
+  'timeTracker.report',
   'timeTracker.settings',
 ];
 

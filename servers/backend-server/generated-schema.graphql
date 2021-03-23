@@ -2209,7 +2209,7 @@ input UpdatedClient_Input {
     email: String
     clientPhone: ClientPhone_Input
     website: String
-    currency: String!
+    currency: String
     socialConnect: SocialConnect_Input
     billingAddress: AddressType_Input
     shippingAddress: AddressType_Input
