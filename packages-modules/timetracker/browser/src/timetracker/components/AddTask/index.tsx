@@ -36,6 +36,7 @@ import { TRACKER_MODE } from '../../containers/MainPage';
 import DurationInput from '../DurationInput';
 import momentZ from 'moment-timezone';
 import { useSelector } from 'react-redux';
+import { useTimeformat } from '../../hooks';
 
 const { RangePicker } = TimePicker;
 const { Title } = Typography;
@@ -78,10 +79,11 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     createTimeRecord,
   } = props;
   const { css } = useFela(props);
+  const { timeFormat, dateFormat } = useTimeformat();
   const userId = useSelector<any>(state => state.user.auth0UserId) as string;
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
-  const [manualDur, setManualDur] = useState(moment().format('HH:mm:ss'));
+  const [manualDur, setManualDur] = useState(moment().format(timeFormat));
   const handleTaskChange = event => {
     event.preventDefault();
     setCurrentTimeRecord({ ...currentTimeRecord, taskName: event.target.value });
@@ -121,7 +123,6 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
   };
 
   const handleChangeDur = duration => {
-    console.log();
     setManualEnd(moment(manualStart).add(duration, 'seconds'));
   };
 
@@ -271,7 +272,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
               <>
                 <Col span={16} sm={6} xxl={10} className="flex-row flex-center">
                   <RangePicker
-                    format="HH:mm"
+                    format={timeFormat}
                     defaultValue={[moment(), moment()]}
                     bordered={false}
                     onChange={handleChangeRange}
@@ -281,7 +282,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                     defaultValue={moment()}
                     bordered={false}
                     onChange={handleChangeDurDate}
-                    format="yyyy-MM-dd"
+                    format={dateFormat}
                   />
                 </Col>
                 <Col span={0} sm={6} className="duration">

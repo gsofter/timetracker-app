@@ -7,14 +7,12 @@ import { useFela } from 'react-fela';
 import { ITimesheetCreateRequest, IOrgMember } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import { VIEW_MODE } from './index';
-import { withTimeformat } from '../../components/hoc';
+import { useTimeformat } from '../../hooks'
 
 interface ITimesheetProps {
   timesheets: Array<ITimesheetResponse>;
   viewMode: VIEW_MODE;
-  members: Array<IOrgMember>;
-  timeFormat?: string;
-  dateFormat?: string;
+  members: Array<IOrgMember>;    
   updateTimesheet: (id: string, request: ITimesheetCreateRequest) => void;
 }
 
@@ -23,10 +21,9 @@ const TimeReport = ({
   viewMode,
   members,
   updateTimesheet,
-  timeFormat,
-  dateFormat,
 }: ITimesheetProps) => {
   const { css } = useFela();
+  const { dateFormat, timeFormat } = useTimeformat();
   const handleSubmit = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
       ..._.omit(record, ['__typename', 'id', 'orgId']),
@@ -150,4 +147,4 @@ const TimeReport = ({
   );
 };
 
-export default withTimeformat(TimeReport);
+export default TimeReport;

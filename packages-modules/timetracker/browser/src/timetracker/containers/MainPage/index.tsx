@@ -29,6 +29,7 @@ import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
 import { formatDuration } from '../../services/timeRecordService';
 import { useSelector } from 'react-redux';
+import { useTimeformat } from '../../hooks';
 interface ITimeTracker {
   isMobile: any;
   currentTeam: any;
@@ -69,6 +70,7 @@ const TimeTracker = (props: ITimeTracker) => {
     resetTimerValues,
   } = props;
   const [mode, setMode] = useState(TRACKER_MODE.TRACK);
+  const { timeFormat, dateFormat } = useTimeformat();
   const userId = useSelector<any>(state => state.user.auth0UserId) as string;
   const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
@@ -154,7 +156,7 @@ const TimeTracker = (props: ITimeTracker) => {
             </div>
             <CustomScrollbar>
               <div className="main-page__list">
-                {splitTimersByDay(timeRecords).map((dayRecords, index, arr) => (
+                {splitTimersByDay(timeRecords, dateFormat).map((dayRecords, index, arr) => (
                   <div
                     className={classNames('main-page__day', {
                       'main-page__day--last-child': index === arr.length - 1,
@@ -163,7 +165,7 @@ const TimeTracker = (props: ITimeTracker) => {
                   >
                     <div className="main-page__day-header">
                       <div className="main-page__day-date">
-                        {renderDayDateString(dayRecords[0].endTime)}
+                        {renderDayDateString(dayRecords[0].endTime, dateFormat)}
                       </div>
                       <div className="main-page__day-date-all-time">
                         Total time: {renderTotalTimeByDay(dayRecords)}
@@ -311,7 +313,7 @@ const withTimer = timerProps => WrappedComponent => wrappedComponentProps => (
   </Timer>
 );
 
-const splitTimersByDay = (timeRecords: [ITimeRecord]): [ITimeRecord][] => {
+const splitTimersByDay = (timeRecords: [ITimeRecord], dateFormat): [ITimeRecord][] => {
   timeRecords.sort((a, b) => {
     if (moment(a.endTime) < moment(b.endTime)) return 1;
     else if (moment(a.endTime) > moment(b.endTime)) return -1;
@@ -320,7 +322,7 @@ const splitTimersByDay = (timeRecords: [ITimeRecord]): [ITimeRecord][] => {
 
   let grouppedDates = {};
   for (let i = 0; i < timeRecords.length; i++) {
-    const dispFormat = 'YYYY-MM-DD';
+    const dispFormat = dateFormat;
     const date = moment(timeRecords[i].endTime);
     let dateStr = date.format(dispFormat);
     const weekStartDay = moment().startOf('week');
@@ -339,17 +341,17 @@ const splitTimersByDay = (timeRecords: [ITimeRecord]): [ITimeRecord][] => {
   return groupedDateArray;
 };
 
-const renderDayDateString = (date: string) => {
+const renderDayDateString = (date: string, dateFormat: string) => {
   if (moment(date) < moment().startOf('week')) {
     return (
       moment(date)
         .startOf('week')
-        .format('MMM/DD/YYYY') +
+        .format(dateFormat) +
       ' - ' +
       moment(date)
         .startOf('week')
         .add('7', 'day')
-        .format('MMM/DD/YYYY')
+        .format(dateFormat)
     );
   }
   return moment(date).calendar(null, {
@@ -358,7 +360,7 @@ const renderDayDateString = (date: string) => {
     nextWeek: 'dddd',
     lastDay: '[Yesterday]',
     lastWeek: 'dddd',
-    sameElse: 'DD/MM/YYYY',
+    sameElse: dateFormat,
   });
 };
 
