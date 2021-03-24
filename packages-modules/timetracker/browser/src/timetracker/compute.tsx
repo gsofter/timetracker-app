@@ -10,15 +10,13 @@ import {
   WithPermissionEnhanced,
   ResourceSettings,
 } from '@adminide-stack/react-shared-components';
-import {
-  IPreDefineAccountPermissions,
-  ConfigurationTarget,
-} from '@adminide-stack/core';
-
+import { IPreDefineAccountPermissions, ConfigurationTarget } from '@adminide-stack/core';
 
 const Home = React.lazy(() => import('./containers/Home'));
 const TimeTracker = React.lazy(() => import('./containers/MainPage'));
 const Timesheet = React.lazy(() => import('./containers/TimesheetPage'));
+const TimeApproval = React.lazy(() => import('./containers/TimeApprovalPage'));
+const Reports = React.lazy(() => import('./containers/ReportsPage'));
 
 const OrganizationSettings = () => (
   <WithPermissionEnhanced
@@ -44,7 +42,7 @@ export const timePageStore: any[] = [
     exact: false,
     icon: <FileOutlined />,
     key: 'timeTracker',
-    component: Home,
+    component: userIsAuthenticatedRedir(Home),
     position: IMenuPosition.MIDDLE,
     tab: 'Time Tracker',
     name: 'Time Tracker',
@@ -55,7 +53,7 @@ export const timePageStore: any[] = [
     exact: true,
     key: 'timeTracker.timer',
     name: 'Timer',
-    component: TimeTracker,
+    component: userIsAuthenticatedRedir(TimeTracker),
     position: IMenuPosition.MIDDLE,
     path: '/:orgName/time-tracker/timer',
     priority: 2,
@@ -64,10 +62,28 @@ export const timePageStore: any[] = [
     exact: true,
     key: 'timeTracker.timesheet',
     name: 'Timesheet',
-    component: Timesheet,
+    component: userIsAuthenticatedRedir(Timesheet),
     position: IMenuPosition.MIDDLE,
     path: '/:orgName/time-tracker/timesheet',
     priority: 3,
+  },
+  {
+    exact: true,
+    key: 'timeTracker.timeapproval',
+    name: 'Approvals',
+    component: userIsAuthenticatedRedir(TimeApproval),
+    position: IMenuPosition.MIDDLE,
+    path: '/:orgName/time-tracker/timeapproval',
+    priority: 4,
+  },
+  {
+    exact: true,
+    key: 'timeTracker.report',
+    name: 'Report',
+    component: userIsAuthenticatedRedir(Reports),
+    position: IMenuPosition.MIDDLE,
+    path: '/:orgName/time-tracker/report',
+    priority: 5,
   },
   {
     name: 'Settings',
@@ -87,7 +103,9 @@ const selectedRoutesAndMenus = [
   'timeTracker.projects',
   'timeTracker.clients',
   'timeTracker.timesheet',
-  'timeTracker.settings'
+  'timeTracker.timeapproval',
+  'timeTracker.report',
+  'timeTracker.settings',
 ];
 
 // get routes

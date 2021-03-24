@@ -87,6 +87,25 @@ export type AccountTeam_Input = {
   teamMembers?: Maybe<Array<Maybe<TeamMember_Input>>>;
 };
 
+export type AddressType = {
+   __typename?: 'AddressType';
+  attention?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  zip?: Maybe<Scalars['String']>;
+};
+
+export type AddressType_Input = {
+  attention?: Maybe<Scalars['String']>;
+  address?: Maybe<Scalars['String']>;
+  city?: Maybe<Scalars['String']>;
+  state?: Maybe<Scalars['String']>;
+  country?: Maybe<Scalars['String']>;
+  zip?: Maybe<Scalars['String']>;
+};
+
 
 export type ApplicationPolicy = IConfigurationModel & {
    __typename?: 'ApplicationPolicy';
@@ -187,26 +206,32 @@ export type AuthUserRaw = IAuthUser & {
 export type Client = {
    __typename?: 'Client';
   id?: Maybe<Scalars['ID']>;
-  name: Scalars['String'];
+  name: NameType;
   companyName?: Maybe<Scalars['String']>;
+  displayName: Scalars['String'];
   email?: Maybe<Scalars['String']>;
   clientPhone?: Maybe<ClientPhone>;
   website?: Maybe<Scalars['String']>;
   currency: Scalars['String'];
   socialConnect?: Maybe<SocialConnect>;
+  billingAddress?: Maybe<AddressType>;
+  shippingAddress?: Maybe<AddressType>;
   orgName?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['DateTime']>;
   updatedAt?: Maybe<Scalars['DateTime']>;
 };
 
 export type ClientAddRequest = {
-  name: Scalars['String'];
+  name: Name_Input;
   companyName?: Maybe<Scalars['String']>;
+  displayName: Scalars['String'];
   email?: Maybe<Scalars['String']>;
   clientPhone?: Maybe<ClientPhone_Input>;
   website?: Maybe<Scalars['String']>;
   currency: Scalars['String'];
   socialConnect?: Maybe<SocialConnect_Input>;
+  billingAddress?: Maybe<AddressType_Input>;
+  shippingAddress?: Maybe<AddressType_Input>;
   orgName?: Maybe<Scalars['String']>;
 };
 
@@ -381,28 +406,23 @@ export type Counter = {
 
 export type CustomerInvoice = {
    __typename?: 'CustomerInvoice';
-  id?: Maybe<Scalars['ID']>;
-  city?: Maybe<Scalars['String']>;
-  companyName?: Maybe<Scalars['String']>;
-  country?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  language?: Maybe<Scalars['String']>;
-  phone?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
-  zip?: Maybe<Scalars['String']>;
+  companyName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  phone?: Maybe<ClientPhone>;
+  billingAddress?: Maybe<AddressType>;
+  shippingAddress?: Maybe<AddressType>;
 };
 
 export type CustomerInvoice_Input = {
-  city?: Maybe<Scalars['String']>;
-  companyName?: Maybe<Scalars['String']>;
-  country?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  language?: Maybe<Scalars['String']>;
-  phone?: Maybe<Scalars['String']>;
-  state?: Maybe<Scalars['String']>;
+  id?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
-  zip?: Maybe<Scalars['String']>;
+  companyName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  phone?: Maybe<ClientPhone_Input>;
+  billingAddress?: Maybe<AddressType_Input>;
+  shippingAddress?: Maybe<AddressType_Input>;
 };
 
 
@@ -579,15 +599,20 @@ export type InvoiceCreateRequest = {
   comment?: Maybe<Scalars['String']>;
   currency?: Maybe<Scalars['String']>;
   discount?: Maybe<Scalars['Float']>;
-  from?: Maybe<CustomerInvoice_Input>;
+  from?: Maybe<MemberInvoice_Input>;
   invoiceDate?: Maybe<Scalars['String']>;
+  terms?: Maybe<Scalars['String']>;
   dueDate?: Maybe<Scalars['String']>;
-  invoiceVendor?: Maybe<CustomerInvoice_Input>;
+  invoiceNumber?: Maybe<Scalars['String']>;
+  orderNumber?: Maybe<Scalars['String']>;
+  invoiceVendor?: Maybe<MemberInvoice_Input>;
   logo?: Maybe<Scalars['String']>;
   paymentStatus?: Maybe<Scalars['Boolean']>;
   projects?: Maybe<Array<Maybe<ProjectInvoice_Input>>>;
   subTotal?: Maybe<Scalars['Float']>;
-  taxTotal?: Maybe<Scalars['Float']>;
+  tax?: Maybe<Scalars['Float']>;
+  subject?: Maybe<Scalars['String']>;
+  conditions?: Maybe<Scalars['String']>;
   timezoneOffset?: Maybe<Scalars['Int']>;
   to?: Maybe<CustomerInvoice_Input>;
   total?: Maybe<Scalars['Float']>;
@@ -599,11 +624,13 @@ export type InvoiceType = {
   comment?: Maybe<Scalars['String']>;
   currency?: Maybe<Scalars['String']>;
   discount?: Maybe<Scalars['Float']>;
-  from?: Maybe<CustomerInvoice>;
+  from?: Maybe<MemberInvoice>;
   invoiceDate?: Maybe<Scalars['String']>;
+  terms?: Maybe<Scalars['String']>;
   dueDate?: Maybe<Scalars['String']>;
   invoiceNumber?: Maybe<Scalars['String']>;
-  invoiceVendor?: Maybe<CustomerInvoice>;
+  orderNumber?: Maybe<Scalars['String']>;
+  invoiceVendor?: Maybe<MemberInvoice>;
   logo?: Maybe<Scalars['String']>;
   overdue?: Maybe<Scalars['Boolean']>;
   paymentStatus?: Maybe<Scalars['Boolean']>;
@@ -611,7 +638,9 @@ export type InvoiceType = {
   sendingStatus?: Maybe<Scalars['Boolean']>;
   status?: Maybe<Scalars['String']>;
   subTotal?: Maybe<Scalars['Float']>;
-  taxTotal?: Maybe<Scalars['Float']>;
+  tax?: Maybe<Scalars['Float']>;
+  subject?: Maybe<Scalars['String']>;
+  conditions?: Maybe<Scalars['String']>;
   timezoneOffset?: Maybe<Scalars['Int']>;
   to?: Maybe<CustomerInvoice>;
   total?: Maybe<Scalars['Float']>;
@@ -624,16 +653,20 @@ export type InvoiceUpdateRequest = {
   comment?: Maybe<Scalars['String']>;
   currency?: Maybe<Scalars['String']>;
   discount?: Maybe<Scalars['Float']>;
-  from?: Maybe<CustomerInvoice_Input>;
+  from?: Maybe<MemberInvoice_Input>;
   invoiceDate?: Maybe<Scalars['String']>;
+  terms?: Maybe<Scalars['String']>;
   dueDate?: Maybe<Scalars['String']>;
   invoiceNumber?: Maybe<Scalars['String']>;
-  invoiceVendor?: Maybe<CustomerInvoice_Input>;
+  orderNumber?: Maybe<Scalars['String']>;
+  invoiceVendor?: Maybe<MemberInvoice_Input>;
   logo?: Maybe<Scalars['String']>;
   paymentStatus?: Maybe<Scalars['Boolean']>;
   projects?: Maybe<Array<Maybe<ProjectInvoice_Input>>>;
   subTotal?: Maybe<Scalars['Float']>;
-  taxTotal?: Maybe<Scalars['Float']>;
+  tax?: Maybe<Scalars['Float']>;
+  subject?: Maybe<Scalars['String']>;
+  conditions?: Maybe<Scalars['String']>;
   timezoneOffset?: Maybe<Scalars['Int']>;
   to?: Maybe<CustomerInvoice_Input>;
   total?: Maybe<Scalars['Float']>;
@@ -714,6 +747,25 @@ export type LoginError = {
    __typename?: 'LoginError';
   timeStamp?: Maybe<Scalars['DateTime']>;
   error?: Maybe<Scalars['AnyObject']>;
+};
+
+export type MemberInvoice = {
+   __typename?: 'MemberInvoice';
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  companyName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  phone?: Maybe<ClientPhone>;
+  address?: Maybe<AddressType>;
+};
+
+export type MemberInvoice_Input = {
+  id?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  companyName?: Maybe<Scalars['String']>;
+  email?: Maybe<Scalars['String']>;
+  phone?: Maybe<ClientPhone_Input>;
+  address?: Maybe<AddressType_Input>;
 };
 
 export type MemorySettings = ISettingsSubject & {
@@ -1151,6 +1203,19 @@ export type MutationUpdateTimesheetArgs = {
 
 export type MutationUpdateTimesheetStatusArgs = {
   request?: Maybe<TimesheetCreateRequest>;
+};
+
+export type Name_Input = {
+  salutation?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
+};
+
+export type NameType = {
+   __typename?: 'NameType';
+  salutation?: Maybe<Scalars['String']>;
+  firstName?: Maybe<Scalars['String']>;
+  lastName?: Maybe<Scalars['String']>;
 };
 
 /**
@@ -1649,7 +1714,6 @@ export type ProjectInvoice = {
   projectName?: Maybe<Scalars['String']>;
   rate?: Maybe<Scalars['Float']>;
   subTotal?: Maybe<Scalars['Float']>;
-  tax?: Maybe<Scalars['Float']>;
 };
 
 export type ProjectInvoice_Input = {
@@ -1657,7 +1721,6 @@ export type ProjectInvoice_Input = {
   projectName?: Maybe<Scalars['String']>;
   rate?: Maybe<Scalars['Float']>;
   subTotal?: Maybe<Scalars['Float']>;
-  tax?: Maybe<Scalars['Float']>;
 };
 
 export type Projects = {
@@ -1714,6 +1777,7 @@ export type Query = {
   getConfigurationData?: Maybe<ConfigurationData>;
   getConfigurationPolicies?: Maybe<Array<Maybe<ConfigurationPolicy>>>;
   getContributionRoles?: Maybe<Array<Maybe<ContributionRoles>>>;
+  getDefaultInvoiceNumber?: Maybe<Scalars['String']>;
   getDurationTimeRecords?: Maybe<Array<Maybe<TimeRecord>>>;
   getDurationTimesheet?: Maybe<TimesheetResponse>;
   getEnvironment?: Maybe<Environment>;
@@ -2335,6 +2399,7 @@ export type TimeRecord = {
 };
 
 export type TimeRecordRequest = {
+  userId?: Maybe<Scalars['String']>;
   startTime?: Maybe<Scalars['DateTime']>;
   endTime?: Maybe<Scalars['DateTime']>;
   taskName?: Maybe<Scalars['String']>;
@@ -2342,12 +2407,12 @@ export type TimeRecordRequest = {
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
   clientId?: Maybe<Scalars['String']>;
-  userId?: Maybe<Scalars['String']>;
 };
 
 export type Timesheet = {
    __typename?: 'Timesheet';
   id?: Maybe<Scalars['ID']>;
+  userId?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['DateTime']>;
   endDate?: Maybe<Scalars['DateTime']>;
   state?: Maybe<TimesheetState>;
@@ -2358,6 +2423,7 @@ export type Timesheet = {
 };
 
 export type TimesheetCreateRequest = {
+  userId?: Maybe<Scalars['String']>;
   startDate?: Maybe<Scalars['DateTime']>;
   endDate?: Maybe<Scalars['DateTime']>;
   state?: Maybe<TimesheetState>;
@@ -2400,13 +2466,16 @@ export type TimeTracker = {
 };
 
 export type UpdatedClient_Input = {
-  name: Scalars['String'];
+  name?: Maybe<Name_Input>;
   companyName?: Maybe<Scalars['String']>;
+  displayName?: Maybe<Scalars['String']>;
   email?: Maybe<Scalars['String']>;
   clientPhone?: Maybe<ClientPhone_Input>;
   website?: Maybe<Scalars['String']>;
   currency: Scalars['String'];
   socialConnect?: Maybe<SocialConnect_Input>;
+  billingAddress?: Maybe<AddressType_Input>;
+  shippingAddress?: Maybe<AddressType_Input>;
   orgName?: Maybe<Scalars['String']>;
 };
 
@@ -2892,8 +2961,11 @@ export type ResolversTypes = {
   Environment: ResolverTypeWrapper<Environment>,
   InvoiceType: ResolverTypeWrapper<InvoiceType>,
   Float: ResolverTypeWrapper<Scalars['Float']>,
-  CustomerInvoice: ResolverTypeWrapper<CustomerInvoice>,
+  MemberInvoice: ResolverTypeWrapper<MemberInvoice>,
+  ClientPhone: ResolverTypeWrapper<ClientPhone>,
+  AddressType: ResolverTypeWrapper<AddressType>,
   ProjectInvoice: ResolverTypeWrapper<ProjectInvoice>,
+  CustomerInvoice: ResolverTypeWrapper<CustomerInvoice>,
   Organization: ResolverTypeWrapper<Organization>,
   OrgUser: ResolverTypeWrapper<OrgUser>,
   IOrgUser: ResolversTypes['OrgUser'],
@@ -2902,7 +2974,7 @@ export type ResolversTypes = {
   InviteMember: ResolverTypeWrapper<InviteMember>,
   InviteStatus: InviteStatus,
   Client: ResolverTypeWrapper<Client>,
-  ClientPhone: ResolverTypeWrapper<ClientPhone>,
+  NameType: ResolverTypeWrapper<NameType>,
   SocialConnect: ResolverTypeWrapper<SocialConnect>,
   OrganizationConfigValue_Input: OrganizationConfigValue_Input,
   ConfigurationOverrides_Input: ConfigurationOverrides_Input,
@@ -2926,8 +2998,10 @@ export type ResolversTypes = {
   AcceptInvitationToTeam_Input: AcceptInvitationToTeam_Input,
   OrganizationNotificationValues: OrganizationNotificationValues,
   ClientAddRequest: ClientAddRequest,
+  Name_Input: Name_Input,
   ClientPhone_Input: ClientPhone_Input,
   SocialConnect_Input: SocialConnect_Input,
+  AddressType_Input: AddressType_Input,
   ProjectAddRequest: ProjectAddRequest,
   ScheduleCreateRequest: ScheduleCreateRequest,
   TimelineCreateRequest: TimelineCreateRequest,
@@ -2935,8 +3009,9 @@ export type ResolversTypes = {
   IdToken: IdToken,
   UserInfo: UserInfo,
   InvoiceCreateRequest: InvoiceCreateRequest,
-  CustomerInvoice_Input: CustomerInvoice_Input,
+  MemberInvoice_Input: MemberInvoice_Input,
   ProjectInvoice_Input: ProjectInvoice_Input,
+  CustomerInvoice_Input: CustomerInvoice_Input,
   OrganizationCreateRequest: OrganizationCreateRequest,
   OrgUser_Input: OrgUser_Input,
   OrganizationInvitation_Input: OrganizationInvitation_Input,
@@ -3094,8 +3169,11 @@ export type ResolversParentTypes = {
   Environment: Environment,
   InvoiceType: InvoiceType,
   Float: Scalars['Float'],
-  CustomerInvoice: CustomerInvoice,
+  MemberInvoice: MemberInvoice,
+  ClientPhone: ClientPhone,
+  AddressType: AddressType,
   ProjectInvoice: ProjectInvoice,
+  CustomerInvoice: CustomerInvoice,
   Organization: Organization,
   OrgUser: OrgUser,
   IOrgUser: ResolversParentTypes['OrgUser'],
@@ -3104,7 +3182,7 @@ export type ResolversParentTypes = {
   InviteMember: InviteMember,
   InviteStatus: InviteStatus,
   Client: Client,
-  ClientPhone: ClientPhone,
+  NameType: NameType,
   SocialConnect: SocialConnect,
   OrganizationConfigValue_Input: OrganizationConfigValue_Input,
   ConfigurationOverrides_Input: ConfigurationOverrides_Input,
@@ -3128,8 +3206,10 @@ export type ResolversParentTypes = {
   AcceptInvitationToTeam_Input: AcceptInvitationToTeam_Input,
   OrganizationNotificationValues: OrganizationNotificationValues,
   ClientAddRequest: ClientAddRequest,
+  Name_Input: Name_Input,
   ClientPhone_Input: ClientPhone_Input,
   SocialConnect_Input: SocialConnect_Input,
+  AddressType_Input: AddressType_Input,
   ProjectAddRequest: ProjectAddRequest,
   ScheduleCreateRequest: ScheduleCreateRequest,
   TimelineCreateRequest: TimelineCreateRequest,
@@ -3137,8 +3217,9 @@ export type ResolversParentTypes = {
   IdToken: IdToken,
   UserInfo: UserInfo,
   InvoiceCreateRequest: InvoiceCreateRequest,
-  CustomerInvoice_Input: CustomerInvoice_Input,
+  MemberInvoice_Input: MemberInvoice_Input,
   ProjectInvoice_Input: ProjectInvoice_Input,
+  CustomerInvoice_Input: CustomerInvoice_Input,
   OrganizationCreateRequest: OrganizationCreateRequest,
   OrgUser_Input: OrgUser_Input,
   OrganizationInvitation_Input: OrganizationInvitation_Input,
@@ -3259,6 +3340,16 @@ export type AccountTeamResolvers<ContextType = any, ParentType extends Resolvers
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type AddressTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['AddressType'] = ResolversParentTypes['AddressType']> = {
+  attention?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  address?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  zip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export interface AnyObjectScalarConfig extends GraphQLScalarTypeConfig<ResolversTypes['AnyObject'], any> {
   name: 'AnyObject'
 }
@@ -3332,13 +3423,16 @@ export type AuthUserRawResolvers<ContextType = any, ParentType extends Resolvers
 
 export type ClientResolvers<ContextType = any, ParentType extends ResolversParentTypes['Client'] = ResolversParentTypes['Client']> = {
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  name?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
+  name?: Resolver<ResolversTypes['NameType'], ParentType, ContextType>,
   companyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  displayName?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   clientPhone?: Resolver<Maybe<ResolversTypes['ClientPhone']>, ParentType, ContextType>,
   website?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   currency?: Resolver<ResolversTypes['String'], ParentType, ContextType>,
   socialConnect?: Resolver<Maybe<ResolversTypes['SocialConnect']>, ParentType, ContextType>,
+  billingAddress?: Resolver<Maybe<ResolversTypes['AddressType']>, ParentType, ContextType>,
+  shippingAddress?: Resolver<Maybe<ResolversTypes['AddressType']>, ParentType, ContextType>,
   orgName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   createdAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
@@ -3438,16 +3532,13 @@ export type CounterResolvers<ContextType = any, ParentType extends ResolversPare
 };
 
 export type CustomerInvoiceResolvers<ContextType = any, ParentType extends ResolversParentTypes['CustomerInvoice'] = ResolversParentTypes['CustomerInvoice']> = {
-  id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
-  city?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  companyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  country?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  language?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  phone?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  state?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   username?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  zip?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  companyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  phone?: Resolver<Maybe<ResolversTypes['ClientPhone']>, ParentType, ContextType>,
+  billingAddress?: Resolver<Maybe<ResolversTypes['AddressType']>, ParentType, ContextType>,
+  shippingAddress?: Resolver<Maybe<ResolversTypes['AddressType']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -3597,11 +3688,13 @@ export type InvoiceTypeResolvers<ContextType = any, ParentType extends Resolvers
   comment?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   currency?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   discount?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
-  from?: Resolver<Maybe<ResolversTypes['CustomerInvoice']>, ParentType, ContextType>,
+  from?: Resolver<Maybe<ResolversTypes['MemberInvoice']>, ParentType, ContextType>,
   invoiceDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  terms?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   dueDate?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   invoiceNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
-  invoiceVendor?: Resolver<Maybe<ResolversTypes['CustomerInvoice']>, ParentType, ContextType>,
+  orderNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  invoiceVendor?: Resolver<Maybe<ResolversTypes['MemberInvoice']>, ParentType, ContextType>,
   logo?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   overdue?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   paymentStatus?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
@@ -3609,7 +3702,9 @@ export type InvoiceTypeResolvers<ContextType = any, ParentType extends Resolvers
   sendingStatus?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   status?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   subTotal?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
-  taxTotal?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
+  tax?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
+  subject?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  conditions?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   timezoneOffset?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   to?: Resolver<Maybe<ResolversTypes['CustomerInvoice']>, ParentType, ContextType>,
   total?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
@@ -3670,6 +3765,16 @@ export type LocalUserSettingsResolvers<ContextType = any, ParentType extends Res
 export type LoginErrorResolvers<ContextType = any, ParentType extends ResolversParentTypes['LoginError'] = ResolversParentTypes['LoginError']> = {
   timeStamp?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   error?: Resolver<Maybe<ResolversTypes['AnyObject']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type MemberInvoiceResolvers<ContextType = any, ParentType extends ResolversParentTypes['MemberInvoice'] = ResolversParentTypes['MemberInvoice']> = {
+  id?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  name?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  companyName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  email?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  phone?: Resolver<Maybe<ResolversTypes['ClientPhone']>, ParentType, ContextType>,
+  address?: Resolver<Maybe<ResolversTypes['AddressType']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -3745,6 +3850,13 @@ export type MutationResolvers<ContextType = any, ParentType extends ResolversPar
   updateTimelineEvent?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateTimelineEventArgs, never>>,
   updateTimesheet?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateTimesheetArgs, never>>,
   updateTimesheetStatus?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<MutationUpdateTimesheetStatusArgs, never>>,
+};
+
+export type NameTypeResolvers<ContextType = any, ParentType extends ResolversParentTypes['NameType'] = ResolversParentTypes['NameType']> = {
+  salutation?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  firstName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  lastName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type OrganizationResolvers<ContextType = any, ParentType extends ResolversParentTypes['Organization'] = ResolversParentTypes['Organization']> = {
@@ -4008,7 +4120,6 @@ export type ProjectInvoiceResolvers<ContextType = any, ParentType extends Resolv
   projectName?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   rate?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
   subTotal?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
-  tax?: Resolver<Maybe<ResolversTypes['Float']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4045,6 +4156,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getConfigurationData?: Resolver<Maybe<ResolversTypes['ConfigurationData']>, ParentType, ContextType>,
   getConfigurationPolicies?: Resolver<Maybe<Array<Maybe<ResolversTypes['ConfigurationPolicy']>>>, ParentType, ContextType, RequireFields<QueryGetConfigurationPoliciesArgs, never>>,
   getContributionRoles?: Resolver<Maybe<Array<Maybe<ResolversTypes['ContributionRoles']>>>, ParentType, ContextType>,
+  getDefaultInvoiceNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   getDurationTimeRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimeRecord']>>>, ParentType, ContextType, RequireFields<QueryGetDurationTimeRecordsArgs, never>>,
   getDurationTimesheet?: Resolver<Maybe<ResolversTypes['TimesheetResponse']>, ParentType, ContextType, RequireFields<QueryGetDurationTimesheetArgs, never>>,
   getEnvironment?: Resolver<Maybe<ResolversTypes['Environment']>, ParentType, ContextType>,
@@ -4280,6 +4392,7 @@ export type TimeRecordResolvers<ContextType = any, ParentType extends ResolversP
 
 export type TimesheetResolvers<ContextType = any, ParentType extends ResolversParentTypes['Timesheet'] = ResolversParentTypes['Timesheet']> = {
   id?: Resolver<Maybe<ResolversTypes['ID']>, ParentType, ContextType>,
+  userId?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   startDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   endDate?: Resolver<Maybe<ResolversTypes['DateTime']>, ParentType, ContextType>,
   state?: Resolver<Maybe<ResolversTypes['TimesheetState']>, ParentType, ContextType>,
@@ -4431,6 +4544,7 @@ export type ViewerSettingsSubjectResolvers<ContextType = any, ParentType extends
 export type Resolvers<ContextType = any> = {
   AccessRole?: AccessRoleResolvers,
   AccountTeam?: AccountTeamResolvers<ContextType>,
+  AddressType?: AddressTypeResolvers<ContextType>,
   AnyObject?: GraphQLScalarType,
   ApplicationPolicy?: ApplicationPolicyResolvers<ContextType>,
   ApplicationRolePermission?: ApplicationRolePermissionResolvers<ContextType>,
@@ -4477,8 +4591,10 @@ export type Resolvers<ContextType = any> = {
   JSONObject?: GraphQLScalarType,
   LocalUserSettings?: LocalUserSettingsResolvers<ContextType>,
   LoginError?: LoginErrorResolvers<ContextType>,
+  MemberInvoice?: MemberInvoiceResolvers<ContextType>,
   MemorySettings?: MemorySettingsResolvers<ContextType>,
   Mutation?: MutationResolvers<ContextType>,
+  NameType?: NameTypeResolvers<ContextType>,
   Organization?: OrganizationResolvers<ContextType>,
   OrganizationConfiguration?: OrganizationConfigurationResolvers<ContextType>,
   OrganizationData?: OrganizationDataResolvers<ContextType>,

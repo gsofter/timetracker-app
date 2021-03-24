@@ -7,15 +7,25 @@ import { useFela } from 'react-fela';
 import { ITimesheetCreateRequest, IOrgMember } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import { VIEW_MODE } from './index';
+import { withTimeformat } from '../../components/hoc';
 
 interface ITimesheetProps {
   timesheets: Array<ITimesheetResponse>;
   viewMode: VIEW_MODE;
   members: Array<IOrgMember>;
+  timeFormat?: string;
+  dateFormat?: string;
   updateTimesheet: (id: string, request: ITimesheetCreateRequest) => void;
 }
 
-const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimesheetProps) => {
+const TimeReport = ({
+  timesheets,
+  viewMode,
+  members,
+  updateTimesheet,
+  timeFormat,
+  dateFormat,
+}: ITimesheetProps) => {
   const { css } = useFela();
   const handleSubmit = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
@@ -72,19 +82,19 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
       title: 'Start Date',
       dataIndex: 'startDate',
       key: 'startDate',
-      render: value => <> {moment(value).format('YYYY-MM-DD')} </>,
+      render: value => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
     },
     {
       title: 'End Date',
       dataIndex: 'endDate',
       key: 'endDate',
-      render: value => <> {moment(value).format('YYYY-MM-DD')} </>,
+      render: value => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
     },
     {
       title: 'Submitted On',
       dataIndex: 'submittedOn',
       key: 'submittedOn',
-      render: value => <> {moment(value).format('YYYY-MM-DD')} </>,
+      render: value => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
     },
     {
       title: 'state',
@@ -140,4 +150,4 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
   );
 };
 
-export default TimeReport;
+export default withTimeformat(TimeReport);
