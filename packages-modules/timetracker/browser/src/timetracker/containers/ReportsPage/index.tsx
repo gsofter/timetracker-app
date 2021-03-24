@@ -6,8 +6,9 @@ import { BarChart, DoughnutChart } from '../../components/Charts';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../../../generated-models';
 import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { formatDuration } from '../../services/timeRecordService';
+import { withTimeformat } from '../../components/hoc'
 
-const ReportsPage = () => {
+const ReportsPage = ({ timeFormat, dateFormat }) => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
     variables: {
@@ -15,6 +16,7 @@ const ReportsPage = () => {
       endTime: moment(weekStart).add(1, 'week'),
     },
   });
+  
   // getter for time records
   const getRecords = useCallback(
     (): Array<ITimeRecord> => (loading || !!!data ? [] : data.getDurationTimeRecords),
@@ -26,7 +28,7 @@ const ReportsPage = () => {
     (): Array<IProject_Output> =>
       loadingProjects || !!!projectsData ? [] : projectsData.getProjects,
     [loadingProjects, projectsData],
-  );
+  );  
 
   useEffect(() => {
     setWeekStart(moment().startOf('week'));
@@ -57,7 +59,7 @@ const ReportsPage = () => {
       .map((itemValue, itemIndex) => {
         return moment(weekStart)
           .add(itemIndex, 'day')
-          .format('YYYY-MM-DD');
+          .format(dateFormat);
       });
     return labels;
   };
@@ -71,10 +73,10 @@ const ReportsPage = () => {
         // filter current day records
         const dayRecords = records.filter(
           r =>
-            moment(r.startTime).format('YYYY-MM-DD') ===
+            moment(r.startTime).format(dateFormat) ===
             moment(weekStart)
               .add(index, 'day')
-              .format('YYYY-MM-DD'),
+              .format(dateFormat),
         );
 
         // calc total duration as seconds
@@ -206,4 +208,4 @@ const ReportsPage = () => {
   );
 };
 
-export default ReportsPage;
+export default withTimeformat(ReportsPage);

@@ -9,11 +9,18 @@ import { IConfigurationContributionNames  } from '@admin-layout/timetracker-core
 
 // });
 const enum TimeFormat {
-    ROUNDED_0_0 = '"0.0" (rounded)',
-    ROUNDED_0_00 = '"0.00" (rounded)',
-    PRECISE_00_00_00 = '"00:00:00" HH:MM:SS (precise)',
-    ROUNDED_UP_00_00 = '"00:00" HH:MM (rounded up)'
+    ROUNDED_0_0 = '"H.m" (rounded)',
+    ROUNDED_0_00 = '"H.mm" (rounded)',
+    PRECISE_00_00_00 = '"HH:mm:ss" (precise)',
+    ROUNDED_UP_00_00 = '"HH:mm" (rounded up)'
 }
+
+const enum DateFormat {
+    USFORMAT = '"MM-DD-YYYY" (US standard)',
+    UKFORMAT = '"DD-MM-YYYY" (UK standard)',
+    ISOFORMAT = '"YYYY-MM-DD" (ISO)',
+}
+
 
 const enum TimeRoundingUpToValue {
     IN_MINUTES_15 = 15*60,
@@ -63,12 +70,24 @@ export const TimeTrackerProperties = {
         'enum': [TimeFormat.ROUNDED_0_0, TimeFormat.ROUNDED_0_00, TimeFormat.PRECISE_00_00_00, TimeFormat.ROUNDED_UP_00_00],
         'default': TimeFormat.PRECISE_00_00_00,
         'enumDescriptions': [
-            localize('timetracker.project.timeFormat.ROUNDED_0_0', '"0.0" (rounded)'),
-            localize('timetracker.project.timeFormat.ROUNDED_0_00', '"0.00" (rounded)'),
-            localize('timetracker.project.timeFormat.PRECISE_00_00_00', '"00:00:00" HH:MM:SS (precise)'),
-            localize('timetracker.project.timeFormat.ROUNDED_UP_00_00', '"00:00" HH:MM (rounded up)'),
+            localize('timetracker.project.timeFormat.ROUNDED_0_0', '"H.m" (rounded)'),
+            localize('timetracker.project.timeFormat.ROUNDED_0_00', '"H.mm" (rounded)'),
+            localize('timetracker.project.timeFormat.PRECISE_00_00_00', '"HH:mm:ss" (precise)'),
+            localize('timetracker.project.timeFormat.ROUNDED_UP_00_00', '"HH:mm" (rounded up)'),
         ],
         'description': localize('timetracker.project.timeFormat', 'Select the format in which you want your entry represented'),
+        'scope': ConfigurationScope.RESOURCE,
+    },
+    'timetracker.project.dateFormat': {
+        'type': 'string',
+        'enum': [DateFormat.USFORMAT, DateFormat.UKFORMAT, DateFormat.ISOFORMAT],
+        'default': DateFormat.USFORMAT,
+        'enumDescriptions': [
+            localize('timetracker.project.dateFormat.USFORMAT', '"MM-DD-YYYY" (US standard)'),
+            localize('timetracker.project.dateFormat.UKFORMAT', '"DD-MM-YYYY" (UK standard)'),
+            localize('timetracker.project.dateFormat.ISOFORMAT', '"YYYY-MM-DD" (ISO FORMAT)'),
+        ],
+        'description': localize('timetracker.project.dateFormat', 'Select the format in which you want your entry represented'),
         'scope': ConfigurationScope.RESOURCE,
     },
     'timetracker.project.roundedToNearest': {

@@ -25,6 +25,7 @@ import { formatDuration } from '../../services/timeRecordService';
 import CSS from 'csstype';
 import * as _ from 'lodash';
 import { useSelector } from 'react-redux';
+import { withTimeformat } from '../../components/hoc';
 
 interface ITabularCalendar {
   weekStart: Moment;
@@ -32,6 +33,8 @@ interface ITabularCalendar {
   records: ITimeRecord[];
   projects: Array<IProject>;
   timesheet: ITimesheet | null;
+  timeFormat?: string;
+  dateFormat?: string;
   handleRemoveDuration: Function;
   updateTimeRecord: Function;
   createTimeRecord: Function;
@@ -44,6 +47,8 @@ const TabularCalendar = ({
   records,
   projects,
   timesheet,
+  timeFormat,
+  dateFormat,
   handleRemoveDuration,
   updateTimeRecord,
   createTimeRecord,
@@ -105,10 +110,9 @@ const TabularCalendar = ({
   };
 
   const getDayTotalDuration = curDay => {
-    const formatStr = 'YYYY-MM-DD';
-    const dayStr = moment(curDay).format(formatStr);
+    const dayStr = moment(curDay).format(dateFormat);
     const dRecords = records
-      .filter(r => moment(r.startTime).format(formatStr) === dayStr)
+      .filter(r => moment(r.startTime).format(dateFormat) === dayStr)
       .filter(r => projects.findIndex(p => p.id === r.projectId) !== -1);
     let totalDur = 0;
     dRecords.forEach(pr => {
@@ -287,12 +291,12 @@ const TabularCalendar = ({
                     const curDayRecords = records.filter(
                       r =>
                         r.projectId === p.id &&
-                        moment(r.startTime).format('YYYY-MM-DD') === curDay.format('YYYY-MM-DD'),
+                        moment(r.startTime).format(dateFormat) === curDay.format(dateFormat),
                     );
                     return (
-                      <td key={curDay.format('YYYY-MM-DD')}>
+                      <td key={curDay.format(dateFormat)}>
                         <TimesheetInput
-                          dateStr={curDay.format('YYYY-MM-DD')}
+                          dateStr={curDay.format(dateFormat)}
                           projectId={p.id}
                           records={curDayRecords}
                           createTimeRecord={createTimeRecord}
@@ -328,12 +332,12 @@ const TabularCalendar = ({
                   const curDayRecords = records.filter(
                     r =>
                       projects.findIndex(p => p.id === r.projectId) === -1 && // doesn't include in projects list
-                      moment(r.startTime).format('YYYY-MM-DD') === curDay.format('YYYY-MM-DD'), // cur day records
+                      moment(r.startTime).format(dateFormat) === curDay.format(dateFormat), // cur day records
                   );
                   return (
-                    <td key={curDay.format('YYYY-MM-DD')}>
+                    <td key={curDay.format(dateFormat)}>
                       <TimesheetInput
-                        dateStr={curDay.format('YYYY-MM-DD')}
+                        dateStr={curDay.format(dateFormat)}
                         projectId={''}
                         records={curDayRecords}
                         createTimeRecord={createTimeRecord}
@@ -360,9 +364,9 @@ const TabularCalendar = ({
                   .map((val, index) => {
                     const curDay = moment(weekStart).add(index, 'day');
                     return (
-                      <td key={curDay.format('YYYY-MM-DD')}>
+                      <td key={curDay.format(dateFormat)}>
                         <TimesheetInput
-                          dateStr={curDay.format('YYYY-MM-DD')}
+                          dateStr={curDay.format(dateFormat)}
                           projectId={pId}
                           createTimeRecord={createTimeRecord}
                           updateTimeRecord={updateTimeRecord}
@@ -537,17 +541,19 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
   if (!data || loading) return null;
   return (
     <Spin spinning={!data || loading}>
-      <TabularCalendar
-        weekStart={weekStart}
-        setWeekStart={setWeekStart}
-        records={filterEvents(data?.getDurationTimeRecords)}
-        projects={projects}
-        timesheet={_.get(approvalData, 'getDurationTimesheet', null)}
-        handleRemoveDuration={handleRemoveDuration}
-        createTimeRecord={createTimeRecord}
-        updateTimeRecord={updateTimeRecord}
-        createTimesheet={createTimesheet}
-      />
+      {withTimeformat(
+        <TabularCalendar
+          weekStart={weekStart}
+          setWeekStart={setWeekStart}
+          records={filterEvents(data?.getDurationTimeRecords)}
+          projects={projects}
+          timesheet={_.get(approvalData, 'getDurationTimesheet', null)}
+          handleRemoveDuration={handleRemoveDuration}
+          createTimeRecord={createTimeRecord}
+          updateTimeRecord={updateTimeRecord}
+          createTimesheet={createTimesheet}
+        />,
+      )}
     </Spin>
   );
 };

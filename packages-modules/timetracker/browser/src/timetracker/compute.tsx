@@ -103,7 +103,7 @@ const selectedRoutesAndMenus = [
   'timeTracker.projects',
   'timeTracker.clients',
   'timeTracker.timesheet',
-  'timeTracker.timeApproval',
+  'timeTracker.timeapproval',
   'timeTracker.report',
   'timeTracker.settings',
 ];

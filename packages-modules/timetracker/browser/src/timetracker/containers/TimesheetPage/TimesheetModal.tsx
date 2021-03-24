@@ -24,7 +24,7 @@ import {
 } from '@admin-layout/timetracker-core';
 import moment from 'moment';
 import Spacer from '../../components/Spacer';
-
+import { withTimeformat } from '../../components/hoc'
 const { RangePicker } = TimePicker;
 
 export interface ITimesheetModalProps {
@@ -218,7 +218,7 @@ const TimesheetModal = ({
   );
 };
 
-export default TimesheetModal;
+export default withTimeformat(TimesheetModal);
 
 const stylesheet: { [property: string]: (props) => CSS.Properties } = {
   form: props => ({
