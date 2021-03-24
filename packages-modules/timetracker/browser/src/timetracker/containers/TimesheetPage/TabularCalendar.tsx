@@ -26,6 +26,7 @@ import CSS from 'csstype';
 import * as _ from 'lodash';
 import { useSelector } from 'react-redux';
 import { withTimeformat } from '../../components/hoc';
+import { useTimeformat } from '../../hooks';
 
 interface ITabularCalendar {
   weekStart: Moment;
@@ -33,8 +34,6 @@ interface ITabularCalendar {
   records: ITimeRecord[];
   projects: Array<IProject>;
   timesheet: ITimesheet | null;
-  timeFormat?: string;
-  dateFormat?: string;
   handleRemoveDuration: Function;
   updateTimeRecord: Function;
   createTimeRecord: Function;
@@ -47,8 +46,6 @@ const TabularCalendar = ({
   records,
   projects,
   timesheet,
-  timeFormat,
-  dateFormat,
   handleRemoveDuration,
   updateTimeRecord,
   createTimeRecord,
@@ -59,6 +56,8 @@ const TabularCalendar = ({
   const [showUnkownProject, setShowUnkownProject] = useState(false);
   const [newRows, setNewRows] = useState([]);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
+  const { timeFormat, dateFormat } = useTimeformat();
+
   const userId = useSelector<any>(state => state.user.auth0UserId) as string;
   useEffect(() => {
     const trackedProjects = projects.filter(
@@ -541,19 +540,17 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
   if (!data || loading) return null;
   return (
     <Spin spinning={!data || loading}>
-      {withTimeformat(
-        <TabularCalendar
-          weekStart={weekStart}
-          setWeekStart={setWeekStart}
-          records={filterEvents(data?.getDurationTimeRecords)}
-          projects={projects}
-          timesheet={_.get(approvalData, 'getDurationTimesheet', null)}
-          handleRemoveDuration={handleRemoveDuration}
-          createTimeRecord={createTimeRecord}
-          updateTimeRecord={updateTimeRecord}
-          createTimesheet={createTimesheet}
-        />,
-      )}
+      <TabularCalendar
+        weekStart={weekStart}
+        setWeekStart={setWeekStart}
+        records={filterEvents(data?.getDurationTimeRecords)}
+        projects={projects}
+        timesheet={_.get(approvalData, 'getDurationTimesheet', null)}
+        handleRemoveDuration={handleRemoveDuration}
+        createTimeRecord={createTimeRecord}
+        updateTimeRecord={updateTimeRecord}
+        createTimesheet={createTimesheet}
+      />
     </Spin>
   );
 };
