@@ -21,6 +21,7 @@ import * as _ from 'lodash';
 import debounce from '../../services/debounce';
 import { formatDuration } from '../../services/timeRecordService';
 import BillableCheck from '../BillableCheck';
+import { useTimeformat } from '../../hooks';
 
 export interface ITaskList {
   timeRecord?: ITimeRecord;
@@ -41,6 +42,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
   const [selectedProject, setSelectedProject] = useState(timeRecord.projectId ?? '');
   const [taskName, setTaskName] = useState(timeRecord.taskName ?? '');
   const [isBillable, setIsBillable] = useState(timeRecord.isBillable);
+  const { timeFormat, dateFormat } = useTimeformat();
   const { projects } = props;
   const debounceTimeLimit = 800;
 
@@ -145,8 +147,8 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
             </Col>
             <Col span={14} sm={6} className="flex-center">
               <Title level={5}>
-                {moment(timeRecord.startTime).format('HH:mm A')} &nbsp;
-                {moment(timeRecord.endTime).format('HH:mm A')}
+                {moment(timeRecord.startTime).format(timeFormat)} &nbsp;
+                {moment(timeRecord.endTime).format(timeFormat)}
               </Title>
             </Col>
             <Col span={6} className="duration">
