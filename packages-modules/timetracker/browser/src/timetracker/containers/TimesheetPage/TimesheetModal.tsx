@@ -25,6 +25,7 @@ import {
 import moment from 'moment';
 import Spacer from '../../components/Spacer';
 import { withTimeformat } from '../../components/hoc'
+import { useTimeformat } from '../../hooks';
 const { RangePicker } = TimePicker;
 
 export interface ITimesheetModalProps {
@@ -54,6 +55,7 @@ const TimesheetModal = ({
 }: ITimesheetModalProps) => {
   const { css } = useFela();
   const [form] = Form.useForm();
+  const { timeFormat, dateFormat } = useTimeformat();
   useEffect(() => {
     form.setFieldsValue({
       userId: event?.userId || '',
@@ -68,10 +70,10 @@ const TimesheetModal = ({
     const request: ITimeRecordRequest = {
       userId,
       startTime: moment(
-        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[0].format('HH:mm:ss'),
+        values.date.format(dateFormat) + ' ' + values.timeRange[0].format(timeFormat),
       ).toDate(),
       endTime: moment(
-        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[1].format('HH:mm:ss'),
+        values.date.format(dateFormat) + ' ' + values.timeRange[1].format(timeFormat),
       ).toDate(),
       projectId: values.projectId,
       isBillable: values.isBillable,
@@ -169,7 +171,7 @@ const TimesheetModal = ({
                 name="timeRange"
                 rules={[{ required: true, message: 'Required field' }]}
               >
-                <RangePicker format="HH:mm:ss" bordered={false} />
+                <RangePicker format={timeFormat} bordered={false} />
               </Form.Item>
             </Col>
           </Row>
@@ -218,7 +220,7 @@ const TimesheetModal = ({
   );
 };
 
-export default withTimeformat(TimesheetModal);
+export default TimesheetModal;
 
 const stylesheet: { [property: string]: (props) => CSS.Properties } = {
   form: props => ({

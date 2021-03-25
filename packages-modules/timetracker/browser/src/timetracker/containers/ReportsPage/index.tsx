@@ -6,10 +6,11 @@ import { BarChart, DoughnutChart } from '../../components/Charts';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../../../generated-models';
 import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { formatDuration } from '../../services/timeRecordService';
-import { withTimeformat } from '../../components/hoc'
+import { useTimeformat } from '../../hooks'
 
-const ReportsPage = ({ timeFormat, dateFormat }) => {
+const ReportsPage = () => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
+  const { dateFormat, timeFormat } = useTimeformat();
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
     variables: {
       startTime: weekStart,
@@ -208,4 +209,4 @@ const ReportsPage = ({ timeFormat, dateFormat }) => {
   );
 };
 
-export default withTimeformat(ReportsPage);
+export default ReportsPage;
