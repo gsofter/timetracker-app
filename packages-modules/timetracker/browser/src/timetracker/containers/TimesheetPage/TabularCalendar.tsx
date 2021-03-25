@@ -442,6 +442,7 @@ interface ITabularCalendarWrapperProps {
 
 const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
   const filterEvents = events => {
+    if(!events) return []
     return events.map(ev => ({
       ...ev,
       startTime: moment(ev.startTime).toDate(),

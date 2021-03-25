@@ -122,6 +122,7 @@ const TimesheetCalendar = ({
   }, [refetch]);
 
   const filterEvents = events => {
+    if(!events) return []
     return events
       .map(ev => ({
         ...ev,

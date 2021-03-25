@@ -12,6 +12,7 @@ import {
   ITimesheetState,
 } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 
 @injectable()
 export class TimeTrackerRepository implements ITimeTrackerRepository {
@@ -33,49 +34,14 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   }
 
   public async getTimeRecords(userId: string, orgId: string): Promise<Array<ITimeRecord>> {
-    const trackDoc = await this.timeTrackerModel.aggregate([
-      {
-        $project: {
-          orgId,
-          timeRecords: {
-            $filter: {
-              input: '$timeRecords',
-              as: 'timeRecords',
-              cond: {
-                $and: [
-                  { $eq: ['$$timeRecords.userId', userId] },
-                  { $ne: ['$$timeRecords.endTime', null] },
-                ],
-              },
-            },
-          },
-        },
-      },
-    ]);
+    const trackDoc = await this.timeTrackerModel.findOne({ orgId });
 
-    // console.log('getTimeRecords.trackDoc => ', trackDoc);
-    // console.log('getTimeRecords.trackDoc[0].timeRecords => ', trackDoc[0].timeRecords);
-    if (trackDoc && trackDoc.length > 0 && trackDoc[0].timeRecords.length > 0) {
-      const res = trackDoc[0].timeRecords
-        .map(tr => {
-          return {
-            id: tr._id,
-            userId: tr.userId,
-            orgId: trackDoc[0].orgId,
-            projectId: tr.projectId,
-            startTime: tr.startTime,
-            endTime: tr.endTime,
-            isBillable: tr.isBillable,
-            tags: tr.tags,
-            taskId: tr.taskId,
-            taskName: tr.taskName,
-          };
-        })
-        .filter(tr => tr.endTime !== null && tr.endTime);
+    if (trackDoc) {
+      let res;
+      if (trackDoc.timeRecords)
+        res = trackDoc.timeRecords.filter(tr => tr.userId === userId && tr.endTime !== null);
       return res;
-    } else {
-      return [];
-    }
+    } else return null;
   }
 
   public async getDurationTimeRecords(
@@ -84,84 +50,25 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     startTime: Date,
     endTime: Date,
   ): Promise<Array<ITimeRecord>> {
-    const trackDoc = await this.timeTrackerModel.aggregate([
-      {
-        $project: {
-          orgId,
-          timeRecords: {
-            $filter: {
-              input: '$timeRecords',
-              as: 'timeRecords',
-              cond: {
-                $and: [
-                  { $eq: ['$$timeRecords.userId', userId] },
-                  { $gte: ['$$timeRecords.startTime', new Date(startTime.toISOString())] },
-                  { $lte: ['$$timeRecords.endTime', new Date(endTime.toISOString())] },
-                ],
-              },
-            },
-          },
-        },
-      },
-    ]);
+    const trackDoc = await this.timeTrackerModel.findOne({ orgId });
 
-    if (trackDoc && trackDoc.length > 0) {
-      return trackDoc[0].timeRecords
-        .filter(r => r.endTime !== null && r.endTime)
-        .map(tr => {
-          return {
-            id: tr._id,
-            userId: tr.userId,
-            orgId: trackDoc[0].orgId,
-            projectId: tr.projectId,
-            startTime: tr.startTime,
-            endTime: tr.endTime,
-            isBillable: tr.isBillable,
-            tags: tr.tags,
-            taskId: tr.taskId,
-            taskName: tr.taskName,
-          };
-        });
+    if (trackDoc && trackDoc.timeRecords) {
+      return trackDoc.timeRecords.filter(
+        r =>
+          r.userId === userId &&
+          moment(startTime) <= moment(r.startTime) &&
+          moment(r.endTime) <= moment(endTime) &&
+          r.endTime !== null,
+      );
     } else {
       return [];
     }
   }
 
   public async getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>> {
-    const trackDoc = await this.timeTrackerModel.aggregate([
-      {
-        $project: {
-          orgId,
-          timesheets: {
-            $filter: {
-              input: '$timesheets',
-              as: 'timesheets',
-              cond: {
-                $eq: ['$$timesheets.userId', userId]
-              },
-            },
-          },
-        },
-      },
-    ]);
-
-    if (trackDoc !== null && trackDoc !== undefined && trackDoc.length > 0 && trackDoc[0].timesheets) {
-      let timesheets = [...trackDoc[0].timesheets];
-      const res = timesheets.map(sheet => {
-        return {
-          id: sheet._id,
-          startDate: sheet.startDate,
-          endDate: sheet.endDate,
-          state: sheet.state,
-          submittedOn: sheet.submittedOn,
-          approvedOn: sheet.approvedOn,
-          updatedBy: sheet.updatedBy,
-          updatedOn: sheet.updatedOn,
-          userId: sheet.userId,
-          orgId: trackDoc[0].orgId,
-        };
-      });
-      return res;
+    const trackDoc = await this.timeTrackerModel.findOne({ orgId });
+    if (trackDoc && trackDoc.timesheets) {
+      return trackDoc.timesheets.filter(sh => sh.userId === userId);
     } else {
       return [];
     }
@@ -173,89 +80,28 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     start: Date,
     end: Date,
   ): Promise<ITimesheet> {
-    const trackDoc = await this.timeTrackerModel.aggregate([
-      {
-        $project: {
-          orgId,
-          timesheets: {
-            $filter: {
-              input: '$timesheets',
-              as: 'timesheets',
-              cond: {
-                $and: [
-                  { $eq: ['$$timesheets.userId', userId] },
-                  { $eq: ['$$timesheets.startDate', start] },
-                  { $eq: ['$$timesheets.endDate', end] },
-                ],
-              },
-            },
-          },
-        },
-      },
-    ]);
-
-    if (trackDoc && trackDoc.length > 0)
-      if (!!trackDoc[0].timesheets && trackDoc[0].timesheets.length > 0) {
-        let sheet = trackDoc[0].timesheets[0];
-      
-        return {
-          id: sheet._id,
-          startDate: sheet.startDate,
-          endDate: sheet.endDate,
-          state: sheet.state,
-          submittedOn: sheet.submittedOn,
-          approvedOn: sheet.approvedOn,
-          updatedBy: sheet.updatedBy,
-          updatedOn: sheet.updatedOn,
-          userId: sheet.userId,
-        };
-      }
-        
-      else return null;
-    return null;
+    const trackDoc = await this.timeTrackerModel.findOne({ orgId });
+    if (trackDoc && trackDoc.timesheets) {
+      return trackDoc.timesheets.find(
+        sh =>
+          sh.userId === userId &&
+          moment(start).format('YYYY-MM-DD') === moment(sh.startDate).format('YYYY-MM-DD') &&
+          moment(end).format('YYYY-MM-DD') === moment(sh.endDate).format('YYYY-MM-DD'),
+      );
+    } else {
+      return null;
+    }
   }
 
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
-    const trackDoc = await this.timeTrackerModel.aggregate([
-      {
-        $project: {
-          orgId,
-          timeRecords: {
-            $filter: {
-              input: '$timeRecords',
-              as: 'timeRecords',
-              cond: {
-                $and: [
-                  { $eq: ['$$timeRecords.userId', userId] },
-                  { $eq: ['$$timeRecords.endTime', null] },
-                ],
-              },
-            },
-          },
-        },
-      },
-    ]);
-    
-    // console.log('getPlayingTimeRecord.trackDoc.timeRecords', trackDoc[0].timeRecords);
-    if (trackDoc && trackDoc.length > 0) {
-      if(!!trackDoc[0].timeRecords && trackDoc[0].timeRecords.length > 0) {
-        let tr = trackDoc[0].timeRecords[0];
-        return {
-          id: tr._id,
-            userId: tr.userId,
-            orgId: trackDoc[0].orgId,
-            projectId: tr.projectId,
-            startTime: tr.startTime,
-            endTime: tr.endTime,
-            isBillable: tr.isBillable,
-            tags: tr.tags,
-            taskId: tr.taskId,
-            taskName: tr.taskName,
-        }
-      }
-      else null;
-    }
-    return null;
+    const trackDoc = await this.timeTrackerModel.findOne({ orgId });
+
+    if (trackDoc) {
+      let res;
+      if (trackDoc.timeRecords)
+        res = trackDoc.timeRecords.find(tr => tr.userId === userId && tr.endTime === null);
+      return res;
+    } else return null;
   }
 
   public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
