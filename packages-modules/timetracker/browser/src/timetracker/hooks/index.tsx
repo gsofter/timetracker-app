@@ -22,10 +22,10 @@ export const useTimeformat = () => {
     timeFormat:
       !timeFormatData || loadingDateFormat
         ? 'HH:mm:ss'
-        : getQuoteWrappedString(timeFormatData?.resolveConfiguration),
+        : timeFormatData?.resolveConfiguration,
     dateFormat:
       !dateFormatData || loadingDateFormat
         ? 'YYYY-MM-DD'
-        : getQuoteWrappedString(dateFormatData?.resolveConfiguration),
+        : dateFormatData?.resolveConfiguration,
   };
 };

@@ -2,8 +2,9 @@ import React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { formatDuration } from '../../services/timeRecordService';
 import moment from 'moment';
-
+import { useTimeformat } from '../../hooks'
 export const BarChart = ({ labels, title, data }) => {
+  const { timeFormat } = useTimeformat();
   const barData = {
     labels,
     datasets: [
@@ -34,7 +35,7 @@ export const BarChart = ({ labels, title, data }) => {
             suggestedMin: 0,
             suggestedMax: 3600,
             callback: value => {
-              return formatDuration(value);
+              return formatDuration(value, timeFormat);
             },
           },
         },
@@ -45,7 +46,7 @@ export const BarChart = ({ labels, title, data }) => {
 
       callbacks: {
         label: function(tooltipItem, data) {
-          return formatDuration(tooltipItem.yLabel);
+          return formatDuration(tooltipItem.yLabel, timeFormat);
         },
       },
     },

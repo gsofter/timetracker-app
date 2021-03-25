@@ -79,7 +79,7 @@ const TimeTracker = (props: ITimeTracker) => {
         moment(timeRecords[i].endTime).valueOf() - moment(timeRecords[i].startTime).valueOf();
     }
 
-    return formatDuration(Math.floor(totalTime / 1000));
+    return formatDuration(Math.floor(totalTime / 1000), timeFormat);
   };
 
   const startTimer = () => {
