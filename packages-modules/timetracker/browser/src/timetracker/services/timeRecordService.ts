@@ -1,18 +1,23 @@
-import { parse } from "@babel/core";
+import moment from 'moment'
+import momentDurationFormatSetup from 'moment-duration-format'
 
+momentDurationFormatSetup(moment);
 /**
  * Format seconds to time
  * 
  * @param seconds 
  * @return hh:mm:ss
  */
-export const formatDuration = (sec: number) => {
+export const formatDuration = (sec: number, timeFormat?: string) => {
   const seconds = Math.abs(sec);
-  const hour = Math.floor(seconds / 3600);
-  const minute = Math.floor((seconds % 3600) / 60);
-  const second = seconds % 60;
-  const format = (num: number) => (num < 10 ? '0' + num : Number(num).toString());
-  return format(hour) + ':' + format(minute) + ':' + format(second);
+  // const hour = Math.floor(seconds / 3600);
+  // const minute = Math.floor((seconds % 3600) / 60);
+  // const second = seconds % 60;
+  // const format = (num: number) => (num < 10 ? '0' + num : Number(num).toString());
+  
+  const duration = moment.duration(seconds, 'seconds') as any;
+  return duration.format('HH:mm:ss', { trim: false })
+  // return format(hour) + ':' + format(minute) + ':' + format(second);
 };
 
 /**

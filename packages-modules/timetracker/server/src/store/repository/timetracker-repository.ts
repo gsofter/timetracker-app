@@ -145,7 +145,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
       },
     ]);
 
-    if (trackDoc !== null && trackDoc !== undefined && trackDoc.length > 0) {
+    if (trackDoc !== null && trackDoc !== undefined && trackDoc.length > 0 && trackDoc[0].timesheets) {
       let timesheets = [...trackDoc[0].timesheets];
       const res = timesheets.map(sheet => {
         return {
