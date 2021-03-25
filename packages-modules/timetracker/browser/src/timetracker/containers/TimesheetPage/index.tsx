@@ -21,8 +21,10 @@ import { momentLocalizer } from 'react-big-calendar';
 import moment from 'moment';
 import momentZ from 'moment-timezone';
 import CSS from 'csstype';
-import { useSelector } from 'react-redux';
-
+import { useLocation } from 'react-router'
+// import { useLocationQuery } from '../../hooks'
+import qs from 'query-string'
+import { useHistory } from 'react-router'
 enum VIEW_MODE {
   CALENDAR_VIEW,
   TABULAR_VIEW,
@@ -35,14 +37,23 @@ interface ITimesheetProps {
 }
 
 const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
-  const [viewMode, setViewMode] = useState(VIEW_MODE.CALENDAR_VIEW);
+  const location = useLocation();
+  const history = useHistory();
+  const parsed = qs.parse(location.search);
+  
+  // const [viewMode, setViewMode] = useState(VIEW_MODE.CALENDAR_VIEW);
   const [localizer, setLocalizer] = useState(momentLocalizer(moment));
   const [selectedProject, setSelectedProject] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
   const [isShowTimeModal, setIsShowTimeModal] = useState(false);
 
-  const handleChangeViewMode = checked => {
-    setViewMode(checked ? VIEW_MODE.CALENDAR_VIEW : VIEW_MODE.TABULAR_VIEW);
+  const handleChangeViewMode = () => {
+    //setViewMode(checked ? VIEW_MODE.CALENDAR_VIEW : VIEW_MODE.TABULAR_VIEW);
+    parsed.view = parsed.view === 'calendar' ? 'tabular' : 'calendar';
+    history.push({
+      pathname: location.pathname,
+      search: qs.stringify(parsed)
+    })
   };
 
   const handleSelectTimezone = timezone => {
@@ -65,7 +76,7 @@ const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
           <Switch
             checkedChildren="Calendar View"
             unCheckedChildren="Tabular View"
-            checked={viewMode === VIEW_MODE.CALENDAR_VIEW}
+            checked={parsed.view === 'calendar'}
             onChange={handleChangeViewMode}
           />
         </Col>
@@ -140,7 +151,7 @@ const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
           </Form>
         </Col>
       </Row>
-      {viewMode === VIEW_MODE.CALENDAR_VIEW ? (
+      {parsed.view === 'calendar' ? (
         <TimesheetCalendar
           localizer={localizer}
           projects={projects}

@@ -8,7 +8,7 @@ import { ITimesheetCreateRequest, IOrgMember } from '@admin-layout/timetracker-c
 import * as _ from 'lodash';
 import { VIEW_MODE } from './index';
 import { useTimeformat } from '../../hooks'
-
+import { useHistory } from 'react-router'
 interface ITimesheetProps {
   timesheets: Array<ITimesheetResponse>;
   viewMode: VIEW_MODE;
@@ -23,7 +23,13 @@ const TimeReport = ({
   updateTimesheet,
 }: ITimesheetProps) => {
   const { css } = useFela();
+  const history = useHistory();
   const { dateFormat, timeFormat } = useTimeformat();
+
+  const handleView = (id: string, record: ITimesheetResponse) => {
+    history.push(`/:orgId/time-tracker/timesheet`)
+  };
+
   const handleSubmit = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
       ..._.omit(record, ['__typename', 'id', 'orgId']),
@@ -105,7 +111,7 @@ const TimeReport = ({
         const actionMenu = () => {
           return (
             <Menu>
-              <Menu.Item key="view"> View </Menu.Item>
+              <Menu.Item key="view" onClick={() => handleView(record.id, record)}> View </Menu.Item>
               {viewMode === VIEW_MODE.OPEN && (
                 <Menu.Item key="submit" onClick={() => handleSubmit(record.id, record)}>
                   Submit
