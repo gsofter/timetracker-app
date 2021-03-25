@@ -9,18 +9,17 @@ import { IConfigurationContributionNames  } from '@admin-layout/timetracker-core
 
 // });
 const enum TimeFormat {
-    ROUNDED_0_0 = '"H.m" (rounded)',
-    ROUNDED_0_00 = '"H.mm" (rounded)',
-    PRECISE_00_00_00 = '"HH:mm:ss" (precise)',
-    ROUNDED_UP_00_00 = '"HH:mm" (rounded up)'
+    ROUNDED_0_0 = 'H.m',
+    ROUNDED_0_00 = 'H.mm',
+    PRECISE_00_00_00 = 'HH:mm:ss',
+    ROUNDED_UP_00_00 = 'HH:mm'
 }
 
 const enum DateFormat {
-    USFORMAT = '"MM-DD-YYYY" (US standard)',
-    UKFORMAT = '"DD-MM-YYYY" (UK standard)',
-    ISOFORMAT = '"YYYY-MM-DD" (ISO)',
+    USFORMAT = 'MM-DD-YYYY',
+    UKFORMAT = 'DD-MM-YYYY',
+    ISOFORMAT = 'YYYY-MM-DD',
 }
-
 
 const enum TimeRoundingUpToValue {
     IN_MINUTES_15 = 15*60,
