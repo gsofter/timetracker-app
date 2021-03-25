@@ -136,7 +136,7 @@ const ReportsPage = () => {
         dataIndex: 'duration',
         title: 'Duration',
         render: value => {
-          return <span> {formatDuration(value)}</span>;
+          return <span> {formatDuration(value, timeFormat)}</span>;
         },
       },
     ];

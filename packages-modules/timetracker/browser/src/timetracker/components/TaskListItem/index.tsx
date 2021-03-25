@@ -153,7 +153,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
             </Col>
             <Col span={6} className="duration">
               <Title level={5}>
-                {formatDuration(calcTotalTime(timeRecord.startTime, timeRecord.endTime))}
+                {formatDuration(calcTotalTime(timeRecord.startTime, timeRecord.endTime), timeFormat)}
               </Title>
             </Col>
             <Col span={4} className="flex-end">

@@ -306,7 +306,7 @@ const TabularCalendar = ({
                       </td>
                     );
                   })}
-                <td> {formatDuration(getProjectTotalDuration(p.id))}</td>
+                <td> {formatDuration(getProjectTotalDuration(p.id), timeFormat)}</td>
                 <td>
                   <Popconfirm
                     title="Are you sure to remove event"
@@ -347,7 +347,7 @@ const TabularCalendar = ({
                     </td>
                   );
                 })}
-              <td> {formatDuration(getProjectTotalDuration(''))}</td>
+              <td> {formatDuration(getProjectTotalDuration(''), timeFormat)}</td>
             </tr>
           ) : (
             <> </>
@@ -416,9 +416,9 @@ const TabularCalendar = ({
               .fill(0)
               .map((val, index) => {
                 const curDay = moment(weekStart).add(index, 'day');
-                return <td>{formatDuration(getDayTotalDuration(curDay))} </td>;
+                return <td>{formatDuration(getDayTotalDuration(curDay), timeFormat)} </td>;
               })}
-            <td>{formatDuration(getTotalDuration())} </td>
+            <td>{formatDuration(getTotalDuration(), timeFormat)} </td>
             <td></td>
           </tr>
         </tbody>
