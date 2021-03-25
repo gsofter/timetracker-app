@@ -16,7 +16,7 @@ export const formatDuration = (sec: number, timeFormat?: string) => {
   // const format = (num: number) => (num < 10 ? '0' + num : Number(num).toString());
   
   const duration = moment.duration(seconds, 'seconds') as any;
-  return duration.format(timeFormat || 'HH:mm:ss', { trim: false })
+  return duration.format('HH:mm:ss', { trim: false })
   // return format(hour) + ':' + format(minute) + ':' + format(second);
 };
 

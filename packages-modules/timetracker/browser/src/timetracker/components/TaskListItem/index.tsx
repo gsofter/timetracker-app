@@ -147,7 +147,7 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
             </Col>
             <Col span={14} sm={6} className="flex-center">
               <Title level={5}>
-                {moment(timeRecord.startTime).format(timeFormat)} &nbsp;
+                {moment(timeRecord.startTime).format(timeFormat)} &nbsp;- &nbsp;
                 {moment(timeRecord.endTime).format(timeFormat)}
               </Title>
             </Col>
