@@ -62,6 +62,74 @@ const enum TimeRoundedType {
   ROUND_DOWN_TO = 'Roudn down to',
 }
 export const TimeTrackerProperties = {
+
+  // notifications
+  'timetracker.notifications.enableTimetrackerNotifications': {
+    type: 'boolean',
+    default: true,
+    description: localize(
+      'timetracker.notifications.timeTrackingNotification',
+      'Allow timetracker emails to be send',
+    ),
+    scope: ConfigurationScope.WINDOW,
+  },
+
+  'timetracker.notifications.timeTrackingNotifications': {
+    type: 'boolean',
+    default: true,
+    description: localize(
+      'timetracker.notifications.timeTrackingNotification',
+      'An email will be send when tracking is stopped by the system due to lack of user response',
+    ),
+    scope: ConfigurationScope.WINDOW,
+  },
+  'timetracker.notifications.approvalNotifications': {
+    type: 'boolean',
+    default: true,
+    description: localize(
+      'timetracker.notifications.approvalNotifications',
+      'An email will be sent to me when my timesheet is approved',
+    ),
+    scope: ConfigurationScope.WINDOW,
+  },
+  'timetracker.notifications.submitNotifications': {
+    type: 'boolean',
+    default: true,
+    description: localize(
+      'timetracker.notifications.submitNotifications',
+      'An email will be sent to me when team member submits time (Approval Managers only)',
+    ),
+    scope: ConfigurationScope.WINDOW,
+  },
+
+  // Time Tracking 
+  'timetracker.activity.autoStop': {
+    type: 'number',
+    default: 24,
+    description: localize(
+      'timetracker.activity.autoStop',
+      'Tracking will stop once maximum tack length has been exceeded',
+    ),
+    scope: ConfigurationScope.WINDOW,
+  },
+  'timetracker.activity.waitingTime': {
+    type: 'number',
+    default: 120,
+    description: localize(
+      'timetracker.activity.waitingTime',
+      'Enable activity check on the time tracking to ask if you are still tracking after the choosen idle time (in seconds)',
+    ),
+    scope: ConfigurationScope.WINDOW,
+  },
+  'timetracker.activity.maxTimeInADay': {
+    type: 'number',
+    default: 120,
+    description: localize(
+      'timetracker.activity.maxTimeInADay',
+      'Enable activity check on the time tracking upto choosen max time in a day(in seconds). It can change upto 1440',
+    ),
+    scope: ConfigurationScope.WINDOW,
+  },
   'timetracker.timerecord.automaticLock': {
     type: 'string',
     default: null,
@@ -219,15 +287,6 @@ export const TimeTrackerProperties = {
     description: localize('timetracker.project.roundedType', 'Select the time rounding type'),
     scope: ConfigurationScope.RESOURCE,
   },
-  'timetracker.project.visibility': {
-    type: 'boolean',
-    default: true,
-    description: localize(
-      'timetracker.project.visibility',
-      'When you create a project, set the visibility of the project to all other users',
-    ),
-    scope: ConfigurationScope.WINDOW,
-  },
   'timetracker.report.timeRoundingInReports': {
     type: 'boolean',
     default: false,
@@ -237,15 +296,15 @@ export const TimeTrackerProperties = {
     ),
     scope: ConfigurationScope.WINDOW,
   },
-  'timetracker.project.favorites': {
-    type: 'boolean',
-    default: true,
-    description: localize(
-      'timetracker.project.favorites',
-      'Let people mark their most used projects as favorite so they appear at the top of their project list when tracking time.',
-    ),
-    scope: ConfigurationScope.RESOURCE,
-  },
+  // 'timetracker.project.favorites': {
+  //   type: 'boolean',
+  //   default: true,
+  //   description: localize(
+  //     'timetracker.project.favorites',
+  //     'Let people mark their most used projects as favorite so they appear at the top of their project list when tracking time.',
+  //   ),
+  //   scope: ConfigurationScope.RESOURCE,
+  // },
   'timetracker.project.groupingLabel': {
     type: 'string',
     default: GroupProjectsBy.CLIENT,
