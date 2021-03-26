@@ -27,6 +27,6 @@ export const useTimeformat = () => {
   };
 };
 
-function useLocationQuery() {
+export function useLocationQuery() {
   return new URLSearchParams(useLocation().search);
 }

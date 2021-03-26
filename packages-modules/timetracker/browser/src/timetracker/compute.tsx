@@ -11,6 +11,7 @@ import {
   ResourceSettings,
 } from '@adminide-stack/react-shared-components';
 import { IPreDefineAccountPermissions, ConfigurationTarget } from '@adminide-stack/core';
+import { ROUTES } from './constants' 
 
 const Home = React.lazy(() => import('./containers/Home'));
 const TimeTracker = React.lazy(() => import('./containers/MainPage'));
@@ -46,7 +47,7 @@ export const timePageStore: any[] = [
     position: IMenuPosition.MIDDLE,
     tab: 'Time Tracker',
     name: 'Time Tracker',
-    path: '/:orgName/time-tracker',
+    path: ROUTES.TimeTracker,
     priority: 1,
   },
   {
@@ -55,7 +56,7 @@ export const timePageStore: any[] = [
     name: 'Timer',
     component: userIsAuthenticatedRedir(TimeTracker),
     position: IMenuPosition.MIDDLE,
-    path: '/:orgName/time-tracker/timer',
+    path: ROUTES.Timer,
     priority: 2,
   },
   {
@@ -64,7 +65,7 @@ export const timePageStore: any[] = [
     name: 'Timesheet',
     component: userIsAuthenticatedRedir(Timesheet),
     position: IMenuPosition.MIDDLE,
-    path: '/:orgName/time-tracker/timesheet',
+    path: ROUTES.Timesheet,
     priority: 3,
   },
   {
@@ -73,7 +74,7 @@ export const timePageStore: any[] = [
     name: 'Approvals',
     component: userIsAuthenticatedRedir(TimeApproval),
     position: IMenuPosition.MIDDLE,
-    path: '/:orgName/time-tracker/timeapproval',
+    path: ROUTES.TimeApproval,
     priority: 4,
   },
   {
@@ -82,7 +83,7 @@ export const timePageStore: any[] = [
     name: 'Report',
     component: userIsAuthenticatedRedir(Reports),
     position: IMenuPosition.MIDDLE,
-    path: '/:orgName/time-tracker/report',
+    path: ROUTES.TimeReport,
     priority: 5,
   },
   {
@@ -90,7 +91,7 @@ export const timePageStore: any[] = [
     exact: true,
     key: 'timeTracker.settings',
     position: IMenuPosition.MIDDLE,
-    path: '/:orgName/time-tracker/settings',
+    path: ROUTES.Settings,
     hideInMenu: false,
     authority: [IPreDefineAccountPermissions.manageTeams],
     component: userIsAuthenticatedRedir(OrganizationSettings),

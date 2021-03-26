@@ -9,6 +9,10 @@ import * as _ from 'lodash';
 import { VIEW_MODE } from './index';
 import { useTimeformat } from '../../hooks'
 import { useHistory } from 'react-router'
+import { generatePath } from 'react-router-dom'
+import { useGetOrgContextQuery } from '@adminide-stack/react-shared-components'
+import { ROUTES } from '../../constants'
+import * as qs from 'query-string'
 interface ITimesheetProps {
   timesheets: Array<ITimesheetResponse>;
   viewMode: VIEW_MODE;
@@ -25,9 +29,12 @@ const TimeReport = ({
   const { css } = useFela();
   const history = useHistory();
   const { dateFormat, timeFormat } = useTimeformat();
-
+  const { data: contextData } = useGetOrgContextQuery();
   const handleView = (id: string, record: ITimesheetResponse) => {
-    history.push(`/:orgId/time-tracker/timesheet`)
+    history.push({
+      pathname: generatePath(ROUTES.Timesheet, { orgName: contextData.getOrgContext.orgName }),
+      search: qs.stringify({ view: 'tabular', weekStart: moment(record.startDate).format('YYYY-MM-DD')})
+    })
   };
 
   const handleSubmit = (id: string, record: ITimesheetResponse) => {
