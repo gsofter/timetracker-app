@@ -17,10 +17,31 @@ const enum TimeFormat {
   ROUNDED_UP_00_00_24 = 'HH:mm',
 }
 
+const enum GroupProjectsBy {
+  CLIENT = 'Client',
+  CATEGORY = 'Category',
+  CUSTOM = 'Custom',
+}
 const enum DateFormat {
   USFORMAT = 'MM-DD-YYYY',
   UKFORMAT = 'DD-MM-YYYY',
   ISOFORMAT = 'YYYY-MM-DD',
+}
+
+const enum WeekDay {
+  SUN = 'Sunday',
+  MON = 'Monday',
+  TUE = 'Tuesday',
+  WED = 'Wednesday',
+  THU = 'Thusday',
+  FRI = 'Friday',
+  SAT = 'Saturday',
+}
+
+const enum FristWeekOfTheYear {
+  FIRST_DAY = 'Week containing first day of the year',
+  FIRST_FULL_7DAY = 'First full seven-day week in January',
+  FIRST_4_DAY = 'First four-day week in January',
 }
 
 const enum TimeRoundingUpToValue {
@@ -36,9 +57,9 @@ const enum TimeRoundingUpToValue {
 }
 
 const enum TimeRoundedType {
-    ROUND_UP_TO = 'Round up to',
-    ROUND_TO_NEAREST = 'Round to nearest',
-    ROUND_DOWN_TO= 'Roudn down to',
+  ROUND_UP_TO = 'Round up to',
+  ROUND_TO_NEAREST = 'Round to nearest',
+  ROUND_DOWN_TO = 'Roudn down to',
 }
 export const TimeTrackerProperties = {
   'timetracker.timerecord.automaticLock': {
@@ -59,19 +80,40 @@ export const TimeTrackerProperties = {
     ),
     scope: ConfigurationScope.WINDOW,
   },
+  'timetracker.project.firstDayOfTheWeek': {
+    type: 'string',
+    enum: [
+      WeekDay.MON,
+      WeekDay.TUE,
+      WeekDay.WED,
+      WeekDay.THU,
+      WeekDay.FRI,
+      WeekDay.SAT,
+      WeekDay.SUN,
+    ],
+    default: WeekDay.MON,
+    description: localize(
+      'timetracker.project.firstDayOfTheWeek',
+      'First day of the week'
+    ),
+    scope: ConfigurationScope.RESOURCE,
+  },
   'timetracker.project.firstWeekOfTheyear': {
     type: 'string',
-    enum: [],
-    default: 'private',
+    enum: [
+      FristWeekOfTheYear.FIRST_4_DAY,
+      FristWeekOfTheYear.FIRST_FULL_7DAY,
+      FristWeekOfTheYear.FIRST_DAY,
+    ],
+    default: FristWeekOfTheYear.FIRST_4_DAY,
     enumDescriptions: [
-      localize('timetracker.project.timeFormat.ROUNDED_0_0', '"0.0" (rounded)'),
-      localize('timetracker.project.timeFormat.ROUNDED_0_00', 'Rounded to 0.00'),
-      localize('timetracker.project.timeFormat.PRECISE_00_00_00', 'Precise time without rounding.'),
-      localize('timetracker.project.timeFormat.ROUNDED_UP_00_00', 'Rounded up to 00.00'),
+      localize('timetracker.project.firstWeekOfTheyear.FIRST_4_DAY', 'The week regarded to be the first week of the year is that which contains at least 4 days of the new year.'),
+      localize('timetracker.project.firstWeekOfTheyear.FIRST_FULL_7DAY', 'The week regarded as the first week of the year is that which contains 7 full days in the new year.'),
+      localize('timetracker.project.firstWeekOfTheyear.FIRST_DAY', 'The week regarded as the first week of the years is that which contains at least one-day of the new year.'),
     ],
     description: localize(
-      'timetracker.project.timeFormat',
-      'Select the format in which you want your entry represented',
+      'timetracker.project.firstWeekOfTheyear',
+      'You can set how you start or view the first calendar week of the year. This will be visible on Timetracker pages like "Reports" or "Calender View".',
     ),
     scope: ConfigurationScope.RESOURCE,
   },
@@ -206,7 +248,12 @@ export const TimeTrackerProperties = {
   },
   'timetracker.project.groupingLabel': {
     type: 'string',
-    default: 'client',
+    default: GroupProjectsBy.CLIENT,
+    enum: [
+      GroupProjectsBy.CLIENT,
+      GroupProjectsBy.CATEGORY,
+      GroupProjectsBy.CUSTOM,
+    ],
     description: localize(
       'timetracker.project.groupingLabel',
       'Group Project by clients or departments, you can change the lable to somethign else',
