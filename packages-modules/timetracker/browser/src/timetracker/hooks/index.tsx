@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useSetting } from '@adminide-stack/react-shared-components';
+import { useLocation } from 'react-router';
 
 const getQuoteWrappedString = (str: string) => {
   const startId = str.indexOf('"');
@@ -20,12 +21,12 @@ export const useTimeformat = () => {
 
   return {
     timeFormat:
-      !timeFormatData || loadingDateFormat
-        ? 'HH:mm:ss'
-        : timeFormatData?.resolveConfiguration,
+      !timeFormatData || loadingDateFormat ? 'HH:mm:ss' : timeFormatData?.resolveConfiguration,
     dateFormat:
-      !dateFormatData || loadingDateFormat
-        ? 'YYYY-MM-DD'
-        : dateFormatData?.resolveConfiguration,
+      !dateFormatData || loadingDateFormat ? 'YYYY-MM-DD' : dateFormatData?.resolveConfiguration,
   };
 };
+
+export function useLocationQuery() {
+  return new URLSearchParams(useLocation().search);
+}

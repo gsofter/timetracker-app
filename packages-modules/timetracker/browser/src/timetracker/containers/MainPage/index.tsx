@@ -314,6 +314,7 @@ const withTimer = timerProps => WrappedComponent => wrappedComponentProps => (
 );
 
 const splitTimersByDay = (timeRecords: [ITimeRecord], dateFormat): [ITimeRecord][] => {
+  if(!timeRecords) return []
   timeRecords.sort((a, b) => {
     if (moment(a.endTime) < moment(b.endTime)) return 1;
     else if (moment(a.endTime) > moment(b.endTime)) return -1;
