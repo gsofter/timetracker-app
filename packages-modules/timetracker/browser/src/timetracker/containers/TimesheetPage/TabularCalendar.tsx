@@ -561,7 +561,7 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
       });
   };
 
-  if (!data || loading) return null;
+  // if (!data || loading) return null;
   return (
     <Spin spinning={!data || loading}>
       <TabularCalendar

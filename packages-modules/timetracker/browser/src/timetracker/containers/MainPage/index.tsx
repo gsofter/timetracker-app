@@ -24,7 +24,7 @@ import {
   ITimeRecord,
   IProjects as IProject,
 } from '@admin-layout/timetracker-core';
-import { message } from 'antd';
+import { message, Spin } from 'antd';
 import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
 import { formatDuration } from '../../services/timeRecordService';
@@ -287,23 +287,23 @@ const TimeTrackerWrapper = props => {
     }
   }, [plData, plLoading]);
 
-  return data && !loading ? (
-    <TimeTracker
-      {...props}
-      projects={_.get(projectsData, 'getProjects', [])}
-      createTimeRecord={createTimeRecord}
-      removeTimeRecord={removeTimeRecord}
-      removePlayingTimeRecord={removePlayingTimeRecord}
-      updateTimeRecord={updateTimeRecord}
-      timeRecords={_.get(data, 'getTimeRecords', [])}
-      setIsRecording={setIsRecording}
-      setCurrentTimeRecord={setCurrentTimeRecord}
-      currentTimeRecord={currentTimeRecord}
-      isRecording={isRecording}
-      resetTimerValues={resetTimerValues}
-    />
-  ) : (
-    <></>
+  return (
+    <Spin spinning={!data || loading}>
+      <TimeTracker
+        {...props}
+        projects={_.get(projectsData, 'getProjects', [])}
+        createTimeRecord={createTimeRecord}
+        removeTimeRecord={removeTimeRecord}
+        removePlayingTimeRecord={removePlayingTimeRecord}
+        updateTimeRecord={updateTimeRecord}
+        timeRecords={_.get(data, 'getTimeRecords', [])}
+        setIsRecording={setIsRecording}
+        setCurrentTimeRecord={setCurrentTimeRecord}
+        currentTimeRecord={currentTimeRecord}
+        isRecording={isRecording}
+        resetTimerValues={resetTimerValues}
+      />
+    </Spin>
   );
 };
 
@@ -314,7 +314,7 @@ const withTimer = timerProps => WrappedComponent => wrappedComponentProps => (
 );
 
 const splitTimersByDay = (timeRecords: [ITimeRecord], dateFormat): [ITimeRecord][] => {
-  if(!timeRecords) return []
+  if (!timeRecords) return [];
   timeRecords.sort((a, b) => {
     if (moment(a.endTime) < moment(b.endTime)) return 1;
     else if (moment(a.endTime) > moment(b.endTime)) return -1;
