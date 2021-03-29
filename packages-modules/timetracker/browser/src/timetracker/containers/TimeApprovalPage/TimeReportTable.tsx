@@ -33,7 +33,7 @@ const TimeReport = ({
   const handleView = (id: string, record: ITimesheetResponse) => {
     history.push({
       pathname: generatePath(ROUTES.Timesheet, { orgName: contextData.getOrgContext.orgName }),
-      search: qs.stringify({ view: 'tabular', weekStart: moment(record.startDate).format('YYYY-MM-DD')})
+      search: qs.stringify({ view: 'tabular', weekStart: moment(record.startDate).format('YYYY-MM-DD'), strict: "true" })
     })
   };
 

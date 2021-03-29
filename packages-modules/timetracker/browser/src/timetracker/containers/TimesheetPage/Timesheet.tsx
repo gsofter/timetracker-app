@@ -31,10 +31,10 @@ import {
   ITimeRecordRequest,
 } from '@admin-layout/timetracker-core';
 import TimesheetModal from './TimesheetModal';
+import { useFirstWeekDay } from '../../hooks';
 
 const { TextArea } = Input;
 const DnDCalendar: any = withDragAndDrop(Calendar as any);
-const localizerM = momentLocalizer(moment);
 const { RangePicker } = TimePicker;
 const allViews: View[] = ['day', 'week', 'month'];
 
@@ -171,6 +171,9 @@ function SelectableCalendar({
             event: EventAgenda,
           },
         }}
+        onNavigate={date => {
+          console.log('onNavigate.date =>', date)
+        }}
         // resources={isViewGroup ? resourceMap : undefined}
         // resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
         // resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
@@ -262,6 +265,14 @@ const stylesheet: any = {
 
 export default (props: ITimesheetProps) => {
   const { css } = useFela();
+  const { day, value } = useFirstWeekDay();
+  moment.locale("es-es", {
+    week: {
+      dow: value //Monday is the first day of the week.
+    }
+  });
+
+  const localizerM = momentLocalizer(moment);
   return (
     <div className={css(stylesheet.styles)}>
       <div className="calender-width">

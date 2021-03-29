@@ -26,7 +26,7 @@ import CSS from 'csstype';
 import * as _ from 'lodash';
 import { useSelector } from 'react-redux';
 import { withTimeformat } from '../../components/hoc';
-import { useTimeformat, useLocationQuery } from '../../hooks';
+import { useTimeformat, useLocationQuery, useFirstWeekDay } from '../../hooks';
 import { useHistory, useLocation } from 'react-router';
 import * as qs from 'query-string';
 interface ITabularCalendar {
@@ -58,7 +58,7 @@ const TabularCalendar = ({
   const [newRows, setNewRows] = useState([]);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   const { timeFormat, dateFormat } = useTimeformat();
-
+  const history = useHistory();
   const userId = useSelector<any>(state => state.user.auth0UserId) as string;
   useEffect(() => {
     const trackedProjects = projects.filter(
@@ -72,36 +72,28 @@ const TabularCalendar = ({
     setNewRows(rows);
   }, [weekStart, records]);
 
-  // useEffect(() => {
-  //   if(locationQuery.get('weekStart'))
-  //     setWeekStart(moment(locationQuery.get('weekStart')))
-  // }, [locationQuery])
-
-  // const setPathWeekStart = (newWeekStarts: Moment) => {
-  //   const parsed = qs.parse(location.search);
-  //   parsed.weekStart = moment(newWeekStarts).format('YYYY-MM-DD');
-  //   history.push({
-  //     pathname: location.pathname,
-  //     search: qs.stringify(parsed)
-  //   })
-  // }
+  const setPathWeekStart = (newWeekStarts: Moment) => {
+    const parsed = qs.parse(location.search);
+    parsed.weekStart = moment(newWeekStarts).format('YYYY-MM-DD');
+    history.push({
+      pathname: location.pathname,
+      search: qs.stringify(parsed)
+    })
+  }
 
   const onClickBack = event => {
     const newWeekStart = moment(weekStart).add('-1', 'week');
-    setWeekStart(newWeekStart);
-    // setPathWeekStart(newWeekStart)
+    setPathWeekStart(newWeekStart)
   };
 
   const onClickNext = event => {
     const newWeekStart = moment(weekStart).add('1', 'week');
-    setWeekStart(newWeekStart);
-    // setPathWeekStart(newWeekStart)
+    setPathWeekStart(newWeekStart)
   };
 
   const onClickToday = event => {
     const newWeekStart = moment().startOf('week');
-    setWeekStart(newWeekStart);
-    // setPathWeekStart(newWeekStart)
+    setPathWeekStart(newWeekStart)
   };
 
   const onClickAddNewRow = () => {
@@ -467,16 +459,35 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
       endTime: moment(ev.endTime).toDate(),
     }));
   };
-  const locationQuery = useLocationQuery();
+
+  
+
   const location = useLocation();
   const history = useHistory();
   const queryParsed = qs.parse(location.search);
+  const { day, value: dowValue } = useFirstWeekDay();
+  // moment.locale("es-es");
+  console.log('dowValue => ', dowValue)
+  const weekStart = () => {
+    return (queryParsed.weekStart ? moment(queryParsed.weekStart) : moment().startOf('week').add(dowValue, 'day'));
+  }
+  
+  useEffect(() => {
+    const queryParsed = qs.parse(location.search)
+    if(queryParsed.strict === undefined || !queryParsed.strict)
+    { 
+      queryParsed.weekStart = moment().startOf('week').add(dowValue, 'day').format('YYYY-MM-DD');
+      history.push({
+        pathname: location.pathname,
+        search: qs.stringify(queryParsed)
+      })
+    }
+  }, [dowValue])
 
-  const [weekStart, setWeekStart] = useState(moment().startOf('week'));
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
     variables: {
-      startTime: weekStart,
-      endTime: moment(weekStart).add(1, 'week'),
+      startTime: weekStart(),
+      endTime: moment(weekStart()).add(1, 'week'),
     },
   });
 
@@ -486,8 +497,8 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
     refetch: refetchApproval,
   } = useGetDurationTimesheetQuery({
     variables: {
-      start: moment(weekStart),
-      end: moment(weekStart).add(1, 'week'),
+      start: moment(weekStart()),
+      end: moment(weekStart()).add(1, 'week'),
     },
   });
 
@@ -495,10 +506,6 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
     refetch();
     refetchApproval();
   };
-
-  useEffect(() => {
-    setWeekStart(queryParsed.weekStart ? moment(queryParsed.weekStart) : moment().startOf('week'));
-  }, []);
 
   useEffect(() => {
     reloadData();
@@ -511,8 +518,8 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
   const handleRemoveDuration = pId => {
     removeMutation({
       variables: {
-        startTime: weekStart,
-        endTime: moment(weekStart).add(1, 'week'),
+        startTime: weekStart(),
+        endTime: moment(weekStart()).add(1, 'week'),
         projectId: pId,
       },
     })
@@ -565,8 +572,8 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
   return (
     <Spin spinning={!data || loading}>
       <TabularCalendar
-        weekStart={weekStart}
-        setWeekStart={setWeekStart}
+        weekStart={weekStart()}
+        setWeekStart={() => {}}
         records={filterEvents(data?.getDurationTimeRecords)}
         projects={projects}
         timesheet={_.get(approvalData, 'getDurationTimesheet', null)}
