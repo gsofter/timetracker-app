@@ -30,3 +30,30 @@ export const useTimeformat = () => {
 export function useLocationQuery() {
   return new URLSearchParams(useLocation().search);
 }
+
+export const useFirstWeekDay = () => {
+  const { data, loading } = useSetting({
+    configKey: 'timetracker.project.firstDayOfTheWeek',
+  });
+
+  let value = 0;
+  if(data && data?.resolveConfiguration === 'Monday')
+    value = 1;
+  else if(data && data?.resolveConfiguration === 'Tuesday')
+    value = 2;
+  else if(data && data?.resolveConfiguration === 'Wednesday')
+    value = 3;
+  else if(data && data?.resolveConfiguration === 'Thursday')
+    value = 4;
+  else if(data && data?.resolveConfiguration === 'Friday')
+    value = 5;
+  else if(data && data?.resolveConfiguration === 'Saturday')
+    value = 6;
+  
+  console.log('useFirstWeekDay.value =>', value);
+  
+  return {
+    day: data?.resolveConfiguration || 'Sunday',
+    value
+  }
+}
