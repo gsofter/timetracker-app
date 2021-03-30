@@ -1,6 +1,7 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm, Modal, Tag } from 'antd';
-import moment, { Moment } from 'moment';
+import { moment } from '../TimesheetPage';
+import { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
 import {
@@ -25,10 +26,10 @@ import { formatDuration } from '../../services/timeRecordService';
 import CSS from 'csstype';
 import * as _ from 'lodash';
 import { useSelector } from 'react-redux';
-import { withTimeformat } from '../../components/hoc';
-import { useTimeformat, useLocationQuery, useFirstWeekDay } from '../../hooks';
+import { useFirstWeekDay, useTimeformat } from '../../hooks';
 import { useHistory, useLocation } from 'react-router';
 import * as qs from 'query-string';
+import { DateLocalizer } from 'react-big-calendar';
 interface ITabularCalendar {
   weekStart: Moment;
   setWeekStart: Function;
@@ -448,9 +449,10 @@ interface ITabularCalendarWrapperProps {
   projects: IProject[];
   tags: any;
   members: any;
+  localizer: DateLocalizer;
 }
 
-const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
+const TabularCalendarWrapper = ({ projects, localizer }: ITabularCalendarWrapperProps) => {
   const filterEvents = events => {
     if(!events) return []
     return events.map(ev => ({
@@ -460,23 +462,25 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
     }));
   };
 
-  
-
   const location = useLocation();
   const history = useHistory();
   const queryParsed = qs.parse(location.search);
   const { day, value: dowValue } = useFirstWeekDay();
-  // moment.locale("es-es");
-  console.log('dowValue => ', dowValue)
+  // moment.updateLocale('en', {
+  //   week: {
+  //     dow : dowValue, // Monday is the first day of the week.
+  //   }
+  // });
+
   const weekStart = () => {
-    return (queryParsed.weekStart ? moment(queryParsed.weekStart) : moment().startOf('week').add(dowValue, 'day'));
+    return (queryParsed.weekStart ? moment(queryParsed.weekStart) : moment().startOf('week'));
   }
   
   useEffect(() => {
     const queryParsed = qs.parse(location.search)
     if(queryParsed.strict === undefined || !queryParsed.strict)
     { 
-      queryParsed.weekStart = moment().startOf('week').add(dowValue, 'day').format('YYYY-MM-DD');
+      queryParsed.weekStart = moment().startOf('week').format('YYYY-MM-DD');
       history.push({
         pathname: location.pathname,
         search: qs.stringify(queryParsed)
@@ -568,7 +572,6 @@ const TabularCalendarWrapper = ({ projects }: ITabularCalendarWrapperProps) => {
       });
   };
 
-  // if (!data || loading) return null;
   return (
     <Spin spinning={!data || loading}>
       <TabularCalendar

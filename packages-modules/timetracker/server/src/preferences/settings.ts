@@ -33,7 +33,7 @@ const enum WeekDay {
   MON = 'Monday',
   TUE = 'Tuesday',
   WED = 'Wednesday',
-  THU = 'Thusday',
+  THU = 'Thursday',
   FRI = 'Friday',
   SAT = 'Saturday',
 }
