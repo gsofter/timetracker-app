@@ -6,7 +6,7 @@ import {
   useUpdateTimeRecordMutation,
   useRemoveTimeRecordMutation,
 } from '../../../generated-models';
-import { message, Form } from 'antd';
+import { message, Form, Spin } from 'antd';
 import moment from 'moment';
 import {
   ITimeRecordRequest,
@@ -15,12 +15,14 @@ import {
   ITimeRecord,
 } from '@admin-layout/timetracker-core';
 import { useSelector } from 'react-redux';
+import { DateLocalizer } from 'react-big-calendar';
+import * as _ from 'lodash';
 export interface ITimesheetCalendarProps {
   projects: Array<IProject>;
   members: Array<IMember>;
   selectedUser: string;
   selectedProject: string;
-  localizer: any;
+  localizer: DateLocalizer;
   isShowTimeModal: boolean;
   handleChangeUser: (value: string) => void;
   handleChangeProject: (value: string) => void;
@@ -46,6 +48,7 @@ const TimesheetCalendar = ({
   handleChangeUser,
   handleChangeProject,
   setIsShowTimeModal,
+  localizer,
 }: ITimesheetCalendarProps) => {
   const [selectedEvent, setSelectedEvent] = useState<ITimeRecord>(defaultRecord);
   const [selectedTask, setSelectedTask] = useState('');
@@ -122,7 +125,7 @@ const TimesheetCalendar = ({
   }, [refetch]);
 
   const filterEvents = events => {
-    if(!events) return []
+    if (!events) return [];
     return events
       .map(ev => ({
         ...ev,
@@ -151,32 +154,35 @@ const TimesheetCalendar = ({
     setIsShowTimeModal(false);
   };
 
-  return !data || loading ? null : (
-    <TimesheetComponent
-      userId={userId}
-      events={filterEvents(data.getTimeRecords)}
-      form={form}
-      loading={loadingAdd || loadingUpdate || loadingRemove}
-      projects={projects}
-      tasks={selectableTasks}
-      members={members}
-      isShowModal={isShowTimeModal}
-      selectedUser={selectedUser}
-      selectedProject={selectedProject}
-      selectedTask={selectedTask}
-      selectedEvent={selectedEvent}
-      setSelectedEvent={setSelectedEvent}
-      handleAddTimeRecordEvent={handleAddTimeRecordEvent}
-      handleUpdateTimeRecordEvent={handleUpdateTimeRecordEvent}
-      handleRemoveTimeRecordEvent={handleRemoveTimeRecordEvent}
-      handleOpenNewTimeModal={handleOpenNewTimeModal}
-      handleCloseTimeModal={handleCloseTimeModal}
-      handleSelectSlot={handleSelectSlot}
-      handleSelectEvent={handleSelectEvent}
-      handleChangeUser={handleChangeUser}
-      handleChangeTask={handleChangeTask}
-      handleChangeProject={handleChangeProject}
-    />
+  return (
+    <Spin spinning={!data || loading}>
+      <TimesheetComponent
+        userId={userId}
+        events={filterEvents(_.get(data, 'getTimeRecords', []))}
+        form={form}
+        loading={loadingAdd || loadingUpdate || loadingRemove}
+        projects={projects}
+        tasks={selectableTasks}
+        members={members}
+        isShowModal={isShowTimeModal}
+        selectedUser={selectedUser}
+        selectedProject={selectedProject}
+        selectedTask={selectedTask}
+        selectedEvent={selectedEvent}
+        setSelectedEvent={setSelectedEvent}
+        localizer={localizer}
+        handleAddTimeRecordEvent={handleAddTimeRecordEvent}
+        handleUpdateTimeRecordEvent={handleUpdateTimeRecordEvent}
+        handleRemoveTimeRecordEvent={handleRemoveTimeRecordEvent}
+        handleOpenNewTimeModal={handleOpenNewTimeModal}
+        handleCloseTimeModal={handleCloseTimeModal}
+        handleSelectSlot={handleSelectSlot}
+        handleSelectEvent={handleSelectEvent}
+        handleChangeUser={handleChangeUser}
+        handleChangeTask={handleChangeTask}
+        handleChangeProject={handleChangeProject}
+      />
+    </Spin>
   );
 };
 

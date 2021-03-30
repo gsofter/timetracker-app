@@ -56,6 +56,7 @@ interface ITimesheetProps {
   projects: Array<IProject>;
   tasks: Array<ITask>;
   members: Array<IMember>;
+  localizer: DateLocalizer;
   setSelectedEvent: Function;
   handleAddTimeRecordEvent: (request: ITimeRecordRequest) => void;
   handleUpdateTimeRecordEvent: (recordId: string, request: ITimeRecordRequest) => void;
@@ -75,12 +76,9 @@ function SelectableCalendar({
   projects,
   members,
   form,
-  tasks,
   isShowModal,
   loading,
-  selectedProject,
   selectedEvent,
-  setSelectedEvent,
   handleAddTimeRecordEvent,
   handleUpdateTimeRecordEvent,
   handleRemoveTimeRecordEvent,
@@ -89,7 +87,7 @@ function SelectableCalendar({
   handleSelectEvent,
   handleOpenNewTimeModal,
   localizer,
-}: ITimesheetProps & { localizer: DateLocalizer }) {
+}: ITimesheetProps) {
   const resetModal = (e: any) => {
     e.preventDefault();
     form.resetFields();
@@ -265,18 +263,10 @@ const stylesheet: any = {
 
 export default (props: ITimesheetProps) => {
   const { css } = useFela();
-  const { day, value } = useFirstWeekDay();
-  moment.locale("es-es", {
-    week: {
-      dow: value //Monday is the first day of the week.
-    }
-  });
-
-  const localizerM = momentLocalizer(moment);
   return (
     <div className={css(stylesheet.styles)}>
       <div className="calender-width">
-        <SelectableCalendar localizer={localizerM} {...props} />
+        <SelectableCalendar {...props} />
       </div>
     </div>
   );
