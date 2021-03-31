@@ -1,29 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import moment from 'moment';
-import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
+import moment, { Moment } from 'moment';
 import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  Button,
-  Select,
-  DatePicker,
-  TimePicker,
-  Avatar,
-  Popconfirm,
-  Modal,
-  Checkbox,
-} from 'antd';
+import { Row, Col, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useFela } from 'react-fela';
 import {
-  ITimesheetCreateRequest,
   ITimeRecord,
   IProjects as IProject,
   ITask,
@@ -31,11 +16,8 @@ import {
   ITimeRecordRequest,
 } from '@admin-layout/timetracker-core';
 import TimesheetModal from './TimesheetModal';
-import { useFirstWeekDay } from '../../hooks';
 
-const { TextArea } = Input;
 const DnDCalendar: any = withDragAndDrop(Calendar as any);
-const { RangePicker } = TimePicker;
 const allViews: View[] = ['day', 'week', 'month'];
 
 enum VIEW_MODE {
@@ -57,7 +39,9 @@ interface ITimesheetProps {
   tasks: Array<ITask>;
   members: Array<IMember>;
   localizer: DateLocalizer;
+  weekStart: Moment;
   setSelectedEvent: Function;
+  setPathWeekStart: Function;
   handleAddTimeRecordEvent: (request: ITimeRecordRequest) => void;
   handleUpdateTimeRecordEvent: (recordId: string, request: ITimeRecordRequest) => void;
   handleRemoveTimeRecordEvent: () => void;
@@ -87,6 +71,8 @@ function SelectableCalendar({
   handleSelectEvent,
   handleOpenNewTimeModal,
   localizer,
+  weekStart,
+  setPathWeekStart,
 }: ITimesheetProps) {
   const resetModal = (e: any) => {
     e.preventDefault();
@@ -124,6 +110,9 @@ function SelectableCalendar({
     );
   };
 
+  const handleNavigate = date => {
+    setPathWeekStart(moment(date));
+  };
   return (
     <>
       <TimesheetModal
@@ -153,7 +142,7 @@ function SelectableCalendar({
         events={events}
         defaultView="week"
         views={allViews}
-        defaultDate={new Date()}
+        defaultDate={weekStart}
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}
         startAccessor="startTime"
@@ -169,9 +158,7 @@ function SelectableCalendar({
             event: EventAgenda,
           },
         }}
-        onNavigate={date => {
-          console.log('onNavigate.date =>', date)
-        }}
+        onNavigate={handleNavigate}
         // resources={isViewGroup ? resourceMap : undefined}
         // resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
         // resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}

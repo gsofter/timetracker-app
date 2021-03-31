@@ -32,7 +32,6 @@ import * as qs from 'query-string';
 import { DateLocalizer } from 'react-big-calendar';
 interface ITabularCalendar {
   weekStart: Moment;
-  setWeekStart: Function;
   records: ITimeRecord[];
   projects: Array<IProject>;
   timesheet: ITimesheet | null;
@@ -40,11 +39,12 @@ interface ITabularCalendar {
   updateTimeRecord: Function;
   createTimeRecord: Function;
   createTimesheet: Function;
+  setPathWeekStart: Function;
 }
 
 const TabularCalendar = ({
   weekStart,
-  setWeekStart,
+  setPathWeekStart,
   records,
   projects,
   timesheet,
@@ -72,15 +72,6 @@ const TabularCalendar = ({
     const rows = newRows.filter(pId => trackedProjects.findIndex(p => p.id === pId) === -1);
     setNewRows(rows);
   }, [weekStart, records]);
-
-  const setPathWeekStart = (newWeekStarts: Moment) => {
-    const parsed = qs.parse(location.search);
-    parsed.weekStart = moment(newWeekStarts).format('YYYY-MM-DD');
-    history.push({
-      pathname: location.pathname,
-      search: qs.stringify(parsed)
-    })
-  }
 
   const onClickBack = event => {
     const newWeekStart = moment(weekStart).add('-1', 'week');
@@ -450,9 +441,11 @@ interface ITabularCalendarWrapperProps {
   tags: any;
   members: any;
   localizer: DateLocalizer;
+  weekStart: Moment;
+  setPathWeekStart: Function;
 }
 
-const TabularCalendarWrapper = ({ projects, localizer }: ITabularCalendarWrapperProps) => {
+const TabularCalendarWrapper = ({ projects, weekStart, setPathWeekStart }: ITabularCalendarWrapperProps) => {
   const filterEvents = events => {
     if(!events) return []
     return events.map(ev => ({
@@ -462,36 +455,10 @@ const TabularCalendarWrapper = ({ projects, localizer }: ITabularCalendarWrapper
     }));
   };
 
-  const location = useLocation();
-  const history = useHistory();
-  const queryParsed = qs.parse(location.search);
-  const { day, value: dowValue } = useFirstWeekDay();
-  // moment.updateLocale('en', {
-  //   week: {
-  //     dow : dowValue, // Monday is the first day of the week.
-  //   }
-  // });
-
-  const weekStart = () => {
-    return (queryParsed.weekStart ? moment(queryParsed.weekStart) : moment().startOf('week'));
-  }
-  
-  useEffect(() => {
-    const queryParsed = qs.parse(location.search)
-    if(queryParsed.strict === undefined || !queryParsed.strict)
-    { 
-      queryParsed.weekStart = moment().startOf('week').format('YYYY-MM-DD');
-      history.push({
-        pathname: location.pathname,
-        search: qs.stringify(queryParsed)
-      })
-    }
-  }, [dowValue])
-
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
     variables: {
-      startTime: weekStart(),
-      endTime: moment(weekStart()).add(1, 'week'),
+      startTime: weekStart,
+      endTime: moment(weekStart).add(1, 'week'),
     },
   });
 
@@ -501,8 +468,8 @@ const TabularCalendarWrapper = ({ projects, localizer }: ITabularCalendarWrapper
     refetch: refetchApproval,
   } = useGetDurationTimesheetQuery({
     variables: {
-      start: moment(weekStart()),
-      end: moment(weekStart()).add(1, 'week'),
+      start: moment(weekStart),
+      end: moment(weekStart).add(1, 'week'),
     },
   });
 
@@ -522,8 +489,8 @@ const TabularCalendarWrapper = ({ projects, localizer }: ITabularCalendarWrapper
   const handleRemoveDuration = pId => {
     removeMutation({
       variables: {
-        startTime: weekStart(),
-        endTime: moment(weekStart()).add(1, 'week'),
+        startTime: moment(weekStart),
+        endTime: moment(weekStart).add(1, 'week'),
         projectId: pId,
       },
     })
@@ -575,8 +542,8 @@ const TabularCalendarWrapper = ({ projects, localizer }: ITabularCalendarWrapper
   return (
     <Spin spinning={!data || loading}>
       <TabularCalendar
-        weekStart={weekStart()}
-        setWeekStart={() => {}}
+        weekStart={weekStart}
+        setPathWeekStart={setPathWeekStart}
         records={filterEvents(data?.getDurationTimeRecords)}
         projects={projects}
         timesheet={_.get(approvalData, 'getDurationTimesheet', null)}

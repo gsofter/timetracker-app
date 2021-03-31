@@ -1,4 +1,4 @@
-import moment from 'moment'
+import moment, { Moment } from 'moment'
 import momentDurationFormatSetup from 'moment-duration-format'
 
 momentDurationFormatSetup(moment);
@@ -10,14 +10,8 @@ momentDurationFormatSetup(moment);
  */
 export const formatDuration = (sec: number, timeFormat?: string) => {
   const seconds = Math.abs(sec);
-  // const hour = Math.floor(seconds / 3600);
-  // const minute = Math.floor((seconds % 3600) / 60);
-  // const second = seconds % 60;
-  // const format = (num: number) => (num < 10 ? '0' + num : Number(num).toString());
-  
   const duration = moment.duration(seconds, 'seconds') as any;
   return duration.format('HH:mm:ss', { trim: false })
-  // return format(hour) + ':' + format(minute) + ':' + format(second);
 };
 
 /**
@@ -36,4 +30,27 @@ export const stringToDuration = (str: string) => {
     totalSeconds = parseInt(digits[0]) * 3600 + parseInt(digits[1]) * 60 + parseInt(digits[2])
   } else return 0;
   return totalSeconds;
+}
+
+/**
+ * 
+ * @param date Moment
+ * @param roundSeconds Number of seconds
+ * @param method Enum of { "ceil", "floor", "round" }
+ * @returns roundedDate
+ */
+export function roundDate(date: Moment, roundSeconds, method) {
+  const duration = moment.duration(roundSeconds, 'seconds')
+  return moment(Math[method]((+date) / (+duration)) * (+duration)); 
+}
+
+/**
+ * 
+ * @param duration Number of duration
+ * @param roundSeconds Number of seconds
+ * @param method Enum of { "ceil", "floor", "round" }
+ * @returns roundedDuration
+ */
+export function roundDuration(duration, roundSeconds, method) {
+  return Math[method](Math.abs(+duration) / (+roundSeconds)) * (+roundSeconds);
 }

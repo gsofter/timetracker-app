@@ -7,7 +7,7 @@ import {
   useRemoveTimeRecordMutation,
 } from '../../../generated-models';
 import { message, Form, Spin } from 'antd';
-import moment from 'moment';
+import moment, { Moment } from 'moment';
 import {
   ITimeRecordRequest,
   IProjects as IProject,
@@ -23,10 +23,12 @@ export interface ITimesheetCalendarProps {
   selectedUser: string;
   selectedProject: string;
   localizer: DateLocalizer;
+  weekStart: Moment;
   isShowTimeModal: boolean;
   handleChangeUser: (value: string) => void;
   handleChangeProject: (value: string) => void;
   setIsShowTimeModal: (value: boolean) => void;
+  setPathWeekStart: Function;
 }
 
 const defaultRecord: ITimeRecord = {
@@ -49,6 +51,8 @@ const TimesheetCalendar = ({
   handleChangeProject,
   setIsShowTimeModal,
   localizer,
+  weekStart,
+  setPathWeekStart
 }: ITimesheetCalendarProps) => {
   const [selectedEvent, setSelectedEvent] = useState<ITimeRecord>(defaultRecord);
   const [selectedTask, setSelectedTask] = useState('');
@@ -164,6 +168,7 @@ const TimesheetCalendar = ({
         projects={projects}
         tasks={selectableTasks}
         members={members}
+        weekStart={weekStart}
         isShowModal={isShowTimeModal}
         selectedUser={selectedUser}
         selectedProject={selectedProject}
@@ -181,6 +186,7 @@ const TimesheetCalendar = ({
         handleChangeUser={handleChangeUser}
         handleChangeTask={handleChangeTask}
         handleChangeProject={handleChangeProject}
+        setPathWeekStart={setPathWeekStart}
       />
     </Spin>
   );
