@@ -7,3 +7,10 @@ export const TYPES = {
     ITimeTrackerRepository: Symbol('ITimeTrackerRepository')
 };
 
+export enum IPreDefineAccountPermissions  {
+    viewTimeTracker = 'organization.timetracker.view',
+    createTimeTracker = 'organization.timetracker.create',
+    editTimeTracker = 'organization.timetracker.edit',
+    deleteTimeTracker = 'organization.timetracker.delete',
+    manageTimeTracker = 'organization.timetracker.manage',
+}
