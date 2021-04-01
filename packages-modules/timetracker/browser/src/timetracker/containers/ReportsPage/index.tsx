@@ -69,21 +69,9 @@ const ReportsPage = () => {
 
   const calcDurationReducer = (totalDur, record) =>
     totalDur +
-    (rounded
-      ? roundDuration(
-          Math.abs(
-            Math.floor(
-              (moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
-            ),
-          ),
-          roundValue,
-          roundType,
-        )
-      : Math.abs(
-          Math.floor(
-            (moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
-          ),
-        ));
+    Math.abs(
+      Math.floor((moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000),
+    );
 
   const generateBarData = () => {
     const records = getRecords();
@@ -102,7 +90,7 @@ const ReportsPage = () => {
 
         // calc total duration as seconds
         const totalDuration = dayRecords.reduce(calcDurationReducer, 0);
-        return totalDuration;
+        return rounded ? roundDuration(totalDuration, roundValue, roundType) : totalDuration;
       });
     return dataSet;
   };
@@ -121,7 +109,7 @@ const ReportsPage = () => {
     const projectDurArray = projects.map((project, index) => {
       const pRecords = timeRecords.filter(record => record.projectId === project.id);
       const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
-      return pTotalDur;
+      return rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
     });
     return projectDurArray;
   };
@@ -150,7 +138,10 @@ const ReportsPage = () => {
     const projectDurArray = projects.map((project, index) => {
       const pRecords = timeRecords.filter(record => record.projectId === project.id);
       const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
-      return { projectName: project.name, duration: pTotalDur };
+      return {
+        projectName: project.name,
+        duration: rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur,
+      };
     });
     return projectDurArray;
   };
