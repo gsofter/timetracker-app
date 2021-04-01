@@ -6,6 +6,7 @@ import { timeTrackerModule } from './containers'
 import { resolvers } from './resolvers'
 import { TYPES } from './constants';
 import { mainLoadConfigurationPre } from './initialization';
+import { TimeTrackerRolesContribution, TimeTrackerRolesPermissionOverwrite } from './preferences';
 
 const createServiceFunc = (container: interfaces.Container) => ({
     timeTrackerService: container.get(TYPES.ITimeTrackerService),
@@ -18,4 +19,10 @@ export default new Feature({
     createContainerFunc: [timeTrackerModule],
     createServiceFunc: createServiceFunc,
     preStartFunc: [mainLoadConfigurationPre],
+    addPermissions: {
+        createPermissions: [TimeTrackerRolesContribution],
+    },
+    rolesUpdate: {
+        overwriteRolesPermissions: TimeTrackerRolesPermissionOverwrite,
+    }
 });
