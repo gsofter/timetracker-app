@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSetting } from '@adminide-stack/react-shared-components';
 import { useLocation } from 'react-router';
+import { TimeRoundedType, TimeRoundingUpToValue } from '../constants'
 
 const getQuoteWrappedString = (str: string) => {
   const startId = str.indexOf('"');
@@ -55,5 +56,36 @@ export const useFirstWeekDay = () => {
   return {
     day: data?.resolveConfiguration || 'Sunday',
     value
+  }
+}
+
+export const useRound = () => {
+  const { data: data, loading: loadingRoundData } = useSetting({
+    configKey: 'timetracker.project.roundedToNearest',
+  });
+  const { data: typeData, loading: loadingRoundType } = useSetting({
+    configKey: 'timetracker.project.roundedType',
+  });
+
+  const [roundType, setRoundType] = useState("ceil")
+  const [roundValue, setRoundValue] = useState(TimeRoundingUpToValue.IN_MINUTES_1);
+
+  useEffect(() => {
+    if(data && data?.resolveConfiguration)
+      setRoundValue(data?.resolveConfiguration)
+    if(typeData && typeData?.resolveConfiguration)
+    {
+      if(typeData?.resolveConfiguration === TimeRoundedType.ROUND_UP_TO)
+        setRoundType('ceil')
+      else if (typeData?.resolveConfiguration === TimeRoundedType.ROUND_TO_NEAREST)
+        setRoundType('round')
+      else if (typeData?.resolveConfiguration === TimeRoundedType.ROUND_DOWN_TO)
+        setRoundType('floor')
+    }  
+  }, [loadingRoundData, loadingRoundType])
+
+  return {
+    roundType,
+    roundValue
   }
 }
