@@ -1,15 +1,17 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Row, Col, Button, Table } from 'antd';
+import { Row, Col, Button, Table, Switch } from 'antd';
 import moment from 'moment';
 import { PageContainer } from '@admin-layout/components';
 import { BarChart, DoughnutChart } from '../../components/Charts';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../../../generated-models';
 import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
-import { formatDuration } from '../../services/timeRecordService';
-import { useTimeformat } from '../../hooks'
+import { formatDuration, roundDuration } from '../../services/timeRecordService';
+import { useRound, useTimeformat } from '../../hooks';
 
 const ReportsPage = () => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
+  const [rounded, setRounded] = useState(false);
+  const { roundType, roundValue } = useRound();
   const { dateFormat, timeFormat } = useTimeformat();
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
     variables: {
@@ -17,7 +19,7 @@ const ReportsPage = () => {
       endTime: moment(weekStart).add(1, 'week'),
     },
   });
-  
+
   // getter for time records
   const getRecords = useCallback(
     (): Array<ITimeRecord> => (loading || !!!data ? [] : data.getDurationTimeRecords),
@@ -29,7 +31,7 @@ const ReportsPage = () => {
     (): Array<IProject_Output> =>
       loadingProjects || !!!projectsData ? [] : projectsData.getProjects,
     [loadingProjects, projectsData],
-  );  
+  );
 
   useEffect(() => {
     setWeekStart(moment().startOf('week'));
@@ -65,6 +67,24 @@ const ReportsPage = () => {
     return labels;
   };
 
+  const calcDurationReducer = (totalDur, record) =>
+    totalDur +
+    (rounded
+      ? roundDuration(
+          Math.abs(
+            Math.floor(
+              (moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
+            ),
+          ),
+          roundValue,
+          roundType,
+        )
+      : Math.abs(
+          Math.floor(
+            (moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
+          ),
+        ));
+
   const generateBarData = () => {
     const records = getRecords();
     console.log('records', records);
@@ -81,16 +101,7 @@ const ReportsPage = () => {
         );
 
         // calc total duration as seconds
-        const totalDuration = dayRecords.reduce(
-          (totalDur, record) =>
-            totalDur +
-            Math.abs(
-              Math.floor(
-                (moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
-              ),
-            ),
-          0,
-        );
+        const totalDuration = dayRecords.reduce(calcDurationReducer, 0);
         return totalDuration;
       });
     return dataSet;
@@ -109,16 +120,7 @@ const ReportsPage = () => {
     const timeRecords = getRecords();
     const projectDurArray = projects.map((project, index) => {
       const pRecords = timeRecords.filter(record => record.projectId === project.id);
-      const pTotalDur = pRecords.reduce(
-        (totalDur, pRecord) =>
-          totalDur +
-          Math.abs(
-            Math.floor(
-              (moment(pRecord.endTime).valueOf() - moment(pRecord.startTime).valueOf()) / 1000,
-            ),
-          ),
-        0,
-      );
+      const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
       return pTotalDur;
     });
     return projectDurArray;
@@ -147,16 +149,7 @@ const ReportsPage = () => {
     const timeRecords = getRecords();
     const projectDurArray = projects.map((project, index) => {
       const pRecords = timeRecords.filter(record => record.projectId === project.id);
-      const pTotalDur = pRecords.reduce(
-        (totalDur, pRecord) =>
-          totalDur +
-          Math.abs(
-            Math.floor(
-              (moment(pRecord.endTime).valueOf() - moment(pRecord.startTime).valueOf()) / 1000,
-            ),
-          ),
-        0,
-      );
+      const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
       return { projectName: project.name, duration: pTotalDur };
     });
     return projectDurArray;
@@ -185,7 +178,15 @@ const ReportsPage = () => {
                   .format('MMMM DD')}
           </span>
         </Col>
-        <Col xs={24} md={6} className="control"></Col>
+        <Col xs={24} md={6} className="control">
+          <span> Switch Mode: </span>
+          <Switch
+            checkedChildren="Rounded"
+            unCheckedChildren="Standard"
+            checked={rounded}
+            onChange={checked => setRounded(checked)}
+          />
+        </Col>
       </Row>
       <Row>
         <Col sm={24}>

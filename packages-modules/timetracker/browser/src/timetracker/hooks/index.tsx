@@ -1,6 +1,7 @@
-import React, { useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { useSetting } from '@adminide-stack/react-shared-components';
 import { useLocation } from 'react-router';
+import { TimeRoundedType, TimeRoundingUpToValue } from '../constants'
 
 const getQuoteWrappedString = (str: string) => {
   const startId = str.indexOf('"');
@@ -29,4 +30,62 @@ export const useTimeformat = () => {
 
 export function useLocationQuery() {
   return new URLSearchParams(useLocation().search);
+}
+
+export const useFirstWeekDay = () => {
+  const { data, loading } = useSetting({
+    configKey: 'timetracker.project.firstDayOfTheWeek',
+  });
+
+  let value = 0;
+  if(data && data?.resolveConfiguration === 'Monday')
+    value = 1;
+  else if(data && data?.resolveConfiguration === 'Tuesday')
+    value = 2;
+  else if(data && data?.resolveConfiguration === 'Wednesday')
+    value = 3;
+  else if(data && data?.resolveConfiguration === 'Thursday')
+    value = 4;
+  else if(data && data?.resolveConfiguration === 'Friday')
+    value = 5;
+  else if(data && data?.resolveConfiguration === 'Saturday')
+    value = 6;
+  
+  console.log('useFirstWeekDay.value =>', value);
+  
+  return {
+    day: data?.resolveConfiguration || 'Sunday',
+    value
+  }
+}
+
+export const useRound = () => {
+  const { data: data, loading: loadingRoundData } = useSetting({
+    configKey: 'timetracker.project.roundedToNearest',
+  });
+  const { data: typeData, loading: loadingRoundType } = useSetting({
+    configKey: 'timetracker.project.roundedType',
+  });
+
+  const [roundType, setRoundType] = useState("ceil")
+  const [roundValue, setRoundValue] = useState(TimeRoundingUpToValue.IN_MINUTES_1);
+
+  useEffect(() => {
+    if(data && data?.resolveConfiguration)
+      setRoundValue(data?.resolveConfiguration)
+    if(typeData && typeData?.resolveConfiguration)
+    {
+      if(typeData?.resolveConfiguration === TimeRoundedType.ROUND_UP_TO)
+        setRoundType('ceil')
+      else if (typeData?.resolveConfiguration === TimeRoundedType.ROUND_TO_NEAREST)
+        setRoundType('round')
+      else if (typeData?.resolveConfiguration === TimeRoundedType.ROUND_DOWN_TO)
+        setRoundType('floor')
+    }  
+  }, [loadingRoundData, loadingRoundType])
+
+  return {
+    roundType,
+    roundValue
+  }
 }

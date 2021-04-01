@@ -9,7 +9,7 @@ import {
   useGetTagsQuery,
   useGetOrganizationMembersQuery,
 } from '../../../generated-models';
-import { Row, Col, Switch, Form, Select, Checkbox } from 'antd';
+import { Row, Col, Switch, Form, Select, Spin } from 'antd';
 import {
   IProjects as IProject,
   ITag,
@@ -17,14 +17,15 @@ import {
   IOrgMember,
 } from '@admin-layout/timetracker-core';
 import TimezonePicker from 'react-timezone';
-import { momentLocalizer } from 'react-big-calendar';
-import moment from 'moment';
+import { momentLocalizer, DateLocalizer } from 'react-big-calendar';
+import moment, { Moment } from 'moment';
 import momentZ from 'moment-timezone';
 import CSS from 'csstype';
-import { useLocation } from 'react-router'
+import { useLocation } from 'react-router';
 // import { useLocationQuery } from '../../hooks'
-import qs from 'query-string'
-import { useHistory } from 'react-router'
+import qs from 'query-string';
+import { useHistory } from 'react-router';
+import { useFirstWeekDay } from '../../hooks';
 enum VIEW_MODE {
   CALENDAR_VIEW,
   TABULAR_VIEW,
@@ -34,15 +35,23 @@ interface ITimesheetProps {
   projects: Array<IProject>;
   tags: Array<ITag>;
   members: Array<IOrgMember>;
+  localizer: DateLocalizer;
+  weekStart: Moment;
+  setPathWeekStart: Function;
 }
 
-const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
+const Timesheet = ({
+  projects,
+  tags,
+  members,
+  localizer,
+  weekStart,
+  setPathWeekStart,
+}: ITimesheetProps) => {
   const location = useLocation();
   const history = useHistory();
   const parsed = qs.parse(location.search);
-  
-  // const [viewMode, setViewMode] = useState(VIEW_MODE.CALENDAR_VIEW);
-  const [localizer, setLocalizer] = useState(momentLocalizer(moment));
+
   const [selectedProject, setSelectedProject] = useState('');
   const [selectedUser, setSelectedUser] = useState('');
   const [isShowTimeModal, setIsShowTimeModal] = useState(false);
@@ -52,12 +61,12 @@ const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
     parsed.view = parsed.view === 'calendar' ? 'tabular' : 'calendar';
     history.push({
       pathname: location.pathname,
-      search: qs.stringify(parsed)
-    })
+      search: qs.stringify(parsed),
+    });
   };
 
   const handleSelectTimezone = timezone => {
-    setLocalizer(momentLocalizer(moment.tz.setDefault(timezone)));
+    // setLocalizer(momentLocalizer(moment.tz.setDefault(timezone)));
   };
 
   const handleChangeProject = (value: string) => {
@@ -154,6 +163,7 @@ const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
       {parsed.view === 'calendar' ? (
         <TimesheetCalendar
           localizer={localizer}
+          weekStart={weekStart}
           projects={projects}
           members={members}
           isShowTimeModal={isShowTimeModal}
@@ -162,9 +172,17 @@ const Timesheet = ({ projects, tags, members }: ITimesheetProps) => {
           handleChangeProject={handleChangeProject}
           handleChangeUser={handleChangeUser}
           setIsShowTimeModal={setIsShowTimeModal}
+          setPathWeekStart={setPathWeekStart}
         />
       ) : (
-        <TabularCalendar projects={projects} members={members} tags={tags} />
+        <TabularCalendar
+          projects={projects}
+          members={members}
+          tags={tags}
+          localizer={localizer}
+          weekStart={weekStart}
+          setPathWeekStart={setPathWeekStart}
+        />
       )}
     </PageContainer>
   );
@@ -174,17 +192,57 @@ const TimesheetPage = () => {
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { data: membersData, loading: loadingMembers } = useGetOrganizationMembersQuery();
   const { data: tagsData, loading: loadingTags } = useGetTagsQuery();
-  return loadingProjects || loadingMembers || loadingTags ? (
-    <></>
-  ) : (
-    <Timesheet
-      projects={_.get(projectsData, 'getProjects', [] as any)}
-      members={_.get(membersData, 'getOrganizationMembers', [])}
-      tags={_.get(tagsData, 'getTags', [])}
-    ></Timesheet>
+  const { day, value: dowValue } = useFirstWeekDay();
+  const history = useHistory();
+  const queryParsed = qs.parse(location.search);
+
+  const weekStart = () => {
+    return queryParsed.weekStart ? moment(queryParsed.weekStart) : moment().startOf('week');
+  };
+
+  useEffect(() => {
+    const queryParsed = qs.parse(location.search);
+    if (queryParsed.strict === undefined || !queryParsed.strict) {
+      queryParsed.weekStart = moment()
+        .startOf('week')
+        .format('YYYY-MM-DD');
+      history.push({
+        pathname: location.pathname,
+        search: qs.stringify(queryParsed),
+      });
+    }
+  }, [dowValue]);
+
+  const setPathWeekStart = (newWeekStarts: Moment) => {
+    const parsed = qs.parse(location.search);
+    parsed.weekStart = moment(newWeekStarts).format('YYYY-MM-DD');
+    history.push({
+      pathname: location.pathname,
+      search: qs.stringify(parsed),
+    });
+  };
+
+  moment.locale('en', {
+    week: {
+      dow: dowValue, //Monday is the first day of the week.
+    },
+  });
+
+  const localizerM = momentLocalizer(moment);
+  return (
+    <Spin spinning={loadingProjects || loadingMembers || loadingTags}>
+      <Timesheet
+        projects={_.get(projectsData, 'getProjects', [] as any)}
+        members={_.get(membersData, 'getOrganizationMembers', [])}
+        tags={_.get(tagsData, 'getTags', [])}
+        localizer={localizerM}
+        weekStart={weekStart()}
+        setPathWeekStart={setPathWeekStart}
+      ></Timesheet>
+    </Spin>
   );
 };
-
+export { moment };
 export default TimesheetPage;
 
 const styles: { [property: string]: (props) => CSS.Properties } = {

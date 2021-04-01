@@ -1,29 +1,14 @@
 import React, { useCallback, useEffect, useState } from 'react';
 import { Calendar, View, DateLocalizer } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
-import moment from 'moment';
-import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
+import moment, { Moment } from 'moment';
 import { momentLocalizer } from 'react-big-calendar';
 import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
-import {
-  Row,
-  Col,
-  Form,
-  Input,
-  Button,
-  Select,
-  DatePicker,
-  TimePicker,
-  Avatar,
-  Popconfirm,
-  Modal,
-  Checkbox,
-} from 'antd';
+import { Row, Col, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useFela } from 'react-fela';
 import {
-  ITimesheetCreateRequest,
   ITimeRecord,
   IProjects as IProject,
   ITask,
@@ -32,10 +17,7 @@ import {
 } from '@admin-layout/timetracker-core';
 import TimesheetModal from './TimesheetModal';
 
-const { TextArea } = Input;
 const DnDCalendar: any = withDragAndDrop(Calendar as any);
-const localizerM = momentLocalizer(moment);
-const { RangePicker } = TimePicker;
 const allViews: View[] = ['day', 'week', 'month'];
 
 enum VIEW_MODE {
@@ -56,7 +38,10 @@ interface ITimesheetProps {
   projects: Array<IProject>;
   tasks: Array<ITask>;
   members: Array<IMember>;
+  localizer: DateLocalizer;
+  weekStart: Moment;
   setSelectedEvent: Function;
+  setPathWeekStart: Function;
   handleAddTimeRecordEvent: (request: ITimeRecordRequest) => void;
   handleUpdateTimeRecordEvent: (recordId: string, request: ITimeRecordRequest) => void;
   handleRemoveTimeRecordEvent: () => void;
@@ -75,12 +60,9 @@ function SelectableCalendar({
   projects,
   members,
   form,
-  tasks,
   isShowModal,
   loading,
-  selectedProject,
   selectedEvent,
-  setSelectedEvent,
   handleAddTimeRecordEvent,
   handleUpdateTimeRecordEvent,
   handleRemoveTimeRecordEvent,
@@ -89,7 +71,9 @@ function SelectableCalendar({
   handleSelectEvent,
   handleOpenNewTimeModal,
   localizer,
-}: ITimesheetProps & { localizer: DateLocalizer }) {
+  weekStart,
+  setPathWeekStart,
+}: ITimesheetProps) {
   const resetModal = (e: any) => {
     e.preventDefault();
     form.resetFields();
@@ -126,6 +110,9 @@ function SelectableCalendar({
     );
   };
 
+  const handleNavigate = date => {
+    setPathWeekStart(moment(date));
+  };
   return (
     <>
       <TimesheetModal
@@ -155,7 +142,7 @@ function SelectableCalendar({
         events={events}
         defaultView="week"
         views={allViews}
-        defaultDate={new Date()}
+        defaultDate={weekStart}
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}
         startAccessor="startTime"
@@ -171,6 +158,7 @@ function SelectableCalendar({
             event: EventAgenda,
           },
         }}
+        onNavigate={handleNavigate}
         // resources={isViewGroup ? resourceMap : undefined}
         // resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
         // resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
@@ -265,7 +253,7 @@ export default (props: ITimesheetProps) => {
   return (
     <div className={css(stylesheet.styles)}>
       <div className="calender-width">
-        <SelectableCalendar localizer={localizerM} {...props} />
+        <SelectableCalendar {...props} />
       </div>
     </div>
   );

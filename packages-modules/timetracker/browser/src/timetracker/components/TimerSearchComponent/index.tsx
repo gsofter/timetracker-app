@@ -4,9 +4,9 @@ import { styleSheet } from './styles';
 import { Button, DatePicker, Space } from 'antd';
 import moment from 'moment';
 import momentZ from 'moment-timezone';
+import { useTimeformat } from '../../hooks'
 
 const { RangePicker } = DatePicker;
-const dateFormat = 'YYYY-MM-DD';
 
 export interface ITimerSearchComponent {
   vocabulary?: any;
@@ -28,7 +28,7 @@ export const TimerSearchComponent: React.FC<ITimerSearchComponent> = ({
 }) => {
   const { css } = useFela();
   const [showCallendar, setShowCallendar] = useState(true);
-
+  const { timeFormat, dateFormat } = useTimeformat();
   return (
     <div className={css(styleSheet.timerSearchComponentStyle as any)}>
       <div className="timer-search">
@@ -42,6 +42,7 @@ export const TimerSearchComponent: React.FC<ITimerSearchComponent> = ({
                     .startOf('week')
                     .add(1, 'week'),
                 ]}
+                format={dateFormat}
               />
             </Space>
           )}
