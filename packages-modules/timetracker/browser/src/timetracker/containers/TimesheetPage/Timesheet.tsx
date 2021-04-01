@@ -142,7 +142,7 @@ function SelectableCalendar({
         events={events}
         defaultView="week"
         views={allViews}
-        defaultDate={weekStart}
+        defaultDate={moment(weekStart).toDate()}
         onSelectEvent={handleSelectEvent}
         onSelectSlot={handleSelectSlot}
         startAccessor="startTime"
