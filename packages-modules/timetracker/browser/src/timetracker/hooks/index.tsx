@@ -67,8 +67,13 @@ export const useRound = () => {
     configKey: 'timetracker.project.roundedType',
   });
 
+  const { data: roundedData, loading: loadingRounded, refetch: refetchRounded } = useSetting({
+    configKey: 'timetracker.report.timeRoundingInReports',
+  })
+
   const [roundType, setRoundType] = useState("ceil")
   const [roundValue, setRoundValue] = useState(TimeRoundingUpToValue.IN_MINUTES_1);
+  const [rounded, setRounded] = useState(false);
 
   useEffect(() => {
     if(data && data?.resolveConfiguration)
@@ -81,11 +86,18 @@ export const useRound = () => {
         setRoundType('round')
       else if (typeData?.resolveConfiguration === TimeRoundedType.ROUND_DOWN_TO)
         setRoundType('floor')
-    }  
-  }, [loadingRoundData, loadingRoundType])
+    }
+    setRounded(roundedData && roundedData?.resolveConfiguration !== undefined ? roundedData?.resolveConfiguration : false);
+  }, [loadingRoundData, loadingRoundType, loadingRounded])
 
+  useEffect(() => {
+    setRounded(roundedData && roundedData?.resolveConfiguration !== undefined ? roundedData?.resolveConfiguration : false);
+  }, [loadingRounded, roundedData])
+  
   return {
     roundType,
-    roundValue
+    roundValue,
+    rounded,
+    refetchRounded,
   }
 }

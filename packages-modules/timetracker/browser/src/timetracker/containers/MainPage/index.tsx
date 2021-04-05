@@ -2,7 +2,6 @@ import React, { useState, useEffect } from 'react';
 import classNames from 'classnames';
 import { useFela } from 'react-fela';
 import moment, { Moment } from 'moment';
-
 import { PageContainer } from '@admin-layout/components';
 import PageHeader from '../../components/PageHeader';
 import { TimerSearchComponent } from '../../components/TimerSearchComponent/index';
@@ -29,7 +28,7 @@ import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
 import { formatDuration } from '../../services/timeRecordService';
 import { useSelector } from 'react-redux';
-import { useTimeformat } from '../../hooks';
+import { useFirstWeekDay, useTimeformat } from '../../hooks';
 interface ITimeTracker {
   isMobile: any;
   currentTeam: any;
@@ -39,6 +38,7 @@ interface ITimeTracker {
   currentTimeRecord: ITimeRecord;
   isRecording: boolean;
   projects: Array<IProject>;
+  weekStart: Moment;
   createTimeRecord: (ITimeRecordRequest) => void;
   removeTimeRecord: (string) => void;
   updateTimeRecord: (string, ITimeRecordRequest) => void;
@@ -61,6 +61,7 @@ const TimeTracker = (props: ITimeTracker) => {
     timer,
     isRecording,
     projects,
+    weekStart,
     currentTimeRecord,
     createTimeRecord,
     removeTimeRecord,
@@ -131,7 +132,7 @@ const TimeTracker = (props: ITimeTracker) => {
     <div className={css(styleSheet.mainpageStyle as any)}>
       <PageContainer>
         <PageHeader disabledTitle={isMobile}>
-          <TimerSearchComponent />
+          <TimerSearchComponent weekStart={weekStart} />
         </PageHeader>
         <TutorialComponent>
           <div
@@ -147,6 +148,7 @@ const TimeTracker = (props: ITimeTracker) => {
                 handleStart={startTimer}
                 handleStop={stopTimer}
                 mode={mode}
+                weekStart={weekStart}
                 setMode={setMode}
                 createTimeRecord={createTimeRecord}
                 currentTimeRecord={currentTimeRecord}
@@ -201,6 +203,18 @@ const TimeTrackerWrapper = props => {
   const [removeMutation] = useRemoveTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
+  const { value: dowValue } = useFirstWeekDay();
+  const [weekStart, setWeekStart] = useState(moment().startOf('week'));
+  useEffect(() => {
+    moment.locale('en', {
+      week: {
+        dow: dowValue,
+      },
+    });
+
+    setWeekStart(moment().startOf('week'))
+  }, [dowValue])
+
   // create time record
   const createTimeRecord = (request: ITimeRecordRequest) => {
     createMutation({ variables: { request } })
@@ -291,6 +305,7 @@ const TimeTrackerWrapper = props => {
     <Spin spinning={!data || loading}>
       <TimeTracker
         {...props}
+        weekStart={weekStart}
         projects={_.get(projectsData, 'getProjects', [])}
         createTimeRecord={createTimeRecord}
         removeTimeRecord={removeTimeRecord}
@@ -365,4 +380,5 @@ const renderDayDateString = (date: string, dateFormat: string) => {
   });
 };
 
+export { moment }
 export default withTimer({ startImmediately: false })(TimeTrackerWrapper);

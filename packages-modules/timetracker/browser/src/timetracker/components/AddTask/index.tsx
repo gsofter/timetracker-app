@@ -34,6 +34,7 @@ import classNames from 'classnames';
 import { formatDuration } from '../../services/timeRecordService';
 import { TRACKER_MODE } from '../../containers/MainPage';
 import DurationInput from '../DurationInput';
+import { Moment } from 'moment';
 import momentZ from 'moment-timezone';
 import { useSelector } from 'react-redux';
 import { useTimeformat } from '../../hooks';
@@ -47,6 +48,7 @@ export interface IAddTask {
   isRecording: boolean;
   projects: IProject[];
   mode: TRACKER_MODE;
+  weekStart: Moment;
   setMode: Function;
   createTimeRecord: (ITimeRecordRequest) => void;
   handleStart: () => void;
