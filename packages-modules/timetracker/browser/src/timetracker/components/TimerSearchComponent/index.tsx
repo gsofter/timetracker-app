@@ -2,29 +2,18 @@ import React, { useState, useRef, useEffect } from 'react';
 import { useFela } from 'react-fela';
 import { styleSheet } from './styles';
 import { Button, DatePicker, Space } from 'antd';
-import moment from 'moment';
+import { Moment } from 'moment'
 import momentZ from 'moment-timezone';
 import { useTimeformat } from '../../hooks'
-
+import { moment } from '../../containers/MainPage'
 const { RangePicker } = DatePicker;
 
 export interface ITimerSearchComponent {
-  vocabulary?: any;
-  firstDayOfWeek?: any;
-  dateFormat?: any;
-  startSearchMode?: any;
-  getTimeEntriesListAction?: any;
-  endSearchMode?: any;
-  isSearchMode?: any;
+  weekStart: Moment;
 }
 
 export const TimerSearchComponent: React.FC<ITimerSearchComponent> = ({
-  vocabulary,
-  firstDayOfWeek,
-  startSearchMode,
-  getTimeEntriesListAction,
-  endSearchMode,
-  isSearchMode,
+  weekStart
 }) => {
   const { css } = useFela();
   const [showCallendar, setShowCallendar] = useState(true);
@@ -37,10 +26,16 @@ export const TimerSearchComponent: React.FC<ITimerSearchComponent> = ({
             <Space direction="vertical" size={12}>
               <RangePicker
                 defaultValue={[
-                  moment().startOf('week'),
-                  moment()
+                  moment(weekStart),
+                  moment(weekStart)
                     .startOf('week')
-                    .add(1, 'week'),
+                    .add(6, 'day'),
+                ]}
+                value={[
+                  moment(weekStart),
+                  moment(weekStart)
+                    .startOf('week')
+                    .add(6, 'day'),
                 ]}
                 format={dateFormat}
               />

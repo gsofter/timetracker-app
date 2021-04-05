@@ -6,9 +6,8 @@ import { BarChart, DoughnutChart } from '../../components/Charts';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../../../generated-models';
 import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { formatDuration, roundDuration } from '../../services/timeRecordService';
-import { useRound, useTimeformat } from '../../hooks';
-import { useSetting } from '@adminide-stack/react-shared-components'
-
+import { useRound, useTimeformat, useFirstWeekDay } from '../../hooks';
+import { useSetting } from '@adminide-stack/react-shared-components';
 const ReportsPage = () => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
   const { roundType, roundValue, rounded, refetchRounded } = useRound();
@@ -19,8 +18,20 @@ const ReportsPage = () => {
       endTime: moment(weekStart).add(1, 'week'),
     },
   });
+  const { value: dowValue } = useFirstWeekDay();
+  useEffect(() => {
+    moment.locale('en', {
+      week: {
+        dow: dowValue,
+      },
+    });
 
-  const { updateConfiguration } = useSetting({ configKey: 'timetracker.report.timeRoundingInReports' })
+    setWeekStart(moment().startOf('week'));
+  }, [dowValue]);
+
+  const { updateConfiguration } = useSetting({
+    configKey: 'timetracker.report.timeRoundingInReports',
+  });
   // getter for time records
   const getRecords = useCallback(
     (): Array<ITimeRecord> => (loading || !!!data ? [] : data.getDurationTimeRecords),
@@ -147,15 +158,17 @@ const ReportsPage = () => {
     return projectDurArray;
   };
 
-  const handleSwitchRoundMode=(checked) => {
-    updateConfiguration({ updateKey: 'timetracker.report.timeRoundingInReports', value: checked}).then(async () => {
-      await refetchRounded();
-      console.log('rounded => ', rounded)
-      message.success('Rounded setting updated')
-    }).catch(e => {
-      console.log(e.message)
-    })
-  }
+  const handleSwitchRoundMode = checked => {
+    updateConfiguration({ updateKey: 'timetracker.report.timeRoundingInReports', value: checked })
+      .then(async () => {
+        await refetchRounded();
+        console.log('rounded => ', rounded);
+        message.success('Rounded setting updated');
+      })
+      .catch(e => {
+        console.log(e.message);
+      });
+  };
 
   return (
     <PageContainer>

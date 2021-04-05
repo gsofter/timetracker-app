@@ -217,7 +217,7 @@ const TabularCalendar = ({
         <p>
           Ready to submit from {moment(weekStart).format('MMM DD')} -
           {moment(weekStart)
-            .add(1, 'week')
+            .add(6, 'day')
             .format('MMM DD')}
           &nbsp; approval?
         </p>
