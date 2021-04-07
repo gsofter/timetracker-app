@@ -8,6 +8,7 @@ import { TaggedType } from '@common-stack/core';
 import AuthModule from '@adminide-stack/user-auth0-server';
 import OrganizationModule from '@adminide-stack/account-api-server';
 import PlatformModule from '@adminide-stack/platform-server/lib/module';
+import MailingModule from '@adminide-stack/mailing-api-server';
 
 export const settings = {
     // mongoConnection: generateMongo(config.MONGO_URL),
@@ -32,6 +33,7 @@ const DefaultFeature = new Feature({
 export default new Feature<any>(
     DefaultFeature,
     PlatformModule,
+    MailingModule,
     AuthModule,
     CounterModule,
     ScheduleModule,
