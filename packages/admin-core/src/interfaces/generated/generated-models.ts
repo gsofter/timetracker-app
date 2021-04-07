@@ -17,11 +17,11 @@ export type Scalars = {
   Float: number;
   AnyObject: any;
   URI: any;
-  URIInput: any;
   DateTime: any;
+  JSON: any;
+  URIInput: any;
   Date: any;
   Time: any;
-  JSON: any;
   JSONObject: any;
 };
 
@@ -127,17 +127,25 @@ export type IApplicationRolePermission = IIConfigurationModel & {
 };
 
 export const enum IApplicationRoles {
+  /** Admin of an Organization */
   ADMIN = 'ADMIN',
+  /** Project Contributors */
   CONTRIBUTORS = 'CONTRIBUTORS',
+  /** Guest  */
   GUEST = 'GUEST',
   MEMBER = 'MEMBER',
   /**  organization member  */
   ORGANIZATION_MANAGER = 'ORGANIZATION_MANAGER',
+  /** Owner of an Organization */
   OWNER = 'OWNER',
+  /** Project Admin */
   PROJECT_ADMIN = 'PROJECT_ADMIN',
+  /** Project Viewer */
   PROJECT_VIEWER = 'PROJECT_VIEWER',
   TEAM_MAINTAINER = 'TEAM_MAINTAINER',
-  TEAM_MEMBER = 'TEAM_MEMBER'
+  TEAM_MEMBER = 'TEAM_MEMBER',
+  /** User who is logged in */
+  USER = 'USER'
 };
 
 export type IAsanaConnection = {
@@ -151,10 +159,22 @@ export type IAsanaConnectionState = {
   user?: Maybe<IAsanaUser>;
 };
 
+export type IAsanaProjects = {
+   __typename?: 'AsanaProjects';
+  gid?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+};
+
 export type IAsanaUser = {
    __typename?: 'AsanaUser';
   user_id?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
+};
+
+export type IAsanaWorkspaces = {
+   __typename?: 'AsanaWorkspaces';
+  gid?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
 };
 
 export type IAuthProvider = {
@@ -576,6 +596,36 @@ export type IIdToken = {
   idToken: Scalars['String'];
 };
 
+export type IIntegraitonConfigurationId = {
+   __typename?: 'IntegraitonConfigurationId';
+  id?: Maybe<Scalars['String']>;
+};
+
+export type IIntegrationConfiguration = {
+   __typename?: 'IntegrationConfiguration';
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  integrationName?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  updatedAt?: Maybe<Scalars['DateTime']>;
+  integrationInfo?: Maybe<Scalars['JSON']>;
+};
+
+export type IIntegrationConfigurationCreateOrUpdateInput = {
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  integrationName?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  integrationInfo?: Maybe<Scalars['JSON']>;
+};
+
+export type IIntegrationConfigurationInput = {
+  name?: Maybe<Scalars['String']>;
+  integrationName?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+  integrationInfo?: Maybe<Scalars['JSON']>;
+};
+
 export type IInvitationDecode = {
    __typename?: 'InvitationDecode';
   orgName?: Maybe<Scalars['String']>;
@@ -621,6 +671,16 @@ export type IInvoiceCreateRequest = {
   timezoneOffset?: Maybe<Scalars['Int']>;
   to?: Maybe<ICustomerInvoice_Input>;
   total?: Maybe<Scalars['Float']>;
+};
+
+export type IInvoiceMailRequest = {
+  template: ITemplate;
+  to: Scalars['String'];
+  from: Scalars['String'];
+  cc?: Maybe<Scalars['String']>;
+  bcc?: Maybe<Scalars['String']>;
+  attachments?: Maybe<Array<Maybe<Scalars['AnyObject']>>>;
+  subject?: Maybe<Scalars['String']>;
 };
 
 export type IInvoiceType = {
@@ -813,13 +873,16 @@ export type IMutation = {
   changeMemberRole?: Maybe<Scalars['Boolean']>;
   changeOrgMemberRole?: Maybe<Scalars['Boolean']>;
   createAuth0User?: Maybe<IAuthUser>;
+  createIntegrationConfiguration?: Maybe<IIntegraitonConfigurationId>;
   createInvoice?: Maybe<Scalars['Boolean']>;
+  createOrUpdateIntegrationConfiguration?: Maybe<IIntegraitonConfigurationId>;
   createOrganization?: Maybe<IOrganization>;
   createTeam?: Maybe<IAccountTeam>;
   createTimeRecord?: Maybe<Scalars['String']>;
   createTimesheet?: Maybe<Scalars['Boolean']>;
   declineInvitation?: Maybe<Scalars['Boolean']>;
   declineOrganizationInvitation?: Maybe<Scalars['Boolean']>;
+  deleteIntegrationConfiguration?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
   initiateConfigurationValue?: Maybe<Scalars['Boolean']>;
   initiatePolicyValue?: Maybe<Scalars['Boolean']>;
@@ -838,6 +901,7 @@ export type IMutation = {
   resendInvitation?: Maybe<Scalars['Boolean']>;
   resendOrganizationInvitation?: Maybe<Scalars['Boolean']>;
   sendInvitation?: Maybe<Scalars['Boolean']>;
+  sendInvoiceMail?: Maybe<Scalars['Boolean']>;
   sendOrganizationInvitation?: Maybe<Scalars['Boolean']>;
   setSettingsValueByResource?: Maybe<Scalars['Boolean']>;
   /**  sync cached counter with current value  */
@@ -861,6 +925,7 @@ export type IMutation = {
   updateTimelineEvent?: Maybe<Scalars['Boolean']>;
   updateTimesheet?: Maybe<Scalars['Boolean']>;
   updateTimesheetStatus?: Maybe<Scalars['Boolean']>;
+  upsertProjectThroughIntegration?: Maybe<IProjects>;
 };
 
 
@@ -943,8 +1008,18 @@ export type IMutationcreateAuth0UserArgs = {
 };
 
 
+export type IMutationcreateIntegrationConfigurationArgs = {
+  data?: Maybe<IIntegrationConfigurationInput>;
+};
+
+
 export type IMutationcreateInvoiceArgs = {
   invoice: IInvoiceCreateRequest;
+};
+
+
+export type IMutationcreateOrUpdateIntegrationConfigurationArgs = {
+  data?: Maybe<IIntegrationConfigurationCreateOrUpdateInput>;
 };
 
 
@@ -975,6 +1050,11 @@ export type IMutationdeclineInvitationArgs = {
 
 export type IMutationdeclineOrganizationInvitationArgs = {
   id: Scalars['ID'];
+};
+
+
+export type IMutationdeleteIntegrationConfigurationArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -1062,6 +1142,11 @@ export type IMutationsendInvitationArgs = {
 };
 
 
+export type IMutationsendInvoiceMailArgs = {
+  request: IInvoiceMailRequest;
+};
+
+
 export type IMutationsendOrganizationInvitationArgs = {
   request?: Maybe<IOrganizationInvitationRequest>;
 };
@@ -1132,7 +1217,7 @@ export type IMutationupdateOrgMemberTeamsArgs = {
 
 
 export type IMutationupdateOrgProjectArgs = {
-  id: Scalars['String'];
+  where: IProjectWhereInput;
   project?: Maybe<IUpdateProject_Input>;
 };
 
@@ -1204,6 +1289,12 @@ export type IMutationupdateTimesheetStatusArgs = {
   request?: Maybe<ITimesheetCreateRequest>;
 };
 
+
+export type IMutationupsertProjectThroughIntegrationArgs = {
+  where: IProjectWhereInput;
+  project?: Maybe<IUpdateProject_Input>;
+};
+
 export type IName_Input = {
   salutation?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
@@ -1215,6 +1306,10 @@ export type INameType = {
   salutation?: Maybe<Scalars['String']>;
   firstName?: Maybe<Scalars['String']>;
   lastName?: Maybe<Scalars['String']>;
+};
+
+export type INode = {
+  id: Scalars['ID'];
 };
 
 /**
@@ -1697,6 +1792,7 @@ export type IProject_Output = {
   teams?: Maybe<Array<Maybe<Scalars['String']>>>;
   status?: Maybe<Scalars['String']>;
   orgName?: Maybe<Scalars['String']>;
+  integrationConfigurationId?: Maybe<Scalars['String']>;
 };
 
 export type IProjectAddRequest = {
@@ -1704,6 +1800,7 @@ export type IProjectAddRequest = {
   clientId?: Maybe<Scalars['String']>;
   teams?: Maybe<Array<Maybe<Scalars['String']>>>;
   orgName?: Maybe<Scalars['String']>;
+  integrationConfigurationId?: Maybe<Scalars['String']>;
 };
 
 export type IProjectInvoice = {
@@ -1730,6 +1827,7 @@ export type IProjects = {
   teams?: Maybe<Array<Maybe<Scalars['String']>>>;
   status?: Maybe<Scalars['String']>;
   type?: Maybe<IProjectType>;
+  integrationConfigurationId?: Maybe<Scalars['String']>;
   /**  Predefined Project template   */
   templateId?: Maybe<Scalars['String']>;
   orgName?: Maybe<Scalars['String']>;
@@ -1741,6 +1839,13 @@ export const enum IProjectType {
   internal = 'internal',
   others = 'others',
   asana = 'asana'
+};
+
+export type IProjectWhereInput = {
+  id?: Maybe<Scalars['String']>;
+  integrationConfigurationId?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  orgName?: Maybe<Scalars['String']>;
 };
 
 export type IQuery = {
@@ -1770,7 +1875,10 @@ export type IQuery = {
   dummy?: Maybe<Scalars['Int']>;
   fetchAuth0User?: Maybe<IAuthUser>;
   getAccounts?: Maybe<Array<Maybe<IUserAccount>>>;
+  getAllIntegrationConfigurations?: Maybe<Array<Maybe<IIntegrationConfiguration>>>;
   getAsanaConnectionState?: Maybe<IAsanaConnection>;
+  getAsanaWorkspaceProjects?: Maybe<Array<Maybe<IAsanaProjects>>>;
+  getAsanaWorkspaces?: Maybe<Array<Maybe<IAsanaWorkspaces>>>;
   getConfiguration?: Maybe<Array<Maybe<IConfiguration>>>;
   getConfigurationData?: Maybe<IConfigurationData>;
   getConfigurationPolicies?: Maybe<Array<Maybe<IConfigurationPolicy>>>;
@@ -1780,6 +1888,8 @@ export type IQuery = {
   getDurationTimeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
   getDurationTimesheet?: Maybe<ITimesheetResponse>;
   getEnvironment?: Maybe<IEnvironment>;
+  getFilteredProjects?: Maybe<Array<Maybe<IProjects>>>;
+  getIntegrationConfiguration?: Maybe<IIntegrationConfiguration>;
   getInvoices?: Maybe<Array<Maybe<IInvoiceType>>>;
   getManageableOrganizations?: Maybe<Array<Maybe<IOrganization>>>;
   getOrgInvitationMembers?: Maybe<Array<Maybe<IInviteMember>>>;
@@ -1803,6 +1913,7 @@ export type IQuery = {
   getTimeRecords?: Maybe<Array<Maybe<ITimeRecord>>>;
   getTimelineEvents?: Maybe<Array<Maybe<ITimeline>>>;
   getTimesheets?: Maybe<Array<Maybe<ITimesheetResponse>>>;
+  getUserAccessRole?: Maybe<IResourceAccessRole>;
   getUserAccount?: Maybe<IUserAccount>;
   getUserOrganizations?: Maybe<Array<Maybe<IOrganization>>>;
   getUserOrganizationsWithRole?: Maybe<Array<Maybe<IOrganization>>>;
@@ -1862,6 +1973,11 @@ export type IQuerygetAccountsArgs = {
 };
 
 
+export type IQuerygetAsanaWorkspaceProjectsArgs = {
+  workspaceId: Scalars['String'];
+};
+
+
 export type IQuerygetConfigurationArgs = {
   input?: Maybe<Array<Maybe<IConfigurationInput>>>;
 };
@@ -1886,6 +2002,16 @@ export type IQuerygetDurationTimeRecordsArgs = {
 export type IQuerygetDurationTimesheetArgs = {
   start?: Maybe<Scalars['DateTime']>;
   end?: Maybe<Scalars['DateTime']>;
+};
+
+
+export type IQuerygetFilteredProjectsArgs = {
+  filter: IProjectWhereInput;
+};
+
+
+export type IQuerygetIntegrationConfigurationArgs = {
+  id: Scalars['String'];
 };
 
 
@@ -1947,6 +2073,11 @@ export type IQuerygetTimelineEventsArgs = {
 
 export type IQuerygetTimesheetsArgs = {
   userId?: Maybe<Scalars['String']>;
+};
+
+
+export type IQuerygetUserAccessRoleArgs = {
+  input?: Maybe<Array<Maybe<IRoleInput>>>;
 };
 
 
@@ -2038,6 +2169,12 @@ export type IRemoteUserSettings = IISettingsSubject & {
   settingsCascade: ISettingsCascade;
 };
 
+export type IResourceAccessRole = {
+   __typename?: 'ResourceAccessRole';
+  accessRoles?: Maybe<Array<Maybe<IAccessRole>>>;
+  resourceUserRoles?: Maybe<Array<Maybe<IResourceUser>>>;
+};
+
 export type IResourcePolicy = IIConfigurationModel & {
    __typename?: 'ResourcePolicy';
   resource?: Maybe<Scalars['URI']>;
@@ -2058,6 +2195,7 @@ export type IResourceRole = IIConfigurationModel & {
 
 export type IResourceUser = IIResourceUserRole & {
    __typename?: 'ResourceUser';
+  resource?: Maybe<Scalars['URI']>;
   role?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   isSelf?: Maybe<Scalars['Boolean']>;
@@ -2329,6 +2467,7 @@ export type ITeamMember = {
   email?: Maybe<Scalars['String']>;
   name?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
+  username?: Maybe<Scalars['String']>;
   role?: Maybe<IApplicationRoles>;
 };
 
@@ -2351,6 +2490,17 @@ export type ITeamUpdateRequest = {
   id: Scalars['String'];
   payload?: Maybe<IAccountTeam_Input>;
   requestedUserId?: Maybe<Scalars['String']>;
+};
+
+export type ITemplate = {
+  templateId?: Maybe<Scalars['String']>;
+  name?: Maybe<Scalars['String']>;
+  text?: Maybe<Scalars['String']>;
+  html?: Maybe<Scalars['String']>;
+  engine?: Maybe<Scalars['String']>;
+  topic?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
+  variables?: Maybe<Scalars['AnyObject']>;
 };
 
 
@@ -2477,7 +2627,7 @@ export type IUpdatedClient_Input = {
   email?: Maybe<Scalars['String']>;
   clientPhone?: Maybe<IClientPhone_Input>;
   website?: Maybe<Scalars['String']>;
-  currency: Scalars['String'];
+  currency?: Maybe<Scalars['String']>;
   socialConnect?: Maybe<ISocialConnect_Input>;
   billingAddress?: Maybe<IAddressType_Input>;
   shippingAddress?: Maybe<IAddressType_Input>;
@@ -2488,6 +2638,8 @@ export type IUpdateProject_Input = {
   name: Scalars['String'];
   clientId?: Maybe<Scalars['String']>;
   teams?: Maybe<Array<Maybe<Scalars['String']>>>;
+  orgName?: Maybe<Scalars['String']>;
+  integrationConfigurationId?: Maybe<Scalars['String']>;
 };
 
 
@@ -2513,9 +2665,9 @@ export type IUpdateProject_Input = {
  * @property
  * userOgs: the orgs and roles for this user on each.
  */
-export type IUserAccount = {
+export type IUserAccount = INode & {
    __typename?: 'UserAccount';
-  id?: Maybe<Scalars['String']>;
+  id: Scalars['ID'];
   email?: Maybe<Scalars['String']>;
   alias?: Maybe<Array<Maybe<Scalars['String']>>>;
   username?: Maybe<Scalars['String']>;
@@ -2872,9 +3024,15 @@ export type IResolversTypes = {
   IUser: IResolversTypes['AuthUser'],
   UserAccountWhere: IUserAccountWhere,
   UserAccount: ResolverTypeWrapper<IUserAccount>,
+  Node: IResolversTypes['UserAccount'],
+  IntegrationConfiguration: ResolverTypeWrapper<IIntegrationConfiguration>,
+  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
+  JSON: ResolverTypeWrapper<Scalars['JSON']>,
   AsanaConnection: ResolverTypeWrapper<IAsanaConnection>,
   AsanaConnectionState: ResolverTypeWrapper<IAsanaConnectionState>,
   AsanaUser: ResolverTypeWrapper<IAsanaUser>,
+  AsanaProjects: ResolverTypeWrapper<IAsanaProjects>,
+  AsanaWorkspaces: ResolverTypeWrapper<IAsanaWorkspaces>,
   ConfigurationInput: IConfigurationInput,
   URIInput: ResolverTypeWrapper<Scalars['URIInput']>,
   Configuration: IResolversTypes['DefaultConfiguration'] | IResolversTypes['UserConfiguration'] | IResolversTypes['OrganizationConfiguration'] | IResolversTypes['OrganizationResourceConfiguration'],
@@ -2896,11 +3054,13 @@ export type IResolversTypes = {
   OrganizationRole: ResolverTypeWrapper<IOrganizationRole>,
   ResourceRole: ResolverTypeWrapper<IResourceRole>,
   ApplicationRolePermission: ResolverTypeWrapper<IApplicationRolePermission>,
-  DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   TimeRecord: ResolverTypeWrapper<ITimeRecord>,
   TimesheetResponse: ResolverTypeWrapper<ITimesheetResponse>,
   TimesheetState: ITimesheetState,
   Environment: ResolverTypeWrapper<IEnvironment>,
+  ProjectWhereInput: IProjectWhereInput,
+  Projects: ResolverTypeWrapper<IProjects>,
+  ProjectType: IProjectType,
   InvoiceType: ResolverTypeWrapper<IInvoiceType>,
   Float: ResolverTypeWrapper<Scalars['Float']>,
   MemberInvoice: ResolverTypeWrapper<IMemberInvoice>,
@@ -2933,6 +3093,9 @@ export type IResolversTypes = {
   Schedule: ResolverTypeWrapper<ISchedule>,
   Tag: ResolverTypeWrapper<ITag>,
   Timeline: ResolverTypeWrapper<ITimeline>,
+  ResourceAccessRole: ResolverTypeWrapper<Omit<IResourceAccessRole, 'accessRoles'> & { accessRoles?: Maybe<Array<Maybe<IResolversTypes['AccessRole']>>> }>,
+  ResourceUser: ResolverTypeWrapper<IResourceUser>,
+  IResourceUserRole: IResolversTypes['ResourceUser'],
   PermissionSubject: ResolverTypeWrapper<IPermissionSubject>,
   PolicySubject: ResolverTypeWrapper<IPolicySubject>,
   ViewerSettingsInput: IViewerSettingsInput,
@@ -2951,10 +3114,13 @@ export type IResolversTypes = {
   AuthProvider: IAuthProvider,
   IdToken: IIdToken,
   UserInfo: IUserInfo,
+  IntegrationConfigurationInput: IIntegrationConfigurationInput,
+  IntegraitonConfigurationId: ResolverTypeWrapper<IIntegraitonConfigurationId>,
   InvoiceCreateRequest: IInvoiceCreateRequest,
   MemberInvoice_Input: IMemberInvoice_Input,
   ProjectInvoice_Input: IProjectInvoice_Input,
   CustomerInvoice_Input: ICustomerInvoice_Input,
+  IntegrationConfigurationCreateOrUpdateInput: IIntegrationConfigurationCreateOrUpdateInput,
   OrganizationCreateRequest: IOrganizationCreateRequest,
   OrgUser_Input: IOrgUser_Input,
   OrganizationInvitation_Input: IOrganizationInvitation_Input,
@@ -2963,6 +3129,8 @@ export type IResolversTypes = {
   TimesheetCreateRequest: ITimesheetCreateRequest,
   OrganizationRemoveRequest: IOrganizationRemoveRequest,
   TeamInvitationRequest: ITeamInvitationRequest,
+  InvoiceMailRequest: IInvoiceMailRequest,
+  Template: ITemplate,
   OrganizationInvitationRequest: IOrganizationInvitationRequest,
   InvoiceUpdateRequest: IInvoiceUpdateRequest,
   ClientUpdateRequest: IClientUpdateRequest,
@@ -2977,7 +3145,6 @@ export type IResolversTypes = {
   SubscribedOrganizationData: ResolverTypeWrapper<ISubscribedOrganizationData>,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   Time: ResolverTypeWrapper<Scalars['Time']>,
-  JSON: ResolverTypeWrapper<Scalars['JSON']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<IFieldError>,
   ConfigCollectionName: IConfigCollectionName,
@@ -2994,8 +3161,6 @@ export type IResolversTypes = {
   PermissionAction: IPermissionAction,
   PermissionResource: IPermissionResource,
   PreDefinedRole: IPreDefinedRole,
-  IResourceUserRole: IResolversTypes['ResourceUser'],
-  ResourceUser: ResolverTypeWrapper<IResourceUser>,
   EnvironmentPayload: IEnvironmentPayload,
   IAuth0UserProfile: IResolversTypes['UserProfile'],
   UserProfile: ResolverTypeWrapper<IUserProfile>,
@@ -3031,8 +3196,6 @@ export type IResolversTypes = {
   OrganizationMember: ResolverTypeWrapper<IOrganizationMember>,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
-  Projects: ResolverTypeWrapper<IProjects>,
-  ProjectType: IProjectType,
   ClientCacheTypeNames: IClientCacheTypeNames,
 };
 
@@ -3081,9 +3244,15 @@ export type IResolversParentTypes = {
   IUser: IResolversParentTypes['AuthUser'],
   UserAccountWhere: IUserAccountWhere,
   UserAccount: IUserAccount,
+  Node: IResolversParentTypes['UserAccount'],
+  IntegrationConfiguration: IIntegrationConfiguration,
+  DateTime: Scalars['DateTime'],
+  JSON: Scalars['JSON'],
   AsanaConnection: IAsanaConnection,
   AsanaConnectionState: IAsanaConnectionState,
   AsanaUser: IAsanaUser,
+  AsanaProjects: IAsanaProjects,
+  AsanaWorkspaces: IAsanaWorkspaces,
   ConfigurationInput: IConfigurationInput,
   URIInput: Scalars['URIInput'],
   Configuration: IResolversParentTypes['DefaultConfiguration'] | IResolversParentTypes['UserConfiguration'] | IResolversParentTypes['OrganizationConfiguration'] | IResolversParentTypes['OrganizationResourceConfiguration'],
@@ -3105,11 +3274,13 @@ export type IResolversParentTypes = {
   OrganizationRole: IOrganizationRole,
   ResourceRole: IResourceRole,
   ApplicationRolePermission: IApplicationRolePermission,
-  DateTime: Scalars['DateTime'],
   TimeRecord: ITimeRecord,
   TimesheetResponse: ITimesheetResponse,
   TimesheetState: ITimesheetState,
   Environment: IEnvironment,
+  ProjectWhereInput: IProjectWhereInput,
+  Projects: IProjects,
+  ProjectType: IProjectType,
   InvoiceType: IInvoiceType,
   Float: Scalars['Float'],
   MemberInvoice: IMemberInvoice,
@@ -3142,6 +3313,9 @@ export type IResolversParentTypes = {
   Schedule: ISchedule,
   Tag: ITag,
   Timeline: ITimeline,
+  ResourceAccessRole: Omit<IResourceAccessRole, 'accessRoles'> & { accessRoles?: Maybe<Array<Maybe<IResolversParentTypes['AccessRole']>>> },
+  ResourceUser: IResourceUser,
+  IResourceUserRole: IResolversParentTypes['ResourceUser'],
   PermissionSubject: IPermissionSubject,
   PolicySubject: IPolicySubject,
   ViewerSettingsInput: IViewerSettingsInput,
@@ -3160,10 +3334,13 @@ export type IResolversParentTypes = {
   AuthProvider: IAuthProvider,
   IdToken: IIdToken,
   UserInfo: IUserInfo,
+  IntegrationConfigurationInput: IIntegrationConfigurationInput,
+  IntegraitonConfigurationId: IIntegraitonConfigurationId,
   InvoiceCreateRequest: IInvoiceCreateRequest,
   MemberInvoice_Input: IMemberInvoice_Input,
   ProjectInvoice_Input: IProjectInvoice_Input,
   CustomerInvoice_Input: ICustomerInvoice_Input,
+  IntegrationConfigurationCreateOrUpdateInput: IIntegrationConfigurationCreateOrUpdateInput,
   OrganizationCreateRequest: IOrganizationCreateRequest,
   OrgUser_Input: IOrgUser_Input,
   OrganizationInvitation_Input: IOrganizationInvitation_Input,
@@ -3172,6 +3349,8 @@ export type IResolversParentTypes = {
   TimesheetCreateRequest: ITimesheetCreateRequest,
   OrganizationRemoveRequest: IOrganizationRemoveRequest,
   TeamInvitationRequest: ITeamInvitationRequest,
+  InvoiceMailRequest: IInvoiceMailRequest,
+  Template: ITemplate,
   OrganizationInvitationRequest: IOrganizationInvitationRequest,
   InvoiceUpdateRequest: IInvoiceUpdateRequest,
   ClientUpdateRequest: IClientUpdateRequest,
@@ -3186,7 +3365,6 @@ export type IResolversParentTypes = {
   SubscribedOrganizationData: ISubscribedOrganizationData,
   Date: Scalars['Date'],
   Time: Scalars['Time'],
-  JSON: Scalars['JSON'],
   JSONObject: Scalars['JSONObject'],
   FieldError: IFieldError,
   ConfigCollectionName: IConfigCollectionName,
@@ -3203,8 +3381,6 @@ export type IResolversParentTypes = {
   PermissionAction: IPermissionAction,
   PermissionResource: IPermissionResource,
   PreDefinedRole: IPreDefinedRole,
-  IResourceUserRole: IResolversParentTypes['ResourceUser'],
-  ResourceUser: IResourceUser,
   EnvironmentPayload: IEnvironmentPayload,
   IAuth0UserProfile: IResolversParentTypes['UserProfile'],
   UserProfile: IUserProfile,
@@ -3240,8 +3416,6 @@ export type IResolversParentTypes = {
   OrganizationMember: IOrganizationMember,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
-  Projects: IProjects,
-  ProjectType: IProjectType,
   ClientCacheTypeNames: IClientCacheTypeNames,
 };
 
@@ -3328,9 +3502,21 @@ export type IAsanaConnectionStateResolvers<ContextType = MyContext, ParentType e
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type IAsanaProjectsResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['AsanaProjects'] = IResolversParentTypes['AsanaProjects']> = {
+  gid?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  name?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type IAsanaUserResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['AsanaUser'] = IResolversParentTypes['AsanaUser']> = {
   user_id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   username?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type IAsanaWorkspacesResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['AsanaWorkspaces'] = IResolversParentTypes['AsanaWorkspaces']> = {
+  gid?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  name?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -3610,6 +3796,21 @@ export type IIConfigurationModelResolvers<ContextType = MyContext, ParentType ex
   overrides?: Resolver<Maybe<Array<Maybe<IResolversTypes['Overrides']>>>, ParentType, ContextType>,
 };
 
+export type IIntegraitonConfigurationIdResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['IntegraitonConfigurationId'] = IResolversParentTypes['IntegraitonConfigurationId']> = {
+  id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type IIntegrationConfigurationResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['IntegrationConfiguration'] = IResolversParentTypes['IntegrationConfiguration']> = {
+  id?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType>,
+  name?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  integrationName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  status?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  updatedAt?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  integrationInfo?: Resolver<Maybe<IResolversTypes['JSON']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type IInvitationDecodeResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['InvitationDecode'] = IResolversParentTypes['InvitationDecode']> = {
   orgName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   teamName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
@@ -3747,13 +3948,16 @@ export type IMutationResolvers<ContextType = MyContext, ParentType extends IReso
   changeMemberRole?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationchangeMemberRoleArgs, 'orgName' | 'teamName' | 'memberId' | 'role'>>,
   changeOrgMemberRole?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationchangeOrgMemberRoleArgs, 'userId' | 'role'>>,
   createAuth0User?: Resolver<Maybe<IResolversTypes['AuthUser']>, ParentType, ContextType, RequireFields<IMutationcreateAuth0UserArgs, never>>,
+  createIntegrationConfiguration?: Resolver<Maybe<IResolversTypes['IntegraitonConfigurationId']>, ParentType, ContextType, RequireFields<IMutationcreateIntegrationConfigurationArgs, never>>,
   createInvoice?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationcreateInvoiceArgs, 'invoice'>>,
+  createOrUpdateIntegrationConfiguration?: Resolver<Maybe<IResolversTypes['IntegraitonConfigurationId']>, ParentType, ContextType, RequireFields<IMutationcreateOrUpdateIntegrationConfigurationArgs, never>>,
   createOrganization?: Resolver<Maybe<IResolversTypes['Organization']>, ParentType, ContextType, RequireFields<IMutationcreateOrganizationArgs, 'organization'>>,
   createTeam?: Resolver<Maybe<IResolversTypes['AccountTeam']>, ParentType, ContextType, RequireFields<IMutationcreateTeamArgs, 'request'>>,
   createTimeRecord?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType, RequireFields<IMutationcreateTimeRecordArgs, never>>,
   createTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationcreateTimesheetArgs, never>>,
   declineInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationdeclineInvitationArgs, 'id'>>,
   declineOrganizationInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationdeclineOrganizationInvitationArgs, 'id'>>,
+  deleteIntegrationConfiguration?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationdeleteIntegrationConfigurationArgs, 'id'>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   initiateConfigurationValue?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationinitiateConfigurationValueArgs, never>>,
   initiatePolicyValue?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationinitiatePolicyValueArgs, never>>,
@@ -3772,6 +3976,7 @@ export type IMutationResolvers<ContextType = MyContext, ParentType extends IReso
   resendInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationresendInvitationArgs, 'id'>>,
   resendOrganizationInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationresendOrganizationInvitationArgs, 'id'>>,
   sendInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationsendInvitationArgs, 'request'>>,
+  sendInvoiceMail?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationsendInvoiceMailArgs, 'request'>>,
   sendOrganizationInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationsendOrganizationInvitationArgs, never>>,
   setSettingsValueByResource?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationsetSettingsValueByResourceArgs, never>>,
   syncCachedCounter?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
@@ -3782,7 +3987,7 @@ export type IMutationResolvers<ContextType = MyContext, ParentType extends IReso
   updateInvoice?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateInvoiceArgs, never>>,
   updateOrgClient?: Resolver<Maybe<IResolversTypes['Client']>, ParentType, ContextType, RequireFields<IMutationupdateOrgClientArgs, never>>,
   updateOrgMemberTeams?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateOrgMemberTeamsArgs, 'userId' | 'orgName'>>,
-  updateOrgProject?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateOrgProjectArgs, 'id'>>,
+  updateOrgProject?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateOrgProjectArgs, 'where'>>,
   updateOrganization?: Resolver<Maybe<IResolversTypes['Organization']>, ParentType, ContextType, RequireFields<IMutationupdateOrganizationArgs, 'organization'>>,
   updateOrganizationContextAddResources?: Resolver<Maybe<Array<Maybe<IResolversTypes['OrganizationResourceData']>>>, ParentType, ContextType, RequireFields<IMutationupdateOrganizationContextAddResourcesArgs, 'resourcesToAdd'>>,
   updateOrganizationContextRemoveResources?: Resolver<Maybe<Array<Maybe<IResolversTypes['OrganizationResourceData']>>>, ParentType, ContextType, RequireFields<IMutationupdateOrganizationContextRemoveResourcesArgs, 'resourcesToRemove'>>,
@@ -3794,6 +3999,7 @@ export type IMutationResolvers<ContextType = MyContext, ParentType extends IReso
   updateTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimelineEventArgs, never>>,
   updateTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimesheetArgs, never>>,
   updateTimesheetStatus?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimesheetStatusArgs, never>>,
+  upsertProjectThroughIntegration?: Resolver<Maybe<IResolversTypes['Projects']>, ParentType, ContextType, RequireFields<IMutationupsertProjectThroughIntegrationArgs, 'where'>>,
 };
 
 export type INameTypeResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['NameType'] = IResolversParentTypes['NameType']> = {
@@ -3801,6 +4007,11 @@ export type INameTypeResolvers<ContextType = MyContext, ParentType extends IReso
   firstName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   lastName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type INodeResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Node'] = IResolversParentTypes['Node']> = {
+  __resolveType: TypeResolveFn<'UserAccount', ParentType, ContextType>,
+  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>,
 };
 
 export type IOrganizationResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['Organization'] = IResolversParentTypes['Organization']> = {
@@ -4055,6 +4266,7 @@ export type IProject_OutputResolvers<ContextType = MyContext, ParentType extends
   teams?: Resolver<Maybe<Array<Maybe<IResolversTypes['String']>>>, ParentType, ContextType>,
   status?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   orgName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  integrationConfigurationId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4074,6 +4286,7 @@ export type IProjectsResolvers<ContextType = MyContext, ParentType extends IReso
   teams?: Resolver<Maybe<Array<Maybe<IResolversTypes['String']>>>, ParentType, ContextType>,
   status?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   type?: Resolver<Maybe<IResolversTypes['ProjectType']>, ParentType, ContextType>,
+  integrationConfigurationId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   templateId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   orgName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   updatedAt?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
@@ -4094,7 +4307,10 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   fetchAuth0User?: Resolver<Maybe<IResolversTypes['AuthUser']>, ParentType, ContextType, RequireFields<IQueryfetchAuth0UserArgs, 'auth0UserId'>>,
   getAccounts?: Resolver<Maybe<Array<Maybe<IResolversTypes['UserAccount']>>>, ParentType, ContextType, RequireFields<IQuerygetAccountsArgs, never>>,
+  getAllIntegrationConfigurations?: Resolver<Maybe<Array<Maybe<IResolversTypes['IntegrationConfiguration']>>>, ParentType, ContextType>,
   getAsanaConnectionState?: Resolver<Maybe<IResolversTypes['AsanaConnection']>, ParentType, ContextType>,
+  getAsanaWorkspaceProjects?: Resolver<Maybe<Array<Maybe<IResolversTypes['AsanaProjects']>>>, ParentType, ContextType, RequireFields<IQuerygetAsanaWorkspaceProjectsArgs, 'workspaceId'>>,
+  getAsanaWorkspaces?: Resolver<Maybe<Array<Maybe<IResolversTypes['AsanaWorkspaces']>>>, ParentType, ContextType>,
   getConfiguration?: Resolver<Maybe<Array<Maybe<IResolversTypes['Configuration']>>>, ParentType, ContextType, RequireFields<IQuerygetConfigurationArgs, never>>,
   getConfigurationData?: Resolver<Maybe<IResolversTypes['ConfigurationData']>, ParentType, ContextType>,
   getConfigurationPolicies?: Resolver<Maybe<Array<Maybe<IResolversTypes['ConfigurationPolicy']>>>, ParentType, ContextType, RequireFields<IQuerygetConfigurationPoliciesArgs, never>>,
@@ -4104,6 +4320,8 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   getDurationTimeRecords?: Resolver<Maybe<Array<Maybe<IResolversTypes['TimeRecord']>>>, ParentType, ContextType, RequireFields<IQuerygetDurationTimeRecordsArgs, never>>,
   getDurationTimesheet?: Resolver<Maybe<IResolversTypes['TimesheetResponse']>, ParentType, ContextType, RequireFields<IQuerygetDurationTimesheetArgs, never>>,
   getEnvironment?: Resolver<Maybe<IResolversTypes['Environment']>, ParentType, ContextType>,
+  getFilteredProjects?: Resolver<Maybe<Array<Maybe<IResolversTypes['Projects']>>>, ParentType, ContextType, RequireFields<IQuerygetFilteredProjectsArgs, 'filter'>>,
+  getIntegrationConfiguration?: Resolver<Maybe<IResolversTypes['IntegrationConfiguration']>, ParentType, ContextType, RequireFields<IQuerygetIntegrationConfigurationArgs, 'id'>>,
   getInvoices?: Resolver<Maybe<Array<Maybe<IResolversTypes['InvoiceType']>>>, ParentType, ContextType>,
   getManageableOrganizations?: Resolver<Maybe<Array<Maybe<IResolversTypes['Organization']>>>, ParentType, ContextType>,
   getOrgInvitationMembers?: Resolver<Maybe<Array<Maybe<IResolversTypes['InviteMember']>>>, ParentType, ContextType>,
@@ -4127,6 +4345,7 @@ export type IQueryResolvers<ContextType = MyContext, ParentType extends IResolve
   getTimeRecords?: Resolver<Maybe<Array<Maybe<IResolversTypes['TimeRecord']>>>, ParentType, ContextType>,
   getTimelineEvents?: Resolver<Maybe<Array<Maybe<IResolversTypes['Timeline']>>>, ParentType, ContextType, RequireFields<IQuerygetTimelineEventsArgs, never>>,
   getTimesheets?: Resolver<Maybe<Array<Maybe<IResolversTypes['TimesheetResponse']>>>, ParentType, ContextType, RequireFields<IQuerygetTimesheetsArgs, never>>,
+  getUserAccessRole?: Resolver<Maybe<IResolversTypes['ResourceAccessRole']>, ParentType, ContextType, RequireFields<IQuerygetUserAccessRoleArgs, never>>,
   getUserAccount?: Resolver<Maybe<IResolversTypes['UserAccount']>, ParentType, ContextType, RequireFields<IQuerygetUserAccountArgs, 'userId'>>,
   getUserOrganizations?: Resolver<Maybe<Array<Maybe<IResolversTypes['Organization']>>>, ParentType, ContextType, RequireFields<IQuerygetUserOrganizationsArgs, never>>,
   getUserOrganizationsWithRole?: Resolver<Maybe<Array<Maybe<IResolversTypes['Organization']>>>, ParentType, ContextType, RequireFields<IQuerygetUserOrganizationsWithRoleArgs, never>>,
@@ -4161,6 +4380,12 @@ export type IRemoteUserSettingsResolvers<ContextType = MyContext, ParentType ext
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type IResourceAccessRoleResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['ResourceAccessRole'] = IResolversParentTypes['ResourceAccessRole']> = {
+  accessRoles?: Resolver<Maybe<Array<Maybe<IResolversTypes['AccessRole']>>>, ParentType, ContextType>,
+  resourceUserRoles?: Resolver<Maybe<Array<Maybe<IResolversTypes['ResourceUser']>>>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type IResourcePolicyResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['ResourcePolicy'] = IResolversParentTypes['ResourcePolicy']> = {
   resource?: Resolver<Maybe<IResolversTypes['URI']>, ParentType, ContextType>,
   target?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
@@ -4180,6 +4405,7 @@ export type IResourceRoleResolvers<ContextType = MyContext, ParentType extends I
 };
 
 export type IResourceUserResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['ResourceUser'] = IResolversParentTypes['ResourceUser']> = {
+  resource?: Resolver<Maybe<IResolversTypes['URI']>, ParentType, ContextType>,
   role?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   name?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   isSelf?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
@@ -4294,6 +4520,7 @@ export type ITeamMemberResolvers<ContextType = MyContext, ParentType extends IRe
   email?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   name?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  username?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   role?: Resolver<Maybe<IResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
@@ -4379,7 +4606,7 @@ export interface IURIInputScalarConfig extends GraphQLScalarTypeConfig<IResolver
 }
 
 export type IUserAccountResolvers<ContextType = MyContext, ParentType extends IResolversParentTypes['UserAccount'] = IResolversParentTypes['UserAccount']> = {
-  id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>,
   email?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   alias?: Resolver<Maybe<Array<Maybe<IResolversTypes['String']>>>, ParentType, ContextType>,
   username?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
@@ -4495,7 +4722,9 @@ export type IResolvers<ContextType = MyContext> = {
   ApplicationRolePermission?: IApplicationRolePermissionResolvers<ContextType>,
   AsanaConnection?: IAsanaConnectionResolvers<ContextType>,
   AsanaConnectionState?: IAsanaConnectionStateResolvers<ContextType>,
+  AsanaProjects?: IAsanaProjectsResolvers<ContextType>,
   AsanaUser?: IAsanaUserResolvers<ContextType>,
+  AsanaWorkspaces?: IAsanaWorkspacesResolvers<ContextType>,
   AuthUser?: IAuthUserResolvers<ContextType>,
   AuthUserRaw?: IAuthUserRawResolvers<ContextType>,
   Client?: IClientResolvers<ContextType>,
@@ -4525,6 +4754,8 @@ export type IResolvers<ContextType = MyContext> = {
   IAuthUser?: IIAuthUserResolvers,
   IConfigurationChangeEvent?: IIConfigurationChangeEventResolvers<ContextType>,
   IConfigurationModel?: IIConfigurationModelResolvers,
+  IntegraitonConfigurationId?: IIntegraitonConfigurationIdResolvers<ContextType>,
+  IntegrationConfiguration?: IIntegrationConfigurationResolvers<ContextType>,
   InvitationDecode?: IInvitationDecodeResolvers<ContextType>,
   InviteMember?: IInviteMemberResolvers<ContextType>,
   InvoiceType?: IInvoiceTypeResolvers<ContextType>,
@@ -4540,6 +4771,7 @@ export type IResolvers<ContextType = MyContext> = {
   MemorySettings?: IMemorySettingsResolvers<ContextType>,
   Mutation?: IMutationResolvers<ContextType>,
   NameType?: INameTypeResolvers<ContextType>,
+  Node?: INodeResolvers,
   Organization?: IOrganizationResolvers<ContextType>,
   OrganizationConfiguration?: IOrganizationConfigurationResolvers<ContextType>,
   OrganizationData?: IOrganizationDataResolvers<ContextType>,
@@ -4575,6 +4807,7 @@ export type IResolvers<ContextType = MyContext> = {
   Query?: IQueryResolvers<ContextType>,
   Range?: IRangeResolvers<ContextType>,
   RemoteUserSettings?: IRemoteUserSettingsResolvers<ContextType>,
+  ResourceAccessRole?: IResourceAccessRoleResolvers<ContextType>,
   ResourcePolicy?: IResourcePolicyResolvers<ContextType>,
   ResourceRole?: IResourceRoleResolvers<ContextType>,
   ResourceUser?: IResourceUserResolvers<ContextType>,

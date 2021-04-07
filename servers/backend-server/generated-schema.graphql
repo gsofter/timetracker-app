@@ -825,11 +825,33 @@ enum PreDefinedRole {
 
 
 enum ApplicationRoles {
+    """
+     User who is logged in
+    """
+    USER
+    """
+     Owner of an Organization
+    """
     OWNER
+    """
+     Admin of an Organization
+    """
     ADMIN
+    """
+     Project Contributors
+    """
     CONTRIBUTORS
+    """
+     Project Admin
+    """
     PROJECT_ADMIN
+    """
+     Project Viewer
+    """
     PROJECT_VIEWER
+    """
+     Guest 
+    """
     GUEST
 }
 
@@ -841,6 +863,7 @@ interface IResourceUserRole {
 }
 
 type ResourceUser implements IResourceUserRole {
+    resource: URI
     role: String
     name: String
     isSelf: Boolean
@@ -881,6 +904,10 @@ type ApplicationRolePermission implements IConfigurationModel {
 
 union AccessRole = DefaultRole | OrganizationRole | ResourceRole | ApplicationRolePermission
 
+type ResourceAccessRole {
+    accessRoles: [AccessRole]
+    resourceUserRoles: [ResourceUser]
+}
 
 input RoleInput {
     target: Int!
@@ -891,7 +918,7 @@ input RoleInput {
 extend type Query {
     getRole(input: RoleInput): AccessRole @addAccountContext
     getRoles(input: [RoleInput]): [AccessRole] @addAccountContext
-
+    getUserAccessRole(input: [RoleInput]): ResourceAccessRole @addAccountContext
     getContributionRoles: [ContributionRoles] @addAccountContext
 }
 
@@ -1488,8 +1515,8 @@ isBillingLeader: true if user is BillingLeader
 userOgs: the orgs and roles for this user on each.
 
 """
-type UserAccount {
-    id: String
+type UserAccount implements Node {
+    id: ID!
     email: String
     alias: [String]
     username: String
@@ -2232,7 +2259,6 @@ extend type Query {
     getOrganizationClients: [Client]
 }
 
-
 type Projects {
     id: ID
     name: String!
@@ -2240,6 +2266,7 @@ type Projects {
     teams: [String]
     status: String
     type: ProjectType
+    integrationConfigurationId: String
     """ Predefined Project template  """
     templateId: String
     orgName: String
@@ -2258,12 +2285,15 @@ input ProjectAddRequest {
     clientId: String
     teams: [String]
     orgName: String
+    integrationConfigurationId: String
 }
 
 input UpdateProject_Input {
     name: String!
     clientId: String
     teams: [String]
+    orgName: String
+    integrationConfigurationId: String
 }
 
 type Project_Output {
@@ -2273,16 +2303,26 @@ type Project_Output {
     teams: [String]
     status: String
     orgName: String
+    integrationConfigurationId: String
+}
+
+input ProjectWhereInput {
+    id: String
+    integrationConfigurationId: String
+    name: String
+    orgName: String
 }
 
 extend type Mutation {
     addOrgProject(project: ProjectAddRequest!): Boolean
-    updateOrgProject(id: String!, project: UpdateProject_Input): Boolean
+    updateOrgProject(where: ProjectWhereInput!, project: UpdateProject_Input): Boolean
     updateProjectStatus(id: String!, status: String): Boolean
+    upsertProjectThroughIntegration(where: ProjectWhereInput!, project: UpdateProject_Input): Projects
 }
 
 extend type Query {
     getProjects: [Project_Output]
+    getFilteredProjects(filter: ProjectWhereInput!): [Projects]
 }
 
 type AsanaUser {
@@ -2299,8 +2339,20 @@ type AsanaConnection {
     asana: AsanaConnectionState
 }
 
+type AsanaProjects {
+    gid: String
+    name: String
+}
+
+type AsanaWorkspaces {
+    gid: String
+    name: String
+}
+
 extend type Query {
     getAsanaConnectionState: AsanaConnection
+    getAsanaWorkspaceProjects(workspaceId: String!): [AsanaProjects]
+    getAsanaWorkspaces: [AsanaWorkspaces]
 }
 
 type InvoiceType {
@@ -2432,13 +2484,74 @@ input InvoiceUpdateRequest {
     total: Float
 }
 
+input Template {
+    templateId: String
+    name: String
+    text: String
+    html: String
+    engine: String
+    topic: String
+    description: String
+    variables: AnyObject
+}
+
+input InvoiceMailRequest {
+    template: Template!
+    to: String!
+    from: String!
+    cc: String
+    bcc: String
+    attachments: [AnyObject]
+    subject: String
+}
+
 extend type Mutation {
     createInvoice(invoice: InvoiceCreateRequest!): Boolean
     updateInvoice(id: String, invoice: InvoiceUpdateRequest): Boolean
     removeInvoice(id: String): Boolean
+    sendInvoiceMail(request: InvoiceMailRequest!): Boolean
 }
 
 extend type Query {
     getInvoices: [InvoiceType]
     getDefaultInvoiceNumber: String
+}
+
+type IntegraitonConfigurationId {
+  id: String
+}
+
+type IntegrationConfiguration{
+  id: ID
+  name: String
+  integrationName: String
+  status: String
+  updatedAt: DateTime
+  integrationInfo: JSON
+}
+
+input IntegrationConfigurationInput {
+  name: String
+  integrationName: String
+  status: String
+  integrationInfo: JSON
+}
+
+input IntegrationConfigurationCreateOrUpdateInput {
+  id: ID
+  name: String
+  integrationName: String
+  status: String
+  integrationInfo: JSON
+}
+
+extend type Query {
+  getAllIntegrationConfigurations: [IntegrationConfiguration]
+  getIntegrationConfiguration(id: String!): IntegrationConfiguration
+}
+
+extend type Mutation {
+  createIntegrationConfiguration(data: IntegrationConfigurationInput): IntegraitonConfigurationId
+  createOrUpdateIntegrationConfiguration(data: IntegrationConfigurationCreateOrUpdateInput): IntegraitonConfigurationId
+  deleteIntegrationConfiguration(id: String!): Boolean
 }
