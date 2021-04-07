@@ -8,11 +8,13 @@ import {
   ITimeRecord,
   ITimesheet,
   ITimesheetCreateRequest,
-  ITimeTracker,
-  ITimesheetState,
 } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
+import { CommonType } from '@common-stack/core';
+import { ServiceBroker, CallingOptions } from 'moleculer';
+import { IMailerServicesendArgs, IMailServiceAction, IMoleculerServiceName } from '@adminide-stack/core'
+import { EmailTemplateCodes } from '../../constants'
 
 @injectable()
 export class TimeTrackerRepository implements ITimeTrackerRepository {
@@ -25,9 +27,8 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     @inject('Logger')
     logger: Logger,
 
-    @inject('MongoOptions')
-    @optional()
-    options?: any,
+    @inject(CommonType.MOLECULER_BROKER)
+    private broker: ServiceBroker,
   ) {
     this.logger = logger.child({ className: 'ScheduleRepository' });
     this.timeTrackerModel = TimeTrackerModelFunc(db);
@@ -268,5 +269,25 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     } catch (err) {
       throw new Error(err.message);
     }
+  }
+
+  private sendMail(topic, to, from, templateVars) {
+    return this.callAction<void, IMailerServicesendArgs>(
+      IMailServiceAction.send,
+      {
+        request: {
+          topic,
+          to,
+          templateId: EmailTemplateCodes.TIMESHEET_APPROVAL,
+          from,
+          variables: templateVars,
+        },
+      },
+      IMoleculerServiceName.MailService,
+    );
+  }
+
+  private async callAction<T, P = any>(command: string, params?: P, topic?: string, opts?: CallingOptions) {
+    return this.broker.call<T, P>(`${topic}.${command}`, params, opts);
   }
 }

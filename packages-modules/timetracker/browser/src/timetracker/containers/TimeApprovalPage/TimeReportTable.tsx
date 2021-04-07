@@ -13,6 +13,7 @@ import { generatePath } from 'react-router-dom'
 import { useGetOrgContextQuery } from '@adminide-stack/react-shared-components'
 import { ROUTES } from '../../constants'
 import * as qs from 'query-string'
+//import { usePermissionAutoFetch } from '@adminide-stack/react-shared-components'
 interface ITimesheetProps {
   timesheets: Array<ITimesheetResponse>;
   viewMode: VIEW_MODE;
@@ -30,6 +31,8 @@ const TimeReport = ({
   const history = useHistory();
   const { dateFormat, timeFormat } = useTimeformat();
   const { data: contextData } = useGetOrgContextQuery();
+//  const { data: permissionData, loading: loadingPermission } = usePermissionAutoFetch({ configKey: 'organization.timetracker.view'})
+//  console.log("permissionData => ", permissionData, loadingPermission);
   const handleView = (id: string, record: ITimesheetResponse) => {
     history.push({
       pathname: generatePath(ROUTES.Timesheet, { orgName: contextData.getOrgContext.orgName }),
