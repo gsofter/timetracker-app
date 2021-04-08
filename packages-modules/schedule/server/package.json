@@ -38,7 +38,7 @@
     }
   },
   "dependencies": {
-    "@admin-layout/schedule-module-core": "file:../core"
+    "@admin-layout/schedule-module-core": "link:../core"
   },
   "peerDependencies": {
     "inversify": "*"

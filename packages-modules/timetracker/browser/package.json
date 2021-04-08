@@ -42,9 +42,9 @@
   "author": "CDMBase LLC",
   "license": "ISC",
   "dependencies": {
-    "@admin-layout/components": "file:../../../packages/components",
-    "@admin-layout/timetracker-core": "file:../core",
-    "@adminide-stack/core": "^0.0.18-alpha.456",
+    "@admin-layout/components": "link:../../../packages/components",
+    "@admin-layout/timetracker-core": "link:../core",
+    "@adminide-stack/core": "^0.0.18-alpha.457",
     "chart.js": "^2.9.4",
     "react-chartjs-2": "^2.11.1",
     "react-compound-timer": "^1.2.0",
@@ -62,8 +62,8 @@
     "@types/react-big-calendar": "^0.30.0"
   },
   "peerDependencies": {
-    "@common-stack/client-react": ">=0.0.251",
-    "@common-stack/core": ">=0.0.251",
+    "@common-stack/client-react": ">=0.0.255",
+    "@common-stack/core": ">=0.0.255",
     "antd": "^4.5.2"
   },
   "typings": "lib/index.d.ts",

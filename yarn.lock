@@ -1584,24 +1584,24 @@
   resolved "https://registry.yarnpkg.com/@common-stack/client-core/-/client-core-0.0.255.tgz#bc25071e423584c2b31a4b746bed4f4a6b9424eb"
   integrity sha512-vtOUCYvfd7VWYGnpMXLb4bTBHcu9qFMe8bumYDzJMR+JJYW/e05/XbMjKtGuPfG3phmqmXUHAW4qjA4RrCIkyA==
   dependencies:
-    "@common-stack/core" "^0.0.255"
+    "@common-stack/core" "0.0.255"
 
 "@common-stack/client-react-native@0.0.255":
   version "0.0.255"
   resolved "https://registry.yarnpkg.com/@common-stack/client-react-native/-/client-react-native-0.0.255.tgz#9f07b1da70de0895c20ffa4428791bff9ad6ada0"
   integrity sha512-80dkTmoBRED2KVIEXYRjkaVAEyidli3ZydgDzJvKFP+q1ef89rebYPDqUbUk2BlPM578KMawNFY4L3XQ+Uzn0A==
   dependencies:
-    "@common-stack/client-core" "^0.0.255"
-    "@common-stack/client-react" "^0.0.255"
-    "@common-stack/core" "^0.0.255"
+    "@common-stack/client-core" "0.0.255"
+    "@common-stack/client-react" "0.0.255"
+    "@common-stack/core" "0.0.255"
 
 "@common-stack/client-react@0.0.255", "@common-stack/client-react@^0.0.255":
   version "0.0.255"
   resolved "https://registry.yarnpkg.com/@common-stack/client-react/-/client-react-0.0.255.tgz#d111d65a4a15bc42a57331c9cda7d385eb6bb4e6"
   integrity sha512-S+Ne9aMgGLF5/SIR/cKgBVnm5xSerX/X1+01Ofi7p4Y+m+ggCYClbWGIM50MrlOUEfsshUeeNtkuiGFqfvqjxQ==
   dependencies:
-    "@common-stack/client-core" "^0.0.255"
-    "@common-stack/core" "^0.0.255"
+    "@common-stack/client-core" "0.0.255"
+    "@common-stack/core" "0.0.255"
     "@wordpress/hooks" "^2.10.0"
     browser-bunyan "^1.6.3"
     history-with-query "^4.10.4"
@@ -1617,7 +1617,7 @@
   resolved "https://registry.yarnpkg.com/@common-stack/server-core/-/server-core-0.0.255.tgz#89fe15e98bb13557378f54579d621c63dfb61128"
   integrity sha512-obeuaKAlGiljogvAFX3bs10FdDbQS5JpXTANjTMBEsTWIVlPQ1bSxBNWi9RdPe4VJQtgGUaUFY9oo4ia1KdZag==
   dependencies:
-    "@common-stack/core" "^0.0.255"
+    "@common-stack/core" "0.0.255"
 
 "@ctrl/tinycolor@^3.4.0":
   version "3.4.0"

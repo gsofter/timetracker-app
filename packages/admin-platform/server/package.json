@@ -38,7 +38,7 @@
     }
   },
   "dependencies": {
-    "@admin-layout/core": "file:../../admin-core"
+    "@admin-layout/core": "link:../../admin-core"
   },
   "publishConfig": {
     "access": "public"

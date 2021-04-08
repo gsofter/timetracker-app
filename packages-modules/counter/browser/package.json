@@ -40,13 +40,13 @@
     }
   },
   "dependencies": {
-    "@admin-layout/react-shared-components": "file:../../../packages/react-shared-components",
-    "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser",
-    "@admin-layout/components": "file:../../../packages/components"
+    "@admin-layout/react-shared-components": "link:../../../packages/react-shared-components",
+    "@admin-layout/platform-browser": "link:../../../packages/admin-platform/browser",
+    "@admin-layout/components": "link:../../../packages/components"
   },
   "peerDependencies": {
-    "@common-stack/client-react": ">=0.0.251",
-    "@common-stack/core": ">=0.0.251",
+    "@common-stack/client-react": ">=0.0.255",
+    "@common-stack/core": ">=0.0.255",
     "antd": "^4.5.2"
   },
   "typescript": {
