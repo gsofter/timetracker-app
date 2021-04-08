@@ -13,8 +13,12 @@ import * as _ from 'lodash';
 import * as moment from 'moment';
 import { CommonType } from '@common-stack/core';
 import { ServiceBroker, CallingOptions } from 'moleculer';
-import { IMailerServicesendArgs, IMailServiceAction, IMoleculerServiceName } from '@adminide-stack/core'
-import { EmailTemplateCodes } from '../../constants'
+import {
+  IMailerServicesendArgs,
+  IMailServiceAction,
+  IMoleculerServiceName,
+} from '@adminide-stack/core';
+import { EmailTemplateCodes } from '../../constants';
 
 @injectable()
 export class TimeTrackerRepository implements ITimeTrackerRepository {
@@ -69,7 +73,8 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   public async getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>> {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
     if (trackDoc && trackDoc.timesheets) {
-      return trackDoc.timesheets.filter(sh => sh.userId === userId);
+      return trackDoc.timesheets;
+      // return trackDoc.timesheets.filter(sh => sh.userId === userId);
     } else {
       return [];
     }
@@ -85,7 +90,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     if (trackDoc && trackDoc.timesheets) {
       return trackDoc.timesheets.find(
         sh =>
-          sh.userId === userId &&
+          //sh.userId === userId &&
           moment(start).format('YYYY-MM-DD') === moment(sh.startDate).format('YYYY-MM-DD') &&
           moment(end).format('YYYY-MM-DD') === moment(sh.endDate).format('YYYY-MM-DD'),
       );
@@ -287,7 +292,12 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     );
   }
 
-  private async callAction<T, P = any>(command: string, params?: P, topic?: string, opts?: CallingOptions) {
+  private async callAction<T, P = any>(
+    command: string,
+    params?: P,
+    topic?: string,
+    opts?: CallingOptions,
+  ) {
     return this.broker.call<T, P>(`${topic}.${command}`, params, opts);
   }
 }

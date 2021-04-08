@@ -192,7 +192,7 @@ const TimesheetPage = () => {
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { data: membersData, loading: loadingMembers } = useGetOrganizationMembersQuery();
   const { data: tagsData, loading: loadingTags } = useGetTagsQuery();
-  const { day, value: dowValue } = useFirstWeekDay();
+  const { value: dowValue } = useFirstWeekDay();
   const history = useHistory();
   const queryParsed = qs.parse(location.search);
 
@@ -244,54 +244,3 @@ const TimesheetPage = () => {
 };
 export { moment };
 export default TimesheetPage;
-
-const styles: { [property: string]: (props) => CSS.Properties } = {
-  dateHeader: props => ({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '@media (max-width: 768px)': {
-      flexDirection: 'column',
-    },
-    '& .day': {
-      fontSize: '3em',
-      fontWeight: '500',
-      '@media (max-width: 768px)': {
-        fontSize: '14px',
-      },
-    },
-    '& .extra': {
-      display: 'flex',
-      flexDirection: 'column',
-      '& .week': {
-        fontSize: '1em',
-        '@media (max-width: 768px)': {
-          fontSize: '12px',
-        },
-      },
-
-      '& .month': {
-        fontSize: '1em',
-        '@media (max-width: 768px)': {
-          fontSize: '12px',
-        },
-        color: '#bbb',
-      },
-    },
-    '& .today': {
-      color: '#1890ff',
-    },
-  }),
-  greenText: props => ({
-    color: 'green',
-  }),
-  boldText: props => ({
-    fontWeight: 'bold',
-  }),
-
-  calendarTable: props => ({
-    width: '100%',
-    background: 'white',
-  }),
-};
