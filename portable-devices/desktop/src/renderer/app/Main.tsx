@@ -6,7 +6,6 @@ import { Provider } from 'react-redux';
 import createRenderer from '../config/fela-renderer';
 import { rehydrate } from 'fela-dom';
 import { epic$ } from '../config/epic-config';
-
 import {
   createReduxStore,
   storeReducer,
@@ -14,7 +13,6 @@ import {
   persistConfig,
 } from '../config/redux-config';
 import { createClientContainer } from '../config/client.service';
-
 import {
   SlotFillProvider,
   InversifyProvider, Lifecycle,
@@ -22,7 +20,6 @@ import {
 import { PluginArea } from '@common-stack/client-react';
 import modules, { MainRoute } from '../modules';
 import { ConnectedRouter } from 'connected-react-router';
-import { ServerError } from './Error';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
 import { useProvideAuth } from '@adminide-stack/user-auth0-browser';
@@ -36,7 +33,6 @@ const ProvideAuth = ({ children }) => {
 
 const { apolloClient: client, container } = createClientContainer();
 
-
 let store;
 if ((module as any).hot && (module as any).hot.data && (module as any).hot.data.store) {
   // console.log('Restoring Redux store:', JSON.stringify((module as any).hot.data.store.getState()));
@@ -45,7 +41,7 @@ if ((module as any).hot && (module as any).hot.data && (module as any).hot.data.
   // new reducer added through our `modules`
   store.replaceReducer(persistReducer(persistConfig, storeReducer((module as any).hot.data.history || history)));
 } else {
-  store = createReduxStore();
+store = createReduxStore('renderer');
 }
 if ((module as any).hot) {
   (module as any).hot.dispose(data => {
@@ -66,12 +62,7 @@ if ((module as any).hot) {
   });
 }
 
-export interface MainState {
-  error?: ServerError;
-  info?: any;
-}
-
-export class Main extends React.Component<any, MainState> {
+export class Main extends React.Component<{}, {}> {
 
   render() {
     const renderer = createRenderer();

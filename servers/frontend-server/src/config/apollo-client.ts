@@ -6,7 +6,6 @@ import { ApolloLink } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getOperationAST } from 'graphql';
 import apolloLogger from 'apollo-link-logger';
-
 import { PUBLIC_SETTINGS } from './public-config';
 import modules from '../modules';
 import { logger } from '@cdm-logger/client';
@@ -123,6 +122,7 @@ const createApolloClient = () => {
         }
     }
     _apolloClient = new ApolloClient<any>(params);
+
     cache.writeData({
         data: {
             ...clientState.defaults,

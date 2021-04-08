@@ -3,12 +3,18 @@ import {
     createStore, Store, applyMiddleware, Middleware, AnyAction,
     compose, combineReducers, StoreEnhancer,
 } from 'redux';
+import {
+    forwardToMain,
+    forwardToRenderer,
+    triggerAlias,
+    replayActionMain,
+    replayActionRenderer,
+  } from 'electron-redux';
 import thunk from 'redux-thunk';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { createLogger } from 'redux-logger';
 import storage from 'redux-persist/lib/storage';
 import modules from '../modules';
-import { persistReducer, WebStorage } from 'redux-persist';
+import { persistReducer } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { createEpicMiddleware } from 'redux-observable';
 import { createClientContainer } from './client.service';
@@ -48,23 +54,51 @@ export const persistConfig = {
  * Add any reducers required for this app dirctly in to
  * `combineReducers`
  */
-export const createReduxStore = (url = '/') => {
+
+export const createReduxStore = (scope = 'main',url = '/') => {
 
     // only in server side, url will be passed.
     const newHistory = __CLIENT__ ? history : history(url);
     /**
      * Add middleware that required for this app.
      */
-    const middlewares: Middleware[] = [
+
+    const router = routerMiddleware(newHistory);
+    let middlewares: Middleware[] = [
         thunk,
-        routerMiddleware(newHistory),
+        // routerMiddleware(newHistory),
+        router,
         epicMiddleware, // epic middleware
     ];
 
     // Add redux logger during development only
     if ((process.env.NODE_ENV === 'development' || __DEBUGGING__) && __CLIENT__) {
-        middlewares.push(reduxLogger);
+        const { createLogger } = require('redux-logger');
+
+        middlewares.push(createLogger({ 
+            level: scope === 'main' ? undefined : 'info',
+            collapsed: true }));
     }
+
+    // this one code belongs to the electron-redux
+    
+    if (scope === 'renderer') {
+        
+        middlewares = [
+          forwardToMain,
+          router,
+          ...middlewares,
+        ];
+      }
+    
+      if (scope === 'main') {
+        middlewares = [
+          triggerAlias,
+          ...middlewares,
+          forwardToRenderer,
+        ];
+      }
+
 
     const enhancers: () => StoreEnhancer<any>[] = () => [
         applyMiddleware(...middlewares),
@@ -98,6 +132,12 @@ export const createReduxStore = (url = '/') => {
         // no SSR for now
         epicMiddleware.run(rootEpic as any);
     }
+
+    if (scope === 'main') {
+        replayActionMain(store);
+      } else {
+        replayActionRenderer(store);
+      }
 
     return store;
 };

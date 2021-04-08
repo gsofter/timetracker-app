@@ -40,6 +40,9 @@
   "dependencies": {
     "@admin-layout/schedule-module-core": "file:../core"
   },
+  "peerDependencies": {
+    "inversify": "*"
+  },
   "publishConfig": {
     "access": "public"
   },

@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { IMenuPosition } from '@common-stack/client-react';
+import { IMenuPosition, IRoute } from '@common-stack/client-react';
 
 import { Hello } from './components/Hello';
 import { Counter } from './components/Counter';
@@ -10,7 +10,7 @@ import {
     FileOutlined
   } from '@ant-design/icons';
 
-export const counterPageStore: any[] = [
+export const counterPageStore: IRoute[] = [
     {
         exact: false,
         icon: <FileOutlined/>,
@@ -35,7 +35,7 @@ export const counterPageStore: any[] = [
     {
         exact: true,
         name: 'Counter',
-        component: Counter,
+        component: Counter as any,
         position: IMenuPosition.MIDDLE,
         key: CONNECTED_REACT_ROUTER_KEY_TYPES.COUNTER,
         path: CONNECTED_REACT_ROUTER_ROUTES_TYPES.COUNTER,
@@ -50,10 +50,8 @@ const selectedRoutesAndMenus = [
     CONNECTED_REACT_ROUTER_KEY_TYPES.COUNTER,
 ];
 
-// get menus
-const filteredMenus = getFilteredMenus(counterPageStore, selectedRoutesAndMenus);
 
 // get routes
 const filteredRoutes = getFilteredRoutes(counterPageStore, selectedRoutesAndMenus);
 
-export { filteredMenus, filteredRoutes };
+export { filteredRoutes };

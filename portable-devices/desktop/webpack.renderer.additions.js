@@ -1,9 +1,6 @@
 const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
 var dotenv = require('dotenv-safe')
-const MonacoWebpackPlugin = require('@vscode/monaco-editor-webpack-plugin');
-const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
-const HtmlWebpackPlugin = require('html-webpack-plugin')
 const CopyWebpackPlugin = require('copy-webpack-plugin');
 
 const options = {
@@ -34,15 +31,12 @@ const options = {
 }
 let config = {
     target: 'electron-renderer',
-    output: {
-        filename: 'main.js',
+    entry: {
+        tray: './src/renderer/tray.tsx',
+        
     },
-    module: {
-        rules: [
-            {
-                test: /\.html$/,
-                loader: 'html-loader'
-            }],
+    output: {
+        filename: '[name].js',
     },
     plugins: [
         new CopyWebpackPlugin({
@@ -86,6 +80,20 @@ let config = {
         ),
         new webpack.DefinePlugin({
             "__ENV__": JSON.stringify(dotenv.parsed)
+        }),
+        new CopyWebpackPlugin({
+            patterns: [{
+                from: 'assets/html/tray-page.html',
+                to: 'tray-page.html',
+            }, {
+                from: 'assets/html/about-page.html',
+                to: 'about-page.html',
+            }, {
+                from: 'assets/html/main-page.html',
+                to: 'main-page.html',
+            },
+
+            ]
         }),
     ],
     // defines: {

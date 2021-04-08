@@ -23,7 +23,7 @@ export const epicMiddleware = createEpicMiddleware({
         routes: modules.getConfiguredRoutes(),
         services,
         logger
-    },
+    }, 
 });
 
 export const storeReducer = (hist) => combineReducers({

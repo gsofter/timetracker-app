@@ -1,6 +1,6 @@
 /// <reference path='../../../../typings/index.d.ts' />
-import { lowerCase } from 'lodash';
 import { logger } from '@cdm-logger/client';
+import { lowerCase } from 'lodash';
 
 /**
  * This file opens up in public site, so make sure it is
@@ -50,9 +50,9 @@ try {
 } catch (e) {
     logger.warn(e);
     logger.info('Encountered above issue while running "global.process = process", will automatically try again in next render');
-}
 
-export const PUBLIC_SETTINGS: __PUBLIC_SETTINGS__ & any= {
+}
+export const PUBLIC_SETTINGS: __PUBLIC_SETTINGS__ = {
     apolloLogging: false,
     GRAPHQL_URL: process.env.GRAPHQL_URL || env.GRAPHQL_URL || __GRAPHQL_URL__,
     GRAPHQL_SUBSCRIPTION_URL: env.GRAPHQL_SUBSCRIPTION_URL,
