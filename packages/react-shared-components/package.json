@@ -40,8 +40,8 @@
   "author": "CDMBase LLC",
   "license": "ISC",
   "dependencies": {
-    "@admin-layout/core": "../admin-core",
-    "@admin-layout/components": "../components",
+    "@admin-layout/core": "link:../admin-core",
+    "@admin-layout/components": "link:../components",
     "@ant-design/pro-provider": "0.0.6",
     "@types/react-copy-to-clipboard": "^4.3.0",
     "@umijs/route-utils": "^1.0.5",
