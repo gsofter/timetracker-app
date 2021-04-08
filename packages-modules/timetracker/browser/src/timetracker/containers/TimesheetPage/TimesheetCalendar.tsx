@@ -124,9 +124,6 @@ const TimesheetCalendar = ({
   };
 
   const { data, loading, error, refetch } = useGetTimeRecordsQuery();
-  useEffect(() => {
-    refetch();
-  }, [refetch]);
 
   const filterEvents = events => {
     if (!events) return [];

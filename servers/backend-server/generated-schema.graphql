@@ -2545,9 +2545,17 @@ input IntegrationConfigurationCreateOrUpdateInput {
   integrationInfo: JSON
 }
 
+input IntegrationConfigurationFilterInput {
+  id: ID
+  name: String
+  integrationName: String
+  status: String
+}
+
 extend type Query {
   getAllIntegrationConfigurations: [IntegrationConfiguration]
   getIntegrationConfiguration(id: String!): IntegrationConfiguration
+  filterIntegrationConfiguration(filter: IntegrationConfigurationFilterInput): [IntegrationConfiguration]
 }
 
 extend type Mutation {
