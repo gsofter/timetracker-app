@@ -66,7 +66,7 @@
     "travis": "istanbul cover -x \"*.test.js\" _mocha -- --timeout 5000 --full-trace ./test/tests.js",
     "posttravis": "npm run lint",
     "watch": "lerna exec --no-sort --ignore *server --ignore *desktop --ignore *mobile --stream --parallel -- webpack --watch",
-    "watch-packages": "lerna exec --no-sort  --scope @sample-stack/platform* --scope @sample-stack/react-shared-components --scope @sample-stack/core --stream --parallel 'webpack --watch'",
+    "watch-packages": "lerna exec --no-sort  --scope @admin-stack/platform* --scope @admin-stack/react-shared-components --scope @admin-stack/core --stream --parallel 'webpack --watch'",
     "zen:build": "cross-env NODE_ENV=production zen build",
     "zen:exp": "zen exp",
     "zen:watch": "zen  watch -x",
