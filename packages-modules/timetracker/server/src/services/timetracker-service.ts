@@ -40,7 +40,12 @@ export class TimeTrackerService implements ITimeTrackerService {
     return this.trackerRepository.getTimesheets(userId, orgId);
   }
 
-  public async getDurationTimesheet(userId: string, orgId: string, start: Date, end: Date): Promise<ITimesheet> {
+  public async getDurationTimesheet(
+    userId: string,
+    orgId: string,
+    start: Date,
+    end: Date,
+  ): Promise<ITimesheet> {
     return this.trackerRepository.getDurationTimesheet(userId, orgId, start, end);
   }
 
@@ -70,14 +75,15 @@ export class TimeTrackerService implements ITimeTrackerService {
     orgId: string,
     sheetId: string,
     request: ITimesheetCreateRequest,
+    userContext?: any,
   ) {
-    return this.trackerRepository.updateTimesheet(userId, orgId, sheetId, request);
+    return this.trackerRepository.updateTimesheet(userId, orgId, sheetId, request, userContext);
   }
 
   public async updateTimesheetStatus(
     userId: string,
     orgId: string,
-    request: ITimesheetCreateRequest
+    request: ITimesheetCreateRequest,
   ) {
     return this.trackerRepository.updateTimesheetStatus(userId, orgId, request);
   }

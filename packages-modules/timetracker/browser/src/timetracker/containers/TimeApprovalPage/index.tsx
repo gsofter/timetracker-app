@@ -52,7 +52,9 @@ const TimeReportWrapper = () => {
       <Tabs defaultActiveKey="1" onChange={handleChangeTabView}>
         <TabPane tab="Opened" key="1">
           <TimeReportTable
-            timesheets={[]}
+            timesheets={_.get(data, 'getTimesheets', []).filter(
+              timesheet => timesheet.state === ITimesheetState.OPEN,
+            )}
             viewMode={VIEW_MODE.OPEN}
             members={_.get(membersData, 'getOrganizationMembers', [])}
             updateTimesheet={updateTimesheet}

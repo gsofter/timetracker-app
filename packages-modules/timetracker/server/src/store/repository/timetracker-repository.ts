@@ -19,7 +19,7 @@ import {
   IMoleculerServiceName,
 } from '@adminide-stack/core';
 import { EmailTemplateCodes } from '../../constants';
-
+import { config } from '../../config';
 @injectable()
 export class TimeTrackerRepository implements ITimeTrackerRepository {
   private timeTrackerModel: TimeTrackerModelType;
@@ -161,12 +161,24 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     orgId: string,
     sheetId: string,
     request: ITimesheetCreateRequest,
+    userContext?: any,
   ) {
     try {
       const response = await this.timeTrackerModel.update(
         { orgId: orgId, timesheets: { $elemMatch: { _id: sheetId } } },
         { $set: { 'timesheets.$': request } },
       );
+      const mailTopic = 'Timsheet approved';
+      const mailTo = userContext.emailId;
+      const mailFrom = config.MAIL_SEND_DEFAULT_EMAIL;
+      const templateVars = {
+        name: userContext.username,
+        startDate: moment(request.startDate).format('YYYY-MM-DD'),
+        endDate: moment(request.endDate).format('YYYY-MM-DD'),
+        timesheet_url: `${config.CLIENT_URL}/${orgId}/time-tracker/timeapproval`,
+        contact_url: `${config.CLIENT_URL}`,
+      };
+      this.sendMail(mailTopic, mailTo, mailFrom, templateVars);
       return true;
     } catch (err) {
       throw new Error(err.message);
