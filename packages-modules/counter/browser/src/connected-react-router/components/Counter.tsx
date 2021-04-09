@@ -5,7 +5,6 @@ import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { increment, decrement } from '../redux';
 import { State } from '../interfaces';
-import { PageContainer } from '@admin-layout/components';
 
 const CounterComponent: React.SFC<RouteComponentProps<any> & StateProps & DispatchProps> = (props) => (
     <div>
@@ -34,11 +33,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
 export const Counter = connect<StateProps, DispatchProps, RouteComponentProps<any>>(
-<<<<<<< HEAD
-  mapStateToProps,
-  mapDispatchToProps,
-=======
     mapStateToProps,
     mapDispatchToProps,
->>>>>>> 165f128ac96507a84c190c9a6fb321826bb2f1bb
 )(CounterComponent);
