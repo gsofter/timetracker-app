@@ -6,7 +6,6 @@ const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-const CleanWebpackPlugin = require('clean-webpack-plugin');
 // const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const config = {
@@ -34,9 +33,6 @@ const config = {
             enabled: true,
             webpackConfig: {
                 plugins: [
-                    new CleanWebpackPlugin({
-                        cleanOnceBeforeBuildPatterns: [],
-                    }),
                     new MonacoWebpackPlugin(),
                     // Bug: will make timesheet component fail
                     // new LodashModuleReplacementPlugin({
@@ -69,9 +65,6 @@ const config = {
                     filename: 'main.js',
                 },
                 plugins: [
-                    new CleanWebpackPlugin({
-                        cleanOnceBeforeBuildPatterns: [],
-                    }),
                     new CopyWebpackPlugin({
                         patterns: [{
                             from: '../../tools/esm-wrapper.js',
