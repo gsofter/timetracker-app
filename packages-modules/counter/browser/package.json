@@ -47,7 +47,16 @@
   "peerDependencies": {
     "@common-stack/client-react": ">=0.0.255",
     "@common-stack/core": ">=0.0.255",
-    "antd": "^4.5.2"
+    "antd": "^4.5.2",
+    "@common-stack/client-react-native": "*",
+    "@react-navigation/drawer": "*",
+    "native-base": "*",
+    "react": "*",
+    "react-native": "*",
+    "react-redux": "*",
+    "react-router": "*",
+    "react-router-dom": "*",
+    "redux": "*"
   },
   "typescript": {
     "definition": "lib/index.d.ts"
