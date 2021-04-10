@@ -3,28 +3,22 @@ import * as React from 'react';
 import { RendererProvider } from 'react-fela';
 import { ApolloProvider } from '@apollo/react-common';
 import { Provider } from 'react-redux';
-import createRenderer from '../config/fela-renderer';
 import { rehydrate } from 'fela-dom';
-import { epic$ } from '../config/epic-config';
-import {
-  createReduxStore,
-  storeReducer,
-  history,
-  persistConfig,
-} from '../config/redux-config';
-import { createClientContainer } from '../config/client.service';
-import {
-  SlotFillProvider,
-  InversifyProvider, Lifecycle,
-} from '@workbench-stack/components';
+import { SlotFillProvider, InversifyProvider, Lifecycle } from '@workbench-stack/components';
 import { PluginArea } from '@common-stack/client-react';
-import modules, { MainRoute } from '../modules';
 import { ConnectedRouter } from 'connected-react-router';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
 import { useProvideAuth } from '@adminide-stack/user-auth0-browser';
-import { ProvideAuth as CoreProvideAuth, ErrorBoundary } from '@adminide-stack/react-shared-components';
+import {
+  ProvideAuth as CoreProvideAuth,
+  ErrorBoundary,
+} from '@adminide-stack/react-shared-components';
 import { ClientTypes } from '@common-stack/client-core';
+import modules, { MainRoute } from '../modules';
+import { createClientContainer } from '../config/client.service';
+import { createReduxStore, storeReducer, history, persistConfig } from '../config/redux-config';
+import { epic$ } from '../config/epic-config';
 
 const ProvideAuth = ({ children }) => {
   const auth = useProvideAuth();
@@ -39,12 +33,14 @@ if ((module as any).hot && (module as any).hot.data && (module as any).hot.data.
   store = (module as any).hot.data.store;
   // replace the reducers always as we don't have ablity to find
   // new reducer added through our `modules`
-  store.replaceReducer(persistReducer(persistConfig, storeReducer((module as any).hot.data.history || history)));
+  store.replaceReducer(
+    persistReducer(persistConfig, storeReducer((module as any).hot.data.history || history)),
+  );
 } else {
-store = createReduxStore('renderer');
+  store = createReduxStore('renderer');
 }
 if ((module as any).hot) {
-  (module as any).hot.dispose(data => {
+  (module as any).hot.dispose((data) => {
     // console.log("Saving Redux store:", JSON.stringify(store.getState()));
     data.store = store;
     data.history = history;
@@ -63,10 +59,9 @@ if ((module as any).hot) {
 }
 
 export class Main extends React.Component<{}, {}> {
-
   render() {
     const renderer = createRenderer();
-    let persistor = persistStore(store);
+    const persistor = persistStore(store);
     rehydrate(renderer);
     return (
       <ErrorBoundary>
@@ -75,16 +70,14 @@ export class Main extends React.Component<{}, {}> {
             <ProvideAuth>
               <ApolloProvider client={client}>
                 <InversifyProvider container={container} modules={modules}>
-                  <Lifecycle setPhaseReady={true}>
+                  <Lifecycle setPhaseReady>
                     <RendererProvider renderer={renderer}>
                       <PersistGate persistor={persistor}>
                         <PluginArea />
                         {modules.getWrappedRoot(
-                          (
-                            <ConnectedRouter history={history}>
-                              <MainRoute />
-                            </ConnectedRouter>
-                          ),
+                          <ConnectedRouter history={history}>
+                            <MainRoute />
+                          </ConnectedRouter>,
                         )}
                       </PersistGate>
                     </RendererProvider>
