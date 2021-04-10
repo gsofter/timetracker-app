@@ -117,6 +117,7 @@
     "redux-observable": "^1.2.0",
     "redux-persist": "^6.0.0",
     "redux-thunk": "^2.3.0",
+    "reflect-metadata": "^0.1.13",
     "reselect": "^4.0.0",
     "rxjs": "^6.5.3",
     "rxjs-compat": "^6.5.3",
