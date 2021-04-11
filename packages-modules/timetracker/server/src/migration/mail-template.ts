@@ -15,6 +15,7 @@ export class TimesheetApprovalMailTemplate {
 
   public async up(): Promise<void> {
     const model = MailTemplateModelFunc(this.db);
+
     model.create({
       engine: 'ejs',
       code: EmailTemplateCodes.TIMESHEET_APPROVAL,
@@ -36,6 +37,7 @@ export class TimesheetSubmitMailTemplate {
 
   public async up(): Promise<void> {
     const model = MailTemplateModelFunc(this.db);
+
     model.create({
       engine: 'ejs',
       code: EmailTemplateCodes.SUBMIT_TIME,

@@ -28,16 +28,6 @@ export const resolver = options => ({
     },
     updateTimesheet: (root, args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Mutation.updateTimesheet) args %j', args);
-      console.log('updateTimesheet =>', userContext);
-      console.log(
-        'updateTimesheet.userContext.permissions.organization.timetracker =>',
-        userContext.permissions.organization.timetracker,
-      );
-      console.log(
-        'updateTimesheet.userContext.permissions.organization.permissions =>',
-        userContext.permissions.organization.settings,
-      );
-      console.log('updateTimesheet.user =>', user);
       return timeTrackerService.updateTimesheet(
         user._id || user.sub,
         userContext.orgId,

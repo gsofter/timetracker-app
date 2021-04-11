@@ -193,6 +193,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
         const mailTopic = 'Timsheet approved';
         const mailTo = userContext.emailId;
         const mailFrom = config.MAIL_SEND_DEFAULT_EMAIL;
+        const templateId = EmailTemplateCodes.TIMESHEET_APPROVAL;
         const templateVars = {
           name: userContext.username,
           startDate: moment(request.startDate).format('YYYY-MM-DD'),
@@ -200,7 +201,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
           timesheet_url: `${config.CLIENT_URL}/${orgId}/time-tracker/timeapproval`,
           contact_url: `${config.CLIENT_URL}`,
         };
-        this.sendMail(mailTopic, mailTo, mailFrom, templateVars);
+        this.sendMail(mailTopic, mailTo, mailFrom, templateId, templateVars);
       }
       if (
         request.state === ITimesheetState.SUBMITTED &&
@@ -210,6 +211,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
         const mailTopic = 'Timsheet submitted';
         const mailTo = userContext.emailId;
         const mailFrom = config.MAIL_SEND_DEFAULT_EMAIL;
+        const templateId = EmailTemplateCodes.SUBMIT_TIME;
         const templateVars = {
           name: userContext.username,
           startDate: moment(request.startDate).format('YYYY-MM-DD'),
@@ -217,7 +219,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
           timesheet_url: `${config.CLIENT_URL}/${orgId}/time-tracker/timeapproval`,
           contact_url: `${config.CLIENT_URL}`,
         };
-        this.sendMail(mailTopic, mailTo, mailFrom, templateVars);
+        this.sendMail(mailTopic, mailTo, mailFrom, templateId, templateVars);
       }
       return true;
     } catch (err) {
@@ -328,14 +330,14 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     }
   }
 
-  private sendMail(topic, to, from, templateVars) {
+  private sendMail(topic, to, from, templateId, templateVars) {
     return this.callAction<void, IMailerServicesendArgs>(
       IMailServiceAction.send,
       {
         request: {
           topic,
           to,
-          templateId: EmailTemplateCodes.TIMESHEET_APPROVAL,
+          templateId,
           from,
           variables: templateVars,
         },
