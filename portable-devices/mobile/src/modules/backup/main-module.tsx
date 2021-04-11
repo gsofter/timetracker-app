@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { Feature, FeatureWithRouterFactory } from '@common-stack/client-react';
-// import counterModules from '@sample-stack/counter-module-browser';
+// import counterModules from '@admin-layout/counter-module-browser';
 import { History } from 'history';
 import { Navigation } from '../routes/main-navigation';
 import Layout from "../components/Layout"

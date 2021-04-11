@@ -6,7 +6,7 @@ import { History } from 'history';
 import { Feature, FeatureWithRouterFactory } from '@common-stack/client-react';
 import { NativeRouter } from 'react-router-native';
 import { StatusBar } from 'expo-status-bar';
-import counterModule from '@sample-stack/counter-module-browser/lib/index.native';
+import counterModule from '@admin-layout/counter-module-browser/lib/index.native';
 import { enableScreens } from 'react-native-screens';
 import LayoutModule from '../components/layout/module';
 import { renderRoutes2 } from './render';
