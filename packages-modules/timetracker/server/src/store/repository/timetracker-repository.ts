@@ -8,7 +8,16 @@ import {
   ITimeRecord,
   ITimesheet,
   ITimesheetCreateRequest,
+  ITimesheetState,
 } from '@admin-layout/timetracker-core';
+import {
+  IPreferencesService,
+  ServerTypes as TYPES,
+  ConfigurationTarget,
+  generateOrgUri,
+  IConfigCollectionName,
+  IConfigFragmentName,
+} from '@adminide-stack/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { CommonType } from '@common-stack/core';
@@ -33,6 +42,8 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
     @inject(CommonType.MOLECULER_BROKER)
     private broker: ServiceBroker,
+    @inject(TYPES.IPreferenceEditorService)
+    private preferencesService: IPreferencesService,
   ) {
     this.logger = logger.child({ className: 'ScheduleRepository' });
     this.timeTrackerModel = TimeTrackerModelFunc(db);
@@ -168,17 +179,46 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
         { orgId: orgId, timesheets: { $elemMatch: { _id: sheetId } } },
         { $set: { 'timesheets.$': request } },
       );
-      const mailTopic = 'Timsheet approved';
-      const mailTo = userContext.emailId;
-      const mailFrom = config.MAIL_SEND_DEFAULT_EMAIL;
-      const templateVars = {
-        name: userContext.username,
-        startDate: moment(request.startDate).format('YYYY-MM-DD'),
-        endDate: moment(request.endDate).format('YYYY-MM-DD'),
-        timesheet_url: `${config.CLIENT_URL}/${orgId}/time-tracker/timeapproval`,
-        contact_url: `${config.CLIENT_URL}`,
-      };
-      this.sendMail(mailTopic, mailTo, mailFrom, templateVars);
+
+      const resourceUri = generateOrgUri(orgId, IConfigFragmentName.settings);
+      const { settings } = (await this.preferencesService.viewerSettings({
+        target: ConfigurationTarget.ORGANIZATION_RESOURCE,
+        settingsResource: resourceUri,
+      })) as any;
+      if (
+        request.state === ITimesheetState.APPROVED &&
+        settings.timetracker.notifications.approvalNotifications &&
+        settings.timetracker.notifications.enableTimetrackerNotifications
+      ) {
+        const mailTopic = 'Timsheet approved';
+        const mailTo = userContext.emailId;
+        const mailFrom = config.MAIL_SEND_DEFAULT_EMAIL;
+        const templateVars = {
+          name: userContext.username,
+          startDate: moment(request.startDate).format('YYYY-MM-DD'),
+          endDate: moment(request.endDate).format('YYYY-MM-DD'),
+          timesheet_url: `${config.CLIENT_URL}/${orgId}/time-tracker/timeapproval`,
+          contact_url: `${config.CLIENT_URL}`,
+        };
+        this.sendMail(mailTopic, mailTo, mailFrom, templateVars);
+      }
+      if (
+        request.state === ITimesheetState.SUBMITTED &&
+        settings.timetracker.notifications.submitNotifications &&
+        settings.timetracker.notifications.enableTimetrackerNotifications
+      ) {
+        const mailTopic = 'Timsheet submitted';
+        const mailTo = userContext.emailId;
+        const mailFrom = config.MAIL_SEND_DEFAULT_EMAIL;
+        const templateVars = {
+          name: userContext.username,
+          startDate: moment(request.startDate).format('YYYY-MM-DD'),
+          endDate: moment(request.endDate).format('YYYY-MM-DD'),
+          timesheet_url: `${config.CLIENT_URL}/${orgId}/time-tracker/timeapproval`,
+          contact_url: `${config.CLIENT_URL}`,
+        };
+        this.sendMail(mailTopic, mailTo, mailFrom, templateVars);
+      }
       return true;
     } catch (err) {
       throw new Error(err.message);
