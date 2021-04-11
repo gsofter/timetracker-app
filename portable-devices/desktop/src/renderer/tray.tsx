@@ -5,9 +5,7 @@ import { ipcRenderer } from 'electron';
 import { toInteger } from 'lodash';
 import { createStore, applyMiddleware } from 'redux';
 import { forwardToMain, replayActionRenderer, getInitialStateRenderer, createAliasedAction } from 'electron-redux';
-import { connectedReactRouter_counter } from '../reducers';
 
-import { increment, decrement } from '../actions';
 
 // setup store
 const initialState = getInitialStateRenderer();
