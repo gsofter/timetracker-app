@@ -47,7 +47,7 @@ type TimesheetResponse {
 
 extend type Query {
   getTimesheets(userId: String): [TimesheetResponse] @addAccountContext
-  getDurationTimesheet(start: DateTime, end: DateTime): TimesheetResponse @addAccountContext
+  getDurationTimesheets(start: DateTime, end: DateTime): [TimesheetResponse] @addAccountContext
 }
 
 extend type Mutation {

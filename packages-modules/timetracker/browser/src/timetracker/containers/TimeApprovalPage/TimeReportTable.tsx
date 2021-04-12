@@ -35,6 +35,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
       search: qs.stringify({
         view: 'tabular',
         weekStart: moment(record.startDate).format('YYYY-MM-DD'),
+        username: record.userId,
         strict: 'true',
       }),
     });
