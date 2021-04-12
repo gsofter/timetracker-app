@@ -8,16 +8,16 @@ export interface ITimeTrackerService {
   /**
    * Get TimeRecords
    */
-  getTimeRecords(userId: string, orgId: string): Promise<Array<ITimeRecord>>;
+  getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
 
   /**
    * Get Duration TimeRecords
    */
   getDurationTimeRecords(
-    userId: string,
     orgId: string,
     startTime: Date,
     endTime: Date,
+    userId?: string,
   ): Promise<Array<ITimeRecord>>;
 
   /**
@@ -28,7 +28,12 @@ export interface ITimeTrackerService {
   /**
    * Get Timesheet for duration
    */
-  getDurationTimesheet(userId: string, orgId: string, start: Date, end: Date): Promise<ITimesheet>;
+  getDurationTimesheets(
+    userId: string,
+    orgId: string,
+    start: Date,
+    end: Date,
+  ): Promise<Array<ITimesheet>>;
 
   /**
    * Get Playing TimeRecord

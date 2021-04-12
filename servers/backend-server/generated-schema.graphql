@@ -1389,8 +1389,9 @@ input TimeRecordRequest {
 }
 
 extend type Query {
-  getTimeRecords: [TimeRecord] @addAccountContext
-  getDurationTimeRecords(startTime: DateTime, endTime: DateTime): [TimeRecord] @addAccountContext
+  getTimeRecords(userId: String): [TimeRecord] @addAccountContext
+  getDurationTimeRecords(startTime: DateTime, endTime: DateTime, userId: String): [TimeRecord]
+    @addAccountContext
   getPlayingTimeRecord: TimeRecord @addAccountContext
 }
 
@@ -1451,7 +1452,7 @@ type TimesheetResponse {
 
 extend type Query {
   getTimesheets(userId: String): [TimesheetResponse] @addAccountContext
-  getDurationTimesheet(start: DateTime, end: DateTime): TimesheetResponse @addAccountContext
+  getDurationTimesheets(start: DateTime, end: DateTime): [TimesheetResponse] @addAccountContext
 }
 
 extend type Mutation {

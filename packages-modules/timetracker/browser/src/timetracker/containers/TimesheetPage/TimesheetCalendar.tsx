@@ -15,14 +15,13 @@ import {
   ITimeRecord,
 } from '@admin-layout/timetracker-core';
 import { useSelector } from 'react-redux';
-import { DateLocalizer } from 'react-big-calendar';
 import * as _ from 'lodash';
 export interface ITimesheetCalendarProps {
   projects: Array<IProject>;
   members: Array<IMember>;
   selectedUser: string;
   selectedProject: string;
-  localizer: DateLocalizer;
+  localizer: any;
   weekStart: Moment;
   isShowTimeModal: boolean;
   handleChangeUser: (value: string) => void;

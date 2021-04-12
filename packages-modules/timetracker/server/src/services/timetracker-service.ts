@@ -28,25 +28,25 @@ export class TimeTrackerService implements ITimeTrackerService {
   }
 
   public async getDurationTimeRecords(
-    userId: string,
     orgId: string,
     startTime: Date,
     endTime: Date,
+    userId?: string,
   ): Promise<Array<ITimeRecord>> {
-    return this.trackerRepository.getDurationTimeRecords(userId, orgId, startTime, endTime);
+    return this.trackerRepository.getDurationTimeRecords(orgId, startTime, endTime, userId);
   }
 
   public async getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>> {
     return this.trackerRepository.getTimesheets(userId, orgId);
   }
 
-  public async getDurationTimesheet(
+  public async getDurationTimesheets(
     userId: string,
     orgId: string,
     start: Date,
     end: Date,
-  ): Promise<ITimesheet> {
-    return this.trackerRepository.getDurationTimesheet(userId, orgId, start, end);
+  ): Promise<Array<ITimesheet>> {
+    return this.trackerRepository.getDurationTimesheets(userId, orgId, start, end);
   }
 
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {

@@ -49,33 +49,39 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     this.timeTrackerModel = TimeTrackerModelFunc(db);
   }
 
-  public async getTimeRecords(userId: string, orgId: string): Promise<Array<ITimeRecord>> {
+  public async getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>> {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
 
-    if (trackDoc) {
-      let res;
-      if (trackDoc.timeRecords)
-        res = trackDoc.timeRecords.filter(tr => tr.userId === userId && tr.endTime !== null);
-      return res;
+    if (trackDoc && trackDoc.timeRecords) {
+      return userId === undefined || userId === null
+        ? trackDoc.timeRecords.filter(tr => tr.endTime !== null)
+        : trackDoc.timeRecords.filter(tr => tr.userId === userId && tr.endTime !== null);
     } else return null;
   }
 
   public async getDurationTimeRecords(
-    userId: string,
     orgId: string,
     startTime: Date,
     endTime: Date,
+    userId?: string,
   ): Promise<Array<ITimeRecord>> {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
 
     if (trackDoc && trackDoc.timeRecords) {
-      return trackDoc.timeRecords.filter(
-        r =>
-          r.userId === userId &&
-          moment(startTime) <= moment(r.startTime) &&
-          moment(r.endTime) <= moment(endTime) &&
-          r.endTime !== null,
-      );
+      return userId === undefined || userId === null
+        ? trackDoc.timeRecords.filter(
+            r =>
+              moment(startTime) <= moment(r.startTime) &&
+              moment(r.endTime) <= moment(endTime) &&
+              r.endTime !== null,
+          )
+        : trackDoc.timeRecords.filter(
+            r =>
+              r.userId === userId &&
+              moment(startTime) <= moment(r.startTime) &&
+              moment(r.endTime) <= moment(endTime) &&
+              r.endTime !== null,
+          );
     } else {
       return [];
     }
@@ -91,22 +97,22 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     }
   }
 
-  public async getDurationTimesheet(
+  public async getDurationTimesheets(
     userId: string,
     orgId: string,
     start: Date,
     end: Date,
-  ): Promise<ITimesheet> {
+  ): Promise<Array<ITimesheet>> {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
     if (trackDoc && trackDoc.timesheets) {
-      return trackDoc.timesheets.find(
+      return trackDoc.timesheets.filter(
         sh =>
           //sh.userId === userId &&
           moment(start).format('YYYY-MM-DD') === moment(sh.startDate).format('YYYY-MM-DD') &&
           moment(end).format('YYYY-MM-DD') === moment(sh.endDate).format('YYYY-MM-DD'),
       );
     } else {
-      return null;
+      return [];
     }
   }
 

@@ -197,7 +197,8 @@ const TimeTracker = (props: ITimeTracker) => {
 
 const TimeTrackerWrapper = props => {
   const { setTime, reset, stop, start } = props.timer;
-  const { data, error, refetch, loading } = useGetTimeRecordsQuery();
+  const userId = useSelector<any>(state => state.user.auth0UserId) as string;
+  const { data, error, refetch, loading } = useGetTimeRecordsQuery({ variables: { userId }});
   const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
   const [createMutation] = useCreateTimeRecordMutation();
   const [removeMutation] = useRemoveTimeRecordMutation();

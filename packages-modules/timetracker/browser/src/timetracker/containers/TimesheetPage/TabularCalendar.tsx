@@ -16,7 +16,7 @@ import { TimesheetInput } from '../../components/TimesheetInput';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
 import {
   useGetDurationTimeRecordsQuery,
-  useGetDurationTimesheetQuery,
+  useGetDurationTimesheetsQuery,
   useRemoveDurationTimeRecordsMutation,
   useUpdateTimeRecordMutation,
   useCreateTimeRecordMutation,
@@ -75,17 +75,17 @@ const TabularCalendar = ({
 
   const onClickBack = event => {
     const newWeekStart = moment(weekStart).add('-1', 'week');
-    setPathWeekStart(newWeekStart)
+    setPathWeekStart(newWeekStart);
   };
 
   const onClickNext = event => {
     const newWeekStart = moment(weekStart).add('1', 'week');
-    setPathWeekStart(newWeekStart)
+    setPathWeekStart(newWeekStart);
   };
 
   const onClickToday = event => {
     const newWeekStart = moment().startOf('week');
-    setPathWeekStart(newWeekStart)
+    setPathWeekStart(newWeekStart);
   };
 
   const onClickAddNewRow = () => {
@@ -440,19 +440,33 @@ interface ITabularCalendarWrapperProps {
   projects: IProject[];
   tags: any;
   members: any;
-  localizer: DateLocalizer;
+  localizer: any;
   weekStart: Moment;
+  selectedUser: string;
+  selectedProject: string;
   setPathWeekStart: Function;
 }
 
-const TabularCalendarWrapper = ({ projects, weekStart, setPathWeekStart }: ITabularCalendarWrapperProps) => {
+const TabularCalendarWrapper = ({
+  projects,
+  weekStart,
+  selectedUser,
+  selectedProject,
+  setPathWeekStart,
+}: ITabularCalendarWrapperProps) => {
   const filterEvents = events => {
-    if(!events) return []
-    return events.map(ev => ({
-      ...ev,
-      startTime: moment(ev.startTime).toDate(),
-      endTime: moment(ev.endTime).toDate(),
-    }));
+    if (!events) return [];
+    return events
+      .filter(
+        ev =>
+          (ev.userId === selectedUser || selectedUser === '') &&
+          (ev.projectId === selectedProject || selectedProject === ''),
+      )
+      .map(ev => ({
+        ...ev,
+        startTime: moment(ev.startTime).toDate(),
+        endTime: moment(ev.endTime).toDate(),
+      }));
   };
 
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
@@ -466,7 +480,7 @@ const TabularCalendarWrapper = ({ projects, weekStart, setPathWeekStart }: ITabu
     data: approvalData,
     loading: loadingApproval,
     refetch: refetchApproval,
-  } = useGetDurationTimesheetQuery({
+  } = useGetDurationTimesheetsQuery({
     variables: {
       start: moment(weekStart),
       end: moment(weekStart).add(1, 'week'),
@@ -539,6 +553,9 @@ const TabularCalendarWrapper = ({ projects, weekStart, setPathWeekStart }: ITabu
       });
   };
 
+  const memberTimesheet = () => {
+    return _.get(approvalData, 'getDurationTimesheets', []).find(sheet => sheet.userId === selectedUser)
+  }
   return (
     <Spin spinning={!data || loading}>
       <TabularCalendar
@@ -546,7 +563,7 @@ const TabularCalendarWrapper = ({ projects, weekStart, setPathWeekStart }: ITabu
         setPathWeekStart={setPathWeekStart}
         records={filterEvents(data?.getDurationTimeRecords)}
         projects={projects}
-        timesheet={_.get(approvalData, 'getDurationTimesheet', null)}
+        timesheet={memberTimesheet()}
         handleRemoveDuration={handleRemoveDuration}
         createTimeRecord={createTimeRecord}
         updateTimeRecord={updateTimeRecord}
