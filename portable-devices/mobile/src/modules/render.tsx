@@ -8,7 +8,7 @@
 import * as React from 'react';
 import { useEffect, useState, createElement } from 'react';
 // import { Plugin, ApplyPluginsType } from '@umijs/runtime';
-import { IRoute, IComponent } from '@common-stack/client-react-native';
+import { IRoute, IComponent } from '@common-stack/client-react';
 import { Switch, Route, Redirect } from 'react-router-native';
 import Home from '../pages/hello';
 
