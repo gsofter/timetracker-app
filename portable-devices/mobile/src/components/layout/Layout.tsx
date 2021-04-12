@@ -6,25 +6,24 @@
 import React, { useState } from 'react';
 import { connect } from 'react-redux';
 import MainHeader from './Header';
-import * as RootNavigation from './root-navigation';
 import { DrawerRoute } from './Drawer';
 
-const Layout = ({ history, routes, location, descriptors }: any) => {
-
-    console.log('---Layout ROUTES', routes, descriptors)
-    // const subRoutes = routes.filter((route: any) => route.id === 'drawer');
-    console.log('--RENDER __LAYOUT')
-    return (
-        <>
-            <MainHeader title={route?.title} />
-            <DrawerRoute history={history} location={location} routes={routes} />
-        </>
-    );
+const Layout = (props: any) => {
+  const { history, route, location } = props;
+  console.log('---Layout ROUTES', props);
+  // const subRoutes = routes.filter((route: any) => route.id === 'drawer');
+  console.log('--RENDER __LAYOUT');
+  return (
+    <>
+      <MainHeader title={route?.title} />
+      <DrawerRoute history={history} location={location} route={route} />
+    </>
+  );
 };
 
 export const ProLayout = connect((state: any) => {
-    return {
-        settings: state.settings,
-        location: state.router.location,
-    };
+  return {
+    settings: state.settings,
+    location: state.router.location,
+  };
 })(Layout);

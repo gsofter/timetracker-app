@@ -3,6 +3,8 @@ import { Feature, IRouteData } from '@common-stack/client-react-native';
 import { connectedReactRouter_counter } from './redux';
 import { filteredRoutes } from './compute.native';
 
+
+console.log('---FILTERED ROUTES', filteredRoutes)
 export default new Feature({
     routeConfig: filteredRoutes,
     reducer: { connectedReactRouter_counter },
