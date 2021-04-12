@@ -13,6 +13,7 @@ import { template } from './menu-template';
 import ScreenShot from './screen-shot';
 
 const isDev = process.env.NODE_ENV === 'development';
+console.log(JSON.stringify(process.versions, null, 2))
 
 let installExtension = null;
 if (isDev) {
