@@ -4,7 +4,18 @@ import { RendererProvider } from 'react-fela';
 import { ApolloProvider } from '@apollo/react-common';
 import { Provider } from 'react-redux';
 import { rehydrate } from 'fela-dom';
-import { SlotFillProvider, InversifyProvider, Lifecycle } from '@workbench-stack/components';
+import { epic$ } from '../config/epic-config';
+import {
+  createReduxStore,
+  storeReducer,
+  history,
+  persistConfig,
+} from '../config/redux-config';
+import { createClientContainer } from '../config/client.service';
+import {
+  SlotFillProvider,
+  InversifyProvider, Lifecycle,
+} from '@workbench-stack/components';
 import { PluginArea } from '@common-stack/client-react';
 import { ConnectedRouter } from 'connected-react-router';
 import { PersistGate } from 'redux-persist/integration/react';
@@ -15,10 +26,6 @@ import {
   ErrorBoundary,
 } from '@adminide-stack/react-shared-components';
 import { ClientTypes } from '@common-stack/client-core';
-import modules, { MainRoute } from '../modules';
-import { createClientContainer } from '../config/client.service';
-import { createReduxStore, storeReducer, history, persistConfig } from '../config/redux-config';
-import { epic$ } from '../config/epic-config';
 
 const ProvideAuth = ({ children }) => {
   const auth = useProvideAuth();

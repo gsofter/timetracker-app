@@ -6,12 +6,13 @@ import { ApolloLink } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getOperationAST } from 'graphql';
 import apolloLogger from 'apollo-link-logger';
-import { onTokenError } from '@adminide-stack/user-auth0-browser';
-import { createUploadLink } from 'apollo-upload-client';
-import { logger } from '@cdm-logger/client';
-import { invariant } from 'ts-invariant';
+
 import { PUBLIC_SETTINGS } from './public-config';
 import modules from '../modules';
+import { logger } from '@cdm-logger/client';
+import { invariant } from 'ts-invariant';
+import { onTokenError } from '@adminide-stack/user-auth0-browser';
+import { createUploadLink } from 'apollo-upload-client';
 
 const clientState = modules.getStateParams({ resolverContex: () => modules.createService({}, {}) });
 

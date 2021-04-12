@@ -26,8 +26,9 @@ import { createEpicMiddleware } from 'redux-observable';
 import { initialRedirectState } from '@adminide-stack/user-auth0-browser';
 import modules from '../modules';
 import { createClientContainer } from './client.service';
-import { rootEpic } from './epic-config';
-
+import { rootEpic } from '../config/epic-config';
+import { initialRedirectState } from '@adminide-stack/user-auth0-browser';
+    
 export const history = require('./router-history');
 
 const reduxLogger = createLogger({
