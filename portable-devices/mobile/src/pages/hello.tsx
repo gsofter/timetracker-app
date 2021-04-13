@@ -12,15 +12,15 @@ const HelloScreen = (props) => {
   return (
     <View style={styles.container}>
       <Content>
+        <View>
         <Text>Hello Value</Text>
-        <Link to="/home/counter">Menu</Link>
+        </View>
       </Content>
       <Footer style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
         <View>
           <Text>Footer will be here</Text>
         </View>
       </Footer>
-      <Route path="/home/counter" component={CounterScreen} />
     </View>
   );
 };
@@ -32,11 +32,13 @@ const styles = StyleSheet.create<Style>({
   },
 });
 
-const Hello = connect((state: any) => {
-  return {
-    settings: state.settings,
-    location: state?.route?.location,
-  };
-})(HelloScreen);
+// const Hello = connect((state: any) => {
+//   return {
+//     settings: state.settings,
+//     location: state?.route?.location,
+//   };
+// })(HelloScreen);
 
-export default Hello;
+// export default Hello;
+export default HelloScreen;
+
