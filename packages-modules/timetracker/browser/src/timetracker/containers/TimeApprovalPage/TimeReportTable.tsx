@@ -66,6 +66,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
     const request: ITimesheetCreateRequest = {
       ..._.omit(record, ['__typename', 'id', 'orgId']),
       approvedOn: moment(),
+      approvedBy: userId,
       state: ITimesheetState.APPROVED,
       updatedOn: moment(),
     };

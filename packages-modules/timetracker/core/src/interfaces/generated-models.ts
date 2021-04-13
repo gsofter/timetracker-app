@@ -2574,6 +2574,7 @@ export type ITimeRecordRequest = {
 
 export type ITimesheet = {
    __typename?: 'Timesheet';
+  approvedBy?: Maybe<Scalars['String']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
   endDate?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
@@ -2586,6 +2587,7 @@ export type ITimesheet = {
 };
 
 export type ITimesheetCreateRequest = {
+  approvedBy?: Maybe<Scalars['String']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
   endDate?: Maybe<Scalars['DateTime']>;
   startDate?: Maybe<Scalars['DateTime']>;
@@ -2598,6 +2600,7 @@ export type ITimesheetCreateRequest = {
 
 export type ITimesheetResponse = {
    __typename?: 'TimesheetResponse';
+  approvedBy?: Maybe<Scalars['String']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
   endDate?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['ID']>;
@@ -4886,6 +4889,7 @@ export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolver
 };
 
 export type ITimesheetResolvers<ContextType = any, ParentType extends IResolversParentTypes['Timesheet'] = IResolversParentTypes['Timesheet']> = {
+  approvedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   endDate?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   id?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType>,
@@ -4899,6 +4903,7 @@ export type ITimesheetResolvers<ContextType = any, ParentType extends IResolvers
 };
 
 export type ITimesheetResponseResolvers<ContextType = any, ParentType extends IResolversParentTypes['TimesheetResponse'] = IResolversParentTypes['TimesheetResponse']> = {
+  approvedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   endDate?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   id?: Resolver<Maybe<IResolversTypes['ID']>, ParentType, ContextType>,

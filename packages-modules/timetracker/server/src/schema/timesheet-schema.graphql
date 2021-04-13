@@ -17,6 +17,7 @@ type Timesheet {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
+  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
 }
@@ -28,6 +29,7 @@ input TimesheetCreateRequest {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
+  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
 }
@@ -39,6 +41,7 @@ type TimesheetResponse {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
+  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
   userId: String
