@@ -5661,6 +5661,11 @@
   dependencies:
     "@types/yoga-layout" "^1.9.3"
 
+"@reactuniversal/drawer@^0.0.2":
+  version "0.0.2"
+  resolved "https://registry.yarnpkg.com/@reactuniversal/drawer/-/drawer-0.0.2.tgz#0cf60174688aae2ea55670afa293b65c0d38156d"
+  integrity sha512-oToXYZQwoxirczOc3KLfHmpHT6RemtIZOd/oZU68dmzp6EE5asL3r+exbwVk5BkfNQQRg93/biEE0aCI1CAmcA==
+
 "@redux-devtools/core@^3.9.0":
   version "3.9.0"
   resolved "https://registry.yarnpkg.com/@redux-devtools/core/-/core-3.9.0.tgz#2f18871f43a50028505ac34abd94d228ee01d991"

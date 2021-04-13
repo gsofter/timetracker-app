@@ -28,6 +28,7 @@ import useColorScheme from './hooks/useColorScheme';
 import useCachedResources from './hooks/useCachedResources';
 
 import { MainRoute } from './modules';
+import Example from './example';
 
 const client = createApolloClient();
 
@@ -65,8 +66,9 @@ export default function App() {
             <PersistGate persistor={persistor}>
               <NativeRouter keyLength={23}>
                 <ConnectedRouter history={history}>
-                  <MainRoute history={history} />
-                  <StatusBar />
+                  <Example/>
+                  {/* <MainRoute history={history} />
+                  <StatusBar /> */}
                 </ConnectedRouter>
               </NativeRouter>
             </PersistGate>
