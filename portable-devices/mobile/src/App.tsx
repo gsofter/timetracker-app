@@ -1,18 +1,21 @@
+/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { StatusBar } from 'expo-status-bar';
-import React, { useRef } from 'react';
-import { NativeRouter, Route, Link } from 'react-router-native';
+import React from 'react';
+import { NativeRouter, Route } from 'react-router-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
-import { StyleSheet, Text, View, AppRegistry } from 'react-native';
-import { Home, About, Topics } from './pages/Topic';
+import { StyleSheet } from 'react-native';
+import { createRenderer } from 'fela-native';
+import Layout from './components/layout/Layout';
+import { Dashboard } from './pages';
 // import { Provider } from 'react-redux';
 // import { ApolloProvider } from 'react-apollo';
 // import { persistStore, persistReducer } from 'redux-persist';
 // import { PersistGate } from 'redux-persist/integration/react';
-import { createRenderer } from 'fela-native';
 // import { RendererProvider } from 'react-fela';
 // import { ConnectedRouter } from 'connected-react-router';
 // import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
@@ -31,7 +34,6 @@ import { createRenderer } from 'fela-native';
 import useCachedResources from './hooks/useCachedResources';
 
 // import { MainRoute } from './modules';
-import Example from './example';
 
 // const client = createApolloClient();
 
@@ -60,23 +62,8 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NativeRouter>
-        <View style={styles.container}>
-          <View style={styles.nav}>
-            <Link to="/" underlayColor="#f0f4f7" style={styles.navItem}>
-              <Text>Home</Text>
-            </Link>
-            <Link to="/about" underlayColor="#f0f4f7" style={styles.navItem}>
-              <Text>About</Text>
-            </Link>
-            <Link to="/topics" underlayColor="#f0f4f7" style={styles.navItem}>
-              <Text>Topics</Text>
-            </Link>
-          </View>
-
-          <Route exact path="/" component={Home} />
-          <Route path="/about" component={About} />
-          <Route path="/topics" component={Topics} />
-        </View>
+        <Route exact path="/" component={Dashboard} />
+        <Route path="/org" component={Layout} />
       </NativeRouter>
     </SafeAreaProvider>
   );
