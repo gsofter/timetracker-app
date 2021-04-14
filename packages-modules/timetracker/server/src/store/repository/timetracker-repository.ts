@@ -1,5 +1,5 @@
 import * as Logger from 'bunyan';
-import { injectable, inject, optional } from 'inversify';
+import { injectable, inject } from 'inversify';
 import { ITimeTrackerRepository } from './../../interfaces';
 import * as mongoose from 'mongoose';
 import { TimeTrackerModelType, TimeTrackerModelFunc } from './../models/timetracker-model';
@@ -15,7 +15,6 @@ import {
   ServerTypes as TYPES,
   ConfigurationTarget,
   generateOrgUri,
-  IConfigCollectionName,
   IConfigFragmentName,
 } from '@adminide-stack/core';
 import * as _ from 'lodash';
@@ -59,6 +58,11 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     } else return null;
   }
 
+  public checkInPeriod(t: Date, A: Date, B: Date): boolean {
+    if (moment(A) < moment(B)) return moment(t) >= moment(A) && moment(t) <= moment(B);
+    else return moment(t) >= moment(B) && moment(t) <= moment(A);
+  }
+
   public async getDurationTimeRecords(
     orgId: string,
     startTime: Date,
@@ -68,20 +72,43 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
 
     if (trackDoc && trackDoc.timeRecords) {
-      return userId === undefined || userId === null
-        ? trackDoc.timeRecords.filter(
-            r =>
-              moment(startTime) <= moment(r.startTime) &&
-              moment(r.endTime) <= moment(endTime) &&
-              r.endTime !== null,
-          )
-        : trackDoc.timeRecords.filter(
-            r =>
-              r.userId === userId &&
-              moment(startTime) <= moment(r.startTime) &&
-              moment(r.endTime) <= moment(endTime) &&
-              r.endTime !== null,
-          );
+      const filteredRecords = trackDoc.timeRecords.filter(
+        r =>
+          (!userId || r.userId === userId) &&
+          moment(startTime) <= moment(r.startTime) &&
+          moment(r.endTime) <= moment(endTime) &&
+          r.endTime !== null,
+      );
+
+      const filteredSheets = trackDoc.timesheets.filter(
+        sh =>
+          ((!userId || sh.userId === userId) &&
+            this.checkInPeriod(startTime, sh.startDate, sh.endDate)) ||
+          this.checkInPeriod(endTime, sh.startDate, sh.endDate),
+      );
+      return filteredRecords.map(tr => {
+        let trEditable = false;
+        for (let sh of filteredSheets) {
+          if (
+            this.checkInPeriod(tr.startTime, sh.startDate, sh.endDate) &&
+            this.checkInPeriod(tr.endTime, sh.startDate, sh.endDate)
+          ) {
+            trEditable = true;
+            break;
+          }
+        }
+        return {
+          id: tr.id,
+          startTime: tr.startTime,
+          endTime: tr.endTime,
+          taskName: tr.taskName,
+          tags: tr.tags,
+          projectId: tr.projectId,
+          isBillable: tr.isBillable,
+          userId: tr.userId,
+          editable: trEditable,
+        };
+      });
     } else {
       return [];
     }
@@ -91,21 +118,24 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
     if (trackDoc && trackDoc.timesheets) {
       return trackDoc.timesheets.map(timesheet => {
-        const sheetTotalDuration = trackDoc.timeRecords
-          .filter(tr => {
-            return (
-              tr.userId === timesheet.userId &&
-              tr.startTime > timesheet.startDate &&
-              tr.endTime < timesheet.endDate
+        let sheetTotalDuration = 0;
+        if (trackDoc.timeRecords)
+          sheetTotalDuration = trackDoc.timeRecords
+            .filter(tr => {
+              return (
+                tr.userId === timesheet.userId &&
+                tr.startTime > timesheet.startDate &&
+                tr.endTime < timesheet.endDate
+              );
+            })
+            .reduce(
+              (duration, tr) =>
+                duration +
+                Math.floor((moment(tr.endTime).valueOf() - moment(tr.startTime).valueOf()) / 1000),
+              0,
             );
-          })
-          .reduce(
-            (duration, tr) =>
-              duration +
-              Math.floor((moment(tr.endTime).valueOf() - moment(tr.startTime).valueOf()) / 1000),
-            0,
-          );
         return {
+          id: timesheet.id,
           startDate: timesheet.startDate,
           endDate: timesheet.endDate,
           state: timesheet.state,

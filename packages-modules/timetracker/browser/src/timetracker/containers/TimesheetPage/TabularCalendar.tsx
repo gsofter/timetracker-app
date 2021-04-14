@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm, Modal, Tag } from 'antd';
 import { moment } from '../TimesheetPage';
 import { Moment } from 'moment';
@@ -26,10 +26,8 @@ import { formatDuration } from '../../services/timeRecordService';
 import CSS from 'csstype';
 import * as _ from 'lodash';
 import { useSelector } from 'react-redux';
-import { useFirstWeekDay, useTimeformat } from '../../hooks';
-import { useHistory, useLocation } from 'react-router';
-import * as qs from 'query-string';
-import { DateLocalizer } from 'react-big-calendar';
+import { useTimeformat } from '../../hooks';
+import { useHistory } from 'react-router';
 interface ITabularCalendar {
   weekStart: Moment;
   records: ITimeRecord[];

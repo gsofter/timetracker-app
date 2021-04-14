@@ -332,6 +332,7 @@ export const GetDurationTimeRecordsDocument = gql`
     projectId
     isBillable
     userId
+    editable
   }
 }
     `;

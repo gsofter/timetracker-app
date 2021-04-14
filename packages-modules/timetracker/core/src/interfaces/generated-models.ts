@@ -2549,6 +2549,7 @@ export type ITimelineCreateRequest = {
 export type ITimeRecord = {
    __typename?: 'TimeRecord';
   clientId?: Maybe<Scalars['String']>;
+  editable?: Maybe<Scalars['Boolean']>;
   endTime?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['String']>;
   isBillable?: Maybe<Scalars['Boolean']>;
@@ -2986,7 +2987,7 @@ export type IGetDurationTimeRecordsQuery = (
   { __typename?: 'Query' }
   & { getDurationTimeRecords?: Maybe<Array<Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId'>
+    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId' | 'editable'>
   )>>> }
 );
 
@@ -3144,6 +3145,7 @@ export const GetDurationTimeRecordsDocument = gql`
     projectId
     isBillable
     userId
+    editable
   }
 }
     `;
@@ -4877,6 +4879,7 @@ export type ITimelineResolvers<ContextType = any, ParentType extends IResolversP
 
 export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolversParentTypes['TimeRecord'] = IResolversParentTypes['TimeRecord']> = {
   clientId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  editable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   endTime?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,

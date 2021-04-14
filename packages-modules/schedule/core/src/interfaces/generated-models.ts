@@ -2606,6 +2606,7 @@ export type ITimesheetResponse = {
   updatedOn?: Maybe<Scalars['DateTime']>;
   userId?: Maybe<Scalars['String']>;
   orgId?: Maybe<Scalars['String']>;
+  totalDuration?: Maybe<Scalars['Int']>;
 };
 
 export const enum ITimesheetState {
@@ -4720,6 +4721,7 @@ export type ITimesheetResponseResolvers<ContextType = any, ParentType extends IR
   updatedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   orgId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  totalDuration?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

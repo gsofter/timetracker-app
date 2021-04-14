@@ -1375,6 +1375,7 @@ extend type Mutation {
   clientId: String
   userId: String
   orgId: String
+  editable: Boolean
 }
 
 input TimeRecordRequest {
