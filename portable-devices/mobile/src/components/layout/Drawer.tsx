@@ -33,7 +33,7 @@ export const DrawerRoute = ({ match, drawerRef }: any) => {
     onOpen={onOpen}
     >
       <Content>
-        <Route exact path={`${match.path}/:topicId`} component={Body} />
+        <Route exact path={`${match.path}/:drawerId`} component={Body} />
       </Content>
     </Drawer>
   )

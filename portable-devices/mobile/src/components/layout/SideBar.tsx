@@ -16,8 +16,8 @@ const SideBar = ({ matchUrl }: any) => {
       <List>
         <ListItem>
           <Left>
-            <Link to={`${matchUrl}/rendering`} underlayColor="#f0f4f7">
-              <Text>Rendering with React</Text>
+            <Link to={`${matchUrl}/hello`} underlayColor="#f0f4f7">
+              <Text>Hello</Text>
             </Link>
           </Left>
           <Right>
@@ -26,8 +26,8 @@ const SideBar = ({ matchUrl }: any) => {
         </ListItem>
         <ListItem>
           <Left>
-            <Link to={`${matchUrl}/components`} underlayColor="#f0f4f7">
-              <Text>Components</Text>
+            <Link to={`${matchUrl}/calendar`} underlayColor="#f0f4f7">
+              <Text>Calendar</Text>
             </Link>
           </Left>
           <Right>
@@ -36,8 +36,8 @@ const SideBar = ({ matchUrl }: any) => {
         </ListItem>
         <ListItem>
           <Left>
-            <Link to={`${matchUrl}/props-v-state`} underlayColor="#f0f4f7">
-              <Text>Props v. State</Text>
+            <Link to={`${matchUrl}/counter`} underlayColor="#f0f4f7">
+              <Text>Counter</Text>
             </Link>
           </Left>
           <Right>

@@ -63,7 +63,7 @@ export default function App() {
     <SafeAreaProvider>
       <NativeRouter>
         <Route exact path="/" component={Dashboard} />
-        <Route path="/topics" component={Layout} />
+        <Route path="/org" component={Layout} />
       </NativeRouter>
     </SafeAreaProvider>
   );
