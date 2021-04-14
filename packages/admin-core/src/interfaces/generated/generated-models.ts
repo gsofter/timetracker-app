@@ -2592,6 +2592,7 @@ export type ITimesheet = {
   state?: Maybe<ITimesheetState>;
   submittedOn?: Maybe<Scalars['DateTime']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
+  approvedBy?: Maybe<Scalars['String']>;
   updatedBy?: Maybe<Scalars['String']>;
   updatedOn?: Maybe<Scalars['DateTime']>;
 };
@@ -2603,6 +2604,7 @@ export type ITimesheetCreateRequest = {
   state?: Maybe<ITimesheetState>;
   submittedOn?: Maybe<Scalars['DateTime']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
+  approvedBy?: Maybe<Scalars['String']>;
   updatedBy?: Maybe<Scalars['String']>;
   updatedOn?: Maybe<Scalars['DateTime']>;
 };
@@ -2615,6 +2617,7 @@ export type ITimesheetResponse = {
   state?: Maybe<ITimesheetState>;
   submittedOn?: Maybe<Scalars['DateTime']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
+  approvedBy?: Maybe<Scalars['String']>;
   updatedBy?: Maybe<Scalars['String']>;
   updatedOn?: Maybe<Scalars['DateTime']>;
   userId?: Maybe<Scalars['String']>;
@@ -4592,6 +4595,7 @@ export type ITimesheetResolvers<ContextType = MyContext, ParentType extends IRes
   state?: Resolver<Maybe<IResolversTypes['TimesheetState']>, ParentType, ContextType>,
   submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  approvedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   updatedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   updatedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
@@ -4604,6 +4608,7 @@ export type ITimesheetResponseResolvers<ContextType = MyContext, ParentType exte
   state?: Resolver<Maybe<IResolversTypes['TimesheetState']>, ParentType, ContextType>,
   submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  approvedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   updatedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   updatedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,

@@ -1451,6 +1451,7 @@ type TimesheetResponse {
   updatedOn: DateTime
   userId: String
   orgId: String
+  totalDuration: Int
 }
 
 extend type Query {

@@ -2608,6 +2608,7 @@ export type ITimesheetResponse = {
   startDate?: Maybe<Scalars['DateTime']>;
   state?: Maybe<ITimesheetState>;
   submittedOn?: Maybe<Scalars['DateTime']>;
+  totalDuration?: Maybe<Scalars['Int']>;
   updatedBy?: Maybe<Scalars['String']>;
   updatedOn?: Maybe<Scalars['DateTime']>;
   userId?: Maybe<Scalars['String']>;
@@ -3058,7 +3059,7 @@ export type IGetTimesheetsQuery = (
   { __typename?: 'Query' }
   & { getTimesheets?: Maybe<Array<Maybe<(
     { __typename?: 'TimesheetResponse' }
-    & Pick<ITimesheetResponse, 'id' | 'userId' | 'orgId' | 'startDate' | 'endDate' | 'state' | 'submittedOn' | 'approvedOn' | 'updatedBy' | 'updatedOn'>
+    & Pick<ITimesheetResponse, 'id' | 'userId' | 'orgId' | 'startDate' | 'endDate' | 'state' | 'submittedOn' | 'approvedOn' | 'updatedBy' | 'updatedOn' | 'totalDuration'>
   )>>> }
 );
 
@@ -3225,6 +3226,7 @@ export const GetTimesheetsDocument = gql`
     approvedOn
     updatedBy
     updatedOn
+    totalDuration
   }
 }
     `;
@@ -4911,6 +4913,7 @@ export type ITimesheetResponseResolvers<ContextType = any, ParentType extends IR
   startDate?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   state?: Resolver<Maybe<IResolversTypes['TimesheetState']>, ParentType, ContextType>,
   submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  totalDuration?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   updatedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   updatedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,

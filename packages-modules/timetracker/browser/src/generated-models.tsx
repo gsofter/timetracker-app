@@ -599,6 +599,7 @@ export const GetTimesheetsDocument = gql`
     approvedOn
     updatedBy
     updatedOn
+    totalDuration
   }
 }
     `;

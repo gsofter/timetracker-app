@@ -90,7 +90,34 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   public async getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>> {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
     if (trackDoc && trackDoc.timesheets) {
-      return trackDoc.timesheets;
+      return trackDoc.timesheets.map(timesheet => {
+        const sheetTotalDuration = trackDoc.timeRecords
+          .filter(tr => {
+            return (
+              tr.userId === timesheet.userId &&
+              tr.startTime > timesheet.startDate &&
+              tr.endTime < timesheet.endDate
+            );
+          })
+          .reduce(
+            (duration, tr) =>
+              duration +
+              Math.floor((moment(tr.endTime).valueOf() - moment(tr.startTime).valueOf()) / 1000),
+            0,
+          );
+        return {
+          startDate: timesheet.startDate,
+          endDate: timesheet.endDate,
+          state: timesheet.state,
+          userId: timesheet.userId,
+          orgId,
+          approvedBy: timesheet.approvedBy,
+          approvedOn: timesheet.approvedOn,
+          updatedBy: timesheet.updatedBy,
+          updatedOn: timesheet.updatedOn,
+          totalDuration: sheetTotalDuration,
+        };
+      });
       // return trackDoc.timesheets.filter(sh => sh.userId === userId);
     } else {
       return [];

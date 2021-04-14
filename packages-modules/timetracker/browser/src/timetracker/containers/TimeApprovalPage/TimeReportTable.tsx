@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 import { usePermissions } from '../../hooks';
 import { IPermissionType } from '@adminide-stack/core';
 import { useSelector } from 'react-redux';
-
+import { formatDuration } from '../../services/timeRecordService'
 interface ITimesheetProps {
   timesheets: Array<ITimesheetResponse>;
   viewMode: VIEW_MODE;
@@ -111,6 +111,12 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
       dataIndex: 'endDate',
       key: 'endDate',
       render: value => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
+    },
+    {
+      title: 'Duration',
+      dataIndex: 'totalDuration',
+      key: 'totalDuration',
+      render: value => <> {formatDuration(value)} </>
     },
     {
       title: 'Submitted On',
