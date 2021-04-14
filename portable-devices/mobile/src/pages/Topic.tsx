@@ -1,19 +1,18 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-use-before-define */
+/* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/restrict-template-expressions */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React from 'react';
-import { StyleSheet, Text, View, AppRegistry } from 'react-native';
+import { StyleSheet, Text, View } from 'react-native';
+import { Route, Link } from 'react-router-native';
+import Body from '../modules/Body';
+import MainHeader from '../modules/Header';
 
-import { NativeRouter, Route, Link } from 'react-router-native';
-
-export const Home = () => <Text style={styles.header}>Home</Text>;
-
-export const About = () => <Text style={styles.header}>About</Text>;
-
-export const Topic = ({ match }) => <Text style={styles.topic}>{match.params.topicId}</Text>;
-
-export const Topics = ({ match }) => (
+export const Topics = ({ match }: any) => (
   <View>
+    <MainHeader title="Hello" />
     <Text style={styles.header}>Topics</Text>
     <View>
       <Link to={`${match.url}/rendering`} style={styles.subNavItem} underlayColor="#f0f4f7">
@@ -27,7 +26,7 @@ export const Topics = ({ match }) => (
       </Link>
     </View>
 
-    <Route path={`${match.path}/:topicId`} component={Topic} />
+    <Route path={`${match.path}/:topicId`} component={Body} />
     <Route
       exact
       path={match.path}

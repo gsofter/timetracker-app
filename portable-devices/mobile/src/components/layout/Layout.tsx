@@ -1,22 +1,23 @@
+/* eslint-disable prettier/prettier */
+/* eslint-disable react/jsx-no-undef */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
+/* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-shadow */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
-import React, { useState } from 'react';
+import React, { useRef } from 'react';
 import { connect } from 'react-redux';
-import MainHeader from './Header';
+import MainHeader from '../../modules/Header';
 import { DrawerRoute } from './Drawer';
 
-const Layout = (props: any) => {
-  const { history, route, location } = props;
-  console.log('---Layout ROUTES', props);
-  // const subRoutes = routes.filter((route: any) => route.id === 'drawer');
-  console.log('--RENDER __LAYOUT');
+const Layout = ({ match }: any) => {
+  const drawerRef = useRef();
   return (
     <>
-      <MainHeader title={route?.title} />
-      <DrawerRoute history={history} location={location} route={route} />
+      <MainHeader title="Time Tracker" drawerRef={drawerRef} />
+      <DrawerRoute match={match} drawerRef={drawerRef}/>
     </>
   );
 };
@@ -27,3 +28,5 @@ export const ProLayout = connect((state: any) => {
     location: state.router.location,
   };
 })(Layout);
+
+export default Layout;
