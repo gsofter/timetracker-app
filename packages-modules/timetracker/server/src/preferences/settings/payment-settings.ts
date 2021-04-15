@@ -1,6 +1,5 @@
 import { ConfigurationScope, IConfigurationPropertySchema } from '@adminide-stack/core';
 import { localize } from '@vscode/monaco-editor/esm/vs/nls';
-import { WeekDay } from './general-settings';
 
 const enum PayPeriod {
     NONE = 'None',
@@ -14,11 +13,17 @@ const enum PayRate {
     HOURLY = 'Hourly',
     FIXED = 'Fixed',
 }
+
+const enum ProcessPayment {
+    MANUALLY = 'Manually',
+    AUTOMATICALLY = 'Automatically',
+}
+
 export const TrackerPaymentProperties: { [path: string]: IConfigurationPropertySchema } = {
-    'timetracker.payment.processPayments': {
+    'timetracker.user.payment.processPayments': {
         type: 'string',
-        default: true,
-        enum: ['Manually', 'Automatically'],
+        default: ProcessPayment.MANUALLY,
+        enum: [ProcessPayment.MANUALLY, ProcessPayment.AUTOMATICALLY],
         enumDescriptions: [
             localize(
                 'timetracker.payment.processPayments.manually',
@@ -35,7 +40,7 @@ export const TrackerPaymentProperties: { [path: string]: IConfigurationPropertyS
         ),
         scope: ConfigurationScope.WINDOW,
     },
-    'timetracker.payment.sendPaymentAfter': {
+    'timetracker.user.payment.sendPaymentAfter': {
         type: 'number',
         default: 0,
         description: localize(
@@ -45,33 +50,33 @@ export const TrackerPaymentProperties: { [path: string]: IConfigurationPropertyS
         scope: ConfigurationScope.WINDOW,
     },
 
-    'timetracker.payment.payPeriod': {
+    'timetracker.user.payment.payPeriod': {
         type: 'string',
         enum: [PayPeriod.NONE, PayPeriod.WEEKLY, PayPeriod.TWICE_PER_MONTH, PayPeriod.BI_WEEKLY, PayPeriod.MONTHLY],
         default: PayPeriod.NONE,
         description: localize('timetracker.payment.payPeriod', 'Pay Period'),
         scope: ConfigurationScope.RESOURCE,
     },
-    'timetracker.payment.payType': {
+    'timetracker.user.payment.payType': {
         type: 'string',
         enum: [PayRate.HOURLY, PayRate.FIXED],
         default: PayRate.HOURLY,
         description: localize('timetracker.payment.payType', 'Pay type'),
         scope: ConfigurationScope.RESOURCE,
     },
-    'timetracker.payment.billRate': {
+    'timetracker.user.payment.billRate': {
         type: 'number',
         default: 0.0,
         description: localize('timetracker.payment.billRate', 'Billing Rate'),
         scope: ConfigurationScope.RESOURCE,
     },
-    'timetracker.payment.payRate': {
+    'timetracker.user.payment.payRate': {
         type: 'number',
         default: 0.0,
         description: localize('timetracker.payment.payRate', 'Paying Rate'),
         scope: ConfigurationScope.RESOURCE,
     },
-    'timetracker.payment.requireTimesheetApproval': {
+    'timetracker.user.payment.requireTimesheetApproval': {
         type: 'boolean',
         default: false,
         description: localize('timetracker.payment.requireTimesheetApproval', 'Whether it requires Timesheet Approval'),
