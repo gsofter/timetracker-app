@@ -9,10 +9,7 @@ import { Footer, Content } from 'native-base';
 import { connect } from 'react-redux';
 import { Link, Route } from 'react-router-native';
 import CounterScreen from './counter';
-interface Style {
-  container: ViewStyle;
-  text: TextStyle;
-}
+
 const HelloScreen = () => {
   return (
     <View style={styles.container}>
@@ -21,7 +18,7 @@ const HelloScreen = () => {
           <Text style={styles.text}>Hello Screen</Text>
         </View>
       </Content>
-      <Footer style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
+      <Footer style={{ position: 'fixed', left: 0, right: 0, bottom: 0 }}>
         <View>
           <Text>Footer will be here</Text>
         </View>
@@ -30,7 +27,7 @@ const HelloScreen = () => {
   );
 };
 
-const styles = StyleSheet.create<Style>({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
   },

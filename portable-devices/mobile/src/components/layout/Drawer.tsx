@@ -11,9 +11,8 @@ import * as React from 'react';
 import { Content, Drawer } from 'native-base';
 import { Route } from 'react-router-native';
 import SideBar from './SideBar';
-import Body from "../../modules/Body"
 
-export const DrawerRoute = ({ match, drawerRef }: any) => {
+export const DrawerRoute = ({ match, drawerRef, routes }: any) => {
 
   const onClose = () => {
     drawerRef.current._root.close()
@@ -33,7 +32,9 @@ export const DrawerRoute = ({ match, drawerRef }: any) => {
     onOpen={onOpen}
     >
       <Content>
-        <Route exact path={`${match.path}/:drawerId`} component={Body} />
+        {routes.map((route: any) => (
+          <Route exact={route.exact} path={route.path} component={route.component} />
+        ))}
       </Content>
     </Drawer>
   )

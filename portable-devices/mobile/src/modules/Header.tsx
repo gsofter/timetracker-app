@@ -1,3 +1,4 @@
+/* eslint-disable no-debugger */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable prettier/prettier */
@@ -15,9 +16,9 @@ const MainHeader = (props: any) => {
 
   const toggle = () => {
     if(isToggle){
-      props.drawerRef.current._root.close();
+      props.drawerRef?.current?._root?.close();
     } else{
-      props.drawerRef.current._root.open();
+      props.drawerRef?.current?._root?.open();
     }
     setIsToggle(!isToggle)
   }
