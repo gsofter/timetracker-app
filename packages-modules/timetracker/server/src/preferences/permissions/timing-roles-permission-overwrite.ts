@@ -1,5 +1,5 @@
 import { IPermissionType, IApplicationRoles } from '@adminide-stack/core';
-import { IPreDefineAccountPermissions } from '../constants';
+import { IPreDefineAccountPermissions } from '../../constants';
 
 export const TimeTrackerRolesPermissionOverwrite = {
     [IApplicationRoles.OWNER]: {
