@@ -11,16 +11,12 @@ import * as React from 'react';
 import { Content, Drawer } from 'native-base';
 import { Route } from 'react-router-native';
 import SideBar from './SideBar';
-import Body from "../../modules/Body"
 
-export const DrawerRoute = ({ match, drawerRef }: any) => {
+export const DrawerRoute = ({ match, drawerRef, routes }: any) => {
 
   const onClose = () => {
+    console.log("close")
     drawerRef.current._root.close()
-  }
-
-  const onOpen = () => {
-    drawerRef.current._root.open();
   }
 
   return (
@@ -30,10 +26,11 @@ export const DrawerRoute = ({ match, drawerRef }: any) => {
       <SideBar matchUrl={match.url} />
     }
     onClose={onClose}
-    onOpen={onOpen}
     >
-      <Content>
-        <Route exact path={`${match.path}/:drawerId`} component={Body} />
+      <Content style={{ flex: 1 }}>
+        {routes.map((route: any) => (
+          <Route key={route.path} exact={route.exact} path={route.path} component={route.component} />
+        ))}
       </Content>
     </Drawer>
   )

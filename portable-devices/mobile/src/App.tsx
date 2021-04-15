@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
@@ -8,10 +9,11 @@ import { StatusBar } from 'expo-status-bar';
 import React from 'react';
 import { NativeRouter, Route } from 'react-router-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
+import { Feature, FeatureWithRouterFactory } from '@common-stack/client-react';
 import { StyleSheet } from 'react-native';
 import { createRenderer } from 'fela-native';
-import Layout from './components/layout/Layout';
-import { Dashboard } from './pages';
+import LayoutModule from './components/layout/module';
+import { drawer } from './components/layout/Layout';
 // import { Provider } from 'react-redux';
 // import { ApolloProvider } from 'react-apollo';
 // import { persistStore, persistReducer } from 'redux-persist';
@@ -52,6 +54,9 @@ import useCachedResources from './hooks/useCachedResources';
 
 const renderer = createRenderer();
 
+const features = new Feature(FeatureWithRouterFactory, LayoutModule, drawer);
+const routes = features.getConfiguredRoutes();
+
 // console.log('---CONFIG--new-', config, env);
 export default function App() {
   // const isLoadingComplete = useCachedResources();
@@ -62,8 +67,14 @@ export default function App() {
   return (
     <SafeAreaProvider>
       <NativeRouter>
-        <Route exact path="/" component={Dashboard} />
-        <Route path="/org" component={Layout} />
+        {routes.map((route: any) => (
+          <Route
+            key={route.path}
+            exact={route.exact}
+            path={route.path}
+            component={(props: any) => route.component(props, route)}
+          />
+        ))}
       </NativeRouter>
     </SafeAreaProvider>
   );

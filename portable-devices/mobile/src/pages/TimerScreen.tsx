@@ -4,24 +4,18 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import React from 'react';
-import { StyleSheet, View, Text, ViewStyle, TextStyle } from 'react-native';
-import { Footer, Content } from 'native-base';
-import { connect } from 'react-redux';
-import { Link, Route } from 'react-router-native';
-import CounterScreen from './counter';
-interface Style {
-  container: ViewStyle;
-  text: TextStyle;
-}
-const HelloScreen = () => {
+import { StyleSheet, View, Text, ScrollView } from 'react-native';
+import { Footer } from 'native-base';
+
+const TimerScreen = () => {
   return (
     <View style={styles.container}>
-      <Content style={{ flex: 1 }}>
+      <ScrollView>
         <View>
-          <Text style={styles.text}>Hello Screen</Text>
+          <Text style={styles.text}>Timer Screen</Text>
         </View>
-      </Content>
-      <Footer style={{ position: 'absolute', left: 0, right: 0, bottom: 0 }}>
+      </ScrollView>
+      <Footer style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
         <View>
           <Text>Footer will be here</Text>
         </View>
@@ -30,9 +24,11 @@ const HelloScreen = () => {
   );
 };
 
-const styles = StyleSheet.create<Style>({
+const styles = StyleSheet.create({
   container: {
     flex: 1,
+    display: 'flex',
+    justifyContent: 'center',
   },
   text: {
     paddingTop: 30,
@@ -48,4 +44,4 @@ const styles = StyleSheet.create<Style>({
 // })(HelloScreen);
 
 // export default Hello;
-export default HelloScreen;
+export default TimerScreen;

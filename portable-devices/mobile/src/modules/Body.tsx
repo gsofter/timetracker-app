@@ -7,12 +7,12 @@
 import React from "react";
 import {Text, Container} from "native-base";
 import {StyleSheet} from "react-native";
-import { HelloScreen, CalendarScreen } from '../pages';
+import { TimerScreen, CalendarScreen } from '../pages';
 import CounterScreen from '../pages/counter';
 
 const Body = ({ match }: any) => {
-    if(match.params.drawerId === 'hello'){
-        return <HelloScreen/>
+    if(match.params.drawerId === 'timer'){
+        return <TimerScreen/>
     } else if(match.params.drawerId === 'calendar'){
         return <CalendarScreen/>
     } else if(match.params.drawerId === 'counter'){
