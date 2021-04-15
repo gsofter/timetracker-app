@@ -42,7 +42,9 @@
   "author": "CDMBase LLC",
   "license": "ISC",
   "peerDependencies": {
-    "@common-stack/server-core": ">=0.0.255"
+    "@adminide-stack/core": "*",
+    "@common-stack/server-core": ">=0.0.255",
+    "@vscode/monaco-editor": "*"
   },
   "typings": "lib/index.d.ts",
   "typescript": {
