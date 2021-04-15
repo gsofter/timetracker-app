@@ -1,7 +1,7 @@
-import { ConfigurationScope } from '@adminide-stack/core';
+import { ConfigurationScope, IConfigurationPropertySchema } from '@adminide-stack/core';
 import { localize } from '@vscode/monaco-editor/esm/vs/nls';
 
-export const ActivityProperties = {
+export const ActivityProperties: { [path: string]: IConfigurationPropertySchema } = {
     'activity.desktopMonitoring.autoStop': {
         type: 'number',
         default: 24,

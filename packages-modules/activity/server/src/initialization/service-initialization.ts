@@ -10,7 +10,7 @@ import * as ILogger from 'bunyan';
 import { TYPES as serverTypes, Schemas } from '@workbench-stack/core';
 import { CommonType } from '@common-stack/core';
 import { interfaces } from 'inversify';
-import { TimeTrackerContribution } from '../preferences';
+import { ActivityTrackerContribution } from '../preferences';
 
 export const mainLoadConfigurationPre = async (_, container: interfaces.Container) => {
     const logger = container.get<ILogger>(CommonType.LOGGER);
@@ -18,6 +18,6 @@ export const mainLoadConfigurationPre = async (_, container: interfaces.Containe
 
     const registry = container.get<IRegistry>(serverTypes.IRegistry);
     const configurationRegistry = registry.as<IConfigurationRegistry>(RegistryExtensions.Configuration);
-    configurationRegistry.registerConfiguration(TimeTrackerContribution);
+    configurationRegistry.registerConfiguration(ActivityTrackerContribution);
     logger.info('PRESTART ENDS:  -- load default configuration to registry');
 };

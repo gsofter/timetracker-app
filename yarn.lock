@@ -12,9 +12,13 @@
   resolved "https://registry.yarnpkg.com/7zip/-/7zip-0.0.6.tgz#9cafb171af82329490353b4816f03347aa150a30"
   integrity sha1-nK+xca+CMpSQNTtIFvAzR6oVCjA=
 
+"@admin-layout/activity-core@link:packages-modules/activity/core":
+  version "0.0.1"
+
 "@admin-layout/activity-module-browser@link:packages-modules/activity/browser":
   version "0.0.1"
   dependencies:
+    "@admin-layout/activity-core" "link:packages-modules/activity/core"
     "@admin-layout/components" "link:packages/components"
     "@admin-layout/platform-browser" "link:packages/admin-platform/browser"
 
