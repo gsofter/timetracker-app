@@ -111,7 +111,7 @@
   dependencies:
     "@admin-layout/components" "link:packages/components"
     "@admin-layout/timetracker-core" "link:packages-modules/timetracker/core"
-    "@adminide-stack/core" "^0.0.18-alpha.462"
+    "@adminide-stack/core" "^0.0.18-alpha.469"
     chart.js "^2.9.4"
     react-chartjs-2 "^2.11.1"
     react-compound-timer "^1.2.0"
@@ -131,7 +131,7 @@
     "@admin-layout/timetracker-core" "link:packages-modules/timetracker/core"
     humanize-duration "^3.24.0"
 
-"@adminide-stack/account-api-browser@^0.0.18-alpha.462":
+"@adminide-stack/account-api-browser@^0.0.18-alpha.469":
   version "0.0.18-alpha.469"
   resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-browser/-/account-api-browser-0.0.18-alpha.469.tgz#ef70df2a672aafb5edaf4da3c8786cfc555f554b"
   integrity sha512-OoSz2+iAAeoIMK1Im47A5DF4sIsfuT16mOz2iRZw2KTJVc4F2TopE7n7RtRbGdwqgYTLVHNHRoBEZ0G1bvzuVA==
@@ -147,7 +147,7 @@
     react-textarea-autosize "^8.2.0"
     suneditor-react "^2.16.1"
 
-"@adminide-stack/account-api-server@^0.0.18-alpha.462":
+"@adminide-stack/account-api-server@^0.0.18-alpha.469":
   version "0.0.18-alpha.469"
   resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-server/-/account-api-server-0.0.18-alpha.469.tgz#323a1bb478e8dd93a9177b812fa267b6872ed4a1"
   integrity sha512-XE2U16BQ6uJV7nI1baJ89DIMnuZhjl/lji5L2XH+byaPGzWUNFeS3xYGoqnJlj4LHOUdDRN2GXQAcrT8mq/9wQ==
@@ -165,7 +165,7 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/common/-/common-0.0.18-alpha.464.tgz#3c62977aa63a84568598431c9210e6128c3856f2"
   integrity sha512-sh9oaYDCIh0BnCeNTuZc75Q2H782g5kFZley4nJz1Pf5qQqsICVqWu18tmki1bO5MO1lG53PsUl78eJ0QSVDMQ==
 
-"@adminide-stack/core@^0.0.18-alpha.462", "@adminide-stack/core@^0.0.18-alpha.469":
+"@adminide-stack/core@^0.0.18-alpha.469":
   version "0.0.18-alpha.469"
   resolved "https://registry.yarnpkg.com/@adminide-stack/core/-/core-0.0.18-alpha.469.tgz#a4d9c4f91e7ea5774adbaec4c615c78a2e51b056"
   integrity sha512-/gKtYMiGrXSYKmEGKES+VEIli8rAAABCbEZ6AM78C51O3bbOZebggq486fUe7+v7sANyGIaw+rw7ECxTSD/s7w==
@@ -189,7 +189,7 @@
     utility-types "^3.10.0"
     valid-url "1.0.9"
 
-"@adminide-stack/extension-module-browser@^0.0.18-alpha.462":
+"@adminide-stack/extension-module-browser@^0.0.18-alpha.469":
   version "0.0.18-alpha.469"
   resolved "https://registry.yarnpkg.com/@adminide-stack/extension-module-browser/-/extension-module-browser-0.0.18-alpha.469.tgz#19b81cd3343c1369fdba14c56c1b0dfb70086e44"
   integrity sha512-QKs0320Kmpfzawd69x/xop9f9n+cRYsV5TB5j99VIlA6RTwWRVuHwIky86TdSFTzTc90G/UKmim0yHWAOfa3Zg==
@@ -206,7 +206,7 @@
     rxjs-websockets "^8.0.0"
     whatwg-url "^7.0.0"
 
-"@adminide-stack/mailing-api-server@^0.0.18-alpha.462":
+"@adminide-stack/mailing-api-server@^0.0.18-alpha.469":
   version "0.0.18-alpha.469"
   resolved "https://registry.yarnpkg.com/@adminide-stack/mailing-api-server/-/mailing-api-server-0.0.18-alpha.469.tgz#99bde562917902fad27289d47d94d9db6ccc970a"
   integrity sha512-F7pnGF97r9o2Q9WVT9WsP55NbQx9SXz4srCFlPuuKvllLZuJlM1cGJ6E4AfzRwAFT4EQXc4b+Ii1FGEuiNiWyA==
@@ -223,7 +223,7 @@
     query-string "^6.1.0"
     underscore "^1.9.1"
 
-"@adminide-stack/platform-browser@^0.0.18-alpha.462", "@adminide-stack/platform-browser@^0.0.18-alpha.469":
+"@adminide-stack/platform-browser@^0.0.18-alpha.469":
   version "0.0.18-alpha.469"
   resolved "https://registry.yarnpkg.com/@adminide-stack/platform-browser/-/platform-browser-0.0.18-alpha.469.tgz#8be0e8532d417a69cbb5d8a9dfe93947cb459349"
   integrity sha512-Stq4/Hnd4vNYWjGvIkdyr51I0JXatBD4T8WINcye+glkAl7ldUSUdBj8Nk0VQ3qRljjCVnRGzDFRDnmvzyv7BQ==
@@ -234,7 +234,7 @@
     jsonc-parser "^2.3.0"
     query-string "^6.1.0"
 
-"@adminide-stack/platform-server@^0.0.18-alpha.462", "@adminide-stack/platform-server@^0.0.18-alpha.469":
+"@adminide-stack/platform-server@^0.0.18-alpha.469":
   version "0.0.18-alpha.469"
   resolved "https://registry.yarnpkg.com/@adminide-stack/platform-server/-/platform-server-0.0.18-alpha.469.tgz#dc89e3477f87feb535e17461aaca69d192ba393f"
   integrity sha512-xHtA2A4Vj0LdxbJhc8B5VSXtoCATV1iy9czALiSGLXM/eKjiYz1eJw5hXntmr1+YhfVniSuwGiUjcBw28yOgmQ==
@@ -254,7 +254,7 @@
     mongo-queryfilter "^0.1.20"
     query-string "^6.1.0"
 
-"@adminide-stack/react-shared-components@^0.0.18-alpha.462", "@adminide-stack/react-shared-components@^0.0.18-alpha.469":
+"@adminide-stack/react-shared-components@^0.0.18-alpha.469":
   version "0.0.18-alpha.469"
   resolved "https://registry.yarnpkg.com/@adminide-stack/react-shared-components/-/react-shared-components-0.0.18-alpha.469.tgz#2b58826616a5428706cd2dd0ef1f24d61ca65b4c"
   integrity sha512-X9vWoY1iLZHg9l6hIbwm+OgABqPP84vfUsv4sr+4BRWqC6KfiC+lHtZ5RqPHL8QwPalNNLkKtQWObh4n5Wwrzw==
@@ -275,7 +275,7 @@
     use-media-antd-query "^1.0.2"
     use-merge-value "^1.0.2"
 
-"@adminide-stack/user-auth0-browser@^0.0.18-alpha.462", "@adminide-stack/user-auth0-browser@^0.0.18-alpha.469":
+"@adminide-stack/user-auth0-browser@^0.0.18-alpha.469":
   version "0.0.18-alpha.469"
   resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.18-alpha.469.tgz#87c9b9eb95dc8972376a9b37f7db825343a921fa"
   integrity sha512-RQzgbEtMydrUhE4ie+F6zzPfQraASwaNJxQWcnFdsRfHPd4azEhqbepP5Gnye68pcYHVkAMdioYXZVIU2y8YeQ==
@@ -289,7 +289,7 @@
     react-cookie "^4.0.1"
     redux-auth-wrapper "^3.0.0"
 
-"@adminide-stack/user-auth0-server@^0.0.18-alpha.462":
+"@adminide-stack/user-auth0-server@^0.0.18-alpha.469":
   version "0.0.18-alpha.469"
   resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-server/-/user-auth0-server-0.0.18-alpha.469.tgz#0e27bdfa8b998a6c363809a2b337e0a283e687d1"
   integrity sha512-fkZPJKLrG0qY+ZxuCBYuaGgozgsSYIRC4MBVsuiY4PIWJw8EJnQfox8HRDDWcM/W6ajWyiPpgsXQj4upTR+9SQ==
