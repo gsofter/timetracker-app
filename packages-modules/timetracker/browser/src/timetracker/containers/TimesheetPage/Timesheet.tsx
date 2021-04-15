@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useState } from 'react';
-import { Calendar, View, DateLocalizer } from 'react-big-calendar';
+import { Calendar } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment, { Moment } from 'moment';
 import { momentLocalizer } from 'react-big-calendar';
@@ -18,7 +18,7 @@ import {
 import TimesheetModal from './TimesheetModal';
 
 const DnDCalendar: any = withDragAndDrop(Calendar as any);
-const allViews: View[] = ['day', 'week', 'month'];
+const allViews: string[] = ['day', 'week', 'month'];
 
 enum VIEW_MODE {
   CALENDAR_VIEW,
@@ -38,7 +38,7 @@ interface ITimesheetProps {
   projects: Array<IProject>;
   tasks: Array<ITask>;
   members: Array<IMember>;
-  localizer: DateLocalizer;
+  localizer: any;
   weekStart: Moment;
   setSelectedEvent: Function;
   setPathWeekStart: Function;

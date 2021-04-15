@@ -194,10 +194,8 @@ const ReportsPage = () => {
           </span>
         </Col>
         <Col xs={24} md={6} className="control">
-          <span> Switch Mode: </span>
+          <span> Rounding: </span>
           <Switch
-            checkedChildren="Rounding"
-            unCheckedChildren="Standard"
             checked={rounded}
             onChange={handleSwitchRoundMode}
           />

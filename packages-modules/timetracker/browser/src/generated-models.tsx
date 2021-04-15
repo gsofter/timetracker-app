@@ -368,48 +368,49 @@ export function useGetDurationTimeRecordsLazyQuery(baseOptions?: ApolloReactHook
 export type GetDurationTimeRecordsQueryHookResult = ReturnType<typeof useGetDurationTimeRecordsQuery>;
 export type GetDurationTimeRecordsLazyQueryHookResult = ReturnType<typeof useGetDurationTimeRecordsLazyQuery>;
 export type GetDurationTimeRecordsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetDurationTimeRecordsQuery, SchemaTypes.IGetDurationTimeRecordsQueryVariables>;
-export const GetDurationTimesheetDocument = gql`
-    query GetDurationTimesheet($start: DateTime, $end: DateTime) {
-  getDurationTimesheet(start: $start, end: $end) {
+export const GetDurationTimesheetsDocument = gql`
+    query GetDurationTimesheets($start: DateTime, $end: DateTime) {
+  getDurationTimesheets(start: $start, end: $end) {
+    userId
     startDate
     endDate
     state
   }
 }
     `;
-export type GetDurationTimesheetComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>, 'query'>;
+export type GetDurationTimesheetsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetDurationTimesheetsQuery, SchemaTypes.IGetDurationTimesheetsQueryVariables>, 'query'>;
 
-    export const GetDurationTimesheetComponent = (props: GetDurationTimesheetComponentProps) => (
-      <ApolloReactComponents.Query<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables> query={GetDurationTimesheetDocument} {...props} />
+    export const GetDurationTimesheetsComponent = (props: GetDurationTimesheetsComponentProps) => (
+      <ApolloReactComponents.Query<SchemaTypes.IGetDurationTimesheetsQuery, SchemaTypes.IGetDurationTimesheetsQueryVariables> query={GetDurationTimesheetsDocument} {...props} />
     );
     
 
 /**
- * __useGetDurationTimesheetQuery__
+ * __useGetDurationTimesheetsQuery__
  *
- * To run a query within a React component, call `useGetDurationTimesheetQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetDurationTimesheetQuery` returns an object from Apollo Client that contains loading, error, and data properties
+ * To run a query within a React component, call `useGetDurationTimesheetsQuery` and pass it any options that fit your needs.
+ * When your component renders, `useGetDurationTimesheetsQuery` returns an object from Apollo Client that contains loading, error, and data properties
  * you can use to render your UI.
  *
  * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
  *
  * @example
- * const { data, loading, error } = useGetDurationTimesheetQuery({
+ * const { data, loading, error } = useGetDurationTimesheetsQuery({
  *   variables: {
  *      start: // value for 'start'
  *      end: // value for 'end'
  *   },
  * });
  */
-export function useGetDurationTimesheetQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>) {
-        return ApolloReactHooks.useQuery<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>(GetDurationTimesheetDocument, baseOptions);
+export function useGetDurationTimesheetsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchemaTypes.IGetDurationTimesheetsQuery, SchemaTypes.IGetDurationTimesheetsQueryVariables>) {
+        return ApolloReactHooks.useQuery<SchemaTypes.IGetDurationTimesheetsQuery, SchemaTypes.IGetDurationTimesheetsQueryVariables>(GetDurationTimesheetsDocument, baseOptions);
       }
-export function useGetDurationTimesheetLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>(GetDurationTimesheetDocument, baseOptions);
+export function useGetDurationTimesheetsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchemaTypes.IGetDurationTimesheetsQuery, SchemaTypes.IGetDurationTimesheetsQueryVariables>) {
+          return ApolloReactHooks.useLazyQuery<SchemaTypes.IGetDurationTimesheetsQuery, SchemaTypes.IGetDurationTimesheetsQueryVariables>(GetDurationTimesheetsDocument, baseOptions);
         }
-export type GetDurationTimesheetQueryHookResult = ReturnType<typeof useGetDurationTimesheetQuery>;
-export type GetDurationTimesheetLazyQueryHookResult = ReturnType<typeof useGetDurationTimesheetLazyQuery>;
-export type GetDurationTimesheetQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetDurationTimesheetQuery, SchemaTypes.IGetDurationTimesheetQueryVariables>;
+export type GetDurationTimesheetsQueryHookResult = ReturnType<typeof useGetDurationTimesheetsQuery>;
+export type GetDurationTimesheetsLazyQueryHookResult = ReturnType<typeof useGetDurationTimesheetsLazyQuery>;
+export type GetDurationTimesheetsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetDurationTimesheetsQuery, SchemaTypes.IGetDurationTimesheetsQueryVariables>;
 export const GetOrganizationMembersDocument = gql`
     query GetOrganizationMembers {
   getOrganizationMembers {
@@ -540,8 +541,8 @@ export type GetProjectsQueryHookResult = ReturnType<typeof useGetProjectsQuery>;
 export type GetProjectsLazyQueryHookResult = ReturnType<typeof useGetProjectsLazyQuery>;
 export type GetProjectsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetProjectsQuery, SchemaTypes.IGetProjectsQueryVariables>;
 export const GetTimeRecordsDocument = gql`
-    query GetTimeRecords {
-  getTimeRecords {
+    query GetTimeRecords($userId: String) {
+  getTimeRecords(userId: $userId) {
     id
     startTime
     endTime
@@ -572,6 +573,7 @@ export type GetTimeRecordsComponentProps = Omit<ApolloReactComponents.QueryCompo
  * @example
  * const { data, loading, error } = useGetTimeRecordsQuery({
  *   variables: {
+ *      userId: // value for 'userId'
  *   },
  * });
  */

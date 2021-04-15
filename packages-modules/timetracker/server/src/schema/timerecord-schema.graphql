@@ -24,8 +24,9 @@ input TimeRecordRequest {
 }
 
 extend type Query {
-  getTimeRecords: [TimeRecord] @addAccountContext
-  getDurationTimeRecords(startTime: DateTime, endTime: DateTime): [TimeRecord] @addAccountContext
+  getTimeRecords(userId: String): [TimeRecord] @addAccountContext
+  getDurationTimeRecords(startTime: DateTime, endTime: DateTime, userId: String): [TimeRecord]
+    @addAccountContext
   getPlayingTimeRecord: TimeRecord @addAccountContext
 }
 
