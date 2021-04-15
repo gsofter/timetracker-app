@@ -1,7 +1,6 @@
 import { ConfigurationScope } from '@adminide-stack/core';
 import { localize } from '@vscode/monaco-editor/esm/vs/nls';
-import { IConfigurationNode } from '@adminide-stack/core';
-import { IConfigurationContributionNames } from '@admin-layout/timetracker-core';
+
 
 // const localize = (id, defaultMessage) => defineMessages({
 //     id,
@@ -28,7 +27,7 @@ const enum DateFormat {
   ISOFORMAT = 'YYYY-MM-DD',
 }
 
-const enum WeekDay {
+export const enum WeekDay {
   SUN = 'Sunday',
   MON = 'Monday',
   TUE = 'Tuesday',
@@ -147,6 +146,21 @@ export const TimeTrackerProperties = {
       'When you create a project, make it billable so its time entries are set as billable by default.',
     ),
     scope: ConfigurationScope.WINDOW,
+  },
+  'timetracker.project.daysAllowedToWork': {
+    type: 'string[]',
+    default: [
+      WeekDay.MON,
+      WeekDay.TUE,
+      WeekDay.WED,
+      WeekDay.THU,
+      WeekDay.FRI,
+    ],
+    description: localize(
+      'timetracker.project.recurringDailyLimit',
+      'Select working day'
+    ),
+    scope: ConfigurationScope.RESOURCE,
   },
   'timetracker.project.firstDayOfTheWeek': {
     type: 'string',
@@ -373,10 +387,4 @@ export const TimeTrackerProperties = {
     default: true,
     scope: ConfigurationScope.WINDOW,
   },
-};
-
-export const TimeTrackerContribution: IConfigurationNode = {
-  id: IConfigurationContributionNames.timeTracker,
-  type: 'object',
-  properties: TimeTrackerProperties as any,
 };

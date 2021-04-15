@@ -11,7 +11,7 @@ import {
 } from '@workbench-stack/core';
 import { CommonType } from '@common-stack/core';
 import { interfaces } from 'inversify';
-import { TimeTrackerContribution } from '../preferences';
+import { TimeTrackerContribution, TrackerPaymentProperties } from '../preferences';
 
 export const mainLoadConfigurationPre = async (_, container: interfaces.Container) => {
     const logger = container.get<ILogger>(CommonType.LOGGER);
