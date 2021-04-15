@@ -2,7 +2,7 @@ import { ConfigurationScope } from '@adminide-stack/core';
 import { localize } from '@vscode/monaco-editor/esm/vs/nls';
 
 export const ActivityProperties = {
-    'timetracker.activity.autoStop': {
+    'activity.desktopMonitoring.autoStop': {
         type: 'number',
         default: 24,
         description: localize(
@@ -20,7 +20,7 @@ export const ActivityProperties = {
         ),
         scope: ConfigurationScope.WINDOW,
     },
-    'timetracker.activity.maxTimeInADay': {
+    'activity.desktopMonitoring.maxTimeInADay': {
         type: 'number',
         default: 120,
         description: localize(
@@ -29,5 +29,4 @@ export const ActivityProperties = {
         ),
         scope: ConfigurationScope.WINDOW,
     },
-
 };
