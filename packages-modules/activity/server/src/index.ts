@@ -1,5 +1,4 @@
-import counter from './module';
-import { Feature } from '@common-stack/server-core';
+import { Feature } from '@common-stack/client-react';
+import activityModule from './module';
 
-
-export default new Feature(counter);
+export default new Feature(activityModule);
