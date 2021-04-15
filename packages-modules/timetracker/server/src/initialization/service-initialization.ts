@@ -1,17 +1,15 @@
-
 import {
     IRegistryExtensions as RegistryExtensions,
-    IConfigurationRegistry, IRegistry,
+    IConfigurationRegistry,
+    IRegistry,
     ServerTypes as TYPES,
     IConfigurationContributionNames,
 } from '@adminide-stack/core';
 import * as ILogger from 'bunyan';
-import {
-    TYPES as serverTypes, Schemas,
-} from '@workbench-stack/core';
+import { TYPES as serverTypes, Schemas } from '@workbench-stack/core';
 import { CommonType } from '@common-stack/core';
 import { interfaces } from 'inversify';
-import { TimeTrackerContribution, TrackerPaymentProperties } from '../preferences';
+import { TimeTrackerContribution } from '../preferences';
 
 export const mainLoadConfigurationPre = async (_, container: interfaces.Container) => {
     const logger = container.get<ILogger>(CommonType.LOGGER);
