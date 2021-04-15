@@ -10,7 +10,7 @@ import { useEffect, useState, createElement } from 'react';
 // import { Plugin, ApplyPluginsType } from '@umijs/runtime';
 import { IRoute, IComponent } from '@common-stack/client-react';
 import { Switch, Route, Redirect } from 'react-router-native';
-import Home from '../pages/hello';
+import Home from '../pages/TimerScreen';
 
 interface IOpts {
   routes: IRoute[];

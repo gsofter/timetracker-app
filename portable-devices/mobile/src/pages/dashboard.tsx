@@ -8,7 +8,7 @@ const Dashboard = () => {
    return (
         <View>
           <Text style={styles.text}>Dashboard Screen</Text>
-          <Link to="/org/hello" underlayColor="#f0f4f7">
+          <Link to="/org/timer" underlayColor="#f0f4f7">
             <Text style={styles.link}>Click here to go to Menu</Text>
           </Link>
         </View>

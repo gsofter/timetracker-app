@@ -15,11 +15,8 @@ import SideBar from './SideBar';
 export const DrawerRoute = ({ match, drawerRef, routes }: any) => {
 
   const onClose = () => {
+    console.log("close")
     drawerRef.current._root.close()
-  }
-
-  const onOpen = () => {
-    drawerRef.current._root.open();
   }
 
   return (
@@ -29,11 +26,10 @@ export const DrawerRoute = ({ match, drawerRef, routes }: any) => {
       <SideBar matchUrl={match.url} />
     }
     onClose={onClose}
-    onOpen={onOpen}
     >
-      <Content>
+      <Content style={{ flex: 1 }}>
         {routes.map((route: any) => (
-          <Route exact={route.exact} path={route.path} component={route.component} />
+          <Route key={route.path} exact={route.exact} path={route.path} component={route.component} />
         ))}
       </Content>
     </Drawer>
