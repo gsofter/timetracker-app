@@ -5,24 +5,23 @@ import Positioner from 'electron-positioner';
 
 const menuBarHtml = path.join(__dirname, '../renderer/assets/html/menubar.html');
 
-
 let browserWindow = null;
 let cachedTrayBounds;
 
 function positionWindow() {
-  let windowPosition = 'topRight';
-  if (cachedTrayBounds) {
-    windowPosition = (process.platform === 'win32') ? 'trayBottomCenter' : 'trayCenter';
-  }
-  const positioner = new Positioner(browserWindow);
-  const { x, y } = positioner.calculate(windowPosition, cachedTrayBounds);
+    let windowPosition = 'topRight';
+    if (cachedTrayBounds) {
+        windowPosition = process.platform === 'win32' ? 'trayBottomCenter' : 'trayCenter';
+    }
+    const positioner = new Positioner(browserWindow);
+    const { x, y } = positioner.calculate(windowPosition, cachedTrayBounds);
 
-  browserWindow.setPosition(x, y);
+    browserWindow.setPosition(x, y);
 }
 
 function showWindow() {
-  browserWindow.show();
-  browserWindow.focus();
+    browserWindow.show();
+    browserWindow.focus();
 }
 
 export default function createMenuBar({ trayBounds = null, uri = '/' } = {}) {

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/no-extraneous-dependencies */
@@ -114,11 +115,11 @@ if (process.env.NODE_ENV === 'development') {
     // config.builders.web.webpackConfig = merge(config.builders.web.webpackConfig, dotEnvPlugin);
 }
 const extraDefines = {
-  __SSR__: false,
-  __PERSIST_GQL__: false,
-  __FRONTEND_BUILD_DIR__: `'${options.frontendBuildDir}'`,
-  __DLL_BUILD_DIR__: `'${options.dllBuildDir}'`,
-  __DEBUGGING__: false,
+    __SSR__: false,
+    __PERSIST_GQL__: false,
+    __FRONTEND_BUILD_DIR__: `'${options.frontendBuildDir}'`,
+    __DLL_BUILD_DIR__: `'${options.dllBuildDir}'`,
+    __DEBUGGING__: false,
 };
 
 if (process.env.NODE_ENV !== 'production') {

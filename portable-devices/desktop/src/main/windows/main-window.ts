@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-floating-promises */
 import * as path from 'path';
 import { BrowserWindow, shell } from 'electron';
 import { format as formatUrl } from 'url';

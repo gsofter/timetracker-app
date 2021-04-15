@@ -1,5 +1,6 @@
-var _require = require("esm")(module)
-console.log('----PRELOAD____CALLLED')
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+const _require = require('esm')(module);
+
 process.once('loaded', () => {
-  global.require = _require
-})
+    global.require = _require;
+});

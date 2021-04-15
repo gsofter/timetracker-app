@@ -31,6 +31,7 @@
   },
   "dependencies": {
     "@admin-layout/activity-module-browser": "link:../../packages-modules/activity/browser",
+    "@admin-layout/activity-module-electron": "link:../../packages-modules/activity/electron",
     "@admin-layout/components": "link:../../packages/components",
     "@admin-layout/core": "link:../../packages/admin-core",
     "@admin-layout/counter-module-browser": "link:../../packages-modules/counter/browser",
@@ -38,6 +39,7 @@
     "@admin-layout/react-shared-components": "link:../../packages/react-shared-components",
     "@admin-layout/schedule-module-browser": "link:../../packages-modules/schedule/browser",
     "@admin-layout/timetracker-module-browser": "link:../../packages-modules/timetracker/browser",
+    "@adminide-stack/user-auth0-browser": "^0.0.18-alpha.458",
     "@ant-design/compatible": "^1.0.5",
     "@ant-design/icons": "^4.2.2",
     "@cdm-logger/client": "^5.0.7",

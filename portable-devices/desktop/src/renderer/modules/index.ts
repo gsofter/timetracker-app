@@ -8,12 +8,12 @@ import { ClientTypes } from '@common-stack/client-react';
 import modules, { MainRoute } from './module';
 
 class UtilityClass {
-  // tslint:disable-next-line:no-shadowed-variable
-  constructor(private modules) {}
+    // eslint-disable-next-line @typescript-eslint/no-shadow
+    constructor(private modules) {}
 
-  public getCacheKey(storeObj) {
-    return this.modules.getDataIdFromObject(storeObj);
-  }
+    public getCacheKey(storeObj) {
+        return this.modules.getDataIdFromObject(storeObj);
+    }
 }
 
 const utility = new UtilityClass(modules);
