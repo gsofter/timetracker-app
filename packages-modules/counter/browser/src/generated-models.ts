@@ -614,6 +614,13 @@ export type IntegrationConfigurationCreateOrUpdateInput = {
   integrationInfo?: Maybe<Scalars['JSON']>;
 };
 
+export type IntegrationConfigurationFilterInput = {
+  id?: Maybe<Scalars['ID']>;
+  name?: Maybe<Scalars['String']>;
+  integrationName?: Maybe<Scalars['String']>;
+  status?: Maybe<Scalars['String']>;
+};
+
 export type IntegrationConfigurationInput = {
   name?: Maybe<Scalars['String']>;
   integrationName?: Maybe<Scalars['String']>;
@@ -1876,6 +1883,7 @@ export type Query = {
   defaultViewerSettingsSubject: DefaultSettings;
   dummy?: Maybe<Scalars['Int']>;
   fetchAuth0User?: Maybe<AuthUser>;
+  filterIntegrationConfiguration?: Maybe<Array<Maybe<IntegrationConfiguration>>>;
   getAccounts?: Maybe<Array<Maybe<UserAccount>>>;
   getAllIntegrationConfigurations?: Maybe<Array<Maybe<IntegrationConfiguration>>>;
   getAsanaConnectionState?: Maybe<AsanaConnection>;
@@ -1887,7 +1895,7 @@ export type Query = {
   getContributionRoles?: Maybe<Array<Maybe<ContributionRoles>>>;
   getDefaultInvoiceNumber?: Maybe<Scalars['String']>;
   getDurationTimeRecords?: Maybe<Array<Maybe<TimeRecord>>>;
-  getDurationTimesheet?: Maybe<TimesheetResponse>;
+  getDurationTimesheets?: Maybe<Array<Maybe<TimesheetResponse>>>;
   getEnvironment?: Maybe<Environment>;
   getFilteredProjects?: Maybe<Array<Maybe<Projects>>>;
   getIntegrationConfiguration?: Maybe<IntegrationConfiguration>;
@@ -1968,6 +1976,11 @@ export type QueryFetchAuth0UserArgs = {
 };
 
 
+export type QueryFilterIntegrationConfigurationArgs = {
+  filter?: Maybe<IntegrationConfigurationFilterInput>;
+};
+
+
 export type QueryGetAccountsArgs = {
   where?: Maybe<UserAccountWhere>;
 };
@@ -1991,10 +2004,11 @@ export type QueryGetConfigurationPoliciesArgs = {
 export type QueryGetDurationTimeRecordsArgs = {
   startTime?: Maybe<Scalars['DateTime']>;
   endTime?: Maybe<Scalars['DateTime']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 
-export type QueryGetDurationTimesheetArgs = {
+export type QueryGetDurationTimesheetsArgs = {
   start?: Maybe<Scalars['DateTime']>;
   end?: Maybe<Scalars['DateTime']>;
 };
@@ -2058,6 +2072,11 @@ export type QueryGetScheduleEventsArgs = {
 export type QueryGetTeamArgs = {
   orgName: Scalars['String'];
   teamName: Scalars['String'];
+};
+
+
+export type QueryGetTimeRecordsArgs = {
+  userId?: Maybe<Scalars['String']>;
 };
 
 
@@ -3080,12 +3099,13 @@ export type ResolversTypes = {
   Preference_Project: ResolverTypeWrapper<Preference_Project>,
   AuthUser: ResolverTypeWrapper<AuthUser>,
   IUser: ResolversTypes['AuthUser'],
-  UserAccountWhere: UserAccountWhere,
-  UserAccount: ResolverTypeWrapper<UserAccount>,
-  Node: ResolversTypes['UserAccount'],
+  IntegrationConfigurationFilterInput: IntegrationConfigurationFilterInput,
   IntegrationConfiguration: ResolverTypeWrapper<IntegrationConfiguration>,
   DateTime: ResolverTypeWrapper<Scalars['DateTime']>,
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
+  UserAccountWhere: UserAccountWhere,
+  UserAccount: ResolverTypeWrapper<UserAccount>,
+  Node: ResolversTypes['UserAccount'],
   AsanaConnection: ResolverTypeWrapper<AsanaConnection>,
   AsanaConnectionState: ResolverTypeWrapper<AsanaConnectionState>,
   AsanaUser: ResolverTypeWrapper<AsanaUser>,
@@ -3299,12 +3319,13 @@ export type ResolversParentTypes = {
   Preference_Project: Preference_Project,
   AuthUser: AuthUser,
   IUser: ResolversParentTypes['AuthUser'],
-  UserAccountWhere: UserAccountWhere,
-  UserAccount: UserAccount,
-  Node: ResolversParentTypes['UserAccount'],
+  IntegrationConfigurationFilterInput: IntegrationConfigurationFilterInput,
   IntegrationConfiguration: IntegrationConfiguration,
   DateTime: Scalars['DateTime'],
   JSON: Scalars['JSON'],
+  UserAccountWhere: UserAccountWhere,
+  UserAccount: UserAccount,
+  Node: ResolversParentTypes['UserAccount'],
   AsanaConnection: AsanaConnection,
   AsanaConnectionState: AsanaConnectionState,
   AsanaUser: AsanaUser,
@@ -4363,6 +4384,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   defaultViewerSettingsSubject?: Resolver<ResolversTypes['DefaultSettings'], ParentType, ContextType, RequireFields<QueryDefaultViewerSettingsSubjectArgs, never>>,
   dummy?: Resolver<Maybe<ResolversTypes['Int']>, ParentType, ContextType>,
   fetchAuth0User?: Resolver<Maybe<ResolversTypes['AuthUser']>, ParentType, ContextType, RequireFields<QueryFetchAuth0UserArgs, 'auth0UserId'>>,
+  filterIntegrationConfiguration?: Resolver<Maybe<Array<Maybe<ResolversTypes['IntegrationConfiguration']>>>, ParentType, ContextType, RequireFields<QueryFilterIntegrationConfigurationArgs, never>>,
   getAccounts?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserAccount']>>>, ParentType, ContextType, RequireFields<QueryGetAccountsArgs, never>>,
   getAllIntegrationConfigurations?: Resolver<Maybe<Array<Maybe<ResolversTypes['IntegrationConfiguration']>>>, ParentType, ContextType>,
   getAsanaConnectionState?: Resolver<Maybe<ResolversTypes['AsanaConnection']>, ParentType, ContextType>,
@@ -4374,7 +4396,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getContributionRoles?: Resolver<Maybe<Array<Maybe<ResolversTypes['ContributionRoles']>>>, ParentType, ContextType>,
   getDefaultInvoiceNumber?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   getDurationTimeRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimeRecord']>>>, ParentType, ContextType, RequireFields<QueryGetDurationTimeRecordsArgs, never>>,
-  getDurationTimesheet?: Resolver<Maybe<ResolversTypes['TimesheetResponse']>, ParentType, ContextType, RequireFields<QueryGetDurationTimesheetArgs, never>>,
+  getDurationTimesheets?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimesheetResponse']>>>, ParentType, ContextType, RequireFields<QueryGetDurationTimesheetsArgs, never>>,
   getEnvironment?: Resolver<Maybe<ResolversTypes['Environment']>, ParentType, ContextType>,
   getFilteredProjects?: Resolver<Maybe<Array<Maybe<ResolversTypes['Projects']>>>, ParentType, ContextType, RequireFields<QueryGetFilteredProjectsArgs, 'filter'>>,
   getIntegrationConfiguration?: Resolver<Maybe<ResolversTypes['IntegrationConfiguration']>, ParentType, ContextType, RequireFields<QueryGetIntegrationConfigurationArgs, 'id'>>,
@@ -4397,7 +4419,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getSettings?: Resolver<Maybe<ResolversTypes['Settings']>, ParentType, ContextType>,
   getTags?: Resolver<Maybe<Array<Maybe<ResolversTypes['Tag']>>>, ParentType, ContextType>,
   getTeam?: Resolver<Maybe<ResolversTypes['AccountTeam']>, ParentType, ContextType, RequireFields<QueryGetTeamArgs, 'orgName' | 'teamName'>>,
-  getTimeRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimeRecord']>>>, ParentType, ContextType>,
+  getTimeRecords?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimeRecord']>>>, ParentType, ContextType, RequireFields<QueryGetTimeRecordsArgs, never>>,
   getTimelineEvents?: Resolver<Maybe<Array<Maybe<ResolversTypes['Timeline']>>>, ParentType, ContextType, RequireFields<QueryGetTimelineEventsArgs, never>>,
   getTimesheets?: Resolver<Maybe<Array<Maybe<ResolversTypes['TimesheetResponse']>>>, ParentType, ContextType, RequireFields<QueryGetTimesheetsArgs, never>>,
   getUserAccessRole?: Resolver<Maybe<ResolversTypes['ResourceAccessRole']>, ParentType, ContextType, RequireFields<QueryGetUserAccessRoleArgs, never>>,

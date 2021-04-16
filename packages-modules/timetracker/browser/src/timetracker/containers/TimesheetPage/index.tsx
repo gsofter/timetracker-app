@@ -20,9 +20,7 @@ import TimezonePicker from 'react-timezone';
 import { momentLocalizer, DateLocalizer } from 'react-big-calendar';
 import moment, { Moment } from 'moment';
 import momentZ from 'moment-timezone';
-import CSS from 'csstype';
 import { useLocation } from 'react-router';
-// import { useLocationQuery } from '../../hooks'
 import qs from 'query-string';
 import { useHistory } from 'react-router';
 import { useFirstWeekDay } from '../../hooks';
@@ -35,8 +33,10 @@ interface ITimesheetProps {
   projects: Array<IProject>;
   tags: Array<ITag>;
   members: Array<IOrgMember>;
-  localizer: DateLocalizer;
+  localizer: any;
   weekStart: Moment;
+  selectedUser: string;
+  setSelectedUser: Function;
   setPathWeekStart: Function;
 }
 
@@ -46,6 +46,8 @@ const Timesheet = ({
   members,
   localizer,
   weekStart,
+  selectedUser,
+  setSelectedUser,
   setPathWeekStart,
 }: ITimesheetProps) => {
   const location = useLocation();
@@ -53,7 +55,6 @@ const Timesheet = ({
   const parsed = qs.parse(location.search);
 
   const [selectedProject, setSelectedProject] = useState('');
-  const [selectedUser, setSelectedUser] = useState('');
   const [isShowTimeModal, setIsShowTimeModal] = useState(false);
 
   const handleChangeViewMode = () => {
@@ -71,7 +72,6 @@ const Timesheet = ({
 
   const handleChangeProject = (value: string) => {
     setSelectedProject(value);
-    const selProject = projects.find(p => p.id === value);
   };
 
   const handleChangeUser = value => {
@@ -129,7 +129,7 @@ const Timesheet = ({
                 <Select.Option value="">All</Select.Option>
                 {members.map(member => {
                   return (
-                    <Select.Option value={member._id} key={member._id}>
+                    <Select.Option value={member.userId} key={member.userId}>
                       {member.name}
                     </Select.Option>
                   );
@@ -182,6 +182,8 @@ const Timesheet = ({
           localizer={localizer}
           weekStart={weekStart}
           setPathWeekStart={setPathWeekStart}
+          selectedUser={selectedUser}
+          selectedProject={selectedProject}
         />
       )}
     </PageContainer>
@@ -192,7 +194,7 @@ const TimesheetPage = () => {
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { data: membersData, loading: loadingMembers } = useGetOrganizationMembersQuery();
   const { data: tagsData, loading: loadingTags } = useGetTagsQuery();
-  const { day, value: dowValue } = useFirstWeekDay();
+  const { value: dowValue } = useFirstWeekDay();
   const history = useHistory();
   const queryParsed = qs.parse(location.search);
 
@@ -200,9 +202,16 @@ const TimesheetPage = () => {
     return queryParsed.weekStart ? moment(queryParsed.weekStart) : moment().startOf('week');
   };
 
+  const selectedUser = () => {
+    return queryParsed.username as string ?? ''
+  }
+
   useEffect(() => {
     const queryParsed = qs.parse(location.search);
-    if (queryParsed.strict === undefined || !queryParsed.strict) {
+    if (
+      queryParsed.strict === undefined ||
+      !queryParsed.strict
+    ) {
       queryParsed.weekStart = moment()
         .startOf('week')
         .format('YYYY-MM-DD');
@@ -222,6 +231,15 @@ const TimesheetPage = () => {
     });
   };
 
+  const setSelectedUser = (username: string) => {
+    const parsed = qs.parse(location.search);
+    parsed.username = username;
+    history.push({
+      pathname: location.pathname,
+      search: qs.stringify(parsed),
+    });
+  }
+
   moment.locale('en', {
     week: {
       dow: dowValue, //Monday is the first day of the week.
@@ -237,61 +255,12 @@ const TimesheetPage = () => {
         tags={_.get(tagsData, 'getTags', [])}
         localizer={localizerM}
         weekStart={weekStart()}
+        selectedUser={selectedUser()}
         setPathWeekStart={setPathWeekStart}
+        setSelectedUser={setSelectedUser}
       ></Timesheet>
     </Spin>
   );
 };
 export { moment };
 export default TimesheetPage;
-
-const styles: { [property: string]: (props) => CSS.Properties } = {
-  dateHeader: props => ({
-    display: 'flex',
-    flexDirection: 'row',
-    justifyContent: 'center',
-    alignItems: 'center',
-    '@media (max-width: 768px)': {
-      flexDirection: 'column',
-    },
-    '& .day': {
-      fontSize: '3em',
-      fontWeight: '500',
-      '@media (max-width: 768px)': {
-        fontSize: '14px',
-      },
-    },
-    '& .extra': {
-      display: 'flex',
-      flexDirection: 'column',
-      '& .week': {
-        fontSize: '1em',
-        '@media (max-width: 768px)': {
-          fontSize: '12px',
-        },
-      },
-
-      '& .month': {
-        fontSize: '1em',
-        '@media (max-width: 768px)': {
-          fontSize: '12px',
-        },
-        color: '#bbb',
-      },
-    },
-    '& .today': {
-      color: '#1890ff',
-    },
-  }),
-  greenText: props => ({
-    color: 'green',
-  }),
-  boldText: props => ({
-    fontWeight: 'bold',
-  }),
-
-  calendarTable: props => ({
-    width: '100%',
-    background: 'white',
-  }),
-};

@@ -28,20 +28,25 @@ export class TimeTrackerService implements ITimeTrackerService {
   }
 
   public async getDurationTimeRecords(
-    userId: string,
     orgId: string,
     startTime: Date,
     endTime: Date,
+    userId?: string,
   ): Promise<Array<ITimeRecord>> {
-    return this.trackerRepository.getDurationTimeRecords(userId, orgId, startTime, endTime);
+    return this.trackerRepository.getDurationTimeRecords(orgId, startTime, endTime, userId);
   }
 
   public async getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>> {
     return this.trackerRepository.getTimesheets(userId, orgId);
   }
 
-  public async getDurationTimesheet(userId: string, orgId: string, start: Date, end: Date): Promise<ITimesheet> {
-    return this.trackerRepository.getDurationTimesheet(userId, orgId, start, end);
+  public async getDurationTimesheets(
+    userId: string,
+    orgId: string,
+    start: Date,
+    end: Date,
+  ): Promise<Array<ITimesheet>> {
+    return this.trackerRepository.getDurationTimesheets(userId, orgId, start, end);
   }
 
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
@@ -70,14 +75,15 @@ export class TimeTrackerService implements ITimeTrackerService {
     orgId: string,
     sheetId: string,
     request: ITimesheetCreateRequest,
+    userContext?: any,
   ) {
-    return this.trackerRepository.updateTimesheet(userId, orgId, sheetId, request);
+    return this.trackerRepository.updateTimesheet(userId, orgId, sheetId, request, userContext);
   }
 
   public async updateTimesheetStatus(
     userId: string,
     orgId: string,
-    request: ITimesheetCreateRequest
+    request: ITimesheetCreateRequest,
   ) {
     return this.trackerRepository.updateTimesheetStatus(userId, orgId, request);
   }
