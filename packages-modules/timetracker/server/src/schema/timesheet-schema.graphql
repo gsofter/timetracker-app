@@ -50,7 +50,7 @@ type TimesheetResponse {
 }
 
 extend type Query {
-  getTimesheets(userId: String): [TimesheetResponse] @addAccountContext
+  getTimesheets(userId: String, withTotalHours: Boolean): [TimesheetResponse] @addAccountContext
   getDurationTimesheets(start: DateTime, end: DateTime): [TimesheetResponse] @addAccountContext
 }
 

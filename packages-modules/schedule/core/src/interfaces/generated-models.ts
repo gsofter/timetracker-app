@@ -2076,6 +2076,7 @@ export type IQuerygetTimelineEventsArgs = {
 
 export type IQuerygetTimesheetsArgs = {
   userId?: Maybe<Scalars['String']>;
+  withTotalHours?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -2554,6 +2555,7 @@ export type ITimeRecord = {
   clientId?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
   orgId?: Maybe<Scalars['String']>;
+  editable?: Maybe<Scalars['Boolean']>;
 };
 
 export type ITimeRecordRequest = {
@@ -4692,6 +4694,7 @@ export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolver
   clientId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   orgId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  editable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

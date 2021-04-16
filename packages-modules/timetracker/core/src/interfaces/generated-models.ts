@@ -2081,6 +2081,7 @@ export type IQuerygetTimelineEventsArgs = {
 
 export type IQuerygetTimesheetsArgs = {
   userId?: Maybe<Scalars['String']>;
+  withTotalHours?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -3053,6 +3054,7 @@ export type IGetTimeRecordsQuery = (
 
 export type IGetTimesheetsQueryVariables = {
   userId?: Maybe<Scalars['String']>;
+  withTotalHours?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -3216,8 +3218,8 @@ export const GetTimeRecordsDocument = gql`
     `;
 export type GetTimeRecordsQueryResult = ApolloReactCommon.QueryResult<IGetTimeRecordsQuery, IGetTimeRecordsQueryVariables>;
 export const GetTimesheetsDocument = gql`
-    query GetTimesheets($userId: String) {
-  getTimesheets(userId: $userId) {
+    query GetTimesheets($userId: String, $withTotalHours: Boolean) {
+  getTimesheets(userId: $userId, withTotalHours: $withTotalHours) {
     id
     userId
     orgId

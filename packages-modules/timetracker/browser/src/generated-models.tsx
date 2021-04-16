@@ -588,8 +588,8 @@ export type GetTimeRecordsQueryHookResult = ReturnType<typeof useGetTimeRecordsQ
 export type GetTimeRecordsLazyQueryHookResult = ReturnType<typeof useGetTimeRecordsLazyQuery>;
 export type GetTimeRecordsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetTimeRecordsQuery, SchemaTypes.IGetTimeRecordsQueryVariables>;
 export const GetTimesheetsDocument = gql`
-    query GetTimesheets($userId: String) {
-  getTimesheets(userId: $userId) {
+    query GetTimesheets($userId: String, $withTotalHours: Boolean) {
+  getTimesheets(userId: $userId, withTotalHours: $withTotalHours) {
     id
     userId
     orgId
@@ -624,6 +624,7 @@ export type GetTimesheetsComponentProps = Omit<ApolloReactComponents.QueryCompon
  * const { data, loading, error } = useGetTimesheetsQuery({
  *   variables: {
  *      userId: // value for 'userId'
+ *      withTotalHours: // value for 'withTotalHours'
  *   },
  * });
  */

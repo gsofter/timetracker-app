@@ -1,5 +1,5 @@
-query GetTimesheets($userId: String) {
-  getTimesheets(userId: $userId) {
+query GetTimesheets($userId: String, $withTotalHours: Boolean) {
+  getTimesheets(userId: $userId, withTotalHours: $withTotalHours) {
     id
     userId
     orgId
