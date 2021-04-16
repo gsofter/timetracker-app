@@ -26,8 +26,8 @@ export const RegisterContribution = () => {
             {
               id: 'payment',
               title: 'Payment',
-              accessor: 'payments',
-              width: 100,
+              accessor: 'actions',
+              width: 150,
               position: 3,
               cell: Payments,
             },

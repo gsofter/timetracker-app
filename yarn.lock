@@ -5406,9 +5406,9 @@
     wcwidth "^1.0.1"
 
 "@react-native-community/datetimepicker@^3.0.2":
-  version "3.4.4"
-  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-3.4.4.tgz#073cff42f4020393d43886fef5f5e4c8e87af898"
-  integrity sha512-iBQO32EvOxt9yDBZUG88j3WaUvm2H+iU1rDLAlJZWKRaB/uwO/Q4JonGSBtGz6TV1SCWSno/soc+c1+Rc3Psig==
+  version "3.4.5"
+  resolved "https://registry.yarnpkg.com/@react-native-community/datetimepicker/-/datetimepicker-3.4.5.tgz#eb973280523c70dab61c1a598d771aeb176f3f9f"
+  integrity sha512-D1131FJ8oSWlviNmV4rTOqkNZFdF9b27pGs0xz2+ST6b2mdscdFGqp2uqnlpunksf4qViydGYGVb5xx0XwKWNg==
   dependencies:
     invariant "^2.2.4"
 
