@@ -115,7 +115,7 @@ export const createReduxStore = (scope = 'main', url = '/') => {
         delete window.__PRELOADED_STATE__;
     }
 
-    const store: any = createStore(persistedReducer, initialState, composeEnhancers(...enhancers()));
+    const store: any = createStore(persistedReducer, initialState as any, composeEnhancers(...enhancers()));
     if (__CLIENT__) {
         // no SSR for now
         epicMiddleware.run(rootEpic as any);

@@ -1,10 +1,38 @@
 import * as React from 'react';
 import { IMenuPosition } from '@common-stack/client-react';
 import { FileOutlined } from '@ant-design/icons';
-import { getFilteredMenus, getFilteredRoutes } from '../utils';
+import { userIsAuthenticatedRedir } from '@adminide-stack/user-auth0-browser';
+import { IPreDefineAccountPermissions, ConfigurationTarget } from '@adminide-stack/core';
+import { IConfigurationContributionNames } from '@admin-layout/activity-core';
+import {
+    WithPermission,
+    WithPermissionBehaviour,
+    WithPermissionEnhanced,
+    ResourceSettings,
+} from '@adminide-stack/react-shared-components';
+import { getFilteredRoutes } from '../utils';
 
 const Home = React.lazy(() => import('./containers/Home'));
 const Timesheet = React.lazy(() => import('./containers/Timesheet'));
+
+const ActivitySettings = () => (
+    <WithPermissionEnhanced
+        behaviour={WithPermissionBehaviour.showUnAuthorized}
+        permissionKeys={[IPreDefineAccountPermissions.viewSettings]}
+    >
+        <WithPermission
+            permissionKeys={[IPreDefineAccountPermissions.editSettings]}
+            render={({ hasPermission }) => (
+                <ResourceSettings
+                    target={ConfigurationTarget.ORGANIZATION}
+                    showSidebar
+                    hasPermission={hasPermission}
+                    options={{ defaultFragment: IConfigurationContributionNames.activityTracker }}
+                />
+            )}
+        />
+    </WithPermissionEnhanced>
+);
 
 export const activityPage: any[] = [
     {
@@ -26,6 +54,16 @@ export const activityPage: any[] = [
         position: IMenuPosition.MIDDLE,
         path: '/:orgName/activity/activityTime',
         priority: 2,
+    },
+    {
+        name: 'Settings',
+        exact: true,
+        key: 'timeTracker.settings',
+        position: IMenuPosition.MIDDLE,
+        path: '/:orgName/activity/settings',
+        hideInMenu: false,
+        authority: [IPreDefineAccountPermissions.manageTeams],
+        component: userIsAuthenticatedRedir(ActivitySettings),
     },
 ];
 

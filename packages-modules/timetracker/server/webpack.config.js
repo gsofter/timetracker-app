@@ -46,6 +46,11 @@ var webpack_opts = {
       test: /\.graphql?/,
       exclude: /node_modules/,
       use: 'raw-loader',
+    },
+    {
+      test: /\.ejs$/,
+      exclude: /node_modules/,
+      use: 'raw-loader',
     }
     ]
   },

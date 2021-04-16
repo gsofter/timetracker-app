@@ -1,3 +1,9 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable no-restricted-syntax */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/triple-slash-reference */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /// <reference path='../../../../typings/index.d.ts' />
 import { logger } from '@cdm-logger/client';
 import { lowerCase } from 'lodash';
@@ -24,11 +30,11 @@ const publicEnv = [
     'CDE_WORKSPACE_URL_PRFIX',
     'AUTH0_TOKEN_GRANTED_TIME',
     'ZIPKIN_URL',
-    'EXTENSION_SOCKET_URL'
+    'EXTENSION_SOCKET_URL',
 ];
 
 const isBrowser = typeof window !== 'undefined';
-const base = (isBrowser ? (window.__ENV__ || __ENV__) : process.env) || {};
+const base = (isBrowser ? window.__ENV__ || __ENV__ : process.env) || {};
 
 const env: any = {};
 for (const v of publicEnv) {
@@ -36,8 +42,8 @@ for (const v of publicEnv) {
 }
 
 // add subscription url for temporary
-env['GRAPHQL_URL'] = env.GRAPHQL_URL || __GRAPHQL_URL__;
-env['GRAPHQL_SUBSCRIPTION_URL'] = env['GRAPHQL_SUBSCRIPTION_URL'] || env['GRAPHQL_URL'].replace(/^http/, 'ws');
+env.GRAPHQL_URL = env.GRAPHQL_URL || __GRAPHQL_URL__;
+env.GRAPHQL_SUBSCRIPTION_URL = env.GRAPHQL_SUBSCRIPTION_URL || env.GRAPHQL_URL.replace(/^http/, 'ws');
 export default env;
 
 if (isBrowser) {
@@ -49,8 +55,9 @@ try {
     logger.info('Process Update Success!');
 } catch (e) {
     logger.warn(e);
-    logger.info('Encountered above issue while running "global.process = process", will automatically try again in next render');
-
+    logger.info(
+        'Encountered above issue while running "global.process = process", will automatically try again in next render',
+    );
 }
 export const PUBLIC_SETTINGS: __PUBLIC_SETTINGS__ = {
     apolloLogging: false,

@@ -34,11 +34,13 @@
     "@admin-layout/activity-module-electron": "link:../../packages-modules/activity/electron",
     "@admin-layout/components": "link:../../packages/components",
     "@admin-layout/core": "link:../../packages/admin-core",
+    "@workbench-stack/components": "^2.0.2",
     "@admin-layout/counter-module-browser": "link:../../packages-modules/counter/browser",
     "@admin-layout/platform-browser": "link:../../packages/admin-platform/browser",
     "@admin-layout/react-shared-components": "link:../../packages/react-shared-components",
     "@admin-layout/schedule-module-browser": "link:../../packages-modules/schedule/browser",
     "@admin-layout/timetracker-module-browser": "link:../../packages-modules/timetracker/browser",
+    "@adminide-stack/react-shared-components": "^0.0.18-alpha.458",
     "@adminide-stack/user-auth0-browser": "^0.0.18-alpha.458",
     "@ant-design/compatible": "^1.0.5",
     "@ant-design/icons": "^4.2.2",
@@ -137,6 +139,9 @@
     "electron-webpack-ts": "^4.0.1",
     "pm2": "^4.2.1",
     "rimraf": "^3.0.0"
+  },
+  "peerDependencies": {
+    "react-hot-loader": "*"
   },
   "iohook": {
     "targets": [
