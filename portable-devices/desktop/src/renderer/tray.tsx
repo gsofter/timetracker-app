@@ -7,11 +7,6 @@ import { createStore, applyMiddleware } from 'redux';
 import { forwardToMain, replayActionRenderer, getInitialStateRenderer, createAliasedAction } from 'electron-redux';
 
 
-// setup store
-const initialState = getInitialStateRenderer();
-const store = createStore(connectedReactRouter_counter, initialState, applyMiddleware(forwardToMain));
-
-replayActionRenderer(store);
 
 // set up renderer
 function mount() {
@@ -25,13 +20,11 @@ function mount() {
   `;
 
     document.getElementById('increment').addEventListener('click', () => {
-        store.dispatch(increment());
         const current_count: string = (toInteger(document.getElementById('value').innerHTML) + 1).toString();
         ipcRenderer.send('update-title-tray-window-event', current_count);
     });
 
     document.getElementById('decrement').addEventListener('click', () => {
-        store.dispatch(decrement());
         const current_count: string = (toInteger(document.getElementById('value').innerHTML) - 1).toString();
         ipcRenderer.send('update-title-tray-window-event', current_count);
     });
@@ -47,11 +40,10 @@ function mount() {
     });
 }
 
-function renderValue() {
-    document.getElementById('value').innerHTML = store.getState().toString();
-}
+// function renderValue() {
+//     document.getElementById('value').innerHTML = store.getState().toString();
+// }
 
 mount();
-renderValue();
+// renderValue();
 
-store.subscribe(renderValue);
