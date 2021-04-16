@@ -1962,6 +1962,7 @@ extend type Query {
     getOrganizationDetailUnsecured(where:OrgDetailWhere!):Organization
     getOrganizationMembers: [OrgMember] @addAccountContext
     getOrgInvitationMembers: [InviteMember] @addAccountContext
+    getOrgTeamInvitations(teamId: String): [OrganizationInvitation] @addAccountContext
     getOrganizationInvitation(id: ID!): OrganizationInvitation
     decodeOrganizationInvitation(token: String!): OrganizationInvitationDecode @addAccountContext
 }

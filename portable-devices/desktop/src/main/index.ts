@@ -5,6 +5,7 @@
 /* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/no-extraneous-dependencies */
 import { app, ipcMain, Menu, webContents } from 'electron';
+import Tracking from '@admin-layout/activity-module-electron';
 import TrayWindow from './windows/tray-window';
 import MainWindow from './windows/main-window';
 import AboutWindow from './windows/about-window';
@@ -20,7 +21,6 @@ if (isDev) {
     installExtension = require('electron-devtools-installer');
 }
 
-// const ioHook = require("iohook");
 const { forwardToRenderer, triggerAlias, replayActionMain, createAliasedAction } = require('electron-redux');
 
 let tray: TrayWindow = null;
@@ -29,6 +29,7 @@ let screenShot: ScreenShot = null;
 let about: AboutWindow = null;
 
 let trayIcon: TrayIcon = null;
+const tracking: Tracking = null;
 
 // We hide dock, because we do not want to show our app as common app.
 // We want to display our app as a Tray-lik app (like Dropbox, Skitch or ets).
@@ -46,6 +47,7 @@ app.on('ready', function () {
     screenShot = new ScreenShot();
 
     trayIcon = new TrayIcon(tray.window);
+    // tracking = new Tracking();
 
     Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 });
