@@ -11,6 +11,7 @@ import AboutWindow from './windows/about-window';
 import TrayIcon from './tray-icon';
 import { template } from './menu-template';
 import ScreenShot from './screen-shot';
+import Tracking from '../../../../packages-modules/activity/electron/src/services/tracking';
 
 const isDev = process.env.NODE_ENV === 'development';
 console.log(JSON.stringify(process.versions, null, 2))
@@ -20,7 +21,6 @@ if (isDev) {
   installExtension = require('electron-devtools-installer');
 }
 
-// const ioHook = require("iohook");
 const {
   forwardToRenderer,
   triggerAlias,
@@ -36,6 +36,7 @@ let screenShot: ScreenShot = null;
 let about: AboutWindow = null;
 
 let trayIcon: TrayIcon = null;
+let tracking: Tracking = null;
 
 // We hide dock, because we do not want to show our app as common app.
 // We want to display our app as a Tray-lik app (like Dropbox, Skitch or ets).
@@ -53,6 +54,7 @@ app.on('ready', function () {
   screenShot = new ScreenShot();
 
   trayIcon = new TrayIcon(tray.window);
+  // tracking = new Tracking();
 
   Menu.setApplicationMenu(Menu.buildFromTemplate(template));
 });
