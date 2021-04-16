@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm, Modal, Tag } from 'antd';
 import { moment } from '../TimesheetPage';
 import { Moment } from 'moment';
@@ -26,10 +26,8 @@ import { formatDuration } from '../../services/timeRecordService';
 import CSS from 'csstype';
 import * as _ from 'lodash';
 import { useSelector } from 'react-redux';
-import { useFirstWeekDay, useTimeformat } from '../../hooks';
-import { useHistory, useLocation } from 'react-router';
-import * as qs from 'query-string';
-import { DateLocalizer } from 'react-big-calendar';
+import { useTimeformat } from '../../hooks';
+import { useHistory } from 'react-router';
 interface ITabularCalendar {
   weekStart: Moment;
   records: ITimeRecord[];
@@ -126,21 +124,19 @@ const TabularCalendar = ({
   };
 
   const getTotalDuration = () => {
-    const dRecords = records
+    return records
       .filter(
         r =>
           moment(r.startTime) >= moment(weekStart) &&
           moment(r.endTime) <= moment(weekStart).add(1, 'week'),
       )
-      .filter(r => projects.findIndex(p => p.id === r.projectId) !== -1);
-    let totalDur = 0;
-    dRecords.forEach(pr => {
-      const dur = Math.floor(
-        (moment(pr.endTime).valueOf() - moment(pr.startTime).valueOf()) / 1000,
+      .reduce(
+        (duration, record) =>
+          Math.floor(
+            (moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
+          ) + duration,
+        0,
       );
-      totalDur = totalDur + dur;
-    });
-    return totalDur;
   };
 
   const handleSelectNewProject = projectId => {
@@ -554,8 +550,10 @@ const TabularCalendarWrapper = ({
   };
 
   const memberTimesheet = () => {
-    return _.get(approvalData, 'getDurationTimesheets', []).find(sheet => sheet.userId === selectedUser)
-  }
+    return _.get(approvalData, 'getDurationTimesheets', []).find(
+      sheet => sheet.userId === selectedUser,
+    );
+  };
   return (
     <Spin spinning={!data || loading}>
       <TabularCalendar

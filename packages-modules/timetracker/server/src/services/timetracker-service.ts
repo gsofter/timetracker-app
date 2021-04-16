@@ -1,15 +1,62 @@
 import * as ILogger from 'bunyan';
-
 import { inject, injectable } from 'inversify';
-import { ITimeTrackerService, ITimeTrackerRepository } from '../interfaces';
 import {
   ITimeRecord,
   ITimeRecordRequest,
   ITimesheet,
   ITimesheetCreateRequest,
-  ITimesheetState,
 } from '@admin-layout/timetracker-core';
-import { TYPES, DEFAULT_USER } from '../constants';
+import { TYPES } from '../constants';
+import * as moment from 'moment';
+import { ITimeTrackerRepository } from '../store/repository/timetracker-repository';
+
+export interface ITimeTrackerService {
+  getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
+  getDurationTimeRecords(
+    orgId: string,
+    startTime: Date,
+    endTime: Date,
+    userId?: string,
+  ): Promise<Array<ITimeRecord>>;
+  getTimesheets(orgId: string): Promise<Array<ITimesheet>>;
+  getTimesheetsWithTotalHours(orgId: string, userId?: string): Promise<Array<ITimesheet>>;
+  getDurationTimesheets(orgId: string, start: Date, end: Date): Promise<Array<ITimesheet>>;
+  getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
+  createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<string>;
+  createTimesheet(
+    userId: string,
+    orgId: string,
+    request: ITimesheetCreateRequest,
+  ): Promise<Boolean>;
+  updateTimeRecord(
+    userId: string,
+    orgId: string,
+    recordId: string,
+    request: ITimeRecordRequest,
+  ): Promise<Boolean>;
+  updateTimesheet(
+    userId: string,
+    orgId: string,
+    sheetId: string,
+    request: ITimesheetCreateRequest,
+    userContext?: any,
+  ): Promise<Boolean>;
+  updateTimesheetStatus(
+    userId: string,
+    orgId: string,
+    request: ITimesheetCreateRequest,
+  ): Promise<Boolean>;
+  removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<Boolean>;
+  removeDurationTimeRecords(
+    userId: string,
+    orgId: string,
+    startTime: Date,
+    endTime: Date,
+    projectId: string,
+  ): Promise<Boolean>;
+  removeTimesheet(userId: string, orgId: string, sheetId: string): Promise<Boolean>;
+}
+
 @injectable()
 export class TimeTrackerService implements ITimeTrackerService {
   private logger: ILogger;
@@ -36,17 +83,49 @@ export class TimeTrackerService implements ITimeTrackerService {
     return this.trackerRepository.getDurationTimeRecords(orgId, startTime, endTime, userId);
   }
 
-  public async getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>> {
-    return this.trackerRepository.getTimesheets(userId, orgId);
+  public async getTimesheets(orgId: string, userId?: string) {
+    return await this.trackerRepository.getTimesheets(orgId, userId);
   }
 
-  public async getDurationTimesheets(
-    userId: string,
-    orgId: string,
-    start: Date,
-    end: Date,
-  ): Promise<Array<ITimesheet>> {
-    return this.trackerRepository.getDurationTimesheets(userId, orgId, start, end);
+  public async getTimesheetsWithTotalHours(orgId: string, userId?: string) {
+    const timesheets = await this.trackerRepository.getTimesheets(orgId, userId);
+    const timeRecords = await this.trackerRepository.getTimeRecords(orgId, userId);
+    return timesheets.map(timesheet => {
+      let sheetTotalDuration = timeRecords
+        .filter(tr => {
+          return (
+            tr.userId === timesheet.userId &&
+            tr.startTime > timesheet.startDate &&
+            tr.endTime < timesheet.endDate
+          );
+        })
+        .reduce(
+          (duration, tr) =>
+            duration +
+            Math.floor((moment(tr.endTime).valueOf() - moment(tr.startTime).valueOf()) / 1000),
+          0,
+        );
+      return {
+        id: timesheet.id,
+        startDate: timesheet.startDate,
+        endDate: timesheet.endDate,
+        state: timesheet.state,
+        userId: timesheet.userId,
+        orgId,
+        approvedBy: timesheet.approvedBy,
+        approvedOn: timesheet.approvedOn,
+        updatedBy: timesheet.updatedBy,
+        updatedOn: timesheet.updatedOn,
+        totalDuration: sheetTotalDuration,
+      };
+    });
+  }
+
+  public async getDurationTimesheets(orgId: string, start: Date, end: Date) {
+    const timesheets = await this.trackerRepository.getOrganizationTimesheets(orgId);
+    return timesheets.filter(
+      sh => moment(start) === moment(sh.startDate) && moment(end) === moment(sh.endDate),
+    );
   }
 
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
