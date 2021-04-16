@@ -13,10 +13,8 @@ import CounterScreen from '../pages/counter';
 const Body = ({ match }: any) => {
     if(match.params.drawerId === 'timer'){
         return <TimerScreen/>
-    } else if(match.params.drawerId === 'calendar'){
+    } else if(match.params.drawerId === 'timesheet'){
         return <CalendarScreen/>
-    } else if(match.params.drawerId === 'counter'){
-        return <CounterScreen/>
     } else{
         return <Text>Invalid Page</Text>
     }

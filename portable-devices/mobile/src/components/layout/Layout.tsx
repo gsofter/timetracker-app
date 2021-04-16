@@ -18,7 +18,7 @@ const Layout = (props: any, route: any) => {
   const drawerRef = useRef();
   return (
     <>
-      <MainHeader title="Time Tracker" drawerRef={drawerRef} />
+      <MainHeader title="CDMBase LLC" drawerRef={drawerRef} />
       <DrawerRoute match={props.match} routes={route.routes} drawerRef={drawerRef}/>
     </>
   );
