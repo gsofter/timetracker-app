@@ -745,10 +745,6 @@ type Preferences {
 
 
 
-
-
-
-
 enum PermissionType {
     Allow
     Deny
@@ -1589,8 +1585,6 @@ extend type Query {
     getAccounts(where:UserAccountWhere):[UserAccount]
 }
 
-
-
 """
  Teams are groups of organization members that reflect yoru company or group's structure
  with cascading access permissions and mentions.
@@ -1620,7 +1614,6 @@ type AccountTeam {
     updatedAt: String
     createdAt: String
     description: String
-    invitations: [TeamInvitation]
     teamMembers: [TeamMember]
 }
 
@@ -1632,7 +1625,6 @@ input AccountTeam_Input {
     tags: [String]
     description: String
     parentTeam: AccountTeam_Input
-    invitations: [TeamInvitation_Input]
     teamMembers: [TeamMember_Input]
 }
 """
@@ -1652,73 +1644,6 @@ input TeamMember_Input {
     email: String
     userId: String
     role: ApplicationRoles
-}
-"""
- Inivitation to become a team member.
- You may invite a user to your team either by ther `username` (only for
- verified users) or by their email. If you opt to invite by email then an email
- will be sent to this person containing a code that they need to accept the
- invitation. If the person doesn't already have an account they will be
- instructed to create one; their account need not have the email address that
- you invited listed as the secret code is confirmation enough.
- @property
- email: The email of the inventee
- @property
- fullName: The name of the invitee, derived from an RFC5322 email string
- @property
- invitedBy: The teamMemberId of the person that sent the invitation
- @property
- teamId: The team invited to
- @property
- tokenExpiration: The datestamp of when the invitation will expire.
- @property
- inviteCount: How many invites have been sent to this email address?
- @property
- acceptedAt: The datetime the invitation was accepted.
- @property
- createdAt: The datetime the invitation was created.
- @property
- updatedAt: The datetime the invitation was last updated.
-"""
-type TeamInvitation {
-    id: ID!
-    email: String
-    teamId: String
-    role: ApplicationRoles
-    active: Boolean
-    fullName: String
-    inviteCount: Int
-    invitedBy: String
-    createdAt: DateTime
-    updatedAt: DateTime
-    acceptedAt: DateTime
-    tokenExpiration: DateTime
-}
-
-
-""" all input for the `acceptInvitationToTeam` mutation."""
-input AcceptInvitationToTeam_Input {
-    """
-    An arbitrary string value with no semantic meaning. Will be included in the
-    payload verbatim. May be used to track mutations by the client.
-    """
-    code: String
-    invitationId: String!
-}
-
-""" The output of our `acceptInvitationToTeam`. """
-input TeamInvitation_Input {
-    email: String
-    teamId: String
-    role: ApplicationRoles
-    active: Boolean
-    fullName: String
-    inviteCount: Int
-    invitedBy: String
-    createdAt: DateTime
-    updatedAt: DateTime
-    acceptedAt: DateTime
-    tokenExpiration: DateTime
 }
 
 extend enum ApplicationRoles {
@@ -1749,7 +1674,6 @@ input TeamUpdateRequest {
     requestedUserId: String
 }
 
-
 input TeamCreateRequest {
     name: String!
     orgName: String!
@@ -1758,21 +1682,6 @@ input TeamCreateRequest {
     teamMembers: [TeamMember_Input]
     parentTeam: String
     description: String
-    invitation: TeamInvitation_Input
-}
-
-input TeamInvitationRequest {
-    teamId: String
-    emails: [String]
-    invitedBy: String
-}
-
-
-type InvitationDecode {
-    orgName: String,
-    teamName: String,
-    email: String,
-    invitationId: String,
 }
 
 extend enum PermissionAction{
@@ -1790,28 +1699,11 @@ extend type Query {
     team(teamId: ID!): AccountTeam
     getTeam(orgName: String!, teamName: String!): AccountTeam
     organizations: [Organization]
-    teamInvitation(id: ID!): TeamInvitation!
-    decodeInvitation(token: String!): InvitationDecode @addAccountContext
 }
 
 extend type Mutation {
-    resendInvitation(id: ID!): Boolean @addAccountContext
-    acceptInvitation(id: ID!): Boolean @addAccountContext
-    """
-     If someone invited you by your email address then you must include the code
-     that was emailed to you, otherwise you may accept the invitation directly
-     using the UUID. If successful, you will be a member of the organization.
-    """
-    acceptInvitationToTeam(
-        """
-         The exclusive input argument for this mutation. An object type, make sure to see documentation for this object's fields.
-        """
-        input: AcceptInvitationToTeam_Input
-    ): Boolean
-    declineInvitation(id: ID!): Boolean @addAccountContext
     createTeam(request: TeamCreationRequest!): AccountTeam @addAccountContext
     removeTeam(teamId: String!): Boolean
-    sendInvitation(request: TeamInvitationRequest!): Boolean
     addTeamMembers(orgName: String!, teamName: String!, memberIds: [String]!): Boolean @addAccountContext
     removeTeamMember(orgName: String!, teamName: String!, memberId: String!): Boolean
     changeMemberRole(orgName: String!, teamName: String!, memberId: String!, role: String!): Boolean

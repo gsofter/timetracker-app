@@ -1,4 +1,7 @@
 import 'reflect-metadata';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
 // load environment config
@@ -14,11 +17,7 @@ import 'react-table/react-table.css';
 const rootEl = document.getElementById('root');
 let frontendReloadCount = 0;
 
-const renderApp = ({ key }: { key: number }) =>
-    ReactDOM.render(
-        <Main key={key} />,
-        rootEl,
-    );
+const renderApp = ({ key }: { key: number }) => ReactDOM.render(<Main key={key} />, rootEl);
 renderApp({ key: frontendReloadCount });
 if (__DEV__) {
     if ((module as any).hot) {
@@ -36,7 +35,7 @@ if (__DEV__) {
         });
         //  React-hot-loader v4 doesn't require following code any more.
         //  but if RHL not working we can uncomment below code to make normal HMR to refresh the page
-          (module as any).hot.accept('./app/Main', () => {
+        (module as any).hot.accept('./app/Main', () => {
             try {
                 console.log('Updating front-end');
                 frontendReloadCount = (frontendReloadCount || 0) + 1;

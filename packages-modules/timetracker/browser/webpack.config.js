@@ -7,6 +7,7 @@ var webpack_opts = {
   mode: 'development',
   entry: {
     index: './src/index.ts',
+    ['index.native']: './src/index.native.ts'
   },
   target: 'node',
   output: {
@@ -15,7 +16,7 @@ var webpack_opts = {
     libraryTarget: "commonjs2",
   },
   resolve: {
-    extensions: ['.ts', '.tsx', '.js', '.jsx', '.graphql', '.graphqls', '.gql', '.css']
+    extensions: ['.ts', '.tsx', '.graphql', '.graphqls', '.gql', '.native.tsx', '.native.ts']
   },
   plugins: [
     new ExtractTextPlugin("styles.css"),

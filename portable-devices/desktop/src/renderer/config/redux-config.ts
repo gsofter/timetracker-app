@@ -1,16 +1,23 @@
-
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
-    createStore, Store, applyMiddleware, Middleware, AnyAction,
-    compose, combineReducers, StoreEnhancer,
+    createStore,
+    Store,
+    applyMiddleware,
+    Middleware,
+    AnyAction,
+    compose,
+    combineReducers,
+    StoreEnhancer,
 } from 'redux';
+import { forwardToMain, forwardToRenderer, triggerAlias, replayActionMain, replayActionRenderer } from 'electron-redux';
 import thunk from 'redux-thunk';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
-import { createLogger } from 'redux-logger';
 import storage from 'redux-persist/lib/storage';
-import modules from '../modules';
-import { persistReducer, WebStorage } from 'redux-persist';
+import { persistReducer } from 'redux-persist';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { createEpicMiddleware } from 'redux-observable';
+import modules from '../modules';
 import { createClientContainer } from './client.service';
 import { rootEpic } from '../config/epic-config';
 import { initialRedirectState } from '@adminide-stack/user-auth0-browser';
@@ -27,55 +34,74 @@ export const epicMiddleware = createEpicMiddleware({
         apolloClient,
         routes: modules.getConfiguredRoutes(),
         services,
-    }, 
+    },
 });
 
-export const storeReducer = (hist) => combineReducers({
-    router: connectRouter(hist),
-    ...modules.reducers,
-});
+export const storeReducer = (hist) =>
+    combineReducers({
+        router: connectRouter(hist),
+        ...modules.reducers,
+    });
 
 export const persistConfig = {
     key: 'root',
     storage,
     stateReconciler: autoMergeLevel2,
     // Don't add `user` state to persist as it creates problems.
-    whitelist: [
-    ],
+    whitelist: [],
 };
 
 /**
  * Add any reducers required for this app dirctly in to
  * `combineReducers`
  */
-export const createReduxStore = (url = '/') => {
 
+export const createReduxStore = (scope = 'main', url = '/') => {
     // only in server side, url will be passed.
     const newHistory = __CLIENT__ ? history : history(url);
     /**
      * Add middleware that required for this app.
      */
-    const middlewares: Middleware[] = [
+
+    const router = routerMiddleware(newHistory);
+    let middlewares: Middleware[] = [
         thunk,
-        routerMiddleware(newHistory),
+        // routerMiddleware(newHistory),
+        router,
         epicMiddleware, // epic middleware
     ];
 
     // Add redux logger during development only
     if ((process.env.NODE_ENV === 'development' || __DEBUGGING__) && __CLIENT__) {
-        middlewares.push(reduxLogger);
+        const { createLogger } = require('redux-logger');
+
+        middlewares.push(
+            createLogger({
+                level: scope === 'main' ? undefined : 'info',
+                collapsed: true,
+            }),
+        );
     }
 
-    const enhancers: () => StoreEnhancer<any>[] = () => [
-        applyMiddleware(...middlewares),
-    ];
+    // this one code belongs to the electron-redux
+    console.log('----SCOPE====', scope);
+    if (scope === 'renderer') {
+        middlewares = [forwardToMain, router, ...middlewares];
+    }
 
-    const composeEnhancers: any = (
-        (process.env.NODE_ENV === 'development' || __DEBUGGING__) &&
-        __CLIENT__ &&
-        window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) || compose;
+    if (scope === 'main') {
+        middlewares = [triggerAlias, ...middlewares, forwardToRenderer];
+    }
 
-    const rootReducer = storeReducer(newHistory);
+    const enhancers: () => StoreEnhancer<any>[] = () => [applyMiddleware(...middlewares)];
+
+    const composeEnhancers: any =
+        ((process.env.NODE_ENV === 'development' || __DEBUGGING__) &&
+            __CLIENT__ &&
+            window.__REDUX_DEVTOOLS_EXTENSION_COMPOSE__) ||
+        compose;
+
+    const rootReducer: any = storeReducer(newHistory);
     const persistedReducer = persistReducer(persistConfig, rootReducer);
 
     // If we have preloaded state, save it.
@@ -88,15 +114,16 @@ export const createReduxStore = (url = '/') => {
         delete window.__PRELOADED_STATE__;
     }
 
-    const store =
-        createStore(
-            persistedReducer,
-            initialState as any,
-            composeEnhancers(...enhancers()),
-        );
+    const store: any = createStore(persistedReducer, initialState, composeEnhancers(...enhancers()));
     if (__CLIENT__) {
         // no SSR for now
         epicMiddleware.run(rootEpic as any);
+    }
+
+    if (scope === 'main') {
+        replayActionMain(store);
+    } else {
+        replayActionRenderer(store);
     }
 
     return store;

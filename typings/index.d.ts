@@ -56,6 +56,7 @@ declare interface __PUBLIC_SETTINGS__ {
   GRAPHQL_URL: string;
   LOCAL_GRAPHQL_URL?: string;
   LOG_LEVEL?: string;
+  GRAPHQL_SUBSCRIPTION_URL?: string;
 }
 
 declare namespace NodeJS {
@@ -85,12 +86,27 @@ declare module '*.graphqls' {
   export default value;
 }
 
+declare module '*.png' {
+  const content: any;
+  export default content;
+}
+
+declare module '*.jpg' {
+  const content: any;
+  export default content;
+}
+
 declare module "*.svg" {
   const content: any;
   export default content;
 }
 
 declare module '*.gif' {
+  const fileName: string;
+  export = fileName;
+}
+
+declare module '*.html' {
   const fileName: string;
   export = fileName;
 }

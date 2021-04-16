@@ -11,22 +11,19 @@ import PlatformModule from '@adminide-stack/platform-server/lib/module';
 import MailingModule from '@adminide-stack/mailing-api-server';
 
 export const settings = {
-    // mongoConnection: generateMongo(config.MONGO_URL),
-    subTopic: config.CONNECTION_ID, // usually versioning
+  // mongoConnection: generateMongo(config.MONGO_URL),
+  subTopic: config.CONNECTION_ID, // usually versioning
 };
 
-
-const defaultModule =
-    () => new ContainerModule((bind: interfaces.Bind) => {
-        bind('Settings').toConstantValue(settings).whenTargetTagged('default', true);
-        bind('Settings').toConstantValue(settings).whenTargetTagged(TaggedType.MICROSERVICE, true);
-        bind('MongoOptions').toConstantValue({});
-    });
-
+const defaultModule = () => new ContainerModule((bind: interfaces.Bind) => {
+  bind('Settings').toConstantValue(settings).whenTargetTagged('default', true);
+  bind('Settings').toConstantValue(settings).whenTargetTagged(TaggedType.MICROSERVICE, true);
+  bind('MongoOptions').toConstantValue({});
+});
 
 const DefaultFeature = new Feature({
-    createContainerFunc: [defaultModule],
-    createHemeraContainerFunc: [defaultModule],
+  createContainerFunc: [defaultModule],
+  createHemeraContainerFunc: [defaultModule],
 });
 
 

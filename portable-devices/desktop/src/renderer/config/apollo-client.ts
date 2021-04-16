@@ -28,10 +28,7 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
             // tslint:disable-next-line
-            invariant.warn(
-                `[GraphQL error]: Message: ${message}, Location: ` +
-                `${locations}, Path: ${path}`,
-            ),
+            invariant.warn(`[GraphQL error]: Message: ${message}, Location: ` + `${locations}, Path: ${path}`),
         );
     }
     if (networkError) {
@@ -41,8 +38,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 let link;
 if (__CLIENT__) {
-    let connectionParams = () => {
-        let param = {};
+    const connectionParams = () => {
+        const param = {};
         for (const connectionParam of modules.connectionParams) {
             Object.assign(param, connectionParam());
         }
@@ -50,7 +47,7 @@ if (__CLIENT__) {
     };
 
     const wsLink = new WebSocketLink({
-        uri: (PUBLIC_SETTINGS.GRAPHQL_URL).replace(/^http/, 'ws'),
+        uri: PUBLIC_SETTINGS.GRAPHQL_URL.replace(/^http/, 'ws'),
         options: {
             reconnect: true,
             timeout: 20000,
@@ -75,10 +72,9 @@ if (__CLIENT__) {
         ({ query, operationName }) => {
             if (operationName && operationName.endsWith('_WS')) {
                 return true;
-            } else {
-                const operationAST = getOperationAST(query as any, operationName);
-                return !!operationAST && operationAST.operation === 'subscription';
             }
+            const operationAST = getOperationAST(query as any, operationName);
+            return !!operationAST && operationAST.operation === 'subscription';
         },
         wsLink,
 

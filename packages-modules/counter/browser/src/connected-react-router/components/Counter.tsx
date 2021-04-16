@@ -1,17 +1,17 @@
+/* eslint-disable react/button-has-type */
 import * as React from 'react';
 import { Dispatch } from 'redux';
 import { connect } from 'react-redux';
 import { RouteComponentProps } from 'react-router';
 import { increment, decrement } from '../redux';
 import { State } from '../interfaces';
-import { PageContainer } from '@admin-layout/components';
 
-const CounterComponent = (props: RouteComponentProps<any> & StateProps & DispatchProps) => (
-  <PageContainer>
-    Counter: {props.count}
-    <button onClick={props.increment}>+</button>
-    <button onClick={props.decrement}>-</button>
-  </PageContainer>
+const CounterComponent: React.SFC<RouteComponentProps<any> & StateProps & DispatchProps> = (props) => (
+    <div>
+        Counter: {props.count}
+        <button onClick={props.increment}>+</button>
+        <button onClick={props.decrement}>-</button>
+    </div>
 );
 
 interface StateProps {
@@ -24,7 +24,7 @@ interface DispatchProps {
 }
 
 const mapStateToProps = (state: State) => ({
-  count: state.connectedReactRouter_counter,
+    count: state.connectedReactRouter_counter,
 });
 
 const mapDispatchToProps = (dispatch: Dispatch) => ({
@@ -33,6 +33,6 @@ const mapDispatchToProps = (dispatch: Dispatch) => ({
 });
 
 export const Counter = connect<StateProps, DispatchProps, RouteComponentProps<any>>(
-  mapStateToProps,
-  mapDispatchToProps,
+    mapStateToProps,
+    mapDispatchToProps,
 )(CounterComponent);

@@ -1,14 +1,13 @@
-
+/* eslint-disable import/no-extraneous-dependencies */
 import {
     IRegistryExtensions as RegistryExtensions,
-    IConfigurationRegistry, IRegistry,
+    IConfigurationRegistry,
+    IRegistry,
     ServerTypes as TYPES,
     IConfigurationContributionNames,
 } from '@adminide-stack/core';
 import * as ILogger from 'bunyan';
-import {
-    TYPES as serverTypes, Schemas,
-} from '@workbench-stack/core';
+import { TYPES as serverTypes, Schemas } from '@workbench-stack/core';
 import { CommonType } from '@common-stack/core';
 import { interfaces } from 'inversify';
 import { TimeTrackerContribution } from '../preferences';

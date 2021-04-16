@@ -1,6 +1,13 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable consistent-return */
+/* eslint-disable @typescript-eslint/no-unsafe-return */
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable no-console */
+/* eslint-disable @typescript-eslint/restrict-template-expressions */
 import { Schema, Connection } from 'mongoose';
-import { Container} from 'inversify';
-import { IDatabaseMigration } from '@adminide-stack/core';
+import { Container } from 'inversify';
 
 export const MigrationSchema = new Schema({
     migrated_at: Date,
@@ -9,9 +16,9 @@ export const MigrationSchema = new Schema({
 
 export async function migrate(db: Connection, container: Container) {
     try {
-        const migrations  = container.getAll<IDatabaseMigration>('MongodbMigration');
+        const migrations = container.getAll<{ up: any; id: any }>('MongodbMigration');
         const model = db.model<any, any>('Migration', MigrationSchema);
-        return Promise.all(
+        return await Promise.all(
             migrations.map(async (migration) => {
                 const exists = await model.findOne({ name: migration.id });
                 if (!exists) {
@@ -22,12 +29,10 @@ export async function migrate(db: Connection, container: Container) {
                         console.log(`Can not process migration ${migration.id}: `, e);
                     }
                 }
-    
                 return migration.id;
             }),
         );
-    } catch(err){
+    } catch (err) {
         console.warn('ignoring migrate database due to ', err.message);
     }
-
 }

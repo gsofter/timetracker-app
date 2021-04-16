@@ -2,58 +2,62 @@
   "name": "@admin-layout/activity-module-browser",
   "version": "0.0.1",
   "description": "Sample core for higher packages to depend on",
+  "license": "ISC",
+  "author": "CDMBase LLC",
   "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
   "scripts": {
-    "jest": "./node_modules/.bin/jest",
-    "test": "cross-env ENV_FILE=../../config/test/test.env jest",
-    "test:debug": "npm test -- --runInBand",
-    "test:watch": "npm test -- --watch",
-    "prepublish": "npm run build",
-    "watch": "npm run build:lib:watch",
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf lib",
     "build:lib": "webpack",
     "build:lib:watch": "npm run build:lib -- --watch",
+    "jest": "./node_modules/.bin/jest",
+    "prepublish": "npm run build",
     "schema:download": "./node_modules/.bin/apollo-codegen download-schema http://localhost:8080/graphql --output schema.json ",
-    "schema:generate": "./node_modules/.bin/apollo-codegen generate src/browser/graphql/**/*.graphql --schema schema.json --target typescript --output src/browser/types/schema.ts"
-  },
-  "publishConfig": {
-    "access": "public"
+    "schema:generate": "./node_modules/.bin/apollo-codegen generate src/browser/graphql/**/*.graphql --schema schema.json --target typescript --output src/browser/types/schema.ts",
+    "test": "cross-env ENV_FILE=../../config/test/test.env jest",
+    "test:debug": "npm test -- --runInBand",
+    "test:watch": "npm test -- --watch",
+    "watch": "npm run build:lib:watch"
   },
   "jest": {
-    "testEnvironment": "node",
-    "roots": [
-      "src"
-    ],
-    "modulePaths": [
-      "node_modules"
-    ],
     "moduleFileExtensions": [
       "ts",
       "tsx",
       "js",
       "json"
     ],
+    "modulePaths": [
+      "node_modules"
+    ],
+    "roots": [
+      "src"
+    ],
+    "testEnvironment": "node",
+    "testRegex": "/__tests__/.*test*\\.(ts|tsx|js)$",
     "transform": {
       "\\.(ts|tsx)$": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
-    },
-    "testRegex": "/__tests__/.*test*\\.(ts|tsx|js)$"
+    }
   },
-  "author": "CDMBase LLC",
-  "license": "ISC",
   "dependencies": {
-    "@admin-layout/platform-browser": "file:../../../packages/admin-platform/browser",
-    "@admin-layout/components": "file:../../../packages/components",
-    "@common-stack/client-core": "0.0.251",
-    "@common-stack/client-react": "0.0.251",
-    "@common-stack/core": "0.0.251"
+    "@admin-layout/activity-core": "link:../core",
+    "@admin-layout/components": "link:../../../packages/components",
+    "@admin-layout/platform-browser": "link:../../../packages/admin-platform/browser"
   },
   "peerDependencies": {
-    "@common-stack/client-react": ">=0.0.251",
-    "@common-stack/core": ">=0.0.251",
-    "antd": "^4.5.2"
+    "@adminide-stack/core": "*",
+    "@adminide-stack/react-shared-components": "*",
+    "@adminide-stack/user-auth0-browser": "*",
+    "@ant-design/icons": "*",
+    "@common-stack/client-core": ">=0.0.255",
+    "@common-stack/client-react": ">=0.0.255",
+    "@common-stack/core": ">=0.0.255",
+    "antd": "^4.5.2",
+    "react": "*"
   },
-  "typings": "lib/index.d.ts",
+  "publishConfig": {
+    "access": "public"
+  },
   "typescript": {
     "definition": "lib/index.d.ts"
   }

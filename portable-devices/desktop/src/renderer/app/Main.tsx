@@ -3,10 +3,8 @@ import * as React from 'react';
 import { RendererProvider } from 'react-fela';
 import { ApolloProvider } from '@apollo/react-common';
 import { Provider } from 'react-redux';
-import createRenderer from '../config/fela-renderer';
 import { rehydrate } from 'fela-dom';
 import { epic$ } from '../config/epic-config';
-
 import {
   createReduxStore,
   storeReducer,
@@ -14,7 +12,6 @@ import {
   persistConfig,
 } from '../config/redux-config';
 import { createClientContainer } from '../config/client.service';
-
 import {
   SlotFillProvider,
   InversifyProvider, Lifecycle,
@@ -22,7 +19,6 @@ import {
 import { PluginArea } from '@common-stack/client-react';
 import modules, { MainRoute } from '../modules';
 import { ConnectedRouter } from 'connected-react-router';
-import { ServerError } from './Error';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
 import { useProvideAuth } from '@adminide-stack/user-auth0-browser';
@@ -36,42 +32,36 @@ const ProvideAuth = ({ children }) => {
 
 const { apolloClient: client, container } = createClientContainer();
 
-
 let store;
 if ((module as any).hot && (module as any).hot.data && (module as any).hot.data.store) {
-  // console.log('Restoring Redux store:', JSON.stringify((module as any).hot.data.store.getState()));
-  store = (module as any).hot.data.store;
-  // replace the reducers always as we don't have ablity to find
-  // new reducer added through our `modules`
-  store.replaceReducer(persistReducer(persistConfig, storeReducer((module as any).hot.data.history || history)));
+    // console.log('Restoring Redux store:', JSON.stringify((module as any).hot.data.store.getState()));
+    store = (module as any).hot.data.store;
+    // replace the reducers always as we don't have ablity to find
+    // new reducer added through our `modules`
+    store.replaceReducer(persistReducer(persistConfig, storeReducer((module as any).hot.data.history || history)));
 } else {
-  store = createReduxStore();
+    store = createReduxStore('renderer');
 }
 if ((module as any).hot) {
-  (module as any).hot.dispose(data => {
-    // console.log("Saving Redux store:", JSON.stringify(store.getState()));
-    data.store = store;
-    data.history = history;
-    // Force Apollo to fetch the latest data from the server
-    delete window.__APOLLO_STATE__;
-  });
-  (module as any).hot.accept('../config/epic-config', () => {
-    // we may need to reload epic always as we don't
-    // know whether it is updated using our `modules`
-    const nextRootEpic = require('../config/epic-config').rootEpic;
-    // First kill any running epics
-    store.dispatch({ type: 'EPIC_END' });
-    // Now setup the new one
-    epic$.next(nextRootEpic);
-  });
+    (module as any).hot.dispose((data) => {
+        // console.log("Saving Redux store:", JSON.stringify(store.getState()));
+        data.store = store;
+        data.history = history;
+        // Force Apollo to fetch the latest data from the server
+        delete window.__APOLLO_STATE__;
+    });
+    (module as any).hot.accept('../config/epic-config', () => {
+        // we may need to reload epic always as we don't
+        // know whether it is updated using our `modules`
+        const nextRootEpic = require('../config/epic-config').rootEpic;
+        // First kill any running epics
+        store.dispatch({ type: 'EPIC_END' });
+        // Now setup the new one
+        epic$.next(nextRootEpic);
+    });
 }
 
-export interface MainState {
-  error?: ServerError;
-  info?: any;
-}
-
-export class Main extends React.Component<any, MainState> {
+export class Main extends React.Component<{}, {}> {
 
   render() {
     const renderer = createRenderer();

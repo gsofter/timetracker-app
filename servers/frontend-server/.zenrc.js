@@ -1,16 +1,17 @@
 const path = require('path');
 var nodeExternals = require('webpack-node-externals');
-const MonacoWebpackPlugin = require('@vscode/monaco-editor-webpack-plugin');
+const MonacoWebpackPlugin = require('@vscode-alt/monaco-editor-webpack-plugin');
 const debug = process.env.DEBUGGING || false;
 const { merge } = require('webpack-merge');
 const webpack = require('webpack');
 const Dotenv = require('dotenv-webpack');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
-// const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
+const LodashModuleReplacementPlugin = require('lodash-webpack-plugin');
 
 const config = {
     builders: {
         web: {
+            webpackDLL: false,
             entry: './src/index.tsx',
             output: {
                 chunkFilename: '[name].bundle.js',

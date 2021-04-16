@@ -166,3 +166,25 @@ generates:
       - typescript-operations
       - typescript-react-apollo
       - typescript-resolvers
+  packages-modules/activity/core/src/interfaces/generated-models.ts:
+    schema:
+      - packages-modules/activity/server/src/**/*.graphql
+    config:
+      scalars:
+        URI: URI
+        URIInput: URI | UriComponents
+      constEnums: true
+      noNamespaces: true
+      namingConvention: keep
+      typesPrefix: I
+      withMutationFn: false
+      withHOC: false
+      withComponent: false
+    plugins:
+      - add: |
+          /* tslint:disable */
+          import { URI,  UriComponents } from '@vscode/monaco-editor/esm/vs/base/common/uri';
+      - typescript
+      - typescript-operations
+      - typescript-react-apollo
+      - typescript-resolvers
