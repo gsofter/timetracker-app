@@ -1,3 +1,6 @@
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable no-param-reassign */
+/* eslint-disable global-require */
 /* eslint-disable react/prefer-stateless-function */
 /* eslint-disable @typescript-eslint/ban-types */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -17,7 +20,8 @@ import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
 import { useProvideAuth } from '@adminide-stack/user-auth0-browser';
 import { ProvideAuth as CoreProvideAuth, ErrorBoundary } from '@adminide-stack/react-shared-components';
-import { ClientTypes } from '@common-stack/client-core';
+import createRenderer from '../config/fela-renderer';
+import modules, { MainRoute } from '../modules';
 import { createClientContainer } from '../config/client.service';
 import { createReduxStore, storeReducer, history, persistConfig } from '../config/redux-config';
 import { epic$ } from '../config/epic-config';
