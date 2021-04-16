@@ -15,7 +15,7 @@ const TimerScreen = () => {
           <Text style={styles.text}>Timer Screen</Text>
         </View>
       </ScrollView>
-      <Footer style={{ position: 'absolute', bottom: 0, left: 0, right: 0 }}>
+      <Footer style={styles.footer}>
         <View>
           <Text>Footer will be here</Text>
         </View>
@@ -27,21 +27,18 @@ const TimerScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    display: 'flex',
-    justifyContent: 'center',
   },
   text: {
     paddingTop: 30,
     textAlign: 'center',
   },
+  footer: {
+    borderTopColor: '#1f1f1f',
+    position: 'absolute',
+    bottom: 0,
+    right: 0,
+    left: 0,
+    backgroundColor: 'red',
+  },
 });
-
-// const Hello = connect((state: any) => {
-//   return {
-//     settings: state.settings,
-//     location: state?.route?.location,
-//   };
-// })(HelloScreen);
-
-// export default Hello;
 export default TimerScreen;

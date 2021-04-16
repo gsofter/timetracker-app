@@ -8,19 +8,20 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import React, { useRef } from 'react';
+import { View } from 'react-native';
 import { Feature } from '@common-stack/client-react';
 import { connect } from 'react-redux';
 import MainHeader from '../../modules/Header';
 import { DrawerRoute } from './Drawer';
-import Body from '../../modules/Body';
+import {TimerScreen, CalendarScreen} from "../../pages"
 
 const Layout = (props: any, route: any) => {
   const drawerRef = useRef();
   return (
-    <>
+    <View style={{ flex: 1 }}>
       <MainHeader title="CDMBase LLC" drawerRef={drawerRef} />
       <DrawerRoute match={props.match} routes={route.routes} drawerRef={drawerRef}/>
-    </>
+    </View>
   );
 };
 
@@ -34,9 +35,15 @@ export const ProLayout = connect((state: any) => {
 export const drawer =  new Feature({
   routeConfig: [
     {
-      '/org/:drawerId': {
+      '/org/timer': {
         exact: true,
-        component: Body,
+        component: TimerScreen,
+      } as any,
+    },
+    {
+      '/org/timesheet': {
+        exact: true,
+        component: CalendarScreen,
       } as any,
     },
   ],
