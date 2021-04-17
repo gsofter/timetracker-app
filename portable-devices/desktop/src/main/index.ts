@@ -12,12 +12,9 @@ import AboutWindow from './windows/about-window';
 import TrayIcon from './tray-icon';
 import { template } from './menu-template';
 import ScreenShot from './screen-shot';
-<<<<<<< HEAD
-=======
 import { createReduxStore } from '../renderer/config/redux-config';
 
 // import { connectedReactRouter_counter } from '../reducers';
->>>>>>> upgrade/0.8.3
 
 const isDev = process.env.NODE_ENV === 'development';
 console.log(JSON.stringify(process.versions, null, 2));
@@ -27,10 +24,6 @@ if (isDev) {
     installExtension = require('electron-devtools-installer');
 }
 
-<<<<<<< HEAD
-const { forwardToRenderer, triggerAlias, replayActionMain, createAliasedAction } = require('electron-redux');
-
-=======
 // const ioHook = require("iohook");
 // const { forwardToRenderer, triggerAlias, replayActionMain, createAliasedAction } = require('electron-redux');
 
@@ -40,7 +33,6 @@ const { forwardToRenderer, triggerAlias, replayActionMain, createAliasedAction }
 // replayActionMain(store);
 // createAliasedAction('INCREMENT_ALIASED', () => ({ type: 'INCREMENT' }));
 
->>>>>>> upgrade/0.8.3
 let tray: TrayWindow = null;
 let main: MainWindow = null;
 let screenShot: ScreenShot = null;
@@ -53,8 +45,13 @@ const tracking: Tracking = null;
 // We want to display our app as a Tray-lik app (like Dropbox, Skitch or ets).
 // app.dock.hide();
 
+function installExtentions() {
+    installExtension.default(installExtension.REDUX_DEVTOOLS);
+    installExtension.default(installExtension.REACT_DEVELOPER_TOOLS);
+}
+
 // This event will be emitted when Electron has finished initialization.
-app.on('ready', function () {
+app.on('ready', () => {
     if (isDev) {
         installExtentions();
     }
@@ -72,7 +69,7 @@ app.on('ready', function () {
 
 // Custom event created to close the app from Tray Window.
 // The ipcMain module is used to handle events from a renderer process (web page).
-ipcMain.on('quit-app', function () {
+ipcMain.on('quit-app', () => {
     console.log('--QUIT_APP');
     main.window.close();
     tray.window.close(); // Standart Event of the BrowserWindow object.
@@ -82,7 +79,7 @@ ipcMain.on('quit-app', function () {
 });
 
 // Custom events MAIN WINDOW
-ipcMain.on('show-main-window-event', function () {
+ipcMain.on('show-main-window-event', () => {
     if (main && main.window) {
         main.window.show();
     }
@@ -90,18 +87,18 @@ ipcMain.on('show-main-window-event', function () {
     screenShot.initScreenShot();
 });
 
-ipcMain.on('about-window', function () {
+ipcMain.on('about-window', () => {
     console.log('###################');
     about.window.show();
 });
 
 // Custom events ABOUT WINDOW
-ipcMain.on('show-about-window-event', function () {
+ipcMain.on('show-about-window-event', () => {
     about.window.show();
 });
 
 // Custom events TRAY WINDOW
-ipcMain.on('update-title-tray-window-event', function (event, title) {
+ipcMain.on('update-title-tray-window-event', (event, title) => {
     console.log('main window');
     if (main && main.window) {
         main.window.show();
@@ -109,8 +106,3 @@ ipcMain.on('update-title-tray-window-event', function (event, title) {
     trayIcon.updateTitle(title);
     screenShot.initScreenShot();
 });
-
-const installExtentions = function () {
-    installExtension.default(installExtension.REDUX_DEVTOOLS);
-    installExtension.default(installExtension.REACT_DEVELOPER_TOOLS);
-};
