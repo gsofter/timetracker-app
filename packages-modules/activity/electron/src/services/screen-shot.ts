@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-misused-promises */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable @typescript-eslint/no-shadow */
-import { desktopCapturer, app, BrowserWindow } from 'electron';
+import { desktopCapturer, app } from 'electron';
 import * as AWS from 'aws-sdk';
 import * as fs from 'fs';
+import checkInternetConnected from 'check-internet-connected';
 import { config } from '../config';
 
 export class ScreenShot {
@@ -16,18 +18,20 @@ export class ScreenShot {
 
     constructor() {
         this.s3 = new AWS.S3({
-            accessKeyId: config.secreenShotS3AccessKeyId,
-            secretAccessKey: config.secreenShotS3SecretAccessKey,
-            Bucket: config.screenShotS3Bucket,
-            signatureVersion: config.screenShotS3SignatureVersion,
+            accessKeyId: config.SCREENSHOT_S3_ACCESS_KEY_ID,
+            secretAccessKey: config.SCREENSHOT_S3_SECRET_ACCESS_KEY,
+            // Bucket: config.screenShotS3Bucket,
+            s3BucketEndpoint: true,
+            endpoint: config.SCREENSHOT_S3_BUCKET,
+            signatureVersion: config.SCREENSHOT_S3_SIGNATURE_VERSION,
         });
         this.getFolderPath();
     }
 
     public initScreenShot() {
         if (!this.intervalId) {
-            this.intervalId = setInterval(() => {
-                this.tackScreenShot();
+            this.intervalId = setInterval(async () => {
+                await this.tackScreenShot();
             }, 30000);
         }
         // window.webContents.executeJavaScript(`window.localStorage.setItem( '${key}', '${value}' )`)
@@ -126,12 +130,12 @@ export class ScreenShot {
         }
     }
 
-    public uploadImageToS3(image: any) {
+    public uploadImageToS3(image: AWS.S3.Body) {
         this.s3.upload(
             {
                 Bucket: 'cdmbase-screenshot-dev',
                 Key: `${new Date().getTime()}.png`,
-                signatureVersion: 'v4',
+                // signatureVersion: 'v4',
                 Body: image,
             },
             (err, data) => {
