@@ -119,7 +119,7 @@
   dependencies:
     "@admin-layout/components" "link:packages/components"
     "@admin-layout/timetracker-core" "link:packages-modules/timetracker/core"
-    "@adminide-stack/core" "^0.0.18-alpha.469"
+    "@adminide-stack/core" "0.0.18-alpha.469"
     chart.js "^2.9.4"
     react-chartjs-2 "^2.11.1"
     react-compound-timer "^1.2.0"
@@ -144,10 +144,10 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-browser/-/account-api-browser-0.0.18-alpha.470.tgz#c5d38b7de07818641f880a3ca06841a0736553b3"
   integrity sha512-5Owlo4kYPiiml5Hg8dc0dZi4dtWsWXpIs9SvVzxr4cOK0sLxjCX3BUl3ffElMsYHOIreV80vUV27a8W2KR1S3g==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.470"
-    "@adminide-stack/extension-api" "^0.0.18-alpha.470"
-    "@adminide-stack/platform-browser" "^0.0.18-alpha.470"
-    "@adminide-stack/user-auth0-browser" "^0.0.18-alpha.470"
+    "@adminide-stack/core" "0.0.18-alpha.470"
+    "@adminide-stack/extension-api" "0.0.18-alpha.470"
+    "@adminide-stack/platform-browser" "0.0.18-alpha.470"
+    "@adminide-stack/user-auth0-browser" "0.0.18-alpha.470"
     "@react-pdf/renderer" "^2.0.0-beta.6"
     date-fns "^2.19.0"
     react-datepicker "^3.5.0"
@@ -160,8 +160,8 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-server/-/account-api-server-0.0.18-alpha.470.tgz#4353aa5b7fd0e1e36ffb8834293deac097e75357"
   integrity sha512-4/I0opUGCWGzVX7rDG96rDR4QoEddlwMjQ2kwcfAp4dAmLJqk5iZjmVqohJdPfchlUiqEfLpN35I7yERSgfGHg==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.470"
-    "@adminide-stack/platform-server" "^0.0.18-alpha.470"
+    "@adminide-stack/core" "0.0.18-alpha.470"
+    "@adminide-stack/platform-server" "0.0.18-alpha.470"
     asana "0.18.5"
     date-fns "^2.19.0"
     jsonwebtoken "^8.5.1"
@@ -173,7 +173,7 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/auth0-server-core/-/auth0-server-core-0.0.18-alpha.470.tgz#ec13f13e524c1158c6724c35c0e44e053b2bcaf0"
   integrity sha512-hJisJTVzmmR4K6VHuDvqXBMCcl9MSLJpqf4T0XWdYwtgWrPtHNWIjjnxQsGUvTQ28g1ifAwQbGHrxWDVWLO2nQ==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.470"
+    "@adminide-stack/core" "0.0.18-alpha.470"
     apollo-server-errors "^2.4.2"
     auth0 "^2.19.0"
 
@@ -197,10 +197,10 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/extension-api/-/extension-api-0.0.18-alpha.470.tgz#9e6661985a260ec2300086bb58fe20bf4cd67329"
   integrity sha512-wPLUZfIpP3nr4k/tUoj1fZyFhk8dPdarue7p8iVTqydXZ1UPyBp/LKMUKdlMLw86vl65WGBCptMQmRE7KIsW1Q==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.470"
+    "@adminide-stack/core" "0.0.18-alpha.470"
     abort-controller "^2.0.0"
     abortable-rx "^1.0.9"
-    cdeops "^0.0.18-alpha.464"
+    cdeops "0.0.18-alpha.464"
     queueing-subject "0.3.4"
     rxjs "^6.3.3"
     utility-types "^3.10.0"
@@ -211,11 +211,11 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/extension-module-browser/-/extension-module-browser-0.0.18-alpha.470.tgz#8556b8a90b24ca13132c328e9e636e9a91081fd8"
   integrity sha512-8C0OMkb8RYQdRUtoorN9p/q3A2lfkLXbJzAV2zXHV76lKZut0dHPM8s8pxSFnX0zMGfIP5bMrOCr+XKs/upWJA==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.470"
-    "@adminide-stack/extension-api" "^0.0.18-alpha.470"
-    "@adminide-stack/react-shared-components" "^0.0.18-alpha.470"
+    "@adminide-stack/core" "0.0.18-alpha.470"
+    "@adminide-stack/extension-api" "0.0.18-alpha.470"
+    "@adminide-stack/react-shared-components" "0.0.18-alpha.470"
     "@babel/polyfill" "^7.2.5"
-    cdeops "^0.0.18-alpha.464"
+    cdeops "0.0.18-alpha.464"
     jsonc-parser "^2.0.2"
     minimatch "^3.0.4"
     queueing-subject "0.3.4"
@@ -228,9 +228,9 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/mailing-api-server/-/mailing-api-server-0.0.18-alpha.470.tgz#907369a6bfac4f7ed540452d1f4d902dd7be8616"
   integrity sha512-678JS1GIwxOj5uDPh2FL2YFJP4bT0L2//ygsLzbj6aTgBehQWmSLH+FaayOY34e2DIvcKYW0iRHe0JoaV4OyEg==
   dependencies:
-    "@adminide-stack/common" "^0.0.18-alpha.464"
-    "@adminide-stack/core" "^0.0.18-alpha.470"
-    "@adminide-stack/platform-server" "^0.0.18-alpha.470"
+    "@adminide-stack/common" "0.0.18-alpha.464"
+    "@adminide-stack/core" "0.0.18-alpha.470"
+    "@adminide-stack/platform-server" "0.0.18-alpha.470"
     ejs "^3.1.5"
     email-templates "^8.0.0"
     mailgun.js "^2.0.1"
@@ -245,8 +245,8 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/platform-browser/-/platform-browser-0.0.18-alpha.470.tgz#a1de3586e677ec5968dfe1e0dc9ed793a6fb490d"
   integrity sha512-k7gF4pGELKXXCSr8BF/HiCYj70uYf5rtHawIB7+kNllHakW4ObMpX73KW0B00KQt2ckzylBHOQVxdpKljuXGMA==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.470"
-    "@adminide-stack/react-shared-components" "^0.0.18-alpha.470"
+    "@adminide-stack/core" "0.0.18-alpha.470"
+    "@adminide-stack/react-shared-components" "0.0.18-alpha.470"
     "@vscode/monaco-editor" "^0.21.2"
     jsonc-parser "^2.3.0"
     query-string "^6.1.0"
@@ -256,7 +256,7 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/platform-server/-/platform-server-0.0.18-alpha.470.tgz#1edcde1e9c6518f047f3e0eeb93b7126f1279e9e"
   integrity sha512-D65dtlJsECoe6BjDEf87UJhO4O8PczmZN9XSNE7G8odD33hk0sMbd37BGqh94dVHG+YiJ5a6VJjqAmwFYhA5wQ==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.470"
+    "@adminide-stack/core" "0.0.18-alpha.470"
     "@files-stack/core" "2.0.1-alpha.0"
     "@files-stack/module-server" "2.0.1-alpha.0"
     "@vscode/monaco-editor" "^0.21.2"
@@ -276,7 +276,7 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/react-shared-components/-/react-shared-components-0.0.18-alpha.470.tgz#37256f889c5c7fdad0bfb9551ec2aeb41f96a0d6"
   integrity sha512-XLZwNV7cAoaVjpev4utAof/hsSLkHPvZ3dw65i5p+SC6pNxKUVbVvzzULzXKm8V6IpT7WeKTu3TXSmyjn58kVA==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.470"
+    "@adminide-stack/core" "0.0.18-alpha.470"
     "@ant-design/pro-provider" "0.0.6"
     "@cdm-logger/client" "^5.0.7"
     "@types/react-copy-to-clipboard" "^4.3.0"
@@ -297,8 +297,8 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.18-alpha.470.tgz#38b5ab7bceb1c2ed7ef77c50e1f92f80123e2248"
   integrity sha512-V+SAvdrwseLZpy0M4Tbcbvc6nFwWdD3xEPc5gx0djzYgwttVIlSgEzcpz7mS20QfNbBEpFTp8Z2+UGUgdJugnA==
   dependencies:
-    "@adminide-stack/common" "^0.0.18-alpha.464"
-    "@adminide-stack/react-shared-components" "^0.0.18-alpha.470"
+    "@adminide-stack/common" "0.0.18-alpha.464"
+    "@adminide-stack/react-shared-components" "0.0.18-alpha.470"
     auth0 "^2.19.0"
     auth0-js "^9.11.3"
     auth0-lock "^11.17.2"
@@ -311,9 +311,9 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-server/-/user-auth0-server-0.0.18-alpha.470.tgz#62b4b6b7b7d150fcd0d84415a4a5735120017e93"
   integrity sha512-eS0fIOxuCvIbbxE+5IRAhYDAbuqtukwajJQSBKGZShbQolPUzQGEp+OlqVsoWHgJqy31lDWQtRNXi+UYEgHnXw==
   dependencies:
-    "@adminide-stack/auth0-server-core" "^0.0.18-alpha.470"
-    "@adminide-stack/common" "^0.0.18-alpha.464"
-    "@adminide-stack/core" "^0.0.18-alpha.470"
+    "@adminide-stack/auth0-server-core" "0.0.18-alpha.470"
+    "@adminide-stack/common" "0.0.18-alpha.464"
+    "@adminide-stack/core" "0.0.18-alpha.470"
     apollo-server-errors "^2.4.2"
     auth0 "^2.19.0"
     connect-ensure-login "^0.1.1"
