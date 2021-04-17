@@ -13,7 +13,6 @@
   "license": "MIT",
   "author": "CDMBase LLC",
   "workspaces": {
-    "nohoist": ["**/iohook", "iohook"],
     "packages": [
       "portable-devices/*",
       "packages-modules/**",
