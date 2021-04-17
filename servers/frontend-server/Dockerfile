@@ -16,6 +16,7 @@ RUN set -ex \
 	python \
 	&& cd /tmp \
 	&& yarn install \
+	&& rm -f /tmp/.npmrc \
 	&& mkdir -p /home/app \
 	&& cp -a /tmp/node_modules /home/app/ \
 	&& rm -Rf /tmp/*

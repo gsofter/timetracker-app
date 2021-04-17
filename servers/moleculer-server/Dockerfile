@@ -4,7 +4,7 @@ FROM node:12.18.4-alpine
 # set workdir and copy the dependnecies there
 # This way, dependnecies are cached without the need of cacheing all files.
 
-COPY .npmrc /tmp/.npmrc  
+COPY .npmrc /tmp/.npmrc 
 ADD package.json /tmp/package.json
 RUN set -ex \
     && apk add --no-cache \
@@ -14,6 +14,7 @@ RUN set -ex \
 	python \
 	&& cd /tmp \
 	&& yarn install \
+	&& rm -f /tmp/.npmrc \
 	&& mkdir -p /home/app \
 	&& cp -a /tmp/node_modules /home/app/ \
 	&& rm -Rf /tmp/*
