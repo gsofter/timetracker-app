@@ -1,5 +1,5 @@
 {
-  "name": "@admin-layout/platform-server",
+  "name": "@admin-layout/platform-electron",
   "version": "0.0.1",
   "description": "Sample core for higher packages to depend on",
   "license": "ISC",
