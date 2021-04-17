@@ -34,9 +34,9 @@ export const resetCounter = (): Action => ({
 });
 
 export type ApiActionGroup<_Q, _S> = {
-  request: (q?: _Q) => Action & Q<_Q>
-  success: (s: _S, q?: _Q) => Action & Q<_Q> & S<_S>
-  error: (e: Error, q?: _Q) => Action & Q<_Q> & E;
+    request: (q?: _Q) => Action & Q<_Q>;
+    success: (s: _S, q?: _Q) => Action & Q<_Q> & S<_S>;
+    error: (e: Error, q?: _Q) => Action & Q<_Q> & E;
 };
 
 const _saveCount: ApiActionGroup<{ value: number }, {}> = {
@@ -59,13 +59,16 @@ const _loadCount: ApiActionGroup<null, { value: number }> = {
 
 type apiFunc<Q, S> = (q: Q) => Promise<S>;
 
-function apiActionGroupFactory<Q, S>(x: ApiActionGroup<Q, S>, go: apiFunc<Q, S>) {
-  return (request: Q) => (dispatch: redux.Dispatch) => {
-    dispatch(x.request(request));
-    go(request)
-      .then((response) => dispatch(x.success(response, request)))
-      .catch((e: Error) => dispatch(x.error(e, request)));
-  };
+function apiActionGroupFactory<Q, S>(
+    x: ApiActionGroup<Q, S>,
+    go: apiFunc<Q, S>,
+) {
+    return (request: Q) => (dispatch: redux.Dispatch) => {
+        dispatch(x.request(request));
+        go(request)
+            .then((response) => dispatch(x.success(response, request)))
+            .catch((e: Error) => dispatch(x.error(e, request)));
+    };
 }
 
 export const saveCount = apiActionGroupFactory(_saveCount, api.save);

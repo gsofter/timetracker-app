@@ -21,7 +21,7 @@ Useful commands:
 |`yarn watch`|               - build the packages in watchmode (Useful for development)|
 |`yarn lerna`|               - install external dependencies at the repo root so they're |`lable to all packages.|
 |`yarn build`|               - build all the packages|
-|`npm install`|                - runs `lerna` and `build`|
+|`yarn install`|                - runs `lerna` and `build`|
 |`lerna publish`|               - publishes packages in the current Lerna project. |
 
 Files explained:
@@ -44,7 +44,7 @@ It uses `lerna.json` for creating the packages structure. Under packages you can
 In Order to get started with the development you need to go through the 
 documentation first
 
-- [Getting Started with lerna](./docs/lerna-build-tools.md)
-- [Running the servers](./docs/How_to_Run_Various_Options.md)
-- [Dos and Dont](./docs/DoAndDont.md)
+- [Getting Started with lerna](./docs/development/CodeContribution/lerna-build-tools.md)
+- [Running the servers](./docs/development/CodeContribution/How_to_Run_Various_Options.md)
+- [Dos and Dont](./docs/development/CodeContribution/DoAndDont.md)
 
