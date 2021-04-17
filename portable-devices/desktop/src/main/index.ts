@@ -12,6 +12,12 @@ import AboutWindow from './windows/about-window';
 import TrayIcon from './tray-icon';
 import { template } from './menu-template';
 import ScreenShot from './screen-shot';
+<<<<<<< HEAD
+=======
+import { createReduxStore } from '../renderer/config/redux-config';
+
+// import { connectedReactRouter_counter } from '../reducers';
+>>>>>>> upgrade/0.8.3
 
 const isDev = process.env.NODE_ENV === 'development';
 console.log(JSON.stringify(process.versions, null, 2));
@@ -21,8 +27,20 @@ if (isDev) {
     installExtension = require('electron-devtools-installer');
 }
 
+<<<<<<< HEAD
 const { forwardToRenderer, triggerAlias, replayActionMain, createAliasedAction } = require('electron-redux');
 
+=======
+// const ioHook = require("iohook");
+// const { forwardToRenderer, triggerAlias, replayActionMain, createAliasedAction } = require('electron-redux');
+
+// const { createStore, applyMiddleware } = require('redux');
+
+// const store = createStore(connectedReactRouter_counter, 0, applyMiddleware(triggerAlias, forwardToRenderer));
+// replayActionMain(store);
+// createAliasedAction('INCREMENT_ALIASED', () => ({ type: 'INCREMENT' }));
+
+>>>>>>> upgrade/0.8.3
 let tray: TrayWindow = null;
 let main: MainWindow = null;
 let screenShot: ScreenShot = null;

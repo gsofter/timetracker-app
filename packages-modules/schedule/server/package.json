@@ -43,6 +43,11 @@
   "peerDependencies": {
     "inversify": "*"
   },
+  "devDependencies": {
+    "glob": "*",
+    "webpack-node-externals": "*",
+    "webpack": "*"
+  },
   "publishConfig": {
     "access": "public"
   },

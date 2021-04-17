@@ -1,6 +1,3 @@
-
-export * from './interfaces';
-
 export interface PersonType {
     name: string;
     id: string;

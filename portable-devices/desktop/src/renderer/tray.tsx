@@ -4,9 +4,22 @@
 import { ipcRenderer } from 'electron';
 import { toInteger } from 'lodash';
 import { createStore, applyMiddleware } from 'redux';
+<<<<<<< HEAD
 import { forwardToMain, replayActionRenderer, getInitialStateRenderer, createAliasedAction } from 'electron-redux';
 
 
+=======
+// import { forwardToMain, replayActionRenderer, getInitialStateRenderer, createAliasedAction } from 'electron-redux';
+// import { connectedReactRouter_counter } from '../reducers';
+
+// import { increment, decrement } from '../actions';
+
+// setup store
+// const initialState = getInitialStateRenderer();
+// const store = createStore(connectedReactRouter_counter, initialState, applyMiddleware(forwardToMain));
+
+// replayActionRenderer(store);
+>>>>>>> upgrade/0.8.3
 
 // set up renderer
 function mount() {
@@ -20,11 +33,19 @@ function mount() {
   `;
 
     document.getElementById('increment').addEventListener('click', () => {
+<<<<<<< HEAD
+=======
+        // store.dispatch(increment());
+>>>>>>> upgrade/0.8.3
         const current_count: string = (toInteger(document.getElementById('value').innerHTML) + 1).toString();
         ipcRenderer.send('update-title-tray-window-event', current_count);
     });
 
     document.getElementById('decrement').addEventListener('click', () => {
+<<<<<<< HEAD
+=======
+        // store.dispatch(decrement());
+>>>>>>> upgrade/0.8.3
         const current_count: string = (toInteger(document.getElementById('value').innerHTML) - 1).toString();
         ipcRenderer.send('update-title-tray-window-event', current_count);
     });
@@ -47,3 +68,7 @@ function mount() {
 mount();
 // renderValue();
 
+<<<<<<< HEAD
+=======
+// store.subscribe(renderValue);
+>>>>>>> upgrade/0.8.3
