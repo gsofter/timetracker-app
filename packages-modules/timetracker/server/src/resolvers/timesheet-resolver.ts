@@ -1,19 +1,13 @@
-import { DEFAULT_ORG } from '../constants';
-
 export const resolver = options => ({
   Query: {
     getTimesheets: (root, args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Query.getTimeSheets) args %j', args);
-      return timeTrackerService.getTimesheets(user._id || user.sub, userContext.orgId, DEFAULT_ORG);
+      if (!args.withTotalHours) return timeTrackerService.getTimesheets(userContext.orgId);
+      return timeTrackerService.getTimesheetsWithTotalHours(userContext.orgId);
     },
     getDurationTimesheets: (root, args, { timeTrackerService, user, userContext }) => {
       options.logger.trace('(Query.getTimeSheets) args %j', args);
-      return timeTrackerService.getDurationTimesheets(
-        user._id || user.sub,
-        userContext.orgId,
-        args.start,
-        args.end,
-      );
+      return timeTrackerService.getDurationTimesheets(userContext.orgId, args.start, args.end);
     },
   },
 

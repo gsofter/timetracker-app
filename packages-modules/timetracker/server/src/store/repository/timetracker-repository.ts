@@ -1,6 +1,5 @@
 import * as Logger from 'bunyan';
-import { injectable, inject, optional } from 'inversify';
-import { ITimeTrackerRepository } from './../../interfaces';
+import { injectable, inject } from 'inversify';
 import * as mongoose from 'mongoose';
 import { TimeTrackerModelType, TimeTrackerModelFunc } from './../models/timetracker-model';
 import {
@@ -15,20 +14,72 @@ import {
   ServerTypes as TYPES,
   ConfigurationTarget,
   generateOrgUri,
-  IConfigCollectionName,
   IConfigFragmentName,
+  IMailerServicesendArgs,
+  IMailServiceAction,
+  IMoleculerServiceName,
 } from '@adminide-stack/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { CommonType } from '@common-stack/core';
 import { ServiceBroker, CallingOptions } from 'moleculer';
-import {
-  IMailerServicesendArgs,
-  IMailServiceAction,
-  IMoleculerServiceName,
-} from '@adminide-stack/core';
 import { EmailTemplateCodes } from '../../constants';
 import { config } from '../../config';
+
+export interface ITimeTrackerRepository {
+  getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
+  getOrganizationTimeRecords(orgId: string): Promise<Array<ITimeRecord>>;
+  getDurationTimeRecords(
+    orgId: string,
+    startTime: Date,
+    endTime: Date,
+    userId?: string,
+  ): Promise<Array<ITimeRecord>>;
+
+  getTimesheets(orgId: string, userId?: string): Promise<Array<ITimesheet>>;
+  getOrganizationTimesheets(orgId: string): Promise<Array<ITimesheet>>;
+  getDurationTimesheets(
+    userId: string,
+    orgId: string,
+    start: Date,
+    end: Date,
+  ): Promise<Array<ITimesheet>>;
+  getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
+  createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<string>;
+  createTimesheet(
+    userId: string,
+    orgId: string,
+    request: ITimesheetCreateRequest,
+  ): Promise<Boolean>;
+  updateTimeRecord(
+    userId: string,
+    orgId: string,
+    recordId: string,
+    request: ITimeRecordRequest,
+  ): Promise<Boolean>;
+  updateTimesheet(
+    userId: string,
+    orgId: string,
+    sheetId: string,
+    request: ITimesheetCreateRequest,
+    userContext?: any,
+  ): Promise<Boolean>;
+  updateTimesheetStatus(
+    userId: string,
+    orgId: string,
+    request: ITimesheetCreateRequest,
+  ): Promise<Boolean>;
+  removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<Boolean>;
+  removeDurationTimeRecords(
+    userId: string,
+    orgId: string,
+    startTime: Date,
+    endTime: Date,
+    projectId: string,
+  ): Promise<Boolean>;
+  removeTimesheet(userId: string, orgId: string, sheetId: string): Promise<Boolean>;
+}
+
 @injectable()
 export class TimeTrackerRepository implements ITimeTrackerRepository {
   private timeTrackerModel: TimeTrackerModelType;
@@ -49,14 +100,21 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     this.timeTrackerModel = TimeTrackerModelFunc(db);
   }
 
-  public async getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>> {
-    const trackDoc = await this.timeTrackerModel.findOne({ orgId });
+  public async getTimeRecords(orgId: string, userId?: string) {
+    const orgRecords = await this.getOrganizationTimeRecords(orgId);
+    return orgRecords.filter(tr => (!userId || tr.userId === userId) && tr.endTime !== null);
+  }
 
+  public async getOrganizationTimeRecords(orgId: string) {
+    const trackDoc = await this.timeTrackerModel.findOne({ orgId });
     if (trackDoc && trackDoc.timeRecords) {
-      return userId === undefined || userId === null
-        ? trackDoc.timeRecords.filter(tr => tr.endTime !== null)
-        : trackDoc.timeRecords.filter(tr => tr.userId === userId && tr.endTime !== null);
-    } else return null;
+      return trackDoc.timeRecords;
+    } else return [];
+  }
+
+  public checkInPeriod(t: Date, A: Date, B: Date): boolean {
+    if (moment(A) < moment(B)) return moment(t) >= moment(A) && moment(t) <= moment(B);
+    else return moment(t) >= moment(B) && moment(t) <= moment(A);
   }
 
   public async getDurationTimeRecords(
@@ -68,33 +126,60 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
 
     if (trackDoc && trackDoc.timeRecords) {
-      return userId === undefined || userId === null
-        ? trackDoc.timeRecords.filter(
-            r =>
-              moment(startTime) <= moment(r.startTime) &&
-              moment(r.endTime) <= moment(endTime) &&
-              r.endTime !== null,
-          )
-        : trackDoc.timeRecords.filter(
-            r =>
-              r.userId === userId &&
-              moment(startTime) <= moment(r.startTime) &&
-              moment(r.endTime) <= moment(endTime) &&
-              r.endTime !== null,
-          );
+      const filteredRecords = trackDoc.timeRecords.filter(
+        r =>
+          (!userId || r.userId === userId) &&
+          moment(startTime) <= moment(r.startTime) &&
+          moment(r.endTime) <= moment(endTime) &&
+          r.endTime !== null,
+      );
+
+      const filteredSheets = trackDoc.timesheets.filter(
+        sh =>
+          ((!userId || sh.userId === userId) &&
+            this.checkInPeriod(startTime, sh.startDate, sh.endDate)) ||
+          this.checkInPeriod(endTime, sh.startDate, sh.endDate),
+      );
+      return filteredRecords.map(tr => {
+        let trEditable = false;
+        for (let sh of filteredSheets) {
+          if (
+            this.checkInPeriod(tr.startTime, sh.startDate, sh.endDate) &&
+            this.checkInPeriod(tr.endTime, sh.startDate, sh.endDate)
+          ) {
+            trEditable = true;
+            break;
+          }
+        }
+        return {
+          id: tr.id,
+          startTime: tr.startTime,
+          endTime: tr.endTime,
+          taskName: tr.taskName,
+          tags: tr.tags,
+          projectId: tr.projectId,
+          isBillable: tr.isBillable,
+          userId: tr.userId,
+          editable: trEditable,
+        };
+      });
     } else {
       return [];
     }
   }
 
-  public async getTimesheets(userId: string, orgId: string): Promise<Array<ITimesheet>> {
+  public async getOrganizationTimesheets(orgId: string) {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
     if (trackDoc && trackDoc.timesheets) {
       return trackDoc.timesheets;
-      // return trackDoc.timesheets.filter(sh => sh.userId === userId);
     } else {
       return [];
     }
+  }
+
+  public async getTimesheets(orgId: string, userId?: string) {
+    const timesheets = await this.getOrganizationTimesheets(orgId);
+    return timesheets.filter(sheet => !userId || sheet.userId === userId);
   }
 
   public async getDurationTimesheets(
