@@ -43,7 +43,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
 
   const handleSubmit = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId', 'totalDuration']),
       submittedOn: moment(),
       state: ITimesheetState.SUBMITTED,
       updatedOn: moment(),
@@ -53,7 +53,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
 
   const handleUnSubmit = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId', 'totalDuration']),
       approvedOn: null,
       submittedOn: null,
       state: ITimesheetState.OPEN,
@@ -64,7 +64,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
 
   const handleApprove = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId', 'totalDuration']),
       approvedOn: moment(),
       approvedBy: userId,
       state: ITimesheetState.APPROVED,
@@ -75,7 +75,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
 
   const handleDeny = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId', 'totalDuration']),
       state: ITimesheetState.DENYED,
       updatedOn: moment(),
     };
