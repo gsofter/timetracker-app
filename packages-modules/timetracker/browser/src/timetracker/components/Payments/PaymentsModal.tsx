@@ -116,6 +116,9 @@ const styles = {
         '& .ant-form-item-label': {
             '> label': {
                 color: '#6a6b6c',
+                textTransform: 'uppercase',
+                fontSize: '13px',
+                fontWeight: '500',
             },
         },
     }),

@@ -132,14 +132,14 @@
     humanize-duration "^3.24.0"
 
 "@adminide-stack/account-api-browser@^0.0.18-alpha.469":
-  version "0.0.18-alpha.469"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-browser/-/account-api-browser-0.0.18-alpha.469.tgz#ef70df2a672aafb5edaf4da3c8786cfc555f554b"
-  integrity sha512-OoSz2+iAAeoIMK1Im47A5DF4sIsfuT16mOz2iRZw2KTJVc4F2TopE7n7RtRbGdwqgYTLVHNHRoBEZ0G1bvzuVA==
+  version "0.0.18-alpha.473"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-browser/-/account-api-browser-0.0.18-alpha.473.tgz#8db526bab1462d90a09fab7dfe581dd9bbc0b0ef"
+  integrity sha512-V/L6IT3vuazfkatiX4GBXYnkpbd++xp6YqcipQuMOH/f2ZB5QwZLS4k3gSNL3itMbz6PM42dNr+ZoVuTVZa2zA==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.469"
-    "@adminide-stack/extension-api" "^0.0.18-alpha.469"
-    "@adminide-stack/platform-browser" "^0.0.18-alpha.469"
-    "@adminide-stack/user-auth0-browser" "^0.0.18-alpha.469"
+    "@adminide-stack/core" "^0.0.18-alpha.470"
+    "@adminide-stack/extension-api" "^0.0.18-alpha.470"
+    "@adminide-stack/platform-browser" "^0.0.18-alpha.470"
+    "@adminide-stack/user-auth0-browser" "^0.0.18-alpha.470"
     "@react-pdf/renderer" "^2.0.0-beta.6"
     date-fns "^2.19.0"
     react-datepicker "^3.5.0"
@@ -148,39 +148,48 @@
     suneditor-react "^2.16.1"
 
 "@adminide-stack/account-api-server@^0.0.18-alpha.469":
-  version "0.0.18-alpha.469"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-server/-/account-api-server-0.0.18-alpha.469.tgz#323a1bb478e8dd93a9177b812fa267b6872ed4a1"
-  integrity sha512-XE2U16BQ6uJV7nI1baJ89DIMnuZhjl/lji5L2XH+byaPGzWUNFeS3xYGoqnJlj4LHOUdDRN2GXQAcrT8mq/9wQ==
+  version "0.0.18-alpha.473"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-server/-/account-api-server-0.0.18-alpha.473.tgz#0b65ef5c4ec8953d77566dfcec78e64f543c81c3"
+  integrity sha512-MXGaOtemaoniJLdOM8Tm6bVCtxeXk7blmDcn2qZ6efFajQ3sWYM4mV5GZj0fDOgP9qhX0oSw3EwjZWGOrlxzBg==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.469"
-    "@adminide-stack/platform-server" "^0.0.18-alpha.469"
+    "@adminide-stack/core" "^0.0.18-alpha.470"
+    "@adminide-stack/platform-server" "^0.0.18-alpha.470"
     asana "0.18.5"
     date-fns "^2.19.0"
     jsonwebtoken "^8.5.1"
     nanoid "^1.3.1"
     pluralize "8.0.0"
 
+"@adminide-stack/auth0-server-core@^0.0.18-alpha.470":
+  version "0.0.18-alpha.470"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/auth0-server-core/-/auth0-server-core-0.0.18-alpha.470.tgz#ec13f13e524c1158c6724c35c0e44e053b2bcaf0"
+  integrity sha512-hJisJTVzmmR4K6VHuDvqXBMCcl9MSLJpqf4T0XWdYwtgWrPtHNWIjjnxQsGUvTQ28g1ifAwQbGHrxWDVWLO2nQ==
+  dependencies:
+    "@adminide-stack/core" "^0.0.18-alpha.470"
+    apollo-server-errors "^2.4.2"
+    auth0 "^2.19.0"
+
 "@adminide-stack/common@^0.0.18-alpha.464":
   version "0.0.18-alpha.464"
   resolved "https://registry.yarnpkg.com/@adminide-stack/common/-/common-0.0.18-alpha.464.tgz#3c62977aa63a84568598431c9210e6128c3856f2"
   integrity sha512-sh9oaYDCIh0BnCeNTuZc75Q2H782g5kFZley4nJz1Pf5qQqsICVqWu18tmki1bO5MO1lG53PsUl78eJ0QSVDMQ==
 
-"@adminide-stack/core@^0.0.18-alpha.469":
-  version "0.0.18-alpha.469"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/core/-/core-0.0.18-alpha.469.tgz#a4d9c4f91e7ea5774adbaec4c615c78a2e51b056"
-  integrity sha512-/gKtYMiGrXSYKmEGKES+VEIli8rAAABCbEZ6AM78C51O3bbOZebggq486fUe7+v7sANyGIaw+rw7ECxTSD/s7w==
+"@adminide-stack/core@^0.0.18-alpha.469", "@adminide-stack/core@^0.0.18-alpha.470":
+  version "0.0.18-alpha.470"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/core/-/core-0.0.18-alpha.470.tgz#dae9fceaa94a9c399aaa2ffaa087b6df77889d36"
+  integrity sha512-xnxnAsmkeiCv/JryHdSp3D34+TdfH+n1QFGdeHKyu8BdqFisrPWxPPWC9o62yvw3JLTv3QVGGZin8HInn67NjA==
   dependencies:
     "@vscode/monaco-editor" "^0.21.2"
     "@workbench-stack/core" "2.0.2"
     querystring "^0.2.0"
     sort-keys "^4.0.0"
 
-"@adminide-stack/extension-api@^0.0.18-alpha.469":
-  version "0.0.18-alpha.469"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-api/-/extension-api-0.0.18-alpha.469.tgz#fc97fd984eedcdb7d8070d974a05377bb5f9f079"
-  integrity sha512-WqT/68pfkyJI6AZCg+ZEXBBlBQf2bNwMDAaZEBcQxD+Gj9GZ6N7eAbFeCWLzFVL2DN/RrGZUoAxVwuBs5Hv9pQ==
+"@adminide-stack/extension-api@^0.0.18-alpha.470":
+  version "0.0.18-alpha.470"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-api/-/extension-api-0.0.18-alpha.470.tgz#9e6661985a260ec2300086bb58fe20bf4cd67329"
+  integrity sha512-wPLUZfIpP3nr4k/tUoj1fZyFhk8dPdarue7p8iVTqydXZ1UPyBp/LKMUKdlMLw86vl65WGBCptMQmRE7KIsW1Q==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.469"
+    "@adminide-stack/core" "^0.0.18-alpha.470"
     abort-controller "^2.0.0"
     abortable-rx "^1.0.9"
     cdeops "^0.0.18-alpha.464"
@@ -190,13 +199,13 @@
     valid-url "1.0.9"
 
 "@adminide-stack/extension-module-browser@^0.0.18-alpha.469":
-  version "0.0.18-alpha.469"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-module-browser/-/extension-module-browser-0.0.18-alpha.469.tgz#19b81cd3343c1369fdba14c56c1b0dfb70086e44"
-  integrity sha512-QKs0320Kmpfzawd69x/xop9f9n+cRYsV5TB5j99VIlA6RTwWRVuHwIky86TdSFTzTc90G/UKmim0yHWAOfa3Zg==
+  version "0.0.18-alpha.470"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-module-browser/-/extension-module-browser-0.0.18-alpha.470.tgz#8556b8a90b24ca13132c328e9e636e9a91081fd8"
+  integrity sha512-8C0OMkb8RYQdRUtoorN9p/q3A2lfkLXbJzAV2zXHV76lKZut0dHPM8s8pxSFnX0zMGfIP5bMrOCr+XKs/upWJA==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.469"
-    "@adminide-stack/extension-api" "^0.0.18-alpha.469"
-    "@adminide-stack/react-shared-components" "^0.0.18-alpha.469"
+    "@adminide-stack/core" "^0.0.18-alpha.470"
+    "@adminide-stack/extension-api" "^0.0.18-alpha.470"
+    "@adminide-stack/react-shared-components" "^0.0.18-alpha.470"
     "@babel/polyfill" "^7.2.5"
     cdeops "^0.0.18-alpha.464"
     jsonc-parser "^2.0.2"
@@ -207,13 +216,13 @@
     whatwg-url "^7.0.0"
 
 "@adminide-stack/mailing-api-server@^0.0.18-alpha.469":
-  version "0.0.18-alpha.469"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/mailing-api-server/-/mailing-api-server-0.0.18-alpha.469.tgz#99bde562917902fad27289d47d94d9db6ccc970a"
-  integrity sha512-F7pnGF97r9o2Q9WVT9WsP55NbQx9SXz4srCFlPuuKvllLZuJlM1cGJ6E4AfzRwAFT4EQXc4b+Ii1FGEuiNiWyA==
+  version "0.0.18-alpha.470"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/mailing-api-server/-/mailing-api-server-0.0.18-alpha.470.tgz#907369a6bfac4f7ed540452d1f4d902dd7be8616"
+  integrity sha512-678JS1GIwxOj5uDPh2FL2YFJP4bT0L2//ygsLzbj6aTgBehQWmSLH+FaayOY34e2DIvcKYW0iRHe0JoaV4OyEg==
   dependencies:
     "@adminide-stack/common" "^0.0.18-alpha.464"
-    "@adminide-stack/core" "^0.0.18-alpha.469"
-    "@adminide-stack/platform-server" "^0.0.18-alpha.469"
+    "@adminide-stack/core" "^0.0.18-alpha.470"
+    "@adminide-stack/platform-server" "^0.0.18-alpha.470"
     ejs "^3.1.5"
     email-templates "^8.0.0"
     mailgun.js "^2.0.1"
@@ -223,23 +232,23 @@
     query-string "^6.1.0"
     underscore "^1.9.1"
 
-"@adminide-stack/platform-browser@^0.0.18-alpha.469":
-  version "0.0.18-alpha.469"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-browser/-/platform-browser-0.0.18-alpha.469.tgz#8be0e8532d417a69cbb5d8a9dfe93947cb459349"
-  integrity sha512-Stq4/Hnd4vNYWjGvIkdyr51I0JXatBD4T8WINcye+glkAl7ldUSUdBj8Nk0VQ3qRljjCVnRGzDFRDnmvzyv7BQ==
+"@adminide-stack/platform-browser@^0.0.18-alpha.469", "@adminide-stack/platform-browser@^0.0.18-alpha.470":
+  version "0.0.18-alpha.470"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-browser/-/platform-browser-0.0.18-alpha.470.tgz#a1de3586e677ec5968dfe1e0dc9ed793a6fb490d"
+  integrity sha512-k7gF4pGELKXXCSr8BF/HiCYj70uYf5rtHawIB7+kNllHakW4ObMpX73KW0B00KQt2ckzylBHOQVxdpKljuXGMA==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.469"
-    "@adminide-stack/react-shared-components" "^0.0.18-alpha.469"
+    "@adminide-stack/core" "^0.0.18-alpha.470"
+    "@adminide-stack/react-shared-components" "^0.0.18-alpha.470"
     "@vscode/monaco-editor" "^0.21.2"
     jsonc-parser "^2.3.0"
     query-string "^6.1.0"
 
-"@adminide-stack/platform-server@^0.0.18-alpha.469":
-  version "0.0.18-alpha.469"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-server/-/platform-server-0.0.18-alpha.469.tgz#dc89e3477f87feb535e17461aaca69d192ba393f"
-  integrity sha512-xHtA2A4Vj0LdxbJhc8B5VSXtoCATV1iy9czALiSGLXM/eKjiYz1eJw5hXntmr1+YhfVniSuwGiUjcBw28yOgmQ==
+"@adminide-stack/platform-server@^0.0.18-alpha.469", "@adminide-stack/platform-server@^0.0.18-alpha.470":
+  version "0.0.18-alpha.470"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-server/-/platform-server-0.0.18-alpha.470.tgz#1edcde1e9c6518f047f3e0eeb93b7126f1279e9e"
+  integrity sha512-D65dtlJsECoe6BjDEf87UJhO4O8PczmZN9XSNE7G8odD33hk0sMbd37BGqh94dVHG+YiJ5a6VJjqAmwFYhA5wQ==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.469"
+    "@adminide-stack/core" "^0.0.18-alpha.470"
     "@files-stack/core" "2.0.1-alpha.0"
     "@files-stack/module-server" "2.0.1-alpha.0"
     "@vscode/monaco-editor" "^0.21.2"
@@ -254,12 +263,12 @@
     mongo-queryfilter "^0.1.20"
     query-string "^6.1.0"
 
-"@adminide-stack/react-shared-components@^0.0.18-alpha.469":
-  version "0.0.18-alpha.469"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/react-shared-components/-/react-shared-components-0.0.18-alpha.469.tgz#2b58826616a5428706cd2dd0ef1f24d61ca65b4c"
-  integrity sha512-X9vWoY1iLZHg9l6hIbwm+OgABqPP84vfUsv4sr+4BRWqC6KfiC+lHtZ5RqPHL8QwPalNNLkKtQWObh4n5Wwrzw==
+"@adminide-stack/react-shared-components@^0.0.18-alpha.469", "@adminide-stack/react-shared-components@^0.0.18-alpha.470":
+  version "0.0.18-alpha.470"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/react-shared-components/-/react-shared-components-0.0.18-alpha.470.tgz#37256f889c5c7fdad0bfb9551ec2aeb41f96a0d6"
+  integrity sha512-XLZwNV7cAoaVjpev4utAof/hsSLkHPvZ3dw65i5p+SC6pNxKUVbVvzzULzXKm8V6IpT7WeKTu3TXSmyjn58kVA==
   dependencies:
-    "@adminide-stack/core" "^0.0.18-alpha.469"
+    "@adminide-stack/core" "^0.0.18-alpha.470"
     "@ant-design/pro-provider" "0.0.6"
     "@cdm-logger/client" "^5.0.7"
     "@types/react-copy-to-clipboard" "^4.3.0"
@@ -275,13 +284,13 @@
     use-media-antd-query "^1.0.2"
     use-merge-value "^1.0.2"
 
-"@adminide-stack/user-auth0-browser@^0.0.18-alpha.469":
-  version "0.0.18-alpha.469"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.18-alpha.469.tgz#87c9b9eb95dc8972376a9b37f7db825343a921fa"
-  integrity sha512-RQzgbEtMydrUhE4ie+F6zzPfQraASwaNJxQWcnFdsRfHPd4azEhqbepP5Gnye68pcYHVkAMdioYXZVIU2y8YeQ==
+"@adminide-stack/user-auth0-browser@^0.0.18-alpha.469", "@adminide-stack/user-auth0-browser@^0.0.18-alpha.470":
+  version "0.0.18-alpha.470"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.18-alpha.470.tgz#38b5ab7bceb1c2ed7ef77c50e1f92f80123e2248"
+  integrity sha512-V+SAvdrwseLZpy0M4Tbcbvc6nFwWdD3xEPc5gx0djzYgwttVIlSgEzcpz7mS20QfNbBEpFTp8Z2+UGUgdJugnA==
   dependencies:
     "@adminide-stack/common" "^0.0.18-alpha.464"
-    "@adminide-stack/react-shared-components" "^0.0.18-alpha.469"
+    "@adminide-stack/react-shared-components" "^0.0.18-alpha.470"
     auth0 "^2.19.0"
     auth0-js "^9.11.3"
     auth0-lock "^11.17.2"
@@ -290,12 +299,13 @@
     redux-auth-wrapper "^3.0.0"
 
 "@adminide-stack/user-auth0-server@^0.0.18-alpha.469":
-  version "0.0.18-alpha.469"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-server/-/user-auth0-server-0.0.18-alpha.469.tgz#0e27bdfa8b998a6c363809a2b337e0a283e687d1"
-  integrity sha512-fkZPJKLrG0qY+ZxuCBYuaGgozgsSYIRC4MBVsuiY4PIWJw8EJnQfox8HRDDWcM/W6ajWyiPpgsXQj4upTR+9SQ==
+  version "0.0.18-alpha.471"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-server/-/user-auth0-server-0.0.18-alpha.471.tgz#d97dd0c76cec044564edab81ac347ca534ed4bd2"
+  integrity sha512-/koEFoO6YPvC43ePze9ZRyfu/wUXXIY5g6WEbjdbHgUk0CLVjSjUEIOj7ypOUX/DuNLMscKhWDjgJ4OkOKWAMQ==
   dependencies:
+    "@adminide-stack/auth0-server-core" "^0.0.18-alpha.470"
     "@adminide-stack/common" "^0.0.18-alpha.464"
-    "@adminide-stack/core" "^0.0.18-alpha.469"
+    "@adminide-stack/core" "^0.0.18-alpha.470"
     apollo-server-errors "^2.4.2"
     auth0 "^2.19.0"
     connect-ensure-login "^0.1.1"
@@ -2994,9 +3004,9 @@
     valid-url "1.0.9"
 
 "@graphql-tools/merge@^6.0.0", "@graphql-tools/merge@^6.2.12":
-  version "6.2.12"
-  resolved "https://registry.yarnpkg.com/@graphql-tools/merge/-/merge-6.2.12.tgz#2a8171e6e4fe73e67b2049b219188e69a3479b05"
-  integrity sha512-SWq09Nv04QN/A5TlB54gKn8K3qmRIilyYWFTfyMTfKWWIaJFJG7XDWB1ZNDFTRb1h9XvKr0LCi4nL/Po8zMbSg==
+  version "6.2.13"
+  resolved "https://registry.yarnpkg.com/@graphql-tools/merge/-/merge-6.2.13.tgz#4603fac8fc44daff0a4704055634d95ca7fa62b2"
+  integrity sha512-Qjlki0fp+bBQPinhdv7rv24eurvThZ5oIFvGMpLxMZplbw/ovJ2c6llwXr5PCuWAk9HGZsyM9NxxDgtTRfq3dQ==
   dependencies:
     "@graphql-tools/schema" "^7.0.0"
     "@graphql-tools/utils" "^7.7.0"
@@ -3110,9 +3120,9 @@
   integrity sha512-yN7kbciD87WzLGc5539Tn0sApjyiGHAJgKvG9W8C7O+6c7qmoQMfVs0W4bX17eqz6C78QJqqFrtgdK5EWf6Qow==
 
 "@hapi/hoek@9.x.x", "@hapi/hoek@^9.0.0":
-  version "9.1.1"
-  resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.1.1.tgz#9daf5745156fd84b8e9889a2dc721f0c58e894aa"
-  integrity sha512-CAEbWH7OIur6jEOzaai83jq3FmKmv4PmX1JYfs9IrYcGEVI/lyL1EXJGCj7eFVJ0bg5QR8LMxBlEtA+xKiLpFw==
+  version "9.2.0"
+  resolved "https://registry.yarnpkg.com/@hapi/hoek/-/hoek-9.2.0.tgz#f3933a44e365864f4dad5db94158106d511e8131"
+  integrity sha512-sqKVVVOe5ivCaXDWivIJYVSaEgdQK9ul7a4Kity5Iw7u9+wBAPbX1RMSnLLmp7O4Vzj0WOWwMAJsTL00xwaNug==
 
 "@hapi/joi@^15.0.3":
   version "15.1.1"
@@ -5516,20 +5526,20 @@
     color "^3.1.3"
     react-native-iphone-x-helper "^1.3.0"
 
-"@react-pdf/font@^2.0.1":
-  version "2.0.1"
-  resolved "https://registry.yarnpkg.com/@react-pdf/font/-/font-2.0.1.tgz#372eed037301d7b20afa1c2e8f5889f315981ed1"
-  integrity sha512-WWqKMrU78zQ+C6qIp5hp2lGH6Phahk45r70KLSJhrMGwIKXTl7v1jHS3FIOayDPyEbORqPS9qyKwU77JRB6IUQ==
+"@react-pdf/font@^2.0.2":
+  version "2.0.2"
+  resolved "https://registry.yarnpkg.com/@react-pdf/font/-/font-2.0.2.tgz#b7b9bf3be7f8f93733a1668d28405102c60f48b6"
+  integrity sha512-/Giohkc+wNgPgiT1ZRewbJj57Gnd6s5k1tJ3tQgjUXMg76sYAoaXAjIQ6RLnrWMQggU/8xAA4ttXLCgHtWJiPg==
   dependencies:
-    "@react-pdf/fontkit" "^1.15.0"
+    "@react-pdf/fontkit" "^2.0.0"
     "@react-pdf/types" "^2.0.1"
     cross-fetch "^3.0.4"
     is-url "^1.2.4"
 
-"@react-pdf/fontkit@^1.15.0":
-  version "1.15.0"
-  resolved "https://registry.yarnpkg.com/@react-pdf/fontkit/-/fontkit-1.15.0.tgz#81bbf6e02def6628dfa6e82f6ec6238c31da5a8c"
-  integrity sha512-ymyReHUE7o5UjJiImL7WWpDecjZcHxEOf2M47yu3KSCM+2CdvJziCztJamjiR4GTEcjmUdop5z8SvKA4DldnYg==
+"@react-pdf/fontkit@^2.0.0":
+  version "2.0.0"
+  resolved "https://registry.yarnpkg.com/@react-pdf/fontkit/-/fontkit-2.0.0.tgz#30c632886bb8ea84e46abb66d3120308b831aafe"
+  integrity sha512-Y8XXG+o4/favWq4ZSYGT2wuXuafzR+wN8LTep7D7UQQiSu4PYHdVbhTBcLaj85Dkgp13lwtPBoSN9YBcckED2w==
   dependencies:
     "@react-pdf/unicode-properties" "2.3.0"
     brotli "^1.2.0"
@@ -5548,14 +5558,14 @@
     "@react-pdf/png-js" "^1.0.0"
     cross-fetch "^3.0.4"
 
-"@react-pdf/layout@^2.0.4":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@react-pdf/layout/-/layout-2.0.4.tgz#3eb5032d69799e35860f83fdb815b26e114f41d4"
-  integrity sha512-B+kE12qrs2IVh7qeBqBoIAGgKqQz83JoblR9UDma++cmDbCWCnsyHSMKjPTEaxlU5asRZp5KyZYqw5eqNEVWKA==
+"@react-pdf/layout@^2.0.5":
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@react-pdf/layout/-/layout-2.0.5.tgz#4ac579c47ec4d8430128891bed93a994f2b6bbed"
+  integrity sha512-gctmwinSo2zj3s+Mlk0JKnPtGYAv4iO2iHAIUgVSf45HAj4eDrjtAWjRFNIT4Ly6/D7zsguq5gLPc/SJiN+ArQ==
   dependencies:
     "@babel/runtime" "^7.6.2"
     "@react-pdf/image" "^2.0.0"
-    "@react-pdf/pdfkit" "^2.0.0"
+    "@react-pdf/pdfkit" "^2.0.1"
     "@react-pdf/primitives" "^2.0.0"
     "@react-pdf/stylesheet" "^2.0.3"
     "@react-pdf/textkit" "^2.0.0"
@@ -5566,12 +5576,12 @@
     queue "^6.0.1"
     ramda "^0.26.1"
 
-"@react-pdf/pdfkit@^2.0.0":
-  version "2.0.0"
-  resolved "https://registry.yarnpkg.com/@react-pdf/pdfkit/-/pdfkit-2.0.0.tgz#61c6daea0b4abaaa198ab808b280c11bc76ce028"
-  integrity sha512-vU0szpg7t6Ejk4jkROwCLf+RyztN0bYy0UN8DLU0as+UrOq2cQcyaniERsD08KaQXk/zaiod2+WPPZ3UR7phaQ==
+"@react-pdf/pdfkit@^2.0.1":
+  version "2.0.1"
+  resolved "https://registry.yarnpkg.com/@react-pdf/pdfkit/-/pdfkit-2.0.1.tgz#827caee92eb223932e7875d3c66321e009bef51e"
+  integrity sha512-IJurhH3RdhALgw6+78X9+7DCPvIAqaW7yssh5/j6rGD1IxIv4KLguZRQ74v3Q51Z51Gk6VL2sbtbuWtbX3MA/Q==
   dependencies:
-    "@react-pdf/fontkit" "^1.15.0"
+    "@react-pdf/fontkit" "^2.0.0"
     "@react-pdf/png-js" "^1.0.0"
     lz-string "^1.4.4"
 
@@ -5585,10 +5595,10 @@
   resolved "https://registry.yarnpkg.com/@react-pdf/primitives/-/primitives-2.0.0.tgz#2a97ef32c97050e0039a427d73f673da3bd914b5"
   integrity sha512-Yh8TEjzyObnalM271znZVJsy6BiY+s6uTOCjLJL8jSvU1rGA1p45VjK7AnNpgH+n+JzpddXQweT2oE2HWGuYFA==
 
-"@react-pdf/render@^2.0.3":
-  version "2.0.3"
-  resolved "https://registry.yarnpkg.com/@react-pdf/render/-/render-2.0.3.tgz#ebcda8a09b4fde8b46b59f473ff600f4d86240ee"
-  integrity sha512-LVHjavsgsN2Ko/HgXssMFOsDbBUZJbPuVqoDYubW6zuFR58GUG9Cjc9FeT6s3fxWMT4pR+xST494ZkIETTXGSw==
+"@react-pdf/render@^2.0.4":
+  version "2.0.4"
+  resolved "https://registry.yarnpkg.com/@react-pdf/render/-/render-2.0.4.tgz#8e87b6029463c6ce10c0caf324be9dad75a75500"
+  integrity sha512-peCzVLRMrZ/+nTPzKDYQ1iQGuUB2oeTZ5xIHHycMnTUMi9BkkSpU+EIGUQXulyfgbcW8SrHQnhdCAKL5EGwhnA==
   dependencies:
     "@react-pdf/primitives" "^2.0.0"
     "@react-pdf/textkit" "^2.0.0"
@@ -5601,16 +5611,16 @@
     svg-arc-to-cubic-bezier "^3.2.0"
 
 "@react-pdf/renderer@^2.0.0-beta.6":
-  version "2.0.4"
-  resolved "https://registry.yarnpkg.com/@react-pdf/renderer/-/renderer-2.0.4.tgz#e29c0a6887ea523fe91360239a6b5a6725331fb5"
-  integrity sha512-eDnPTlMRSCTWGckqpIOJtNkdNtCadBoyaHPiuMPAd01GroSN5OS9t/rNKJmSFwXUxkum9xduTIeBf/tm+f5ixw==
+  version "2.0.5"
+  resolved "https://registry.yarnpkg.com/@react-pdf/renderer/-/renderer-2.0.5.tgz#291be716edec5c7d2c670268c85bdd9865d7ce23"
+  integrity sha512-EWe9jhhQ9V5r2kQDjtQ9UP5uHMQxM8ZjftW6p4pQhikvt3PZ32cmEBYPAIVvSGUwj76tgWjeDhLwEUkJfvTSAw==
   dependencies:
     "@babel/runtime" "^7.6.2"
-    "@react-pdf/font" "^2.0.1"
-    "@react-pdf/layout" "^2.0.4"
-    "@react-pdf/pdfkit" "^2.0.0"
+    "@react-pdf/font" "^2.0.2"
+    "@react-pdf/layout" "^2.0.5"
+    "@react-pdf/pdfkit" "^2.0.1"
     "@react-pdf/primitives" "^2.0.0"
-    "@react-pdf/render" "^2.0.3"
+    "@react-pdf/render" "^2.0.4"
     "@react-pdf/types" "^2.0.1"
     blob-stream "^0.1.3"
     queue "^6.0.1"
@@ -6540,9 +6550,9 @@
     "@types/react-native" "*"
 
 "@types/react-native@*":
-  version "0.64.2"
-  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.64.2.tgz#2e344aeec0b4eb21fb9eaa0ed8973245c5601d56"
-  integrity sha512-w2y04h+GVLY+OMlFSmq4adPuS51XtEp1yUr83OvXf+moMQ4zDG1Q07HhyvYDXdc+BSS9ANHySBqVCz0hFxli9Q==
+  version "0.64.3"
+  resolved "https://registry.yarnpkg.com/@types/react-native/-/react-native-0.64.3.tgz#02b3eec685e51995a90468382f6bb5d9fff20257"
+  integrity sha512-gOQfWlp5Z5MS4RRvH1u9HfnL7QUspiGyYuGWgxL4lXi7hIKriAVSMtdIToJF+8cED8MemFe45PmQeSvDeSTgSA==
   dependencies:
     "@types/react" "*"
 
@@ -7671,9 +7681,9 @@ ansicolors@~0.3.2:
   integrity sha1-ZlWX3oap/+Oqm/vmyuXG6kJrSXk=
 
 antd@^4.5.2:
-  version "4.15.1"
-  resolved "https://registry.yarnpkg.com/antd/-/antd-4.15.1.tgz#1ba1e0108866e1be03d3e8fb351582ade17d88db"
-  integrity sha512-zTZz8GY9yERNjSnH6xWU3Rw5sC3RtHEs/LOTKcSMTtU3Q5jHXIbAHKd1C6bYLQT6Ru75p+/UyKvJoNip/ax/WQ==
+  version "4.15.2"
+  resolved "https://registry.yarnpkg.com/antd/-/antd-4.15.2.tgz#f955bcbdd1f577c7ac93a00ad17d1719d1b90818"
+  integrity sha512-9IwlR022xSQrG+iJG8d7adSo9gy4n7AuS5x0/OxDi/V3CYSTTfaE24jp1wnmgmXOVAT/77Llg9OEbKcSyFim2g==
   dependencies:
     "@ant-design/colors" "^6.0.0"
     "@ant-design/icons" "^4.6.2"
@@ -10475,9 +10485,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001125, caniuse-lite@^1.0.30001208:
-  version "1.0.30001209"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001209.tgz#1bb4be0bd118e98e21cfb7ef617b1ef2164622f4"
-  integrity sha512-2Ktt4OeRM7EM/JaOZjuLzPYAIqmbwQMNnYbgooT+icoRGrKOyAxA1xhlnotBD1KArRSPsuJp3TdYcZYrL7qNxA==
+  version "1.0.30001210"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001210.tgz#7c12d029e93b725cc2fe44a5eaabd9b838250d33"
+  integrity sha512-avmGf0Jo00I8vB0I89J4Pba48kddasErV7slu7wrkyM5uY9gE5P+B+V3hjABv8Hp4YNG2nBqIUFUXlnqNteXEA==
 
 capital-case@^1.0.4:
   version "1.0.4"
@@ -13772,12 +13782,13 @@ electron-devtools-installer@^2.2.4:
     semver "^5.3.0"
 
 electron-devtools-installer@^3.1.1:
-  version "3.1.1"
-  resolved "https://registry.yarnpkg.com/electron-devtools-installer/-/electron-devtools-installer-3.1.1.tgz#7b56c8c86475c5e4e10de6917d150c53c9ceb55e"
-  integrity sha512-g2D4J6APbpsiIcnLkFMyKZ6bOpEJ0Ltcc2m66F7oKUymyGAt628OWeU9nRZoh1cNmUs/a6Cls2UfOmsZtE496Q==
+  version "3.2.0"
+  resolved "https://registry.yarnpkg.com/electron-devtools-installer/-/electron-devtools-installer-3.2.0.tgz#acc48d24eb7033fe5af284a19667e73b78d406d0"
+  integrity sha512-t3UczsYugm4OAbqvdImMCImIMVdFzJAHgbwHpkl5jmfu1izVgUcP/mnrPqJIpEeCK1uZGpt+yHgWEN+9EwoYhQ==
   dependencies:
     rimraf "^3.0.2"
     semver "^7.2.1"
+    tslib "^2.1.0"
     unzip-crx-3 "^0.2.0"
 
 electron-is-accelerator@^0.1.0:
@@ -18680,9 +18691,9 @@ human-signals@^2.1.0:
   integrity sha512-B4FFZ6q/T2jhhksgkbEW3HBvWIfDW85snkQgawt07S7J5QXTk6BkNV+0yAeZrM5QpMAdYlocGoljn0sJ/WQkFw==
 
 humanize-duration@^3.24.0:
-  version "3.25.1"
-  resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.25.1.tgz#50e12bf4b3f515ec91106107ee981e8cfe955d6f"
-  integrity sha512-P+dRo48gpLgc2R9tMRgiDRNULPKCmqFYgguwqOO2C0fjO35TgdURDQDANSR1Nt92iHlbHGMxOTnsB8H8xnMa2Q==
+  version "3.25.2"
+  resolved "https://registry.yarnpkg.com/humanize-duration/-/humanize-duration-3.25.2.tgz#5259585b749ecc5ad5a60fb37121aee0e9ab0c5e"
+  integrity sha512-zSerjahuzBazDaE8skjMI7Xmrt/EirvW5cDsXgysx8tYIjcgCMnI5Y5985y3LxYeLah9L5cQY3WEw1k7GRWbfg==
 
 humanize-ms@^1.2.1:
   version "1.2.1"
@@ -19074,16 +19085,16 @@ ini@^1.3.2, ini@^1.3.4, ini@^1.3.5, ini@~1.3.0:
   integrity sha512-JV/yugV2uzW5iMRSiZAyDtQd+nxtUnjeLt0acNdw98kKLrvuRVyB80tsREOE7yvGVgalhZ6RNXCmEHkUKBKxew==
 
 init-package-json@^2.0.2:
-  version "2.0.2"
-  resolved "https://registry.yarnpkg.com/init-package-json/-/init-package-json-2.0.2.tgz#d81a7e6775af9b618f20bba288e440b8d1ce05f3"
-  integrity sha512-PO64kVeArePvhX7Ff0jVWkpnE1DfGRvaWcStYrPugcJz9twQGYibagKJuIMHCX7ENcp0M6LJlcjLBuLD5KeJMg==
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/init-package-json/-/init-package-json-2.0.3.tgz#c8ae4f2a4ad353bcbc089e5ffe98a8f1a314e8fd"
+  integrity sha512-tk/gAgbMMxR6fn1MgMaM1HpU1ryAmBWWitnxG5OhuNXeX0cbpbgV5jA4AIpQJVNoyOfOevTtO6WX+rPs+EFqaQ==
   dependencies:
     glob "^7.1.1"
-    npm-package-arg "^8.1.0"
+    npm-package-arg "^8.1.2"
     promzard "^0.3.0"
     read "~1.0.1"
-    read-package-json "^3.0.0"
-    semver "^7.3.2"
+    read-package-json "^3.0.1"
+    semver "^7.3.5"
     validate-npm-package-license "^3.0.4"
     validate-npm-package-name "^3.0.0"
 
@@ -25549,9 +25560,9 @@ object-hash@^2.0.3:
   integrity sha512-VOJmgmS+7wvXf8CjbQmimtCnEx3IAoLxI3fp2fbWehxrWBcAQFbk+vcwb6vzR0VZv/eNCJ/27j151ZTwqW/JeQ==
 
 object-inspect@^1.7.0, object-inspect@^1.9.0:
-  version "1.9.0"
-  resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.9.0.tgz#c90521d74e1127b67266ded3394ad6116986533a"
-  integrity sha512-i3Bp9iTqwhaLZBxGkRfo5ZbE07BQRT7MGu8+nNgwW9ItGp1TzCTw2DLEoWwjClxBjOFI/hWljTAmYGCEwmtnOw==
+  version "1.10.2"
+  resolved "https://registry.yarnpkg.com/object-inspect/-/object-inspect-1.10.2.tgz#b6385a3e2b7cae0b5eafcf90cddf85d128767f30"
+  integrity sha512-gz58rdPpadwztRrPjZE9DZLOABUpTGdcANUgOwBFO1C+HZZhePoP83M65WGDmbpwFYJSWqavbl4SgDn4k8RYTA==
 
 object-is@^1.0.1, object-is@^1.0.2, object-is@^1.1.2, object-is@^1.1.4:
   version "1.1.5"
@@ -29774,7 +29785,7 @@ read-package-json@^2.0.0:
     normalize-package-data "^2.0.0"
     npm-normalize-package-bin "^1.0.0"
 
-read-package-json@^3.0.0:
+read-package-json@^3.0.0, read-package-json@^3.0.1:
   version "3.0.1"
   resolved "https://registry.yarnpkg.com/read-package-json/-/read-package-json-3.0.1.tgz#c7108f0b9390257b08c21e3004d2404c806744b9"
   integrity sha512-aLcPqxovhJTVJcsnROuuzQvv6oziQx4zd3JvG0vGCL5MjTONUc4uJ90zCBC6R7W7oUKBNoR/F8pkyfVwlbxqng==
@@ -31760,9 +31771,9 @@ socks-proxy-agent@^4.0.0, socks-proxy-agent@^4.0.1:
     socks "~2.3.2"
 
 socks@^2.3.3:
-  version "2.6.0"
-  resolved "https://registry.yarnpkg.com/socks/-/socks-2.6.0.tgz#6b984928461d39871b3666754b9000ecf39dfac2"
-  integrity sha512-mNmr9owlinMplev0Wd7UHFlqI4ofnBnNzFuzrm63PPaHgbkqCFe4T5LzwKmtQ/f2tX0NTpcdVLyD/FHxFBstYw==
+  version "2.6.1"
+  resolved "https://registry.yarnpkg.com/socks/-/socks-2.6.1.tgz#989e6534a07cf337deb1b1c94aaa44296520d30e"
+  integrity sha512-kLQ9N5ucj8uIcxrDwjm0Jsqk06xdpBjGNQtpXy4Q8/QY2k+fY7nZH8CARy+hkbG+SGAovmzzuauCpBlb8FrnBA==
   dependencies:
     ip "^1.1.5"
     smart-buffer "^4.1.0"
@@ -32581,17 +32592,17 @@ sumchecker@^3.0.1:
     debug "^4.1.0"
 
 suneditor-react@^2.16.1:
-  version "2.16.2"
-  resolved "https://registry.yarnpkg.com/suneditor-react/-/suneditor-react-2.16.2.tgz#eed4f5e8d245dcab9826e654b718379c509e9776"
-  integrity sha512-U9DwcTEsJGfjtATCS8LXLYhO+ng8awZAyvf7iCvPQ0ywVck7sgFUKDuUuG2FRccOdN6yezZRYWTnjJC9XEvzLw==
+  version "2.16.3"
+  resolved "https://registry.yarnpkg.com/suneditor-react/-/suneditor-react-2.16.3.tgz#9192162dedc048a376fb4eeec2660d8650ba6bca"
+  integrity sha512-SB5j0FIS1CiUCWsqkqgkoQHv/dTp8jj6D5U/a+fAXw/AaGFRfVGxQNgyb/v08xLjGvO4N3mKhjzsGmd4bnZyMw==
   dependencies:
     prop-types "^15.7.2"
-    suneditor "^2.37.4"
+    suneditor "^2.38.3"
 
-suneditor@^2.37.4:
-  version "2.38.2"
-  resolved "https://registry.yarnpkg.com/suneditor/-/suneditor-2.38.2.tgz#51883f44d686154f55df411d52285aa453700e8d"
-  integrity sha512-njm/xQO03O9MxUDfCYtHKHOss1J4HlL/S51yfJK9BHCPMYjBKa7ULKU+PWO7bSer7ktjk/O7ngqt0aPAPZlmKw==
+suneditor@^2.38.3:
+  version "2.38.3"
+  resolved "https://registry.yarnpkg.com/suneditor/-/suneditor-2.38.3.tgz#097532777e56f608b65fb2d7c1624e606e1e1198"
+  integrity sha512-B9v7GpAcVStTxG/ORe1745dSdhfegNMYD9Q1mj5KoVf7srwGf8kzzKHvGdHp1GQ9lmOtZfR/BihGlbwKCh9Ohg==
 
 superagent-proxy@^2.0.0:
   version "2.1.0"
@@ -32791,9 +32802,9 @@ table@5.4.6:
     string-width "^3.0.0"
 
 table@^6.0.4:
-  version "6.1.0"
-  resolved "https://registry.yarnpkg.com/table/-/table-6.1.0.tgz#676a0cfb206008b59e783fcd94ef8ba7d67d966c"
-  integrity sha512-T4G5KMmqIk6X87gLKWyU5exPpTjLjY5KyrFWaIjv3SvgaIUGXV7UEzGEnZJdTA38/yUS6f9PlKezQ0bYXG3iIQ==
+  version "6.2.0"
+  resolved "https://registry.yarnpkg.com/table/-/table-6.2.0.tgz#3d92adbd37aca3c45de5f9c698d0474aa1de22b8"
+  integrity sha512-WMBBLuauiLXJjth35K4vOnd/xkaZ/dxEcyoZ+YhxSwfxFqvh+av06+oRqIwbR14m1lENB1egSWOFv/bNEt2D8A==
   dependencies:
     ajv "^8.0.1"
     is-boolean-object "^1.1.0"
@@ -33263,10 +33274,15 @@ titleize@^2.1.0:
   resolved "https://registry.yarnpkg.com/titleize/-/titleize-2.1.0.tgz#5530de07c22147a0488887172b5bd94f5b30a48f"
   integrity sha512-m+apkYlfiQTKLW+sI4vqUkwMEzfgEUEYSqljx1voUE3Wz/z1ZsxyzSxvH2X8uKVrOp7QkByWt0rA6+gvhCKy6g==
 
-tlds@1.219.0, tlds@^1.218.0:
+tlds@1.219.0:
   version "1.219.0"
   resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.219.0.tgz#7e636062386a1f3c9184356de93d40842ffe91d9"
   integrity sha512-o4g9c8kXCmTDwUnK/9HpTT9o/GNH85KCvs+S5SgUw5yILdECvMmTGzK7ngoWMp97P5tfYr8fZeF16YhgV/l90A==
+
+tlds@^1.218.0:
+  version "1.220.0"
+  resolved "https://registry.yarnpkg.com/tlds/-/tlds-1.220.0.tgz#cdf6fa51e7f20da0b53af406cce9f15d2ebd87cb"
+  integrity sha512-dUc6ko5g7xuBjDmSn5B5FCjOVnCn9Ea8ce+kynWKAanymx59R+zV75h6aED0OZHh1EpfNWq4jui0cwd9aXdy0Q==
 
 tmp@^0.0.29:
   version "0.0.29"
@@ -35916,7 +35932,7 @@ write-pkg@^4.0.0:
     type-fest "^0.4.1"
     write-json-file "^3.2.0"
 
-ws@7.4.4, ws@^7, ws@^7.0.0, ws@^7.2.1, ws@^7.3.1, ws@^7.4.4:
+ws@7.4.4:
   version "7.4.4"
   resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.4.tgz#383bc9742cb202292c9077ceab6f6047b17f2d59"
   integrity sha512-Qm8k8ojNQIMx7S+Zp8u/uHOx7Qazv3Yv4q68MiWWWOJhiwG5W3x7iqmRtJo8xxrciZUY4vRxUTJCKuRnF28ZZw==
@@ -35951,6 +35967,11 @@ ws@^6.0.0, ws@^6.2.1:
   integrity sha512-GIyAXC2cB7LjvpgMt9EKS2ldqr0MTrORaleiOno6TweZ6r3TKtoFQWay/2PceJ3RuBasOHzXNn5Lrw1X0bEjqA==
   dependencies:
     async-limiter "~1.0.0"
+
+ws@^7, ws@^7.0.0, ws@^7.2.1, ws@^7.3.1, ws@^7.4.4:
+  version "7.4.5"
+  resolved "https://registry.yarnpkg.com/ws/-/ws-7.4.5.tgz#a484dd851e9beb6fdb420027e3885e8ce48986c1"
+  integrity sha512-xzyu3hFvomRfXKH8vOFMU3OguG6oOvhXMo3xsGy3xWExqaM2dxBbVxuD99O7m3ZUFMvvscsZDqxfgMaRr/Nr1g==
 
 ws@~6.1.0:
   version "6.1.4"
