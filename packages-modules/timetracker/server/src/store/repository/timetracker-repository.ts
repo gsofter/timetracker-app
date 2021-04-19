@@ -7,43 +7,17 @@ import {
   ITimeRecord,
   ITimesheet,
   ITimesheetCreateRequest,
-  ITimesheetState,
 } from '@admin-layout/timetracker-core';
-import {
-  IPreferencesService,
-  ServerTypes as TYPES,
-  ConfigurationTarget,
-  generateOrgUri,
-  IConfigFragmentName,
-  IMailerServicesendArgs,
-  IMailServiceAction,
-  IMoleculerServiceName,
-} from '@adminide-stack/core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { CommonType } from '@common-stack/core';
 import { ServiceBroker, CallingOptions } from 'moleculer';
-import { EmailTemplateCodes } from '../../constants';
-import { config } from '../../config';
 
 export interface ITimeTrackerRepository {
   getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
   getOrganizationTimeRecords(orgId: string): Promise<Array<ITimeRecord>>;
-  getDurationTimeRecords(
-    orgId: string,
-    startTime: Date,
-    endTime: Date,
-    userId?: string,
-  ): Promise<Array<ITimeRecord>>;
-
   getTimesheets(orgId: string, userId?: string): Promise<Array<ITimesheet>>;
   getOrganizationTimesheets(orgId: string): Promise<Array<ITimesheet>>;
-  getDurationTimesheets(
-    userId: string,
-    orgId: string,
-    start: Date,
-    end: Date,
-  ): Promise<Array<ITimesheet>>;
   getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
   createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<string>;
   createTimesheet(
@@ -93,8 +67,6 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
     @inject(CommonType.MOLECULER_BROKER)
     private broker: ServiceBroker,
-    @inject(TYPES.IPreferenceEditorService)
-    private preferencesService: IPreferencesService,
   ) {
     this.logger = logger.child({ className: 'ScheduleRepository' });
     this.timeTrackerModel = TimeTrackerModelFunc(db);
@@ -117,57 +89,6 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     else return moment(t) >= moment(B) && moment(t) <= moment(A);
   }
 
-  public async getDurationTimeRecords(
-    orgId: string,
-    startTime: Date,
-    endTime: Date,
-    userId?: string,
-  ): Promise<Array<ITimeRecord>> {
-    const trackDoc = await this.timeTrackerModel.findOne({ orgId });
-
-    if (trackDoc && trackDoc.timeRecords) {
-      const filteredRecords = trackDoc.timeRecords.filter(
-        r =>
-          (!userId || r.userId === userId) &&
-          moment(startTime) <= moment(r.startTime) &&
-          moment(r.endTime) <= moment(endTime) &&
-          r.endTime !== null,
-      );
-
-      const filteredSheets = trackDoc.timesheets.filter(
-        sh =>
-          ((!userId || sh.userId === userId) &&
-            this.checkInPeriod(startTime, sh.startDate, sh.endDate)) ||
-          this.checkInPeriod(endTime, sh.startDate, sh.endDate),
-      );
-      return filteredRecords.map(tr => {
-        let trEditable = false;
-        for (let sh of filteredSheets) {
-          if (
-            this.checkInPeriod(tr.startTime, sh.startDate, sh.endDate) &&
-            this.checkInPeriod(tr.endTime, sh.startDate, sh.endDate)
-          ) {
-            trEditable = true;
-            break;
-          }
-        }
-        return {
-          id: tr.id,
-          startTime: tr.startTime,
-          endTime: tr.endTime,
-          taskName: tr.taskName,
-          tags: tr.tags,
-          projectId: tr.projectId,
-          isBillable: tr.isBillable,
-          userId: tr.userId,
-          editable: trEditable,
-        };
-      });
-    } else {
-      return [];
-    }
-  }
-
   public async getOrganizationTimesheets(orgId: string) {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
     if (trackDoc && trackDoc.timesheets) {
@@ -180,25 +101,6 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
   public async getTimesheets(orgId: string, userId?: string) {
     const timesheets = await this.getOrganizationTimesheets(orgId);
     return timesheets.filter(sheet => !userId || sheet.userId === userId);
-  }
-
-  public async getDurationTimesheets(
-    userId: string,
-    orgId: string,
-    start: Date,
-    end: Date,
-  ): Promise<Array<ITimesheet>> {
-    const trackDoc = await this.timeTrackerModel.findOne({ orgId });
-    if (trackDoc && trackDoc.timesheets) {
-      return trackDoc.timesheets.filter(
-        sh =>
-          //sh.userId === userId &&
-          moment(start).format('YYYY-MM-DD') === moment(sh.startDate).format('YYYY-MM-DD') &&
-          moment(end).format('YYYY-MM-DD') === moment(sh.endDate).format('YYYY-MM-DD'),
-      );
-    } else {
-      return [];
-    }
   }
 
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
@@ -266,52 +168,10 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     userContext?: any,
   ) {
     try {
-      const response = await this.timeTrackerModel.update(
+      await this.timeTrackerModel.update(
         { orgId: orgId, timesheets: { $elemMatch: { _id: sheetId } } },
         { $set: { 'timesheets.$': request } },
       );
-
-      const resourceUri = generateOrgUri(orgId, IConfigFragmentName.settings);
-      const { settings } = (await this.preferencesService.viewerSettings({
-        target: ConfigurationTarget.ORGANIZATION_RESOURCE,
-        settingsResource: resourceUri,
-      })) as any;
-      if (
-        request.state === ITimesheetState.APPROVED &&
-        settings.timetracker.notifications.approvalNotifications &&
-        settings.timetracker.notifications.enableTimetrackerNotifications
-      ) {
-        const mailTopic = 'Timsheet approved';
-        const mailTo = userContext.emailId;
-        const mailFrom = config.MAIL_SEND_DEFAULT_EMAIL;
-        const templateId = EmailTemplateCodes.TIMESHEET_APPROVAL;
-        const templateVars = {
-          name: userContext.username,
-          startDate: moment(request.startDate).format('YYYY-MM-DD'),
-          endDate: moment(request.endDate).format('YYYY-MM-DD'),
-          timesheet_url: `${config.CLIENT_URL}/${orgId}/time-tracker/timeapproval`,
-          contact_url: `${config.CLIENT_URL}`,
-        };
-        this.sendMail(mailTopic, mailTo, mailFrom, templateId, templateVars);
-      }
-      if (
-        request.state === ITimesheetState.SUBMITTED &&
-        settings.timetracker.notifications.submitNotifications &&
-        settings.timetracker.notifications.enableTimetrackerNotifications
-      ) {
-        const mailTopic = 'Timsheet submitted';
-        const mailTo = userContext.emailId;
-        const mailFrom = config.MAIL_SEND_DEFAULT_EMAIL;
-        const templateId = EmailTemplateCodes.SUBMIT_TIME;
-        const templateVars = {
-          name: userContext.username,
-          startDate: moment(request.startDate).format('YYYY-MM-DD'),
-          endDate: moment(request.endDate).format('YYYY-MM-DD'),
-          timesheet_url: `${config.CLIENT_URL}/${orgId}/time-tracker/timeapproval`,
-          contact_url: `${config.CLIENT_URL}`,
-        };
-        this.sendMail(mailTopic, mailTo, mailFrom, templateId, templateVars);
-      }
       return true;
     } catch (err) {
       throw new Error(err.message);
@@ -419,30 +279,5 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     } catch (err) {
       throw new Error(err.message);
     }
-  }
-
-  private sendMail(topic, to, from, templateId, templateVars) {
-    return this.callAction<void, IMailerServicesendArgs>(
-      IMailServiceAction.send,
-      {
-        request: {
-          topic,
-          to,
-          templateId,
-          from,
-          variables: templateVars,
-        },
-      },
-      IMoleculerServiceName.MailService,
-    );
-  }
-
-  private async callAction<T, P = any>(
-    command: string,
-    params?: P,
-    topic?: string,
-    opts?: CallingOptions,
-  ) {
-    return this.broker.call<T, P>(`${topic}.${command}`, params, opts);
   }
 }
