@@ -1,38 +1,40 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm, Modal, Tag } from 'antd';
-import { moment } from '../TimesheetPage';
+import { moment } from '../../TimesheetPage';
 import { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
 import {
   ITimeRecord,
-  ITimeRecordRequest,
   ITimesheetCreateRequest,
   IProjects as IProject,
   ITimesheetState,
   ITimesheet,
 } from '@admin-layout/timetracker-core';
-import { TimesheetInput } from '../../components/TimesheetInput';
+import { TimesheetInput } from '../../../components/TimesheetInput';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
-import {
-  useGetDurationTimeRecordsQuery,
-  useGetDurationTimesheetsQuery,
-  useRemoveDurationTimeRecordsMutation,
-  useUpdateTimeRecordMutation,
-  useCreateTimeRecordMutation,
-  useCreateTimesheetMutation,
-} from '../../../generated-models';
-import { formatDuration } from '../../services/timeRecordService';
+
+import { formatDuration } from '../../../services/timeRecordService';
 import CSS from 'csstype';
 import * as _ from 'lodash';
 import { useSelector } from 'react-redux';
-import { useTimeformat } from '../../hooks';
-import { useHistory } from 'react-router';
+import { useTimeformat } from '../../../hooks';
+
+const calcDuration = (records: Array<ITimeRecord>) => {
+  return records.reduce(
+    (duration, record) =>
+      Math.floor(
+        Math.abs(moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
+      ) + duration,
+    0,
+  );
+};
 interface ITabularCalendar {
   weekStart: Moment;
   records: ITimeRecord[];
   projects: Array<IProject>;
   timesheet: ITimesheet | null;
+  selectedUser: string;
   handleRemoveDuration: Function;
   updateTimeRecord: Function;
   createTimeRecord: Function;
@@ -40,12 +42,13 @@ interface ITabularCalendar {
   setPathWeekStart: Function;
 }
 
-const TabularCalendar = ({
+export const TabularCalendar = ({
   weekStart,
   setPathWeekStart,
   records,
   projects,
   timesheet,
+  selectedUser,
   handleRemoveDuration,
   updateTimeRecord,
   createTimeRecord,
@@ -57,94 +60,74 @@ const TabularCalendar = ({
   const [newRows, setNewRows] = useState([]);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   const { timeFormat, dateFormat } = useTimeformat();
-  const history = useHistory();
-  const userId = useSelector<any>(state => state.user.auth0UserId) as string;
+  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   useEffect(() => {
     const trackedProjects = projects.filter(
-      p => records.findIndex(r => r.projectId === p.id) !== -1,
+      (p) => records.findIndex((r) => r.projectId === p.id) !== -1,
     );
     setTrackedProjects(trackedProjects);
 
-    if (records.findIndex(r => r.projectId === '') === -1) setShowUnkownProject(false);
+    if (records.findIndex((r) => r.projectId === '') === -1) setShowUnkownProject(false);
     else setShowUnkownProject(true);
-    const rows = newRows.filter(pId => trackedProjects.findIndex(p => p.id === pId) === -1);
+    const rows = newRows.filter((pId) => trackedProjects.findIndex((p) => p.id === pId) === -1);
     setNewRows(rows);
   }, [weekStart, records]);
 
-  const onClickBack = event => {
+  const onClickBack = (event) => {
+    event.preventDefault();
     const newWeekStart = moment(weekStart).add('-1', 'week');
     setPathWeekStart(newWeekStart);
   };
 
-  const onClickNext = event => {
+  const onClickNext = (event) => {
+    event.preventDefault();
     const newWeekStart = moment(weekStart).add('1', 'week');
     setPathWeekStart(newWeekStart);
   };
 
-  const onClickToday = event => {
+  const onClickToday = (event) => {
+    event.preventDefault();
     const newWeekStart = moment().startOf('week');
     setPathWeekStart(newWeekStart);
   };
 
-  const onClickAddNewRow = () => {
-    // setNewRows()
+  const getProjectTotalDuration = (projectId) => {
+    return calcDuration(
+      records
+        .filter((r) => r.projectId === projectId)
+        .filter(
+          (r) =>
+            moment(r.startTime) >= moment(weekStart) &&
+            moment(r.endTime) <= moment(weekStart).add(1, 'week'),
+        ),
+    );
   };
 
-  const getProjectTotalDuration = projectId => {
-    const pRecords = records
-      .filter(r => r.projectId === projectId)
-      .filter(
-        r =>
-          moment(r.startTime) >= moment(weekStart) &&
-          moment(r.endTime) <= moment(weekStart).add(1, 'week'),
-      );
-    let totalDur = 0;
-    pRecords.forEach(pr => {
-      const dur = Math.floor(
-        (moment(pr.endTime).valueOf() - moment(pr.startTime).valueOf()) / 1000,
-      );
-      totalDur = totalDur + dur;
-    });
-    return totalDur;
-  };
-
-  const getDayTotalDuration = curDay => {
+  const getDayTotalDuration = (curDay) => {
     const dayStr = moment(curDay).format(dateFormat);
-    const dRecords = records
-      .filter(r => moment(r.startTime).format(dateFormat) === dayStr)
-      .filter(r => projects.findIndex(p => p.id === r.projectId) !== -1);
-    let totalDur = 0;
-    dRecords.forEach(pr => {
-      const dur = Math.floor(
-        (moment(pr.endTime).valueOf() - moment(pr.startTime).valueOf()) / 1000,
-      );
-      totalDur = totalDur + dur;
-    });
-    return totalDur;
+    return calcDuration(
+      records
+        .filter((r) => moment(r.startTime).format(dateFormat) === dayStr)
+        .filter((r) => projects.findIndex((p) => p.id === r.projectId) !== -1),
+    );
   };
 
   const getTotalDuration = () => {
-    return records
-      .filter(
-        r =>
+    return calcDuration(
+      records.filter(
+        (r) =>
           moment(r.startTime) >= moment(weekStart) &&
           moment(r.endTime) <= moment(weekStart).add(1, 'week'),
-      )
-      .reduce(
-        (duration, record) =>
-          Math.floor(
-            (moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
-          ) + duration,
-        0,
-      );
+      ),
+    );
   };
 
-  const handleSelectNewProject = projectId => {
+  const handleSelectNewProject = (projectId) => {
     setNewRows([...newRows, projectId]);
   };
 
-  const handleRemoveNewRow = rowId => {
-    setNewRows(newRows.filter(pId => pId !== rowId));
+  const handleRemoveNewRow = (rowId) => {
+    setNewRows(newRows.filter((pId) => pId !== rowId));
   };
 
   const handleSubmitApproval = (event: React.MouseEvent<HTMLButtonElement>) => {
@@ -171,21 +154,22 @@ const TabularCalendar = ({
 
   const isProjectSelectable = () => {
     const selectables = projects.filter(
-      p =>
-        trackedProjects.findIndex(tp => tp.id === p.id) === -1 &&
-        newRows.findIndex(pId => pId === p.id) === -1,
+      (p) =>
+        trackedProjects.findIndex((tp) => tp.id === p.id) === -1 &&
+        newRows.findIndex((pId) => pId === p.id) === -1,
     );
     return selectables.length > 0 ? true : false;
   };
+
   const projectDropdownMenus = (
     <Menu className={css(styles.projectDown)}>
       {projects
         .filter(
-          p =>
-            trackedProjects.findIndex(tp => tp.id === p.id) === -1 &&
-            newRows.findIndex(pId => pId === p.id) === -1,
+          (p) =>
+            trackedProjects.findIndex((tp) => tp.id === p.id) === -1 &&
+            newRows.findIndex((pId) => pId === p.id) === -1,
         )
-        .map(pr => {
+        .map((pr) => {
           return (
             <Menu.Item key={pr.id} onClick={() => handleSelectNewProject(pr.id)}>
               {pr.name}
@@ -212,9 +196,7 @@ const TabularCalendar = ({
       >
         <p>
           Ready to submit from {moment(weekStart).format('MMM DD')} -
-          {moment(weekStart)
-            .add(6, 'day')
-            .format('MMM DD')}
+          {moment(weekStart).add(6, 'day').format('MMM DD')}
           &nbsp; approval?
         </p>
       </Modal>
@@ -227,16 +209,9 @@ const TabularCalendar = ({
         <Col xs={24} md={12} style={{ textAlign: 'center' }}>
           <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
           <span className="duration-end">
-            {moment(weekStart).format('MM') ===
-            moment(weekStart)
-              .add(1, 'week')
-              .format('MM')
-              ? moment(weekStart)
-                  .add(1, 'week')
-                  .format('DD')
-              : moment(weekStart)
-                  .add(1, 'week')
-                  .format('MMMM DD')}
+            {moment(weekStart).format('MM') === moment(weekStart).add(1, 'week').format('MM')
+              ? moment(weekStart).add(1, 'week').format('DD')
+              : moment(weekStart).add(1, 'week').format('MMMM DD')}
           </span>
         </Col>
         <Col xs={24} md={6} className="control" style={{ textAlign: 'right' }}>
@@ -277,7 +252,7 @@ const TabularCalendar = ({
           </tr>
         </thead>
         <tbody>
-          {trackedProjects.map(p => {
+          {trackedProjects.map((p) => {
             return (
               <tr key={p.id}>
                 <td> {p.name}</td>
@@ -286,7 +261,7 @@ const TabularCalendar = ({
                   .map((val, index) => {
                     const curDay = moment(weekStart).add(index, 'day');
                     const curDayRecords = records.filter(
-                      r =>
+                      (r) =>
                         r.projectId === p.id &&
                         moment(r.startTime).format(dateFormat) === curDay.format(dateFormat),
                     );
@@ -327,8 +302,8 @@ const TabularCalendar = ({
                 .map((val, index) => {
                   const curDay = moment(weekStart).add(index, 'day');
                   const curDayRecords = records.filter(
-                    r =>
-                      projects.findIndex(p => p.id === r.projectId) === -1 && // doesn't include in projects list
+                    (r) =>
+                      projects.findIndex((p) => p.id === r.projectId) === -1 && // doesn't include in projects list
                       moment(r.startTime).format(dateFormat) === curDay.format(dateFormat), // cur day records
                   );
                   return (
@@ -351,8 +326,8 @@ const TabularCalendar = ({
             <> </>
           )}
 
-          {newRows.map(pId => {
-            const project = projects.find(p => p.id === pId);
+          {newRows.map((pId) => {
+            const project = projects.find((p) => p.id === pId);
             return (
               <tr key={pId}>
                 <td> {project.name}</td>
@@ -424,7 +399,11 @@ const TabularCalendar = ({
       <Row className="table-footer">
         {timesheet ? <Tag color="blue"> {timesheet.state} </Tag> : ''}
         <div className="spacer"></div>
-        <Button type="primary" onClick={openSubmitApproval} disabled={timesheet !== null}>
+        <Button
+          type="primary"
+          onClick={openSubmitApproval}
+          disabled={timesheet !== undefined || selectedUser === ''}
+        >
           Submit For Approval
         </Button>
       </Row>
@@ -432,147 +411,8 @@ const TabularCalendar = ({
   );
 };
 
-interface ITabularCalendarWrapperProps {
-  projects: IProject[];
-  tags: any;
-  members: any;
-  localizer: any;
-  weekStart: Moment;
-  selectedUser: string;
-  selectedProject: string;
-  setPathWeekStart: Function;
-}
-
-const TabularCalendarWrapper = ({
-  projects,
-  weekStart,
-  selectedUser,
-  selectedProject,
-  setPathWeekStart,
-}: ITabularCalendarWrapperProps) => {
-  const filterEvents = events => {
-    if (!events) return [];
-    return events
-      .filter(
-        ev =>
-          (ev.userId === selectedUser || selectedUser === '') &&
-          (ev.projectId === selectedProject || selectedProject === ''),
-      )
-      .map(ev => ({
-        ...ev,
-        startTime: moment(ev.startTime).toDate(),
-        endTime: moment(ev.endTime).toDate(),
-      }));
-  };
-
-  const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
-    variables: {
-      startTime: weekStart,
-      endTime: moment(weekStart).add(1, 'week'),
-    },
-  });
-
-  const {
-    data: approvalData,
-    loading: loadingApproval,
-    refetch: refetchApproval,
-  } = useGetDurationTimesheetsQuery({
-    variables: {
-      start: moment(weekStart),
-      end: moment(weekStart).add(1, 'week'),
-    },
-  });
-
-  const reloadData = () => {
-    refetch();
-    refetchApproval();
-  };
-
-  useEffect(() => {
-    reloadData();
-  }, [weekStart]);
-
-  const [createMutation] = useCreateTimeRecordMutation();
-  const [updateMutation] = useUpdateTimeRecordMutation();
-  const [removeMutation] = useRemoveDurationTimeRecordsMutation();
-  const [createTimesheetMutation] = useCreateTimesheetMutation();
-  const handleRemoveDuration = pId => {
-    removeMutation({
-      variables: {
-        startTime: moment(weekStart),
-        endTime: moment(weekStart).add(1, 'week'),
-        projectId: pId,
-      },
-    })
-      .then(() => {
-        message.success('Removed');
-        refetch();
-      })
-      .catch(err => {
-        console.log(err.message);
-      });
-  };
-
-  // create time record
-  const createTimeRecord = (request: ITimeRecordRequest) => {
-    createMutation({ variables: { request } })
-      .then(() => {
-        message.success('TimeRecord created');
-        refetch();
-      })
-      .catch(error => {
-        message.error(error.message);
-      });
-  };
-
-  // update time record
-  const updateTimeRecord = (recordId: string, request: ITimeRecordRequest) => {
-    updateMutation({ variables: { recordId, request } })
-      .then(() => {
-        message.success('TimeRecord Updated');
-        refetch();
-      })
-      .catch(error => {
-        message.error(error.message);
-      });
-  };
-
-  // create timeSheet
-  const createTimesheet = (request: ITimesheetCreateRequest) => {
-    createTimesheetMutation({ variables: { request } })
-      .then(() => {
-        refetchApproval();
-        message.success('Timesheet Created');
-      })
-      .catch(error => {
-        message.error(error.message);
-      });
-  };
-
-  const memberTimesheet = () => {
-    return _.get(approvalData, 'getDurationTimesheets', []).find(
-      sheet => sheet.userId === selectedUser,
-    );
-  };
-  return (
-    <Spin spinning={!data || loading}>
-      <TabularCalendar
-        weekStart={weekStart}
-        setPathWeekStart={setPathWeekStart}
-        records={filterEvents(data?.getDurationTimeRecords)}
-        projects={projects}
-        timesheet={memberTimesheet()}
-        handleRemoveDuration={handleRemoveDuration}
-        createTimeRecord={createTimeRecord}
-        updateTimeRecord={updateTimeRecord}
-        createTimesheet={createTimesheet}
-      />
-    </Spin>
-  );
-};
-
 const styles: { [property: string]: (props) => CSS.Properties } = {
-  root: props => ({
+  root: (props) => ({
     display: 'block',
     '& .table-footer': {
       display: 'flex',
@@ -588,7 +428,7 @@ const styles: { [property: string]: (props) => CSS.Properties } = {
       flexDirection: 'row',
     },
   }),
-  modal: props => ({
+  modal: (props) => ({
     display: 'inherited',
     '& .flex-row': {
       display: 'flex',
@@ -598,7 +438,7 @@ const styles: { [property: string]: (props) => CSS.Properties } = {
       flexGrow: 1,
     },
   }),
-  dateHeader: props => ({
+  dateHeader: (props) => ({
     display: 'flex',
     flexDirection: 'row',
     justifyContent: 'center',
@@ -635,14 +475,8 @@ const styles: { [property: string]: (props) => CSS.Properties } = {
       color: '#1890ff',
     },
   }),
-  greenText: props => ({
-    color: 'green',
-  }),
-  boldText: props => ({
-    fontWeight: 'bold',
-  }),
 
-  calendarTable: props => ({
+  calendarTable: (props) => ({
     width: '100%',
     background: 'white',
     border: '1px solid #bbb',
@@ -668,5 +502,3 @@ const styles: { [property: string]: (props) => CSS.Properties } = {
     },
   }),
 };
-
-export default TabularCalendarWrapper;

@@ -108,7 +108,7 @@ export class TimeTrackerService implements ITimeTrackerService {
     const timeRecords = await this.trackerRepository.getTimeRecords(orgId, userId);
     const timesheets = await this.trackerRepository.getTimesheets(orgId);
     const durationRecords = timeRecords.filter(
-      r =>
+      (r) =>
         (!userId || r.userId === userId) &&
         moment(startTime) <= moment(r.startTime) &&
         moment(r.endTime) <= moment(endTime) &&
@@ -116,13 +116,13 @@ export class TimeTrackerService implements ITimeTrackerService {
     );
 
     const filteredSheets = timesheets.filter(
-      sh =>
+      (sh) =>
         ((!userId || sh.userId === userId) &&
           this.checkInPeriod(startTime, sh.startDate, sh.endDate)) ||
         this.checkInPeriod(endTime, sh.startDate, sh.endDate),
     );
 
-    return durationRecords.map(tr => {
+    return durationRecords.map((tr) => {
       let trEditable = false;
       for (let sh of filteredSheets) {
         if (
@@ -154,9 +154,9 @@ export class TimeTrackerService implements ITimeTrackerService {
   public async getTimesheetsWithTotalHours(orgId: string, userId?: string) {
     const timesheets = await this.trackerRepository.getTimesheets(orgId, userId);
     const timeRecords = await this.trackerRepository.getTimeRecords(orgId, userId);
-    return timesheets.map(timesheet => {
+    return timesheets.map((timesheet) => {
       let sheetTotalDuration = timeRecords
-        .filter(tr => {
+        .filter((tr) => {
           return (
             tr.userId === timesheet.userId &&
             tr.startTime > timesheet.startDate &&
@@ -188,7 +188,9 @@ export class TimeTrackerService implements ITimeTrackerService {
   public async getDurationTimesheets(orgId: string, start: Date, end: Date) {
     const timesheets = await this.trackerRepository.getOrganizationTimesheets(orgId);
     return timesheets.filter(
-      sh => moment(start) === moment(sh.startDate) && moment(end) === moment(sh.endDate),
+      (sh) =>
+        moment(start).format('YYYY-MM-DD') === moment(sh.startDate).format('YYYY-MM-DD') &&
+        moment(end).format('YYYY-MM-DD') === moment(sh.endDate).format('YYYY-MM-DD'),
     );
   }
 

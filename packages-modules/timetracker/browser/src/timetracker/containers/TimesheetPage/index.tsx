@@ -1,8 +1,8 @@
 import * as _ from 'lodash';
 import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@admin-layout/components';
-import TabularCalendar from './TabularCalendar';
-import TimesheetCalendar from './TimesheetCalendar';
+import TabularCalendar from './Tabular';
+import TimesheetCalendar from './Calendar';
 import {
   useGetProjectsQuery,
   useGetMembersQuery,
@@ -24,11 +24,6 @@ import { useLocation } from 'react-router';
 import qs from 'query-string';
 import { useHistory } from 'react-router';
 import { useFirstWeekDay } from '../../hooks';
-enum VIEW_MODE {
-  CALENDAR_VIEW,
-  TABULAR_VIEW,
-}
-
 interface ITimesheetProps {
   projects: Array<IProject>;
   tags: Array<ITag>;
