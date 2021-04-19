@@ -1,8 +1,4 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-var-requires */
 /* eslint-disable import/no-extraneous-dependencies */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 const Dotenv = require('dotenv-webpack');
 const webpack = require('webpack');
 const dotenv = require('dotenv-safe');
@@ -49,7 +45,44 @@ const config = {
     output: {
         filename: '[name].js',
     },
+    module: {
+        rules: [
+            {
+                test: /\.js/,
+                // enforce: 'pre',
+                type: 'javascript/esm',
+                include: /node_modules\/@vscode\/monaco-editor\/esm/,
+                // use: require.resolve('./monaco-loader'),
+                use: {
+                    loader: 'babel-loader',
+                    options: {
+                        presets: [['@babel/preset-env', { modules: 'commonjs' }]],
+                        plugins: [
+                            "react-hot-loader/babel",
+                            '@babel/plugin-transform-modules-commonjs',
+                            '@babel/plugin-transform-destructuring',
+                            "@babel/plugin-transform-for-of",
+                            '@babel/plugin-transform-regenerator',
+                            '@babel/plugin-transform-runtime',
+                            "@babel/plugin-syntax-dynamic-import",
+                            '@babel/plugin-proposal-class-properties',
+                            ['@babel/plugin-proposal-decorators', { legacy: true }],
+                            '@babel/plugin-proposal-object-rest-spread',
+                        ],
+                    },
+                },
+            },
+        ],
+    },
     plugins: [
+        // new CopyWebpackPlugin({
+        //     patterns: [
+        //         {
+        //             from: './assets/esm-wrapper.js',
+        //             to: 'index.js',
+        //         },
+        //     ],
+        // }),
         new Dotenv({
             path: process.env.ENV_FILE,
         }),

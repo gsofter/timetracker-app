@@ -39,7 +39,7 @@ let screenShot: ScreenShot = null;
 let about: AboutWindow = null;
 
 let trayIcon: TrayIcon = null;
-const tracking: Tracking = null;
+// const tracking: Tracking = null;
 
 // We hide dock, because we do not want to show our app as common app.
 // We want to display our app as a Tray-lik app (like Dropbox, Skitch or ets).
