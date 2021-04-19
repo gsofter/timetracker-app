@@ -1,14 +1,12 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-shadow */
 import { desktopCapturer, app } from 'electron';
+import { inject, injectable } from 'inversify';
+import { IClientContainerService, IClientConfigurationService, IConfigurationOverrides } from '@adminide-stack/core';
 import * as AWS from 'aws-sdk';
 import * as fs from 'fs';
 import checkInternetConnected from 'check-internet-connected';
 import { config } from '../config';
 
+@injectable()
 export class ScreenShot {
     public intervalId: number;
 
@@ -16,6 +14,8 @@ export class ScreenShot {
 
     public outputPath: string;
 
+    // @inject(IClientContainerService.IConfigurationService)
+    // private configurationService: IClientConfigurationService,
     constructor() {
         this.s3 = new AWS.S3({
             accessKeyId: config.SCREENSHOT_S3_ACCESS_KEY_ID,
@@ -28,6 +28,12 @@ export class ScreenShot {
         this.getFolderPath();
     }
 
+    // private getValue(key) {
+    //     const overrides: IConfigurationOverrides = {
+
+    //     };
+    //     this.configurationService.getValue(key, );
+    // }
     public initScreenShot() {
         if (!this.intervalId) {
             this.intervalId = setInterval(async () => {

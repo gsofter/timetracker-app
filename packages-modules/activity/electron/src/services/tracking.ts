@@ -10,21 +10,21 @@ export class TrackingService implements ITrackingService {
 
     private mouseWheel: number;
 
-    Tracking() {
+    constructor() {
         console.log('Tracking constructor called....');
         ioHook.start();
 
         ioHook.on('keyup', (event) => {
             console.log('keyup event =======>', event);
-            this.keyPress++;
+            this.keyPress += 1;
         });
         ioHook.on('mouseclick', (event) => {
             console.log('mouseclick event =======>', event);
-            this.mouseClick++;
+            this.mouseClick += 1;
         });
         ioHook.on('mousewheel', (event) => {
             console.log('mousewheel event =======>', event);
-            this.mouseWheel++;
+            this.mouseWheel += 1;
         });
     }
 
