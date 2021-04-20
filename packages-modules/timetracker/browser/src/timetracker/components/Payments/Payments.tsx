@@ -1,6 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useFela } from 'react-fela';
+import { message } from 'antd';
 import { EditTwoTone } from '@ant-design/icons';
 import { useSetting } from '@adminide-stack/react-shared-components';
 import { ConfigurationTarget } from '@adminide-stack/core';
@@ -80,6 +81,7 @@ export const Payments = (props) => {
         updatePaymentSettings(request).then(() => {
             onClose();
             form.resetFields();
+            message.success('Payment details updated successfully');
         });
     }
 
