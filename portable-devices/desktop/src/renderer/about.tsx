@@ -1,8 +1,3 @@
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable react/no-render-return-value */
 import 'antd/dist/antd.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';

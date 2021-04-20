@@ -1,18 +1,10 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable import/no-extraneous-dependencies */
 import { app, ipcMain, Menu, webContents } from 'electron';
-import Tracking from '@admin-layout/activity-module-electron';
 import TrayWindow from './windows/tray-window';
 import MainWindow from './windows/main-window';
 import AboutWindow from './windows/about-window';
 import TrayIcon from './tray-icon';
 import { template } from './menu-template';
 import ScreenShot from './screen-shot';
-import { createReduxStore } from '../renderer/config/redux-config';
 
 // import { connectedReactRouter_counter } from '../reducers';
 
@@ -49,6 +41,11 @@ function installExtentions() {
     installExtension.default(installExtension.REDUX_DEVTOOLS);
     installExtension.default(installExtension.REACT_DEVELOPER_TOOLS);
 }
+
+app.commandLine.appendSwitch('auth-server-whitelist', 'https://dev-cdebase.auth0.com/co/authenticate');
+app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
+app.commandLine.appendSwitch('disable-site-isolation-trials');
+app.userAgentFallback = 'Chrome';
 
 // This event will be emitted when Electron has finished initialization.
 app.on('ready', () => {

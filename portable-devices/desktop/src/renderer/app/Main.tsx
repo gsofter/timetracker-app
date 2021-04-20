@@ -1,12 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable no-param-reassign */
-/* eslint-disable global-require */
-/* eslint-disable react/prefer-stateless-function */
-/* eslint-disable @typescript-eslint/ban-types */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable react/jsx-no-undef */
 import { hot } from 'react-hot-loader/root';
 import * as React from 'react';
 import { RendererProvider } from 'react-fela';

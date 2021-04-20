@@ -1,10 +1,3 @@
-/* eslint-disable @typescript-eslint/no-var-requires */
-/* eslint-disable global-require */
-/* eslint-disable no-underscore-dangle */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-return */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import {
     createStore,
     Store,
@@ -15,7 +8,7 @@ import {
     combineReducers,
     StoreEnhancer,
 } from 'redux';
-import { forwardToMain, forwardToRenderer, triggerAlias, replayActionMain, replayActionRenderer } from 'electron-redux';
+// import { forwardToMain, forwardToRenderer, triggerAlias, replayActionMain, replayActionRenderer } from 'electron-redux';
 import thunk from 'redux-thunk';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import storage from 'redux-persist/lib/storage';
@@ -29,12 +22,13 @@ import { rootEpic } from './epic-config';
 
 export const history = require('./router-history');
 
-const { apolloClient, services } = createClientContainer();
+const { apolloClient, services, logger } = createClientContainer();
 export const epicMiddleware = createEpicMiddleware({
     dependencies: {
         apolloClient,
         routes: modules.getConfiguredRoutes(),
         services,
+        logger,
     },
 });
 
@@ -64,11 +58,11 @@ export const createReduxStore = (scope = 'main', url = '/') => {
      * Add middleware that required for this app.
      */
 
-    const router = routerMiddleware(newHistory);
+    // const router = routerMiddleware(newHistory);
     let middlewares: Middleware[] = [
         thunk,
-        // routerMiddleware(newHistory),
-        router,
+        routerMiddleware(newHistory),
+        // router,
         epicMiddleware, // epic middleware
     ];
 
@@ -78,7 +72,7 @@ export const createReduxStore = (scope = 'main', url = '/') => {
 
         middlewares.push(
             createLogger({
-                level: scope === 'main' ? undefined : 'info',
+                // level: scope === 'main' ? undefined : 'info',
                 collapsed: true,
             }),
         );
@@ -86,13 +80,15 @@ export const createReduxStore = (scope = 'main', url = '/') => {
 
     // this one code belongs to the electron-redux
     console.log('----SCOPE====', scope);
-    if (scope === 'renderer') {
-        middlewares = [forwardToMain, router, ...middlewares];
-    }
+    // if (scope === 'renderer') {
+    //     middlewares = [
+    //         // forwardToMain, 
+    //         router, ...middlewares];
+    // }
 
-    if (scope === 'main') {
-        middlewares = [triggerAlias, ...middlewares, forwardToRenderer];
-    }
+    // if (scope === 'main') {
+    //     middlewares = [triggerAlias, ...middlewares, forwardToRenderer];
+    // }
 
     const enhancers: () => StoreEnhancer<any>[] = () => [applyMiddleware(...middlewares)];
 
@@ -121,11 +117,11 @@ export const createReduxStore = (scope = 'main', url = '/') => {
         epicMiddleware.run(rootEpic as any);
     }
 
-    if (scope === 'main') {
-        replayActionMain(store);
-    } else {
-        replayActionRenderer(store);
-    }
+    // if (scope === 'main') {
+    //     replayActionMain(store);
+    // } else {
+    //     replayActionRenderer(store);
+    // }
 
     return store;
 };

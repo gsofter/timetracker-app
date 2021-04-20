@@ -1,9 +1,6 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { ipcRenderer } from 'electron';
 import { toInteger } from 'lodash';
-import { createStore, applyMiddleware } from 'redux';
+// import { createStore, applyMiddleware } from 'redux';
 // import { forwardToMain, replayActionRenderer, getInitialStateRenderer, createAliasedAction } from 'electron-redux';
 // import { connectedReactRouter_counter } from '../reducers';
 

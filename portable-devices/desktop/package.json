@@ -65,6 +65,7 @@
     "apollo-link-schema": "^1.2.4",
     "apollo-link-ws": "^1.0.19",
     "apollo-logger": "^0.3.3",
+    "apollo-upload-client": "^14.1.1",
     "aws-sdk": "^2.880.0",
     "browser-bunyan": "^1.6.3",
     "check-internet-connected": "^2.0.5",
@@ -141,7 +142,9 @@
     "rimraf": "^3.0.0"
   },
   "peerDependencies": {
-    "react-hot-loader": "*"
+    "@cdm-logger/core": "*",
+    "react-hot-loader": "*",
+    "ts-invariant": "*"
   },
   "iohook": {
     "targets": [

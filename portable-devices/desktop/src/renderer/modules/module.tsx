@@ -1,5 +1,3 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable import/no-extraneous-dependencies */
 import * as React from 'react';
 import { Feature, FeatureWithRouterFactory, renderRoutes2 } from '@common-stack/client-react';
 import { ThemeProvider } from '@admin-layout/components';

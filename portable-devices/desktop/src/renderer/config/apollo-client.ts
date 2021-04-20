@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApolloClient, ApolloClientOptions } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { BatchHttpLink } from 'apollo-link-batch-http';
@@ -26,12 +28,10 @@ const schema = ``;
 const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
-            // tslint:disable-next-line
-            invariant.warn(`[GraphQL error]: Message: ${message}, Location: ` + `${locations}, Path: ${path}`),
+            invariant.warn(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`),
         );
     }
     if (networkError) {
-        // tslint:disable-next-line
         invariant.warn(`[Network error]: ${networkError}`);
     }
 });
