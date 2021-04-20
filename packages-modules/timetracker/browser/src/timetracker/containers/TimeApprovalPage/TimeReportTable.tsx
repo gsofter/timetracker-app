@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 import { usePermissions } from '../../hooks';
 import { IPermissionType } from '@adminide-stack/core';
 import { useSelector } from 'react-redux';
-
+import { formatDuration } from '../../services/timeRecordService'
 interface ITimesheetProps {
   timesheets: Array<ITimesheetResponse>;
   viewMode: VIEW_MODE;
@@ -43,7 +43,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
 
   const handleSubmit = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId', 'totalDuration']),
       submittedOn: moment(),
       state: ITimesheetState.SUBMITTED,
       updatedOn: moment(),
@@ -53,7 +53,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
 
   const handleUnSubmit = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId', 'totalDuration']),
       approvedOn: null,
       submittedOn: null,
       state: ITimesheetState.OPEN,
@@ -64,8 +64,9 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
 
   const handleApprove = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId', 'totalDuration']),
       approvedOn: moment(),
+      approvedBy: userId,
       state: ITimesheetState.APPROVED,
       updatedOn: moment(),
     };
@@ -74,7 +75,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
 
   const handleDeny = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
-      ..._.omit(record, ['__typename', 'id', 'orgId']),
+      ..._.omit(record, ['__typename', 'id', 'orgId', 'totalDuration']),
       state: ITimesheetState.DENYED,
       updatedOn: moment(),
     };
@@ -110,6 +111,12 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
       dataIndex: 'endDate',
       key: 'endDate',
       render: value => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
+    },
+    {
+      title: 'Duration',
+      dataIndex: 'totalDuration',
+      key: 'totalDuration',
+      render: value => <> {formatDuration(value)} </>
     },
     {
       title: 'Submitted On',

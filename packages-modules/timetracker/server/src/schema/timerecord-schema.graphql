@@ -10,6 +10,7 @@ type TimeRecord {
   clientId: String
   userId: String
   orgId: String
+  editable: Boolean
 }
 
 input TimeRecordRequest {

@@ -20,11 +20,6 @@ import TimesheetModal from './TimesheetModal';
 const DnDCalendar: any = withDragAndDrop(Calendar as any);
 const allViews: string[] = ['day', 'week', 'month'];
 
-enum VIEW_MODE {
-  CALENDAR_VIEW,
-  TABULAR_VIEW,
-}
-
 interface ITimesheetProps {
   userId: string;
   form: any;
@@ -54,7 +49,7 @@ interface ITimesheetProps {
   handleChangeUser: (any) => void;
 }
 
-function SelectableCalendar({
+export default function SelectableCalendar({
   userId,
   events,
   projects,
@@ -248,13 +243,13 @@ const stylesheet: any = {
   }),
 };
 
-export default (props: ITimesheetProps) => {
-  const { css } = useFela();
-  return (
-    <div className={css(stylesheet.styles)}>
-      <div className="calender-width">
-        <SelectableCalendar {...props} />
-      </div>
-    </div>
-  );
-};
+// export default (props: ITimesheetProps) => {
+//   const { css } = useFela();
+//   return (
+//     <div className={css(stylesheet.styles)}>
+//       <div className="calender-width">
+//         <SelectableCalendar {...props} />
+//       </div>
+//     </div>
+//   );
+// };

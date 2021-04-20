@@ -2076,6 +2076,7 @@ export type IQuerygetTimelineEventsArgs = {
 
 export type IQuerygetTimesheetsArgs = {
   userId?: Maybe<Scalars['String']>;
+  withTotalHours?: Maybe<Scalars['Boolean']>;
 };
 
 
@@ -2554,6 +2555,7 @@ export type ITimeRecord = {
   clientId?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
   orgId?: Maybe<Scalars['String']>;
+  editable?: Maybe<Scalars['Boolean']>;
 };
 
 export type ITimeRecordRequest = {
@@ -2576,6 +2578,7 @@ export type ITimesheet = {
   state?: Maybe<ITimesheetState>;
   submittedOn?: Maybe<Scalars['DateTime']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
+  approvedBy?: Maybe<Scalars['String']>;
   updatedBy?: Maybe<Scalars['String']>;
   updatedOn?: Maybe<Scalars['DateTime']>;
 };
@@ -2587,6 +2590,7 @@ export type ITimesheetCreateRequest = {
   state?: Maybe<ITimesheetState>;
   submittedOn?: Maybe<Scalars['DateTime']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
+  approvedBy?: Maybe<Scalars['String']>;
   updatedBy?: Maybe<Scalars['String']>;
   updatedOn?: Maybe<Scalars['DateTime']>;
 };
@@ -2599,10 +2603,12 @@ export type ITimesheetResponse = {
   state?: Maybe<ITimesheetState>;
   submittedOn?: Maybe<Scalars['DateTime']>;
   approvedOn?: Maybe<Scalars['DateTime']>;
+  approvedBy?: Maybe<Scalars['String']>;
   updatedBy?: Maybe<Scalars['String']>;
   updatedOn?: Maybe<Scalars['DateTime']>;
   userId?: Maybe<Scalars['String']>;
   orgId?: Maybe<Scalars['String']>;
+  totalDuration?: Maybe<Scalars['Int']>;
 };
 
 export const enum ITimesheetState {
@@ -4688,6 +4694,7 @@ export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolver
   clientId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   orgId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  editable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4699,6 +4706,7 @@ export type ITimesheetResolvers<ContextType = any, ParentType extends IResolvers
   state?: Resolver<Maybe<IResolversTypes['TimesheetState']>, ParentType, ContextType>,
   submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  approvedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   updatedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   updatedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
@@ -4711,10 +4719,12 @@ export type ITimesheetResponseResolvers<ContextType = any, ParentType extends IR
   state?: Resolver<Maybe<IResolversTypes['TimesheetState']>, ParentType, ContextType>,
   submittedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   approvedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
+  approvedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   updatedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   updatedOn?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   orgId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  totalDuration?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
