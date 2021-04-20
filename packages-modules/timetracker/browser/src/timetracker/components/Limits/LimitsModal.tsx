@@ -12,7 +12,7 @@ interface ILimitsModal {
     daysAllowed: string[];
     visible: boolean;
     onClose: () => void;
-    onSubmit: (request: any, form: any) => void;
+    onSubmit: (request: any, daysAllowed: string[], resetFields: any) => void;
 }
 
 const Days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
@@ -32,15 +32,19 @@ export const LimitsModal = (props: ILimitsModal) => {
         setIsDailyLimit(!!dailyLimit);
     }, [dailyLimit]);
 
-    const onCloseModal = () => {
-        onClose();
+    const resetFields = () => {
         form.resetFields();
         setDaysAllowedState(daysAllowed);
         setIsDailyLimit(!!dailyLimit);
+    }
+
+    const onCloseModal = () => {
+        onClose();
+        resetFields();
     };
 
     const onFinish = (request) => {
-        onSubmit(request, form);
+        onSubmit(request, daysAllowedState, resetFields);
     };
 
     const onClickDay = (day) => {

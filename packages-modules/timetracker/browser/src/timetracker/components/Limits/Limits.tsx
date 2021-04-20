@@ -1,6 +1,7 @@
 import * as React from 'react'
 import { useState } from 'react';
 import { useFela } from 'react-fela';
+import { message } from 'antd';
 import { EditTwoTone } from '@ant-design/icons';
 import { useSetting } from '@adminide-stack/react-shared-components';
 import { ConfigurationTarget } from '@adminide-stack/core';
@@ -12,14 +13,17 @@ export const Limits = (props) => {
 
     const { data: weeklyLimitConfig, loading: loadWeekly, updateConfiguration } = useSetting({
         configKey: 'timetracker.user.recurringWeeklyLimit',
+        overrides: props.value.record.name,
     });
 
     const { data: dailyLimitConfig, loading: loadDaily } = useSetting({
         configKey: 'timetracker.user.recurringDailyLimit',
+        overrides: props.value.record.name,
     });
 
     const { data: daysAllowedConfig, loading } = useSetting({
         configKey: 'timetracker.project.daysAllowedToWork',
+        overrides: props.value.record.name,
     });
 
     const openLimitsModal = () => {
@@ -30,8 +34,33 @@ export const Limits = (props) => {
         setVisible(false);
     };
 
-    const onSubmit = (request) => {
-        console.log('on-Submit---', request);
+    const updateLimitSettings = async (request, daysAllowed) => {
+        await updateConfiguration({
+            updateKey: 'timetracker.user.recurringWeeklyLimit',
+            value: parseInt(request.weeklyLimit, 10) || '',
+            updateOverrides: { overrideIdentifier: props.value.record.name },
+            target: ConfigurationTarget.ORGANIZATION,
+        });
+        await updateConfiguration({
+            updateKey: 'timetracker.user.recurringDailyLimit',
+            value: parseInt(request.dailyLimit, 10) || '',
+            updateOverrides: { overrideIdentifier: props.value.record.name },
+            target: ConfigurationTarget.ORGANIZATION,
+        });
+        await updateConfiguration({
+            updateKey: 'timetracker.project.daysAllowedToWork',
+            value: daysAllowed.toString(),
+            updateOverrides: { overrideIdentifier: props.value.record.name },
+            target: ConfigurationTarget.ORGANIZATION,
+        });
+    };
+
+    const onSubmit = (request, daysAllowed, resetFields) => {
+        updateLimitSettings(request, daysAllowed).then(() => {
+            onClose();
+            resetFields();
+            message.success('Limit details updated successfully');
+        })
     };
 
     if (loading || loadWeekly || loadDaily) {
