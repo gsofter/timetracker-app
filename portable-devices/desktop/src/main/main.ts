@@ -1,12 +1,3 @@
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable @typescript-eslint/unbound-method */
-/* eslint-disable @typescript-eslint/no-unused-vars */
-/* eslint-disable @typescript-eslint/restrict-template-expressions */
-/* eslint-disable @typescript-eslint/no-misused-promises */
-/* eslint-disable no-console */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /**
  * This module executes inside of electron's main process. You can start
  * electron renderer process from here and communicate with the other processes
@@ -23,6 +14,8 @@ const { isDevelopment } = config;
 // Global reference to mainWindow (necessary to prevent window from being garbage collected)
 let mainWindow: BrowserWindow | undefined;
 app.commandLine.appendSwitch('auth-server-whitelist', 'https://dev-cdebase.auth0.com/co/authenticate');
+app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
+app.commandLine.appendSwitch('disable-site-isolation-trials');
 
 const createMainWindow = () => {
     // Create the browser window.
@@ -46,15 +39,14 @@ const createMainWindow = () => {
     };
 
     // This is what the call to setItem() looks like
-    const setLocalStorage = (key, value) => {
-        return new Promise((resolve, reject) => {
+    const setLocalStorage = (key, value) =>
+        new Promise((resolve, reject) => {
             console.log('---HERERE___');
 
             window.webContents.executeJavaScript(`localStorage.setItem( '${key}', '${value}' )`).then((v) => {
                 resolve(v);
             });
         });
-    };
     webRequest.onBeforeRequest(filter, async ({ url }) => {
         console.log('---REQUEST___URL', url, url);
         // load to localstorage
@@ -76,13 +68,8 @@ const createMainWindow = () => {
     });
 
     if (isDevelopment) {
-        app.commandLine.appendSwitch('auth-server-whitelist', 'https://dev-cdebase.auth0.com/co/authenticate');
-        app.commandLine.appendSwitch('disable-features', 'OutOfBlinkCors');
-        app.commandLine.appendSwitch('disable-site-isolation-trials');
         window.webContents.openDevTools();
-    }
 
-    if (isDevelopment) {
         // window.loadURL(`http://localhost:${config.ELECTRON_WEBPACK_WDS_PORT}`);
         window.loadURL(
             formatUrl({

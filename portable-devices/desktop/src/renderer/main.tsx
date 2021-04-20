@@ -1,11 +1,8 @@
-/* eslint-disable react/no-render-return-value */
-/* eslint-disable import/no-named-as-default */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-explicit-any */
+import 'reflect-metadata';
 import 'antd/dist/antd.css';
 import * as React from 'react';
 import * as ReactDOM from 'react-dom';
+import './config/public-config'; // load before rendering `Main`
 import Main from './app/Main';
 
 // Virtual (module as any), generated in-memory by zenjs, contains count of backend rebuilds
