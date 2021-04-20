@@ -44,7 +44,7 @@
   "dependencies": {
     "@admin-layout/components": "link:../../../packages/components",
     "@admin-layout/timetracker-core": "link:../core",
-    "@adminide-stack/core": "^0.0.18-alpha.469",
+    "@adminide-stack/core": "0.0.18-alpha.474",
     "chart.js": "^2.9.4",
     "react-chartjs-2": "^2.11.1",
     "react-compound-timer": "^1.2.0",
