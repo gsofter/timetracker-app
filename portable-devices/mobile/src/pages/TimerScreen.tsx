@@ -18,10 +18,10 @@ import TimeRange from '../modules/timerModules/TimeRange';
 const TimerScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
   const [billable, setBillable] = useState(false);
-  const [track, setTrack] = useState(false);
+  const [track, setTrack] = useState(true);
   const [manual, setManual] = useState(false);
-  const [selectedStartDate, setSelectedStartDate] = useState<any>();
-  const [selectedEndDate, setSelectedEndDate] = useState<any>();
+  const [selectedStartDate, setSelectedStartDate] = useState<any>('Start Date');
+  const [selectedEndDate, setSelectedEndDate] = useState<any>('End Date');
 
   const toggleProject = () => {
     setIsToggle(!isToggle);
@@ -40,6 +40,21 @@ const TimerScreen = () => {
     }
   };
 
+  const onReset = () => {
+    setSelectedEndDate(null);
+    setSelectedStartDate(null);
+  };
+
+  const onTrack = () => {
+    setTrack(true);
+    setManual(false);
+  };
+
+  const onManual = () => {
+    setManual(true);
+    setTrack(false);
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -47,6 +62,7 @@ const TimerScreen = () => {
           selectedStartDate={selectedStartDate}
           selectedEndDate={selectedEndDate}
           onDateChange={onDateChange}
+          onReset={onReset}
         />
       </ScrollView>
       <TimerFooter
@@ -54,6 +70,10 @@ const TimerScreen = () => {
         billable={billable}
         toggleProject={toggleProject}
         toggleBillable={toggleBillable}
+        track={track}
+        manual={manual}
+        onTrack={onTrack}
+        onManual={onManual}
       />
     </View>
   );

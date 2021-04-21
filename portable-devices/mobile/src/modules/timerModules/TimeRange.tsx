@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-return */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -10,19 +11,23 @@ import { Icon, Button } from 'native-base';
 import CalendarPicker from 'react-native-calendar-picker';
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
 
-const TimeRange = ({ onDateChange, selectedStartDate, selectedEndDate }: any) => {
+import { Weeks, Months } from "../../constants/Data"
+
+const TimeRange = ({ onDateChange, onReset, selectedStartDate, selectedEndDate }: any) => {
     const [modalVisible, setModalVisible] = useState(false)
     return (
         <View>
             <View style={styles.textStyle}>
-                <Text style={styles.textStyle}>Selected Start Date :</Text>
-                <Text style={styles.textStyle}>
+                <Text onPress={() => setModalVisible(true)}>
                     {selectedStartDate ? selectedStartDate.toString() : ''}
                 </Text>
-                <Text style={styles.textStyle}>Selected End Date :</Text>
-                <Text style={styles.textStyle}>{selectedEndDate ? selectedEndDate.toString() : ''}</Text>
+                <Icon style={styles.font_size} name="arrow-forward-outline" />
+                <Text onPress={() => setModalVisible(true)}>
+                    {selectedEndDate ? selectedEndDate.toString() : ''}
+                </Text>
+                <Icon style={styles.font_size} name="today-outline" />
+                <Button info onPress={() => onReset()} ><Text>Rest</Text></Button>
             </View>
-            <Button onPress={() => setModalVisible(true)}><Text>Open Modal</Text></Button>
             <Dialog
                 visible={modalVisible}
                 onTouchOutside={() => {
@@ -30,55 +35,52 @@ const TimeRange = ({ onDateChange, selectedStartDate, selectedEndDate }: any) =>
                 }}
             >
                 <DialogContent>
-                    <Text>Hello</Text>
+                    <View>
+                        <CalendarPicker
+                            startFromMonday
+                            allowRangeSelection
+                            minDate={new Date(2018, 1, 1)}
+                            maxDate={new Date(2050, 6, 3)}
+                            weekdays={Weeks}
+                            months={Months}
+                            previousTitle={<Icon name="caret-back-circle-outline" />}
+                            nextTitle={<Icon name="caret-forward-circle-outline" />}
+                            todayBackgroundColor="#e6ffe6"
+                            selectedDayColor="#66ff33"
+                            selectedDayTextColor="#000000"
+                            scaleFactor={375}
+                            textStyle={{
+                            color: '#000000',
+                            }}
+                            onDateChange={onDateChange}
+                        />
+                    </View>
                 </DialogContent>
             </Dialog>
-            {/* <View>
-                <CalendarPicker
-                    startFromMonday
-                    allowRangeSelection
-                    minDate={new Date(2018, 1, 1)}
-                    maxDate={new Date(2050, 6, 3)}
-                    weekdays={['Mon', 'Tue', 'Wed', 'Thur', 'Fri', 'Sat', 'Sun']}
-                    months={[
-                    'January',
-                    'Febraury',
-                    'March',
-                    'April',
-                    'May',
-                    'June',
-                    'July',
-                    'August',
-                    'September',
-                    'October',
-                    'November',
-                    'December',
-                    ]}
-                    previousTitle={<Icon name="caret-back-circle-outline" />}
-                    nextTitle={<Icon name="caret-forward-circle-outline" />}
-                    todayBackgroundColor="#e6ffe6"
-                    selectedDayColor="#66ff33"
-                    selectedDayTextColor="#000000"
-                    scaleFactor={375}
-                    textStyle={{
-                    color: '#000000',
-                    }}
-                    onDateChange={onDateChange}
-                />
-            </View>
-             */}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
   textStyle: {
-    marginTop: 10,
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 30,
+    backgroundColor: 'white',
+    padding: 10,
+    flexDirection: 'row',
+    alignItems: 'center',
   },
   titleStyle: {
     textAlign: 'center',
     fontSize: 20,
     margin: 20,
+  },
+  font_size: {
+      fontSize: 18,
+      color: 'grey',
+      marginRight: 10,
+      marginLeft: 10,
   },
 })
 

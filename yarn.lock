@@ -6591,6 +6591,14 @@
     "@types/react" "*"
     "@types/react-native" "*"
 
+"@types/react-native-popup-dialog@^0.16.2":
+  version "0.16.2"
+  resolved "https://registry.yarnpkg.com/@types/react-native-popup-dialog/-/react-native-popup-dialog-0.16.2.tgz#127da20c746652a76308a22a9130983fecf9e811"
+  integrity sha512-wmrleiZO3QqYgFGPLHhJgesR7PICQ6SMDQoXZU7lOBcqd3vh6nop3SMLrM7DMxXvt5jzVURVWG7O2RfG1OVwUw==
+  dependencies:
+    "@types/react" "*"
+    "@types/react-native" "*"
+
 "@types/react-native-vector-icons@^6.4.6":
   version "6.4.6"
   resolved "https://registry.yarnpkg.com/@types/react-native-vector-icons/-/react-native-vector-icons-6.4.6.tgz#848e3b14572def56212cafbf5cb1254b445bfb41"

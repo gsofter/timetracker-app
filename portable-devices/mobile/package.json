@@ -179,6 +179,7 @@
     "@types/react-router-native": "^5.1.0",
     "@types/react-test-renderer": "^16.0.2",
     "@types/react-native-calendar-picker": "^7.0.1",
+    "@types/react-native-popup-dialog": "^0.16.2",
     "@types/redux-logger": "^3.0.8",
     "apollo-utilities": "^1.0.3",
     "axios-mock-adapter": "^1.17.0",

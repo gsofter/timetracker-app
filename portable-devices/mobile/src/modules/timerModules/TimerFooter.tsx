@@ -11,7 +11,7 @@ import React from 'react';
 import { Icon, Item, Input, Row, Col, Button } from 'native-base';
 import { View, StyleSheet, Text } from 'react-native';
 
-const TimerFooter = ({ billable, toggleBillable, toggleProject, isToggle }: any) => {
+const TimerFooter = ({ billable, onManual, onTrack, manual, track, toggleBillable, toggleProject, isToggle }: any) => {
 
     return (
         <View style={styles.footer}>
@@ -34,6 +34,7 @@ const TimerFooter = ({ billable, toggleBillable, toggleProject, isToggle }: any)
           </View>
         </View>
         <Row style={styles.row_2}>
+          {track && (
             <>
                 <Col>
                     <Button small transparent>
@@ -57,9 +58,17 @@ const TimerFooter = ({ billable, toggleBillable, toggleProject, isToggle }: any)
                     </Button>
                 </Col>
             </>
+          )}
+          {manual && (
+            <>
+              <Col>
+                <Text>Manual Timing</Text>
+              </Col>
+            </>
+          )}
           <Col>
-            <Icon name="time-outline" style={{ alignSelf: 'center' }} />
-            <Icon name="list-outline" style={{ alignSelf: 'center' }} />
+            <Icon onPress={() => onTrack()} name="time-outline" style={{ alignSelf: 'center', color: track? '#1890ff': 'grey' }} />
+            <Icon onPress={() => onManual()} name="list-outline" style={{ alignSelf: 'center', color: track? '#1890ff': 'grey' }} />
           </Col>
         </Row>
       </View>
