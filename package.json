@@ -310,8 +310,6 @@
       "electron-85"
     ],
     "platforms": [
-      "win32",
-      "darwin",
       "linux"
     ],
     "arches": [
