@@ -13,35 +13,16 @@ import * as moment from 'moment';
 import { CommonType } from '@common-stack/core';
 import { ServiceBroker, CallingOptions } from 'moleculer';
 
-export interface ITimeTrackerRepository {
+export interface ITimeRecordRepository {
   getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
   getOrganizationTimeRecords(orgId: string): Promise<Array<ITimeRecord>>;
-  getTimesheets(orgId: string, userId?: string): Promise<Array<ITimesheet>>;
-  getOrganizationTimesheets(orgId: string): Promise<Array<ITimesheet>>;
   getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
   createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<string>;
-  createTimesheet(
-    userId: string,
-    orgId: string,
-    request: ITimesheetCreateRequest,
-  ): Promise<Boolean>;
   updateTimeRecord(
     userId: string,
     orgId: string,
     recordId: string,
     request: ITimeRecordRequest,
-  ): Promise<Boolean>;
-  updateTimesheet(
-    userId: string,
-    orgId: string,
-    sheetId: string,
-    request: ITimesheetCreateRequest,
-    userContext?: any,
-  ): Promise<Boolean>;
-  updateTimesheetStatus(
-    userId: string,
-    orgId: string,
-    request: ITimesheetCreateRequest,
   ): Promise<Boolean>;
   removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<Boolean>;
   removeDurationTimeRecords(
@@ -51,11 +32,10 @@ export interface ITimeTrackerRepository {
     endTime: Date,
     projectId: string,
   ): Promise<Boolean>;
-  removeTimesheet(userId: string, orgId: string, sheetId: string): Promise<Boolean>;
 }
 
 @injectable()
-export class TimeTrackerRepository implements ITimeTrackerRepository {
+export class TimeRecordRepository implements ITimeRecordRepository {
   private timeTrackerModel: TimeTrackerModelType;
   private logger: Logger;
   constructor(
@@ -74,7 +54,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
   public async getTimeRecords(orgId: string, userId?: string) {
     const orgRecords = await this.getOrganizationTimeRecords(orgId);
-    return orgRecords.filter(tr => (!userId || tr.userId === userId) && tr.endTime !== null);
+    return orgRecords.filter((tr) => (!userId || tr.userId === userId) && tr.endTime !== null);
   }
 
   public async getOrganizationTimeRecords(orgId: string) {
@@ -100,7 +80,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
 
   public async getTimesheets(orgId: string, userId?: string) {
     const timesheets = await this.getOrganizationTimesheets(orgId);
-    return timesheets.filter(sheet => !userId || sheet.userId === userId);
+    return timesheets.filter((sheet) => !userId || sheet.userId === userId);
   }
 
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
@@ -109,7 +89,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     if (trackDoc) {
       let res;
       if (trackDoc.timeRecords)
-        res = trackDoc.timeRecords.find(tr => tr.userId === userId && tr.endTime === null);
+        res = trackDoc.timeRecords.find((tr) => tr.userId === userId && tr.endTime === null);
       return res;
     } else return null;
   }
@@ -215,7 +195,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
     try {
       const trackerDoc = await this.timeTrackerModel.find({ orgId });
       if (trackerDoc && trackerDoc.length > 0) {
-        const timeRecords = trackerDoc[0].timeRecords.filter(tr => tr.id !== recordId);
+        const timeRecords = trackerDoc[0].timeRecords.filter((tr) => tr.id !== recordId);
         await this.timeTrackerModel.update(
           {
             orgId,
@@ -247,7 +227,7 @@ export class TimeTrackerRepository implements ITimeTrackerRepository {
       const trackerDoc = await this.timeTrackerModel.find({ orgId });
       if (trackerDoc && trackerDoc.length > 0) {
         const timeRecords = trackerDoc[0].timeRecords.filter(
-          tr => tr.startTime < startTime || tr.startTime > endTime || tr.projectId !== projectId,
+          (tr) => tr.startTime < startTime || tr.startTime > endTime || tr.projectId !== projectId,
         );
         await this.timeTrackerModel.update(
           {

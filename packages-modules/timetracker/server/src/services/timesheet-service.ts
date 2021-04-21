@@ -1,8 +1,6 @@
 import * as ILogger from 'bunyan';
 import { inject, injectable } from 'inversify';
 import {
-  ITimeRecord,
-  ITimeRecordRequest,
   ITimesheet,
   ITimesheetState,
   ITimesheetCreateRequest,
@@ -19,34 +17,19 @@ import {
 } from '@adminide-stack/core';
 import { TYPES } from '../constants';
 import * as moment from 'moment';
-import { ITimeTrackerRepository } from '../store/repository/timetracker-repository';
+import { ITimeRecordRepository, ITimesheetRepository } from '../store/repository';
 import { EmailTemplateCodes } from '../constants';
 import { config } from '../config';
 import { ServiceBroker, CallingOptions } from 'moleculer';
 import { CommonType } from '@common-stack/core';
-export interface ITimeTrackerService {
-  getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
-  getDurationTimeRecords(
-    orgId: string,
-    startTime: Date,
-    endTime: Date,
-    userId?: string,
-  ): Promise<Array<ITimeRecord>>;
+export interface ITimesheetService {
   getTimesheets(orgId: string): Promise<Array<ITimesheet>>;
   getTimesheetsWithTotalHours(orgId: string, userId?: string): Promise<Array<ITimesheet>>;
   getDurationTimesheets(orgId: string, start: Date, end: Date): Promise<Array<ITimesheet>>;
-  getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
-  createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<string>;
   createTimesheet(
     userId: string,
     orgId: string,
     request: ITimesheetCreateRequest,
-  ): Promise<Boolean>;
-  updateTimeRecord(
-    userId: string,
-    orgId: string,
-    recordId: string,
-    request: ITimeRecordRequest,
   ): Promise<Boolean>;
   updateTimesheet(
     userId: string,
@@ -60,23 +43,18 @@ export interface ITimeTrackerService {
     orgId: string,
     request: ITimesheetCreateRequest,
   ): Promise<Boolean>;
-  removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<Boolean>;
-  removeDurationTimeRecords(
-    userId: string,
-    orgId: string,
-    startTime: Date,
-    endTime: Date,
-    projectId: string,
-  ): Promise<Boolean>;
   removeTimesheet(userId: string, orgId: string, sheetId: string): Promise<Boolean>;
 }
 
 @injectable()
-export class TimeTrackerService implements ITimeTrackerService {
+export class TimesheetService implements ITimesheetService {
   private logger: ILogger;
   constructor(
-    @inject(TYPES.ITimeTrackerRepository)
-    protected trackerRepository: ITimeTrackerRepository,
+    @inject(TYPES.ITimesheetRepository)
+    protected timesheetRepository: ITimesheetRepository,
+
+    @inject(TYPES.ITimeRecordRepository)
+    protected timeRecordRepository: ITimeRecordRepository,
 
     @inject(ServerTypes.IPreferenceEditorService)
     private preferencesService: IPreferencesService,
@@ -95,65 +73,13 @@ export class TimeTrackerService implements ITimeTrackerService {
     else return moment(t) >= moment(B) && moment(t) <= moment(A);
   }
 
-  public async getTimeRecords(orgId: string, userId: string) {
-    return this.trackerRepository.getTimeRecords(orgId, userId);
-  }
-
-  public async getDurationTimeRecords(
-    orgId: string,
-    startTime: Date,
-    endTime: Date,
-    userId?: string,
-  ): Promise<Array<ITimeRecord>> {
-    const timeRecords = await this.trackerRepository.getTimeRecords(orgId, userId);
-    const timesheets = await this.trackerRepository.getTimesheets(orgId);
-    const durationRecords = timeRecords.filter(
-      (r) =>
-        (!userId || r.userId === userId) &&
-        moment(startTime) <= moment(r.startTime) &&
-        moment(r.endTime) <= moment(endTime) &&
-        r.endTime !== null,
-    );
-
-    const filteredSheets = timesheets.filter(
-      (sh) =>
-        ((!userId || sh.userId === userId) &&
-          this.checkInPeriod(startTime, sh.startDate, sh.endDate)) ||
-        this.checkInPeriod(endTime, sh.startDate, sh.endDate),
-    );
-
-    return durationRecords.map((tr) => {
-      let trEditable = false;
-      for (let sh of filteredSheets) {
-        if (
-          this.checkInPeriod(tr.startTime, sh.startDate, sh.endDate) &&
-          this.checkInPeriod(tr.endTime, sh.startDate, sh.endDate)
-        ) {
-          trEditable = true;
-          break;
-        }
-      }
-      return {
-        id: tr.id,
-        startTime: tr.startTime,
-        endTime: tr.endTime,
-        taskName: tr.taskName,
-        tags: tr.tags,
-        projectId: tr.projectId,
-        isBillable: tr.isBillable,
-        userId: tr.userId,
-        editable: trEditable,
-      };
-    });
-  }
-
   public async getTimesheets(orgId: string, userId?: string) {
-    return await this.trackerRepository.getTimesheets(orgId, userId);
+    return await this.timesheetRepository.getTimesheets(orgId, userId);
   }
 
   public async getTimesheetsWithTotalHours(orgId: string, userId?: string) {
-    const timesheets = await this.trackerRepository.getTimesheets(orgId, userId);
-    const timeRecords = await this.trackerRepository.getTimeRecords(orgId, userId);
+    const timesheets = await this.timesheetRepository.getTimesheets(orgId, userId);
+    const timeRecords = await this.timeRecordRepository.getTimeRecords(orgId, userId);
     return timesheets.map((timesheet) => {
       let sheetTotalDuration = timeRecords
         .filter((tr) => {
@@ -186,7 +112,7 @@ export class TimeTrackerService implements ITimeTrackerService {
   }
 
   public async getDurationTimesheets(orgId: string, start: Date, end: Date) {
-    const timesheets = await this.trackerRepository.getOrganizationTimesheets(orgId);
+    const timesheets = await this.timesheetRepository.getOrganizationTimesheets(orgId);
     return timesheets.filter(
       (sh) =>
         moment(start).format('YYYY-MM-DD') === moment(sh.startDate).format('YYYY-MM-DD') &&
@@ -194,25 +120,8 @@ export class TimeTrackerService implements ITimeTrackerService {
     );
   }
 
-  public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
-    return this.trackerRepository.getPlayingTimeRecord(userId, orgId);
-  }
-
-  public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
-    return this.trackerRepository.createTimeRecord(userId, orgId, request);
-  }
-
   public async createTimesheet(userId: string, orgId: string, request: ITimesheetCreateRequest) {
-    return this.trackerRepository.createTimesheet(userId, orgId, request);
-  }
-
-  public async updateTimeRecord(
-    userId: string,
-    orgId: string,
-    recordId: string,
-    request: ITimeRecordRequest,
-  ) {
-    return this.trackerRepository.updateTimeRecord(userId, orgId, recordId, request);
+    return this.timesheetRepository.createTimesheet(userId, orgId, request);
   }
 
   public async updateTimesheet(
@@ -223,7 +132,7 @@ export class TimeTrackerService implements ITimeTrackerService {
     userContext?: any,
   ) {
     try {
-      await this.trackerRepository.updateTimesheet(userId, orgId, sheetId, request, userContext);
+      await this.timesheetRepository.updateTimesheet(userId, orgId, sheetId, request, userContext);
 
       const resourceUri = generateOrgUri(orgId, IConfigFragmentName.settings);
       const { settings } = (await this.preferencesService.viewerSettings({
@@ -278,31 +187,11 @@ export class TimeTrackerService implements ITimeTrackerService {
     orgId: string,
     request: ITimesheetCreateRequest,
   ) {
-    return this.trackerRepository.updateTimesheetStatus(userId, orgId, request);
-  }
-
-  public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
-    return this.trackerRepository.removeTimeRecord(userId, orgId, recordId);
-  }
-
-  public async removeDurationTimeRecords(
-    userId: string,
-    orgId: string,
-    startTime: Date,
-    endTime: Date,
-    projectId: string,
-  ) {
-    return this.trackerRepository.removeDurationTimeRecords(
-      userId,
-      orgId,
-      startTime,
-      endTime,
-      projectId,
-    );
+    return this.timesheetRepository.updateTimesheetStatus(userId, orgId, request);
   }
 
   public async removeTimesheet(userId: string, orgId: string, sheetId: string) {
-    return this.trackerRepository.removeTimesheet(userId, orgId, sheetId);
+    return this.timesheetRepository.removeTimesheet(userId, orgId, sheetId);
   }
 
   private sendMail(topic, to, from, templateId, templateVars) {
