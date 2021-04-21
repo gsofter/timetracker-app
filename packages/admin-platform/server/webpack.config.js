@@ -57,10 +57,7 @@ const webpackOpts = {
             },
         ],
     },
-    externals: [
-        nodeExternals({ modulesDir: '../../../node_modules' }),
-        nodeExternals(),
-    ],
+    externals: [nodeExternals({ modulesDir: '../../../node_modules' }), nodeExternals()],
 };
 
 module.exports = webpackOpts;
