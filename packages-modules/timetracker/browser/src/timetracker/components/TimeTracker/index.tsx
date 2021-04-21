@@ -1,10 +1,8 @@
-import React, { useContext, useEffect, useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useFela } from 'react-fela';
-import _, { parseInt, range } from 'lodash';
 import {
   PlusCircleOutlined,
   TagOutlined,
-  StopFilled,
   CloseOutlined,
   ClockCircleOutlined,
   BarsOutlined,
@@ -32,17 +30,19 @@ import moment from 'moment';
 import BillableCheck from '../BillableCheck';
 import classNames from 'classnames';
 import { formatDuration } from '../../services/timeRecordService';
-import { TRACKER_MODE } from '../../containers/MainPage';
+import { TRACKER_MODE } from '../../constants';
 import DurationInput from '../DurationInput';
 import { Moment } from 'moment';
 import momentZ from 'moment-timezone';
 import { useSelector } from 'react-redux';
 import { useTimeformat } from '../../hooks';
+import debounce from '../../services/debounce';
+import * as _ from 'lodash';
 
 const { RangePicker } = TimePicker;
 const { Title } = Typography;
 
-export interface IAddTask {
+export interface ITimeTracker {
   currentTimeRecord: ITimeRecord;
   timer: any;
   isRecording: boolean;
@@ -50,24 +50,14 @@ export interface IAddTask {
   mode: TRACKER_MODE;
   weekStart: Moment;
   setMode: Function;
-  createTimeRecord: (ITimeRecordRequest) => void;
   handleStart: () => void;
   handleStop: () => void;
-  setCurrentTimeRecord: Function;
+  createTimeRecord: (ITimeRecordRequest) => void;
   removePlayingTimeRecord: Function;
+  updatePlayingTimeRecord: (record: ITimeRecord, debounce?: boolean) => void;
 }
 
-const formatDurationInput = (dur: string) => {
-  let arr = dur.split(':').map(d => parseInt(d, 10));
-
-  if (arr[2] > 59) arr[2] = 59;
-  if (arr[1] > 59) arr[1] = 59;
-
-  const totalSeconds = arr[0] * 3600 + arr[1] * 60 + arr[0];
-  return formatDuration(totalSeconds);
-};
-
-export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
+export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const {
     isRecording,
     currentTimeRecord,
@@ -76,38 +66,40 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     setMode,
     handleStart,
     handleStop,
-    setCurrentTimeRecord,
     removePlayingTimeRecord,
     createTimeRecord,
+    updatePlayingTimeRecord
   } = props;
   const { css } = useFela(props);
   const { timeFormat, dateFormat } = useTimeformat();
-  const userId = useSelector<any>(state => state.user.auth0UserId) as string;
+  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
   const [manualDur, setManualDur] = useState(moment().format(timeFormat));
-  const handleTaskChange = event => {
-    event.preventDefault();
-    setCurrentTimeRecord({ ...currentTimeRecord, taskName: event.target.value });
+  const debounceTimeLimit = 800;
+  
+  const handleTaskChange = (e) => {
+    e.persist();
+    updatePlayingTimeRecord({ ...currentTimeRecord, taskName: e.target.value }, true)
   };
 
-  const handleSelectProject = projectId => {
-    setCurrentTimeRecord({ ...currentTimeRecord, projectId: projectId });
+  const handleSelectProject = (projectId) => {
+    updatePlayingTimeRecord({ ...currentTimeRecord, projectId: projectId });
   };
 
-  const handleChangeBillable = event => {
-    setCurrentTimeRecord({ ...currentTimeRecord, isBillable: !currentTimeRecord.isBillable });
+  const handleChangeBillable = (event) => {
+    updatePlayingTimeRecord({ ...currentTimeRecord, isBillable: !currentTimeRecord.isBillable });
   };
 
-  const handleTagsChange = value => {
-    console.log('handleTagsChange.value =>', value);
+  const handleTagsChange = (value) => {
+    updatePlayingTimeRecord({ ...currentTimeRecord, tags: value });
   };
 
-  const handleDiscard = event => {
+  const handleDiscard = (event) => {
     removePlayingTimeRecord();
   };
 
-  const handleChangeMode = m => {
+  const handleChangeMode = (m) => {
     setMode(m);
   };
 
@@ -120,11 +112,11 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
     setManualDur(formatDuration(timeDiff));
   };
 
-  const handleChangeDurDate = date => {
+  const handleChangeDurDate = (date) => {
     console.log('handleChangeDurDate.date =>', date);
   };
 
-  const handleChangeDur = duration => {
+  const handleChangeDur = (duration) => {
     setManualEnd(moment(manualStart).add(duration, 'seconds'));
   };
 
@@ -135,16 +127,14 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
       endTime: manualEnd,
       isBillable: currentTimeRecord.isBillable,
       taskName: currentTimeRecord.taskName,
-      // totalTime: Math.floor((manualEnd.valueOf() - manualStart.valueOf()) / 1000),
       projectId: currentTimeRecord.projectId,
     };
-
     createTimeRecord(newRecordReq);
   };
   // Dropdown overlay for project select
   const projectDropdownMenus = (
     <Menu className={css(styles.projectDown)}>
-      {projects.map(project => {
+      {projects.map((project) => {
         return (
           <Menu.Item
             key={project.id}
@@ -168,7 +158,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
           onChange={handleTagsChange}
           tokenSeparators={[',']}
         >
-          {projects.map(p => (
+          {projects.map((p) => (
             <Select.Option key={p.id} value={p.id}>
               {p.name}
             </Select.Option>
@@ -209,7 +199,7 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                 >
                   {currentTimeRecord.projectId === ''
                     ? 'Projects'
-                    : projects.find(p => p.id === currentTimeRecord.projectId)?.name}
+                    : projects.find((p) => p.id === currentTimeRecord.projectId)?.name}
                 </Button>
               </Dropdown>
             </Col>
@@ -233,9 +223,9 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
               <>
                 <Col span={14} sm={10} xxl={14} className="flex-center">
                   <Title level={5} style={{ marginBottom: '0px' }}>
-                    <Timer.Hours formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
-                    <Timer.Minutes formatValue={val => `${val < 10 ? `0${val}` : val}`} />:
-                    <Timer.Seconds formatValue={val => `${val < 10 ? `0${val}` : val}`} />
+                    <Timer.Hours formatValue={(val) => `${val < 10 ? `0${val}` : val}`} />:
+                    <Timer.Minutes formatValue={(val) => `${val < 10 ? `0${val}` : val}`} />:
+                    <Timer.Seconds formatValue={(val) => `${val < 10 ? `0${val}` : val}`} />
                   </Title>
                 </Col>
 
@@ -289,11 +279,6 @@ export const AddTask: React.FC<IAddTask> = (props: IAddTask) => {
                 </Col>
                 <Col span={0} sm={6} className="duration">
                   <div className="flex-center">
-                    {/* <TimeField
-                      value={manualDur.format('HH:mm:ss')}
-                      format="HH:mm:ss"
-                      onChange={handleChangeDur}
-                    ></TimeField> */}
                     <DurationInput
                       duration={Math.floor(
                         (moment(manualEnd).valueOf() - moment(manualStart).valueOf()) / 1000,

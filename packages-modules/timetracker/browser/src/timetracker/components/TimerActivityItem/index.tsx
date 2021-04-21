@@ -2,15 +2,12 @@ import React, { useState, useCallback, useMemo } from 'react';
 import classNames from 'classnames';
 import moment from 'moment';
 import { useFela } from 'react-fela';
-import { Button, TimePicker, Row, Col, Input, Typography, Dropdown, Menu } from 'antd';
+import { Button, Row, Col, Input, Typography, Dropdown, Menu } from 'antd';
 import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
-
-const { RangePicker } = TimePicker;
 import CSS from 'csstype';
 import {
   PlusCircleOutlined,
   TagOutlined,
-  CalendarOutlined,
   CaretRightOutlined,
   MoreOutlined,
   DeleteOutlined,
@@ -23,7 +20,7 @@ import { formatDuration } from '../../services/timeRecordService';
 import BillableCheck from '../BillableCheck';
 import { useTimeformat } from '../../hooks';
 
-export interface ITaskList {
+export interface ITimerActivityItemProps {
   timeRecord?: ITimeRecord;
   timeRecords: [ITimeRecord];
   projects: IProject[];
@@ -36,13 +33,13 @@ const calcTotalTime = (startTime: string, endTime: string): number => {
   return Math.floor((moment(endTime).valueOf() - moment(startTime).valueOf()) / 1000);
 };
 
-export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
+export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITimerActivityItemProps) => {
   const { removeTimeRecord, timeRecord, updateTimeRecord, handlePlayTimer } = props;
   const { css } = useFela(props);
   const [selectedProject, setSelectedProject] = useState(timeRecord.projectId ?? '');
   const [taskName, setTaskName] = useState(timeRecord.taskName ?? '');
   const [isBillable, setIsBillable] = useState(timeRecord.isBillable);
-  const { timeFormat, dateFormat } = useTimeformat();
+  const { timeFormat } = useTimeformat();
   const { projects } = props;
   const debounceTimeLimit = 800;
 
@@ -58,7 +55,6 @@ export const TaskListItem: React.FC<ITaskList> = (props: ITaskList) => {
 
   const menus = (
     <Menu>
-      {/* <Menu.Item key="duplicate"> Duplicate </Menu.Item> */}
       <Menu.Item key="remove" icon={<DeleteOutlined />} onClick={handleRemove}>
         Remove
       </Menu.Item>
@@ -214,8 +210,6 @@ const styles: { [key: string]: (props) => CSS.Properties } = {
         },
       },
       '& .divider': {
-        // marginTop: '5px',
-        // marginBottom: '5px',
         borderLeft: '1px dashed #eee',
         height: '75%',
       },

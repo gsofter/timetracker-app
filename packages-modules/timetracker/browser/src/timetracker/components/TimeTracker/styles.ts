@@ -1,4 +1,4 @@
-import { Property, Properties } from 'csstype';
+import { Properties } from 'csstype';
 
 export const styleSheet: { [key: string]: (obj) => Properties } = {
   addTaskStyles: ({ theme }) => {
@@ -34,14 +34,9 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
       },
 
       '& .add-task__play-icon': {
-        // cursor: 'pointer',
-        // borderRadius: '50%',
-        // width: '3.6rem',
-        // height: '3.6rem',
-        // boxShadow: '0 0.4rem 0.4rem rgba(0, 0, 0, 0.25)',
         '& svg': {
-            fontSize: '50px',
-            color:  primaryColor ? primaryColor : '#1b8efa',
+          fontSize: '50px',
+          color: primaryColor ? primaryColor : '#1b8efa',
         },
         '&--disabled': {
           '& .add-task__play-icon-circle': {
@@ -56,14 +51,9 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
       },
 
       '& .add-task__stop-icon': {
-        // cursor: 'pointer',
-        // borderRadius: '50%',
-        // width: '3.6rem',
-        // height: '3.6rem',
-        // boxShadow: '0 0.4rem 0.4rem rgba(0, 0, 0, 0.25)',
         '& svg': {
-            fontSize: '50px',
-            color:  'red',
+          fontSize: '50px',
+          color: 'red',
         },
         '&--disabled': {
           opacity: '0.6',

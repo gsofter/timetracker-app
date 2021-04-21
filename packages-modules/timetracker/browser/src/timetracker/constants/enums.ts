@@ -15,3 +15,8 @@ export const enum TimeRoundedType {
   ROUND_TO_NEAREST = 'Round to nearest',
   ROUND_DOWN_TO = 'Roudn down to',
 }
+
+export enum TRACKER_MODE {
+  MANUAL,
+  TRACK,
+}
