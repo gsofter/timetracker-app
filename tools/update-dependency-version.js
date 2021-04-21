@@ -64,6 +64,7 @@ glob('./+(servers|packages|packages-modules)/**/package.json', null, (err, files
     .then(() => {
       git.status()
         .then((status) => {
+          console.log('GIT STATUS--', status);
           if (status.modified.length) {
             const fileArray = status.modified.filter((element) => element.includes('package.json'));
             const addArray = fileArray.map((element) => `./${element}`);
