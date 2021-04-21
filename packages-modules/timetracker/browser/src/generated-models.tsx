@@ -463,6 +463,7 @@ export const GetPlayingTimeRecordDocument = gql`
     taskName
     tags
     projectId
+    userId
     isBillable
   }
 }

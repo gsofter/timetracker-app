@@ -47,8 +47,6 @@ export const useFirstWeekDay = () => {
   else if (data && data?.resolveConfiguration === 'Friday') value = 5;
   else if (data && data?.resolveConfiguration === 'Saturday') value = 6;
 
-  console.log('useFirstWeekDay.value =>', value);
-
   return {
     day: data?.resolveConfiguration || 'Sunday',
     value,

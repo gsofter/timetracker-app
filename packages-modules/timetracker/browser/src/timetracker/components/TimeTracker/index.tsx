@@ -37,6 +37,7 @@ import momentZ from 'moment-timezone';
 import { useSelector } from 'react-redux';
 import { useTimeformat } from '../../hooks';
 import debounce from '../../services/debounce';
+import * as _ from 'lodash';
 
 const { RangePicker } = TimePicker;
 const { Title } = Typography;
@@ -49,12 +50,11 @@ export interface ITimeTracker {
   mode: TRACKER_MODE;
   weekStart: Moment;
   setMode: Function;
-  createTimeRecord: (ITimeRecordRequest) => void;
-  updateTimeRecord: (recordId: string, request: ITimeRecordRequest) => void;
   handleStart: () => void;
   handleStop: () => void;
-  setCurrentTimeRecord: Function;
+  createTimeRecord: (ITimeRecordRequest) => void;
   removePlayingTimeRecord: Function;
+  updatePlayingTimeRecord: (record: ITimeRecord, debounce?: boolean) => void;
 }
 
 export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
@@ -66,10 +66,9 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
     setMode,
     handleStart,
     handleStop,
-    setCurrentTimeRecord,
     removePlayingTimeRecord,
     createTimeRecord,
-    updateTimeRecord
+    updatePlayingTimeRecord
   } = props;
   const { css } = useFela(props);
   const { timeFormat, dateFormat } = useTimeformat();
@@ -78,40 +77,22 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const [manualEnd, setManualEnd] = useState(moment());
   const [manualDur, setManualDur] = useState(moment().format(timeFormat));
   const debounceTimeLimit = 800;
-  const debouncedFunc = useMemo(
-    () =>
-      debounce(value => {
-        if(currentTimeRecord.id)
-          updateTimeRecord(currentTimeRecord.id, { ...currentTimeRecord, taskName: value })
-      }, debounceTimeLimit),
-    [],
-  );
-  const handleTaskChange = useCallback(
-    e => {
-      e.persist();
-      console.log('handleTaskChange =>', currentTimeRecord)
-      setCurrentTimeRecord({ ...currentTimeRecord, taskName: e.target.value });
-      debouncedFunc(e.target.value);
-    },
-    [debouncedFunc],
-  );
+  
+  const handleTaskChange = (e) => {
+    e.persist();
+    updatePlayingTimeRecord({ ...currentTimeRecord, taskName: e.target.value }, true)
+  };
 
   const handleSelectProject = (projectId) => {
-    if(currentTimeRecord.id)
-      updateTimeRecord(currentTimeRecord.id, { ...currentTimeRecord, projectId: projectId })
-    setCurrentTimeRecord({ ...currentTimeRecord, projectId: projectId });
+    updatePlayingTimeRecord({ ...currentTimeRecord, projectId: projectId });
   };
 
   const handleChangeBillable = (event) => {
-    if(currentTimeRecord.id)
-      updateTimeRecord(currentTimeRecord.id, { ...currentTimeRecord, isBillable: !currentTimeRecord.isBillable  })
-    setCurrentTimeRecord({ ...currentTimeRecord, isBillable: !currentTimeRecord.isBillable });
+    updatePlayingTimeRecord({ ...currentTimeRecord, isBillable: !currentTimeRecord.isBillable });
   };
 
   const handleTagsChange = (value) => {
-    if(currentTimeRecord.id)
-      updateTimeRecord(currentTimeRecord.id, { ...currentTimeRecord, tags: value  })
-    setCurrentTimeRecord({ ...currentTimeRecord, tags: value });
+    updatePlayingTimeRecord({ ...currentTimeRecord, tags: value });
   };
 
   const handleDiscard = (event) => {

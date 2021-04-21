@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { useFela } from 'react-fela';
 import moment, { Moment } from 'moment';
@@ -158,6 +158,23 @@ const TimerActivity = (props: ITimerActivityProps) => {
     createTimeRecord(newTimeRecord);
   };
 
+  const debounceFunc = useMemo(
+    () =>
+      _.debounce((timeRecord) => {
+        updateTimeRecord(timeRecord.id, { ..._.omit(timeRecord, ['__typename', 'id']) });
+      }, 2000),
+    [],
+  );
+
+  const updatePlayingTimeRecord = (timeRecord: ITimeRecord, debounce?: boolean) => {
+    setCurrentTimeRecord(timeRecord);
+    if (debounce && currentTimeRecord.id !== undefined && currentTimeRecord.id !== '') {
+      debounceFunc(timeRecord);
+    } else if (currentTimeRecord.id !== undefined && currentTimeRecord.id !== '') {
+      updateTimeRecord(timeRecord.id, { ..._.omit(timeRecord, ['__typename', 'id']) });
+    }
+  };
+
   return (
     <div className={css(styleSheet.mainpageStyle as any)}>
       <PageContainer>
@@ -181,9 +198,8 @@ const TimerActivity = (props: ITimerActivityProps) => {
                 handleStop={stopTimer}
                 setMode={setMode}
                 createTimeRecord={createTimeRecord}
-                updateTimeRecord={updateTimeRecord}
                 currentTimeRecord={currentTimeRecord}
-                setCurrentTimeRecord={setCurrentTimeRecord}
+                updatePlayingTimeRecord={updatePlayingTimeRecord}
                 removePlayingTimeRecord={removePlayingTimeRecord}
               />
             </div>
