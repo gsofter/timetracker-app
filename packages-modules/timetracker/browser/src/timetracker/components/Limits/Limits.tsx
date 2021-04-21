@@ -6,6 +6,7 @@ import { EditTwoTone } from '@ant-design/icons';
 import { useSetting } from '@adminide-stack/react-shared-components';
 import { ConfigurationTarget } from '@adminide-stack/core';
 import { LimitsModal } from './LimitsModal';
+import { isArray } from 'lodash';
 
 export const Limits = (props) => {
     const [visible, setVisible] = useState(false);
@@ -78,7 +79,7 @@ export const Limits = (props) => {
                 onSubmit={onSubmit}
                 weeklyLimit={weeklyLimit}
                 dailyLimit={dailyLimit}
-                daysAllowed={daysAllowed}
+                daysAllowed={isArray(daysAllowed) ? daysAllowed : daysAllowed.split(',')}
             />
             <div className={css(styles.left)}>
                 {weeklyLimit ? <div>{`${weeklyLimit} / week`}</div> : <div className={css(styles.gray)}>No weekly limit</div>}
