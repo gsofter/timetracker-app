@@ -14,7 +14,7 @@ import { getFilteredRoutes } from '../utils';
 import { ROUTES } from './constants';
 
 const Home = React.lazy(() => import('./containers/Home'));
-const TimeTracker = React.lazy(() => import('./containers/MainPage'));
+const TimeTracker = React.lazy(() => import('./containers/TimerPage'));
 const Timesheet = React.lazy(() => import('./containers/TimesheetPage'));
 const TimeApproval = React.lazy(() => import('./containers/TimeApprovalPage'));
 const Reports = React.lazy(() => import('./containers/ReportsPage'));

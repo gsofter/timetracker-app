@@ -30,9 +30,8 @@ export const styleSheet = {
         zIndex: '10',
       },
       '& .main-page__day': {
-        margin: '0 0 2.6rem 0',
         padding: '1rem',
-        paddingLeft:'0px',
+        paddingLeft: '0px',
         paddingRight: '0px',
         background: '#f0f2f5;',
       },
@@ -81,7 +80,7 @@ export const styleSheet = {
       '& .task-container': {
         // marginLeft: '-30px',
         // marginRight: '-30px',
-      }
+      },
     };
   },
 };
