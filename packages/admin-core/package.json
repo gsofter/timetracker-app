@@ -19,7 +19,6 @@
     "watch": "yarn build:lib:watch"
   },
   "devDependencies": {
-    "webpack": "4.43.0"
   },
   "publishConfig": {
     "access": "public"

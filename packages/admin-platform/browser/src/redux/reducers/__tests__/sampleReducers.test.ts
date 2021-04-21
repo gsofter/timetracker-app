@@ -22,6 +22,8 @@ describe('reducers/counter', () => {
         });
         store.dispatch(incrementCounter(3));
     });
+    store.dispatch(incrementCounter(3));
+  });
 
     it('restores state', (done) => {
         const store = createStore(combineReducers<Store.Sample>(reducers));

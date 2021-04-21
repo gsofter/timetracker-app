@@ -1,5 +1,5 @@
 {
-  "name": "@admin-layout/healthcheck-server",
+  "name": "@admin-layout/platform-electron",
   "version": "0.0.1",
   "description": "Sample core for higher packages to depend on",
   "license": "ISC",
@@ -13,9 +13,7 @@
     "build:lib:watch": "yarn build:lib -- --watch",
     "jest": "./node_modules/.bin/jest",
     "prepublish": "yarn build",
-    "schema:download": "./node_modules/.bin/apollo-codegen download-schema http://localhost:8080/graphql --output schema.json ",
-    "schema:generate": "./node_modules/.bin/apollo-codegen generate src/browser/graphql/**/*.graphql --schema schema.json --target typescript --output src/browser/types/schema.ts",
-    "test": "cross-env ENV_FILE=../../config/test/test.env jest",
+    "test": "jest",
     "test:debug": "npm test -- --runInBand",
     "test:watch": "npm test -- --watch",
     "watch": "yarn build:lib:watch"
@@ -40,15 +38,7 @@
     }
   },
   "dependencies": {
-    "@hmcts/nodejs-healthcheck": "^1.5.1",
-    "mongo-healthcheck": "^2.0.1",
-    "redis-healthcheck": "^0.1.1"
-  },
-  "peerDependencies": {
-    "@common-stack/server-core": ">=0.0.251",
-    "ioredis": "^4.14.1",
-    "mongoose": "5.10.0",
-    "nats": "^1.3.2"
+    "@admin-layout/core": "link:../../admin-core"
   },
   "publishConfig": {
     "access": "public"

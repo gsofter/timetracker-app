@@ -1371,7 +1371,6 @@ extend type Mutation {
   clientId: String
   userId: String
   orgId: String
-  editable: Boolean
 }
 
 input TimeRecordRequest {
@@ -1419,7 +1418,6 @@ type Timesheet {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
-  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
 }
@@ -1431,7 +1429,6 @@ input TimesheetCreateRequest {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
-  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
 }
@@ -1443,16 +1440,14 @@ type TimesheetResponse {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
-  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
   userId: String
   orgId: String
-  totalDuration: Int
 }
 
 extend type Query {
-  getTimesheets(userId: String, withTotalHours: Boolean): [TimesheetResponse] @addAccountContext
+  getTimesheets(userId: String): [TimesheetResponse] @addAccountContext
   getDurationTimesheets(start: DateTime, end: DateTime): [TimesheetResponse] @addAccountContext
 }
 
@@ -1630,7 +1625,6 @@ input AccountTeam_Input {
 """
  TeamMember: A member of a team.
 """
-
 type TeamMember {
     id: String
     email: String
@@ -1638,7 +1632,6 @@ type TeamMember {
     userId: String
     username: String
     role: ApplicationRoles
-    status: String
 }
 
 input TeamMember_Input {
@@ -1646,7 +1639,6 @@ input TeamMember_Input {
     email: String
     userId: String
     role: ApplicationRoles
-    status: String
 }
 
 extend enum ApplicationRoles {

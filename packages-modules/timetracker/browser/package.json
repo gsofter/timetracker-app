@@ -62,6 +62,7 @@
     "@types/react-big-calendar": "^0.30.0"
   },
   "peerDependencies": {
+    "@adminide-stack/core": "*",
     "@common-stack/client-react": ">=0.0.255",
     "@common-stack/core": ">=0.0.255",
     "antd": "^4.5.2"

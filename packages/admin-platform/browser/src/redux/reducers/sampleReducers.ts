@@ -40,12 +40,12 @@ function error(state = '', action: Action): string {
 }
 
 const initialState: Store.Counter = {
-    value: 0,
+  value: 0,
 };
 
 function counter(
-    state: Store.Counter = initialState,
-    action: Action,
+  state: Store.Counter = initialState,
+  action: Action,
 ): Store.Counter {
     switch (action.type) {
         case '@@admin-layout/INCREMENT_COUNTER':
@@ -58,9 +58,9 @@ function counter(
         case '@@admin-layout/LOAD_COUNT_SUCCESS':
             return { value: action.response.value };
 
-        default:
-            return state;
-    }
+    default:
+      return state;
+  }
 }
 
 export const reducers = {
