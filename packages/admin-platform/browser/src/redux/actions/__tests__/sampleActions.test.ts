@@ -42,13 +42,13 @@ describe('actions', () => {
         });
 
         describe('when API request succeeds', () => {
-            it('dispatches @@sample-stack/SAVE_COUNT_SUCCESS', () => {
+            it('dispatches @@admin-layout/SAVE_COUNT_SUCCESS', () => {
                 const { dispatch, reducer } = store();
                 actions.saveCount({ value: 14 })(dispatch);
                 return eventually(
                     expectTypes(reducer, [
-                        '@@sample-stack/SAVE_COUNT_REQUEST',
-                        '@@sample-stack/SAVE_COUNT_SUCCESS',
+                        '@@admin-layout/SAVE_COUNT_REQUEST',
+                        '@@admin-layout/SAVE_COUNT_SUCCESS',
                     ]),
                 );
             });
@@ -61,18 +61,18 @@ describe('actions', () => {
                 );
             });
 
-            it('dispatches @@sample-stack/SAVE_COUNT_ERROR', () => {
+            it('dispatches @@admin-layout/SAVE_COUNT_ERROR', () => {
                 const { dispatch, reducer } = store();
                 actions.saveCount({ value: 14 })(dispatch);
                 return eventually(
                     expectTypes(reducer, [
-                        '@@sample-stack/SAVE_COUNT_REQUEST',
-                        '@@sample-stack/SAVE_COUNT_ERROR',
+                        '@@admin-layout/SAVE_COUNT_REQUEST',
+                        '@@admin-layout/SAVE_COUNT_ERROR',
                     ]),
                 );
             });
 
-            it('includes error message with @@sample-stack/SAVE_COUNT_ERROR', () => {
+            it('includes error message with @@admin-layout/SAVE_COUNT_ERROR', () => {
                 const { dispatch, reducer } = store();
                 actions.saveCount({ value: 14 })(dispatch);
                 return eventually(() => {
@@ -82,7 +82,7 @@ describe('actions', () => {
                 });
             });
 
-            it('includes request with @@sample-stack/SAVE_COUNT_ERROR for convenience', () => {
+            it('includes request with @@admin-layout/SAVE_COUNT_ERROR for convenience', () => {
                 const { dispatch, reducer } = store();
                 actions.saveCount({ value: 14 })(dispatch);
                 return eventually(() => {
@@ -105,13 +105,13 @@ describe('actions', () => {
         });
 
         describe('when API request succeeds', () => {
-            it('dispatches @sample-stack/LOAD_COUNT_SUCCESS', () => {
+            it('dispatches @admin-layout/LOAD_COUNT_SUCCESS', () => {
                 const { dispatch, reducer } = store();
                 actions.loadCount(null)(dispatch);
                 return eventually(
                     expectTypes(reducer, [
-                        '@@sample-stack/LOAD_COUNT_REQUEST',
-                        '@@sample-stack/LOAD_COUNT_SUCCESS',
+                        '@@admin-layout/LOAD_COUNT_REQUEST',
+                        '@@admin-layout/LOAD_COUNT_SUCCESS',
                     ]),
                 );
             });
@@ -134,18 +134,18 @@ describe('actions', () => {
                 );
             });
 
-            it('dispatches @@sample-stack/LOAD_COUNT_ERROR', () => {
+            it('dispatches @@admin-layout/LOAD_COUNT_ERROR', () => {
                 const { dispatch, reducer } = store();
                 actions.loadCount(null)(dispatch);
                 return eventually(
                     expectTypes(reducer, [
-                        '@@sample-stack/LOAD_COUNT_REQUEST',
-                        '@@sample-stack/LOAD_COUNT_ERROR',
+                        '@@admin-layout/LOAD_COUNT_REQUEST',
+                        '@@admin-layout/LOAD_COUNT_ERROR',
                     ]),
                 );
             });
 
-            it('includes error message with @@sample-stack/LOAD_COUNT_ERROR', () => {
+            it('includes error message with @@admin-layout/LOAD_COUNT_ERROR', () => {
                 const { dispatch, reducer } = store();
                 actions.loadCount(null)(dispatch);
                 return eventually(() => {
