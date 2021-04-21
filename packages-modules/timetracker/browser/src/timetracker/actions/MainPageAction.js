@@ -15,85 +15,84 @@ export const GET_TIME_ENTRIES_LIST_PAGINATION = 'GET_TIME_ENTRIES_LIST_PAGINATIO
 export const DISABLE_PAGINATION = 'DISABLE_PAGINATION';
 export const RESTORE_PAGINATION = 'RESTORE_PAGINATION';
 
-const setTimeEntriesListAction = payload => ({
-    type: GET_TIME_ENTRIES_LIST,
-    payload,
+const setTimeEntriesListAction = (payload) => ({
+  type: GET_TIME_ENTRIES_LIST,
+  payload,
 });
 
-export const getTimeEntriesListAction = byPage => async dispatch => {
-    const { page, limit, disabled } = store.getState().mainPageReducer.pagination;
-    let res = [];
+export const getTimeEntriesListAction = (byPage) => async (dispatch) => {
+  const { page, limit, disabled } = store.getState().mainPageReducer.pagination;
+  let res = [];
 
-    if (disabled) {
-        res = await getTimeEntriesList();
-    } else if (page === 1) {
-        res = await getTimeEntriesList({ page, limit });
-    } else {
-        res = await getTimeEntriesList({
-            page: 1,
-            limit: page * limit,
-        });
-    }
-    const parsedList = getTodayTimeEntriesParseFunction(res.data.data);
-    const { timerV2 } = parsedList;
-    dispatch(setTimeEntriesListAction(timerV2));
+  if (disabled) {
+    res = await getTimeEntriesList();
+  } else if (page === 1) {
+    res = await getTimeEntriesList({ page, limit });
+  } else {
+    res = await getTimeEntriesList({
+      page: 1,
+      limit: page * limit,
+    });
+  }
+  const parsedList = getTodayTimeEntriesParseFunction(res.data.data);
+  const { timerV2 } = parsedList;
+  dispatch(setTimeEntriesListAction(timerV2));
 };
 
-export const setCurrentTimerAction = payload => ({
-    type: SET_CURRENT_TIMER,
-    payload,
+export const setCurrentTimerAction = (payload) => ({
+  type: SET_CURRENT_TIMER,
+  payload,
 });
 
-export const setServerClientTimediffAction = time => ({
-    type: SET_SERVER_CLIENT_TIMEDIFF,
-    payload: +moment(time) - +moment(),
+export const setServerClientTimediffAction = (time) => ({
+  type: SET_SERVER_CLIENT_TIMEDIFF,
+  payload: +moment(time) - +moment(),
 });
 
-export const setTimerTickAction = key => {
-    if (key === 'reset') {
-        return {
-            type: SET_TIMER_TICK,
-            payload: null,
-        };
-    } else {
-        const { mainPageReducer } = store.getState();
-        const { currentTimer } = mainPageReducer;
-        const duration = getTimeDiff(currentTimer.timeStart, true);
-        const durationForTitle = getTimeDiff(currentTimer.timeStart, true, 'classic');
-        updatePageTitle(durationForTitle, currentTimer.issue, currentTimer.project.name);
-        return {
-            type: SET_TIMER_TICK,
-            payload: duration,
-        };
-    }
+export const setTimerTickAction = (key) => {
+  if (key === 'reset') {
+    return {
+      type: SET_TIMER_TICK,
+      payload: null,
+    };
+  }
+  const { mainPageReducer } = store.getState();
+  const { currentTimer } = mainPageReducer;
+  const duration = getTimeDiff(currentTimer.timeStart, true);
+  const durationForTitle = getTimeDiff(currentTimer.timeStart, true, 'classic');
+  updatePageTitle(durationForTitle, currentTimer.issue, currentTimer.project.name);
+  return {
+    type: SET_TIMER_TICK,
+    payload: duration,
+  };
 };
 
 export const incPaginationAction = () => ({
-    type: INC_PAGINATION,
+  type: INC_PAGINATION,
 });
 
 export const restorePaginationAction = () => ({
-    type: RESTORE_PAGINATION,
+  type: RESTORE_PAGINATION,
 });
 
-const setTimeEntriesListPaginationAction = payload => ({
-    type: GET_TIME_ENTRIES_LIST_PAGINATION,
-    payload,
+const setTimeEntriesListPaginationAction = (payload) => ({
+  type: GET_TIME_ENTRIES_LIST_PAGINATION,
+  payload,
 });
 
 const disablePaginationAction = () => ({
-    type: DISABLE_PAGINATION,
+  type: DISABLE_PAGINATION,
 });
 
-export const getTimeEntriesListPaginationAction = () => async dispatch => {
-    const { page, limit } = store.getState().mainPageReducer.pagination;
+export const getTimeEntriesListPaginationAction = () => async (dispatch) => {
+  const { page, limit } = store.getState().mainPageReducer.pagination;
 
-    const res = await getTimeEntriesList({ page, limit });
-    if (res.data.data.timer_v2.length) {
-        const parsedList = getTodayTimeEntriesParseFunction(res.data.data);
-        const { timerV2 } = parsedList;
-        dispatch(setTimeEntriesListPaginationAction(timerV2));
-    } else {
-        dispatch(disablePaginationAction());
-    }
+  const res = await getTimeEntriesList({ page, limit });
+  if (res.data.data.timer_v2.length) {
+    const parsedList = getTodayTimeEntriesParseFunction(res.data.data);
+    const { timerV2 } = parsedList;
+    dispatch(setTimeEntriesListPaginationAction(timerV2));
+  } else {
+    dispatch(disablePaginationAction());
+  }
 };

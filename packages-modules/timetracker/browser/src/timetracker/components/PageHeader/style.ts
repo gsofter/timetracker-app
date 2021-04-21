@@ -1,13 +1,11 @@
 export const styleSheet = {
   pageHeaderStyle: ({ theme }) => {
-    const {
-      primaryColor,
-    } = theme;
+    const { primaryColor } = theme;
     return {
       position: 'relative',
       '& .theme-primary': {
-        backgroundColor: primaryColor ? primaryColor : '#1b8efa',
-        borderColor: primaryColor ? primaryColor : '#1b8efa',
+        backgroundColor: primaryColor || '#1b8efa',
+        borderColor: primaryColor || '#1b8efa',
       },
       '& .header-wrapper': {
         display: 'flex',
@@ -46,7 +44,7 @@ export const styleSheet = {
         lineHeight: 'normal',
         fontSize: '14px',
         color: '#ffffff',
-        backgroundColor: primaryColor ? primaryColor : '#1b8efa',
+        backgroundColor: primaryColor || '#1b8efa',
         outline: 'none',
         cursor: 'pointer',
         borderRadius: '4px',

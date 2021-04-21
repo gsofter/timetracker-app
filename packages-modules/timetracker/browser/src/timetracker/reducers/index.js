@@ -14,16 +14,16 @@ import clientsReducer from './ClientsReducer';
 import invoicesReducer from './InvoicesReducer';
 
 export const rootReducer = combineReducers({
-    projectReducer,
-    mainPageReducer,
-    teamPageReducer,
-    reportsPageReducer,
-    teamReducer,
-    teamAddReducer,
-    responsiveReducer,
-    languageReducer,
-    userReducer,
-    notificationReducer,
-    clientsReducer,
-    invoicesReducer,
+  projectReducer,
+  mainPageReducer,
+  teamPageReducer,
+  reportsPageReducer,
+  teamReducer,
+  teamAddReducer,
+  responsiveReducer,
+  languageReducer,
+  userReducer,
+  notificationReducer,
+  clientsReducer,
+  invoicesReducer,
 });

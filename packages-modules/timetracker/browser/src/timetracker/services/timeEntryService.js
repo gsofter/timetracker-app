@@ -1,11 +1,11 @@
 export function encodeTimeEntryIssue(issue) {
-    const encodedIssue = issue ? encodeURI(issue) : '';
+  const encodedIssue = issue ? encodeURI(issue) : '';
 
-    return encodedIssue;
+  return encodedIssue;
 }
 
 export function decodeTimeEntryIssue(issue) {
-    const decodedIssue = issue ? decodeURI(issue) : '';
+  const decodedIssue = issue ? decodeURI(issue) : '';
 
-    return decodedIssue;
+  return decodedIssue;
 }

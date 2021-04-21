@@ -36,11 +36,11 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
       '& .add-task__play-icon': {
         '& svg': {
           fontSize: '50px',
-          color: primaryColor ? primaryColor : '#1b8efa',
+          color: primaryColor || '#1b8efa',
         },
         '&--disabled': {
           '& .add-task__play-icon-circle': {
-            fill: primaryColor ? primaryColor : '#1b8efa',
+            fill: primaryColor || '#1b8efa',
           },
         },
       },

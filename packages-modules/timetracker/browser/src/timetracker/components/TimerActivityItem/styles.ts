@@ -19,8 +19,8 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
         padding: '20px',
 
         '& .ant-picker': {
-           width: '100%',
-           marginTop: '10px'
+          width: '100%',
+          marginTop: '10px',
         },
         '& .dataPicker--button': {
           display: 'flex',
@@ -28,9 +28,9 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
         '& Button': {
           marginTop: '10px',
           marginRight: '10px',
-          backgroundColor: primaryColor ? primaryColor : '#1b8efa',
-          borderColor: primaryColor ? primaryColor : '#1b8efa',
-        }
+          backgroundColor: primaryColor || '#1b8efa',
+          borderColor: primaryColor || '#1b8efa',
+        },
       },
       '& .ant-picker-calendar-full .ant-picker-panel .ant-picker-calendar-date': {
         height: '50px',
@@ -119,18 +119,18 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
         margin: '0 1rem 0 0',
         cursor: 'pointer',
         '& svg': {
-            color: primaryColor ? primaryColor : '#1b8efa',
-        }
-    },
-    '& .task-item .task-item__edit-icon': {
+          color: primaryColor || '#1b8efa',
+        },
+      },
+      '& .task-item .task-item__edit-icon': {
         cursor: 'pointer',
         margin: '0 1rem 0 0',
         fill: '#6fcf97',
         width: '1.5rem',
         height: '1.5rem',
         '& svg': {
-            color: primaryColor ? primaryColor : '#1b8efa',
-        }
+          color: primaryColor || '#1b8efa',
+        },
       },
       '& .task-item .task-item__delete-icon': {
         cursor: 'pointer',

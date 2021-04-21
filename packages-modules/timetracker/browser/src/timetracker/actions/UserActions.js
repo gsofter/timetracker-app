@@ -7,7 +7,11 @@
 // Actions
 import reportsPageAction from './ReportsPageAction';
 import { setLanguage } from './LanguageActions';
-import { getUserTeamsAction, getCurrentTeamAction, getCurrentTeamDetailedDataAction } from './TeamActions';
+import {
+  getUserTeamsAction,
+  getCurrentTeamAction,
+  getCurrentTeamDetailedDataAction,
+} from './TeamActions';
 
 export const GET_USER_DATA_REQUEST = 'GET_USER_DATA_REQUEST';
 export const GET_USER_DATA_REQUEST_SUCCESS = 'GET_USER_DATA_REQUEST_SUCCESS';
@@ -23,123 +27,123 @@ export const SET_TIME_FORMAT = 'SET_TIME_FORMAT';
 export const SET_FIRST_DAY_OF_WEEK = 'SET_FIRST_DAY_OF_WEEK';
 export const SET_DURATION_TIME_FORMAT = 'SET_DURATION_TIME_FORMAT';
 
-export const setDurationTimeFormat = payload => ({
-    type: SET_DURATION_TIME_FORMAT,
-    payload,
+export const setDurationTimeFormat = (payload) => ({
+  type: SET_DURATION_TIME_FORMAT,
+  payload,
 });
 
-export const setFirstDayOfWeek = payload => ({
-    type: SET_FIRST_DAY_OF_WEEK,
-    payload,
+export const setFirstDayOfWeek = (payload) => ({
+  type: SET_FIRST_DAY_OF_WEEK,
+  payload,
 });
 
-export const setTimeFormat = payload => ({
-    type: SET_TIME_FORMAT,
-    payload,
+export const setTimeFormat = (payload) => ({
+  type: SET_TIME_FORMAT,
+  payload,
 });
 
-export const setDateFormat = payload => ({
-    type: SET_DATE_FORMAT,
-    payload,
+export const setDateFormat = (payload) => ({
+  type: SET_DATE_FORMAT,
+  payload,
 });
 
 const getUserDataRequest = () => ({
-    type: GET_USER_DATA_REQUEST,
+  type: GET_USER_DATA_REQUEST,
 });
 
-const getUserDataRequestSuccess = payload => ({
-    type: GET_USER_DATA_REQUEST_SUCCESS,
-    payload,
+const getUserDataRequestSuccess = (payload) => ({
+  type: GET_USER_DATA_REQUEST_SUCCESS,
+  payload,
 });
 
-const getUserDataRequestFail = payload => ({
-    type: GET_USER_DATA_REQUEST_FAIL,
-    payload,
+const getUserDataRequestFail = (payload) => ({
+  type: GET_USER_DATA_REQUEST_FAIL,
+  payload,
 });
 
-export const changeUserData = payload => ({
-    type: CHANGE_USER_DATA,
-    payload,
+export const changeUserData = (payload) => ({
+  type: CHANGE_USER_DATA,
+  payload,
 });
 
 export const resetAll = () => ({
-    type: RESET_ALL,
+  type: RESET_ALL,
 });
 
-export const toggleModal = payload => ({
-    type: TOGGLE_MODAL,
-    payload,
+export const toggleModal = (payload) => ({
+  type: TOGGLE_MODAL,
+  payload,
 });
 
-export const checkUserDataAction = () => async dispatch => {
-    try {
-        const { data } = await getUserData();
-        const { language } = data;
+export const checkUserDataAction = () => async (dispatch) => {
+  try {
+    const { data } = await getUserData();
+    const { language } = data;
 
-        dispatch(setLanguage(language));
-        dispatch(changeUserData(data));
-    } catch (error) {
-        logoutByUnauthorized();
-    }
+    dispatch(setLanguage(language));
+    dispatch(changeUserData(data));
+  } catch (error) {
+    logoutByUnauthorized();
+  }
 };
 
-export const getUserDataAction = () => async dispatch => {
-    dispatch(getUserDataRequest());
-    try {
-        const { data } = await getUserData();
-        const { language } = data;
+export const getUserDataAction = () => async (dispatch) => {
+  dispatch(getUserDataRequest());
+  try {
+    const { data } = await getUserData();
+    const { language } = data;
 
-        dispatch(
-            reportsPageAction('SET_ACTIVE_USER', {
-                data: [data.email],
-            })
-        );
+    dispatch(
+      reportsPageAction('SET_ACTIVE_USER', {
+        data: [data.email],
+      }),
+    );
 
-        dispatch(setLanguage(language));
-        dispatch(getUserDataRequestSuccess(data));
-        dispatch(getUserTeamsAction());
-        dispatch(getCurrentTeamAction());
-        dispatch(getCurrentTeamDetailedDataAction());
-    } catch (error) {
-        logoutByUnauthorized();
-        dispatch(getUserDataRequestFail(error));
-    }
+    dispatch(setLanguage(language));
+    dispatch(getUserDataRequestSuccess(data));
+    dispatch(getUserTeamsAction());
+    dispatch(getCurrentTeamAction());
+    dispatch(getCurrentTeamDetailedDataAction());
+  } catch (error) {
+    logoutByUnauthorized();
+    dispatch(getUserDataRequestFail(error));
+  }
 };
 
 // SET_USER_AVATAR
 
 const setUserAvatarRequest = () => ({
-    type: SET_USER_AVATAR_REQUEST,
+  type: SET_USER_AVATAR_REQUEST,
 });
 
-const setUserAvatarRequestSuccess = payload => ({
-    type: SET_USER_AVATAR_REQUEST_SUCCESS,
-    payload,
+const setUserAvatarRequestSuccess = (payload) => ({
+  type: SET_USER_AVATAR_REQUEST_SUCCESS,
+  payload,
 });
 
-const setUserAvatarRequestFail = payload => ({
-    type: SET_USER_AVATAR_REQUEST_FAIL,
-    payload,
+const setUserAvatarRequestFail = (payload) => ({
+  type: SET_USER_AVATAR_REQUEST_FAIL,
+  payload,
 });
 
-export const setUserAvatarAction = (id, formData) => async dispatch => {
-    dispatch(setUserAvatarRequest());
-    try {
-        const { data } = await setAvatar(id, formData);
+export const setUserAvatarAction = (id, formData) => async (dispatch) => {
+  dispatch(setUserAvatarRequest());
+  try {
+    const { data } = await setAvatar(id, formData);
 
-        dispatch(setUserAvatarRequestSuccess(data));
-    } catch (error) {
-        dispatch(setUserAvatarRequestFail(error));
-    }
+    dispatch(setUserAvatarRequestSuccess(data));
+  } catch (error) {
+    dispatch(setUserAvatarRequestFail(error));
+  }
 };
 
-export const deleteUserAvatarAction = id => async dispatch => {
-    dispatch(setUserAvatarRequest());
-    try {
-        const { data } = await deleteAvatar(id);
+export const deleteUserAvatarAction = (id) => async (dispatch) => {
+  dispatch(setUserAvatarRequest());
+  try {
+    const { data } = await deleteAvatar(id);
 
-        dispatch(setUserAvatarRequestSuccess(data));
-    } catch (error) {
-        dispatch(setUserAvatarRequestFail(error));
-    }
+    dispatch(setUserAvatarRequestSuccess(data));
+  } catch (error) {
+    dispatch(setUserAvatarRequestFail(error));
+  }
 };
