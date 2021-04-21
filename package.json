@@ -56,7 +56,7 @@
     "jest": "./node_modules/.bin/jest",
     "lerna": "lerna bootstrap",
     "prelernapublish": "git checkout publish && git merge -s recursive -X theirs master",
-    "lernapublish": "lerna publish --ignore-scripts --cd-version=patch",
+    "lernapublish": "lerna publish --ignore-scripts --cd-version=patch --no-push --force-publish",
     "postlernapublish": "git checkout master",
     "lint": "eslint --ext js --ext ts --ext tsx --ext md",
     "lint:ci": "yarn lint . --format junit",
