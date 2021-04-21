@@ -53,7 +53,7 @@
     "prelernapublish": "git checkout publish && git merge -s recursive -X theirs master",
     "lernapublish": "lerna publish --ignore-scripts --cd-version=patch",
     "postlernapublish": "git checkout master",
-    "lint": "eslint --ext js --ext ts --ext md",
+    "lint": "eslint --ext js --ext ts --ext tsx --ext md",
     "lint:ci": "yarn lint . --format junit",
     "lint:fix": "yarn lint -- --fix",
     "lint:md": "markdownlint",
