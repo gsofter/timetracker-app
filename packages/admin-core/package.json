@@ -18,8 +18,6 @@
     "test:watch": "npm test -- --watch",
     "watch": "yarn build:lib:watch"
   },
-  "devDependencies": {
-  },
   "publishConfig": {
     "access": "public"
   },

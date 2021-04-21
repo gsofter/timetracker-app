@@ -1,6 +1,6 @@
 {
   "name": "admin-layout",
-  "version": "0.8.3",
+  "version": "0.8.4",
   "private": true,
   "homepage": "https://github.com/cdmbase/admin-layout#readme",
   "bugs": {
@@ -21,6 +21,9 @@
     ]
   },
   "scripts": {
+    "prebootstrap": "lerna run prepare",
+    "bootstrap": "yarn && yarn lerna && yarn build",
+    "postbootstrap": "yarn build",
     "build": "yarn build:packages",
     "build:clean": "lerna exec yarn build:clean",
     "build:packages": "lerna run build --ignore *server --ignore *desktop",
@@ -28,6 +31,7 @@
     "check-updates": "lerna exec ./node_modules/.bin/npm-check-updates -- -u",
     "clean": "lerna clean --yes && yarn build:clean && rimraf node_modules",
     "clean:force": "rimraf package-lock.json yarn.lock && yarn clean",
+    "clean:install": "yarn clean:force && yarn git:pull && yarn bootstrap",
     "cli": "node tools/cli",
     "commit": "git cz",
     "compile": "lerna exec -- yarn compile",
@@ -37,7 +41,7 @@
     "db:migrate:rollback": "knex migrate:rollback  --cwd . --knexfile ./servers/backend-server/knexfile.js",
     "db:seed": "yarn db:migrate && knex seed:run  --cwd . --knexfile ./servers/backend-server/knexfile.js",
     "predevpublish": "git checkout devpublish && git pull origin devpublish && git merge -s recursive -X theirs develop -m 'merge from develop' && node tools/update-dependency-version.js",
-    "devpublish": "lerna publish prerelease --ignore-scripts",
+    "devpublish": "lerna publish prerelease --ignore-scripts --exact",
     "postdevpublish": "git checkout develop",
     "devpublish:auto": "yarn devpublish -- --yes",
     "devpublish:force": "yarn devpublish:forceManual -- --yes",
@@ -58,9 +62,7 @@
     "lint:ci": "yarn lint . --format junit",
     "lint:fix": "yarn lint -- --fix",
     "lint:md": "markdownlint",
-    "lintx": "eslint -c .eslintrc.js --ext .ts ./packages/**/src/**/*.ts ./packages-modules/**/src/**/*.ts",
-    "postbootstrap": "yarn build",
-    "prebootstrap": "lerna run prepare",
+    "lintx": "yarn lint ./packages/**/src/**/*.ts ./packages-modules/**/src/**/*.ts",
     "prodBuild": "cross-env NODE_ENV=production babel-node --presets es2015 tools/webpack.run",
     "publish": "yarn lernapublish",
     "publish:force": "yarn lernapublish -- --force-publish=*",
