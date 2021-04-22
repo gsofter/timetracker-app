@@ -1,3 +1,4 @@
+/* eslint-disable prettier/prettier */
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 /* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
@@ -10,6 +11,7 @@
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-use-before-define */
 import React, { useState } from 'react';
+import moment from 'moment';
 import { StyleSheet, View, ScrollView } from 'react-native';
 
 import TimerFooter from '../modules/timerModules/TimerFooter';
@@ -20,8 +22,8 @@ const TimerScreen = () => {
   const [billable, setBillable] = useState(false);
   const [track, setTrack] = useState(true);
   const [manual, setManual] = useState(false);
-  const [selectedStartDate, setSelectedStartDate] = useState<any>('Start Date');
-  const [selectedEndDate, setSelectedEndDate] = useState<any>('End Date');
+  const [selectedStartDate, setSelectedStartDate] = useState<any>(moment().format('MM-DD-YYYY'));
+  const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
 
   const toggleProject = () => {
     setIsToggle(!isToggle);
@@ -32,17 +34,17 @@ const TimerScreen = () => {
   };
 
   const onDateChange = (date: any, type: any) => {
+    const Date = moment(date).format('MM-DD-YYYY')
     if (type === 'END_DATE') {
-      setSelectedEndDate(date);
+      setSelectedEndDate(Date);
     } else {
-      setSelectedEndDate(null);
-      setSelectedStartDate(date);
+      setSelectedStartDate(Date);
     }
   };
 
   const onReset = () => {
-    setSelectedEndDate(null);
-    setSelectedStartDate(null);
+    setSelectedEndDate(moment().format('MM-DD-YYYY'));
+    setSelectedStartDate(moment().add(5, 'd').format('MM-DD-YYYY'));
   };
 
   const onTrack = () => {
@@ -74,6 +76,7 @@ const TimerScreen = () => {
         manual={manual}
         onTrack={onTrack}
         onManual={onManual}
+        onDateChange={onDateChange}
       />
     </View>
   );

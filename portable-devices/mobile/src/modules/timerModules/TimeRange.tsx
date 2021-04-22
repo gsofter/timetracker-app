@@ -17,16 +17,18 @@ const TimeRange = ({ onDateChange, onReset, selectedStartDate, selectedEndDate }
     const [modalVisible, setModalVisible] = useState(false)
     return (
         <View>
-            <View style={styles.textStyle}>
-                <Text onPress={() => setModalVisible(true)}>
-                    {selectedStartDate ? selectedStartDate.toString() : ''}
-                </Text>
-                <Icon style={styles.font_size} name="arrow-forward-outline" />
-                <Text onPress={() => setModalVisible(true)}>
-                    {selectedEndDate ? selectedEndDate.toString() : ''}
-                </Text>
-                <Icon style={styles.font_size} name="today-outline" />
-                <Button info onPress={() => onReset()} ><Text>Rest</Text></Button>
+            <View style={styles.textDiv}>
+                <View style={styles.textStyle}>
+                    <Text onPress={() => setModalVisible(true)}>
+                        {selectedStartDate ? selectedStartDate.toString() : ''}
+                    </Text>
+                    <Icon style={styles.font_size} name="arrow-forward-outline" />
+                    <Text onPress={() => setModalVisible(true)}>
+                        {selectedEndDate ? selectedEndDate.toString() : ''}
+                    </Text>
+                    <Icon style={styles.font_size} name="today-outline" />
+                </View>
+                <Button block style={styles.button} info onPress={() => onReset()} ><Text style={styles.button_text}>Rest</Text></Button>
             </View>
             <Dialog
                 visible={modalVisible}
@@ -52,7 +54,7 @@ const TimeRange = ({ onDateChange, onReset, selectedStartDate, selectedEndDate }
                             textStyle={{
                             color: '#000000',
                             }}
-                            onDateChange={onDateChange}
+                            onDateChange={(date, type) => onDateChange(date, type)}
                         />
                     </View>
                 </DialogContent>
@@ -65,9 +67,15 @@ const styles = StyleSheet.create({
   textStyle: {
     display: 'flex',
     justifyContent: 'center',
-    marginTop: 30,
     backgroundColor: 'white',
-    padding: 10,
+    padding: 12,
+    flexDirection: 'row',
+    alignItems: 'center',
+  },
+  textDiv: {
+    display: 'flex',
+    justifyContent: 'center',
+    marginTop: 30,
     flexDirection: 'row',
     alignItems: 'center',
   },
@@ -82,6 +90,13 @@ const styles = StyleSheet.create({
       marginRight: 10,
       marginLeft: 10,
   },
+  button: {
+      width: '20%',
+      alignItems: 'center'
+  },
+  button_text: {
+      color: 'white',
+  }
 })
 
 export default TimeRange;
