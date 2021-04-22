@@ -38,11 +38,7 @@ export interface ITimesheetService {
     request: ITimesheetCreateRequest,
     userContext?: any,
   ): Promise<Boolean>;
-  updateTimesheetStatus(
-    userId: string,
-    orgId: string,
-    request: ITimesheetCreateRequest,
-  ): Promise<Boolean>;
+  updateTimesheetStatus(orgId: string, sheetId: string, state: ITimesheetState): Promise<Boolean>;
   removeTimesheet(userId: string, orgId: string, sheetId: string): Promise<Boolean>;
 }
 
@@ -55,6 +51,9 @@ export class TimesheetService implements ITimesheetService {
 
     @inject(TYPES.ITimeRecordRepository)
     protected timeRecordRepository: ITimeRecordRepository,
+
+    @inject(TYPES.ITimeRecordService)
+    protected timeRecordService: ITimeRecordRepository,
 
     @inject(ServerTypes.IPreferenceEditorService)
     private preferencesService: IPreferencesService,
@@ -132,8 +131,17 @@ export class TimesheetService implements ITimesheetService {
     userContext?: any,
   ) {
     try {
-      await this.timesheetRepository.updateTimesheet(userId, orgId, sheetId, request, userContext);
-
+      await this.timesheetRepository.updateTimesheet(orgId, sheetId, request);
+      if (request.state === ITimesheetState.APPROVED) {
+        // approve time records from startDate to endDate
+        console.log('updateTimesheet.APPROVED');
+        this.timeRecordService.approveTimeRecords(
+          orgId,
+          sheetId,
+          request.startDate,
+          request.endDate,
+        );
+      }
       const resourceUri = generateOrgUri(orgId, IConfigFragmentName.settings);
       const { settings } = (await this.preferencesService.viewerSettings({
         target: ConfigurationTarget.ORGANIZATION_RESOURCE,
@@ -182,12 +190,19 @@ export class TimesheetService implements ITimesheetService {
     }
   }
 
-  public async updateTimesheetStatus(
-    userId: string,
-    orgId: string,
-    request: ITimesheetCreateRequest,
-  ) {
-    return this.timesheetRepository.updateTimesheetStatus(userId, orgId, request);
+  public async updateTimesheetStatus(orgId: string, sheetId: string, state: ITimesheetState) {
+    try {
+      const timesheet = await this.timesheetRepository.updateTimesheetStatus(orgId, sheetId, state);
+      console.log('updateTimesheetStatus.timesheet =>', timesheet);
+      if (state === ITimesheetState.APPROVED) {
+        // approve time records from startDate to endDate
+        console.log('APPROVED');
+      }
+
+      return true;
+    } catch (e) {
+      throw new Error(e.message);
+    }
   }
 
   public async removeTimesheet(userId: string, orgId: string, sheetId: string) {

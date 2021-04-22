@@ -9,5 +9,6 @@ query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime) {
     isBillable
     userId
     editable
+    timesheetId
   }
 }

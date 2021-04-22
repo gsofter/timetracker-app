@@ -32,6 +32,7 @@ export interface ITimeRecordRepository {
     endTime: Date,
     projectId: string,
   ): Promise<Boolean>;
+  approveTimeRecords(orgId: string, sheetId: string, startDate: Date, endDate: Date);
 }
 
 @injectable()
@@ -69,20 +70,6 @@ export class TimeRecordRepository implements ITimeRecordRepository {
     else return moment(t) >= moment(B) && moment(t) <= moment(A);
   }
 
-  public async getOrganizationTimesheets(orgId: string) {
-    const trackDoc = await this.timeTrackerModel.findOne({ orgId });
-    if (trackDoc && trackDoc.timesheets) {
-      return trackDoc.timesheets;
-    } else {
-      return [];
-    }
-  }
-
-  public async getTimesheets(orgId: string, userId?: string) {
-    const timesheets = await this.getOrganizationTimesheets(orgId);
-    return timesheets.filter((sheet) => !userId || sheet.userId === userId);
-  }
-
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
 
@@ -107,19 +94,6 @@ export class TimeRecordRepository implements ITimeRecordRepository {
     }
   }
 
-  public async createTimesheet(userId: string, orgId: string, request: ITimesheetCreateRequest) {
-    try {
-      const response = await this.timeTrackerModel.update(
-        { orgId: orgId },
-        { $push: { timesheets: request } },
-        { upsert: true },
-      );
-      return true;
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  }
-
   public async updateTimeRecord(
     userId: string,
     orgId: string,
@@ -133,57 +107,6 @@ export class TimeRecordRepository implements ITimeRecordRepository {
       const response = await this.timeTrackerModel.update(
         { orgId: orgId, timeRecords: { $elemMatch: { _id: recordId } } },
         { $set: { 'timeRecords.$': request } },
-      );
-      return true;
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  }
-
-  public async updateTimesheet(
-    userId: string,
-    orgId: string,
-    sheetId: string,
-    request: ITimesheetCreateRequest,
-    userContext?: any,
-  ) {
-    try {
-      await this.timeTrackerModel.update(
-        { orgId: orgId, timesheets: { $elemMatch: { _id: sheetId } } },
-        { $set: { 'timesheets.$': request } },
-      );
-      return true;
-    } catch (err) {
-      throw new Error(err.message);
-    }
-  }
-
-  public async updateTimesheetStatus(
-    userId: string,
-    orgId: string,
-    request: ITimesheetCreateRequest,
-  ) {
-    try {
-      const response = await this.timeTrackerModel.update(
-        {
-          orgId,
-          $and: [
-            {
-              $elemMatch: { 'timesheets.startDate': new Date(request.startDate.toISOString()) },
-            },
-            {
-              $elemMatch: { 'timesheets.endDate': new Date(request.endDate.toISOString()) },
-            },
-            {
-              $elemMatch: { 'timesheets.userId': userId },
-            },
-          ],
-        },
-        {
-          $set: {
-            'timesheets.$': request,
-          },
-        },
       );
       return true;
     } catch (err) {
@@ -245,19 +168,23 @@ export class TimeRecordRepository implements ITimeRecordRepository {
     }
   }
 
-  public async removeTimesheet(userId: string, orgId: string, sheetId: string) {
-    try {
-      await this.timeTrackerModel.update(
-        {
-          orgId,
-        },
-        {
-          $pull: { 'timesheets._id': sheetId },
-        },
-      );
-      return true;
-    } catch (err) {
-      throw new Error(err.message);
-    }
+  public async approveTimeRecords(orgId: string, sheetId: string, startDate: Date, endDate: Date) {
+    const response = await this.timeTrackerModel.updateMany(
+      {
+        orgId,
+      },
+      { $set: { 'timeRecords.$[el].timesheetId': sheetId } },
+      {
+        multi: true,
+        arrayFilters: [
+          {
+            'el.startTime': { $gte: startDate },
+            'el.endTime': { $lte: endDate },
+          },
+        ],
+      },
+    );
+
+    console.log('approveTimeRecords =>', response);
   }
 }

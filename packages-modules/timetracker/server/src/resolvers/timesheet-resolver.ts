@@ -40,11 +40,7 @@ export const resolver = (options) => ({
     },
     updateTimesheetStatus: (root, args, { timesheetService, user, userContext }) => {
       options.logger.trace('(Mutation.updateTimesheetStatus) args %j', args);
-      return timesheetService.updateTimesheetStatus(
-        user._id || user.sub,
-        userContext.orgId,
-        args.request,
-      );
+      return timesheetService.updateTimesheetStatus(userContext.orgId, args.sheetId, args.state);
     },
   },
   Subscription: {},

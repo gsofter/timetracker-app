@@ -1371,6 +1371,7 @@ extend type Mutation {
   clientId: String
   userId: String
   orgId: String
+  timesheetId: String
   editable: Boolean
 }
 
@@ -1460,7 +1461,7 @@ extend type Mutation {
   createTimesheet(request: TimesheetCreateRequest): Boolean @addAccountContext
   updateTimesheet(sheetId: String, request: TimesheetCreateRequest): Boolean @addAccountContext
   removeTimesheet(sheetId: String): Boolean @addAccountContext
-  updateTimesheetStatus(request: TimesheetCreateRequest): Boolean @addAccountContext
+  updateTimesheetStatus(sheetId: String, state: TimesheetState): Boolean @addAccountContext
 }
 
 type TimeTracker {

@@ -1,6 +1,6 @@
 import * as ILogger from 'bunyan';
 import { inject, injectable } from 'inversify';
-import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-core';
+import { ITimeRecord, ITimeRecordRequest, ITimesheet } from '@admin-layout/timetracker-core';
 import {
   ServerTypes,
   IPreferencesService,
@@ -38,6 +38,7 @@ export interface ITimeRecordService {
     endTime: Date,
     projectId: string,
   ): Promise<Boolean>;
+  approveTimeRecords(orgId: string, sheetId: string, startDate: Date, endDate: Date);
 }
 
 @injectable()
@@ -154,6 +155,10 @@ export class TimeRecordService implements ITimeRecordService {
       endTime,
       projectId,
     );
+  }
+
+  public async approveTimeRecords(orgId: string, sheetId: string, startDate: Date, endDate: Date) {
+    this.timeRecordRepository.approveTimeRecords(orgId, sheetId, startDate, endDate);
   }
 
   private sendMail(topic, to, from, templateId, templateVars) {
