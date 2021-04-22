@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApolloClient, ApolloClientOptions } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { BatchHttpLink } from 'apollo-link-batch-http';
@@ -7,12 +9,12 @@ import { WebSocketLink } from 'apollo-link-ws';
 import { getOperationAST } from 'graphql';
 import apolloLogger from 'apollo-link-logger';
 
-import { PUBLIC_SETTINGS } from './public-config';
-import modules from '../modules';
 import { logger } from '@cdm-logger/client';
 import { invariant } from 'ts-invariant';
 import { onTokenError } from '@adminide-stack/user-auth0-browser';
 import { createUploadLink } from 'apollo-upload-client';
+import modules from '../modules';
+import { PUBLIC_SETTINGS } from './public-config';
 
 const clientState = modules.getStateParams({ resolverContex: () => modules.createService({}, {}) });
 
@@ -21,18 +23,15 @@ export const cache = new InMemoryCache({
     dataIdFromObject: (result) => modules.getDataIdFromObject(result),
     fragmentMatcher: clientState.fragmentMatcher as any,
 });
-
 const schema = ``;
 
 const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
-            // tslint:disable-next-line
-            invariant.warn(`[GraphQL error]: Message: ${message}, Location: ` + `${locations}, Path: ${path}`),
+            invariant.warn(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`),
         );
     }
     if (networkError) {
-        // tslint:disable-next-line
         invariant.warn(`[Network error]: ${networkError}`);
     }
 });

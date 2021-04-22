@@ -30,16 +30,6 @@ export type Scalars = {
 
 
 
-/**  all input for the `acceptInvitationToTeam` mutation. */
-export type IAcceptInvitationToTeam_Input = {
-  /**
-   * An arbitrary string value with no semantic meaning. Will be included in the
-   * payload verbatim. May be used to track mutations by the client.
-   */
-  code?: Maybe<Scalars['String']>;
-  invitationId: Scalars['String'];
-};
-
 export type IAccessRole = IDefaultRole | IOrganizationRole | IResourceRole | IApplicationRolePermission;
 
 /**
@@ -72,7 +62,6 @@ export type IAccountTeam = {
   updatedAt?: Maybe<Scalars['String']>;
   createdAt?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  invitations?: Maybe<Array<Maybe<ITeamInvitation>>>;
   teamMembers?: Maybe<Array<Maybe<ITeamMember>>>;
 };
 
@@ -84,7 +73,6 @@ export type IAccountTeam_Input = {
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   description?: Maybe<Scalars['String']>;
   parentTeam?: Maybe<IAccountTeam_Input>;
-  invitations?: Maybe<Array<Maybe<ITeamInvitation_Input>>>;
   teamMembers?: Maybe<Array<Maybe<ITeamMember_Input>>>;
 };
 
@@ -624,14 +612,6 @@ export type IIntegrationConfigurationInput = {
   integrationInfo?: Maybe<Scalars['JSON']>;
 };
 
-export type IInvitationDecode = {
-   __typename?: 'InvitationDecode';
-  orgName?: Maybe<Scalars['String']>;
-  teamName?: Maybe<Scalars['String']>;
-  email?: Maybe<Scalars['String']>;
-  invitationId?: Maybe<Scalars['String']>;
-};
-
 export type IInviteMember = {
    __typename?: 'InviteMember';
   id?: Maybe<Scalars['String']>;
@@ -850,13 +830,6 @@ export type IMemorySettings = IISettingsSubject & {
 
 export type IMutation = {
    __typename?: 'Mutation';
-  acceptInvitation?: Maybe<Scalars['Boolean']>;
-  /**
-   * If someone invited you by your email address then you must include the code
-   * that was emailed to you, otherwise you may accept the invitation directly
-   * using the UUID. If successful, you will be a member of the organization.
-   */
-  acceptInvitationToTeam?: Maybe<Scalars['Boolean']>;
   acceptOrganizationInvitation?: Maybe<Scalars['Boolean']>;
   addClient?: Maybe<Scalars['Boolean']>;
   addContributionRole?: Maybe<Scalars['Boolean']>;
@@ -878,7 +851,6 @@ export type IMutation = {
   createTeam?: Maybe<IAccountTeam>;
   createTimeRecord?: Maybe<Scalars['String']>;
   createTimesheet?: Maybe<Scalars['Boolean']>;
-  declineInvitation?: Maybe<Scalars['Boolean']>;
   declineOrganizationInvitation?: Maybe<Scalars['Boolean']>;
   deleteIntegrationConfiguration?: Maybe<Scalars['Boolean']>;
   dummy?: Maybe<Scalars['Int']>;
@@ -896,9 +868,7 @@ export type IMutation = {
   removeTimeRecord?: Maybe<Scalars['Boolean']>;
   removeTimelineEvent?: Maybe<Scalars['Boolean']>;
   removeTimesheet?: Maybe<Scalars['Boolean']>;
-  resendInvitation?: Maybe<Scalars['Boolean']>;
   resendOrganizationInvitation?: Maybe<Scalars['Boolean']>;
-  sendInvitation?: Maybe<Scalars['Boolean']>;
   sendInvoiceMail?: Maybe<Scalars['Boolean']>;
   sendOrganizationInvitation?: Maybe<Scalars['Boolean']>;
   setSettingsValueByResource?: Maybe<Scalars['Boolean']>;
@@ -924,16 +894,6 @@ export type IMutation = {
   updateTimesheet?: Maybe<Scalars['Boolean']>;
   updateTimesheetStatus?: Maybe<Scalars['Boolean']>;
   upsertProjectThroughIntegration?: Maybe<IProjects>;
-};
-
-
-export type IMutationacceptInvitationArgs = {
-  id: Scalars['ID'];
-};
-
-
-export type IMutationacceptInvitationToTeamArgs = {
-  input?: Maybe<IAcceptInvitationToTeam_Input>;
 };
 
 
@@ -1041,11 +1001,6 @@ export type IMutationcreateTimesheetArgs = {
 };
 
 
-export type IMutationdeclineInvitationArgs = {
-  id: Scalars['ID'];
-};
-
-
 export type IMutationdeclineOrganizationInvitationArgs = {
   id: Scalars['ID'];
 };
@@ -1125,18 +1080,8 @@ export type IMutationremoveTimesheetArgs = {
 };
 
 
-export type IMutationresendInvitationArgs = {
-  id: Scalars['ID'];
-};
-
-
 export type IMutationresendOrganizationInvitationArgs = {
   id: Scalars['ID'];
-};
-
-
-export type IMutationsendInvitationArgs = {
-  request: ITeamInvitationRequest;
 };
 
 
@@ -1852,7 +1797,6 @@ export type IQuery = {
   counter?: Maybe<ICounter>;
   /**  Counter from Datasource  */
   counterCache?: Maybe<ICounter>;
-  decodeInvitation?: Maybe<IInvitationDecode>;
   decodeOrganizationInvitation?: Maybe<IOrganizationInvitationDecode>;
   /** Return the permissions groups */
   defaultPermissions?: Maybe<Array<Maybe<ISettingsGroup>>>;
@@ -1891,6 +1835,7 @@ export type IQuery = {
   getInvoices?: Maybe<Array<Maybe<IInvoiceType>>>;
   getManageableOrganizations?: Maybe<Array<Maybe<IOrganization>>>;
   getOrgInvitationMembers?: Maybe<Array<Maybe<IInviteMember>>>;
+  getOrgTeamInvitations?: Maybe<Array<Maybe<IOrganizationInvitation>>>;
   getOrganizationClients?: Maybe<Array<Maybe<IClient>>>;
   getOrganizationConfigValue?: Maybe<Scalars['AnyObject']>;
   getOrganizationDetail?: Maybe<IOrganization>;
@@ -1925,18 +1870,12 @@ export type IQuery = {
   moleculerCounter?: Maybe<ICounter>;
   organizations?: Maybe<Array<Maybe<IOrganization>>>;
   team?: Maybe<IAccountTeam>;
-  teamInvitation: ITeamInvitation;
   teams?: Maybe<Array<Maybe<IAccountTeam>>>;
   /**
    * The settings for the viewer. The viewer is either an anonymous visitor (in which case viewer settings is
    * global settings) or an authenticated user (in which case viewer settings are the user's settings).
    */
   viewerSettings: IViewerSettingsSubject;
-};
-
-
-export type IQuerydecodeInvitationArgs = {
-  token: Scalars['String'];
 };
 
 
@@ -2010,6 +1949,11 @@ export type IQuerygetFilteredProjectsArgs = {
 
 export type IQuerygetIntegrationConfigurationArgs = {
   id: Scalars['String'];
+};
+
+
+export type IQuerygetOrgTeamInvitationsArgs = {
+  teamId?: Maybe<Scalars['String']>;
 };
 
 
@@ -2122,11 +2066,6 @@ export type IQuerymergedApplicationPermissionsArgs = {
 
 export type IQueryteamArgs = {
   teamId: Scalars['ID'];
-};
-
-
-export type IQueryteamInvitationArgs = {
-  id: Scalars['ID'];
 };
 
 
@@ -2388,7 +2327,6 @@ export type ITeamCreateRequest = {
   teamMembers?: Maybe<Array<Maybe<ITeamMember_Input>>>;
   parentTeam?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-  invitation?: Maybe<ITeamInvitation_Input>;
 };
 
 export type ITeamCreationRequest = {
@@ -2398,70 +2336,6 @@ export type ITeamCreationRequest = {
   emails?: Maybe<Array<Maybe<Scalars['String']>>>;
   parentTeam?: Maybe<Scalars['String']>;
   description?: Maybe<Scalars['String']>;
-};
-
-/**
- * Inivitation to become a team member.
- * You may invite a user to your team either by ther `username` (only for
- * verified users) or by their email. If you opt to invite by email then an email
- * will be sent to this person containing a code that they need to accept the
- * invitation. If the person doesn't already have an account they will be
- * instructed to create one; their account need not have the email address that
- * you invited listed as the secret code is confirmation enough.
- * @property
- * email: The email of the inventee
- * @property
- * fullName: The name of the invitee, derived from an RFC5322 email string
- * @property
- * invitedBy: The teamMemberId of the person that sent the invitation
- * @property
- * teamId: The team invited to
- * @property
- * tokenExpiration: The datestamp of when the invitation will expire.
- * @property
- * inviteCount: How many invites have been sent to this email address?
- * @property
- * acceptedAt: The datetime the invitation was accepted.
- * @property
- * createdAt: The datetime the invitation was created.
- * @property
- * updatedAt: The datetime the invitation was last updated.
- */
-export type ITeamInvitation = {
-   __typename?: 'TeamInvitation';
-  id: Scalars['ID'];
-  email?: Maybe<Scalars['String']>;
-  teamId?: Maybe<Scalars['String']>;
-  role?: Maybe<IApplicationRoles>;
-  active?: Maybe<Scalars['Boolean']>;
-  fullName?: Maybe<Scalars['String']>;
-  inviteCount?: Maybe<Scalars['Int']>;
-  invitedBy?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  acceptedAt?: Maybe<Scalars['DateTime']>;
-  tokenExpiration?: Maybe<Scalars['DateTime']>;
-};
-
-/**  The output of our `acceptInvitationToTeam`.  */
-export type ITeamInvitation_Input = {
-  email?: Maybe<Scalars['String']>;
-  teamId?: Maybe<Scalars['String']>;
-  role?: Maybe<IApplicationRoles>;
-  active?: Maybe<Scalars['Boolean']>;
-  fullName?: Maybe<Scalars['String']>;
-  inviteCount?: Maybe<Scalars['Int']>;
-  invitedBy?: Maybe<Scalars['String']>;
-  createdAt?: Maybe<Scalars['DateTime']>;
-  updatedAt?: Maybe<Scalars['DateTime']>;
-  acceptedAt?: Maybe<Scalars['DateTime']>;
-  tokenExpiration?: Maybe<Scalars['DateTime']>;
-};
-
-export type ITeamInvitationRequest = {
-  teamId?: Maybe<Scalars['String']>;
-  emails?: Maybe<Array<Maybe<Scalars['String']>>>;
-  invitedBy?: Maybe<Scalars['String']>;
 };
 
 /** TeamMember: A member of a team. */
@@ -3128,7 +3002,6 @@ export type IResolversTypes = {
   Counter: ResolverTypeWrapper<ICounter>,
   Int: ResolverTypeWrapper<Scalars['Int']>,
   String: ResolverTypeWrapper<Scalars['String']>,
-  InvitationDecode: ResolverTypeWrapper<IInvitationDecode>,
   OrganizationInvitationDecode: ResolverTypeWrapper<IOrganizationInvitationDecode>,
   SettingsGroup: ResolverTypeWrapper<ISettingsGroup>,
   Range: ResolverTypeWrapper<IRange>,
@@ -3229,7 +3102,6 @@ export type IResolversTypes = {
   OrganizationData: ResolverTypeWrapper<IOrganizationData>,
   OrganizationResourceData: ResolverTypeWrapper<IOrganizationResourceData>,
   AccountTeam: ResolverTypeWrapper<IAccountTeam>,
-  TeamInvitation: ResolverTypeWrapper<ITeamInvitation>,
   TeamMember: ResolverTypeWrapper<ITeamMember>,
   Project_Output: ResolverTypeWrapper<IProject_Output>,
   RoleInput: IRoleInput,
@@ -3244,7 +3116,6 @@ export type IResolversTypes = {
   ViewerSettingsInput: IViewerSettingsInput,
   ViewerSettingsSubject: ResolverTypeWrapper<IViewerSettingsSubject>,
   Mutation: ResolverTypeWrapper<{}>,
-  AcceptInvitationToTeam_Input: IAcceptInvitationToTeam_Input,
   OrganizationNotificationValues: IOrganizationNotificationValues,
   ClientAddRequest: IClientAddRequest,
   Name_Input: IName_Input,
@@ -3271,7 +3142,6 @@ export type IResolversTypes = {
   TimeRecordRequest: ITimeRecordRequest,
   TimesheetCreateRequest: ITimesheetCreateRequest,
   OrganizationRemoveRequest: IOrganizationRemoveRequest,
-  TeamInvitationRequest: ITeamInvitationRequest,
   InvoiceMailRequest: IInvoiceMailRequest,
   Template: ITemplate,
   OrganizationInvitationRequest: IOrganizationInvitationRequest,
@@ -3327,7 +3197,6 @@ export type IResolversTypes = {
   UserAccountRemoveRequest: IUserAccountRemoveRequest,
   UserAccountRemovedEvent: ResolverTypeWrapper<IUserAccountRemovedEvent>,
   AccountTeam_Input: IAccountTeam_Input,
-  TeamInvitation_Input: ITeamInvitation_Input,
   TeamMember_Input: ITeamMember_Input,
   TeamRemoveRequest: ITeamRemoveRequest,
   TeamUpdateRequest: ITeamUpdateRequest,
@@ -3347,7 +3216,6 @@ export type IResolversParentTypes = {
   Counter: ICounter,
   Int: Scalars['Int'],
   String: Scalars['String'],
-  InvitationDecode: IInvitationDecode,
   OrganizationInvitationDecode: IOrganizationInvitationDecode,
   SettingsGroup: ISettingsGroup,
   Range: IRange,
@@ -3448,7 +3316,6 @@ export type IResolversParentTypes = {
   OrganizationData: IOrganizationData,
   OrganizationResourceData: IOrganizationResourceData,
   AccountTeam: IAccountTeam,
-  TeamInvitation: ITeamInvitation,
   TeamMember: ITeamMember,
   Project_Output: IProject_Output,
   RoleInput: IRoleInput,
@@ -3463,7 +3330,6 @@ export type IResolversParentTypes = {
   ViewerSettingsInput: IViewerSettingsInput,
   ViewerSettingsSubject: IViewerSettingsSubject,
   Mutation: {},
-  AcceptInvitationToTeam_Input: IAcceptInvitationToTeam_Input,
   OrganizationNotificationValues: IOrganizationNotificationValues,
   ClientAddRequest: IClientAddRequest,
   Name_Input: IName_Input,
@@ -3490,7 +3356,6 @@ export type IResolversParentTypes = {
   TimeRecordRequest: ITimeRecordRequest,
   TimesheetCreateRequest: ITimesheetCreateRequest,
   OrganizationRemoveRequest: IOrganizationRemoveRequest,
-  TeamInvitationRequest: ITeamInvitationRequest,
   InvoiceMailRequest: IInvoiceMailRequest,
   Template: ITemplate,
   OrganizationInvitationRequest: IOrganizationInvitationRequest,
@@ -3546,7 +3411,6 @@ export type IResolversParentTypes = {
   UserAccountRemoveRequest: IUserAccountRemoveRequest,
   UserAccountRemovedEvent: IUserAccountRemovedEvent,
   AccountTeam_Input: IAccountTeam_Input,
-  TeamInvitation_Input: ITeamInvitation_Input,
   TeamMember_Input: ITeamMember_Input,
   TeamRemoveRequest: ITeamRemoveRequest,
   TeamUpdateRequest: ITeamUpdateRequest,
@@ -3595,7 +3459,6 @@ export type IAccountTeamResolvers<ContextType = any, ParentType extends IResolve
   updatedAt?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   createdAt?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  invitations?: Resolver<Maybe<Array<Maybe<IResolversTypes['TeamInvitation']>>>, ParentType, ContextType>,
   teamMembers?: Resolver<Maybe<Array<Maybe<IResolversTypes['TeamMember']>>>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
@@ -3947,14 +3810,6 @@ export type IIntegrationConfigurationResolvers<ContextType = any, ParentType ext
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
-export type IInvitationDecodeResolvers<ContextType = any, ParentType extends IResolversParentTypes['InvitationDecode'] = IResolversParentTypes['InvitationDecode']> = {
-  orgName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  teamName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  email?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  invitationId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-};
-
 export type IInviteMemberResolvers<ContextType = any, ParentType extends IResolversParentTypes['InviteMember'] = IResolversParentTypes['InviteMember']> = {
   id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   email?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
@@ -4070,8 +3925,6 @@ export type IMemorySettingsResolvers<ContextType = any, ParentType extends IReso
 };
 
 export type IMutationResolvers<ContextType = any, ParentType extends IResolversParentTypes['Mutation'] = IResolversParentTypes['Mutation']> = {
-  acceptInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationacceptInvitationArgs, 'id'>>,
-  acceptInvitationToTeam?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationacceptInvitationToTeamArgs, never>>,
   acceptOrganizationInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationacceptOrganizationInvitationArgs, 'id'>>,
   addClient?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddClientArgs, 'client'>>,
   addContributionRole?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationaddContributionRoleArgs, 'name'>>,
@@ -4091,7 +3944,6 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   createTeam?: Resolver<Maybe<IResolversTypes['AccountTeam']>, ParentType, ContextType, RequireFields<IMutationcreateTeamArgs, 'request'>>,
   createTimeRecord?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType, RequireFields<IMutationcreateTimeRecordArgs, never>>,
   createTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationcreateTimesheetArgs, never>>,
-  declineInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationdeclineInvitationArgs, 'id'>>,
   declineOrganizationInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationdeclineOrganizationInvitationArgs, 'id'>>,
   deleteIntegrationConfiguration?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationdeleteIntegrationConfigurationArgs, 'id'>>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
@@ -4109,9 +3961,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   removeTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimeRecordArgs, never>>,
   removeTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimelineEventArgs, never>>,
   removeTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimesheetArgs, never>>,
-  resendInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationresendInvitationArgs, 'id'>>,
   resendOrganizationInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationresendOrganizationInvitationArgs, 'id'>>,
-  sendInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationsendInvitationArgs, 'request'>>,
   sendInvoiceMail?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationsendInvoiceMailArgs, 'request'>>,
   sendOrganizationInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationsendOrganizationInvitationArgs, never>>,
   setSettingsValueByResource?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationsetSettingsValueByResourceArgs, never>>,
@@ -4433,7 +4283,6 @@ export type IProjectsResolvers<ContextType = any, ParentType extends IResolversP
 export type IQueryResolvers<ContextType = any, ParentType extends IResolversParentTypes['Query'] = IResolversParentTypes['Query']> = {
   counter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   counterCache?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
-  decodeInvitation?: Resolver<Maybe<IResolversTypes['InvitationDecode']>, ParentType, ContextType, RequireFields<IQuerydecodeInvitationArgs, 'token'>>,
   decodeOrganizationInvitation?: Resolver<Maybe<IResolversTypes['OrganizationInvitationDecode']>, ParentType, ContextType, RequireFields<IQuerydecodeOrganizationInvitationArgs, 'token'>>,
   defaultPermissions?: Resolver<Maybe<Array<Maybe<IResolversTypes['SettingsGroup']>>>, ParentType, ContextType, RequireFields<IQuerydefaultPermissionsArgs, never>>,
   defaultPolicies?: Resolver<Maybe<Array<Maybe<IResolversTypes['SettingsGroup']>>>, ParentType, ContextType, RequireFields<IQuerydefaultPoliciesArgs, never>>,
@@ -4461,6 +4310,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   getInvoices?: Resolver<Maybe<Array<Maybe<IResolversTypes['InvoiceType']>>>, ParentType, ContextType>,
   getManageableOrganizations?: Resolver<Maybe<Array<Maybe<IResolversTypes['Organization']>>>, ParentType, ContextType>,
   getOrgInvitationMembers?: Resolver<Maybe<Array<Maybe<IResolversTypes['InviteMember']>>>, ParentType, ContextType>,
+  getOrgTeamInvitations?: Resolver<Maybe<Array<Maybe<IResolversTypes['OrganizationInvitation']>>>, ParentType, ContextType, RequireFields<IQuerygetOrgTeamInvitationsArgs, never>>,
   getOrganizationClients?: Resolver<Maybe<Array<Maybe<IResolversTypes['Client']>>>, ParentType, ContextType>,
   getOrganizationConfigValue?: Resolver<Maybe<IResolversTypes['AnyObject']>, ParentType, ContextType, RequireFields<IQuerygetOrganizationConfigValueArgs, never>>,
   getOrganizationDetail?: Resolver<Maybe<IResolversTypes['Organization']>, ParentType, ContextType, RequireFields<IQuerygetOrganizationDetailArgs, 'where'>>,
@@ -4491,7 +4341,6 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   organizations?: Resolver<Maybe<Array<Maybe<IResolversTypes['Organization']>>>, ParentType, ContextType>,
   team?: Resolver<Maybe<IResolversTypes['AccountTeam']>, ParentType, ContextType, RequireFields<IQueryteamArgs, 'teamId'>>,
-  teamInvitation?: Resolver<IResolversTypes['TeamInvitation'], ParentType, ContextType, RequireFields<IQueryteamInvitationArgs, 'id'>>,
   teams?: Resolver<Maybe<Array<Maybe<IResolversTypes['AccountTeam']>>>, ParentType, ContextType>,
   viewerSettings?: Resolver<IResolversTypes['ViewerSettingsSubject'], ParentType, ContextType, RequireFields<IQueryviewerSettingsArgs, never>>,
 };
@@ -4631,22 +4480,6 @@ export type ITagResolvers<ContextType = any, ParentType extends IResolversParent
 export type ITaskResolvers<ContextType = any, ParentType extends IResolversParentTypes['Task'] = IResolversParentTypes['Task']> = {
   id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   name?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  __isTypeOf?: isTypeOfResolverFn<ParentType>,
-};
-
-export type ITeamInvitationResolvers<ContextType = any, ParentType extends IResolversParentTypes['TeamInvitation'] = IResolversParentTypes['TeamInvitation']> = {
-  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>,
-  email?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  teamId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  role?: Resolver<Maybe<IResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
-  active?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
-  fullName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  inviteCount?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
-  invitedBy?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
-  createdAt?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  updatedAt?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  acceptedAt?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
-  tokenExpiration?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4894,7 +4727,6 @@ export type IResolvers<ContextType = any> = {
   IConfigurationModel?: IIConfigurationModelResolvers,
   IntegraitonConfigurationId?: IIntegraitonConfigurationIdResolvers<ContextType>,
   IntegrationConfiguration?: IIntegrationConfigurationResolvers<ContextType>,
-  InvitationDecode?: IInvitationDecodeResolvers<ContextType>,
   InviteMember?: IInviteMemberResolvers<ContextType>,
   InvoiceType?: IInvoiceTypeResolvers<ContextType>,
   IOrgUser?: IIOrgUserResolvers,
@@ -4960,7 +4792,6 @@ export type IResolvers<ContextType = any> = {
   Subscription?: ISubscriptionResolvers<ContextType>,
   Tag?: ITagResolvers<ContextType>,
   Task?: ITaskResolvers<ContextType>,
-  TeamInvitation?: ITeamInvitationResolvers<ContextType>,
   TeamMember?: ITeamMemberResolvers<ContextType>,
   Time?: GraphQLScalarType,
   Timeline?: ITimelineResolvers<ContextType>,

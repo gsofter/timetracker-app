@@ -23,22 +23,22 @@ export const SET_TIME_FORMAT = 'SET_TIME_FORMAT';
 export const SET_FIRST_DAY_OF_WEEK = 'SET_FIRST_DAY_OF_WEEK';
 export const SET_DURATION_TIME_FORMAT = 'SET_DURATION_TIME_FORMAT';
 
-export const setDurationTimeFormat = payload => ({
+export const setDurationTimeFormat = (payload) => ({
     type: SET_DURATION_TIME_FORMAT,
     payload,
 });
 
-export const setFirstDayOfWeek = payload => ({
+export const setFirstDayOfWeek = (payload) => ({
     type: SET_FIRST_DAY_OF_WEEK,
     payload,
 });
 
-export const setTimeFormat = payload => ({
+export const setTimeFormat = (payload) => ({
     type: SET_TIME_FORMAT,
     payload,
 });
 
-export const setDateFormat = payload => ({
+export const setDateFormat = (payload) => ({
     type: SET_DATE_FORMAT,
     payload,
 });
@@ -47,17 +47,17 @@ const getUserDataRequest = () => ({
     type: GET_USER_DATA_REQUEST,
 });
 
-const getUserDataRequestSuccess = payload => ({
+const getUserDataRequestSuccess = (payload) => ({
     type: GET_USER_DATA_REQUEST_SUCCESS,
     payload,
 });
 
-const getUserDataRequestFail = payload => ({
+const getUserDataRequestFail = (payload) => ({
     type: GET_USER_DATA_REQUEST_FAIL,
     payload,
 });
 
-export const changeUserData = payload => ({
+export const changeUserData = (payload) => ({
     type: CHANGE_USER_DATA,
     payload,
 });
@@ -66,12 +66,12 @@ export const resetAll = () => ({
     type: RESET_ALL,
 });
 
-export const toggleModal = payload => ({
+export const toggleModal = (payload) => ({
     type: TOGGLE_MODAL,
     payload,
 });
 
-export const checkUserDataAction = () => async dispatch => {
+export const checkUserDataAction = () => async (dispatch) => {
     try {
         const { data } = await getUserData();
         const { language } = data;
@@ -83,7 +83,7 @@ export const checkUserDataAction = () => async dispatch => {
     }
 };
 
-export const getUserDataAction = () => async dispatch => {
+export const getUserDataAction = () => async (dispatch) => {
     dispatch(getUserDataRequest());
     try {
         const { data } = await getUserData();
@@ -92,7 +92,7 @@ export const getUserDataAction = () => async dispatch => {
         dispatch(
             reportsPageAction('SET_ACTIVE_USER', {
                 data: [data.email],
-            })
+            }),
         );
 
         dispatch(setLanguage(language));
@@ -112,17 +112,17 @@ const setUserAvatarRequest = () => ({
     type: SET_USER_AVATAR_REQUEST,
 });
 
-const setUserAvatarRequestSuccess = payload => ({
+const setUserAvatarRequestSuccess = (payload) => ({
     type: SET_USER_AVATAR_REQUEST_SUCCESS,
     payload,
 });
 
-const setUserAvatarRequestFail = payload => ({
+const setUserAvatarRequestFail = (payload) => ({
     type: SET_USER_AVATAR_REQUEST_FAIL,
     payload,
 });
 
-export const setUserAvatarAction = (id, formData) => async dispatch => {
+export const setUserAvatarAction = (id, formData) => async (dispatch) => {
     dispatch(setUserAvatarRequest());
     try {
         const { data } = await setAvatar(id, formData);
@@ -133,7 +133,7 @@ export const setUserAvatarAction = (id, formData) => async dispatch => {
     }
 };
 
-export const deleteUserAvatarAction = id => async dispatch => {
+export const deleteUserAvatarAction = (id) => async (dispatch) => {
     dispatch(setUserAvatarRequest());
     try {
         const { data } = await deleteAvatar(id);

@@ -18,7 +18,7 @@
         "publish",
         "devpublish"
       ],
-      "message": "chore(release): publish",
+      "message": "chore(release): publish [skip ci]\n",
       "ignoreChanges": [
         "**/__fixtures__/**",
         "**/__tests__/**",

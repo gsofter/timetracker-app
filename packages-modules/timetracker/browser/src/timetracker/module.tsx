@@ -14,4 +14,5 @@ export default new Feature({
       render: RegisterContribution,
     },
   ],
+  
 });

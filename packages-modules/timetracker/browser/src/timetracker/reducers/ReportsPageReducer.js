@@ -1,7 +1,6 @@
 import * as moment from 'moment';
 
-import { getCurrentDate } from '../services/timeService';
-import { getTimeDurationByGivenTimestamp } from '../services/timeService';
+import { getCurrentDate, getTimeDurationByGivenTimestamp } from '../services/timeService';
 
 const initialState = {
     timeRange: {
@@ -51,7 +50,7 @@ const initialState = {
             },
             tooltips: {
                 callbacks: {
-                    label: function(tooltipItem) {
+                    label(tooltipItem) {
                         return getTimeDurationByGivenTimestamp(+moment(tooltipItem.yLabel));
                     },
                 },
