@@ -13,6 +13,8 @@ import Main from './app/Main';
 import 'backend_reload';
 import 'antd/dist/antd.css';
 import 'react-table/react-table.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 
 const rootEl = document.getElementById('root');
 let frontendReloadCount = 0;
