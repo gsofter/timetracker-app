@@ -5,6 +5,7 @@ import {
   ITimesheetCreateRequest,
   IProjects as IProject,
   ITimeRecordRequest,
+  ITimeRecord,
 } from '@admin-layout/timetracker-core';
 import {
   useGetDurationTimeRecordsQuery,
@@ -29,6 +30,19 @@ interface ITabularCalendarWrapperProps {
 }
 import * as _ from 'lodash';
 
+const filterTimeRecords = (records: Array<ITimeRecord>, filterOptions: any): Array<ITimeRecord> => {
+  const { selectedUser, selectedProject, approval } = filterOptions;
+  if (!records) return [];
+  return records
+    .filter(
+      (ev) =>
+        (ev.userId === selectedUser || selectedUser === '') &&
+        (ev.projectId === selectedProject || selectedProject === '') &&
+        (approval === undefined ? true : approval ? !!ev.timesheetId : !ev.timesheetId)
+        ,
+    )
+};
+
 const TabularCalendarWrapper = ({
   projects,
   weekStart,
@@ -36,21 +50,6 @@ const TabularCalendarWrapper = ({
   selectedProject,
   setPathWeekStart,
 }: ITabularCalendarWrapperProps) => {
-  const filterEvents = (events) => {
-    if (!events) return [];
-    return events
-      .filter(
-        (ev) =>
-          (ev.userId === selectedUser || selectedUser === '') &&
-          (ev.projectId === selectedProject || selectedProject === ''),
-      )
-      .map((ev) => ({
-        ...ev,
-        startTime: moment(ev.startTime).toDate(),
-        endTime: moment(ev.endTime).toDate(),
-      }));
-  };
-
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
     variables: {
       startTime: weekStart,
@@ -140,13 +139,40 @@ const TabularCalendarWrapper = ({
       (sheet) => sheet.userId === selectedUser,
     );
   };
+
+  const projectsApproval = () => {
+    let approvedSet = new Set<string>()
+    let unApprovedSet = new Set<string>()
+    filterTimeRecords(data?.getDurationTimeRecords, {selectedUser, selectedProject})
+      .forEach(record => {
+        if(!!record.timesheetId)
+          approvedSet.add(record.projectId)
+        else
+          unApprovedSet.add(record.projectId)
+      })
+    return {
+      approvals: Array.from(approvedSet.values()),
+      unApprovals: Array.from(unApprovedSet.values())
+    }
+  }
+
+  const getProjectsMap = () => {
+    const projectsMap = new Map<string, IProject>()
+    projects.forEach(project => {
+      projectsMap.set(project.id, project)
+    })
+    return projectsMap
+  }
+
   return (
     <Spin spinning={!data || loading}>
       <TabularCalendar
         weekStart={weekStart}
         setPathWeekStart={setPathWeekStart}
-        records={filterEvents(data?.getDurationTimeRecords)}
+        records={filterTimeRecords(data?.getDurationTimeRecords, { selectedUser, selectedProject})}
         projects={projects}
+        projectsMap={getProjectsMap()}
+        projectsApproval={projectsApproval()}
         timesheet={memberTimesheet()}
         selectedUser={selectedUser}
         handleRemoveDuration={handleRemoveDuration}

@@ -1,19 +1,22 @@
 import { ContainerModule, interfaces } from 'inversify';
 import { TYPES } from '../constants';
-import { TimeTrackerService } from '../services';
-import { TimeTrackerRepository } from '../store/repository';
+import { TimeRecordService, TimesheetService } from '../services';
+import { TimeRecordRepository, TimesheetRepository } from '../store/repository';
 import { TimesheetApprovalMailTemplate, TimesheetSubmitMailTemplate } from '../migration';
-export const timeTrackerModule: (settings: any) => ContainerModule = setting =>
+export const timeTrackerModule: (settings: any) => ContainerModule = (setting) =>
   new ContainerModule((bind: interfaces.Bind) => {
-    bind(TYPES.ITimeTrackerRepository)
-      .to(TimeTrackerRepository)
+    bind(TYPES.ITimeRecordRepository)
+      .to(TimeRecordRepository)
       .inSingletonScope()
       .whenTargetIsDefault();
 
-    bind(TYPES.ITimeTrackerService)
-      .to(TimeTrackerService)
+    bind(TYPES.ITimesheetRepository)
+      .to(TimesheetRepository)
       .inSingletonScope()
       .whenTargetIsDefault();
+
+    bind(TYPES.ITimeRecordService).to(TimeRecordService).inSingletonScope().whenTargetIsDefault();
+    bind(TYPES.ITimesheetService).to(TimesheetService).inSingletonScope().whenTargetIsDefault();
 
     bind('MongodbMigration')
       .to(TimesheetApprovalMailTemplate)
