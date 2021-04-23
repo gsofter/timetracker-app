@@ -14,5 +14,9 @@ export default new Feature({
       render: RegisterContribution,
     },
   ],
+  stylesInsert: [
+    'react-big-calendar/lib/addons/dragAndDrop/styles.css',
+    'react-big-calendar/lib/css/react-big-calendar.css'
+  ]
   
 });

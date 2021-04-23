@@ -3,7 +3,6 @@ import TimelineComponent, { TimelineHeaders, DateHeader, TimelineKeys } from 're
 import moment from 'moment';
 import { UserOutlined, ScheduleOutlined } from '@ant-design/icons';
 import TimezonePicker from 'react-timezone';
-import 'react-calendar-timeline/lib/Timeline.css';
 import { Row, Col, Form, Input, Button, Select, DatePicker, Avatar } from 'antd';
 import { Modal } from '../Modal';
 import { useFela } from 'react-fela';

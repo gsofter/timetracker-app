@@ -3,8 +3,6 @@ import { Calendar } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment, { Moment } from 'moment';
 import { momentLocalizer } from 'react-big-calendar';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import { Row, Col, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import { useFela } from 'react-fela';
