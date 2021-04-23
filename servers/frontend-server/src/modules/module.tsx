@@ -24,8 +24,6 @@ const features = new Feature(
   ExtensionModule,
 );
 
-console.log('---CSS', features.stylesInserts)
-
 const configuredRoutes = features.getConfiguredRoutes();
 
 const routes = renderRoutes2({ routes: configuredRoutes });
