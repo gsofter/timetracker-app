@@ -147,6 +147,7 @@ export const TimeTrackerProperties: { [path: string]: IConfigurationPropertySche
     'timetracker.project.daysAllowedToWork': {
         type: ['string'],
         default: [WeekDay.MON, WeekDay.TUE, WeekDay.WED, WeekDay.THU, WeekDay.FRI],
+        enum: [WeekDay.MON, WeekDay.TUE, WeekDay.WED, WeekDay.THU, WeekDay.FRI, WeekDay.SAT, WeekDay.SUN],
         description: localize('timetracker.project.recurringDailyLimit', 'Select working day'),
         scope: ConfigurationScope.RESOURCE,
     },
