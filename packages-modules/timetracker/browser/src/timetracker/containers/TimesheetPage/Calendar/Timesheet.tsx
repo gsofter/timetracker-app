@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react';
+import React from 'react';
 import { Calendar } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment, { Moment } from 'moment';
@@ -7,7 +7,6 @@ import 'react-big-calendar/lib/css/react-big-calendar.css';
 import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import { Row, Col, Button } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
-import { useFela } from 'react-fela';
 import {
   ITimeRecord,
   IProjects as IProject,
@@ -44,9 +43,7 @@ interface ITimesheetProps {
   handleCloseTimeModal: () => void;
   handleSelectSlot: (any) => void;
   handleSelectEvent: (any) => void;
-  handleChangeProject: (any) => void;
   handleChangeTask: (any) => void;
-  handleChangeUser: (any) => void;
 }
 
 export default function SelectableCalendar({
@@ -96,16 +93,14 @@ export default function SelectableCalendar({
 
   const EventAgenda = ({ event }) => {
     return (
-      <>
-        <span>
-          <em style={{ color: 'magenta' }}>{event.title}</em>
-          <p>{event.desc}</p>
-        </span>
-      </>
+      <span>
+        <em style={{ color: 'magenta' }}>{event.title}</em>
+        <p>{event.desc}</p>
+      </span>
     );
   };
 
-  const handleNavigate = date => {
+  const handleNavigate = (date) => {
     setPathWeekStart(moment(date));
   };
   return (
@@ -163,7 +158,7 @@ export default function SelectableCalendar({
 }
 
 const stylesheet: any = {
-  styles: theme => ({
+  styles: (theme) => ({
     position: 'relative',
     width: '100%',
     // Default height for the Timesheet Calender view
@@ -234,7 +229,7 @@ const stylesheet: any = {
     },
   }),
 
-  form: props => ({
+  form: (props) => ({
     display: 'block',
     '& .footer': {
       display: 'flex',

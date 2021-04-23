@@ -8,7 +8,6 @@ query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime) {
     projectId
     isBillable
     userId
-    editable
     timesheetId
   }
 }

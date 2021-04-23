@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from 'react';
+import React, { useCallback, useEffect, useState } from 'react';
 import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm, Modal, Tag } from 'antd';
 import { moment } from '../../TimesheetPage';
 import { Moment } from 'moment';
@@ -29,12 +29,19 @@ const calcDuration = (records: Array<ITimeRecord>) => {
     0,
   );
 };
+
+interface IProjectsApproval {
+  approvals: Array<string>;
+  unApprovals: Array<string>;
+}
 interface ITabularCalendar {
   weekStart: Moment;
   records: ITimeRecord[];
   projects: Array<IProject>;
   timesheet: ITimesheet | null;
   selectedUser: string;
+  projectsApproval: IProjectsApproval;
+  projectsMap: Map<string, IProject>;
   handleRemoveDuration: Function;
   updateTimeRecord: Function;
   createTimeRecord: Function;
@@ -49,30 +56,25 @@ export const TabularCalendar = ({
   projects,
   timesheet,
   selectedUser,
+  projectsApproval,
+  projectsMap,
   handleRemoveDuration,
   updateTimeRecord,
   createTimeRecord,
   createTimesheet,
 }: ITabularCalendar) => {
   const { css } = useFela();
-  const [trackedProjects, setTrackedProjects] = useState<Array<IProject>>([]);
-  const [showUnkownProject, setShowUnkownProject] = useState(false);
   const [newRows, setNewRows] = useState([]);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   const { timeFormat, dateFormat } = useTimeformat();
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
+  const { approvals, unApprovals } = projectsApproval;
+
   useEffect(() => {
-    const trackedProjects = projects.filter(
-      (p) => records.findIndex((r) => r.projectId === p.id) !== -1,
-    );
-    setTrackedProjects(trackedProjects);
-
-    if (records.findIndex((r) => r.projectId === '') === -1) setShowUnkownProject(false);
-    else setShowUnkownProject(true);
-    const rows = newRows.filter((pId) => trackedProjects.findIndex((p) => p.id === pId) === -1);
+    const rows = newRows.filter((pId) => unApprovals.findIndex((upId) => upId === pId) === -1);
     setNewRows(rows);
-  }, [weekStart, records]);
 
+  }, [unApprovals])
   const onClickBack = (event) => {
     event.preventDefault();
     const newWeekStart = moment(weekStart).add('-1', 'week');
@@ -152,32 +154,229 @@ export const TabularCalendar = ({
     setShowApprovalModal(false);
   };
 
-  const isProjectSelectable = () => {
-    const selectables = projects.filter(
+  const selectableProjects = () => {
+    // selectable projects should not be involved to unApprovedProjects() or newRows
+    return projects.filter(
       (p) =>
-        trackedProjects.findIndex((tp) => tp.id === p.id) === -1 &&
+        unApprovals.findIndex((upId) => upId === p.id) === -1 &&
         newRows.findIndex((pId) => pId === p.id) === -1,
     );
-    return selectables.length > 0 ? true : false;
   };
 
   const projectDropdownMenus = (
     <Menu className={css(styles.projectDown)}>
-      {projects
-        .filter(
-          (p) =>
-            trackedProjects.findIndex((tp) => tp.id === p.id) === -1 &&
-            newRows.findIndex((pId) => pId === p.id) === -1,
-        )
-        .map((pr) => {
-          return (
-            <Menu.Item key={pr.id} onClick={() => handleSelectNewProject(pr.id)}>
-              {pr.name}
-            </Menu.Item>
-          );
-        })}
+      {selectableProjects().map((pr) => {
+        return (
+          <Menu.Item key={pr.id} onClick={() => handleSelectNewProject(pr.id)}>
+            {pr.name}
+          </Menu.Item>
+        );
+      })}
     </Menu>
   );
+
+  const HeaderRows = () => {
+    return (
+      <tr>
+        <th> ProjectName </th>
+        {Array(7)
+          .fill(0)
+          .map((val, index) => {
+            const curDay = moment(weekStart).add(index, 'day');
+            return (
+              <th key={index}>
+                <div className={css(styles.dateHeader)}>
+                  <div className={cls('day')}>
+                    <span>{curDay.format('DD')}</span>
+                  </div>
+                  <div className="extra">
+                    <div className="week">
+                      <span>{curDay.format('ddd')}</span>
+                    </div>
+                    <div className="month">
+                      <span>{curDay.format('MMM')}</span>
+                    </div>
+                  </div>
+                </div>
+              </th>
+            );
+          })}
+        <th> Total </th>
+        <th> Action </th>
+      </tr>
+    );
+  };
+
+  const UnApprovedRows = () => {
+    return unApprovals.map((pId) => {
+      const project = projectsMap.get(pId);
+      return (
+        <tr key={project.id}>
+          <td> {project.name}</td>
+          {Array(7)
+            .fill(0)
+            .map((val, index) => {
+              const curDay = moment(weekStart).add(index, 'day');
+              const curDayRecords = records.filter(
+                (r) =>
+                  r.projectId === project.id &&
+                  moment(r.startTime).format(dateFormat) === curDay.format(dateFormat) &&
+                  !r.timesheetId,
+              );
+              return (
+                <td key={curDay.format(dateFormat)}>
+                  <TimesheetInput
+                    dateStr={curDay.format(dateFormat)}
+                    projectId={project.id}
+                    records={curDayRecords}
+                    createTimeRecord={createTimeRecord}
+                    updateTimeRecord={updateTimeRecord}
+                    projects={projects}
+                    projectTitle={project.name}
+                  />
+                </td>
+              );
+            })}
+          <td> {formatDuration(getProjectTotalDuration(project.id), timeFormat)}</td>
+          <td>
+            <Popconfirm
+              title="Are you sure to remove event"
+              okText="OK"
+              cancelText="Cancel"
+              onConfirm={() => handleRemoveDuration(project.id)}
+            >
+              <Button icon={<CloseOutlined />} />
+            </Popconfirm>
+          </td>
+        </tr>
+      );
+    });
+  };
+
+  const ApprovedRows = () => {
+    return approvals.map((pId) => {
+      const project = projectsMap.get(pId);
+      return (
+        <tr key={project.id}>
+          <td> {project.name}</td>
+          {Array(7)
+            .fill(0)
+            .map((val, index) => {
+              const curDay = moment(weekStart).add(index, 'day');
+              const curDayRecords = records.filter(
+                (r) =>
+                  r.projectId === project.id &&
+                  moment(r.startTime).format(dateFormat) === curDay.format(dateFormat) &&
+                  !!r.timesheetId,
+              );
+              return (
+                <td key={curDay.format(dateFormat)}>
+                  <TimesheetInput
+                    dateStr={curDay.format(dateFormat)}
+                    projectId={project.id}
+                    records={curDayRecords}
+                    createTimeRecord={createTimeRecord}
+                    updateTimeRecord={updateTimeRecord}
+                    projects={projects}
+                    projectTitle={project.name}
+                    disabled={true}
+                  />
+                </td>
+              );
+            })}
+          <td> {formatDuration(getProjectTotalDuration(project.id), timeFormat)}</td>
+          <td>
+            <Popconfirm
+              title="Are you sure to remove event"
+              okText="OK"
+              cancelText="Cancel"
+              onConfirm={() => handleRemoveDuration(project.id)}
+            >
+              <Button icon={<CloseOutlined />} />
+            </Popconfirm>
+          </td>
+        </tr>
+      );
+    });
+  };
+
+  const NewRows = () => {
+    return newRows.map((pId) => {
+      const project = projects.find((p) => p.id === pId);
+      return (
+        <tr key={pId}>
+          <td> {project.name}</td>
+          {Array(7)
+            .fill(0)
+            .map((val, index) => {
+              const curDay = moment(weekStart).add(index, 'day');
+              return (
+                <td key={curDay.format(dateFormat)}>
+                  <TimesheetInput
+                    dateStr={curDay.format(dateFormat)}
+                    projectId={pId}
+                    createTimeRecord={createTimeRecord}
+                    updateTimeRecord={updateTimeRecord}
+                    projects={projects}
+                  />
+                </td>
+              );
+            })}
+          <td>00:00:00</td>
+          <td>
+            <Popconfirm
+              title="Are you sure to remove event"
+              okText="OK"
+              cancelText="Cancel"
+              onConfirm={() => handleRemoveNewRow(pId)}
+            >
+              <Button icon={<CloseOutlined />} />
+            </Popconfirm>
+          </td>
+        </tr>
+      );
+    });
+  };
+
+  const ProjectSelectionRow = () => {
+    return (
+      <tr>
+        <td>
+          <Dropdown
+            overlay={projectDropdownMenus}
+            trigger={['click']}
+            disabled={projects.length === 0}
+          >
+            <Button icon={<PlusOutlined />} disabled={projects.length === 0}>
+              Select Project
+            </Button>
+          </Dropdown>
+        </td>
+        {Array(9)
+          .fill(0)
+          .map((val) => (
+            <EmptyCell />
+          ))}
+      </tr>
+    );
+  };
+
+  const TotalReportRow = () => {
+    return (
+      <tr className="total">
+        <td> Total </td>
+        {Array(7)
+          .fill(0)
+          .map((val, index) => {
+            const curDay = moment(weekStart).add(index, 'day');
+            return <td>{formatDuration(getDayTotalDuration(curDay), timeFormat)} </td>;
+          })}
+        <td>{formatDuration(getTotalDuration(), timeFormat)} </td>
+        <td></td>
+      </tr>
+    );
+  };
+
   return (
     <div className={css(styles.root)}>
       <Modal
@@ -222,178 +421,13 @@ export const TabularCalendar = ({
       </Row>
 
       <table className={css(styles.calendarTable)}>
-        <thead>
-          <tr>
-            <th> ProjectName </th>
-            {Array(7)
-              .fill(0)
-              .map((val, index) => {
-                const curDay = moment(weekStart).add(index, 'day');
-                return (
-                  <th key={index}>
-                    <div className={css(styles.dateHeader)}>
-                      <div className={cls('day')}>
-                        <span>{curDay.format('DD')}</span>
-                      </div>
-                      <div className="extra">
-                        <div className="week">
-                          <span>{curDay.format('ddd')}</span>
-                        </div>
-                        <div className="month">
-                          <span>{curDay.format('MMM')}</span>
-                        </div>
-                      </div>
-                    </div>
-                  </th>
-                );
-              })}
-            <th> Total </th>
-            <th> Action </th>
-          </tr>
-        </thead>
+        <thead>{HeaderRows()}</thead>
         <tbody>
-          {trackedProjects.map((p) => {
-            return (
-              <tr key={p.id}>
-                <td> {p.name}</td>
-                {Array(7)
-                  .fill(0)
-                  .map((val, index) => {
-                    const curDay = moment(weekStart).add(index, 'day');
-                    const curDayRecords = records.filter(
-                      (r) =>
-                        r.projectId === p.id &&
-                        moment(r.startTime).format(dateFormat) === curDay.format(dateFormat),
-                    );
-                    return (
-                      <td key={curDay.format(dateFormat)}>
-                        <TimesheetInput
-                          dateStr={curDay.format(dateFormat)}
-                          projectId={p.id}
-                          records={curDayRecords}
-                          createTimeRecord={createTimeRecord}
-                          updateTimeRecord={updateTimeRecord}
-                          projects={projects}
-                          projectTitle={p.name}
-                        />
-                      </td>
-                    );
-                  })}
-                <td> {formatDuration(getProjectTotalDuration(p.id), timeFormat)}</td>
-                <td>
-                  <Popconfirm
-                    title="Are you sure to remove event"
-                    okText="OK"
-                    cancelText="Cancel"
-                    onConfirm={() => handleRemoveDuration(p.id)}
-                  >
-                    <Button icon={<CloseOutlined />} />
-                  </Popconfirm>
-                </td>
-              </tr>
-            );
-          })}
-
-          {showUnkownProject ? (
-            <tr>
-              <td> Unknown </td>
-              {Array(7)
-                .fill(0)
-                .map((val, index) => {
-                  const curDay = moment(weekStart).add(index, 'day');
-                  const curDayRecords = records.filter(
-                    (r) =>
-                      projects.findIndex((p) => p.id === r.projectId) === -1 && // doesn't include in projects list
-                      moment(r.startTime).format(dateFormat) === curDay.format(dateFormat), // cur day records
-                  );
-                  return (
-                    <td key={curDay.format(dateFormat)}>
-                      <TimesheetInput
-                        dateStr={curDay.format(dateFormat)}
-                        projectId={''}
-                        records={curDayRecords}
-                        createTimeRecord={createTimeRecord}
-                        updateTimeRecord={updateTimeRecord}
-                        projects={projects}
-                        projectTitle={''}
-                      />
-                    </td>
-                  );
-                })}
-              <td> {formatDuration(getProjectTotalDuration(''), timeFormat)}</td>
-            </tr>
-          ) : (
-            <> </>
-          )}
-
-          {newRows.map((pId) => {
-            const project = projects.find((p) => p.id === pId);
-            return (
-              <tr key={pId}>
-                <td> {project.name}</td>
-                {Array(7)
-                  .fill(0)
-                  .map((val, index) => {
-                    const curDay = moment(weekStart).add(index, 'day');
-                    return (
-                      <td key={curDay.format(dateFormat)}>
-                        <TimesheetInput
-                          dateStr={curDay.format(dateFormat)}
-                          projectId={pId}
-                          createTimeRecord={createTimeRecord}
-                          updateTimeRecord={updateTimeRecord}
-                          projects={projects}
-                        />
-                      </td>
-                    );
-                  })}
-                <td>00:00:00</td>
-                <td>
-                  <Popconfirm
-                    title="Are you sure to remove event"
-                    okText="OK"
-                    cancelText="Cancel"
-                    onConfirm={() => handleRemoveNewRow(pId)}
-                  >
-                    <Button icon={<CloseOutlined />} />
-                  </Popconfirm>
-                </td>
-              </tr>
-            );
-          })}
-          <tr>
-            <td>
-              <Dropdown
-                overlay={projectDropdownMenus}
-                trigger={['click']}
-                disabled={!isProjectSelectable()}
-              >
-                <Button icon={<PlusOutlined />} disabled={!isProjectSelectable()}>
-                  Select Project
-                </Button>
-              </Dropdown>
-            </td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-            <td></td>
-          </tr>
-          <tr className="total">
-            <td> Total </td>
-            {Array(7)
-              .fill(0)
-              .map((val, index) => {
-                const curDay = moment(weekStart).add(index, 'day');
-                return <td>{formatDuration(getDayTotalDuration(curDay), timeFormat)} </td>;
-              })}
-            <td>{formatDuration(getTotalDuration(), timeFormat)} </td>
-            <td></td>
-          </tr>
+          {ApprovedRows()}
+          {UnApprovedRows()}
+          {NewRows()}
+          {ProjectSelectionRow()}
+          {TotalReportRow()}
         </tbody>
       </table>
       <Row className="table-footer">
@@ -501,4 +535,8 @@ const styles: { [property: string]: (props) => CSS.Properties } = {
       paddingBottom: '20px',
     },
   }),
+};
+
+const EmptyCell = () => {
+  return <td></td>;
 };

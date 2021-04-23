@@ -2,16 +2,11 @@ import * as Logger from 'bunyan';
 import { injectable, inject } from 'inversify';
 import * as mongoose from 'mongoose';
 import { TimeTrackerModelType, TimeTrackerModelFunc } from './../models/timetracker-model';
-import {
-  ITimeRecordRequest,
-  ITimeRecord,
-  ITimesheet,
-  ITimesheetCreateRequest,
-} from '@admin-layout/timetracker-core';
+import { ITimeRecordRequest, ITimeRecord } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { CommonType } from '@common-stack/core';
-import { ServiceBroker, CallingOptions } from 'moleculer';
+import { ServiceBroker } from 'moleculer';
 
 export interface ITimeRecordRepository {
   getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
@@ -180,11 +175,10 @@ export class TimeRecordRepository implements ITimeRecordRepository {
           {
             'el.startTime': { $gte: startDate },
             'el.endTime': { $lte: endDate },
+            'el.timesheetId': null,
           },
         ],
       },
     );
-
-    console.log('approveTimeRecords =>', response);
   }
 }

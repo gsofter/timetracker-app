@@ -370,7 +370,6 @@ export const GetDurationTimeRecordsDocument = gql`
     projectId
     isBillable
     userId
-    editable
     timesheetId
   }
 }
@@ -592,6 +591,7 @@ export const GetTimeRecordsDocument = gql`
     projectId
     isBillable
     userId
+    timesheetId
   }
 }
     `;

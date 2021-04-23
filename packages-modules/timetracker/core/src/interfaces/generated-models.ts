@@ -2875,7 +2875,7 @@ export type IGetDurationTimeRecordsQuery = (
   { __typename?: 'Query' }
   & { getDurationTimeRecords?: Maybe<Array<Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId' | 'editable' | 'timesheetId'>
+    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId' | 'timesheetId'>
   )>>> }
 );
 
@@ -2935,7 +2935,7 @@ export type IGetTimeRecordsQuery = (
   { __typename?: 'Query' }
   & { getTimeRecords?: Maybe<Array<Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId'>
+    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId' | 'timesheetId'>
   )>>> }
 );
 
@@ -3041,7 +3041,6 @@ export const GetDurationTimeRecordsDocument = gql`
     projectId
     isBillable
     userId
-    editable
     timesheetId
   }
 }
@@ -3109,6 +3108,7 @@ export const GetTimeRecordsDocument = gql`
     projectId
     isBillable
     userId
+    timesheetId
   }
 }
     `;

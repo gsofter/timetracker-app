@@ -79,45 +79,13 @@ export class TimeRecordService implements ITimeRecordService {
     userId?: string,
   ): Promise<Array<ITimeRecord>> {
     const timeRecords = await this.timeRecordRepository.getTimeRecords(orgId, userId);
-    const timesheets = await this.timesheetRepository.getTimesheets(orgId);
-    const durationRecords = timeRecords.filter(
+    return timeRecords.filter(
       (r) =>
         (!userId || r.userId === userId) &&
         moment(startTime) <= moment(r.startTime) &&
         moment(r.endTime) <= moment(endTime) &&
         r.endTime !== null,
     );
-
-    const filteredSheets = timesheets.filter(
-      (sh) =>
-        ((!userId || sh.userId === userId) &&
-          this.checkInPeriod(startTime, sh.startDate, sh.endDate)) ||
-        this.checkInPeriod(endTime, sh.startDate, sh.endDate),
-    );
-
-    return durationRecords.map((tr) => {
-      let trEditable = false;
-      for (let sh of filteredSheets) {
-        if (
-          this.checkInPeriod(tr.startTime, sh.startDate, sh.endDate) &&
-          this.checkInPeriod(tr.endTime, sh.startDate, sh.endDate)
-        ) {
-          trEditable = true;
-          break;
-        }
-      }
-      return {
-        id: tr.id,
-        startTime: tr.startTime,
-        endTime: tr.endTime,
-        taskName: tr.taskName,
-        tags: tr.tags,
-        projectId: tr.projectId,
-        isBillable: tr.isBillable,
-        userId: tr.userId,
-        editable: trEditable,
-      };
-    });
   }
 
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {

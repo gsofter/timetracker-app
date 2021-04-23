@@ -90,12 +90,12 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
             <DurationInput
               duration={totalDuration() as Number}
               onChange={handleChangeDuration}
-              disabled={records.length > 1 || records[0].editable === false}
+              disabled={disabled}
             />
             <Button
               icon={<MoreOutlined />}
               onClick={handleMore}
-              disabled={records.length > 1 || records[0].editable === false}
+              disabled={disabled}
             />
           </>
         ) : (
