@@ -10,14 +10,11 @@
 /* eslint-disable @typescript-eslint/no-use-before-define */
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
-import { Icon, Item, Input, Row, Col, Button } from 'native-base';
-import { View, StyleSheet, Text } from 'react-native';
-import DateTimePicker from '@react-native-community/datetimepicker';
-import CalendarPicker from 'react-native-calendar-picker';
-import moment from 'moment';
-import Dialog, { DialogContent } from 'react-native-popup-dialog';
+import { Icon, Item, Input, Row, Col } from 'native-base';
+import { View, StyleSheet, Text, Platform } from 'react-native';
 
-import { Weeks, Months } from "../../constants/Data"
+import TimeTrack from './TimeTrack'
+import ManualTime from "./ManualTime"
 
 const TimerFooter = ({ billable, onManual, onTrack, manual, track, toggleBillable, toggleProject, isToggle }: any) => {
 
@@ -25,8 +22,11 @@ const TimerFooter = ({ billable, onManual, onTrack, manual, track, toggleBillabl
   const [isStartTime, setIsStartTime] = useState(false)
   const [endTime, setEndTime] = useState(new Date(1598051730000))
   const [isEndTime, setIsEndTime] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(moment().format('M-DD-YY'))
+  const [selectedDate, setSelectedDate] = useState(new Date(1598051730000))
   const [calendarVisible, setCalendarVisible] = useState(false)
+  const [stopwatchStart, setStopWatchStart] = useState(false)
+  const [isStart, setIsStart] = useState(true)
+  const [isStop, setIsStop] = useState(false)
 
   const toggleStart = () =>{
     setIsStartTime(true)
@@ -48,11 +48,13 @@ const TimerFooter = ({ billable, onManual, onTrack, manual, track, toggleBillabl
     setIsEndTime(false)
   };
 
-  const onDateChange = (date: any, type: any) => {
-    const Date = moment(date).format('M-DD-YY')
-    if (type === 'END_DATE') {
-      setSelectedDate(Date);
-    }
+  const onDateChange = (event: any, date: any) => {
+    setSelectedDate(date);
+    setCalendarVisible(Platform.OS === 'ios')
+  };
+
+  const getFormattedTime = (time: any) => {
+    const currentTime = time;
   };
 
     return (
@@ -88,88 +90,31 @@ const TimerFooter = ({ billable, onManual, onTrack, manual, track, toggleBillabl
           />
         </Col>
           {track && (
-            <>
-                <Col>
-                    <Text>00:00:00</Text>
-                </Col>
-                <Col>
-                    <Button info block>
-                        <Text style={{ color: 'white' }}>Start</Text>
-                    </Button>
-                </Col>
-            </>
+            <TimeTrack 
+            stopwatchStart={stopwatchStart}
+            setIsStart={setIsStart}
+            getFormattedTime={getFormattedTime}
+            isStart={isStart}
+            isStop={isStop}
+            setStopWatchStart={setStopWatchStart}
+            setIsStop={setIsStop}
+            />
           )}
           {manual && (
-            <>
-              <Col style={{ width: 60 }}>
-                <View style={{ flexDirection: 'row' }}>
-                  <Text onPress={() => toggleStart()}>{moment(startTime).format('hh:mm')}</Text>
-                  <Icon style={styles.font_size} name="arrow-forward-outline" />
-                </View>
-                {isStartTime && 
-                  <DateTimePicker
-                  testID="dateTimePicker"
-                  value={startTime}
-                  mode='time'
-                  is24Hour={false}
-                  display="default"
-                  onChange={changeStartTime}
-                />}
-              </Col>
-              <Col style={{ width: 60 }}>
-                <View style={{ flexDirection: 'row' }}>
-                  <Text onPress={() => toggleEnd()}>{moment(endTime).format('hh:mm')}</Text>
-                  <Icon style={styles.font_size} name="time-outline" />
-                </View>
-                {isEndTime && 
-                <DateTimePicker
-                  testID="dateTimePicker"
-                  value={endTime}
-                  mode='time'
-                  is24Hour={false}
-                  display="default"
-                  onChange={changeEndTime}
-                />}
-              </Col>
-              <Col>
-                  <View style={{ flexDirection: 'row', alignItems: 'center' }}>
-                    <Text onPress={() => setCalendarVisible(true)}>
-                        {selectedDate ? selectedDate.toString() : ''}
-                    </Text>
-                    <Icon style={styles.font_size} name="today-outline" />
-                    <Button info small block><Text style={styles.add_btn}>Add</Text></Button>
-                  </View>
-                  {calendarVisible && 
-                  <Dialog
-                    visible={calendarVisible}
-                    onTouchOutside={() => {
-                      setCalendarVisible(false)
-                    }}
-                  >
-                    <DialogContent>
-                        <View>
-                          <CalendarPicker
-                            startFromMonday
-                            minDate={new Date(2018, 1, 1)}
-                            maxDate={new Date(2050, 6, 3)}
-                            weekdays={Weeks}
-                            months={Months}
-                            previousTitle={<Icon name="caret-back-circle-outline" />}
-                            nextTitle={<Icon name="caret-forward-circle-outline" />}
-                            todayBackgroundColor="#e6ffe6"
-                            selectedDayColor="#66ff33"
-                            selectedDayTextColor="#000000"
-                            scaleFactor={375}
-                            textStyle={{
-                            color: '#000000',
-                            }}
-                            onDateChange={(date, type) => onDateChange(date, "END_DATE")}
-                        />
-                        </View>
-                    </DialogContent>
-                </Dialog>}
-              </Col>
-            </>
+            <ManualTime 
+            toggleStart={toggleStart}
+            startTime={startTime}
+            isStartTime={isStartTime}
+            changeStartTime={changeStartTime}
+            toggleEnd={toggleEnd}
+            endTime={endTime}
+            changeEndTime={changeEndTime}
+            setCalendarVisible={setCalendarVisible}
+            selectedDate={selectedDate}
+            calendarVisible={calendarVisible}
+            onDateChange={onDateChange}
+            isEndTime={isEndTime}
+            />
           )}
           <Col>
             <Icon onPress={() => onTrack()} name="time-outline" style={{ alignSelf: 'center', color: track? '#1890ff': 'grey' }} />
@@ -223,17 +168,6 @@ const styles = StyleSheet.create({
     icon_dollar: {
       fontSize: 18,
     },
-    font_size: {
-      fontSize: 18,
-      color: 'grey',
-      marginRight: 5,
-      marginLeft: 5,
-  },
-  add_btn: {
-    paddingLeft: 5,
-    paddingRight: 5,
-    color: 'white'
-  }
 });
 
 export default TimerFooter;
