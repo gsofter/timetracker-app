@@ -26,6 +26,7 @@ const TimeRecordSchema = new Schema({
   tags: { type: [String] },
   isBillable: { type: Boolean },
   projectId: { type: String }, // ----> project
+  timesheetId: { type: String }, // ----> timesheet
 });
 
 // ===> Timesheet
@@ -47,7 +48,7 @@ const TimeTrackerSchema = new Schema({
   timesheets: [TimesheetSchema],
 });
 
-TimeRecordSchema.virtual('id').get(function() {
+TimeRecordSchema.virtual('id').get(function () {
   return this._id.toHexString();
 });
 
@@ -55,7 +56,7 @@ TimeRecordSchema.set('toJSON', {
   virtuals: true,
 });
 
-TimeTrackerSchema.virtual('id').get(function() {
+TimeTrackerSchema.virtual('id').get(function () {
   return this._id.toHexString();
 });
 
@@ -67,5 +68,5 @@ TimeTrackerSchema.set('toObject', { virtuals: true });
 
 export type TimeTrackerModelType = Model<ITimeTrackerModel>;
 
-export const TimeTrackerModelFunc: (db: Connection) => TimeTrackerModelType = db =>
+export const TimeTrackerModelFunc: (db: Connection) => TimeTrackerModelType = (db) =>
   db.model<ITimeTrackerModel>('timetracker', TimeTrackerSchema);

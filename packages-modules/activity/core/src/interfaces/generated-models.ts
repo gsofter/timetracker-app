@@ -1233,7 +1233,8 @@ export type IMutationupdateTimesheetArgs = {
 
 
 export type IMutationupdateTimesheetStatusArgs = {
-  request?: Maybe<ITimesheetCreateRequest>;
+  sheetId?: Maybe<Scalars['String']>;
+  state?: Maybe<ITimesheetState>;
 };
 
 
@@ -2433,6 +2434,7 @@ export type ITimeRecord = {
   clientId?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
   orgId?: Maybe<Scalars['String']>;
+  timesheetId?: Maybe<Scalars['String']>;
   editable?: Maybe<Scalars['Boolean']>;
 };
 
@@ -4372,6 +4374,7 @@ export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolver
   clientId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   orgId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  timesheetId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   editable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };

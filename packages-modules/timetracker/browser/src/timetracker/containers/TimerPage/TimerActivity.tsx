@@ -162,7 +162,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
     () =>
       _.debounce((timeRecord) => {
         updateTimeRecord(timeRecord.id, { ..._.omit(timeRecord, ['__typename', 'id']) });
-      }, 2000),
+      }, 800),
     [],
   );
 
