@@ -103,6 +103,7 @@ export class TimesheetService implements ITimesheetService {
         orgId,
         approvedBy: timesheet.approvedBy,
         approvedOn: timesheet.approvedOn,
+        submittedOn: timesheet.submittedOn,
         updatedBy: timesheet.updatedBy,
         updatedOn: timesheet.updatedOn,
         totalDuration: sheetTotalDuration,
@@ -134,13 +135,15 @@ export class TimesheetService implements ITimesheetService {
       await this.timesheetRepository.updateTimesheet(orgId, sheetId, request);
       if (request.state === ITimesheetState.APPROVED) {
         // approve time records from startDate to endDate
-        console.log('updateTimesheet.APPROVED');
         this.timeRecordService.approveTimeRecords(
           orgId,
           sheetId,
           request.startDate,
           request.endDate,
         );
+      } else if (request.state === ITimesheetState.DENYED) {
+        // approve time records from startDate to endDate
+        this.timeRecordService.disapproveTimeRecords(orgId, sheetId);
       }
       const resourceUri = generateOrgUri(orgId, IConfigFragmentName.settings);
       const { settings } = (await this.preferencesService.viewerSettings({
