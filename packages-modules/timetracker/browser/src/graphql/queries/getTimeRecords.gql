@@ -1,5 +1,5 @@
-query GetTimeRecords {
-  getTimeRecords {
+query GetTimeRecords($userId: String) {
+  getTimeRecords(userId: $userId) {
     id
     startTime
     endTime

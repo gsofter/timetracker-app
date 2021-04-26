@@ -14,3 +14,10 @@ export enum IPreDefineAccountPermissions  {
     deleteTimeTracker = 'organization.timetracker.delete',
     manageTimeTracker = 'organization.timetracker.manage',
 }
+
+export const EmailTemplateCodes = {
+    TIMESHEET_APPROVAL: "TIMESHEET_APPROVAL_EMAIL_TEMPLATE",
+    ENABLE_TIMETRACKER: "ENABLE_TIMETRACKER_EMAIL_TEMPLATE",
+    SUBMIT_TIME: "SUBMIT_TIME_EMAIL_TEMPLATE",
+    TIMETRACKING_STOP: "TIMETRACKING_STOP_TEMPLATE",
+}

@@ -1,6 +1,6 @@
 const path = require('path');
 var nodeExternals = require('webpack-node-externals');
-const MonacoWebpackPlugin = require('@vscode/monaco-editor-webpack-plugin');
+const MonacoWebpackPlugin = require('@vscode-alt/monaco-editor-webpack-plugin');
 const debug = process.env.DEBUGGING || false;
 const { merge } = require('webpack-merge');
 const webpack = require('webpack');

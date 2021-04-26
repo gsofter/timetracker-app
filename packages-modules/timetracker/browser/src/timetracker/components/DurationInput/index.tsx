@@ -34,11 +34,12 @@ const formatDurationInput = (dur: string) => {
 
 interface IDurationInputProps {
   duration?: Number;
+  disabled?: boolean;
   onChange?: Function;
 }
 
 export default function DurationInput(props: IDurationInputProps) {
-  const { duration, onChange } = props;
+  const { duration, onChange, disabled } = props;
 
   const [inputStr, setInputStr] = useState('');
   useEffect(() => {
@@ -82,6 +83,7 @@ export default function DurationInput(props: IDurationInputProps) {
       value={inputStr}
       onPressEnter={onPressEnter}
       onBlur={onBlur}
+      disabled={disabled}
     />
   );
 }

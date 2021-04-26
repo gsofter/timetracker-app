@@ -64,15 +64,6 @@ const Html = ({
           />
         )}
         <style id="font-stylesheet" />
-        {!!__DEV__ && (
-          <style
-            dangerouslySetInnerHTML={{
-              __html: modules.stylesInserts
-                .map((style) => style._getCss())
-                .join(''),
-            }}
-          />
-        )}
         {styleSheet.map(({ type, rehydration, css, media, support }) => (
           <style
             id="stylesheet"

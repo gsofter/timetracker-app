@@ -24,9 +24,9 @@ const features = new Feature(
   ExtensionModule,
 );
 
-const configuredRoutes =  features.getConfiguredRoutes();
+const configuredRoutes = features.getConfiguredRoutes();
 
-const routes = renderRoutes2({ routes: configuredRoutes});
+const routes = renderRoutes2({ routes: configuredRoutes });
 // console.log(sharedModule);
 export const MainRoute = props => {
   return (

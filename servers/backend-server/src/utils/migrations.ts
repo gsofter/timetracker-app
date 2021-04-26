@@ -29,7 +29,6 @@ export async function migrate(db: Connection, container: Container) {
                         console.log(`Can not process migration ${migration.id}: `, e);
                     }
                 }
-
                 return migration.id;
             }),
         );
