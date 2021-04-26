@@ -73,8 +73,7 @@ export const TabularCalendar = ({
   useEffect(() => {
     const rows = newRows.filter((pId) => unApprovals.findIndex((upId) => upId === pId) === -1);
     setNewRows(rows);
-
-  }, [unApprovals])
+  }, [unApprovals]);
   const onClickBack = (event) => {
     event.preventDefault();
     const newWeekStart = moment(weekStart).add('-1', 'week');
@@ -93,15 +92,15 @@ export const TabularCalendar = ({
     setPathWeekStart(newWeekStart);
   };
 
-  const getProjectTotalDuration = (projectId) => {
+  const getProjectTotalDuration = (projectId, approved: boolean) => {
     return calcDuration(
-      records
-        .filter((r) => r.projectId === projectId)
-        .filter(
-          (r) =>
-            moment(r.startTime) >= moment(weekStart) &&
-            moment(r.endTime) <= moment(weekStart).add(1, 'week'),
-        ),
+      records.filter(
+        (r) =>
+          r.projectId === projectId &&
+          (approved ? !!r.timesheetId : !r.timesheetId) &&
+          moment(r.startTime) >= moment(weekStart) &&
+          moment(r.endTime) <= moment(weekStart).add(1, 'week'),
+      ),
     );
   };
 
@@ -237,7 +236,7 @@ export const TabularCalendar = ({
                 </td>
               );
             })}
-          <td> {formatDuration(getProjectTotalDuration(project.id), timeFormat)}</td>
+          <td> {formatDuration(getProjectTotalDuration(project.id, false), timeFormat)}</td>
           <td>
             <Popconfirm
               title="Are you sure to remove event"
@@ -284,15 +283,16 @@ export const TabularCalendar = ({
                 </td>
               );
             })}
-          <td> {formatDuration(getProjectTotalDuration(project.id), timeFormat)}</td>
+          <td> {formatDuration(getProjectTotalDuration(project.id, true), timeFormat)}</td>
           <td>
             <Popconfirm
               title="Are you sure to remove event"
               okText="OK"
               cancelText="Cancel"
               onConfirm={() => handleRemoveDuration(project.id)}
+              disabled
             >
-              <Button icon={<CloseOutlined />} />
+              <Button icon={<CloseOutlined />} disabled />
             </Popconfirm>
           </td>
         </tr>
@@ -433,11 +433,7 @@ export const TabularCalendar = ({
       <Row className="table-footer">
         {timesheet ? <Tag color="blue"> {timesheet.state} </Tag> : ''}
         <div className="spacer"></div>
-        <Button
-          type="primary"
-          onClick={openSubmitApproval}
-          disabled={unApprovals.length === 0}
-        >
+        <Button type="primary" onClick={openSubmitApproval} disabled={unApprovals.length === 0}>
           Submit For Approval
         </Button>
       </Row>
