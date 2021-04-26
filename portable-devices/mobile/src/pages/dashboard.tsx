@@ -6,7 +6,7 @@ import { Link } from 'react-router-native';
 
 const Dashboard = () => {
    return (
-        <View>
+        <View style={{ flex: 1 }}>
           <Text style={styles.text}>Dashboard Screen</Text>
           <Link to="/org/timer" underlayColor="#f0f4f7">
             <Text style={styles.link}>Click here to go to Menu</Text>

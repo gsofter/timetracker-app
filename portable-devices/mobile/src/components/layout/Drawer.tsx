@@ -8,7 +8,7 @@
 /* eslint-disable react/no-unused-prop-types */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 import * as React from 'react';
-import { Content, Drawer } from 'native-base';
+import { Drawer } from 'native-base';
 import { Route } from 'react-router-native';
 import SideBar from './SideBar';
 
@@ -27,11 +27,9 @@ export const DrawerRoute = ({ match, drawerRef, routes }: any) => {
     }
     onClose={onClose}
     >
-      <Content style={{ flex: 1 }}>
-        {routes.map((route: any) => (
-          <Route key={route.path} exact={route.exact} path={route.path} component={route.component} />
-        ))}
-      </Content>
+      {routes.map((route: any) => (
+        <Route key={route.path} exact={route.exact} path={route.path} component={route.component} />
+      ))}
     </Drawer>
   )
 };
