@@ -1371,6 +1371,7 @@ extend type Mutation {
   clientId: String
   userId: String
   orgId: String
+  editable: Boolean
 }
 
 input TimeRecordRequest {
@@ -1385,8 +1386,9 @@ input TimeRecordRequest {
 }
 
 extend type Query {
-  getTimeRecords: [TimeRecord] @addAccountContext
-  getDurationTimeRecords(startTime: DateTime, endTime: DateTime): [TimeRecord] @addAccountContext
+  getTimeRecords(userId: String): [TimeRecord] @addAccountContext
+  getDurationTimeRecords(startTime: DateTime, endTime: DateTime, userId: String): [TimeRecord]
+    @addAccountContext
   getPlayingTimeRecord: TimeRecord @addAccountContext
 }
 
@@ -1417,6 +1419,7 @@ type Timesheet {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
+  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
 }
@@ -1428,6 +1431,7 @@ input TimesheetCreateRequest {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
+  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
 }
@@ -1439,15 +1443,17 @@ type TimesheetResponse {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
+  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
   userId: String
   orgId: String
+  totalDuration: Int
 }
 
 extend type Query {
-  getTimesheets(userId: String): [TimesheetResponse] @addAccountContext
-  getDurationTimesheet(start: DateTime, end: DateTime): TimesheetResponse @addAccountContext
+  getTimesheets(userId: String, withTotalHours: Boolean): [TimesheetResponse] @addAccountContext
+  getDurationTimesheets(start: DateTime, end: DateTime): [TimesheetResponse] @addAccountContext
 }
 
 extend type Mutation {
@@ -1624,6 +1630,7 @@ input AccountTeam_Input {
 """
  TeamMember: A member of a team.
 """
+
 type TeamMember {
     id: String
     email: String
@@ -1631,6 +1638,7 @@ type TeamMember {
     userId: String
     username: String
     role: ApplicationRoles
+    status: String
 }
 
 input TeamMember_Input {
@@ -1638,6 +1646,7 @@ input TeamMember_Input {
     email: String
     userId: String
     role: ApplicationRoles
+    status: String
 }
 
 extend enum ApplicationRoles {
@@ -1962,6 +1971,7 @@ extend type Query {
     getOrganizationDetailUnsecured(where:OrgDetailWhere!):Organization
     getOrganizationMembers: [OrgMember] @addAccountContext
     getOrgInvitationMembers: [InviteMember] @addAccountContext
+    getOrgTeamInvitations(teamId: String): [OrganizationInvitation] @addAccountContext
     getOrganizationInvitation(id: ID!): OrganizationInvitation
     decodeOrganizationInvitation(token: String!): OrganizationInvitationDecode @addAccountContext
 }
