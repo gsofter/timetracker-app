@@ -5,7 +5,6 @@ import ApolloCounter from './apollo-server-n-client';
 import ConnectedReactRouter from './connected-react-router';
 import Organization from './organization';
 import Fela from './fela';
-import Dashboard from './Dashboard';
 
 export * from './Dashboard';
 export default new Feature(
@@ -14,7 +13,6 @@ export default new Feature(
     //  ApolloCounter, 
     //  Fela, 
     //  Account,
-    Dashboard,
     Organization
 );
 
