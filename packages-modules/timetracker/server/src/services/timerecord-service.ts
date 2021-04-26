@@ -39,6 +39,7 @@ export interface ITimeRecordService {
     projectId: string,
   ): Promise<Boolean>;
   approveTimeRecords(orgId: string, sheetId: string, startDate: Date, endDate: Date);
+  disapproveTimeRecords(orgId: string, sheetId: string);
 }
 
 @injectable()
@@ -127,6 +128,10 @@ export class TimeRecordService implements ITimeRecordService {
 
   public async approveTimeRecords(orgId: string, sheetId: string, startDate: Date, endDate: Date) {
     this.timeRecordRepository.approveTimeRecords(orgId, sheetId, startDate, endDate);
+  }
+
+  public async disapproveTimeRecords(orgId: string, sheetId: string) {
+    this.timeRecordRepository.disapproveTimeRecords(orgId, sheetId);
   }
 
   private sendMail(topic, to, from, templateId, templateVars) {

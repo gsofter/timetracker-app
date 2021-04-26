@@ -126,7 +126,7 @@ const TimesheetCalendar = ({
       .filter(ev => {
         return (
           (ev.userId === selectedUser || selectedUser === '') &&
-          (ev.projectId === selectedProject || selectedProject === '')
+          (ev.projectId === selectedProject || selectedProject === '__all')
         );
       })
       .map(ev => ({
