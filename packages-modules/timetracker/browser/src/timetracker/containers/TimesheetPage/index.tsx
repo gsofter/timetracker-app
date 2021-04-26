@@ -142,7 +142,7 @@ const Timesheet = ({
           >
             <Form.Item label="Projects">
               <Select onChange={handleChangeProject} value={selectedProject}>
-                <Select.Option value="">All</Select.Option>
+                <Select.Option value="__all">All</Select.Option>
                 {projects.map(res => {
                   return (
                     <Select.Option value={res.id} key={res.id}>

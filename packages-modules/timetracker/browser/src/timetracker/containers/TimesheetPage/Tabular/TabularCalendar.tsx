@@ -134,7 +134,7 @@ export const TabularCalendar = ({
   const handleSubmitApproval = (event: React.MouseEvent<HTMLButtonElement>) => {
     event.preventDefault();
     const approvalRequest: ITimesheetCreateRequest = {
-      userId,
+      userId: selectedUser,
       startDate: moment(weekStart),
       endDate: moment(weekStart).add(1, 'week'),
       state: ITimesheetState.SUBMITTED,
@@ -433,7 +433,11 @@ export const TabularCalendar = ({
       <Row className="table-footer">
         {timesheet ? <Tag color="blue"> {timesheet.state} </Tag> : ''}
         <div className="spacer"></div>
-        <Button type="primary" onClick={openSubmitApproval} disabled={unApprovals.length === 0}>
+        <Button
+          type="primary"
+          onClick={openSubmitApproval}
+          disabled={unApprovals.length === 0 || timesheet.state === ITimesheetState.SUBMITTED}
+        >
           Submit For Approval
         </Button>
       </Row>

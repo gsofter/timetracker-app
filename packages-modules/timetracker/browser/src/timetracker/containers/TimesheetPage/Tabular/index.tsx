@@ -37,7 +37,7 @@ const filterTimeRecords = (records: Array<ITimeRecord>, filterOptions: any): Arr
     .filter(
       (ev) =>
         (ev.userId === selectedUser || selectedUser === '') &&
-        (ev.projectId === selectedProject || selectedProject === '') &&
+        (ev.projectId === selectedProject || selectedProject === '__all') &&
         (approval === undefined ? true : approval ? !!ev.timesheetId : !ev.timesheetId)
         ,
     )
