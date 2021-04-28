@@ -73,6 +73,18 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
     updateTimesheet(id, request);
   };
 
+  // for testing purpose
+  const handleUnApprove = (id: string, record: ITimesheetResponse) => {
+    const request: ITimesheetCreateRequest = {
+      ..._.omit(record, ['__typename', 'id', 'orgId', 'totalDuration']),
+      approvedOn: moment(),
+      approvedBy: userId,
+      state: ITimesheetState.SUBMITTED,
+      updatedOn: moment(),
+    };
+    updateTimesheet(id, request);
+  };
+
   const handleDeny = (id: string, record: ITimesheetResponse) => {
     const request: ITimesheetCreateRequest = {
       ..._.omit(record, ['__typename', 'id', 'orgId', 'totalDuration']),
@@ -167,6 +179,11 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
                   Deny
                 </Menu.Item>
               )}
+              {viewMode === VIEW_MODE.APPROVED && (
+                <Menu.Item key="submit" onClick={() => handleUnApprove(record.id, record)}>
+                  Unapprove
+                </Menu.Item>
+              )}
             </Menu>
           );
         };
@@ -182,9 +199,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
   ];
 
   return (
-    <>
       <Table columns={columns} dataSource={filteredTimesheets(timesheets)} />
-    </>
   );
 };
 

@@ -5,7 +5,6 @@ import TabularCalendar from './Tabular';
 import TimesheetCalendar from './Calendar';
 import {
   useGetProjectsQuery,
-  useGetMembersQuery,
   useGetTagsQuery,
   useGetOrganizationMembersQuery,
 } from '../../../generated-models';
@@ -24,6 +23,7 @@ import { useLocation } from 'react-router';
 import qs from 'query-string';
 import { useHistory } from 'react-router';
 import { useFirstWeekDay } from '../../hooks';
+import { useSelector } from 'react-redux';
 interface ITimesheetProps {
   projects: Array<IProject>;
   tags: Array<ITag>;
@@ -69,7 +69,7 @@ const Timesheet = ({
     setSelectedProject(value);
   };
 
-  const handleChangeUser = value => {
+  const handleChangeSelectedUser = value => {
     setSelectedUser(value);
   };
 
@@ -120,7 +120,7 @@ const Timesheet = ({
             className="sm-screen-size"
           >
             <Form.Item label="Members">
-              <Select onChange={handleChangeUser} value={selectedUser}>
+              <Select onChange={handleChangeSelectedUser} value={selectedUser}>
                 <Select.Option value="">All</Select.Option>
                 {members.map(member => {
                   return (
@@ -142,7 +142,7 @@ const Timesheet = ({
           >
             <Form.Item label="Projects">
               <Select onChange={handleChangeProject} value={selectedProject}>
-                <Select.Option value="">All</Select.Option>
+                <Select.Option value="__all">All</Select.Option>
                 {projects.map(res => {
                   return (
                     <Select.Option value={res.id} key={res.id}>
@@ -164,8 +164,6 @@ const Timesheet = ({
           isShowTimeModal={isShowTimeModal}
           selectedUser={selectedUser}
           selectedProject={selectedProject}
-          handleChangeProject={handleChangeProject}
-          handleChangeUser={handleChangeUser}
           setIsShowTimeModal={setIsShowTimeModal}
           setPathWeekStart={setPathWeekStart}
         />
@@ -192,13 +190,13 @@ const TimesheetPage = () => {
   const { value: dowValue } = useFirstWeekDay();
   const history = useHistory();
   const queryParsed = qs.parse(location.search);
-
+  const userId = useSelector<any>(state => state.user.auth0UserId) as string
   const weekStart = () => {
     return queryParsed.weekStart ? moment(queryParsed.weekStart) : moment().startOf('week');
   };
 
   const selectedUser = () => {
-    return queryParsed.username as string ?? ''
+    return queryParsed.username as string ?? userId
   }
 
   useEffect(() => {
@@ -237,15 +235,18 @@ const TimesheetPage = () => {
 
   moment.locale('en', {
     week: {
-      dow: dowValue, //Monday is the first day of the week.
+      dow: dowValue, // { dow: 0 } => Monday
     },
   });
 
   const localizerM = momentLocalizer(moment);
+  const filteredProjects = () => {
+    return [..._.get(projectsData, 'getProjects', []), { id: '', name: 'UnKnown'}]
+  }
   return (
     <Spin spinning={loadingProjects || loadingMembers || loadingTags}>
       <Timesheet
-        projects={_.get(projectsData, 'getProjects', [] as any)}
+        projects={filteredProjects()}
         members={_.get(membersData, 'getOrganizationMembers', [])}
         tags={_.get(tagsData, 'getTags', [])}
         localizer={localizerM}
