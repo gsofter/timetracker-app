@@ -199,9 +199,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
   ];
 
   return (
-    <>
       <Table columns={columns} dataSource={filteredTimesheets(timesheets)} />
-    </>
   );
 };
 

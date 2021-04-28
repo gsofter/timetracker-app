@@ -28,6 +28,7 @@ export interface ITimeRecordRepository {
     projectId: string,
   ): Promise<Boolean>;
   approveTimeRecords(orgId: string, sheetId: string, startDate: Date, endDate: Date);
+  disapproveTimeRecords(orgId: string, sheetId: string);
 }
 
 @injectable()
@@ -164,21 +165,47 @@ export class TimeRecordRepository implements ITimeRecordRepository {
   }
 
   public async approveTimeRecords(orgId: string, sheetId: string, startDate: Date, endDate: Date) {
-    const response = await this.timeTrackerModel.updateMany(
-      {
-        orgId,
-      },
-      { $set: { 'timeRecords.$[el].timesheetId': sheetId } },
-      {
-        multi: true,
-        arrayFilters: [
-          {
-            'el.startTime': { $gte: startDate },
-            'el.endTime': { $lte: endDate },
-            'el.timesheetId': null,
-          },
-        ],
-      },
-    );
+    try {
+      await this.timeTrackerModel.updateMany(
+        {
+          orgId,
+        },
+        { $set: { 'timeRecords.$[el].timesheetId': sheetId } },
+        {
+          multi: true,
+          arrayFilters: [
+            {
+              'el.startTime': { $gte: startDate },
+              'el.endTime': { $lte: endDate },
+              'el.timesheetId': null,
+            },
+          ],
+        },
+      );
+    } catch (e) {
+      this.logger.debug('approveTimeRecords =>', e.message);
+      throw new Error(e.message);
+    }
+  }
+  public async disapproveTimeRecords(orgId: string, sheetId: string) {
+    try {
+      await this.timeTrackerModel.updateMany(
+        {
+          orgId,
+        },
+        { $set: { 'timeRecords.$[el].timesheetId': null } },
+        {
+          multi: true,
+          arrayFilters: [
+            {
+              'el.timesheetId': sheetId,
+            },
+          ],
+        },
+      );
+    } catch (e) {
+      this.logger.debug('disapproveTimeRecords =>', e.message);
+      throw new Error(e.message);
+    }
   }
 }
