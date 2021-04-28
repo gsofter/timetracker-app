@@ -17,6 +17,7 @@ type Timesheet {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
+  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
 }
@@ -28,6 +29,7 @@ input TimesheetCreateRequest {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
+  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
 }
@@ -39,15 +41,17 @@ type TimesheetResponse {
   state: TimesheetState
   submittedOn: DateTime
   approvedOn: DateTime
+  approvedBy: String
   updatedBy: String # ---> userId
   updatedOn: DateTime
   userId: String
   orgId: String
+  totalDuration: Int
 }
 
 extend type Query {
-  getTimesheets(userId: String): [TimesheetResponse] @addAccountContext
-  getDurationTimesheet(start: DateTime, end: DateTime): TimesheetResponse @addAccountContext
+  getTimesheets(userId: String, withTotalHours: Boolean): [TimesheetResponse] @addAccountContext
+  getDurationTimesheets(start: DateTime, end: DateTime): [TimesheetResponse] @addAccountContext
 }
 
 extend type Mutation {

@@ -5,8 +5,6 @@ import moment from 'moment';
 import { ScheduleOutlined } from '@ant-design/icons';
 import TimezonePicker from 'react-timezone';
 import { momentLocalizer } from 'react-big-calendar';
-import 'react-big-calendar/lib/css/react-big-calendar.css';
-import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 import { Row, Col, Form, Input, Button, Select, DatePicker, Popconfirm } from 'antd';
 import { Modal } from '../Modal';
 import { useFela } from 'react-fela';

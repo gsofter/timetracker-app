@@ -14,40 +14,45 @@ export interface ITimesheetInputProps {
   dateStr: string;
   projectId?: string;
   records?: ITimeRecord[];
-  updateTimeRecord: Function;
-  createTimeRecord: Function;
   projects: any[];
   projectTitle?: string;
+  disabled?: boolean;
+  updateTimeRecord: Function;
+  createTimeRecord: Function;
 }
 
 export const TimesheetInput = (props: ITimesheetInputProps) => {
-  const { dateStr, records, projectId, createTimeRecord, updateTimeRecord, projectTitle } = props;
+  const {
+    dateStr,
+    records,
+    projectId,
+    createTimeRecord,
+    updateTimeRecord,
+    projectTitle,
+    disabled,
+  } = props;
   const { css } = useFela();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const userId = useSelector<any>(state => state.user.auth0UserId) as string;
-  const handleMore = event => {
-    console.log('handleMore');
+  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
+  const handleMore = (event) => {
+    event.preventDefault();
     setIsModalVisible(true);
   };
 
   const totalDuration = () => {
-    let totalDur = 0;
-    records.forEach(r => {
+    return records.reduce((totalDur, r) => {
       const dur = Math.floor((moment(r.endTime).valueOf() - moment(r.startTime).valueOf()) / 1000);
-      totalDur = totalDur + Math.abs(dur);
-    });
-    return totalDur;
+      return (totalDur = totalDur + Math.abs(dur));
+    }, 0);
   };
 
-  const handleChangeDuration = dur => {
+  const handleChangeDuration = (dur) => {
     if (records === undefined || records.length === 0) {
       // empty
       const newRequest: ITimeRecordRequest = {
         userId,
         startTime: moment(dateStr).add('9', 'hours'),
-        endTime: moment(dateStr)
-          .add('9', 'hours')
-          .add(dur, 'seconds'),
+        endTime: moment(dateStr).add('9', 'hours').add(dur, 'seconds'),
         projectId: projectId,
       };
 
@@ -82,11 +87,19 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
       <div className={css(styles.timesheet)}>
         {records && records.length > 0 ? (
           <>
-            <DurationInput duration={totalDuration() as Number} onChange={handleChangeDuration} />
-            <Button icon={<MoreOutlined />} onClick={handleMore} />
+            <DurationInput
+              duration={totalDuration() as Number}
+              onChange={handleChangeDuration}
+              disabled={records.length > 1 || records[0].editable === false}
+            />
+            <Button
+              icon={<MoreOutlined />}
+              onClick={handleMore}
+              disabled={records.length > 1 || records[0].editable === false}
+            />
           </>
         ) : (
-          <DurationInput onChange={handleChangeDuration} />
+          <DurationInput onChange={handleChangeDuration} disabled={disabled} />
         )}
       </div>
     </>
@@ -94,12 +107,12 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
 };
 
 const styles: { [key: string]: (arg) => CSS.Properties } = {
-  timesheet: theme => ({
+  timesheet: (theme) => ({
     display: 'flex',
     flexDirection: 'row',
   }),
 
-  modal: theme => ({
+  modal: (theme) => ({
     display: 'block',
     '& .date': {
       color: '#eee',

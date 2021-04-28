@@ -1,11 +1,11 @@
-import React, { useState, useRef, useEffect } from 'react';
+import React, { useState } from 'react';
 import { useFela } from 'react-fela';
 import { styleSheet } from './styles';
 import { Button, DatePicker, Space } from 'antd';
 import { Moment } from 'moment'
 import momentZ from 'moment-timezone';
 import { useTimeformat } from '../../hooks'
-import { moment } from '../../containers/MainPage'
+import { moment } from '../../containers/TimerPage'
 const { RangePicker } = DatePicker;
 
 export interface ITimerSearchComponent {
@@ -17,7 +17,7 @@ export const TimerSearchComponent: React.FC<ITimerSearchComponent> = ({
 }) => {
   const { css } = useFela();
   const [showCallendar, setShowCallendar] = useState(true);
-  const { timeFormat, dateFormat } = useTimeformat();
+  const { dateFormat } = useTimeformat();
   return (
     <div className={css(styleSheet.timerSearchComponentStyle as any)}>
       <div className="timer-search">

@@ -1,8 +1,8 @@
 // import { getUserTeams, getCurrentTeam, switchTeam, getCurrentTeamDetailedData } from '../configAPI';
 
-const formatUserTeamsData = responseData => responseData.data.user_team.map(item => item.team);
+const formatUserTeamsData = (responseData) => responseData.data.user_team.map((item) => item.team);
 
-const formatCurrentTeamData = responseData => {
+const formatCurrentTeamData = (responseData) => {
     const { team, role_collaboration } = responseData.data.user_team[0];
 
     return {
@@ -35,17 +35,17 @@ const getUserTeamsRequest = () => ({
     type: GET_USER_TEAMS_REQUEST,
 });
 
-const getUserTeamsRequestSuccess = payload => ({
+const getUserTeamsRequestSuccess = (payload) => ({
     type: GET_USER_TEAMS_REQUEST_SUCCESS,
     payload,
 });
 
-const getUserTeamsRequestFail = error => ({
+const getUserTeamsRequestFail = (error) => ({
     type: GET_USER_TEAMS_REQUEST_FAIL,
     error,
 });
 
-export const getUserTeamsAction = () => async dispatch => {
+export const getUserTeamsAction = () => async (dispatch) => {
     dispatch(getUserTeamsRequest());
     try {
         const { data } = await getUserTeams();
@@ -61,17 +61,17 @@ const getCurrentTeamRequest = () => ({
     type: GET_CURRENT_TEAM_REQUEST,
 });
 
-const getCurrentTeamRequestSuccess = payload => ({
+const getCurrentTeamRequestSuccess = (payload) => ({
     type: GET_CURRENT_TEAM_REQUEST_SUCCESS,
     payload,
 });
 
-const getCurrentTeamRequestFail = error => ({
+const getCurrentTeamRequestFail = (error) => ({
     type: GET_CURRENT_TEAM_REQUEST_FAIL,
     error,
 });
 
-export const getCurrentTeamAction = () => async dispatch => {
+export const getCurrentTeamAction = () => async (dispatch) => {
     dispatch(getCurrentTeamRequest());
     try {
         const { data } = await getCurrentTeam();
@@ -87,17 +87,17 @@ const getCurrentTeamDetailedDataRequest = () => ({
     type: GET_CURRENT_TEAM_DETAILED_DATA_REQUEST,
 });
 
-const getCurrentTeamDetailedDataRequestSuccess = payload => ({
+const getCurrentTeamDetailedDataRequestSuccess = (payload) => ({
     type: GET_CURRENT_TEAM_DETAILED_DATA_REQUEST_SUCCESS,
     payload,
 });
 
-const getCurrentTeamDetailedDataRequestFail = error => ({
+const getCurrentTeamDetailedDataRequestFail = (error) => ({
     type: GET_CURRENT_TEAM_DETAILED_DATA_REQUEST_FAIL,
     error,
 });
 
-export const getCurrentTeamDetailedDataAction = () => async dispatch => {
+export const getCurrentTeamDetailedDataAction = () => async (dispatch) => {
     dispatch(getCurrentTeamDetailedDataRequest());
     try {
         const { data } = await getCurrentTeamDetailedData();
@@ -109,7 +109,7 @@ export const getCurrentTeamDetailedDataAction = () => async dispatch => {
 };
 
 // ADD_INVITED_USER_TO_CURRENT_TEAM_DETAILED_DATA
-export const addInvitedUserToCurrentTeamDetailedDataAction = payload => ({
+export const addInvitedUserToCurrentTeamDetailedDataAction = (payload) => ({
     type: ADD_INVITED_USER_TO_CURRENT_TEAM_DETAILED_DATA,
     payload,
 });
@@ -123,12 +123,12 @@ const switchTeamRequestSuccess = () => ({
     type: SWITCH_TEAM_REQUEST_SUCCESS,
 });
 
-const switchTeamRequestFail = error => ({
+const switchTeamRequestFail = (error) => ({
     type: SWITCH_TEAM_REQUEST_FAIL,
     error,
 });
 
-export const switchTeamRequestAction = data => async dispatch => {
+export const switchTeamRequestAction = (data) => async (dispatch) => {
     dispatch(switchTeamRequest());
 
     try {

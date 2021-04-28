@@ -7,10 +7,8 @@ import {
   useGetOrganizationMembersQuery,
 } from '../../../generated-models';
 import {
-  ITimesheet,
   ITimesheetState,
   ITimesheetCreateRequest,
-  IOrgMember,
 } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import CSS from 'csstype';
@@ -31,12 +29,12 @@ const handleChangeTabView = key => {
 };
 
 const TimeReportWrapper = () => {
-  const { data, loading, refetch } = useGetTimesheetsQuery();
+  const { data, loading, refetch } = useGetTimesheetsQuery({ variables: { withTotalHours: true }});
   const { data: membersData, loading: loadingMembers } = useGetOrganizationMembersQuery();
 
   const [updateMutation] = useUpdateTimesheetMutation();
   const updateTimesheet = (sheetId: string, request: ITimesheetCreateRequest) => {
-    updateMutation({ variables: { sheetId, request } })
+    updateMutation({ variables: { sheetId, request } }) 
       .then(() => {
         refetch();
         message.success('Timesheet updated');
@@ -52,7 +50,9 @@ const TimeReportWrapper = () => {
       <Tabs defaultActiveKey="1" onChange={handleChangeTabView}>
         <TabPane tab="Opened" key="1">
           <TimeReportTable
-            timesheets={[]}
+            timesheets={_.get(data, 'getTimesheets', []).filter(
+              timesheet => timesheet.state === ITimesheetState.OPEN,
+            )}
             viewMode={VIEW_MODE.OPEN}
             members={_.get(membersData, 'getOrganizationMembers', [])}
             updateTimesheet={updateTimesheet}
