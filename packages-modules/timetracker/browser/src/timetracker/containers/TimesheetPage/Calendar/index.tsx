@@ -125,8 +125,9 @@ const TimesheetCalendar = ({
     return events
       .filter(ev => {
         return (
-          (ev.userId === selectedUser || selectedUser === '') &&
-          (ev.projectId === selectedProject || selectedProject === '__all')
+          (ev.userId === selectedUser || selectedUser === '__all') &&
+          (ev.projectId === selectedProject || selectedProject === '__all') &&
+          members.findIndex(mem => mem.userId === ev.userId) > -1
         );
       })
       .map(ev => ({

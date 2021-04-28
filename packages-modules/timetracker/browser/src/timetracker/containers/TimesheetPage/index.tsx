@@ -9,20 +9,16 @@ import {
   useGetOrganizationMembersQuery,
 } from '../../../generated-models';
 import { Row, Col, Switch, Form, Select, Spin } from 'antd';
-import {
-  IProjects as IProject,
-  ITag,
-  ITeamMember as IMember,
-  IOrgMember,
-} from '@admin-layout/timetracker-core';
+import { IProjects as IProject, ITag, IOrgMember } from '@admin-layout/timetracker-core';
+import { IPermissionType } from '@adminide-stack/core';
 import TimezonePicker from 'react-timezone';
-import { momentLocalizer, DateLocalizer } from 'react-big-calendar';
+import { momentLocalizer } from 'react-big-calendar';
 import moment, { Moment } from 'moment';
 import momentZ from 'moment-timezone';
 import { useLocation } from 'react-router';
 import qs from 'query-string';
 import { useHistory } from 'react-router';
-import { useFirstWeekDay } from '../../hooks';
+import { useFirstWeekDay, useViewPermissions } from '../../hooks';
 import { useSelector } from 'react-redux';
 interface ITimesheetProps {
   projects: Array<IProject>;
@@ -48,12 +44,11 @@ const Timesheet = ({
   const location = useLocation();
   const history = useHistory();
   const parsed = qs.parse(location.search);
-
   const [selectedProject, setSelectedProject] = useState('');
   const [isShowTimeModal, setIsShowTimeModal] = useState(false);
+  const { others: viewOthersPermit } = useViewPermissions();
 
   const handleChangeViewMode = () => {
-    //setViewMode(checked ? VIEW_MODE.CALENDAR_VIEW : VIEW_MODE.TABULAR_VIEW);
     parsed.view = parsed.view === 'calendar' ? 'tabular' : 'calendar';
     history.push({
       pathname: location.pathname,
@@ -61,7 +56,7 @@ const Timesheet = ({
     });
   };
 
-  const handleSelectTimezone = timezone => {
+  const handleSelectTimezone = (timezone) => {
     // setLocalizer(momentLocalizer(moment.tz.setDefault(timezone)));
   };
 
@@ -69,10 +64,11 @@ const Timesheet = ({
     setSelectedProject(value);
   };
 
-  const handleChangeSelectedUser = value => {
+  const handleChangeSelectedUser = (value) => {
     setSelectedUser(value);
   };
 
+  console.log('selectedUser => ', selectedUser)
   return (
     <PageContainer>
       <Row align="middle" justify="space-between" style={{ marginBottom: '10px' }}>
@@ -120,9 +116,14 @@ const Timesheet = ({
             className="sm-screen-size"
           >
             <Form.Item label="Members">
-              <Select onChange={handleChangeSelectedUser} value={selectedUser}>
-                <Select.Option value="">All</Select.Option>
-                {members.map(member => {
+              <Select
+                onChange={handleChangeSelectedUser}
+                value={selectedUser}
+              >
+                <Select.Option value="__all" key="__all">
+                  All
+                </Select.Option>
+                {members.map((member) => {
                   return (
                     <Select.Option value={member.userId} key={member.userId}>
                       {member.name}
@@ -143,7 +144,7 @@ const Timesheet = ({
             <Form.Item label="Projects">
               <Select onChange={handleChangeProject} value={selectedProject}>
                 <Select.Option value="__all">All</Select.Option>
-                {projects.map(res => {
+                {projects.map((res) => {
                   return (
                     <Select.Option value={res.id} key={res.id}>
                       {res.name}
@@ -190,24 +191,21 @@ const TimesheetPage = () => {
   const { value: dowValue } = useFirstWeekDay();
   const history = useHistory();
   const queryParsed = qs.parse(location.search);
-  const userId = useSelector<any>(state => state.user.auth0UserId) as string
+  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
+  const { self: viewSelfPermit, others: viewOtherPermit } = useViewPermissions();
+
   const weekStart = () => {
     return queryParsed.weekStart ? moment(queryParsed.weekStart) : moment().startOf('week');
   };
 
   const selectedUser = () => {
-    return queryParsed.username as string ?? userId
-  }
+    return (queryParsed.username as string) ?? (viewSelfPermit === IPermissionType.Allow ? userId: '');
+  };
 
   useEffect(() => {
     const queryParsed = qs.parse(location.search);
-    if (
-      queryParsed.strict === undefined ||
-      !queryParsed.strict
-    ) {
-      queryParsed.weekStart = moment()
-        .startOf('week')
-        .format('YYYY-MM-DD');
+    if (queryParsed.strict === undefined || !queryParsed.strict) {
+      queryParsed.weekStart = moment().startOf('week').format('YYYY-MM-DD');
       history.push({
         pathname: location.pathname,
         search: qs.stringify(queryParsed),
@@ -231,7 +229,7 @@ const TimesheetPage = () => {
       pathname: location.pathname,
       search: qs.stringify(parsed),
     });
-  }
+  };
 
   moment.locale('en', {
     week: {
@@ -241,13 +239,22 @@ const TimesheetPage = () => {
 
   const localizerM = momentLocalizer(moment);
   const filteredProjects = () => {
-    return [..._.get(projectsData, 'getProjects', []), { id: '', name: 'UnKnown'}]
-  }
+    return [..._.get(projectsData, 'getProjects', []), { id: '', name: 'UnKnown' }];
+  };
+
+  const filteredMembers = () => {
+    return _.get(membersData, 'getOrganizationMembers', []).filter((member) => {
+      if (viewOtherPermit === IPermissionType.Allow && member.userId !== userId) return true;
+      if (viewSelfPermit === IPermissionType.Allow && member.userId === userId) return true;
+      return false;
+    });
+  };
+
   return (
     <Spin spinning={loadingProjects || loadingMembers || loadingTags}>
       <Timesheet
         projects={filteredProjects()}
-        members={_.get(membersData, 'getOrganizationMembers', [])}
+        members={filteredMembers()}
         tags={_.get(tagsData, 'getTags', [])}
         localizer={localizerM}
         weekStart={weekStart()}

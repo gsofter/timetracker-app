@@ -6,6 +6,7 @@ import {
   IProjects as IProject,
   ITimeRecordRequest,
   ITimeRecord,
+  IOrgMember,
 } from '@admin-layout/timetracker-core';
 import {
   useGetDurationTimeRecordsQuery,
@@ -21,7 +22,7 @@ import { TabularCalendar } from './TabularCalendar';
 interface ITabularCalendarWrapperProps {
   projects: IProject[];
   tags: any;
-  members: any;
+  members: Array<IOrgMember>;
   localizer: any;
   weekStart: Moment;
   selectedUser: string;
@@ -30,23 +31,32 @@ interface ITabularCalendarWrapperProps {
 }
 import * as _ from 'lodash';
 
-const filterTimeRecords = (records: Array<ITimeRecord>, filterOptions: any): Array<ITimeRecord> => {
-  const { selectedUser, selectedProject, approval } = filterOptions;
+interface IFilterOptions {
+  selectedUser? : string;
+  selectedProject?: string;
+  approval?: boolean;
+  members?: Array<IOrgMember>;
+}
+
+const filterTimeRecords = (records: Array<ITimeRecord>, filterOptions: IFilterOptions): Array<ITimeRecord> => {
+  const { selectedUser, selectedProject, approval, members } = filterOptions;
   if (!records) return [];
+  const memStrArr = members.map(mem => mem.userId)
   return records
     .filter(
       (ev) =>
-        (ev.userId === selectedUser || selectedUser === '') &&
+        (ev.userId === selectedUser || selectedUser === '__all') &&
         (ev.projectId === selectedProject || selectedProject === '__all') &&
         (approval === undefined ? true : approval ? !!ev.timesheetId : !ev.timesheetId)
         ,
-    )
+    ).filter(record => memStrArr.includes(record.userId))
 };
 
 const TabularCalendarWrapper = ({
   projects,
   weekStart,
   selectedUser,
+  members,
   selectedProject,
   setPathWeekStart,
 }: ITabularCalendarWrapperProps) => {
@@ -143,7 +153,7 @@ const TabularCalendarWrapper = ({
   const projectsApproval = () => {
     let approvedSet = new Set<string>()
     let unApprovedSet = new Set<string>()
-    filterTimeRecords(data?.getDurationTimeRecords, {selectedUser, selectedProject})
+    filterTimeRecords(data?.getDurationTimeRecords, {selectedUser, selectedProject, members})
       .forEach(record => {
         if(!!record.timesheetId)
           approvedSet.add(record.projectId)
@@ -169,7 +179,7 @@ const TabularCalendarWrapper = ({
       <TabularCalendar
         weekStart={weekStart}
         setPathWeekStart={setPathWeekStart}
-        records={filterTimeRecords(data?.getDurationTimeRecords, { selectedUser, selectedProject})}
+        records={filterTimeRecords(data?.getDurationTimeRecords, { selectedUser, selectedProject, members})}
         projects={projects}
         projectsMap={getProjectsMap()}
         projectsApproval={projectsApproval()}

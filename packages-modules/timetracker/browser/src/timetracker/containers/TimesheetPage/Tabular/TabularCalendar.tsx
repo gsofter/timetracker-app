@@ -436,7 +436,7 @@ export const TabularCalendar = ({
         <Button
           type="primary"
           onClick={openSubmitApproval}
-          disabled={unApprovals.length === 0 || timesheet.state === ITimesheetState.SUBMITTED}
+          disabled={unApprovals.length === 0 || (timesheet ? timesheet.state === ITimesheetState.SUBMITTED:false)}
         >
           Submit For Approval
         </Button>
