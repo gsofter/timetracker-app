@@ -115,12 +115,12 @@ export const useViewPermissions = () => {
   const [othersPer, setOthersPer] = useState('');
 
   useEffect(() => {
-    setSelfPer(_.get(selfPer, 'resolveConfiguration', IPermissionType.NotSet));
-  }, [selfPer, loadingSelf]);
+    setSelfPer(_.get(selfData, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [selfData, loadingSelf]);
 
   useEffect(() => {
-    setOthersPer(_.get(othersPer, 'resolveConfiguration', IPermissionType.NotSet));
-  }, [othersPer, loadingOthers]);
+    setOthersPer(_.get(othersData, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [othersData, loadingOthers]);
 
   return {
     self: selfPer,
@@ -141,12 +141,12 @@ export const useCreatePermissions = () => {
   const [othersPer, setOthersPer] = useState('');
 
   useEffect(() => {
-    setSelfPer(_.get(selfPer, 'resolveConfiguration', IPermissionType.NotSet));
-  }, [selfPer, loadingSelf]);
+    setSelfPer(_.get(selfData, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [selfData, loadingSelf]);
 
   useEffect(() => {
-    setOthersPer(_.get(othersPer, 'resolveConfiguration', IPermissionType.NotSet));
-  }, [othersPer, loadingOthers]);
+    setOthersPer(_.get(othersData, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [othersData, loadingOthers]);
 
   return {
     self: selfPer,
@@ -167,12 +167,12 @@ export const useEditPermissions = () => {
   const [othersPer, setOthersPer] = useState('');
 
   useEffect(() => {
-    setSelfPer(_.get(selfPer, 'resolveConfiguration', IPermissionType.NotSet));
-  }, [selfPer, loadingSelf]);
+    setSelfPer(_.get(selfData, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [selfData, loadingSelf]);
 
   useEffect(() => {
-    setOthersPer(_.get(othersPer, 'resolveConfiguration', IPermissionType.NotSet));
-  }, [othersPer, loadingOthers]);
+    setOthersPer(_.get(othersData, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [othersData, loadingOthers]);
 
   return {
     self: selfPer,
@@ -193,12 +193,12 @@ export const useManagePermissions = () => {
   const [othersPer, setOthersPer] = useState('');
 
   useEffect(() => {
-    setSelfPer(_.get(selfPer, 'resolveConfiguration', IPermissionType.NotSet));
-  }, [selfPer, loadingSelf]);
+    setSelfPer(_.get(selfData, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [selfData, loadingSelf]);
 
   useEffect(() => {
-    setOthersPer(_.get(othersPer, 'resolveConfiguration', IPermissionType.NotSet));
-  }, [othersPer, loadingOthers]);
+    setOthersPer(_.get(othersData, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [othersData, loadingOthers]);
 
   return {
     self: selfPer,
@@ -219,12 +219,12 @@ export const useDeletePermissions = () => {
   const [othersPer, setOthersPer] = useState('');
 
   useEffect(() => {
-    setSelfPer(_.get(selfPer, 'resolveConfiguration', IPermissionType.NotSet));
-  }, [selfPer, loadingSelf]);
+    setSelfPer(_.get(selfData, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [selfData, loadingSelf]);
 
   useEffect(() => {
-    setOthersPer(_.get(othersPer, 'resolveConfiguration', IPermissionType.NotSet));
-  }, [othersPer, loadingOthers]);
+    setOthersPer(_.get(othersData, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [othersData, loadingOthers]);
 
   return {
     self: selfPer,
