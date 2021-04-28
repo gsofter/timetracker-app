@@ -47,7 +47,7 @@ const TimesheetCalendar = ({
   setIsShowTimeModal,
   localizer,
   weekStart,
-  setPathWeekStart
+  setPathWeekStart,
 }: ITimesheetCalendarProps) => {
   const [selectedEvent, setSelectedEvent] = useState<ITimeRecord>(defaultRecord);
   const [selectedTask, setSelectedTask] = useState('');
@@ -56,7 +56,7 @@ const TimesheetCalendar = ({
   const [updateMutation, { loading: loadingUpdate }] = useUpdateTimeRecordMutation();
   const [removeMutation, { loading: loadingRemove }] = useRemoveTimeRecordMutation();
   const [form] = Form.useForm();
-  const userId = useSelector<any>(state => state.user.auth0UserId) as string;
+  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   // create event handler
   const handleAddTimeRecordEvent = (request: ITimeRecordRequest) => {
     addMutation({ variables: { request } })
@@ -65,7 +65,7 @@ const TimesheetCalendar = ({
         setIsShowTimeModal(false);
         refetch();
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err.message);
         message.error('Event creation failed!');
       });
@@ -79,7 +79,7 @@ const TimesheetCalendar = ({
         refetch();
         setIsShowTimeModal(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err.message);
         message.error('Event update failed!');
       });
@@ -93,7 +93,7 @@ const TimesheetCalendar = ({
         refetch();
         setIsShowTimeModal(false);
       })
-      .catch(err => {
+      .catch((err) => {
         console.log(err.message);
       });
   };
@@ -120,23 +120,24 @@ const TimesheetCalendar = ({
 
   const { data, loading, error, refetch } = useGetTimeRecordsQuery();
 
-  const filterEvents = events => {
+  const filterEvents = (events) => {
     if (!events) return [];
     return events
-      .filter(ev => {
+      .filter((ev) => {
         return (
-          (ev.userId === selectedUser || selectedUser === '') &&
-          (ev.projectId === selectedProject || selectedProject === '__all')
+          (ev.userId === selectedUser || selectedUser === '__all') &&
+          (ev.projectId === selectedProject || selectedProject === '__all') &&
+          members.findIndex((mem) => mem.userId === ev.userId) > -1
         );
       })
-      .map(ev => ({
+      .map((ev) => ({
         ...ev,
         startTime: moment(ev.startTime).toDate(),
         endTime: moment(ev.endTime).toDate(),
       }));
   };
 
-  const handleChangeTask = value => {
+  const handleChangeTask = (value) => {
     setSelectedTask(value);
   };
 

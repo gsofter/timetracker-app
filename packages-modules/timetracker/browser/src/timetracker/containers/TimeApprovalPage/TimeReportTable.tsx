@@ -5,7 +5,7 @@ import { MoreOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { ITimesheetCreateRequest, IOrgMember } from '@admin-layout/timetracker-core';
 import { VIEW_MODE } from './index';
-import { useTimeformat } from '../../hooks';
+import { useManagePermissions, useTimeformat, useViewPermissions } from '../../hooks';
 import { useHistory } from 'react-router';
 import { generatePath } from 'react-router-dom';
 import { useGetOrgContextQuery } from '@adminide-stack/react-shared-components';
@@ -15,7 +15,7 @@ import * as _ from 'lodash';
 import { usePermissions } from '../../hooks';
 import { IPermissionType } from '@adminide-stack/core';
 import { useSelector } from 'react-redux';
-import { formatDuration } from '../../services/timeRecordService'
+import { formatDuration } from '../../services/timeRecordService';
 interface ITimesheetProps {
   timesheets: Array<ITimesheetResponse>;
   viewMode: VIEW_MODE;
@@ -27,8 +27,9 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
   const history = useHistory();
   const { dateFormat } = useTimeformat();
   const { data: contextData } = useGetOrgContextQuery();
-  const { viewPermission, managePermission } = usePermissions();
-  const userId = useSelector<any>(state => state.user.auth0UserId) as string;
+  const managePermit = useManagePermissions();
+  const viewPermit = useViewPermissions();
+  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const handleView = (id: string, record: ITimesheetResponse) => {
     history.push({
       pathname: generatePath(ROUTES.Timesheet, { orgName: contextData.getOrgContext.orgName }),
@@ -93,22 +94,14 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
     };
     updateTimesheet(id, request);
   };
-  
-  const filteredTimesheets = (timesheets: Array<ITimesheetResponse>) => {
-    if(viewPermission === IPermissionType.Allow)
-      return timesheets;
-    else 
-      return timesheets.filter(sheet => sheet.userId === userId)
-  }
 
   const columns = [
     {
       title: 'User',
       dataIndex: 'userId',
       key: 'userId',
-      render: value => {
-        console.log('value =>', value);
-        const member = members.find(m => m.userId === value);
+      render: (value) => {
+        const member = members.find((m) => m.userId === value);
         return <> {member !== undefined ? member.name : ''} </>;
       },
     },
@@ -116,25 +109,25 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
       title: 'Start Date',
       dataIndex: 'startDate',
       key: 'startDate',
-      render: value => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
+      render: (value) => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
     },
     {
       title: 'End Date',
       dataIndex: 'endDate',
       key: 'endDate',
-      render: value => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
+      render: (value) => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
     },
     {
       title: 'Duration',
       dataIndex: 'totalDuration',
       key: 'totalDuration',
-      render: value => <> {formatDuration(value)} </>
+      render: (value) => <> {formatDuration(value)} </>,
     },
     {
       title: 'Submitted On',
       dataIndex: 'submittedOn',
       key: 'submittedOn',
-      render: value => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
+      render: (value) => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
     },
     {
       title: 'state',
@@ -145,10 +138,20 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
       action: 'action',
       key: 'action',
       render: (text, record) => {
+        const disableView =
+          (record.userId === userId && viewPermit.self !== IPermissionType.Allow) ||
+          (record.userId !== userId && viewPermit.others !== IPermissionType.Allow);
+        const disableManage =
+          (record.userId === userId && managePermit.self !== IPermissionType.Allow) ||
+          (record.userId !== userId && managePermit.others !== IPermissionType.Allow);
         const actionMenu = () => {
           return (
             <Menu>
-              <Menu.Item key="view" onClick={() => handleView(record.id, record)}>
+              <Menu.Item
+                key="view"
+                onClick={() => handleView(record.id, record)}
+                disabled={disableView}
+              >
                 View
               </Menu.Item>
               {viewMode === VIEW_MODE.OPEN && (
@@ -157,7 +160,11 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
                 </Menu.Item>
               )}
               {viewMode === VIEW_MODE.SUBMITTED && (
-                <Menu.Item key="unsubmit" onClick={() => handleUnSubmit(record.id, record)}>
+                <Menu.Item
+                  key="unsubmit"
+                  onClick={() => handleUnSubmit(record.id, record)}
+                  disabled={disableManage}
+                >
                   Unsubmit
                 </Menu.Item>
               )}
@@ -165,7 +172,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
                 <Menu.Item
                   key="approve"
                   onClick={() => handleApprove(record.id, record)}
-                  disabled={managePermission !== IPermissionType.Allow}
+                  disabled={disableManage}
                 >
                   Approve
                 </Menu.Item>
@@ -174,13 +181,17 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
                 <Menu.Item
                   key="deny"
                   onClick={() => handleDeny(record.id, record)}
-                  disabled={managePermission !== IPermissionType.Allow}
+                  disabled={disableManage}
                 >
                   Deny
                 </Menu.Item>
               )}
               {viewMode === VIEW_MODE.APPROVED && (
-                <Menu.Item key="submit" onClick={() => handleUnApprove(record.id, record)}>
+                <Menu.Item
+                  key="submit"
+                  onClick={() => handleUnApprove(record.id, record)}
+                  disabled={disableManage}
+                >
                   Unapprove
                 </Menu.Item>
               )}
@@ -198,9 +209,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
     },
   ];
 
-  return (
-      <Table columns={columns} dataSource={filteredTimesheets(timesheets)} />
-  );
+  return <Table columns={columns} dataSource={timesheets} />;
 };
 
 export default TimeReport;
