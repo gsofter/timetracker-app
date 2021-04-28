@@ -24,6 +24,8 @@ export interface ITimerActivityItemProps {
   timeRecord?: ITimeRecord;
   timeRecords: [ITimeRecord];
   projects: IProject[];
+  disablePlay?: boolean;
+  disableDelete?: boolean;
   removeTimeRecord: (recordId: string) => void;
   updateTimeRecord: (recordId: string, request: ITimeRecordRequest) => void;
   handlePlayTimer: (timeRecord: ITimeRecord) => void;
@@ -34,7 +36,7 @@ const calcTotalTime = (startTime: string, endTime: string): number => {
 };
 
 export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITimerActivityItemProps) => {
-  const { removeTimeRecord, timeRecord, updateTimeRecord, handlePlayTimer } = props;
+  const { removeTimeRecord, timeRecord, disablePlay, disableDelete, updateTimeRecord, handlePlayTimer } = props;
   const { css } = useFela(props);
   const [selectedProject, setSelectedProject] = useState(timeRecord.projectId ?? '');
   const [taskName, setTaskName] = useState(timeRecord.taskName ?? '');
@@ -55,7 +57,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
 
   const menus = (
     <Menu>
-      <Menu.Item key="remove" icon={<DeleteOutlined />} onClick={handleRemove}>
+      <Menu.Item key="remove" icon={<DeleteOutlined />} onClick={handleRemove} disabled={disableDelete}>
         Remove
       </Menu.Item>
     </Menu>
@@ -158,6 +160,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
                 size="large"
                 icon={<CaretRightOutlined />}
                 onClick={() => handlePlayTimer(timeRecord)}
+                disabled={disablePlay}
               ></Button>
               <Dropdown overlay={menus} trigger={['click']}>
                 <Button icon={<MoreOutlined />} size="large"></Button>

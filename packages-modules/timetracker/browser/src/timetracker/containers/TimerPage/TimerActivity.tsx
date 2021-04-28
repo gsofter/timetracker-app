@@ -19,7 +19,7 @@ import {
 import * as _ from 'lodash';
 import { formatDuration } from '../../services/timeRecordService';
 import { useSelector } from 'react-redux';
-import { useTimeformat, useCreatePermissions } from '../../hooks';
+import { useTimeformat, useCreatePermissions, useDeletePermissions } from '../../hooks';
 import { TRACKER_MODE } from '../../constants';
 
 const splitTimersByDay = (timeRecords: [ITimeRecord], dateFormat): [ITimeRecord][] => {
@@ -107,6 +107,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
   const { timeFormat, dateFormat } = useTimeformat();
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const { self: createPermit } = useCreatePermissions();
+  const { self: deletePermit } = useDeletePermissions();
   const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
     for (let i = 0; i < timeRecords.length; i++) {
@@ -228,10 +229,12 @@ const TimerActivity = (props: ITimerActivityProps) => {
                         key={timeRecord.id}
                         timeRecord={timeRecord}
                         timeRecords={timeRecords}
+                        projects={projects}
+                        disablePlay={createPermit !== IPermissionType.Allow}
+                        disableDelete={deletePermit !== IPermissionType.Allow}
                         removeTimeRecord={removeTimeRecord}
                         updateTimeRecord={updateTimeRecord}
                         handlePlayTimer={handlePlayTimer}
-                        projects={projects}
                       />
                     ))}
                   </div>
