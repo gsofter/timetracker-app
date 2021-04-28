@@ -43,6 +43,7 @@
   "license": "ISC",
   "dependencies": {
     "@admin-layout/components": "link:../../../packages/components",
+    "@admin-layout/react-shared-components": "link:../../../packages/react-shared-components",
     "@admin-layout/timetracker-core": "link:../core",
     "chart.js": "^2.9.4",
     "react-chartjs-2": "^2.11.1",
