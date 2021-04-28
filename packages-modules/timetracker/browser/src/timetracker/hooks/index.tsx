@@ -3,6 +3,7 @@ import { useSetting, usePermissionAutoFetch } from '@adminide-stack/react-shared
 import { useLocation } from 'react-router';
 import { TimeRoundedType, TimeRoundingUpToValue } from '../constants';
 import { IPermissionType } from '@adminide-stack/core'
+import { IPreDefineAccountPermissions } from '../constants'
 import * as _ from 'lodash';
 
 const getQuoteWrappedString = (str: string) => {
@@ -101,9 +102,140 @@ export const useRound = () => {
   };
 };
 
+const useViewPermissions = () => {
+  const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
+    configKey: IPreDefineAccountPermissions.viewSelfTimeTracker,
+  });
+
+  const { data: othersData, loading: loadingOthers } = usePermissionAutoFetch({
+    configKey: IPreDefineAccountPermissions.viewOthersTimeTracker,
+  });
+
+  const [selfPer, setSelfPer] = useState('');
+  const [othersPer, setOthersPer] = useState('');
+
+  useEffect(() => {
+    setSelfPer(_.get(selfPer, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [selfPer, loadingSelf]);
+
+  useEffect(() => {
+    setOthersPer(_.get(othersPer, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [othersPer, loadingOthers]);
+
+  return {
+    self: selfPer,
+    others: othersPer,
+  }
+}
+
+const useCreatePermissions = () => {
+  const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
+    configKey: IPreDefineAccountPermissions.createSelfTimeTracker,
+  });
+
+  const { data: othersData, loading: loadingOthers } = usePermissionAutoFetch({
+    configKey: IPreDefineAccountPermissions.createOthersTimeTracker,
+  });
+
+  const [selfPer, setSelfPer] = useState('');
+  const [othersPer, setOthersPer] = useState('');
+
+  useEffect(() => {
+    setSelfPer(_.get(selfPer, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [selfPer, loadingSelf]);
+
+  useEffect(() => {
+    setOthersPer(_.get(othersPer, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [othersPer, loadingOthers]);
+
+  return {
+    self: selfPer,
+    others: othersPer,
+  }
+}
+
+const useEditPermissions = () => {
+  const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
+    configKey: IPreDefineAccountPermissions.editSelfTimeTracker,
+  });
+
+  const { data: othersData, loading: loadingOthers } = usePermissionAutoFetch({
+    configKey: IPreDefineAccountPermissions.editOthersTimeTracker,
+  });
+
+  const [selfPer, setSelfPer] = useState('');
+  const [othersPer, setOthersPer] = useState('');
+
+  useEffect(() => {
+    setSelfPer(_.get(selfPer, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [selfPer, loadingSelf]);
+
+  useEffect(() => {
+    setOthersPer(_.get(othersPer, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [othersPer, loadingOthers]);
+
+  return {
+    self: selfPer,
+    others: othersPer,
+  }
+}
+
+const useManagePermissions = () => {
+  const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
+    configKey: IPreDefineAccountPermissions.manageSelfTimeTracker,
+  });
+
+  const { data: othersData, loading: loadingOthers } = usePermissionAutoFetch({
+    configKey: IPreDefineAccountPermissions.manageOthersTimeTracker,
+  });
+
+  const [selfPer, setSelfPer] = useState('');
+  const [othersPer, setOthersPer] = useState('');
+
+  useEffect(() => {
+    setSelfPer(_.get(selfPer, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [selfPer, loadingSelf]);
+
+  useEffect(() => {
+    setOthersPer(_.get(othersPer, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [othersPer, loadingOthers]);
+
+  return {
+    self: selfPer,
+    others: othersPer,
+  }
+}
+
+const useDeletePermissions = () => {
+  const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
+    configKey: IPreDefineAccountPermissions.deleteSelfTimeTracker,
+  });
+
+  const { data: othersData, loading: loadingOthers } = usePermissionAutoFetch({
+    configKey: IPreDefineAccountPermissions.deleteOthersTimeTracker,
+  });
+
+  const [selfPer, setSelfPer] = useState('');
+  const [othersPer, setOthersPer] = useState('');
+
+  useEffect(() => {
+    setSelfPer(_.get(selfPer, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [selfPer, loadingSelf]);
+
+  useEffect(() => {
+    setOthersPer(_.get(othersPer, 'resolveConfiguration', IPermissionType.NotSet));
+  }, [othersPer, loadingOthers]);
+
+  return {
+    self: selfPer,
+    others: othersPer,
+  }
+}
+
+
 export const usePermissions = () => {
   const { data: viewPermission, loading: loadingView } = usePermissionAutoFetch({
-    configKey: 'organization.timetracker.view',
+    configKey: IPreDefineAccountPermissions.editSelfTimeTracker,
   });
 
   const { data: managePermission, loading: loadingManage } = usePermissionAutoFetch({
