@@ -11,6 +11,7 @@ import {
 import {
   ITimeRecordRequest,
   ITimeRecord,
+  IPermissionType
 } from '@admin-layout/timetracker-core';
 import { message, Spin } from 'antd';
 import * as _ from 'lodash';
@@ -18,6 +19,7 @@ import Timer from 'react-compound-timer';
 import { useSelector } from 'react-redux';
 import { useFirstWeekDay } from '../../hooks';
 import TimerActivity from './TimerActivity';
+import { useCreatePermissions, useDeletePermissions } from '../../hooks'
 
 const TimeTrackerWrapper = props => {
   const { setTime, reset, stop, start } = props.timer;
@@ -30,6 +32,8 @@ const TimeTrackerWrapper = props => {
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { value: dowValue } = useFirstWeekDay();
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
+  const { self: createPermit } = useCreatePermissions()
+  const { self: deletePermit } = useDeletePermissions();
   useEffect(() => {
     moment.locale('en', {
       week: {
@@ -42,6 +46,10 @@ const TimeTrackerWrapper = props => {
 
   // create time record
   const createTimeRecord = (request: ITimeRecordRequest) => {
+    if(createPermit !== IPermissionType.Allow) {
+      message.warning('Permission Not Allowed')
+      return
+    }
     createMutation({ variables: { request } })
       .then(() => {
         message.info('TimeRecord created');
@@ -55,6 +63,10 @@ const TimeTrackerWrapper = props => {
 
   // remove time record
   const removeTimeRecord = (recordId: string) => {
+    if(deletePermit !== IPermissionType.Allow) {
+      message.warning('Permission Not Allowed')
+      return
+    }
     removeMutation({ variables: { recordId } })
       .then(() => {
         message.success('TimeRecord Removed');

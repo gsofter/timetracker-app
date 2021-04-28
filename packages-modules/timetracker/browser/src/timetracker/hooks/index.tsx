@@ -102,7 +102,7 @@ export const useRound = () => {
   };
 };
 
-const useViewPermissions = () => {
+export const useViewPermissions = () => {
   const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
     configKey: IPreDefineAccountPermissions.viewSelfTimeTracker,
   });
@@ -128,7 +128,7 @@ const useViewPermissions = () => {
   }
 }
 
-const useCreatePermissions = () => {
+export const useCreatePermissions = () => {
   const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
     configKey: IPreDefineAccountPermissions.createSelfTimeTracker,
   });
@@ -154,7 +154,7 @@ const useCreatePermissions = () => {
   }
 }
 
-const useEditPermissions = () => {
+export const useEditPermissions = () => {
   const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
     configKey: IPreDefineAccountPermissions.editSelfTimeTracker,
   });
@@ -180,7 +180,7 @@ const useEditPermissions = () => {
   }
 }
 
-const useManagePermissions = () => {
+export const useManagePermissions = () => {
   const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
     configKey: IPreDefineAccountPermissions.manageSelfTimeTracker,
   });
@@ -206,7 +206,7 @@ const useManagePermissions = () => {
   }
 }
 
-const useDeletePermissions = () => {
+export const useDeletePermissions = () => {
   const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
     configKey: IPreDefineAccountPermissions.deleteSelfTimeTracker,
   });

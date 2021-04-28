@@ -14,11 +14,12 @@ import {
   ITimeRecordRequest,
   ITimeRecord,
   IProjects as IProject,
+  IPermissionType,
 } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import { formatDuration } from '../../services/timeRecordService';
 import { useSelector } from 'react-redux';
-import { useTimeformat } from '../../hooks';
+import { useTimeformat, useCreatePermissions } from '../../hooks';
 import { TRACKER_MODE } from '../../constants';
 
 const splitTimersByDay = (timeRecords: [ITimeRecord], dateFormat): [ITimeRecord][] => {
@@ -105,6 +106,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
   const [mode, setMode] = useState(TRACKER_MODE.TRACK);
   const { timeFormat, dateFormat } = useTimeformat();
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
+  const { self: createPermit } = useCreatePermissions();
   const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
     for (let i = 0; i < timeRecords.length; i++) {
@@ -197,6 +199,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
                 handleStart={startTimer}
                 handleStop={stopTimer}
                 setMode={setMode}
+                disable={createPermit !== IPermissionType.Allow}
                 createTimeRecord={createTimeRecord}
                 currentTimeRecord={currentTimeRecord}
                 updatePlayingTimeRecord={updatePlayingTimeRecord}
