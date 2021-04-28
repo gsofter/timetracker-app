@@ -19,7 +19,7 @@ import {
   InversifyProvider, Lifecycle,
 } from '@workbench-stack/components';
 import { PluginArea } from '@common-stack/client-react';
-import modules, { MainRoute } from '../modules';
+import modules, { MainRoute, logger } from '../modules';
 import { ConnectedRouter } from 'connected-react-router';
 import { PersistGate } from 'redux-persist/integration/react';
 import { persistStore, persistReducer } from 'redux-persist';
@@ -33,7 +33,11 @@ const ProvideAuth = ({ children }) => {
 
 const { apolloClient: client, container } = createClientContainer();
 
-
+if (__DEV__) {
+  modules.stylesInserts.map(style => {
+    logger.warn('Include CSS file ["%s"] in index.ts', style);
+  });
+}
 let store;
 if ((module as any).hot && (module as any).hot.data && (module as any).hot.data.store) {
   // console.log('Restoring Redux store:', JSON.stringify((module as any).hot.data.store.getState()));

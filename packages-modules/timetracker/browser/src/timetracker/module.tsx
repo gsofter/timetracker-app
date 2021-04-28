@@ -29,5 +29,9 @@ export default new Feature({
       render: ReportProvider,
     }
   ],
+  stylesInsert: [
+    'react-big-calendar/lib/addons/dragAndDrop/styles.css',
+    'react-big-calendar/lib/css/react-big-calendar.css'
+  ]
   
 });
