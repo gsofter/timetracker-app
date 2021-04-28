@@ -32,24 +32,27 @@ interface ITabularCalendarWrapperProps {
 import * as _ from 'lodash';
 
 interface IFilterOptions {
-  selectedUser? : string;
+  selectedUser?: string;
   selectedProject?: string;
   approval?: boolean;
   members?: Array<IOrgMember>;
 }
 
-const filterTimeRecords = (records: Array<ITimeRecord>, filterOptions: IFilterOptions): Array<ITimeRecord> => {
+const filterTimeRecords = (
+  records: Array<ITimeRecord>,
+  filterOptions: IFilterOptions,
+): Array<ITimeRecord> => {
   const { selectedUser, selectedProject, approval, members } = filterOptions;
   if (!records) return [];
-  const memStrArr = members.map(mem => mem.userId)
+  const memStrArr = members.map((mem) => mem.userId);
   return records
     .filter(
       (ev) =>
         (ev.userId === selectedUser || selectedUser === '__all') &&
         (ev.projectId === selectedProject || selectedProject === '__all') &&
-        (approval === undefined ? true : approval ? !!ev.timesheetId : !ev.timesheetId)
-        ,
-    ).filter(record => memStrArr.includes(record.userId))
+        (approval === undefined ? true : approval ? !!ev.timesheetId : !ev.timesheetId),
+    )
+    .filter((record) => memStrArr.includes(record.userId));
 };
 
 const TabularCalendarWrapper = ({
@@ -151,35 +154,40 @@ const TabularCalendarWrapper = ({
   };
 
   const projectsApproval = () => {
-    let approvedSet = new Set<string>()
-    let unApprovedSet = new Set<string>()
-    filterTimeRecords(data?.getDurationTimeRecords, {selectedUser, selectedProject, members})
-      .forEach(record => {
-        if(!!record.timesheetId)
-          approvedSet.add(record.projectId)
-        else
-          unApprovedSet.add(record.projectId)
-      })
+    let approvedSet = new Set<string>();
+    let unApprovedSet = new Set<string>();
+    filterTimeRecords(data?.getDurationTimeRecords, {
+      selectedUser,
+      selectedProject,
+      members,
+    }).forEach((record) => {
+      if (!!record.timesheetId) approvedSet.add(record.projectId);
+      else unApprovedSet.add(record.projectId);
+    });
     return {
       approvals: Array.from(approvedSet.values()),
-      unApprovals: Array.from(unApprovedSet.values())
-    }
-  }
+      unApprovals: Array.from(unApprovedSet.values()),
+    };
+  };
 
   const getProjectsMap = () => {
-    const projectsMap = new Map<string, IProject>()
-    projects.forEach(project => {
-      projectsMap.set(project.id, project)
-    })
-    return projectsMap
-  }
+    const projectsMap = new Map<string, IProject>();
+    projects.forEach((project) => {
+      projectsMap.set(project.id, project);
+    });
+    return projectsMap;
+  };
 
   return (
     <Spin spinning={!data || loading}>
       <TabularCalendar
         weekStart={weekStart}
         setPathWeekStart={setPathWeekStart}
-        records={filterTimeRecords(data?.getDurationTimeRecords, { selectedUser, selectedProject, members})}
+        records={filterTimeRecords(data?.getDurationTimeRecords, {
+          selectedUser,
+          selectedProject,
+          members,
+        })}
         projects={projects}
         projectsMap={getProjectsMap()}
         projectsApproval={projectsApproval()}

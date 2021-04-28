@@ -68,7 +68,7 @@ const Timesheet = ({
     setSelectedUser(value);
   };
 
-  console.log('selectedUser => ', selectedUser)
+  console.log('selectedUser => ', selectedUser);
   return (
     <PageContainer>
       <Row align="middle" justify="space-between" style={{ marginBottom: '10px' }}>
@@ -116,10 +116,7 @@ const Timesheet = ({
             className="sm-screen-size"
           >
             <Form.Item label="Members">
-              <Select
-                onChange={handleChangeSelectedUser}
-                value={selectedUser}
-              >
+              <Select onChange={handleChangeSelectedUser} value={selectedUser}>
                 <Select.Option value="__all" key="__all">
                   All
                 </Select.Option>
@@ -199,7 +196,9 @@ const TimesheetPage = () => {
   };
 
   const selectedUser = () => {
-    return (queryParsed.username as string) ?? (viewSelfPermit === IPermissionType.Allow ? userId: '');
+    return (
+      (queryParsed.username as string) ?? (viewSelfPermit === IPermissionType.Allow ? userId : '')
+    );
   };
 
   useEffect(() => {

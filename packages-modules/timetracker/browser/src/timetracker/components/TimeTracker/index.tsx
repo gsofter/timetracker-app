@@ -70,17 +70,17 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
     handleStop,
     removePlayingTimeRecord,
     createTimeRecord,
-    updatePlayingTimeRecord
+    updatePlayingTimeRecord,
   } = props;
   const { css } = useFela(props);
   const { timeFormat, dateFormat } = useTimeformat();
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
-  
+
   const handleTaskChange = (e) => {
     e.persist();
-    updatePlayingTimeRecord({ ...currentTimeRecord, taskName: e.target.value }, true)
+    updatePlayingTimeRecord({ ...currentTimeRecord, taskName: e.target.value }, true);
   };
 
   const handleSelectProject = (projectId) => {

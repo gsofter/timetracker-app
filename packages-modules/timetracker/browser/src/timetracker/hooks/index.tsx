@@ -2,8 +2,8 @@ import React, { useEffect, useState } from 'react';
 import { useSetting, usePermissionAutoFetch } from '@adminide-stack/react-shared-components';
 import { useLocation } from 'react-router';
 import { TimeRoundedType, TimeRoundingUpToValue } from '../constants';
-import { IPermissionType } from '@adminide-stack/core'
-import { IPreDefineAccountPermissions } from '../constants'
+import { IPermissionType } from '@adminide-stack/core';
+import { IPreDefineAccountPermissions } from '../constants';
 import * as _ from 'lodash';
 
 const getQuoteWrappedString = (str: string) => {
@@ -125,8 +125,8 @@ export const useViewPermissions = () => {
   return {
     self: selfPer,
     others: othersPer,
-  }
-}
+  };
+};
 
 export const useCreatePermissions = () => {
   const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
@@ -151,8 +151,8 @@ export const useCreatePermissions = () => {
   return {
     self: selfPer,
     others: othersPer,
-  }
-}
+  };
+};
 
 export const useEditPermissions = () => {
   const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
@@ -177,8 +177,8 @@ export const useEditPermissions = () => {
   return {
     self: selfPer,
     others: othersPer,
-  }
-}
+  };
+};
 
 export const useManagePermissions = () => {
   const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
@@ -203,8 +203,8 @@ export const useManagePermissions = () => {
   return {
     self: selfPer,
     others: othersPer,
-  }
-}
+  };
+};
 
 export const useDeletePermissions = () => {
   const { data: selfData, loading: loadingSelf } = usePermissionAutoFetch({
@@ -229,9 +229,8 @@ export const useDeletePermissions = () => {
   return {
     self: selfPer,
     others: othersPer,
-  }
-}
-
+  };
+};
 
 export const usePermissions = () => {
   const { data: viewPermission, loading: loadingView } = usePermissionAutoFetch({
@@ -256,5 +255,5 @@ export const usePermissions = () => {
   return {
     viewPermission: viewPer,
     managePermission: managePer,
-  }
+  };
 };

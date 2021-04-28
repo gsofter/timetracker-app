@@ -92,11 +92,7 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
               onChange={handleChangeDuration}
               disabled={disabled}
             />
-            <Button
-              icon={<MoreOutlined />}
-              onClick={handleMore}
-              disabled={disabled}
-            />
+            <Button icon={<MoreOutlined />} onClick={handleMore} disabled={disabled} />
           </>
         ) : (
           <DurationInput onChange={handleChangeDuration} disabled={disabled} />

@@ -3,7 +3,11 @@ import classNames from 'classnames';
 import moment from 'moment';
 import { useFela } from 'react-fela';
 import { Button, Row, Col, Input, Typography, Dropdown, Menu } from 'antd';
-import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
+import {
+  ITimeRecord,
+  ITimeRecordRequest,
+  IProjects as IProject,
+} from '@admin-layout/timetracker-core';
 import CSS from 'csstype';
 import {
   PlusCircleOutlined,
@@ -35,8 +39,17 @@ const calcTotalTime = (startTime: string, endTime: string): number => {
   return Math.floor((moment(endTime).valueOf() - moment(startTime).valueOf()) / 1000);
 };
 
-export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITimerActivityItemProps) => {
-  const { removeTimeRecord, timeRecord, disablePlay, disableDelete, updateTimeRecord, handlePlayTimer } = props;
+export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (
+  props: ITimerActivityItemProps,
+) => {
+  const {
+    removeTimeRecord,
+    timeRecord,
+    disablePlay,
+    disableDelete,
+    updateTimeRecord,
+    handlePlayTimer,
+  } = props;
   const { css } = useFela(props);
   const [selectedProject, setSelectedProject] = useState(timeRecord.projectId ?? '');
   const [taskName, setTaskName] = useState(timeRecord.taskName ?? '');
@@ -57,7 +70,12 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
 
   const menus = (
     <Menu>
-      <Menu.Item key="remove" icon={<DeleteOutlined />} onClick={handleRemove} disabled={disableDelete}>
+      <Menu.Item
+        key="remove"
+        icon={<DeleteOutlined />}
+        onClick={handleRemove}
+        disabled={disableDelete}
+      >
         Remove
       </Menu.Item>
     </Menu>
@@ -65,7 +83,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
 
   const projectDropdownMenus = (
     <Menu className={css(styles.projectDown)}>
-      {projects.map(project => {
+      {projects.map((project) => {
         return (
           <Menu.Item
             key={project.id}
@@ -81,14 +99,14 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
 
   const debouncedFunc = useMemo(
     () =>
-      debounce(value => {
+      debounce((value) => {
         const request = { ..._.omit(timeRecord, ['__typename', 'id']), taskName: value };
         updateTimeRecord(timeRecord.id, request);
       }, debounceTimeLimit),
     [],
   );
   const handleChangeTask = useCallback(
-    e => {
+    (e) => {
       e.persist();
       setTaskName(e.target.value);
       debouncedFunc(e.target.value);
@@ -96,7 +114,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
     [debouncedFunc],
   );
 
-  const handleChangeBillable = event => {
+  const handleChangeBillable = (event) => {
     setIsBillable(!isBillable);
     updateTimeRecord(timeRecord.id, {
       ..._.omit(timeRecord, ['__typename', 'id']),
@@ -129,7 +147,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
                 >
                   {selectedProject === ''
                     ? 'Projects'
-                    : projects.find(p => p.id === selectedProject)?.name}
+                    : projects.find((p) => p.id === selectedProject)?.name}
                 </Button>
               </Dropdown>
             </Col>
@@ -151,7 +169,10 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
             </Col>
             <Col span={6} className="duration">
               <Title level={5}>
-                {formatDuration(calcTotalTime(timeRecord.startTime, timeRecord.endTime), timeFormat)}
+                {formatDuration(
+                  calcTotalTime(timeRecord.startTime, timeRecord.endTime),
+                  timeFormat,
+                )}
               </Title>
             </Col>
             <Col span={4} className="flex-end">
@@ -174,7 +195,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
 };
 
 const styles: { [key: string]: (props) => CSS.Properties } = {
-  timeRecord: theme => ({
+  timeRecord: (theme) => ({
     padding: '5px 10px',
     border: '1px solid #eee',
     borderRadius: '5px',
