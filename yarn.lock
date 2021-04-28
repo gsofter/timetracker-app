@@ -119,7 +119,6 @@
   dependencies:
     "@admin-layout/components" "link:packages/components"
     "@admin-layout/timetracker-core" "link:packages-modules/timetracker/core"
-    "@adminide-stack/core" "0.0.20-alpha.5"
     chart.js "^2.9.4"
     react-chartjs-2 "^2.11.1"
     react-compound-timer "^1.2.0"
@@ -187,16 +186,6 @@
   version "0.0.20-alpha.22"
   resolved "https://registry.yarnpkg.com/@adminide-stack/core/-/core-0.0.20-alpha.22.tgz#35a9bdc01c1ad7bb599b2e5b186077d1deb94d70"
   integrity sha512-LnXFjiqFWjc5MuRoNtynYPwxwLYb8h0z9TSvgmhS3f85bXf8IELlDXWtOJL4uZ41jFbCGG5YDeIoVRHu7JY1+A==
-  dependencies:
-    "@vscode/monaco-editor" "^0.21.2"
-    "@workbench-stack/core" "2.0.2"
-    querystring "^0.2.0"
-    sort-keys "^4.0.0"
-
-"@adminide-stack/core@0.0.20-alpha.5":
-  version "0.0.20-alpha.5"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/core/-/core-0.0.20-alpha.5.tgz#b687c99b60a3df73bc6f8c0ca4cf2c7219f68065"
-  integrity sha512-cwhSfmoqtkw/AlPj8+OOmtGt99Fy47tU37y/rjg5CxYevp2V6JASdZygvwiFan77SisE/WdAJKrQAZN5otKR4g==
   dependencies:
     "@vscode/monaco-editor" "^0.21.2"
     "@workbench-stack/core" "2.0.2"
