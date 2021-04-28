@@ -19,13 +19,13 @@ export const accountPageStore: any[] = [
     key: 'dashboard',
     name: 'Dashboard',
     component: Dashboard,
-    position: IMenuPosition.UPPER,
+    position: IMenuPosition.LOWER,
     exact: true,
     priority: 1,
   },
 ];
 
-const selectedRoutesAndMenus = [ 'dashboard'];
+const selectedRoutesAndMenus = ['dashboard'];
 
 // get menus
 const filteredMenus = getFilteredMenus(accountPageStore, selectedRoutesAndMenus);

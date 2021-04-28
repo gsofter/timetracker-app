@@ -1,8 +1,9 @@
 import * as React from 'react';
+import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 import { useFela } from 'react-fela';
-import { Card, Tabs, Switch, Col, Table } from 'antd';
-import moment from 'moment';
+import { Card, Switch, Col, Table, Radio, Row } from 'antd';
+import { RightOutlined, LeftOutlined } from '@ant-design/icons';
 import { useSetting } from '@adminide-stack/react-shared-components';
 import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 import { formatDuration, roundDuration } from '../timetracker/services/timeRecordService';
@@ -10,8 +11,6 @@ import { useFirstWeekDay, useRound, useTimeformat } from '../timetracker/hooks';
 import { BarChart } from './BarChart';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../generated-models';
 import { DoughnutChart } from './DoughnutChart';
-
-const { TabPane } = Tabs;
 
 export const Report = () => {
     const { css } = useFela();
@@ -63,6 +62,7 @@ export const Report = () => {
             loadingProjects || !!!projectsData ? [] : projectsData.getProjects,
         [loadingProjects, projectsData],
     );
+
     const calcDurationReducer = (totalDur, record) =>
         totalDur +
         Math.abs(
@@ -70,50 +70,32 @@ export const Report = () => {
         );
 
     const generateBarData = () => {
-        const records = getRecords();
-        console.log('records', records);
-        const dataSet = Array(7)
-            .fill(0)
-            .map((itemValue, index) => {
-                // filter current day records
-                const dayRecords = records.filter(
-                    r =>
-                        moment(r.startTime).format(dateFormat) ===
-                        moment(weekStart)
-                            .add(index, 'day')
-                            .format(dateFormat),
-                );
-
-                // calc total duration as seconds
-                const totalDuration = dayRecords.reduce(calcDurationReducer, 0);
-                return rounded ? roundDuration(totalDuration, roundValue, roundType) : totalDuration;
-            });
-        return dataSet;
+        return Array(7).fill(0).map((itemValue, index) => {
+            // filter current day records
+            const dayRecords = getRecords().filter(r =>
+                moment(r.startTime).format(dateFormat) === moment(weekStart).add(index, 'day').format(dateFormat)
+            );
+            // calc total duration as seconds
+            const totalDuration = dayRecords.reduce(calcDurationReducer, 0);
+            return rounded ? roundDuration(totalDuration, roundValue, roundType) : totalDuration;
+        });
     };
-    //
+
     const generateLabels = (): Array<string> => {
-        const labels = Array(7)
-            .fill(0)
-            .map((itemValue, itemIndex) => {
-                return moment(weekStart)
-                    .add(itemIndex, 'day')
-                    .format(dateFormat);
-            });
-        return labels;
+        return Array(7).fill(0).map((itemValue, itemIndex) =>
+            moment(weekStart).add(itemIndex, 'day').format(dateFormat)
+        );
     };
 
     const generateDatasource = () => {
-        const projects = getProjects();
-        const timeRecords = getRecords();
-        const projectDurArray = projects.map((project, index) => {
-            const pRecords = timeRecords.filter(record => record.projectId === project.id);
+        return getProjects().map((project, index) => {
+            const pRecords = getRecords().filter(record => record.projectId === project.id);
             const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
             return {
                 projectName: project.name,
                 duration: rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur,
             };
         });
-        return projectDurArray;
     };
 
     const generateTableColumns = () => {
@@ -135,70 +117,67 @@ export const Report = () => {
     };
 
     const generateProjectLabels = () => {
-        const projects = getProjects();
-        const projectLabels = projects.map((project, index) => {
+        return getProjects().map((project, index) => {
             return project.name;
         });
-        return projectLabels;
     };
 
     const generateProjectDurations = () => {
-        const projects = getProjects();
-        const timeRecords = getRecords();
-        const projectDurArray = projects.map((project, index) => {
-            const pRecords = timeRecords.filter(record => record.projectId === project.id);
+        return getProjects().map((project, index) => {
+            const pRecords = getRecords().filter(record => record.projectId === project.id);
             const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
             return rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
         });
-        return projectDurArray;
     };
 
-    const onChangeTab = (key) => {
+    const onClick = (e) => {
+        const { value } = e.target;
         let newWeekStart;
-        if (key === '1') {
+        if (value === 'today') {
             newWeekStart = moment().startOf('week');
-        } else if (key === '2') {
+        } else if (value === 'back') {
             newWeekStart = moment(weekStart).add('-1', 'week');
         } else {
             newWeekStart = moment(weekStart).add('1', 'week');
         }
         setWeekStart(newWeekStart);
     }
-    const operations = (
-        <div className={css(styles.flex)}>
-            <div>
-                <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
-                <span className="duration-end">
-                    {moment(weekStart).format('MM') === moment(weekStart).add(6, 'day').format('MM')
-                    ? moment(weekStart).add(6, 'day').format('DD')
-                    : moment(weekStart).add(6, 'day').format('MMMM DD')}
-              </span>
-            </div>
-            <div className={css(styles.rounding)}>
-                <div className={css(styles.roundingLabel)}>Rounding:</div>
-                <Switch/>
-            </div>
-        </div>
-    );
 
     return (
         <div className={css(styles.container)}>
             <Card title={'Timetracker Report'} bordered={false}>
-                <Tabs defaultActiveKey="1" onChange={onChangeTab} tabBarExtraContent={operations}>
-                    <TabPane tab="Today" key="1">
-                        <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
-                    </TabPane>
-                    <TabPane tab="Back" key="2">
-                        <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
-                    </TabPane>
-                    <TabPane tab="Next" key="3">
-                        <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
-                    </TabPane>
-                </Tabs>
+                <Row style={{ width: '100%', textAlign: 'center', alignItems: 'baseline' }}>
+                    <Col xs={24} md={6} className={css(styles.left)}>
+                        <Radio.Group>
+                            <Radio.Button onClick={onClick} value={'back'}>
+                                <LeftOutlined /><span>Back</span>
+                            </Radio.Button>
+                            <Radio.Button onClick={onClick} value={'today'}>Today</Radio.Button>
+                            <Radio.Button onClick={onClick} value={'next'}>
+                                <span>Next</span><RightOutlined/>
+                            </Radio.Button>
+                        </Radio.Group>
+                    </Col>
+                    <Col xs={24} md={12}>
+                        <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
+                        <span className="duration-end">
+                            {moment(weekStart).format('MM') === moment(weekStart).add(6, 'day').format('MM')
+                                ? moment(weekStart).add(6, 'day').format('DD')
+                                : moment(weekStart).add(6, 'day').format('MMMM DD')}
+                        </span>
+                    </Col>
+                    <Col xs={24} md={6} className={css(styles.right)}>
+                        <span className={css(styles.roundingLabel)}>Rounding:</span>
+                        <Switch />
+                    </Col>
+                </Row>
+                <div className={css(styles.barChartWrapper)}>
+                    <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
+                </div>
             </Card>
-            <div className={css(styles.flex)}>
+            <div className={css(styles.flex, styles.height)}>
                 <Card className={css(styles.tableCard)} title={'Project Table'}>
-                    <Table dataSource={generateDatasource()} columns={generateTableColumns()} />
+                    <Table dataSource={generateDatasource()} columns={generateTableColumns()} pagination={{ defaultPageSize: 3 }} />
                 </Card>
                 <Card className={css(styles.chartCard)} title={'Project Report'}>
                     <DoughnutChart
@@ -214,15 +193,11 @@ export const Report = () => {
 
 const styles = {
     container: () => ({
-       '& .ant-tabs-extra-content': {
+        '& .ant-tabs-extra-content': {
            width: '55%',
-       },
+        },
     }),
     flex: () => ({
-       display: 'flex', 
-    }),
-    rounding: () => ({
-        marginLeft: 'auto',
         display: 'flex',
     }),
     roundingLabel: () => ({
@@ -237,5 +212,18 @@ const styles = {
     chartCard: () => ({
         width: '50%',
         marginTop: '25px',
+    }),
+    barChartWrapper: () => ({
+        width: '65%',
+        margin: '0 auto',
+    }),
+    right: () => ({
+        textAlign: 'right',
+    }),
+    left: () => ({
+        textAlign: 'left',
+    }),
+    height: () => ({
+        height: '400px',
     }),
 };
