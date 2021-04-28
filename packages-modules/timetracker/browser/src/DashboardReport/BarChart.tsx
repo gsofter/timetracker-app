@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Bar } from 'react-chartjs-2';
 import { formatDuration } from '../timetracker/services/timeRecordService';
-// import { useTimeformat } from '../timetracker/hooks'
+import { useTimeformat } from '../timetracker/hooks'
 
 export const BarChart = ({ labels, title, data }) => {
-    // const { timeFormat } = useTimeformat();
+    const { timeFormat } = useTimeformat();
     const barData = {
         labels,
         datasets: [
@@ -33,7 +33,7 @@ export const BarChart = ({ labels, title, data }) => {
                         suggestedMin: 0,
                         suggestedMax: 3600,
                         callback: value => {
-                            return formatDuration(value, 'HH:mm:ss');
+                            return formatDuration(value, timeFormat);
                         },
                     },
                 },
@@ -43,7 +43,7 @@ export const BarChart = ({ labels, title, data }) => {
             enabled: true,
             callbacks: {
                 label: function(tooltipItem, data) {
-                    return formatDuration(tooltipItem.yLabel, 'HH:mm:ss');
+                    return formatDuration(tooltipItem.yLabel, timeFormat);
                 },
             },
         },

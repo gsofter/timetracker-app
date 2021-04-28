@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { Doughnut } from 'react-chartjs-2';
 import { formatDuration } from '../timetracker/services/timeRecordService';
-// import { useTimeformat } from '../timetracker/hooks'
+import { useTimeformat } from '../timetracker/hooks'
 
 export const DoughnutChart = ({ data, labels, title }) => {
-  // const { timeFormat } = useTimeformat();
+  const { timeFormat } = useTimeformat();
   const chartData = {
     labels: labels,
     datasets: [
@@ -30,7 +30,7 @@ export const DoughnutChart = ({ data, labels, title }) => {
       callbacks: {
         label: function(tooltipItem, data) {
           const duration = data.datasets[tooltipItem.datasetIndex].data[0];
-          return formatDuration(duration, 'HH:mm:ss');
+          return formatDuration(duration, timeFormat);
         },
       },
     },

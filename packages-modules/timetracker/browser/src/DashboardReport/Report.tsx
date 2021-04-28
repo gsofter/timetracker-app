@@ -2,7 +2,7 @@ import * as React from 'react';
 import moment from 'moment';
 import { useCallback, useEffect, useState } from 'react';
 import { useFela } from 'react-fela';
-import { Card, Switch, Col, Table, Radio, Row } from 'antd';
+import { Card, Switch, Col, Table, Radio, Row, message } from 'antd';
 import { RightOutlined, LeftOutlined } from '@ant-design/icons';
 import { useSetting } from '@adminide-stack/react-shared-components';
 import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
@@ -23,19 +23,13 @@ export const Report = () => {
         },
     });
     const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
-    //temporary
-    const rounded = false;
-    const roundType = 'round';
-    const roundValue = 900;
-    const dateFormat = 'MM-DD-YYYY';
-    const timeFormat = 'hh:mm:ss A';
 
-    // const { updateConfiguration } = useSetting({
-    //     configKey: 'timetracker.report.timeRoundingInReports',
-    // });
-    // const { roundType, roundValue, rounded, refetchRounded } = useRound();
-    // const { dateFormat, timeFormat } = useTimeformat();
-    // const { value: dowValue } = useFirstWeekDay();
+    const { updateConfiguration } = useSetting({
+        configKey: 'timetracker.report.timeRoundingInReports',
+    });
+    const { roundType, roundValue, rounded, refetchRounded } = useRound();
+    const { dateFormat, timeFormat } = useTimeformat();
+    const { value: dowValue } = useFirstWeekDay();
 
     useEffect(() => {
         setWeekStart(moment().startOf('week'));
@@ -45,14 +39,13 @@ export const Report = () => {
         refetch();
     }, [weekStart]);
 
-    // useEffect(() => {
-    //     moment.locale('en', {
-    //         week: { dow: dowValue },
-    //     });
-    //
-    //     setWeekStart(moment().startOf('week'));
-    // }, [dowValue]);
-    //
+    useEffect(() => {
+        moment.locale('en', {
+            week: { dow: dowValue },
+        });
+        setWeekStart(moment().startOf('week'));
+    }, [dowValue]);
+
     const getRecords = useCallback(
         (): Array<ITimeRecord> => (loading || !!!data ? [] : data.getDurationTimeRecords),
         [loading, data],
@@ -130,6 +123,18 @@ export const Report = () => {
         });
     };
 
+    const handleSwitchRoundMode = checked => {
+        updateConfiguration({ updateKey: 'timetracker.report.timeRoundingInReports', value: checked })
+            .then(async () => {
+                await refetchRounded();
+                console.log('rounded => ', rounded);
+                message.success('Rounded setting updated');
+            })
+            .catch(e => {
+                console.log(e.message);
+            });
+    };
+
     const onClick = (e) => {
         const { value } = e.target;
         let newWeekStart;
@@ -168,7 +173,7 @@ export const Report = () => {
                     </Col>
                     <Col xs={24} md={6} className={css(styles.right)}>
                         <span className={css(styles.roundingLabel)}>Rounding:</span>
-                        <Switch />
+                        <Switch checked={rounded} onChange={handleSwitchRoundMode}/>
                     </Col>
                 </Row>
                 <div className={css(styles.barChartWrapper)}>
