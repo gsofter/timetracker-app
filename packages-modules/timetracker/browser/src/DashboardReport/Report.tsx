@@ -180,7 +180,7 @@ export const Report = () => {
                     <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
                 </div>
             </Card>
-            <div className={css(styles.flex, styles.height)}>
+            <div className={css(styles.flex)}>
                 <Card className={css(styles.tableCard)} title={'Project Table'}>
                     <Table dataSource={generateDatasource()} columns={generateTableColumns()} pagination={{ defaultPageSize: 3 }} />
                 </Card>
@@ -201,6 +201,9 @@ const styles = {
         '& .ant-tabs-extra-content': {
            width: '55%',
         },
+        '& .ant-table-cell': {
+            padding: '11px',
+        },
     }),
     flex: () => ({
         display: 'flex',
@@ -219,7 +222,7 @@ const styles = {
         marginTop: '25px',
     }),
     barChartWrapper: () => ({
-        width: '65%',
+        // width: '65%',
         margin: '0 auto',
     }),
     right: () => ({
@@ -227,8 +230,5 @@ const styles = {
     }),
     left: () => ({
         textAlign: 'left',
-    }),
-    height: () => ({
-        height: '400px',
     }),
 };

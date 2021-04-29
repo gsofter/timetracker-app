@@ -47,6 +47,7 @@ export const BarChart = ({ labels, title, data }) => {
                 },
             },
         },
+        responsive: true,
     };
 
     return <Bar data={barData} options={barOptions} width={350} />;
