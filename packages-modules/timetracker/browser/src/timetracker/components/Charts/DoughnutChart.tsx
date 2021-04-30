@@ -37,7 +37,7 @@ export const DoughnutChart = ({ data, labels, title }) => {
       enabled: true,
 
       callbacks: {
-        label: function(tooltipItem, data) {
+        label: function (tooltipItem, data) {
           const duration = data.datasets[tooltipItem.datasetIndex].data[0];
           return formatDuration(duration, timeFormat);
         },

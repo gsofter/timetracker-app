@@ -14,6 +14,7 @@ import { ProSettings } from '@admin-layout/components';
 import { Menu, Dropdown, Button, Space } from 'antd';
 import { LOCALES } from './../../locales';
 import { CHANGE_LANGUAGE } from '../../constants/constants';
+import HeaderTimerHandler from './HeaderTimerHandler';
 
 export interface GlobalHeaderRightProps {
   theme?: string;
@@ -30,7 +31,7 @@ const ENVTagColor = {
 };
 
 const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
-  const { theme, layout, upperMenus, orgName, formatMessage} = props;
+  const { theme, layout, upperMenus, orgName, formatMessage } = props;
   const dispatch = useDispatch();
   const [language, setLanguage] = React.useState('ENG');
   const [locale, setLocale] = React.useState(LOCALES.EN_US);
@@ -102,6 +103,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
 
   return (
     <div className={css(styleSheet.right)}>
+      <HeaderTimerHandler />
       <Dropdown overlay={LanguageMenu} placement="bottomRight">
         <Button className="lang-btn">{language}</Button>
       </Dropdown>
