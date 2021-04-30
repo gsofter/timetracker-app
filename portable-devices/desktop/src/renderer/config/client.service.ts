@@ -1,19 +1,17 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/naming-convention */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 import { ClientTypes } from '@common-stack/client-core';
 import { Container } from 'inversify';
 import ApolloClient from 'apollo-client';
-import modules, { container } from '../modules';
+import { CdmLogger } from '@cdm-logger/core';
+import modules, { container, logger } from '../modules';
 import { createApolloClient, cache } from './apollo-client';
 
 let __CLIENT_SERVICE__: {
     apolloClient: ApolloClient<any>;
     container: Container;
     services: any;
+    logger: CdmLogger.ILogger;
 };
 export const createClientContainer = () => {
     if (__CLIENT_SERVICE__) {
@@ -30,6 +28,7 @@ export const createClientContainer = () => {
         container,
         apolloClient,
         services,
+        logger,
     };
     return __CLIENT_SERVICE__;
 };

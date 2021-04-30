@@ -15,7 +15,7 @@ RUN set -ex \
 	build-base \
 	python \
 	&& cd /tmp \
-	&& npm install \
+	&& yarn install \
 	&& rm -f /tmp/.npmrc \
 	&& mkdir -p /home/app \
 	&& cp -a /tmp/node_modules /home/app/ \
@@ -29,4 +29,4 @@ ADD . /home/app
 ENV PORT=3000
 EXPOSE ${PORT}
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]

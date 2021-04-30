@@ -25,7 +25,7 @@ const publicEnv = [
     'CDE_WORKSPACE_URL_PRFIX',
     'AUTH0_TOKEN_GRANTED_TIME',
     'ZIPKIN_URL',
-    'EXTENSION_SOCKET_URL'
+    'EXTENSION_SOCKET_URL',
 ];
 
 const isBrowser = typeof window !== 'undefined';
@@ -37,8 +37,8 @@ const base = {
     AUTH0_API_AUDIENCE: 'https://dev-cdebase.auth0.com/api/v2/',
     STRIPE_ENDPOINT_SECRET: 'werwerw',
     CLIENT_URL: 'http://localhost',
-    CONNECTION_ID: 'default'
-}
+    CONNECTION_ID: 'default',
+};
 
 const env: any = {};
 for (const v of publicEnv) {

@@ -4,12 +4,13 @@ import { useDispatch } from 'react-redux';
 import { EditTwoTone } from '@ant-design/icons';
 import { generateContributionId, CONTRIBUTION_ACTION_TYPES } from '@adminide-stack/extension-api';
 import { Payments } from './components/Payments';
+import { Limits } from './components/Limits';
 
 const EditableComponent = (props) => {
   return (
     <div>
       <div style={{ float: 'left' }}>-</div>
-      <EditTwoTone  style={{ float: 'right', margin: '5px' }}/>
+      <EditTwoTone style={{ float: 'right', margin: '5px' }}/>
     </div>
   );
 };
@@ -26,18 +27,18 @@ export const RegisterContribution = () => {
             {
               id: 'payment',
               title: 'Payment',
-              accessor: 'payments',
-              width: 100,
+              accessor: 'actions',
+              width: 150,
               position: 3,
               cell: Payments,
             },
             {
               id: 'limits',
               title: 'Limits',
-              accessor: 'limits',
+              accessor: 'actions',
               width: 100,
               position: 3,
-              cell: EditableComponent,
+              cell: Limits,
             },
             {
               id: 'timeTracking',

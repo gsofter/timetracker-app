@@ -11,7 +11,7 @@ COPY .npmrc /tmp/.npmrc
 ADD package.json /tmp/package.json
 RUN set -ex \
 	&& cd /tmp \
-	&& npm install \
+	&& yarn install \
 	&& rm -f /tmp/.npmrc \
 	&& mkdir -p /home/app \
 	&& cp -a /tmp/node_modules /home/app/ \
@@ -25,4 +25,4 @@ ADD . /home/app
 ENV PORT=8080
 EXPOSE ${PORT}
 
-CMD ["npm", "start"]
+CMD ["yarn", "start"]

@@ -32,7 +32,7 @@ const initialState = {
     vocabulary: en_vocabulary,
 };
 
-const setVocabulary = lang => {
+const setVocabulary = (lang) => {
     if (lang === 'en') return en_vocabulary;
     if (lang === 'ru') return ru_vocabulary;
     if (lang === 'de') return de_vocabulary;

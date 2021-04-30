@@ -6,14 +6,11 @@ import { ClientTypes as BrowserTypes } from '@common-stack/client-core';
 import { platformModule } from './inversify-containers';
 import { resolvers, dataIdFromObject, schema, defaults } from './graphql';
 
-
-const platformServiceGen = (container: interfaces.Container) => {
-    return {
-        apolloClient: container.get<ApolloClient<any>>(BrowserTypes.ApolloClient),
-        cache: container.get<any>(BrowserTypes.InMemoryCache),
-        utility: container.get(BrowserTypes.UtilityClass),
-    }
-}
+const platformServiceGen = (container: interfaces.Container) => ({
+    apolloClient: container.get<ApolloClient<any>>(BrowserTypes.ApolloClient),
+    cache: container.get<any>(BrowserTypes.InMemoryCache),
+    utility: container.get(BrowserTypes.UtilityClass),
+});
 export default new Feature({
     dataIdFromObject,
     createContainerFunc: platformModule,
