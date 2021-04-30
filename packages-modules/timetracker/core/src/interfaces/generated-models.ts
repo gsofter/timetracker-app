@@ -2447,6 +2447,7 @@ export type ITimeRecordRequest = {
   startTime?: Maybe<Scalars['DateTime']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   taskName?: Maybe<Scalars['String']>;
+  timesheetId?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
 };
 
@@ -2769,17 +2770,6 @@ export const enum IVisibility {
   public = 'public'
 };
 
-export type IGetTagsQueryVariables = {};
-
-
-export type IGetTagsQuery = (
-  { __typename?: 'Query' }
-  & { getTags?: Maybe<Array<Maybe<(
-    { __typename?: 'Tag' }
-    & Pick<ITag, 'id' | 'name'>
-  )>>> }
-);
-
 export type ICreateTimeRecordMutationVariables = {
   request?: Maybe<ITimeRecordRequest>;
 };
@@ -2965,15 +2955,6 @@ export type IGetMembersQuery = (
 );
 
 
-export const GetTagsDocument = gql`
-    query GetTags {
-  getTags @client {
-    id
-    name
-  }
-}
-    `;
-export type GetTagsQueryResult = ApolloReactCommon.QueryResult<IGetTagsQuery, IGetTagsQueryVariables>;
 export const CreateTimeRecordDocument = gql`
     mutation CreateTimeRecord($request: TimeRecordRequest) {
   createTimeRecord(request: $request)

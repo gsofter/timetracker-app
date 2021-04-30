@@ -3,8 +3,8 @@
 import * as SchemaTypes from '@admin-layout/timetracker-core';
 
 import gql from 'graphql-tag';
-import * as React from 'react';
 import * as ApolloReactCommon from '@apollo/react-common';
+import * as React from 'react';
 import * as ApolloReactComponents from '@apollo/react-components';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -26,46 +26,6 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 
-
-export const GetTagsDocument = gql`
-    query GetTags {
-  getTags @client {
-    id
-    name
-  }
-}
-    `;
-export type GetTagsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>, 'query'>;
-
-    export const GetTagsComponent = (props: GetTagsComponentProps) => (
-      <ApolloReactComponents.Query<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables> query={GetTagsDocument} {...props} />
-    );
-    
-
-/**
- * __useGetTagsQuery__
- *
- * To run a query within a React component, call `useGetTagsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetTagsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetTagsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>) {
-        return ApolloReactHooks.useQuery<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>(GetTagsDocument, baseOptions);
-      }
-export function useGetTagsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>(GetTagsDocument, baseOptions);
-        }
-export type GetTagsQueryHookResult = ReturnType<typeof useGetTagsQuery>;
-export type GetTagsLazyQueryHookResult = ReturnType<typeof useGetTagsLazyQuery>;
-export type GetTagsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>;
 export const CreateTimeRecordDocument = gql`
     mutation CreateTimeRecord($request: TimeRecordRequest) {
   createTimeRecord(request: $request)

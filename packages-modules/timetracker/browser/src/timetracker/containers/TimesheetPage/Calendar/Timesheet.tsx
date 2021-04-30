@@ -13,6 +13,7 @@ import {
   ITimeRecordRequest,
 } from '@admin-layout/timetracker-core';
 import TimesheetModal from './TimesheetModal';
+import * as _ from 'lodash';
 
 const DnDCalendar: any = withDragAndDrop(Calendar as any);
 const allViews: string[] = ['day', 'week', 'month'];
@@ -70,18 +71,20 @@ export default function SelectableCalendar({
   };
 
   const onEventDrop = ({ event, start, end, allDay }) => {
-    const updateRequest = { startTime: moment(start), endTime: moment(end) };
+    const updateRequest = { ..._.omit(event, ['id', '__typename']), startTime: moment(start), endTime: moment(end) };
     handleUpdateTimeRecordEvent(event.id, updateRequest);
   };
 
   const onEventResize = ({ event, start, end }) => {
-    const updateRequest = { startTime: moment(start), endTime: moment(end) };
+    const updateRequest = { ..._.omit(event, ['id', '__typename']), startTime: moment(start), endTime: moment(end) };
     handleUpdateTimeRecordEvent(event.id, updateRequest);
   };
 
-  const EventComponent = ({ start, end, title }) => {
+  const EventComponent = ({ event, start, end, title }) => {
+    const project = projects.find((p) => p.id === event.projectId);
     return (
       <>
+        <p> {project && project.name}</p>
         <p>{title}</p>
         <p>{start}</p>
         <p>{end}</p>
@@ -147,9 +150,6 @@ export default function SelectableCalendar({
           },
         }}
         onNavigate={handleNavigate}
-        // resources={isViewGroup ? resourceMap : undefined}
-        // resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
-        // resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
       />
     </>
   );

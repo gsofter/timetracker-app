@@ -23,12 +23,12 @@ input TimeRecordRequest {
   isBillable: Boolean
   projectId: String
   clientId: String
+  timesheetId: String
 }
 
 extend type Query {
   getTimeRecords(userId: String): [TimeRecord] @addAccountContext
-  getDurationTimeRecords(startTime: DateTime, endTime: DateTime, userId: String): [TimeRecord]
-    @addAccountContext
+  getDurationTimeRecords(startTime: DateTime, endTime: DateTime, userId: String): [TimeRecord] @addAccountContext
   getPlayingTimeRecord: TimeRecord @addAccountContext
 }
 
@@ -36,6 +36,5 @@ extend type Mutation {
   createTimeRecord(request: TimeRecordRequest): String @addAccountContext
   updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean @addAccountContext
   removeTimeRecord(recordId: String): Boolean @addAccountContext
-  removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean
-    @addAccountContext
+  removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean @addAccountContext
 }
