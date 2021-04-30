@@ -26,9 +26,9 @@ Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
     const fontSize = (height / 154).toFixed(2);
     ctx.font = fontSize + 'em Verdana';
     ctx.color = 'rgba(54, 162, 235, 1)';
-    ctx.textBaseline = 'hanging';
+    ctx.textBaseline = 'bottom';
 
-    const text = chart.config.data.text,
+    const text = chart.config.data.text || '',
         textX = Math.round((width - ctx.measureText(text).width) / 2),
         textY = height / 2;
 
@@ -72,7 +72,12 @@ export const DoughnutChart = ({ data, labels, title }) => {
       },
     },
     cutoutPercentage: 70,
-    // responsive: true,
+    legend: {
+      position: 'bottom',
+      labels: {
+        boxWidth: 15,
+      },
+    },
   };
 
   return (

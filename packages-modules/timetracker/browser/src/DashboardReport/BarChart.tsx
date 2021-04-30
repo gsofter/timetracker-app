@@ -12,7 +12,6 @@ export const BarChart = ({ labels, title, data }) => {
                 label: title,
                 backgroundColor: 'rgba(54, 162, 235, 1)',
                 data,
-                barThickness: 30,
                 maxBarThickness: 30,
             },
         ],
