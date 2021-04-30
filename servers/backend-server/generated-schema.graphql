@@ -1631,7 +1631,6 @@ input AccountTeam_Input {
 """
  TeamMember: A member of a team.
 """
-
 type TeamMember {
     id: String
     email: String
@@ -1639,7 +1638,6 @@ type TeamMember {
     userId: String
     username: String
     role: ApplicationRoles
-    status: String
 }
 
 input TeamMember_Input {
@@ -1647,7 +1645,6 @@ input TeamMember_Input {
     email: String
     userId: String
     role: ApplicationRoles
-    status: String
 }
 
 extend enum ApplicationRoles {
