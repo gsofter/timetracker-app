@@ -1,5 +1,6 @@
-import Dashboard from './dashboard';
+import SignIn from './SignIn';
 import TimerScreen from './TimerScreen';
 import CalendarScreen from './Calendar';
+import SignUp from './SignUp';
 
-export { Dashboard, TimerScreen, CalendarScreen };
+export { SignIn, TimerScreen, CalendarScreen, SignUp };
