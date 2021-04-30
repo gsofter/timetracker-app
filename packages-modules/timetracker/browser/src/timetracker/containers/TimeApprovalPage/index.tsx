@@ -58,7 +58,7 @@ const TimeReportWrapper = () => {
     const memStrArr = filteredMembers().map((mem) => mem.userId);
     return _.get(data, 'getTimesheets', []).filter(
       (timesheet) =>
-        timesheet.state === state || (state === undefined && memStrArr.includes(timesheet.userId)),
+        (timesheet.state === state || state === undefined) && memStrArr.includes(timesheet.userId),
     );
   };
 
@@ -111,7 +111,4 @@ const TimeReportWrapper = () => {
   );
 };
 
-const styleSheet: { [key: string]: (props) => CSS.Properties } = {
-  sheetRow: (props) => ({}),
-};
 export default TimeReportWrapper;
