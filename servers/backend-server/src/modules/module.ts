@@ -17,6 +17,7 @@ export const settings = {
 const defaultModule = () =>
     new ContainerModule((bind: interfaces.Bind) => {
         bind('Settings').toConstantValue(settings).whenTargetTagged('default', true);
+        bind('Settings').toConstantValue(settings).whenTargetTagged('microservice', true);
         bind('Settings').toConstantValue(settings).whenTargetTagged(TaggedType.MICROSERVICE, true);
         bind('MongoOptions').toConstantValue({});
     });
