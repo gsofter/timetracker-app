@@ -1,17 +1,12 @@
 import * as cors from 'cors';
 import * as express from 'express';
-import { config } from '../config';
 import { logger } from '@cdm-logger/server';
+import { config } from '../config';
 
-const CLIENT_URL = config.CLIENT_URL;
-const BACKEND_URL = config.BACKEND_URL;
+const { CLIENT_URL } = config;
+const { BACKEND_URL } = config;
 
-const corsWhitelist = [
-    BACKEND_URL,
-    CLIENT_URL,
-    config.GRAPHQL_URL,
-    '*CDEBase.io'
-];
+const corsWhitelist = [BACKEND_URL, CLIENT_URL, config.GRAPHQL_URL, '*CDEBase.io'];
 logger.info('Cors whitelist: %j', corsWhitelist);
 const corsOptions = {
     origin: (origin, callback) => {

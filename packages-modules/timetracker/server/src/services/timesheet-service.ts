@@ -1,5 +1,5 @@
 import * as ILogger from 'bunyan';
-import { inject, injectable } from 'inversify';
+import { inject, injectable, tagged } from 'inversify';
 import {
   ITimesheet,
   ITimesheetState,
@@ -61,6 +61,9 @@ export class TimesheetService implements ITimesheetService {
     @inject(CommonType.MOLECULER_BROKER)
     private broker: ServiceBroker,
 
+    @inject('Settings')
+    @tagged('microservice', true)
+    private settings: any,
     @inject('Logger')
     logger: ILogger,
   ) {
@@ -234,6 +237,6 @@ export class TimesheetService implements ITimesheetService {
     topic?: string,
     opts?: CallingOptions,
   ) {
-    return this.broker.call<T, P>(`${topic}.${command}`, params, opts);
+    return this.broker.call<T, P>(`${topic}.${command}@${this.settings.adminApiNamespace}`, params, opts);
   }
 }
