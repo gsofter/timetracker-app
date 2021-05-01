@@ -63,7 +63,7 @@
     "@admin-layout/platform-server": "link:../../packages/admin-platform/server",
     "@admin-layout/schedule-module-server": "link:../../packages-modules/schedule/server",
     "@admin-layout/timetracker-module-server": "link:../../packages-modules/timetracker/server",
-    "@adminide-stack/account-api-server": "0.0.20-alpha.26",
+    "@adminide-stack/account-api-server": "0.0.20-alpha.28",
     "@adminide-stack/core": "0.0.20-alpha.26",
     "@adminide-stack/platform-server": "0.0.20-alpha.26",
     "@adminide-stack/user-auth0-server": "0.0.20-alpha.26",
