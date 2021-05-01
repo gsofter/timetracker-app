@@ -11,10 +11,8 @@ import {
   IConfigFragmentName,
   ServerTypes,
   IPreferencesService,
-  IMailServiceAction,
-  IMailerServicesendArgs,
-  IMoleculerServiceName,
 } from '@adminide-stack/core';
+import { IMailServiceAction, IMailerServicesendArgs, IMoleculerServiceName } from '@container-stack/mailing-api';
 import { TYPES } from '../constants';
 import * as moment from 'moment';
 import { ITimeRecordRepository, ITimesheetRepository } from '../store/repository';
