@@ -3,7 +3,7 @@ import * as Logger from 'bunyan';
 import { injectable, inject, tagged } from 'inversify';
 import { IDatabaseMigration } from '@adminide-stack/core';
 import { IMoleculerServiceName, IMailServiceAction, IMailerServicesendArgs } from '@container-stack/mailing-api';
-import { CommonType } from '@common-stack/core';
+import { CommonType, TaggedType } from '@common-stack/core';
 import { CallingOptions, ServiceBroker } from 'moleculer';
 import { EmailTemplateCodes } from '../constants';
 
@@ -16,7 +16,7 @@ export class TimesheetApprovalMailTemplate implements IDatabaseMigration {
         @inject(CommonType.MOLECULER_BROKER)
         protected broker: ServiceBroker,
         @inject('Settings')
-        @tagged('microservice', true)
+        @tagged(TaggedType.MICROSERVICE, true)
         private settings: any,
     ) {}
 
@@ -55,7 +55,7 @@ export class TimesheetSubmitMailTemplate implements IDatabaseMigration {
         @inject(CommonType.MOLECULER_BROKER)
         protected broker: ServiceBroker,
         @inject('Settings')
-        @tagged('microservice', true)
+        @tagged(TaggedType.MICROSERVICE, true)
         private settings: any,
     ) {}
 

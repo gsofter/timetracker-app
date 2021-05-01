@@ -1,9 +1,8 @@
 import { ContainerModule, interfaces } from 'inversify';
-import CounterModule from '@admin-layout/counter-module-server';
-import { config } from '../config';
-import { NATS_MOLECULER_COUNTER_SERIVCE } from '@admin-layout/counter-module-server';
+import CounterModule, { NATS_MOLECULER_COUNTER_SERIVCE } from '@admin-layout/counter-module-server';
+import { TaggedType } from '@common-stack/core';
 import { Feature } from '@common-stack/server-core';
-
+import { config } from '../config';
 
 const subTopic = config.CONNECTION_ID; // version.topic.action
 
@@ -17,11 +16,10 @@ export const settings: any & { name: string } = {
     configPath: process.env.CONFIG_PATH,
 };
 
-
-const defaultModule =
-    () => new ContainerModule((bind: interfaces.Bind) => {
+const defaultModule = () =>
+    new ContainerModule((bind: interfaces.Bind) => {
         bind('Settings').toConstantValue(settings).whenTargetTagged('default', true);
-        bind('Settings').toConstantValue(settings).whenTargetTagged('microservice', true);
+        bind('Settings').toConstantValue(settings).whenTargetTagged(TaggedType.MICROSERVICE, true);
         bind('MongoOptions').toConstantValue({});
     });
 
@@ -30,7 +28,4 @@ const DefaultFeature = new Feature({
     createHemeraContainerFunc: [defaultModule],
 });
 
-export default new Feature(
-    DefaultFeature,
-    CounterModule,
-);
+export default new Feature(DefaultFeature, CounterModule);

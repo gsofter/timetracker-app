@@ -12,7 +12,7 @@ import {
 import { IMailServiceAction, IMailerServicesendArgs, IMoleculerServiceName } from '@container-stack/mailing-api';
 import * as moment from 'moment';
 import { ServiceBroker, CallingOptions } from 'moleculer';
-import { CommonType } from '@common-stack/core';
+import { CommonType, TaggedType } from '@common-stack/core';
 import { TYPES, EmailTemplateCodes } from '../constants';
 import { ITimeRecordRepository, ITimesheetRepository } from '../store/repository';
 
@@ -55,7 +55,7 @@ export class TimesheetService implements ITimesheetService {
         private broker: ServiceBroker,
 
         @inject('Settings')
-        @tagged('microservice', true)
+        @tagged(TaggedType.MICROSERVICE, true)
         private settings: any,
         @inject('Logger')
         logger: ILogger,
