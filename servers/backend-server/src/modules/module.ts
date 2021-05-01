@@ -37,7 +37,6 @@ if (config.isDev) {
 export default new Feature<any>(
     DefaultFeature,
     PlatformModule,
-    MailingModule,
     AuthModule,
     CounterModule,
     ScheduleModule,
