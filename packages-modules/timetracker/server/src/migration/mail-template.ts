@@ -6,6 +6,7 @@ import { IMoleculerServiceName, IMailServiceAction, IMailerServicesendArgs } fro
 import { CommonType, TaggedType } from '@common-stack/core';
 import { CallingOptions, ServiceBroker } from 'moleculer';
 import { EmailTemplateCodes } from '../constants';
+import { config } from '../config';
 
 const TimeApprovalTemplate = require('./approval_notification.ejs');
 const TimeSubmitTemplate = require('./submit_notification.ejs');
@@ -18,10 +19,10 @@ export class TimesheetApprovalMailTemplate implements IDatabaseMigration {
         @inject('Settings')
         @tagged(TaggedType.MICROSERVICE, true)
         private settings: any,
-    ) {}
+    ) { }
 
     get id() {
-        return EmailTemplateCodes.TIMESHEET_APPROVAL;
+        return 'EmailTemplateCodes_05012021';
     }
 
     public async up(): Promise<void> {
@@ -35,7 +36,9 @@ export class TimesheetApprovalMailTemplate implements IDatabaseMigration {
             topic: 'Timesheet approved.',
         };
 
-        await this.broker.waitForServices('MailService');
+        if (config.isDev) {
+            await this.broker.waitForServices('MailService');
+        }
 
         return this.callAction(
             IMailServiceAction.saveTemplate,
@@ -57,10 +60,10 @@ export class TimesheetSubmitMailTemplate implements IDatabaseMigration {
         @inject('Settings')
         @tagged(TaggedType.MICROSERVICE, true)
         private settings: any,
-    ) {}
+    ) { }
 
     get id() {
-        return EmailTemplateCodes.SUBMIT_TIME;
+        return 'TimesheetSubmitMailTemplate_05012021';
     }
 
     public async up(): Promise<void> {
@@ -73,8 +76,9 @@ export class TimesheetSubmitMailTemplate implements IDatabaseMigration {
             name: 'Timesheet submit notification',
             topic: 'Timesheet submitted.',
         };
-
-        await this.broker.waitForServices('MailService');
+        if (config.isDev) {
+            await this.broker.waitForServices('MailService');
+        }
 
         return this.callAction(
             IMailServiceAction.saveTemplate,
