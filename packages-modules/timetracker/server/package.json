@@ -41,6 +41,7 @@
   },
   "dependencies": {
     "@admin-layout/timetracker-core": "link:../core",
+    "@container-stack/mailing-api": "^0.0.26-61",
     "humanize-duration": "^3.24.0",
     "moment": "^2.29.1"
   },

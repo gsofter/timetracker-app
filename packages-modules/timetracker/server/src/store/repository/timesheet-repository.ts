@@ -1,3 +1,4 @@
+/* eslint-disable class-methods-use-this */
 import * as Logger from 'bunyan';
 import { injectable, inject } from 'inversify';
 import * as mongoose from 'mongoose';
@@ -5,7 +6,7 @@ import { ITimesheet, ITimesheetCreateRequest, ITimesheetState } from '@admin-lay
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { CommonType } from '@common-stack/core';
-import { ServiceBroker, CallingOptions } from 'moleculer';
+import { ServiceBroker } from 'moleculer';
 import { TimeTrackerModelType, TimeTrackerModelFunc } from '../models/timetracker-model';
 
 export interface ITimesheetRepository {
@@ -37,9 +38,9 @@ export class TimesheetRepository implements ITimesheetRepository {
         this.timeTrackerModel = TimeTrackerModelFunc(db);
     }
 
-    public checkInPeriod(t: Date, A: Date, B: Date): boolean {
-        if (moment(A) < moment(B)) return moment(t) >= moment(A) && moment(t) <= moment(B);
-        return moment(t) >= moment(B) && moment(t) <= moment(A);
+    public checkInPeriod(t: Date, dateA: Date, dateB: Date): boolean {
+        if (moment(dateA) < moment(dateB)) return moment(t) >= moment(dateA) && moment(t) <= moment(dateB);
+        return moment(t) >= moment(dateB) && moment(t) <= moment(dateA);
     }
 
     public async getOrganizationTimesheets(orgId: string) {
