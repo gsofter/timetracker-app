@@ -21,7 +21,6 @@ import { moment } from '../../TimesheetPage';
 import { TabularCalendar } from './TabularCalendar';
 interface ITabularCalendarWrapperProps {
   projects: IProject[];
-  tags: any;
   members: Array<IOrgMember>;
   localizer: any;
   weekStart: Moment;
@@ -38,10 +37,7 @@ interface IFilterOptions {
   members?: Array<IOrgMember>;
 }
 
-const filterTimeRecords = (
-  records: Array<ITimeRecord>,
-  filterOptions: IFilterOptions,
-): Array<ITimeRecord> => {
+const filterTimeRecords = (records: Array<ITimeRecord>, filterOptions: IFilterOptions): Array<ITimeRecord> => {
   const { selectedUser, selectedProject, approval, members } = filterOptions;
   if (!records) return [];
   const memStrArr = members.map((mem) => mem.userId);
@@ -70,11 +66,7 @@ const TabularCalendarWrapper = ({
     },
   });
 
-  const {
-    data: approvalData,
-    loading: loadingApproval,
-    refetch: refetchApproval,
-  } = useGetDurationTimesheetsQuery({
+  const { data: approvalData, loading: loadingApproval, refetch: refetchApproval } = useGetDurationTimesheetsQuery({
     variables: {
       start: moment(weekStart),
       end: moment(weekStart).add(1, 'week'),
@@ -148,9 +140,7 @@ const TabularCalendarWrapper = ({
   };
 
   const memberTimesheet = () => {
-    return _.get(approvalData, 'getDurationTimesheets', []).find(
-      (sheet) => sheet.userId === selectedUser,
-    );
+    return _.get(approvalData, 'getDurationTimesheets', []).find((sheet) => sheet.userId === selectedUser);
   };
 
   const projectsApproval = () => {
