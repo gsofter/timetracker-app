@@ -102,6 +102,7 @@
     "chokidar": "^3.4.0"
   },
   "dependencies": {
+    "@container-stack/mailing-api-server": "0.0.26-63",
     "dataloader": "^2.0.0",
     "graphql": "^14.7.0",
     "graphql-tag": "^2.11.0",
