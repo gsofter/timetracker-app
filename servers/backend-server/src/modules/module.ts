@@ -31,7 +31,6 @@ let DevModules = new Feature({});
 
 if (config.isDev) {
     const MailingModule = require('@container-stack/mailing-api-server');
-    console.log('--Mailining', MailingModule);
     DevModules = MailingModule.default;
 }
 
