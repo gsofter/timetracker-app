@@ -12,7 +12,6 @@ import { useGetOrgContextQuery } from '@adminide-stack/react-shared-components';
 import { ROUTES } from '../../constants';
 import * as qs from 'query-string';
 import * as _ from 'lodash';
-import { usePermissions } from '../../hooks';
 import { IPermissionType } from '@adminide-stack/core';
 import { useSelector } from 'react-redux';
 import { formatDuration } from '../../services/timeRecordService';
@@ -115,7 +114,13 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
       title: 'End Date',
       dataIndex: 'endDate',
       key: 'endDate',
-      render: (value) => <> {moment(value).format(dateFormat || 'YYYY-MM-DD')} </>,
+      render: (value) => (
+        <>
+          {moment(value)
+            .add(-1, 'day')
+            .format(dateFormat || 'YYYY-MM-DD')}
+        </>
+      ),
     },
     {
       title: 'Duration',
@@ -147,11 +152,7 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
         const actionMenu = () => {
           return (
             <Menu>
-              <Menu.Item
-                key="view"
-                onClick={() => handleView(record.id, record)}
-                disabled={disableView}
-              >
+              <Menu.Item key="view" onClick={() => handleView(record.id, record)} disabled={disableView}>
                 View
               </Menu.Item>
               {viewMode === VIEW_MODE.OPEN && (
@@ -160,38 +161,22 @@ const TimeReport = ({ timesheets, viewMode, members, updateTimesheet }: ITimeshe
                 </Menu.Item>
               )}
               {viewMode === VIEW_MODE.SUBMITTED && (
-                <Menu.Item
-                  key="unsubmit"
-                  onClick={() => handleUnSubmit(record.id, record)}
-                  disabled={disableManage}
-                >
+                <Menu.Item key="unsubmit" onClick={() => handleUnSubmit(record.id, record)} disabled={disableManage}>
                   Unsubmit
                 </Menu.Item>
               )}
               {viewMode === VIEW_MODE.SUBMITTED && (
-                <Menu.Item
-                  key="approve"
-                  onClick={() => handleApprove(record.id, record)}
-                  disabled={disableManage}
-                >
+                <Menu.Item key="approve" onClick={() => handleApprove(record.id, record)} disabled={disableManage}>
                   Approve
                 </Menu.Item>
               )}
               {viewMode === VIEW_MODE.SUBMITTED && (
-                <Menu.Item
-                  key="deny"
-                  onClick={() => handleDeny(record.id, record)}
-                  disabled={disableManage}
-                >
+                <Menu.Item key="deny" onClick={() => handleDeny(record.id, record)} disabled={disableManage}>
                   Deny
                 </Menu.Item>
               )}
               {viewMode === VIEW_MODE.APPROVED && (
-                <Menu.Item
-                  key="submit"
-                  onClick={() => handleUnApprove(record.id, record)}
-                  disabled={disableManage}
-                >
+                <Menu.Item key="submit" onClick={() => handleUnApprove(record.id, record)} disabled={disableManage}>
                   Unapprove
                 </Menu.Item>
               )}
