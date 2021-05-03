@@ -7,7 +7,7 @@ import { useFirstWeekDay } from '../timetracker/hooks';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../generated-models';
 import { Reports } from './ReportComponent';
 
-export const Report = () => {
+const Report = () => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
 
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
@@ -57,3 +57,4 @@ export const Report = () => {
     />
   );
 };
+export default Report;

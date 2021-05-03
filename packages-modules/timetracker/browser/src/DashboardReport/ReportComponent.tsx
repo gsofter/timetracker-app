@@ -151,62 +151,55 @@ export const Reports: React.FC<IReportsProps> = ({
   };
 
   return (
-    <div className={css(styles.container)}>
-      <Card title={'Timetracker Report'} bordered={false}>
-        <Row style={{ width: '100%', textAlign: 'center', alignItems: 'baseline' }}>
-          <Col xs={24} md={6} className={css(styles.left)}>
-            <Radio.Group>
-              <Radio.Button onClick={onClick} value={'back'}>
-                <LeftOutlined />
-                <span>Back</span>
-              </Radio.Button>
-              <Radio.Button onClick={onClick} value={'today'}>
-                Today
-              </Radio.Button>
-              <Radio.Button onClick={onClick} value={'next'}>
-                <span>Next</span>
-                <RightOutlined />
-              </Radio.Button>
-            </Radio.Group>
-          </Col>
-          <Col xs={24} md={12}>
+      <div className={css(styles.container)}>
+        <Card title={'Timetracker Report'} bordered={false}>
+          <div className={css(styles.flex)}>
+            <div className={css(styles.left)}>
+              <Radio.Group>
+                <Radio.Button onClick={onClick} value={'back'}>
+                  <LeftOutlined /><span>Back</span>
+                </Radio.Button>
+                <Radio.Button onClick={onClick} value={'today'}>Today</Radio.Button>
+                <Radio.Button onClick={onClick} value={'next'}>
+                  <span>Next</span><RightOutlined/>
+                </Radio.Button>
+              </Radio.Group>
+            </div>
+            <div className={css(styles.right)}>
+              <span className={css(styles.roundingLabel)}>Rounding:</span>
+              <Switch checked={rounded} onChange={handleSwitchRoundMode}/>
+            </div>
+          </div>
+          <div className={css(styles.title)}>
             <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
             <span className="duration-end">
-              {moment(weekStart).format('MM') === moment(weekStart).add(6, 'day').format('MM')
-                ? moment(weekStart).add(6, 'day').format('DD')
-                : moment(weekStart).add(6, 'day').format('MMMM DD')}
-            </span>
-          </Col>
-          <Col xs={24} md={6} className={css(styles.right)}>
-            <span className={css(styles.roundingLabel)}>Rounding:</span>
-            <Switch checked={isRounded} onChange={handleSwitchRoundMode} />
-          </Col>
-        </Row>
-        <div className={css(styles.barChartWrapper)}>
-          <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
+                            {moment(weekStart).format('MM') === moment(weekStart).add(6, 'day').format('MM')
+                                ? moment(weekStart).add(6, 'day').format('DD')
+                                : moment(weekStart).add(6, 'day').format('MMMM DD')}
+                        </span>
+          </div>
+          <div className={css(styles.barChartWrapper)}>
+            <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
+          </div>
+        </Card>
+        <div className={css(styles.flexM)}>
+          <Card className={css(styles.tableCard)} title={'Project Table'}>
+            <Table dataSource={generateDatasource()} columns={generateTableColumns()} pagination={{ defaultPageSize: 3 }} />
+          </Card>
+          <Card className={css(styles.chartCard)} title={'Project Report'}>
+            <DoughnutChart
+                title="Reports"
+                data={generateProjectDurations()}
+                labels={generateProjectLabels()}
+            />
+          </Card>
         </div>
-      </Card>
-      <div className={css(styles.flex)}>
-        <Card className={css(styles.tableCard)} title={'Project Table'}>
-          <Table
-            dataSource={generateDatasource()}
-            columns={generateTableColumns()}
-            pagination={{ defaultPageSize: 3 }}
-          />
-        </Card>
-        <Card className={css(styles.chartCard)} title={'Project Report'}>
-          <DoughnutChart title="Reports" data={generateProjectDurations()} labels={generateProjectLabels()} />
-        </Card>
       </div>
-    </div>
   );
 };
 
 const styles = {
   container: () => ({
-    '& .ant-tabs-extra-content': {
-      width: '55%',
-    },
     '& .ant-table-cell': {
       padding: '11px',
     },
@@ -214,27 +207,44 @@ const styles = {
   flex: () => ({
     display: 'flex',
   }),
+  flexM: () => ({
+    '@media (min-width: 800px)': {
+      display: 'flex',
+    },
+  }),
   roundingLabel: () => ({
     margin: '-1px 6px',
     fontWeight: 400,
   }),
   tableCard: () => ({
-    width: '50%',
+    '@media (min-width: 800px)': {
+      width: '50%',
+      marginRight: '25px',
+    },
     marginTop: '25px',
-    marginRight: '25px',
   }),
   chartCard: () => ({
-    width: '50%',
+    '@media (min-width: 800px)': {
+      width: '50%',
+    },
     marginTop: '25px',
   }),
   barChartWrapper: () => ({
-    // width: '65%',
     margin: '0 auto',
+    '@media (min-width: 1200px)': {
+      width: '80%',
+    },
   }),
   right: () => ({
     textAlign: 'right',
+    width: '50%',
   }),
   left: () => ({
     textAlign: 'left',
+    width: '50%',
   }),
+  title: () => ({
+    width: '100%',
+    textAlign: 'center',
+  })
 };
