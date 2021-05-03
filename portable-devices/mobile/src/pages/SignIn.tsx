@@ -39,7 +39,7 @@ const SignIn = () => {
               Don't have an account?{'  '}
             </Text>
             <Link to="/sign-up" underlayColor="#f0f4f7">
-              <Text>SignUp</Text>
+              <Text style={styles.linkColor}>SignUp</Text>
             </Link>
           </View>
         </View>
@@ -60,7 +60,10 @@ const styles = StyleSheet.create({
     },
     direction_row: {
       flexDirection: 'row',
-      alignItems: 'center'
+      justifyContent: 'center'
+    },
+    linkColor: {
+      color: '#62b1f6'
     }
 })
 
