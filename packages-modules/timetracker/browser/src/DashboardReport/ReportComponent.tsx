@@ -87,6 +87,9 @@ export const Reports: React.FC<IReportsProps> = ({
     const projectLabels = projects.map((project, index) => {
       return project.name;
     });
+    if (records.filter(r => !r.projectId).length) {
+      projectLabels.push('Unknown');
+    }
     return projectLabels;
   };
 
@@ -96,6 +99,11 @@ export const Reports: React.FC<IReportsProps> = ({
       const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
       return rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
     });
+    if (records.filter(r => !r.projectId).length) {
+      const unRecord = records.filter(r => !r.projectId);
+      const unTotalDur = unRecord.reduce(calcDurationReducer, 0);
+      projectDurArray.push(rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur)
+    }
     return projectDurArray;
   };
 
