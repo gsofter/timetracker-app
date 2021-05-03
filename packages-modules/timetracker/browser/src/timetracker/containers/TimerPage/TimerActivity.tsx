@@ -59,12 +59,8 @@ const renderDayDateString = (date: string, dateFormat: string) => {
       moment(date).startOf('week').add('7', 'day').format(dateFormat)
     );
   }
-  return moment(date).calendar(null, {
-    sameDay: '[Today]',
-    lastDay: '[Yesterday]',
-    lastWeek: 'dddd',
-    sameElse: dateFormat,
-  });
+  if (moment(date).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) return 'Today';
+  else return moment(date).format(dateFormat);
 };
 
 interface ITimerActivityProps {
@@ -111,8 +107,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
   const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
     for (let i = 0; i < timeRecords.length; i++) {
-      totalTime +=
-        moment(timeRecords[i].endTime).valueOf() - moment(timeRecords[i].startTime).valueOf();
+      totalTime += moment(timeRecords[i].endTime).valueOf() - moment(timeRecords[i].startTime).valueOf();
     }
     return formatDuration(Math.floor(totalTime / 1000), timeFormat);
   };
@@ -140,8 +135,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
       projectId: currentTimeRecord.projectId,
       isBillable: currentTimeRecord.isBillable,
     };
-    if (currentTimeRecord.id === undefined || currentTimeRecord.id === '')
-      createTimeRecord(newTimeRecord);
+    if (currentTimeRecord.id === undefined || currentTimeRecord.id === '') createTimeRecord(newTimeRecord);
     else updateTimeRecord(currentTimeRecord.id, newTimeRecord);
   };
 
@@ -218,11 +212,9 @@ const TimerActivity = (props: ITimerActivityProps) => {
                   >
                     <div className="main-page__day-header">
                       <div className="main-page__day-date">
-                        {renderDayDateString(dayRecords[0].endTime, dateFormat)}
+                        {renderDayDateString(dayRecords[0].endTime, 'ddd, MMM DD')}
                       </div>
-                      <div className="main-page__day-date-all-time">
-                        Total time: {renderTotalTimeByDay(dayRecords)}
-                      </div>
+                      <div className="main-page__day-date-all-time">Total time: {renderTotalTimeByDay(dayRecords)}</div>
                     </div>
                     {dayRecords.map((timeRecord) => (
                       <TimerActivityItem
