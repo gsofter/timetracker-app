@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm, Modal, Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Button, Dropdown, Menu, Popconfirm, Modal, Tag } from 'antd';
 import { moment } from '../../TimesheetPage';
 import { Moment } from 'moment';
 import { useFela } from 'react-fela';
@@ -23,9 +23,7 @@ import { useTimeformat } from '../../../hooks';
 const calcDuration = (records: Array<ITimeRecord>) => {
   return records.reduce(
     (duration, record) =>
-      Math.floor(
-        Math.abs(moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
-      ) + duration,
+      Math.floor(Math.abs(moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000) + duration,
     0,
   );
 };
@@ -67,7 +65,6 @@ export const TabularCalendar = ({
   const [newRows, setNewRows] = useState([]);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   const { timeFormat, dateFormat } = useTimeformat();
-  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const { approvals, unApprovals } = projectsApproval;
 
   useEffect(() => {
@@ -116,9 +113,7 @@ export const TabularCalendar = ({
   const getTotalDuration = () => {
     return calcDuration(
       records.filter(
-        (r) =>
-          moment(r.startTime) >= moment(weekStart) &&
-          moment(r.endTime) <= moment(weekStart).add(1, 'week'),
+        (r) => moment(r.startTime) >= moment(weekStart) && moment(r.endTime) <= moment(weekStart).add(1, 'week'),
       ),
     );
   };
@@ -156,9 +151,7 @@ export const TabularCalendar = ({
   const selectableProjects = () => {
     // selectable projects should not be involved to unApprovedProjects() or newRows
     return projects.filter(
-      (p) =>
-        unApprovals.findIndex((upId) => upId === p.id) === -1 &&
-        newRows.findIndex((pId) => pId === p.id) === -1,
+      (p) => unApprovals.findIndex((upId) => upId === p.id) === -1 && newRows.findIndex((pId) => pId === p.id) === -1,
     );
   };
 
@@ -342,11 +335,7 @@ export const TabularCalendar = ({
     return (
       <tr>
         <td>
-          <Dropdown
-            overlay={projectDropdownMenus}
-            trigger={['click']}
-            disabled={projects.length === 0}
-          >
+          <Dropdown overlay={projectDropdownMenus} trigger={['click']} disabled={projects.length === 0}>
             <Button icon={<PlusOutlined />} disabled={projects.length === 0}>
               Select Project
             </Button>
@@ -394,8 +383,7 @@ export const TabularCalendar = ({
         ]}
       >
         <p>
-          Ready to submit from {moment(weekStart).format('MMM DD')} -
-          {moment(weekStart).add(6, 'day').format('MMM DD')}
+          Ready to submit from {moment(weekStart).format('MMM DD')} -{moment(weekStart).add(6, 'day').format('MMM DD')}
           &nbsp; approval?
         </p>
       </Modal>
@@ -436,10 +424,7 @@ export const TabularCalendar = ({
         <Button
           type="primary"
           onClick={openSubmitApproval}
-          disabled={
-            unApprovals.length === 0 ||
-            (timesheet ? timesheet.state === ITimesheetState.SUBMITTED : false)
-          }
+          disabled={unApprovals.length === 0 || (timesheet ? timesheet.state === ITimesheetState.SUBMITTED : false)}
         >
           Submit For Approval
         </Button>

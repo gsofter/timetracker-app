@@ -38,9 +38,8 @@ const Timesheet = ({
   const location = useLocation();
   const history = useHistory();
   const parsed = qs.parse(location.search);
-  const [selectedProject, setSelectedProject] = useState('');
+  const [selectedProject, setSelectedProject] = useState('__all');
   const [isShowTimeModal, setIsShowTimeModal] = useState(false);
-  const { others: viewOthersPermit } = useViewPermissions();
 
   const handleChangeViewMode = () => {
     parsed.view = parsed.view === 'calendar' ? 'tabular' : 'calendar';
