@@ -8,56 +8,55 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { Button, Form, Item, Input, Toast, Container, Root } from 'native-base';
-import { Link } from 'react-router-native';
-import {Formik, ErrorMessage} from 'formik';
-import { Font } from 'expo';
-import { Ionicons } from '@expo/vector-icons';
-import yup from 'yup';
-import * as AuthSession from 'expo-auth-session';
-import { auth0, AUTH0_DOMAIN, CLIENT_ID, dbConnection } from "../lib/auth0"
-
-interface FormInitialValues {
-  username: string,
-  email: string,
-  password: string,
-  confirmPassword: string
-}
+import { Button, Form, Item, Input, Spinner } from 'native-base';
+import { Link, useHistory } from 'react-router-native';
+import {Formik} from 'formik';
+import { auth0, dbConnection } from "../lib/auth0";
 
 const SignUp = () => {
 
-  const initialValues: FormInitialValues = {
-    username: 'Muflah',
-    email: 'johndoe@gmail.com',
-    password: 'developer@007',
-    confirmPassword: ''
-  }
+  const history = useHistory()
+  const[isLoading, setIsLoading] = useState(false)
 
    return (
         <View style={styles.container}>
           <Formik
           enableReinitialize
-          initialValues = {initialValues}
+          initialValues = {{
+            username: 'Muflah',
+            email: 'johndoe@gmail.com',
+            password: 'fighter',
+            confirmPassword: ''
+          }}
           onSubmit={(values: any, {setFieldError}) => {
-            auth0.auth
-              .createUser({
-                email: values.email,
-                username: values.username,
-                password: values.password,
-                connection: dbConnection,
-              })
-              .then((res) => alert(JSON.stringify(res)))
-              .catch((error) => {
-                if(error.code === 'invalid_password'){
-                  setFieldError('password', error.json.policy)
-                }
-                if(error.code === 'username_exists'){
-                  setFieldError('username', error.message)
-                }
-                if(error.code === 'user_exists'){
-                  setFieldError('email', error.message)
-                }
-              });
+            if(values.password === values.confirmPassword){
+              setIsLoading(true)
+              auth0.auth
+                .createUser({
+                  email: values.email,
+                  username: values.username,
+                  password: values.password,
+                  connection: dbConnection,
+                })
+                .then((res) => {
+                  setIsLoading(false)
+                  history.push('/org/timer')
+                })
+                .catch((error) => {
+                  setIsLoading(false)
+                  if(error.code === 'invalid_password'){
+                    setFieldError('password', error.json.policy)
+                  }
+                  if(error.code === 'username_exists'){
+                    setFieldError('username', error.message)
+                  }
+                  if(error.code === 'user_exists'){
+                    setFieldError('email', error.message)
+                  }
+                });
+            } else{
+              setFieldError('confirmPassword', "Password didn't match")
+            }
           }}
           >
             {({handleChange, handleSubmit, values, errors}: any) => (
@@ -66,8 +65,7 @@ const SignUp = () => {
                   <Input
                   value={values.username}
                   onChange={handleChange('username')}
-                  textContentType='name' 
-                  keyboardType='default' 
+                  textContentType='name'
                   placeholder="Username" />
                 </Item>
                 {errors.username && <Text style={{ color: 'red' }}>{errors.username}</Text>}
@@ -75,8 +73,8 @@ const SignUp = () => {
                   <Input 
                   value={values.email}
                   onChange={handleChange('email')}
-                  textContentType='emailAddress' 
-                  keyboardType='email-address' 
+                  textContentType='emailAddress'
+                  keyboardType='email-address'
                   placeholder="Email" />
                 </Item>
                 {errors.email && <Text style={{ color: 'red' }}>{errors.email}</Text>}
@@ -99,9 +97,14 @@ const SignUp = () => {
                   textContentType='password' 
                   placeholder='Confirm Password' />
                 </Item>
-                <Button onPress={handleSubmit} style={styles.marginTop20} info block>
-                  <Text style={styles.colorWhite}>SignUp</Text>
-                </Button>
+                {errors.confirmPassword && <Text style={{ color: 'red' }}>{errors.confirmPassword}</Text>}
+                {isLoading ? (
+                  <Spinner color='blue' />
+                ): (
+                  <Button onPress={handleSubmit} style={styles.marginTop20} info block>
+                    <Text style={styles.colorWhite}>SignUp</Text>
+                  </Button>
+                )}
               </Form>
             )}
           </Formik>

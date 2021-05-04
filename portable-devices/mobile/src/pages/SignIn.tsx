@@ -10,30 +10,54 @@ import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
 import { Button, Form, Item, Input } from 'native-base';
 import { Link } from 'react-router-native';
-import * as AuthSession from 'expo-auth-session';
-import { auth0, AUTH0_DOMAIN, CLIENT_ID } from "../lib/auth0"
+import { Formik } from 'formik'
+import { auth0, dbConnection } from "../lib/auth0"
 
 const SignIn = () => {
 
    return (
         <View style={styles.container}>
-          <Form>
-            <Item last>
-              <Input 
-              textContentType='emailAddress' 
-              keyboardType='email-address' 
-              placeholder="Email" />
-            </Item>
-            <Item last>
-              <Input 
-              textContentType='password' 
-              keyboardType='visible-password' 
-              placeholder='Password' />
-            </Item>
-            <Button style={styles.marginTop20} info block>
-              <Text style={styles.colorWhite}>SignIn</Text>
-            </Button>
-          </Form>
+          <Formik 
+          initialValues={{
+            email: '',
+            password: ''
+          }}
+          onSubmit={(values: any) => {
+            auth0.auth
+              .passwordRealm({
+                username: values.email,
+                password: values.password,
+                realm: dbConnection,
+              })
+              .then(console.log)
+              .catch(console.error);
+          }}
+          >
+            {({handleChange, handleSubmit, values}: any) => (
+              <Form>
+                <Item last>
+                  <Input 
+                  value={values.email}
+                  onChange={handleChange('email')}
+                  textContentType='emailAddress' 
+                  keyboardType='email-address' 
+                  placeholder="Email" />
+                </Item>
+                <Item last>
+                  <Input 
+                  secureTextEntry
+                  value={values.password}
+                  onChange={handleChange('password')}
+                  textContentType='password' 
+                  keyboardType='visible-password' 
+                  placeholder='Password' />
+                </Item>
+                <Button onPress={handleSubmit} style={styles.marginTop20} info block>
+                  <Text style={styles.colorWhite}>SignIn</Text>
+                </Button>
+              </Form>
+            )}
+          </Formik>
           <View style={styles.direction_row}>
             <Text>
               Don't have an account?{'  '}
