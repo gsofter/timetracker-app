@@ -40,7 +40,7 @@
     "@admin-layout/schedule-module-browser": "link:../../packages-modules/schedule/browser",
     "@admin-layout/timetracker-module-browser": "link:../../packages-modules/timetracker/browser",
     "@adminide-stack/react-shared-components": "0.0.20-alpha.32",
-    "@adminide-stack/user-auth0-browser": "0.0.20-alpha.32",
+    "@adminide-stack/user-auth0-browser": "0.0.20-alpha.33",
     "@ant-design/compatible": "^1.0.5",
     "@ant-design/icons": "^4.2.2",
     "@cdm-logger/client": "^5.0.7",
