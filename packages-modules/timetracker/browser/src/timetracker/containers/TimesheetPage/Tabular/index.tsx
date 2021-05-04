@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Moment } from 'moment';
-import { message, Spin } from 'antd';
+import { message, Spin, Row, Col, Button } from 'antd';
 import {
   ITimesheetCreateRequest,
   IProjects as IProject,
@@ -59,7 +59,7 @@ const TabularCalendarWrapper = ({
   selectedProject,
   setPathWeekStart,
 }: ITabularCalendarWrapperProps) => {
-  const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
+  const { data, loading: loadingRecords, refetch, error } = useGetDurationTimeRecordsQuery({
     variables: {
       startTime: weekStart,
       endTime: moment(weekStart).add(1, 'week'),
@@ -82,10 +82,10 @@ const TabularCalendarWrapper = ({
     reloadData();
   }, [weekStart]);
 
-  const [createMutation] = useCreateTimeRecordMutation();
-  const [updateMutation] = useUpdateTimeRecordMutation();
-  const [removeMutation] = useRemoveDurationTimeRecordsMutation();
-  const [createTimesheetMutation] = useCreateTimesheetMutation();
+  const [createMutation, { loading: loadingCreate }] = useCreateTimeRecordMutation();
+  const [updateMutation, { loading: loadingUpdate }] = useUpdateTimeRecordMutation();
+  const [removeMutation, { loading: loadingRemove }] = useRemoveDurationTimeRecordsMutation();
+  const [createTimesheetMutation, { loading: loadingCreateTimesheet }] = useCreateTimesheetMutation();
   const handleRemoveDuration = (pId) => {
     removeMutation({
       variables: {
@@ -168,26 +168,114 @@ const TabularCalendarWrapper = ({
     return projectsMap;
   };
 
+  const onClickBack = (event) => {
+    event.preventDefault();
+    const newWeekStart = moment(weekStart).add('-1', 'week');
+    setPathWeekStart(newWeekStart);
+  };
+
+  const onClickNext = (event) => {
+    event.preventDefault();
+    const newWeekStart = moment(weekStart).add('1', 'week');
+    setPathWeekStart(newWeekStart);
+  };
+
+  const onClickToday = (event) => {
+    event.preventDefault();
+    const newWeekStart = moment().startOf('week');
+    setPathWeekStart(newWeekStart);
+  };
+
   return (
-    <Spin spinning={!data || loading}>
-      <TabularCalendar
-        weekStart={weekStart}
-        setPathWeekStart={setPathWeekStart}
-        records={filterTimeRecords(data?.getDurationTimeRecords, {
-          selectedUser,
-          selectedProject,
-          members,
-        })}
-        projects={projects}
-        projectsMap={getProjectsMap()}
-        projectsApproval={projectsApproval()}
-        timesheet={memberTimesheet()}
-        selectedUser={selectedUser}
-        handleRemoveDuration={handleRemoveDuration}
-        createTimeRecord={createTimeRecord}
-        updateTimeRecord={updateTimeRecord}
-        createTimesheet={createTimesheet}
-      />
+    <Spin
+      spinning={
+        !data ||
+        loadingRecords ||
+        loadingApproval ||
+        loadingCreate ||
+        loadingUpdate ||
+        loadingRemove ||
+        loadingCreateTimesheet
+      }
+    >
+      <Row className="toolBar">
+        <Col xs={24} md={6} className="control">
+          <Button onClick={onClickToday}> Today </Button>
+          <Button onClick={onClickBack}> Back </Button>
+          <Button onClick={onClickNext}> Next </Button>
+        </Col>
+        <Col xs={24} md={12} style={{ textAlign: 'center' }}>
+          <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
+          <span className="duration-end">
+            {moment(weekStart).format('MM') === moment(weekStart).add(1, 'week').format('MM')
+              ? moment(weekStart).add(1, 'week').format('DD')
+              : moment(weekStart).add(1, 'week').format('MMMM DD')}
+          </span>
+        </Col>
+        <Col xs={24} md={6} className="control" style={{ textAlign: 'right' }}>
+          <Button> Day </Button>
+          <Button> Week </Button>
+          <Button> Month </Button>
+        </Col>
+      </Row>
+      {selectedUser !== '__all' ? (
+        <TabularCalendar
+          weekStart={weekStart}
+          records={filterTimeRecords(data?.getDurationTimeRecords, {
+            selectedUser,
+            selectedProject,
+            members,
+          })}
+          projects={projects}
+          projectsMap={getProjectsMap()}
+          projectsApproval={projectsApproval()}
+          timesheet={memberTimesheet()}
+          selectedUser={selectedUser}
+          loading={
+            loadingRecords ||
+            loadingApproval ||
+            loadingCreate ||
+            loadingUpdate ||
+            loadingRemove ||
+            loadingCreateTimesheet
+          }
+          handleRemoveDuration={handleRemoveDuration}
+          createTimeRecord={createTimeRecord}
+          updateTimeRecord={updateTimeRecord}
+          createTimesheet={createTimesheet}
+        />
+      ) : (
+        members.map((mem) => {
+          return (
+            <TabularCalendar
+              key={mem.userId}
+              weekStart={weekStart}
+              records={filterTimeRecords(data?.getDurationTimeRecords, {
+                selectedUser: mem.userId,
+                selectedProject,
+                members,
+              })}
+              projects={projects}
+              projectsMap={getProjectsMap()}
+              projectsApproval={projectsApproval()}
+              timesheet={memberTimesheet()}
+              selectedUser={mem.userId}
+              loading={
+                loadingRecords ||
+                loadingApproval ||
+                loadingCreate ||
+                loadingUpdate ||
+                loadingRemove ||
+                loadingCreateTimesheet
+              }
+              handleRemoveDuration={handleRemoveDuration}
+              createTimeRecord={createTimeRecord}
+              updateTimeRecord={updateTimeRecord}
+              createTimesheet={createTimesheet}
+            />
+          );
+        })
+      )}
     </Spin>
   );
 };
