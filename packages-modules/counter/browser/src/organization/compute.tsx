@@ -1,7 +1,6 @@
 import * as React from 'react';
 import { IMenuPosition } from '@common-stack/client-react';
 import { Organization } from './components/Organization';
-import { Dashboard } from '../Dashboard'
 import { getFilteredMenus, getFilteredRoutes } from '../utils';
 
 export const accountPageStore: any[] = [
@@ -14,18 +13,9 @@ export const accountPageStore: any[] = [
     exact: true,
     priority: 2,
   },
-  {
-    path: '/:orgName/dashboard',
-    key: 'dashboard',
-    name: 'Dashboard',
-    component: Dashboard,
-    position: IMenuPosition.LOWER,
-    exact: true,
-    priority: 1,
-  },
 ];
 
-const selectedRoutesAndMenus = ['dashboard'];
+const selectedRoutesAndMenus = [];
 
 // get menus
 const filteredMenus = getFilteredMenus(accountPageStore, selectedRoutesAndMenus);

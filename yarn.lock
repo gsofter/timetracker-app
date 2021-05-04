@@ -142,15 +142,15 @@
     humanize-duration "^3.24.0"
     moment "^2.29.1"
 
-"@adminide-stack/account-api-browser@0.0.20-alpha.34":
-  version "0.0.20-alpha.34"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-browser/-/account-api-browser-0.0.20-alpha.34.tgz#bdde719e8a55e219bd0abfa7da0c9be453f72546"
-  integrity sha512-yOycUXSrluSZqLZ0vvyBAguF0BDlESxrcGfVfUK+zcfgcy7Y4AQndCDWPHgNonIiZH5dyPwIv1ZgBjmAvpAVXA==
+"@adminide-stack/account-api-browser@0.0.20-alpha.36":
+  version "0.0.20-alpha.36"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-browser/-/account-api-browser-0.0.20-alpha.36.tgz#352f962de2230717d3c3b4c892b97e5ffd04837e"
+  integrity sha512-wSGOosVexG3+Qq+UlNMJ4aQQ21JHumGKu/0Hec39W0NgBJn6BnKgcI9D8AMLtrvxLdrn4xDS9Ly6guM/iL5ddQ==
   dependencies:
     "@adminide-stack/core" "0.0.20-alpha.30"
     "@adminide-stack/extension-api" "0.0.20-alpha.30"
-    "@adminide-stack/platform-browser" "0.0.20-alpha.34"
-    "@adminide-stack/user-auth0-browser" "0.0.20-alpha.33"
+    "@adminide-stack/platform-browser" "0.0.20-alpha.36"
+    "@adminide-stack/user-auth0-browser" "0.0.20-alpha.36"
     "@react-pdf/renderer" "^2.0.0-beta.6"
     date-fns "^2.19.0"
     react-datepicker "^3.5.0"
@@ -210,14 +210,14 @@
     utility-types "^3.10.0"
     valid-url "1.0.9"
 
-"@adminide-stack/extension-module-browser@0.0.20-alpha.33":
-  version "0.0.20-alpha.33"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-module-browser/-/extension-module-browser-0.0.20-alpha.33.tgz#8b397d7f771bdb9ff877b14c02c363c9e12bafa3"
-  integrity sha512-O4TdDnvNbsZa1vHBdMFRdWBOq3VpSfOZvmC6AH2b+ShG2I9tdZ9t9fu4ctrTGMG/v0MSRQyUN/AnuaZ3s3zkVA==
+"@adminide-stack/extension-module-browser@0.0.20-alpha.36":
+  version "0.0.20-alpha.36"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-module-browser/-/extension-module-browser-0.0.20-alpha.36.tgz#328ab9defc0ec81fbe2cc96d87c78424298a4f48"
+  integrity sha512-5zatzZ+MhmHXC+k68Tm5z5e8zpT2XeR4idTpTIGkivVcMvSEwKO6f/uPEJnn4INgY7fuo3IqwZwWFOPZeZtlIA==
   dependencies:
     "@adminide-stack/core" "0.0.20-alpha.30"
     "@adminide-stack/extension-api" "0.0.20-alpha.30"
-    "@adminide-stack/react-shared-components" "0.0.20-alpha.32"
+    "@adminide-stack/react-shared-components" "0.0.20-alpha.36"
     "@babel/polyfill" "^7.2.5"
     cdeops "0.0.20-alpha.11"
     jsonc-parser "^2.0.2"
@@ -227,13 +227,13 @@
     rxjs-websockets "^8.0.0"
     whatwg-url "^7.0.0"
 
-"@adminide-stack/platform-browser@0.0.20-alpha.34":
-  version "0.0.20-alpha.34"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-browser/-/platform-browser-0.0.20-alpha.34.tgz#e557c1ec4b3890972fe8be27b0515fbb3c8d8e3d"
-  integrity sha512-/tUBRhO78aUiz5/Dkgfg6RTsNLgQNe7XE5tQel0jW5Beo2/yaZtdykhWr+N7gJGRUGW4SWQb1tsnO/9VvoJTfw==
+"@adminide-stack/platform-browser@0.0.20-alpha.36":
+  version "0.0.20-alpha.36"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-browser/-/platform-browser-0.0.20-alpha.36.tgz#da13f9c2eef7fcb1e9841c9be620f156b8665718"
+  integrity sha512-jcxrijb0Ayb6sripEv7MHklCOwssmXonubln7mQ3a3cDvSQgGqTtie4uRj6c56YcQkfbveOSajbtWB1iGbgAnA==
   dependencies:
     "@adminide-stack/core" "0.0.20-alpha.30"
-    "@adminide-stack/react-shared-components" "0.0.20-alpha.32"
+    "@adminide-stack/react-shared-components" "0.0.20-alpha.36"
     "@vscode/monaco-editor" "^0.21.2"
     jsonc-parser "^2.3.0"
     query-string "^6.1.0"
@@ -258,10 +258,10 @@
     mongo-queryfilter "^0.1.20"
     query-string "^6.1.0"
 
-"@adminide-stack/react-shared-components@0.0.20-alpha.32":
-  version "0.0.20-alpha.32"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/react-shared-components/-/react-shared-components-0.0.20-alpha.32.tgz#634323f524276b35f0ef2ed9621328b976cb1387"
-  integrity sha512-BVuJ7zGtXuv1xUFnRELjfUMA+Mn5h7y4n2hpT7ev1iQ3nbJddUceParxEGcWLHQzwYgaSV2qxjm8tb3StqyXCg==
+"@adminide-stack/react-shared-components@0.0.20-alpha.36":
+  version "0.0.20-alpha.36"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/react-shared-components/-/react-shared-components-0.0.20-alpha.36.tgz#e439026ba748a1a3c58d357351551dee53c84fb1"
+  integrity sha512-Kq2ppNxEiTePpKRpny3J6VD2mhxdvQ7kMb5YZ+y3GB+C5REsk2kNRP1K+oKtFN/qjGdk1dj2DSHvyCnaX+w4XQ==
   dependencies:
     "@adminide-stack/core" "0.0.20-alpha.30"
     "@ant-design/pro-provider" "0.0.6"
@@ -279,13 +279,13 @@
     use-media-antd-query "^1.0.2"
     use-merge-value "^1.0.2"
 
-"@adminide-stack/user-auth0-browser@0.0.20-alpha.33":
-  version "0.0.20-alpha.33"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.20-alpha.33.tgz#efd3321628b876dec60f864e8d719b631ed6bd4a"
-  integrity sha512-kInev5w/JvYpw5ukw57bjrPnJXAqgCJ2ioSExEAG5C2m6jsmBaBHyMVBvDwh2NfysuZ3ahuSvB+eoI5jYc/X5g==
+"@adminide-stack/user-auth0-browser@0.0.20-alpha.36":
+  version "0.0.20-alpha.36"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.20-alpha.36.tgz#0e2cdc8ec77c195763f9684582b31dc760ec2aed"
+  integrity sha512-y4PTqg4uNRb3SqwVNZiy0kLMWfkbuiPWeR/sJ/tyEhEBgQh6iK0BV5mliM9PbhkiUmCtbQVDsjYiuK2dbyitzA==
   dependencies:
     "@adminide-stack/common" "0.0.20-alpha.23"
-    "@adminide-stack/react-shared-components" "0.0.20-alpha.32"
+    "@adminide-stack/react-shared-components" "0.0.20-alpha.36"
     auth0 "^2.19.0"
     auth0-js "^9.11.3"
     auth0-lock "^11.17.2"
@@ -410,10 +410,10 @@
     tslib "^1.10.0"
     zen-observable "^0.8.14"
 
-"@apollo/federation@0.23.2":
-  version "0.23.2"
-  resolved "https://registry.yarnpkg.com/@apollo/federation/-/federation-0.23.2.tgz#5dd9abcbc40e6233555c47e2f83deade6436cd85"
-  integrity sha512-O3ZuKdjYpxyl9UAvE8dHK5dkHzS7DYagwR8Ts3oB3O4BshHh/9+SoPvyKQSDw25ZZXx2/87OZMvZWM8OSE4cgw==
+"@apollo/federation@0.24.0":
+  version "0.24.0"
+  resolved "https://registry.yarnpkg.com/@apollo/federation/-/federation-0.24.0.tgz#c4d9641b8681decc080c47b3e97daa50c78d30ba"
+  integrity sha512-WzTAZ7023HkJz75+nGdW/7L7dsg0m/Iaj6aNoUy+HnWmkxH072BNAwMwNKlMMohJP5YAaigt4qxZ03XqXj+3Rw==
   dependencies:
     apollo-graphql "^0.9.2"
     lodash.xorby "^4.7.0"
@@ -6934,20 +6934,20 @@
   integrity sha512-HrCIVMLjE1MOozVoD86622S7aunluLb2PJdPfb3nYiEtohm8mIB/vyv0Fd37AdeMFrTUQXEunw78YloMA3Qilg==
 
 "@typescript-eslint/eslint-plugin-tslint@^4.20.0":
-  version "4.22.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin-tslint/-/eslint-plugin-tslint-4.22.0.tgz#f79b149f7bcc60090ea53147a2c00b812de09e83"
-  integrity sha512-r4lhAPmd69ohf5grgDALtekETv4WVCpvfXtT3Nf3UUO/88sn4HB4h8xN1afwL48BprQ4TxH7ZUv7Ou6xgRlkAA==
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin-tslint/-/eslint-plugin-tslint-4.22.1.tgz#5b66c35047f9c395a6d56d49a5666af588f6c270"
+  integrity sha512-pfidpEzYYvZpcbQDzC55yfwihEREk831rFC50i5f+4GMMvpFvwA5BmGjJL2+djCFHfowD9Y1MRD0hC26oU72Ew==
   dependencies:
-    "@typescript-eslint/experimental-utils" "4.22.0"
+    "@typescript-eslint/experimental-utils" "4.22.1"
     lodash "^4.17.15"
 
 "@typescript-eslint/eslint-plugin@^4.20.0":
-  version "4.22.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.22.0.tgz#3d5f29bb59e61a9dba1513d491b059e536e16dbc"
-  integrity sha512-U8SP9VOs275iDXaL08Ln1Fa/wLXfj5aTr/1c0t0j6CdbOnxh+TruXu1p4I0NAvdPBQgoPjHsgKn28mOi0FzfoA==
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/eslint-plugin/-/eslint-plugin-4.22.1.tgz#6bcdbaa4548553ab861b4e5f34936ead1349a543"
+  integrity sha512-kVTAghWDDhsvQ602tHBc6WmQkdaYbkcTwZu+7l24jtJiYvm9l+/y/b2BZANEezxPDiX5MK2ZecE+9BFi/YJryw==
   dependencies:
-    "@typescript-eslint/experimental-utils" "4.22.0"
-    "@typescript-eslint/scope-manager" "4.22.0"
+    "@typescript-eslint/experimental-utils" "4.22.1"
+    "@typescript-eslint/scope-manager" "4.22.1"
     debug "^4.1.1"
     functional-red-black-tree "^1.0.1"
     lodash "^4.17.15"
@@ -6955,60 +6955,60 @@
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@typescript-eslint/experimental-utils@4.22.0", "@typescript-eslint/experimental-utils@^4.0.1":
-  version "4.22.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-4.22.0.tgz#68765167cca531178e7b650a53456e6e0bef3b1f"
-  integrity sha512-xJXHHl6TuAxB5AWiVrGhvbGL8/hbiCQ8FiWwObO3r0fnvBdrbWEDy1hlvGQOAWc6qsCWuWMKdVWlLAEMpxnddg==
+"@typescript-eslint/experimental-utils@4.22.1", "@typescript-eslint/experimental-utils@^4.0.1":
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/experimental-utils/-/experimental-utils-4.22.1.tgz#3938a5c89b27dc9a39b5de63a62ab1623ab27497"
+  integrity sha512-svYlHecSMCQGDO2qN1v477ax/IDQwWhc7PRBiwAdAMJE7GXk5stF4Z9R/8wbRkuX/5e9dHqbIWxjeOjckK3wLQ==
   dependencies:
     "@types/json-schema" "^7.0.3"
-    "@typescript-eslint/scope-manager" "4.22.0"
-    "@typescript-eslint/types" "4.22.0"
-    "@typescript-eslint/typescript-estree" "4.22.0"
+    "@typescript-eslint/scope-manager" "4.22.1"
+    "@typescript-eslint/types" "4.22.1"
+    "@typescript-eslint/typescript-estree" "4.22.1"
     eslint-scope "^5.0.0"
     eslint-utils "^2.0.0"
 
 "@typescript-eslint/parser@^4.20.0", "@typescript-eslint/parser@^4.4.1":
-  version "4.22.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-4.22.0.tgz#e1637327fcf796c641fe55f73530e90b16ac8fe8"
-  integrity sha512-z/bGdBJJZJN76nvAY9DkJANYgK3nlRstRRi74WHm3jjgf2I8AglrSY+6l7ogxOmn55YJ6oKZCLLy+6PW70z15Q==
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/parser/-/parser-4.22.1.tgz#a95bda0fd01d994a15fc3e99dc984294f25c19cc"
+  integrity sha512-l+sUJFInWhuMxA6rtirzjooh8cM/AATAe3amvIkqKFeMzkn85V+eLzb1RyuXkHak4dLfYzOmF6DXPyflJvjQnw==
   dependencies:
-    "@typescript-eslint/scope-manager" "4.22.0"
-    "@typescript-eslint/types" "4.22.0"
-    "@typescript-eslint/typescript-estree" "4.22.0"
+    "@typescript-eslint/scope-manager" "4.22.1"
+    "@typescript-eslint/types" "4.22.1"
+    "@typescript-eslint/typescript-estree" "4.22.1"
     debug "^4.1.1"
 
-"@typescript-eslint/scope-manager@4.22.0":
-  version "4.22.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-4.22.0.tgz#ed411545e61161a8d702e703a4b7d96ec065b09a"
-  integrity sha512-OcCO7LTdk6ukawUM40wo61WdeoA7NM/zaoq1/2cs13M7GyiF+T4rxuA4xM+6LeHWjWbss7hkGXjFDRcKD4O04Q==
+"@typescript-eslint/scope-manager@4.22.1":
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/scope-manager/-/scope-manager-4.22.1.tgz#5bb357f94f9cd8b94e6be43dd637eb73b8f355b4"
+  integrity sha512-d5bAiPBiessSmNi8Amq/RuLslvcumxLmyhf1/Xa9IuaoFJ0YtshlJKxhlbY7l2JdEk3wS0EnmnfeJWSvADOe0g==
   dependencies:
-    "@typescript-eslint/types" "4.22.0"
-    "@typescript-eslint/visitor-keys" "4.22.0"
+    "@typescript-eslint/types" "4.22.1"
+    "@typescript-eslint/visitor-keys" "4.22.1"
 
-"@typescript-eslint/types@4.22.0":
-  version "4.22.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-4.22.0.tgz#0ca6fde5b68daf6dba133f30959cc0688c8dd0b6"
-  integrity sha512-sW/BiXmmyMqDPO2kpOhSy2Py5w6KvRRsKZnV0c4+0nr4GIcedJwXAq+RHNK4lLVEZAJYFltnnk1tJSlbeS9lYA==
+"@typescript-eslint/types@4.22.1":
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/types/-/types-4.22.1.tgz#bf99c6cec0b4a23d53a61894816927f2adad856a"
+  integrity sha512-2HTkbkdAeI3OOcWbqA8hWf/7z9c6gkmnWNGz0dKSLYLWywUlkOAQ2XcjhlKLj5xBFDf8FgAOF5aQbnLRvgNbCw==
 
-"@typescript-eslint/typescript-estree@4.22.0":
-  version "4.22.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-4.22.0.tgz#b5d95d6d366ff3b72f5168c75775a3e46250d05c"
-  integrity sha512-TkIFeu5JEeSs5ze/4NID+PIcVjgoU3cUQUIZnH3Sb1cEn1lBo7StSV5bwPuJQuoxKXlzAObjYTilOEKRuhR5yg==
+"@typescript-eslint/typescript-estree@4.22.1":
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/typescript-estree/-/typescript-estree-4.22.1.tgz#dca379eead8cdfd4edc04805e83af6d148c164f9"
+  integrity sha512-p3We0pAPacT+onSGM+sPR+M9CblVqdA9F1JEdIqRVlxK5Qth4ochXQgIyb9daBomyQKAXbygxp1aXQRV0GC79A==
   dependencies:
-    "@typescript-eslint/types" "4.22.0"
-    "@typescript-eslint/visitor-keys" "4.22.0"
+    "@typescript-eslint/types" "4.22.1"
+    "@typescript-eslint/visitor-keys" "4.22.1"
     debug "^4.1.1"
     globby "^11.0.1"
     is-glob "^4.0.1"
     semver "^7.3.2"
     tsutils "^3.17.1"
 
-"@typescript-eslint/visitor-keys@4.22.0":
-  version "4.22.0"
-  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-4.22.0.tgz#169dae26d3c122935da7528c839f42a8a42f6e47"
-  integrity sha512-nnMu4F+s4o0sll6cBSsTeVsT4cwxB7zECK3dFxzEjPBii9xLpq4yqqsy/FU5zMfan6G60DKZSCXAa3sHJZrcYw==
+"@typescript-eslint/visitor-keys@4.22.1":
+  version "4.22.1"
+  resolved "https://registry.yarnpkg.com/@typescript-eslint/visitor-keys/-/visitor-keys-4.22.1.tgz#6045ae25a11662c671f90b3a403d682dfca0b7a6"
+  integrity sha512-WPkOrIRm+WCLZxXQHCi+WG8T2MMTUFR70rWjdWYddLT7cEfb2P4a3O/J2U1FBVsSFTocXLCoXWY6MZGejeStvQ==
   dependencies:
-    "@typescript-eslint/types" "4.22.0"
+    "@typescript-eslint/types" "4.22.1"
     eslint-visitor-keys "^2.0.0"
 
 "@umijs/route-utils@^1.0.5":
@@ -7433,9 +7433,9 @@ acorn@^7.1.0, acorn@^7.1.1, acorn@^7.4.0:
   integrity sha512-nQyp0o1/mNdbTO1PO6kHkwSrmgZ0MT/jCCpNiwbUjGoRN4dlBhqJtoQuCnEOKzgTVwg0ZWiCoQy6SxMebQVh8A==
 
 acorn@^8.0.4, acorn@^8.1.0:
-  version "8.2.2"
-  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.2.2.tgz#c4574e4fea298d6e6ed4b85ab844b06dd59f26d6"
-  integrity sha512-VrMS8kxT0e7J1EX0p6rI/E0FbfOVcvBpbIqHThFv+f8YrZIlMfVotYcXKVPmTvPW8sW5miJzfUFrrvthUZg8VQ==
+  version "8.2.3"
+  resolved "https://registry.yarnpkg.com/acorn/-/acorn-8.2.3.tgz#37ba3771cfb1ee31a05950eef495259da28658c6"
+  integrity sha512-IJ3kohgrCGAVZrTAc2ufb2Hk2IAdkZTrMHo9DYDC5hX41HrcavlIL0nx31NQLdSkgAk8yE7oFSwPVYX17HWNHw==
 
 add-dom-event-listener@^1.1.0:
   version "1.1.0"
@@ -7911,60 +7911,60 @@ apollo-client@^2.6.10, apollo-client@^2.6.8:
     tslib "^1.10.0"
     zen-observable "^0.8.0"
 
-apollo-codegen-core@^0.39.10:
-  version "0.39.10"
-  resolved "https://registry.yarnpkg.com/apollo-codegen-core/-/apollo-codegen-core-0.39.10.tgz#30356e9bd9d84da4ee48ada34ff11693baa7e7fe"
-  integrity sha512-Sdvqjkg+VumXb7qSNgN4/akbYOsBRIARTtqZmlFS31iY34foAaeMcdzG9wFp/1wW7N9Gv4zLwMNXEyCpyo81FA==
+apollo-codegen-core@^0.40.0:
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/apollo-codegen-core/-/apollo-codegen-core-0.40.0.tgz#927fdfede86d6d6a21b26ce3365ae6cb04128c95"
+  integrity sha512-AeGVAeHhf5wkxPdqabFulDWyByROPfQR47bQtImvKdddVcNN0x/pIYACahFOF3keaHl/I29J0y1VnMrfF3FnMg==
   dependencies:
     "@babel/generator" "7.14.0"
     "@babel/parser" "^7.1.3"
     "@babel/types" "7.14.0"
     apollo-env "^0.10.0"
-    apollo-language-server "^1.25.9"
+    apollo-language-server "^1.26.0"
     ast-types "^0.14.0"
     common-tags "^1.5.1"
     recast "^0.20.0"
 
-apollo-codegen-flow@^0.37.10:
-  version "0.37.10"
-  resolved "https://registry.yarnpkg.com/apollo-codegen-flow/-/apollo-codegen-flow-0.37.10.tgz#d46d9fd1155f91c01e145cf0a12083e4c509498d"
-  integrity sha512-KXbbuLGS+5mD1RtHS2px9wuthSbdEOgODuCAc38Uz12u5y5FZFoc99g+OtlpOZpf78o7M0ghL6iMQMNCDla5ow==
+apollo-codegen-flow@^0.38.0:
+  version "0.38.0"
+  resolved "https://registry.yarnpkg.com/apollo-codegen-flow/-/apollo-codegen-flow-0.38.0.tgz#9e129a853cf9f8f9695eaa4df313a986e065480d"
+  integrity sha512-QrZWS3JuX6Cgj4acvz9Dh9AUw6kqCqcV58mCfx3CkfFCexnxr/UWXZL7I9cHb2LsdoAj9cBNe60Q12ZaIhRUvA==
   dependencies:
     "@babel/generator" "7.14.0"
     "@babel/types" "7.14.0"
-    apollo-codegen-core "^0.39.10"
+    apollo-codegen-core "^0.40.0"
     change-case "^4.0.0"
     common-tags "^1.5.1"
     inflected "^2.0.3"
 
-apollo-codegen-scala@^0.38.10:
-  version "0.38.10"
-  resolved "https://registry.yarnpkg.com/apollo-codegen-scala/-/apollo-codegen-scala-0.38.10.tgz#fa6638faa8a824eb2632d434d0821eac04a95f53"
-  integrity sha512-rkzTGm0i6Wg0wUM3Xt+IOMJjT9DO4EK9ei+pxouQ3RlQmiqkSY//MpxtUws/MKn5wy2JIYtlQrMdOWRrw3ZAfQ==
+apollo-codegen-scala@^0.39.0:
+  version "0.39.0"
+  resolved "https://registry.yarnpkg.com/apollo-codegen-scala/-/apollo-codegen-scala-0.39.0.tgz#e832b6567d6a68ae6c9f8ce2eab9534ac9cedcb2"
+  integrity sha512-N143q9HmYizfe0EBm/p82FPzzK+F2/EbRe1Iv3waw4dXgNjtQe6UYRI/lgmVE965/SrkVFRCMTZX6lnMiwINZA==
   dependencies:
-    apollo-codegen-core "^0.39.10"
+    apollo-codegen-core "^0.40.0"
     change-case "^4.0.0"
     common-tags "^1.5.1"
     inflected "^2.0.3"
 
-apollo-codegen-swift@^0.39.10:
-  version "0.39.10"
-  resolved "https://registry.yarnpkg.com/apollo-codegen-swift/-/apollo-codegen-swift-0.39.10.tgz#eb2695769d9c3010845138535157df3287a34812"
-  integrity sha512-n2QXNo9g/rCGtUGFsnMd9kelXjMx8C9XMIrpTyqXd4QkmsBL2ZQr7HZfFwXCcr8CMz7+4+DUATLbvDC3PDaBvw==
+apollo-codegen-swift@^0.40.0:
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/apollo-codegen-swift/-/apollo-codegen-swift-0.40.0.tgz#66e1cc2776d20d4c5e9d9a0198734e72a51cb064"
+  integrity sha512-FVPwVyseJy230+iqfgNgLcY8wSDLAckDCgL8GujddA0vhxjpYLIOlnBGMFE2R/oQF/bTWjhg/g7mWuJMb0f7pA==
   dependencies:
-    apollo-codegen-core "^0.39.10"
+    apollo-codegen-core "^0.40.0"
     change-case "^4.0.0"
     common-tags "^1.5.1"
     inflected "^2.0.3"
 
-apollo-codegen-typescript@^0.39.10:
-  version "0.39.10"
-  resolved "https://registry.yarnpkg.com/apollo-codegen-typescript/-/apollo-codegen-typescript-0.39.10.tgz#d1263960b4d3afb64d27cf60cf9f005fb35ad51d"
-  integrity sha512-V4tX8VY0ccMN4SBce7WniSwpxNM0uobhYVkECd42P4IUny1uNjTPY8tvIUqDGawhkj/scWZ4Sdka2Njz5UPF2w==
+apollo-codegen-typescript@^0.40.0:
+  version "0.40.0"
+  resolved "https://registry.yarnpkg.com/apollo-codegen-typescript/-/apollo-codegen-typescript-0.40.0.tgz#3082ecc37e7b7b3453a33f4063a7db85c4739c87"
+  integrity sha512-YhXmVM9pjmNE1T2OQFlpi6NhqBAZsfeFMQzSItdZDzaqP7KndvFV3QhHDDHPDlIQon0O1RWLXvWZ4oH0N/4piQ==
   dependencies:
     "@babel/generator" "7.14.0"
     "@babel/types" "7.14.0"
-    apollo-codegen-core "^0.39.10"
+    apollo-codegen-core "^0.40.0"
     change-case "^4.0.0"
     common-tags "^1.5.1"
     inflected "^2.0.3"
@@ -8049,12 +8049,12 @@ apollo-graphql@^0.9.0, apollo-graphql@^0.9.2:
     lodash.sortby "^4.7.0"
     sha.js "^2.4.11"
 
-apollo-language-server@^1.25.9:
-  version "1.25.9"
-  resolved "https://registry.yarnpkg.com/apollo-language-server/-/apollo-language-server-1.25.9.tgz#808032c19129f07db003284f78df7e924071714a"
-  integrity sha512-q1x8wLs/xMMoANACY4/TbjPhV0b0wz8i0yI509WK4s+zGUAbV/m5R8HeDntTSAvt4hkFRCTX6r9JrncCE4D+7w==
+apollo-language-server@^1.26.0:
+  version "1.26.0"
+  resolved "https://registry.yarnpkg.com/apollo-language-server/-/apollo-language-server-1.26.0.tgz#06a25935c612706ac8b3e58ae1ebbbaef999efab"
+  integrity sha512-gyeEaHxSqFmMA+t3H04THo7/gy3XyioyErEh8/31pb1zeVxLJHwLr9yyP/JmSaHsQJS0zammSqtyk8bXhRjfLA==
   dependencies:
-    "@apollo/federation" "0.23.2"
+    "@apollo/federation" "0.24.0"
     "@apollographql/apollo-tools" "^0.5.0"
     "@apollographql/graphql-language-service-interface" "^2.0.2"
     "@endemolshinegroup/cosmiconfig-typescript-loader" "^1.0.0"
@@ -8415,9 +8415,9 @@ apollo-utilities@1.3.4, apollo-utilities@^1.0.0, apollo-utilities@^1.0.1, apollo
     tslib "^1.10.0"
 
 apollo@^2.21.2:
-  version "2.32.13"
-  resolved "https://registry.yarnpkg.com/apollo/-/apollo-2.32.13.tgz#46de73a3580a956431e75c8e0d75de9c2dc5f1da"
-  integrity sha512-lEglFjzPRQdZy/kHY9n3B4ClT88jVOk+gEHLZVUtsrdjliOgZ76NmSGAVEW6K2ZmBUT/suu1W6HOjH4bJkW4pA==
+  version "2.33.0"
+  resolved "https://registry.yarnpkg.com/apollo/-/apollo-2.33.0.tgz#d1c82c16faa06f7a721d6c96634babbee17df1b8"
+  integrity sha512-dpaxUsILQUXYHBUYMk9yMf9mhFa7d+f3fsOIWmwKjH6g+VA5+h7RMbqI22rzgbHQpzUWh4awQCBt8vlRCzdWyw==
   dependencies:
     "@apollographql/apollo-tools" "^0.5.0"
     "@oclif/command" "1.8.0"
@@ -8428,14 +8428,14 @@ apollo@^2.21.2:
     "@oclif/plugin-not-found" "1.2.4"
     "@oclif/plugin-plugins" "1.10.0"
     "@oclif/plugin-warn-if-update-available" "1.7.0"
-    apollo-codegen-core "^0.39.10"
-    apollo-codegen-flow "^0.37.10"
-    apollo-codegen-scala "^0.38.10"
-    apollo-codegen-swift "^0.39.10"
-    apollo-codegen-typescript "^0.39.10"
+    apollo-codegen-core "^0.40.0"
+    apollo-codegen-flow "^0.38.0"
+    apollo-codegen-scala "^0.39.0"
+    apollo-codegen-swift "^0.40.0"
+    apollo-codegen-typescript "^0.40.0"
     apollo-env "^0.10.0"
     apollo-graphql "^0.9.2"
-    apollo-language-server "^1.25.9"
+    apollo-language-server "^1.26.0"
     chalk "2.4.2"
     cli-ux "5.5.1"
     env-ci "5.0.2"
@@ -10586,9 +10586,9 @@ caniuse-api@^3.0.0:
     lodash.uniq "^4.5.0"
 
 caniuse-lite@^1.0.0, caniuse-lite@^1.0.30001109, caniuse-lite@^1.0.30001125, caniuse-lite@^1.0.30001219:
-  version "1.0.30001220"
-  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001220.tgz#c080e1c8eefb99f6cc9685da6313840bdbaf4c36"
-  integrity sha512-pjC2T4DIDyGAKTL4dMvGUQaMUHRmhvPpAgNNTa14jaBWHu+bLQgvpFqElxh9L4829Fdx0PlKiMp3wnYldRtECA==
+  version "1.0.30001221"
+  resolved "https://registry.yarnpkg.com/caniuse-lite/-/caniuse-lite-1.0.30001221.tgz#b916721ddf59066cfbe96c5c9a77cf7ae5c52e65"
+  integrity sha512-b9TOZfND3uGSLjMOrLh8XxSQ41x8mX+9MLJYDM4AAHLfaZHttrLNPrScWjVnBITRZbY5sPpCt7X85n7VSLZ+/g==
 
 capital-case@^1.0.4:
   version "1.0.4"
@@ -14007,9 +14007,9 @@ electron-redux@^1.5.4:
     redux "^4.0.1"
 
 electron-to-chromium@^1.3.564, electron-to-chromium@^1.3.723:
-  version "1.3.725"
-  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.725.tgz#04fc83f9189169aff50f0a00c6b4090b910cba85"
-  integrity sha512-2BbeAESz7kc6KBzs7WVrMc1BY5waUphk4D4DX5dSQXJhsc3tP5ZFaiyuL0AB7vUKzDYpIeYwTYlEfxyjsGUrhw==
+  version "1.3.726"
+  resolved "https://registry.yarnpkg.com/electron-to-chromium/-/electron-to-chromium-1.3.726.tgz#6d3c577e5f5a48904ba891464740896c05e3bdb1"
+  integrity sha512-dw7WmrSu/JwtACiBzth8cuKf62NKL1xVJuNvyOg0jvruN/n4NLtGYoTzciQquCPNaS2eR+BT5GrxHbslfc/w1w==
 
 electron-updater@^4.3.4:
   version "4.3.8"
