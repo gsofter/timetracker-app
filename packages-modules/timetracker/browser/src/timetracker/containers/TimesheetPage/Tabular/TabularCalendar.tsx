@@ -40,16 +40,15 @@ interface ITabularCalendar {
   selectedUser: string;
   projectsApproval: IProjectsApproval;
   projectsMap: Map<string, IProject>;
+  loading?: boolean;
   handleRemoveDuration: Function;
   updateTimeRecord: Function;
   createTimeRecord: Function;
   createTimesheet: Function;
-  setPathWeekStart: Function;
 }
 
 export const TabularCalendar = ({
   weekStart,
-  setPathWeekStart,
   records,
   projects,
   timesheet,
@@ -71,23 +70,6 @@ export const TabularCalendar = ({
     const rows = newRows.filter((pId) => unApprovals.findIndex((upId) => upId === pId) === -1);
     setNewRows(rows);
   }, [unApprovals]);
-  const onClickBack = (event) => {
-    event.preventDefault();
-    const newWeekStart = moment(weekStart).add('-1', 'week');
-    setPathWeekStart(newWeekStart);
-  };
-
-  const onClickNext = (event) => {
-    event.preventDefault();
-    const newWeekStart = moment(weekStart).add('1', 'week');
-    setPathWeekStart(newWeekStart);
-  };
-
-  const onClickToday = (event) => {
-    event.preventDefault();
-    const newWeekStart = moment().startOf('week');
-    setPathWeekStart(newWeekStart);
-  };
 
   const getProjectTotalDuration = (projectId, approved: boolean) => {
     return calcDuration(
@@ -221,6 +203,7 @@ export const TabularCalendar = ({
                     dateStr={curDay.format(dateFormat)}
                     projectId={project.id}
                     records={curDayRecords}
+                    userId={selectedUser}
                     createTimeRecord={createTimeRecord}
                     updateTimeRecord={updateTimeRecord}
                     projects={projects}
@@ -266,6 +249,7 @@ export const TabularCalendar = ({
                   <TimesheetInput
                     dateStr={curDay.format(dateFormat)}
                     projectId={project.id}
+                    userId={selectedUser}
                     records={curDayRecords}
                     createTimeRecord={createTimeRecord}
                     updateTimeRecord={updateTimeRecord}
@@ -308,6 +292,7 @@ export const TabularCalendar = ({
                   <TimesheetInput
                     dateStr={curDay.format(dateFormat)}
                     projectId={pId}
+                    userId={selectedUser}
                     createTimeRecord={createTimeRecord}
                     updateTimeRecord={updateTimeRecord}
                     projects={projects}
@@ -387,26 +372,6 @@ export const TabularCalendar = ({
           &nbsp; approval?
         </p>
       </Modal>
-      <Row className="toolBar">
-        <Col xs={24} md={6} className="control">
-          <Button onClick={onClickToday}> Today </Button>
-          <Button onClick={onClickBack}> Back </Button>
-          <Button onClick={onClickNext}> Next </Button>
-        </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'center' }}>
-          <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
-          <span className="duration-end">
-            {moment(weekStart).format('MM') === moment(weekStart).add(1, 'week').format('MM')
-              ? moment(weekStart).add(1, 'week').format('DD')
-              : moment(weekStart).add(1, 'week').format('MMMM DD')}
-          </span>
-        </Col>
-        <Col xs={24} md={6} className="control" style={{ textAlign: 'right' }}>
-          <Button> Day </Button>
-          <Button> Week </Button>
-          <Button> Month </Button>
-        </Col>
-      </Row>
 
       <table className={css(styles.calendarTable)}>
         <thead>{HeaderRows()}</thead>
