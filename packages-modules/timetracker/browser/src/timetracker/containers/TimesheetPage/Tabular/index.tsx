@@ -130,8 +130,8 @@ const TabularCalendarWrapper = ({
   // create timeSheet
   const createTimesheet = (request: ITimesheetCreateRequest) => {
     createTimesheetMutation({ variables: { request } })
-      .then(() => {
-        refetchApproval();
+      .then(async () => {
+        await refetchApproval();
         message.success('Timesheet Created');
       })
       .catch((error) => {
@@ -139,8 +139,8 @@ const TabularCalendarWrapper = ({
       });
   };
 
-  const memberTimesheet = () => {
-    return _.get(approvalData, 'getDurationTimesheets', []).find((sheet) => sheet.userId === selectedUser);
+  const memberTimesheet = (userId: string) => {
+    return _.get(approvalData, 'getDurationTimesheets', []).find((sheet) => sheet.userId === userId);
   };
 
   const projectsApproval = () => {
@@ -232,7 +232,7 @@ const TabularCalendarWrapper = ({
                 projects={projects}
                 projectsMap={getProjectsMap()}
                 projectsApproval={projectsApproval()}
-                timesheet={memberTimesheet()}
+                timesheet={memberTimesheet(selectedUser)}
                 selectedUser={selectedUser}
                 members={members}
                 loading={
@@ -262,7 +262,7 @@ const TabularCalendarWrapper = ({
                     projects={projects}
                     projectsMap={getProjectsMap()}
                     projectsApproval={projectsApproval()}
-                    timesheet={memberTimesheet()}
+                    timesheet={memberTimesheet(mem.userId)}
                     selectedUser={mem.userId}
                     members={members}
                     loading={

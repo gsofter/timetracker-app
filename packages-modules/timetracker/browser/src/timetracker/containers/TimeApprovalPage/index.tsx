@@ -9,9 +9,8 @@ import {
 } from '../../../generated-models';
 import { ITimesheetState, ITimesheetCreateRequest } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
-import CSS from 'csstype';
 import TimeReportTable from './TimeReportTable';
-import { useViewPermissions, useManagePermissions } from '../../hooks';
+import { useViewPermissions } from '../../hooks';
 import { useSelector } from 'react-redux';
 
 const { TabPane } = Tabs;
@@ -57,8 +56,7 @@ const TimeReportWrapper = () => {
   const filteredTimesheets = (state?: ITimesheetState) => {
     const memStrArr = filteredMembers().map((mem) => mem.userId);
     return _.get(data, 'getTimesheets', []).filter(
-      (timesheet) =>
-        (timesheet.state === state || state === undefined) && memStrArr.includes(timesheet.userId),
+      (timesheet) => (timesheet.state === state || state === undefined) && memStrArr.includes(timesheet.userId),
     );
   };
 
