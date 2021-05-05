@@ -17,7 +17,7 @@ const Home = React.lazy(() => import('./containers/Home'));
 const TimeTracker = React.lazy(() => import('./containers/TimerPage'));
 const Timesheet = React.lazy(() => import('./containers/TimesheetPage'));
 const TimeApproval = React.lazy(() => import('./containers/TimeApprovalPage'));
-const Reports = React.lazy(() => import('./containers/ReportsPage'));
+const Reports = React.lazy(() => import('../DashboardReport'));
 
 const OrganizationSettings = () => (
   <WithPermissionEnhanced

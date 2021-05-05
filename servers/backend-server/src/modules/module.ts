@@ -12,6 +12,7 @@ import { config } from '../config';
 export const settings = {
     // mongoConnection: generateMongo(config.MONGO_URL),
     subTopic: config.CONNECTION_ID, // usually versioning
+    adminApiNamespace: 'api-admin',
 };
 
 const defaultModule = () =>
@@ -31,7 +32,6 @@ let DevModules = new Feature({});
 
 if (config.isDev) {
     const MailingModule = require('@container-stack/mailing-api-server');
-    console.log('--Mailining', MailingModule);
     DevModules = MailingModule.default;
 }
 
@@ -45,3 +45,5 @@ export default new Feature<any>(
     OrganizationModule,
     DevModules,
 );
+
+export const ApiModule = new Feature<any>(DevModules);

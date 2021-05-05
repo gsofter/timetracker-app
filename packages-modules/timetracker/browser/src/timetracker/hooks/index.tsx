@@ -24,10 +24,8 @@ export const useTimeformat = () => {
   });
 
   return {
-    timeFormat:
-      !timeFormatData || loadingDateFormat ? 'HH:mm:ss' : timeFormatData?.resolveConfiguration,
-    dateFormat:
-      !dateFormatData || loadingDateFormat ? 'YYYY-MM-DD' : dateFormatData?.resolveConfiguration,
+    timeFormat: !timeFormatData || loadingDateFormat ? 'HH:mm:ss' : timeFormatData?.resolveConfiguration,
+    dateFormat: !dateFormatData || loadingDateFormat ? 'YYYY-MM-DD' : dateFormatData?.resolveConfiguration,
   };
 };
 
@@ -74,23 +72,17 @@ export const useRound = () => {
     if (data && data?.resolveConfiguration) setRoundValue(data?.resolveConfiguration);
     if (typeData && typeData?.resolveConfiguration) {
       if (typeData?.resolveConfiguration === TimeRoundedType.ROUND_UP_TO) setRoundType('ceil');
-      else if (typeData?.resolveConfiguration === TimeRoundedType.ROUND_TO_NEAREST)
-        setRoundType('round');
-      else if (typeData?.resolveConfiguration === TimeRoundedType.ROUND_DOWN_TO)
-        setRoundType('floor');
+      else if (typeData?.resolveConfiguration === TimeRoundedType.ROUND_TO_NEAREST) setRoundType('round');
+      else if (typeData?.resolveConfiguration === TimeRoundedType.ROUND_DOWN_TO) setRoundType('floor');
     }
     setRounded(
-      roundedData && roundedData?.resolveConfiguration !== undefined
-        ? roundedData?.resolveConfiguration
-        : false,
+      roundedData && roundedData?.resolveConfiguration !== undefined ? roundedData?.resolveConfiguration : false,
     );
   }, [loadingRoundData, loadingRoundType, loadingRounded]);
 
   useEffect(() => {
     setRounded(
-      roundedData && roundedData?.resolveConfiguration !== undefined
-        ? roundedData?.resolveConfiguration
-        : false,
+      roundedData && roundedData?.resolveConfiguration !== undefined ? roundedData?.resolveConfiguration : false,
     );
   }, [loadingRounded, roundedData]);
 
@@ -99,6 +91,7 @@ export const useRound = () => {
     roundValue,
     rounded,
     refetchRounded,
+    setRounded,
   };
 };
 

@@ -8,7 +8,6 @@ import { ITimeRecord, ITimeRecordRequest } from '@admin-layout/timetracker-core'
 import * as _ from 'lodash';
 import DurationInput from '../DurationInput';
 import TimesheetEditModal from './TimesheetEditModal';
-import { useSelector } from 'react-redux';
 
 export interface ITimesheetInputProps {
   dateStr: string;
@@ -17,23 +16,15 @@ export interface ITimesheetInputProps {
   projects: any[];
   projectTitle?: string;
   disabled?: boolean;
+  userId?: string;
   updateTimeRecord: Function;
   createTimeRecord: Function;
 }
 
 export const TimesheetInput = (props: ITimesheetInputProps) => {
-  const {
-    dateStr,
-    records,
-    projectId,
-    createTimeRecord,
-    updateTimeRecord,
-    projectTitle,
-    disabled,
-  } = props;
+  const { dateStr, records, projectId, userId, createTimeRecord, updateTimeRecord, projectTitle, disabled } = props;
   const { css } = useFela();
   const [isModalVisible, setIsModalVisible] = useState(false);
-  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const handleMore = (event) => {
     event.preventDefault();
     setIsModalVisible(true);
@@ -87,11 +78,7 @@ export const TimesheetInput = (props: ITimesheetInputProps) => {
       <div className={css(styles.timesheet)}>
         {records && records.length > 0 ? (
           <>
-            <DurationInput
-              duration={totalDuration() as Number}
-              onChange={handleChangeDuration}
-              disabled={disabled}
-            />
+            <DurationInput duration={totalDuration() as Number} onChange={handleChangeDuration} disabled={disabled} />
             <Button icon={<MoreOutlined />} onClick={handleMore} disabled={disabled} />
           </>
         ) : (
