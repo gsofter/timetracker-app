@@ -1,6 +1,6 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { PageContainer } from '@admin-layout/components';
-import { Tabs, message } from 'antd';
+import { Tabs, message, Spin } from 'antd';
 import { IPermissionType } from '@adminide-stack/core';
 import {
   useGetTimesheetsQuery,
@@ -33,7 +33,9 @@ const TimeReportWrapper = () => {
   const { others: viewOtherPermit, self: viewSelfPermit } = useViewPermissions();
   const [updateMutation] = useUpdateTimesheetMutation();
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
-
+  useEffect(() => {
+    refetch();
+  }, []);
   const updateTimesheet = (sheetId: string, request: ITimesheetCreateRequest) => {
     updateMutation({ variables: { sheetId, request } })
       .then(() => {
@@ -60,52 +62,53 @@ const TimeReportWrapper = () => {
     );
   };
 
-  if (loading) return <> Loading... </>;
   return (
-    <PageContainer>
-      <Tabs defaultActiveKey="1" onChange={handleChangeTabView}>
-        <TabPane tab="Opened" key="1">
-          <TimeReportTable
-            timesheets={filteredTimesheets(ITimesheetState.OPEN)}
-            viewMode={VIEW_MODE.OPEN}
-            members={_.get(membersData, 'getOrganizationMembers', [])}
-            updateTimesheet={updateTimesheet}
-          />
-        </TabPane>
-        <TabPane tab="Submitted" key="2">
-          <TimeReportTable
-            timesheets={filteredTimesheets(ITimesheetState.SUBMITTED)}
-            viewMode={VIEW_MODE.SUBMITTED}
-            members={_.get(membersData, 'getOrganizationMembers', [])}
-            updateTimesheet={updateTimesheet}
-          />
-        </TabPane>
-        <TabPane tab="Approved" key="3">
-          <TimeReportTable
-            timesheets={filteredTimesheets(ITimesheetState.APPROVED)}
-            viewMode={VIEW_MODE.APPROVED}
-            members={_.get(membersData, 'getOrganizationMembers', [])}
-            updateTimesheet={updateTimesheet}
-          />
-        </TabPane>
-        <TabPane tab="Denied" key="4">
-          <TimeReportTable
-            timesheets={filteredTimesheets(ITimesheetState.DENYED)}
-            viewMode={VIEW_MODE.DENYED}
-            members={_.get(membersData, 'getOrganizationMembers', [])}
-            updateTimesheet={updateTimesheet}
-          />
-        </TabPane>
-        <TabPane tab="All" key="5">
-          <TimeReportTable
-            timesheets={filteredTimesheets()}
-            viewMode={VIEW_MODE.ALL}
-            members={_.get(membersData, 'getOrganizationMembers', [])}
-            updateTimesheet={updateTimesheet}
-          />
-        </TabPane>
-      </Tabs>
-    </PageContainer>
+    <Spin spinning={loading}>
+      <PageContainer>
+        <Tabs defaultActiveKey="1" onChange={handleChangeTabView}>
+          <TabPane tab="Opened" key="1">
+            <TimeReportTable
+              timesheets={filteredTimesheets(ITimesheetState.OPEN)}
+              viewMode={VIEW_MODE.OPEN}
+              members={_.get(membersData, 'getOrganizationMembers', [])}
+              updateTimesheet={updateTimesheet}
+            />
+          </TabPane>
+          <TabPane tab="Submitted" key="2">
+            <TimeReportTable
+              timesheets={filteredTimesheets(ITimesheetState.SUBMITTED)}
+              viewMode={VIEW_MODE.SUBMITTED}
+              members={_.get(membersData, 'getOrganizationMembers', [])}
+              updateTimesheet={updateTimesheet}
+            />
+          </TabPane>
+          <TabPane tab="Approved" key="3">
+            <TimeReportTable
+              timesheets={filteredTimesheets(ITimesheetState.APPROVED)}
+              viewMode={VIEW_MODE.APPROVED}
+              members={_.get(membersData, 'getOrganizationMembers', [])}
+              updateTimesheet={updateTimesheet}
+            />
+          </TabPane>
+          <TabPane tab="Denied" key="4">
+            <TimeReportTable
+              timesheets={filteredTimesheets(ITimesheetState.DENYED)}
+              viewMode={VIEW_MODE.DENYED}
+              members={_.get(membersData, 'getOrganizationMembers', [])}
+              updateTimesheet={updateTimesheet}
+            />
+          </TabPane>
+          <TabPane tab="All" key="5">
+            <TimeReportTable
+              timesheets={filteredTimesheets()}
+              viewMode={VIEW_MODE.ALL}
+              members={_.get(membersData, 'getOrganizationMembers', [])}
+              updateTimesheet={updateTimesheet}
+            />
+          </TabPane>
+        </Tabs>
+      </PageContainer>
+    </Spin>
   );
 };
 
