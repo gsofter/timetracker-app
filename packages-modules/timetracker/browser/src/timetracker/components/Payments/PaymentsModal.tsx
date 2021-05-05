@@ -99,10 +99,20 @@ export const PaymentsModal = (props: IPaymentsModal) => {
                     </div>
                 </Item>
                 <div className={css(styles.flex)}>
-                    <Item className={css(styles.width50, styles.mr20)} label={'Pay Rate'} name={'payRate'}>
+                    <Item
+                        className={css(styles.width50, styles.mr20)}
+                        rules={[{ required: true, message: 'Please enter pay rate!' }]}
+                        label={'Pay Rate'}
+                        name={'payRate'}
+                    >
                         <Input type={'number'} addonAfter={'USD/hr'}/>
                     </Item>
-                    <Item className={css(styles.width50)} label={'Bill Rate'} name={'billRate'}>
+                    <Item
+                        className={css(styles.width50)}
+                        rules={[{ required: true, message: 'Please enter bill rate!' }]}
+                        label={'Bill Rate'}
+                        name={'billRate'}
+                    >
                         <Input type={'number'} addonAfter={'USD/hr'}/>
                     </Item>
                 </div>
