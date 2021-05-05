@@ -11,7 +11,7 @@ export default new Feature(
     //  ConnectedReactRouter, 
     //  ApolloCounter, 
     //  Fela, 
-    //  Account, 
+    //  Account,
     Organization
 );
 

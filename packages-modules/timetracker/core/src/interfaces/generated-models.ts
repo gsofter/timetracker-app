@@ -1234,7 +1234,8 @@ export type IMutationupdateTimesheetArgs = {
 
 
 export type IMutationupdateTimesheetStatusArgs = {
-  request?: Maybe<ITimesheetCreateRequest>;
+  sheetId?: Maybe<Scalars['String']>;
+  state?: Maybe<ITimesheetState>;
 };
 
 
@@ -2434,6 +2435,7 @@ export type ITimeRecord = {
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   taskId?: Maybe<Scalars['String']>;
   taskName?: Maybe<Scalars['String']>;
+  timesheetId?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
 };
 
@@ -2445,6 +2447,7 @@ export type ITimeRecordRequest = {
   startTime?: Maybe<Scalars['DateTime']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   taskName?: Maybe<Scalars['String']>;
+  timesheetId?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
 };
 
@@ -2767,17 +2770,6 @@ export const enum IVisibility {
   public = 'public'
 };
 
-export type IGetTagsQueryVariables = {};
-
-
-export type IGetTagsQuery = (
-  { __typename?: 'Query' }
-  & { getTags?: Maybe<Array<Maybe<(
-    { __typename?: 'Tag' }
-    & Pick<ITag, 'id' | 'name'>
-  )>>> }
-);
-
 export type ICreateTimeRecordMutationVariables = {
   request?: Maybe<ITimeRecordRequest>;
 };
@@ -2852,6 +2844,17 @@ export type IUpdateTimesheetMutation = (
   & Pick<IMutation, 'updateTimesheet'>
 );
 
+export type IUpdateTimesheetStatusMutationVariables = {
+  sheetId?: Maybe<Scalars['String']>;
+  state?: Maybe<ITimesheetState>;
+};
+
+
+export type IUpdateTimesheetStatusMutation = (
+  { __typename?: 'Mutation' }
+  & Pick<IMutation, 'updateTimesheetStatus'>
+);
+
 export type IGetDurationTimeRecordsQueryVariables = {
   startTime?: Maybe<Scalars['DateTime']>;
   endTime?: Maybe<Scalars['DateTime']>;
@@ -2862,7 +2865,7 @@ export type IGetDurationTimeRecordsQuery = (
   { __typename?: 'Query' }
   & { getDurationTimeRecords?: Maybe<Array<Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId' | 'editable'>
+    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId' | 'timesheetId'>
   )>>> }
 );
 
@@ -2922,7 +2925,7 @@ export type IGetTimeRecordsQuery = (
   { __typename?: 'Query' }
   & { getTimeRecords?: Maybe<Array<Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId'>
+    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId' | 'timesheetId'>
   )>>> }
 );
 
@@ -2952,15 +2955,6 @@ export type IGetMembersQuery = (
 );
 
 
-export const GetTagsDocument = gql`
-    query GetTags {
-  getTags @client {
-    id
-    name
-  }
-}
-    `;
-export type GetTagsQueryResult = ApolloReactCommon.QueryResult<IGetTagsQuery, IGetTagsQueryVariables>;
 export const CreateTimeRecordDocument = gql`
     mutation CreateTimeRecord($request: TimeRecordRequest) {
   createTimeRecord(request: $request)
@@ -3010,6 +3004,13 @@ export const UpdateTimesheetDocument = gql`
     `;
 export type UpdateTimesheetMutationResult = ApolloReactCommon.MutationResult<IUpdateTimesheetMutation>;
 export type UpdateTimesheetMutationOptions = ApolloReactCommon.BaseMutationOptions<IUpdateTimesheetMutation, IUpdateTimesheetMutationVariables>;
+export const UpdateTimesheetStatusDocument = gql`
+    mutation UpdateTimesheetStatus($sheetId: String, $state: TimesheetState) {
+  updateTimesheetStatus(sheetId: $sheetId, state: $state)
+}
+    `;
+export type UpdateTimesheetStatusMutationResult = ApolloReactCommon.MutationResult<IUpdateTimesheetStatusMutation>;
+export type UpdateTimesheetStatusMutationOptions = ApolloReactCommon.BaseMutationOptions<IUpdateTimesheetStatusMutation, IUpdateTimesheetStatusMutationVariables>;
 export const GetDurationTimeRecordsDocument = gql`
     query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime) {
   getDurationTimeRecords(startTime: $startTime, endTime: $endTime) {
@@ -3021,7 +3022,7 @@ export const GetDurationTimeRecordsDocument = gql`
     projectId
     isBillable
     userId
-    editable
+    timesheetId
   }
 }
     `;
@@ -3088,6 +3089,7 @@ export const GetTimeRecordsDocument = gql`
     projectId
     isBillable
     userId
+    timesheetId
   }
 }
     `;
@@ -4725,6 +4727,7 @@ export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolver
   tags?: Resolver<Maybe<Array<Maybe<IResolversTypes['String']>>>, ParentType, ContextType>,
   taskId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   taskName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  timesheetId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };

@@ -3,8 +3,8 @@
 import * as SchemaTypes from '@admin-layout/timetracker-core';
 
 import gql from 'graphql-tag';
-import * as React from 'react';
 import * as ApolloReactCommon from '@apollo/react-common';
+import * as React from 'react';
 import * as ApolloReactComponents from '@apollo/react-components';
 import * as ApolloReactHooks from '@apollo/react-hooks';
 export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
@@ -26,45 +26,6 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 
-export const GetTagsDocument = gql`
-    query GetTags {
-  getTags @client {
-    id
-    name
-  }
-}
-    `;
-export type GetTagsComponentProps = Omit<ApolloReactComponents.QueryComponentOptions<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>, 'query'>;
-
-    export const GetTagsComponent = (props: GetTagsComponentProps) => (
-      <ApolloReactComponents.Query<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables> query={GetTagsDocument} {...props} />
-    );
-    
-
-/**
- * __useGetTagsQuery__
- *
- * To run a query within a React component, call `useGetTagsQuery` and pass it any options that fit your needs.
- * When your component renders, `useGetTagsQuery` returns an object from Apollo Client that contains loading, error, and data properties
- * you can use to render your UI.
- *
- * @param baseOptions options that will be passed into the query, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
- *
- * @example
- * const { data, loading, error } = useGetTagsQuery({
- *   variables: {
- *   },
- * });
- */
-export function useGetTagsQuery(baseOptions?: ApolloReactHooks.QueryHookOptions<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>) {
-        return ApolloReactHooks.useQuery<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>(GetTagsDocument, baseOptions);
-      }
-export function useGetTagsLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryHookOptions<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>) {
-          return ApolloReactHooks.useLazyQuery<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>(GetTagsDocument, baseOptions);
-        }
-export type GetTagsQueryHookResult = ReturnType<typeof useGetTagsQuery>;
-export type GetTagsLazyQueryHookResult = ReturnType<typeof useGetTagsLazyQuery>;
-export type GetTagsQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetTagsQuery, SchemaTypes.IGetTagsQueryVariables>;
 export const CreateTimeRecordDocument = gql`
     mutation CreateTimeRecord($request: TimeRecordRequest) {
   createTimeRecord(request: $request)
@@ -321,6 +282,43 @@ export function useUpdateTimesheetMutation(baseOptions?: ApolloReactHooks.Mutati
 export type UpdateTimesheetMutationHookResult = ReturnType<typeof useUpdateTimesheetMutation>;
 export type UpdateTimesheetMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IUpdateTimesheetMutation>;
 export type UpdateTimesheetMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IUpdateTimesheetMutation, SchemaTypes.IUpdateTimesheetMutationVariables>;
+export const UpdateTimesheetStatusDocument = gql`
+    mutation UpdateTimesheetStatus($sheetId: String, $state: TimesheetState) {
+  updateTimesheetStatus(sheetId: $sheetId, state: $state)
+}
+    `;
+export type IUpdateTimesheetStatusMutationFn = ApolloReactCommon.MutationFunction<SchemaTypes.IUpdateTimesheetStatusMutation, SchemaTypes.IUpdateTimesheetStatusMutationVariables>;
+export type UpdateTimesheetStatusComponentProps = Omit<ApolloReactComponents.MutationComponentOptions<SchemaTypes.IUpdateTimesheetStatusMutation, SchemaTypes.IUpdateTimesheetStatusMutationVariables>, 'mutation'>;
+
+    export const UpdateTimesheetStatusComponent = (props: UpdateTimesheetStatusComponentProps) => (
+      <ApolloReactComponents.Mutation<SchemaTypes.IUpdateTimesheetStatusMutation, SchemaTypes.IUpdateTimesheetStatusMutationVariables> mutation={UpdateTimesheetStatusDocument} {...props} />
+    );
+    
+
+/**
+ * __useUpdateTimesheetStatusMutation__
+ *
+ * To run a mutation, you first call `useUpdateTimesheetStatusMutation` within a React component and pass it any options that fit your needs.
+ * When your component renders, `useUpdateTimesheetStatusMutation` returns a tuple that includes:
+ * - A mutate function that you can call at any time to execute the mutation
+ * - An object with fields that represent the current status of the mutation's execution
+ *
+ * @param baseOptions options that will be passed into the mutation, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options-2;
+ *
+ * @example
+ * const [updateTimesheetStatusMutation, { data, loading, error }] = useUpdateTimesheetStatusMutation({
+ *   variables: {
+ *      sheetId: // value for 'sheetId'
+ *      state: // value for 'state'
+ *   },
+ * });
+ */
+export function useUpdateTimesheetStatusMutation(baseOptions?: ApolloReactHooks.MutationHookOptions<SchemaTypes.IUpdateTimesheetStatusMutation, SchemaTypes.IUpdateTimesheetStatusMutationVariables>) {
+        return ApolloReactHooks.useMutation<SchemaTypes.IUpdateTimesheetStatusMutation, SchemaTypes.IUpdateTimesheetStatusMutationVariables>(UpdateTimesheetStatusDocument, baseOptions);
+      }
+export type UpdateTimesheetStatusMutationHookResult = ReturnType<typeof useUpdateTimesheetStatusMutation>;
+export type UpdateTimesheetStatusMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IUpdateTimesheetStatusMutation>;
+export type UpdateTimesheetStatusMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IUpdateTimesheetStatusMutation, SchemaTypes.IUpdateTimesheetStatusMutationVariables>;
 export const GetDurationTimeRecordsDocument = gql`
     query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime) {
   getDurationTimeRecords(startTime: $startTime, endTime: $endTime) {
@@ -332,7 +330,7 @@ export const GetDurationTimeRecordsDocument = gql`
     projectId
     isBillable
     userId
-    editable
+    timesheetId
   }
 }
     `;
@@ -553,6 +551,7 @@ export const GetTimeRecordsDocument = gql`
     projectId
     isBillable
     userId
+    timesheetId
   }
 }
     `;

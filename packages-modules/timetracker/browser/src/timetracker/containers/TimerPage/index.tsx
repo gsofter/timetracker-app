@@ -8,21 +8,19 @@ import {
   useUpdateTimeRecordMutation,
   useGetProjectsQuery,
 } from '../../../generated-models';
-import {
-  ITimeRecordRequest,
-  ITimeRecord,
-} from '@admin-layout/timetracker-core';
+import { ITimeRecordRequest, ITimeRecord, IPermissionType } from '@admin-layout/timetracker-core';
 import { message, Spin } from 'antd';
 import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
 import { useSelector } from 'react-redux';
 import { useFirstWeekDay } from '../../hooks';
 import TimerActivity from './TimerActivity';
+import { useCreatePermissions, useDeletePermissions } from '../../hooks';
 
-const TimeTrackerWrapper = props => {
+const TimeTrackerWrapper = (props) => {
   const { setTime, reset, stop, start } = props.timer;
-  const userId = useSelector<any>(state => state.user.auth0UserId) as string;
-  const { data, error, refetch, loading } = useGetTimeRecordsQuery({ variables: { userId }});
+  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
+  const { data, error, refetch, loading } = useGetTimeRecordsQuery({ variables: { userId } });
   const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
   const [createMutation] = useCreateTimeRecordMutation();
   const [removeMutation] = useRemoveTimeRecordMutation();
@@ -30,6 +28,8 @@ const TimeTrackerWrapper = props => {
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { value: dowValue } = useFirstWeekDay();
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
+  const { self: createPermit } = useCreatePermissions();
+  const { self: deletePermit } = useDeletePermissions();
   useEffect(() => {
     moment.locale('en', {
       week: {
@@ -37,30 +37,38 @@ const TimeTrackerWrapper = props => {
       },
     });
 
-    setWeekStart(moment().startOf('week'))
-  }, [dowValue])
+    setWeekStart(moment().startOf('week'));
+  }, [dowValue]);
 
   // create time record
   const createTimeRecord = (request: ITimeRecordRequest) => {
+    if (createPermit !== IPermissionType.Allow) {
+      message.warning('Permission Not Allowed');
+      return;
+    }
     createMutation({ variables: { request } })
       .then(() => {
         message.info('TimeRecord created');
         plRefetch();
         refetch();
       })
-      .catch(error => {
+      .catch((error) => {
         message.error(error.message);
       });
   };
 
   // remove time record
   const removeTimeRecord = (recordId: string) => {
+    if (deletePermit !== IPermissionType.Allow) {
+      message.warning('Permission Not Allowed');
+      return;
+    }
     removeMutation({ variables: { recordId } })
       .then(() => {
         message.success('TimeRecord Removed');
         refetch();
       })
-      .catch(error => {
+      .catch((error) => {
         message.error(error.message);
       });
   };
@@ -73,7 +81,7 @@ const TimeTrackerWrapper = props => {
         refetch();
         plRefetch();
       })
-      .catch(error => {
+      .catch((error) => {
         message.error(error.message);
       });
   };
@@ -86,7 +94,7 @@ const TimeTrackerWrapper = props => {
         plRefetch();
         resetTimerValues();
       })
-      .catch(error => {
+      .catch((error) => {
         message.error(error.message);
       });
   };
@@ -146,11 +154,11 @@ const TimeTrackerWrapper = props => {
   );
 };
 
-const withTimer = timerProps => WrappedComponent => wrappedComponentProps => (
+const withTimer = (timerProps) => (WrappedComponent) => (wrappedComponentProps) => (
   <Timer {...timerProps}>
-    {timerRenderProps => <WrappedComponent {...wrappedComponentProps} timer={timerRenderProps} />}
+    {(timerRenderProps) => <WrappedComponent {...wrappedComponentProps} timer={timerRenderProps} />}
   </Timer>
 );
 
-export { moment }
+export { moment };
 export default withTimer({ startImmediately: false })(TimeTrackerWrapper);

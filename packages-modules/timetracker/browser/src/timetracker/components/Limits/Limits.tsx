@@ -14,17 +14,17 @@ export const Limits = (props) => {
 
     const { data: weeklyLimitConfig, loading: loadWeekly, updateConfiguration } = useSetting({
         configKey: 'timetracker.user.recurringWeeklyLimit',
-        overrides: props.value.record.name,
+        overrides: { overrideIdentifier: props.value.record.name },
     });
 
     const { data: dailyLimitConfig, loading: loadDaily } = useSetting({
         configKey: 'timetracker.user.recurringDailyLimit',
-        overrides: props.value.record.name,
+        overrides: { overrideIdentifier: props.value.record.name },
     });
 
     const { data: daysAllowedConfig, loading } = useSetting({
         configKey: 'timetracker.project.daysAllowedToWork',
-        overrides: props.value.record.name,
+        overrides: { overrideIdentifier: props.value.record.name },
     });
 
     const openLimitsModal = () => {

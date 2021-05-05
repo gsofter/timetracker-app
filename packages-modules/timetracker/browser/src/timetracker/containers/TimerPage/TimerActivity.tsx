@@ -14,11 +14,12 @@ import {
   ITimeRecordRequest,
   ITimeRecord,
   IProjects as IProject,
+  IPermissionType,
 } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import { formatDuration } from '../../services/timeRecordService';
 import { useSelector } from 'react-redux';
-import { useTimeformat } from '../../hooks';
+import { useTimeformat, useCreatePermissions, useDeletePermissions } from '../../hooks';
 import { TRACKER_MODE } from '../../constants';
 
 const splitTimersByDay = (timeRecords: [ITimeRecord], dateFormat): [ITimeRecord][] => {
@@ -58,12 +59,8 @@ const renderDayDateString = (date: string, dateFormat: string) => {
       moment(date).startOf('week').add('7', 'day').format(dateFormat)
     );
   }
-  return moment(date).calendar(null, {
-    sameDay: '[Today]',
-    lastDay: '[Yesterday]',
-    lastWeek: 'dddd',
-    sameElse: dateFormat,
-  });
+  if (moment(date).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) return 'Today';
+  else return moment(date).format(dateFormat);
 };
 
 interface ITimerActivityProps {
@@ -105,11 +102,12 @@ const TimerActivity = (props: ITimerActivityProps) => {
   const [mode, setMode] = useState(TRACKER_MODE.TRACK);
   const { timeFormat, dateFormat } = useTimeformat();
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
+  const { self: createPermit } = useCreatePermissions();
+  const { self: deletePermit } = useDeletePermissions();
   const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
     for (let i = 0; i < timeRecords.length; i++) {
-      totalTime +=
-        moment(timeRecords[i].endTime).valueOf() - moment(timeRecords[i].startTime).valueOf();
+      totalTime += moment(timeRecords[i].endTime).valueOf() - moment(timeRecords[i].startTime).valueOf();
     }
     return formatDuration(Math.floor(totalTime / 1000), timeFormat);
   };
@@ -137,8 +135,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
       projectId: currentTimeRecord.projectId,
       isBillable: currentTimeRecord.isBillable,
     };
-    if (currentTimeRecord.id === undefined || currentTimeRecord.id === '')
-      createTimeRecord(newTimeRecord);
+    if (currentTimeRecord.id === undefined || currentTimeRecord.id === '') createTimeRecord(newTimeRecord);
     else updateTimeRecord(currentTimeRecord.id, newTimeRecord);
   };
 
@@ -162,7 +159,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
     () =>
       _.debounce((timeRecord) => {
         updateTimeRecord(timeRecord.id, { ..._.omit(timeRecord, ['__typename', 'id']) });
-      }, 2000),
+      }, 800),
     [],
   );
 
@@ -197,6 +194,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
                 handleStart={startTimer}
                 handleStop={stopTimer}
                 setMode={setMode}
+                disable={createPermit !== IPermissionType.Allow}
                 createTimeRecord={createTimeRecord}
                 currentTimeRecord={currentTimeRecord}
                 updatePlayingTimeRecord={updatePlayingTimeRecord}
@@ -214,21 +212,21 @@ const TimerActivity = (props: ITimerActivityProps) => {
                   >
                     <div className="main-page__day-header">
                       <div className="main-page__day-date">
-                        {renderDayDateString(dayRecords[0].endTime, dateFormat)}
+                        {renderDayDateString(dayRecords[0].endTime, 'ddd, MMM DD')}
                       </div>
-                      <div className="main-page__day-date-all-time">
-                        Total time: {renderTotalTimeByDay(dayRecords)}
-                      </div>
+                      <div className="main-page__day-date-all-time">Total time: {renderTotalTimeByDay(dayRecords)}</div>
                     </div>
                     {dayRecords.map((timeRecord) => (
                       <TimerActivityItem
                         key={timeRecord.id}
                         timeRecord={timeRecord}
                         timeRecords={timeRecords}
+                        projects={projects}
+                        disablePlay={createPermit !== IPermissionType.Allow}
+                        disableDelete={deletePermit !== IPermissionType.Allow}
                         removeTimeRecord={removeTimeRecord}
                         updateTimeRecord={updateTimeRecord}
                         handlePlayTimer={handlePlayTimer}
-                        projects={projects}
                       />
                     ))}
                   </div>

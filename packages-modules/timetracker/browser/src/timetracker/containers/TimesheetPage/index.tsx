@@ -3,30 +3,21 @@ import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@admin-layout/components';
 import TabularCalendar from './Tabular';
 import TimesheetCalendar from './Calendar';
-import {
-  useGetProjectsQuery,
-  useGetMembersQuery,
-  useGetTagsQuery,
-  useGetOrganizationMembersQuery,
-} from '../../../generated-models';
+import { useGetProjectsQuery, useGetOrganizationMembersQuery } from '../../../generated-models';
 import { Row, Col, Switch, Form, Select, Spin } from 'antd';
-import {
-  IProjects as IProject,
-  ITag,
-  ITeamMember as IMember,
-  IOrgMember,
-} from '@admin-layout/timetracker-core';
+import { IProjects as IProject, ITag, IOrgMember } from '@admin-layout/timetracker-core';
+import { IPermissionType } from '@adminide-stack/core';
 import TimezonePicker from 'react-timezone';
-import { momentLocalizer, DateLocalizer } from 'react-big-calendar';
+import { momentLocalizer } from 'react-big-calendar';
 import moment, { Moment } from 'moment';
 import momentZ from 'moment-timezone';
 import { useLocation } from 'react-router';
 import qs from 'query-string';
 import { useHistory } from 'react-router';
-import { useFirstWeekDay } from '../../hooks';
+import { useFirstWeekDay, useViewPermissions } from '../../hooks';
+import { useSelector } from 'react-redux';
 interface ITimesheetProps {
   projects: Array<IProject>;
-  tags: Array<ITag>;
   members: Array<IOrgMember>;
   localizer: any;
   weekStart: Moment;
@@ -37,7 +28,6 @@ interface ITimesheetProps {
 
 const Timesheet = ({
   projects,
-  tags,
   members,
   localizer,
   weekStart,
@@ -48,12 +38,10 @@ const Timesheet = ({
   const location = useLocation();
   const history = useHistory();
   const parsed = qs.parse(location.search);
-
-  const [selectedProject, setSelectedProject] = useState('');
+  const [selectedProject, setSelectedProject] = useState('__all');
   const [isShowTimeModal, setIsShowTimeModal] = useState(false);
 
   const handleChangeViewMode = () => {
-    //setViewMode(checked ? VIEW_MODE.CALENDAR_VIEW : VIEW_MODE.TABULAR_VIEW);
     parsed.view = parsed.view === 'calendar' ? 'tabular' : 'calendar';
     history.push({
       pathname: location.pathname,
@@ -61,7 +49,7 @@ const Timesheet = ({
     });
   };
 
-  const handleSelectTimezone = timezone => {
+  const handleSelectTimezone = (timezone) => {
     // setLocalizer(momentLocalizer(moment.tz.setDefault(timezone)));
   };
 
@@ -69,7 +57,7 @@ const Timesheet = ({
     setSelectedProject(value);
   };
 
-  const handleChangeUser = value => {
+  const handleChangeSelectedUser = (value) => {
     setSelectedUser(value);
   };
 
@@ -94,12 +82,7 @@ const Timesheet = ({
       </Row>
       <Row align="middle" gutter={[24, 16]}>
         <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
+          <Form labelCol={{ span: 20 }} wrapperCol={{ span: 20 }} layout="vertical" className="sm-screen-size">
             <Form.Item label="Timezone Picker">
               <TimezonePicker
                 value="Asia/Yerevan"
@@ -113,16 +96,13 @@ const Timesheet = ({
           </Form>
         </Col>
         <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
+          <Form labelCol={{ span: 20 }} wrapperCol={{ span: 20 }} layout="vertical" className="sm-screen-size">
             <Form.Item label="Members">
-              <Select onChange={handleChangeUser} value={selectedUser}>
-                <Select.Option value="">All</Select.Option>
-                {members.map(member => {
+              <Select onChange={handleChangeSelectedUser} value={selectedUser}>
+                <Select.Option value="__all" key="__all">
+                  All
+                </Select.Option>
+                {members.map((member) => {
                   return (
                     <Select.Option value={member.userId} key={member.userId}>
                       {member.name}
@@ -134,16 +114,11 @@ const Timesheet = ({
           </Form>
         </Col>
         <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
+          <Form labelCol={{ span: 20 }} wrapperCol={{ span: 20 }} layout="vertical" className="sm-screen-size">
             <Form.Item label="Projects">
               <Select onChange={handleChangeProject} value={selectedProject}>
-                <Select.Option value="">All</Select.Option>
-                {projects.map(res => {
+                <Select.Option value="__all">All</Select.Option>
+                {projects.map((res) => {
                   return (
                     <Select.Option value={res.id} key={res.id}>
                       {res.name}
@@ -164,8 +139,6 @@ const Timesheet = ({
           isShowTimeModal={isShowTimeModal}
           selectedUser={selectedUser}
           selectedProject={selectedProject}
-          handleChangeProject={handleChangeProject}
-          handleChangeUser={handleChangeUser}
           setIsShowTimeModal={setIsShowTimeModal}
           setPathWeekStart={setPathWeekStart}
         />
@@ -173,7 +146,6 @@ const Timesheet = ({
         <TabularCalendar
           projects={projects}
           members={members}
-          tags={tags}
           localizer={localizer}
           weekStart={weekStart}
           setPathWeekStart={setPathWeekStart}
@@ -188,28 +160,24 @@ const Timesheet = ({
 const TimesheetPage = () => {
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { data: membersData, loading: loadingMembers } = useGetOrganizationMembersQuery();
-  const { data: tagsData, loading: loadingTags } = useGetTagsQuery();
   const { value: dowValue } = useFirstWeekDay();
   const history = useHistory();
   const queryParsed = qs.parse(location.search);
+  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
+  const { self: viewSelfPermit, others: viewOtherPermit } = useViewPermissions();
 
   const weekStart = () => {
     return queryParsed.weekStart ? moment(queryParsed.weekStart) : moment().startOf('week');
   };
 
   const selectedUser = () => {
-    return queryParsed.username as string ?? ''
-  }
+    return (queryParsed.username as string) ?? (viewSelfPermit === IPermissionType.Allow ? userId : '');
+  };
 
   useEffect(() => {
     const queryParsed = qs.parse(location.search);
-    if (
-      queryParsed.strict === undefined ||
-      !queryParsed.strict
-    ) {
-      queryParsed.weekStart = moment()
-        .startOf('week')
-        .format('YYYY-MM-DD');
+    if (queryParsed.strict === undefined || !queryParsed.strict) {
+      queryParsed.weekStart = moment().startOf('week').format('YYYY-MM-DD');
       history.push({
         pathname: location.pathname,
         search: qs.stringify(queryParsed),
@@ -233,21 +201,32 @@ const TimesheetPage = () => {
       pathname: location.pathname,
       search: qs.stringify(parsed),
     });
-  }
+  };
 
   moment.locale('en', {
     week: {
-      dow: dowValue, //Monday is the first day of the week.
+      dow: dowValue, // { dow: 0 } => Monday
     },
   });
 
   const localizerM = momentLocalizer(moment);
+  const filteredProjects = () => {
+    return [..._.get(projectsData, 'getProjects', []), { id: '', name: 'UnKnown' }];
+  };
+
+  const filteredMembers = () => {
+    return _.get(membersData, 'getOrganizationMembers', []).filter((member) => {
+      if (viewOtherPermit === IPermissionType.Allow && member.userId !== userId) return true;
+      if (viewSelfPermit === IPermissionType.Allow && member.userId === userId) return true;
+      return false;
+    });
+  };
+
   return (
-    <Spin spinning={loadingProjects || loadingMembers || loadingTags}>
+    <Spin spinning={loadingProjects || loadingMembers}>
       <Timesheet
-        projects={_.get(projectsData, 'getProjects', [] as any)}
-        members={_.get(membersData, 'getOrganizationMembers', [])}
-        tags={_.get(tagsData, 'getTags', [])}
+        projects={filteredProjects()}
+        members={filteredMembers()}
         localizer={localizerM}
         weekStart={weekStart()}
         selectedUser={selectedUser()}
