@@ -11,7 +11,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Button, Form, Item, Input, Spinner } from 'native-base';
 import { Link, useHistory } from 'react-router-native';
 import { Formik } from 'formik'
-import { auth0, dbConnection } from "../lib/auth0"
+import { auth0, dbConnection } from "../auth0/auth0"
 
 const SignIn = () => {
 

@@ -17,7 +17,7 @@ import { useHistory } from "react-router-native"
 
 import TimerFooter from '../modules/timerModules/TimerFooter';
 import TimeRange from '../modules/timerModules/TimeRange';
-import {auth0} from "../lib/auth0"
+import {auth0} from "../auth0/auth0"
 
 const TimerScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
