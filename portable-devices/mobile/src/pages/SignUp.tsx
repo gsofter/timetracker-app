@@ -40,7 +40,7 @@ const SignUp = () => {
                 })
                 .then((res) => {
                   setIsLoading(false)
-                  history.push('/org/timer')
+                  history.replace('/org/timer')
                 })
                 .catch((error) => {
                   setIsLoading(false)

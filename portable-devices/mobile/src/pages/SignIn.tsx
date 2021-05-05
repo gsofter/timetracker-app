@@ -8,12 +8,15 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import { StyleSheet, View, Text } from 'react-native';
-import { Button, Form, Item, Input } from 'native-base';
-import { Link } from 'react-router-native';
+import { Button, Form, Item, Input, Spinner } from 'native-base';
+import { Link, useHistory } from 'react-router-native';
 import { Formik } from 'formik'
 import { auth0, dbConnection } from "../lib/auth0"
 
 const SignIn = () => {
+
+  const [isLoading, setIsLoading] = useState(false)
+  const history = useHistory()
 
    return (
         <View style={styles.container}>
@@ -22,18 +25,29 @@ const SignIn = () => {
             email: '',
             password: ''
           }}
-          onSubmit={(values: any) => {
+          onSubmit={(values: any, {setFieldError}) => {
+            alert(JSON.stringify(values))
+            setIsLoading(true)
             auth0.auth
               .passwordRealm({
                 username: values.email,
                 password: values.password,
                 realm: dbConnection,
               })
-              .then(console.log)
-              .catch(console.error);
+              .then((res) => {
+                setIsLoading(false)
+                history.replace({
+                  pathname: '/org/timer',
+                  state: {token: res.accessToken}
+                })
+              })
+              .catch((error) => {
+                setIsLoading(false)
+                setFieldError('password', error.message)
+              });
           }}
           >
-            {({handleChange, handleSubmit, values}: any) => (
+            {({handleChange, handleSubmit, values, errors}: any) => (
               <Form>
                 <Item last>
                   <Input 
@@ -52,9 +66,14 @@ const SignIn = () => {
                   keyboardType='visible-password' 
                   placeholder='Password' />
                 </Item>
-                <Button onPress={handleSubmit} style={styles.marginTop20} info block>
-                  <Text style={styles.colorWhite}>SignIn</Text>
-                </Button>
+                {errors.password && <Text style={{ color: 'red' }}>{errors.password}</Text>}
+                {isLoading ? (
+                  <Spinner color='blue' />
+                ): (
+                  <Button onPress={handleSubmit} style={styles.marginTop20} info block>
+                    <Text style={styles.colorWhite}>SignIn</Text>
+                  </Button>
+                )}
               </Form>
             )}
           </Formik>

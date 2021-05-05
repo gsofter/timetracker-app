@@ -10,12 +10,14 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
 /* eslint-disable @typescript-eslint/no-use-before-define */
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { StyleSheet, View, ScrollView } from 'react-native';
+import { useHistory } from "react-router-native"
 
 import TimerFooter from '../modules/timerModules/TimerFooter';
 import TimeRange from '../modules/timerModules/TimeRange';
+import {auth0} from "../lib/auth0"
 
 const TimerScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
@@ -24,6 +26,14 @@ const TimerScreen = () => {
   const [manual, setManual] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState<any>(moment().format('MM-DD-YYYY'));
   const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
+  const history = useHistory<any>()
+
+  useEffect(() => {
+    auth0.auth
+    .userInfo({token: history.location.state.token})
+    .then(console.log)
+    .catch(console.error);
+  }, [])
 
   const toggleProject = () => {
     setIsToggle(!isToggle);
