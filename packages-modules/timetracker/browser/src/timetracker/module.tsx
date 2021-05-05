@@ -2,14 +2,14 @@ import * as React from 'react';
 import { Feature } from '@common-stack/client-react';
 import { filteredRoutes } from './compute';
 import { RegisterContribution } from './register-contribution';
-import { Report } from '../DashboardReport';
-import { ReportFill } from '@admin-layout/react-shared-components';
+import Report from '../DashboardReport';
+import { DashboardFill } from '@adminide-stack/react-shared-components';
 
 const ReportProvider = () => {
   return (
-      <ReportFill>
+      <DashboardFill>
         <Report/>
-      </ReportFill>
+      </DashboardFill>
   );
 };
 

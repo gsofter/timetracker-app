@@ -14,17 +14,17 @@ export const Limits = (props) => {
 
     const { data: weeklyLimitConfig, loading: loadWeekly, updateConfiguration } = useSetting({
         configKey: 'timetracker.user.recurringWeeklyLimit',
-        overrides: props.value.record.name,
+        overrides: { overrideIdentifier: props.value.record.name },
     });
 
     const { data: dailyLimitConfig, loading: loadDaily } = useSetting({
         configKey: 'timetracker.user.recurringDailyLimit',
-        overrides: props.value.record.name,
+        overrides: { overrideIdentifier: props.value.record.name },
     });
 
     const { data: daysAllowedConfig, loading } = useSetting({
         configKey: 'timetracker.project.daysAllowedToWork',
-        overrides: props.value.record.name,
+        overrides: { overrideIdentifier: props.value.record.name },
     });
 
     const openLimitsModal = () => {
@@ -35,29 +35,35 @@ export const Limits = (props) => {
         setVisible(false);
     };
 
-    const updateLimitSettings = async (request, daysAllowed) => {
-        await updateConfiguration({
-            updateKey: 'timetracker.user.recurringWeeklyLimit',
-            value: parseInt(request.weeklyLimit, 10) || '',
-            updateOverrides: { overrideIdentifier: props.value.record.name },
-            target: ConfigurationTarget.ORGANIZATION,
-        });
-        await updateConfiguration({
-            updateKey: 'timetracker.user.recurringDailyLimit',
-            value: parseInt(request.dailyLimit, 10) || '',
-            updateOverrides: { overrideIdentifier: props.value.record.name },
-            target: ConfigurationTarget.ORGANIZATION,
-        });
-        await updateConfiguration({
-            updateKey: 'timetracker.project.daysAllowedToWork',
-            value: daysAllowed.toString(),
-            updateOverrides: { overrideIdentifier: props.value.record.name },
-            target: ConfigurationTarget.ORGANIZATION,
-        });
+    const updateLimitSettings = async (request, daysAllow) => {
+        if (weeklyLimit !== parseInt(request.weeklyLimit, 10)) {
+            await updateConfiguration({
+                updateKey: 'timetracker.user.recurringWeeklyLimit',
+                value: parseInt(request.weeklyLimit, 10) || '',
+                updateOverrides: { overrideIdentifier: props.value.record.name },
+                target: ConfigurationTarget.ORGANIZATION,
+            });
+        }
+        if (dailyLimit !== parseInt(request.dailyLimit, 10)) {
+            await updateConfiguration({
+                updateKey: 'timetracker.user.recurringDailyLimit',
+                value: parseInt(request.dailyLimit, 10) || '',
+                updateOverrides: { overrideIdentifier: props.value.record.name },
+                target: ConfigurationTarget.ORGANIZATION,
+            });
+        }
+        if (daysAllowed !== daysAllow.toString()) {
+            await updateConfiguration({
+                updateKey: 'timetracker.project.daysAllowedToWork',
+                value: daysAllow.toString(),
+                updateOverrides: { overrideIdentifier: props.value.record.name },
+                target: ConfigurationTarget.ORGANIZATION,
+            });
+        }
     };
 
-    const onSubmit = (request, daysAllowed, resetFields) => {
-        updateLimitSettings(request, daysAllowed).then(() => {
+    const onSubmit = (request, daysAllow, resetFields) => {
+        updateLimitSettings(request, daysAllow).then(() => {
             onClose();
             resetFields();
             message.success('Limit details updated successfully');
