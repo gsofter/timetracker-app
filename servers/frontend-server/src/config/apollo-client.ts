@@ -1,3 +1,5 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable @typescript-eslint/no-explicit-any */
 import { ApolloClient, ApolloClientOptions } from 'apollo-client';
 import { InMemoryCache } from 'apollo-cache-inmemory';
 import { BatchHttpLink } from 'apollo-link-batch-http';
@@ -6,12 +8,14 @@ import { ApolloLink } from 'apollo-link';
 import { WebSocketLink } from 'apollo-link-ws';
 import { getOperationAST } from 'graphql';
 import apolloLogger from 'apollo-link-logger';
-import { PUBLIC_SETTINGS } from './public-config';
-import modules from '../modules';
 import { logger } from '@cdm-logger/client';
 import { invariant } from 'ts-invariant';
 import { onTokenError } from '@adminide-stack/user-auth0-browser';
 import { createUploadLink } from 'apollo-upload-client';
+import { RetryLink } from 'apollo-link-retry';
+import { isBoolean } from 'lodash';
+import modules from '../modules';
+import { PUBLIC_SETTINGS } from './public-config';
 
 const clientState = modules.getStateParams({ resolverContex: () => modules.createService({}, {}) });
 
@@ -23,14 +27,27 @@ export const cache = new InMemoryCache({
 
 const schema = ``;
 
+const attemptConditions = async (count, operation, error) => {
+    const promises = clientState.retryLinkAttemptFuncs.map((func) => func(count, operation, error));
+
+    try {
+        const result = await promises;
+        return !!result.find((item) => item && isBoolean(item));
+    } catch (e) {
+        logger.trace('Error occured in retryLink Attempt condition', e);
+        throw e;
+    }
+};
+
+const retrylink = new RetryLink({
+    attempts: attemptConditions,
+});
+
 const errorLink = onError(({ graphQLErrors, networkError }) => {
     if (graphQLErrors) {
         graphQLErrors.map(({ message, locations, path }) =>
             // tslint:disable-next-line
-            invariant.warn(
-                `[GraphQL error]: Message: ${message}, Location: ` +
-                `${locations}, Path: ${path}`,
-            ),
+            invariant.warn(`[GraphQL error]: Message: ${message}, Location: ${locations}, Path: ${path}`),
         );
     }
     if (networkError) {
@@ -40,8 +57,8 @@ const errorLink = onError(({ graphQLErrors, networkError }) => {
 });
 let link;
 if (__CLIENT__) {
-    let connectionParams = () => {
-        let param = {};
+    const connectionParams = () => {
+        const param = {};
         for (const connectionParam of modules.connectionParams) {
             Object.assign(param, connectionParam());
         }
@@ -49,7 +66,7 @@ if (__CLIENT__) {
     };
 
     const wsLink = new WebSocketLink({
-        uri: (PUBLIC_SETTINGS.GRAPHQL_URL).replace(/^http/, 'ws'),
+        uri: PUBLIC_SETTINGS.GRAPHQL_URL.replace(/^http/, 'ws'),
         options: {
             reconnect: true,
             timeout: 20000,
@@ -74,10 +91,9 @@ if (__CLIENT__) {
         ({ query, operationName }) => {
             if (operationName && operationName.endsWith('_WS')) {
                 return true;
-            } else {
-                const operationAST = getOperationAST(query as any, operationName);
-                return !!operationAST && operationAST.operation === 'subscription';
             }
+            const operationAST = getOperationAST(query as any, operationName);
+            return !!operationAST && operationAST.operation === 'subscription';
         },
         wsLink,
 
@@ -89,7 +105,7 @@ if (__CLIENT__) {
     link = new BatchHttpLink({ uri: PUBLIC_SETTINGS.LOCAL_GRAPHQL_URL });
 }
 
-const links = [errorLink, ...modules.link, /** ...modules.errorLink, */ link];
+const links = [errorLink, retrylink, ...modules.link, /** ...modules.errorLink, */ link];
 
 // Add apollo logger during development only
 if ((process.env.NODE_ENV === 'development' || __DEBUGGING__) && __CLIENT__) {
