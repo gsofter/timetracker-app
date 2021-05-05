@@ -1,17 +1,9 @@
 import { Properties } from 'csstype';
 
 export const styleSheet: { [key: string]: (obj) => Properties } = {
-  button: () => ({
-    margin: '10px 15px 0 0',
-    display: 'flex',
-  }),
-  icon: () => ({
-    marginTop: '2px',
-    fontSize: '18px',
-  }),
-  handleBody: () => ({
+  TimerWidget: () => ({
     backgroundColor: '#FFF',
-    padding: '10px',
+    padding: '10px 25px',
     boxShadow: '0 4px 12px 0 rgba(0,0,0,0.2)',
     borderRadius: '6px',
   }),

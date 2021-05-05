@@ -1,9 +1,10 @@
 import React, { useState } from 'react';
-import { FieldTimeOutlined } from '@ant-design/icons'
-import { Button, Popover } from 'antd';
+import { FieldTimeOutlined } from '@ant-design/icons';
+import Draggable from 'react-draggable';
+import { Button } from 'antd';
 import { useFela } from 'react-fela';
 import { styleSheet } from './style';
-import HandlerBody from './HandlerBody';
+import TimerWidget from './TimerWidget';
 
 const HeaderTimerHandler: React.FC = (props) => {
   const { css } = useFela();
@@ -19,19 +20,27 @@ const HeaderTimerHandler: React.FC = (props) => {
   }
 
   return (
-    <Popover
-      content={
-        <HandlerBody
-          onClose={hidePopover}
-          onTrack={onChangeTrack}
-          trackStarted={trackStarted}
+    <>
+      <Draggable
+        handle="._handler"
+        defaultPosition={{ x: 110, y: 60 }}
+        position={null}
+        grid={[25, 25]}
+        scale={1}
+      >
+        <div
+          hidden={!visiblity}
+          className={'_handler'}
+          style={{ zIndex: 999 }}
         >
-          Close
-        </HandlerBody>
-      }
-      trigger="click"
-      visible={visiblity}
-    >
+          <TimerWidget
+            onClose={hidePopover}
+            onTrack={onChangeTrack}
+            trackStarted={trackStarted}
+          />
+        </div>
+      </Draggable>
+
       <Button
         className={css(styleSheet.button)}
         type={trackStarted ? 'primary' : 'default'}
@@ -42,7 +51,7 @@ const HeaderTimerHandler: React.FC = (props) => {
       >
         00:00:30
       </Button>
-    </Popover>
+    </>
   )
 }
 

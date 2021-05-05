@@ -4,9 +4,9 @@ export const styleSheet: { [key: string]: (obj) => Properties } = {
   right: ({ theme, primaryColor, layout }) => ({
     display: 'flex',
     float: 'right',
-    height: '48px',
+    height: '48px !important',
     marginLeft: 'auto',
-    overflow: 'hidden',
+    overflow: 'visible',
     '& .lang-btn': {
       marginTop: '10px',
       marginRight: '10px',

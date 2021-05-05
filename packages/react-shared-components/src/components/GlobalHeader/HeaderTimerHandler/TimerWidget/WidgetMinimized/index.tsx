@@ -1,23 +1,26 @@
-import React, { useState } from 'react';
+import React from 'react';
 import {
   CaretRightFilled,
   CloseOutlined,
   PauseOutlined,
+  BorderOutlined
 } from '@ant-design/icons';
 import { Button, Typography } from 'antd';
 
-interface HanlderBodyProps {
+interface WidgetMinimizedProps {
   onClose: () => void;
   onTrack: () => void;
+  onMaximize: () => void;
   trackStarted: boolean;
+  hidden: boolean;
 }
 
-const HandlerBody: React.FC<HanlderBodyProps> = (props: HanlderBodyProps) => {
+const WidgetMinimized: React.FC<WidgetMinimizedProps> = (props: WidgetMinimizedProps) => {
   const { Text } = Typography;
-  const { onClose, onTrack, trackStarted } = props;
+  const { onClose, onTrack, onMaximize, trackStarted, hidden } = props;
 
   return (
-    <div>
+    <div hidden={hidden}>
       <Button
         type="primary"
         shape="circle"
@@ -26,15 +29,23 @@ const HandlerBody: React.FC<HanlderBodyProps> = (props: HanlderBodyProps) => {
         style={{ marginRight: '30px' }}
       />
       <Text>00:00:30</Text>
+
+      <Button
+        shape="circle"
+        icon={<BorderOutlined />}
+        size="small"
+        onClick={onMaximize}
+        style={{ marginLeft: '30px', border: 'none' }}
+      />
       <Button
         shape="circle"
         icon={<CloseOutlined />}
-        onClick={onClose}
         size="small"
-        style={{ marginLeft: '30px', border: 'none' }}
+        onClick={onClose}
+        style={{ border: 'none' }}
       />
     </div>
   );
 }
 
-export default HandlerBody;
+export default WidgetMinimized;
