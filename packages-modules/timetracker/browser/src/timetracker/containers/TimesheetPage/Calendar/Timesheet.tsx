@@ -3,7 +3,7 @@ import { Calendar } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment, { Moment } from 'moment';
 import { momentLocalizer } from 'react-big-calendar';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import {
   ITimeRecord,
@@ -14,6 +14,8 @@ import {
 } from '@admin-layout/timetracker-core';
 import TimesheetModal from './TimesheetModal';
 import * as _ from 'lodash';
+
+const { Title } = Typography;
 
 const DnDCalendar: any = withDragAndDrop(Calendar as any);
 const allViews: string[] = ['day', 'week', 'month'];
@@ -82,8 +84,10 @@ export default function SelectableCalendar({
 
   const EventComponent = ({ event, start, end, title }) => {
     const project = projects.find((p) => p.id === event.projectId);
+    const member = members.find((m) => m.userId === event.userId);
     return (
       <>
+        <Title level={5}> {member && member.name}</Title>
         <p> {project && project.name}</p>
         <p>{title}</p>
         <p>{start}</p>
