@@ -45,7 +45,7 @@
   "peerDependencies": {
     "@adminide-stack/core": "*",
     "@ant-design/icons": "*",
-    "@common-stack/server-core": ">=0.0.255",
+    "@common-stack/server-core": ">=0.0.256",
     "@vscode/monaco-editor": "*",
     "react": "*"
   },

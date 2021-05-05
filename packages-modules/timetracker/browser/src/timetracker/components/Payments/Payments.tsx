@@ -45,36 +45,46 @@ export const Payments = (props) => {
     };
 
     const updatePaymentSettings = async (request) => {
-        await updateConfiguration({
-            updateKey: 'timetracker.user.payment.payPeriod',
-            value: request.payPeriod,
-            updateOverrides: { overrideIdentifier: props.value.record.name },
-            target: ConfigurationTarget.ORGANIZATION,
-        });
-        await updateConfiguration({
-            updateKey: 'timetracker.user.payment.payType',
-            value: request.payType,
-            updateOverrides: { overrideIdentifier: props.value.record.name },
-            target: ConfigurationTarget.ORGANIZATION,
-        });
-        await updateConfiguration({
-            updateKey: 'timetracker.user.payment.billRate',
-            value: parseInt(request.billRate, 10),
-            updateOverrides: { overrideIdentifier: props.value.record.name },
-            target: ConfigurationTarget.ORGANIZATION,
-        });
-        await updateConfiguration({
-            updateKey: 'timetracker.user.payment.payRate',
-            value: parseInt(request.payRate, 10),
-            updateOverrides: { overrideIdentifier: props.value.record.name },
-            target: ConfigurationTarget.ORGANIZATION,
-        });
-        await updateConfiguration({
-            updateKey: 'timetracker.user.payment.requireTimesheetApproval',
-            value: request.requireTimesheetApproval,
-            updateOverrides: { overrideIdentifier: props.value.record.name },
-            target: ConfigurationTarget.ORGANIZATION,
-        });
+        if (payPeriod !== request.payPeriod) {
+            await updateConfiguration({
+                updateKey: 'timetracker.user.payment.payPeriod',
+                value: request.payPeriod,
+                updateOverrides: { overrideIdentifier: props.value.record.name },
+                target: ConfigurationTarget.ORGANIZATION,
+            });
+        }
+        if (payType !== request.payType) {
+            await updateConfiguration({
+                updateKey: 'timetracker.user.payment.payType',
+                value: request.payType,
+                updateOverrides: { overrideIdentifier: props.value.record.name },
+                target: ConfigurationTarget.ORGANIZATION,
+            });
+        }
+        if (billRate !== parseInt(request.billRate, 10)) {
+            await updateConfiguration({
+                updateKey: 'timetracker.user.payment.billRate',
+                value: parseInt(request.billRate, 10) || '',
+                updateOverrides: { overrideIdentifier: props.value.record.name },
+                target: ConfigurationTarget.ORGANIZATION,
+            });
+        }
+        if (payRate !== parseInt(request.payRate, 10)) {
+            await updateConfiguration({
+                updateKey: 'timetracker.user.payment.payRate',
+                value: parseInt(request.payRate, 10) || '',
+                updateOverrides: { overrideIdentifier: props.value.record.name },
+                target: ConfigurationTarget.ORGANIZATION,
+            });
+        }
+        if (requireTimesheetApproval !== request.requireTimesheetApproval) {
+            await updateConfiguration({
+                updateKey: 'timetracker.user.payment.requireTimesheetApproval',
+                value: request.requireTimesheetApproval,
+                updateOverrides: { overrideIdentifier: props.value.record.name },
+                target: ConfigurationTarget.ORGANIZATION,
+            });
+        }
     };
 
     const onSubmit = (request, form) => {

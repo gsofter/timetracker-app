@@ -99,8 +99,8 @@ export const Reports: React.FC<IReportsProps> = ({
       const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
       return rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
     });
-    if (records.filter(r => !r.projectId).length) {
-      const unRecord = records.filter(r => !r.projectId);
+    const unRecord = records.filter(r => !r.projectId);
+    if (unRecord.length) {
       const unTotalDur = unRecord.reduce(calcDurationReducer, 0);
       projectDurArray.push(rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur)
     }
@@ -134,6 +134,14 @@ export const Reports: React.FC<IReportsProps> = ({
         duration: rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur,
       };
     });
+    const unRecord = records.filter(r => !r.projectId);
+    if (unRecord.length) {
+      const unTotalDur = unRecord.reduce(calcDurationReducer, 0);
+      projectDurArray.push({
+        projectName: 'Unknown',
+        duration: rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur,
+      });
+    }
     return projectDurArray;
   };
 
