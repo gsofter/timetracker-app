@@ -1,9 +1,7 @@
-import { injectable } from 'inversify';
+/* eslint-disable class-methods-use-this */
 import * as humanizeDuration from 'humanize-duration';
 
 export class TimeTrackerService {
-    constructor() {}
-
     getISOTime(): string {
         return new Date().toISOString();
     }
@@ -87,19 +85,19 @@ export class TimeTrackerService {
     }
 
     getDayPeriodsBetweenStartEndDates(startDate: string, endDate: string): any[] {
-        let datesList = [];
+        const datesList = [];
         let currentDateTimestamp = this.getTimestampByGivenValue(startDate);
         const endDateTimestamp = this.getTimestampByGivenValue(endDate);
         while (currentDateTimestamp < endDateTimestamp) {
             const nextDateTimestamp = this.getTimestampByGivenValue(
                 `${this.getDateValueFromISOTimeByGivenValue(
-                    currentDateTimestamp + 24 * 60 * 60 * 1000
-                )}T${this.getTimeValueFromISOTimeByGivenValue(startDate)}`
+                    currentDateTimestamp + 24 * 60 * 60 * 1000,
+                )}T${this.getTimeValueFromISOTimeByGivenValue(startDate)}`,
             );
             datesList.push({
                 startPeriod: this.getISOTimeByGivenValue(currentDateTimestamp),
                 endPeriod: this.getISOTimeByGivenValue(
-                    nextDateTimestamp > endDateTimestamp ? endDateTimestamp : nextDateTimestamp
+                    nextDateTimestamp > endDateTimestamp ? endDateTimestamp : nextDateTimestamp,
                 ),
             });
             currentDateTimestamp = nextDateTimestamp;

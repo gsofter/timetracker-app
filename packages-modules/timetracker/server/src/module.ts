@@ -8,8 +8,8 @@ import { mainLoadConfigurationPre } from './initialization';
 import { TimeTrackerRolesContribution, TimeTrackerRolesPermissionOverwrite } from './preferences';
 
 const createServiceFunc = (container: interfaces.Container) => ({
-    timeTrackerService: container.get(TYPES.ITimeTrackerService),
-    // timeRecordService: container.get(TYPES.ITimeRecordService),
+    timeRecordService: container.get(TYPES.ITimeRecordService),
+    timesheetService: container.get(TYPES.ITimesheetService),
 });
 
 export default new Feature({

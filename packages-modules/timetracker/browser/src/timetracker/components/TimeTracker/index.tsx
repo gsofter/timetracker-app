@@ -49,6 +49,7 @@ export interface ITimeTracker {
   projects: IProject[];
   mode: TRACKER_MODE;
   weekStart: Moment;
+  disable: boolean;
   setMode: Function;
   handleStart: () => void;
   handleStop: () => void;
@@ -63,24 +64,23 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
     currentTimeRecord,
     projects,
     mode,
+    disable,
     setMode,
     handleStart,
     handleStop,
     removePlayingTimeRecord,
     createTimeRecord,
-    updatePlayingTimeRecord
+    updatePlayingTimeRecord,
   } = props;
   const { css } = useFela(props);
   const { timeFormat, dateFormat } = useTimeformat();
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
-  const [manualDur, setManualDur] = useState(moment().format(timeFormat));
-  const debounceTimeLimit = 800;
-  
+
   const handleTaskChange = (e) => {
     e.persist();
-    updatePlayingTimeRecord({ ...currentTimeRecord, taskName: e.target.value }, true)
+    updatePlayingTimeRecord({ ...currentTimeRecord, taskName: e.target.value }, true);
   };
 
   const handleSelectProject = (projectId) => {
@@ -108,8 +108,6 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
     const end = range[1];
     setManualStart(start);
     setManualEnd(end);
-    const timeDiff = (end.valueOf() - start.valueOf()) / 1000;
-    setManualDur(formatDuration(timeDiff));
   };
 
   const handleChangeDurDate = (date) => {
@@ -237,7 +235,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
                       { 'flex-end': !isRecording },
                     )}
                   >
-                    <Button type="primary" onClick={handleStart}>
+                    <Button type="primary" onClick={handleStart} disabled={disable}>
                       START
                     </Button>
                   </div>
@@ -248,7 +246,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
                       { 'flex-end': isRecording },
                     )}
                   >
-                    <Button type="primary" danger onClick={handleStop}>
+                    <Button type="primary" danger onClick={handleStop} disabled={disable}>
                       STOP
                     </Button>
                   </div>
@@ -288,7 +286,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
                   </div>
                 </Col>
                 <Col span={3} className="flex-center">
-                  <Button type="primary" size="small" onClick={handleAddManual}>
+                  <Button type="primary" size="small" onClick={handleAddManual} disabled={disable}>
                     ADD
                   </Button>
                 </Col>
