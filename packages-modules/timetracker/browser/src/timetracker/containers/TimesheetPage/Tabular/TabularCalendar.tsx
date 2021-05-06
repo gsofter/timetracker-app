@@ -387,7 +387,14 @@ export const TabularCalendar = ({
       <Row className="table-footer">
         {timesheet ? <Tag color="blue"> {timesheet.state} </Tag> : ''}
         <div className="spacer">
-          <ExportExcel/>
+          <ExportExcel
+              weekStart={weekStart}
+              records={records}
+              projectsMap={projectsMap}
+              approvals={approvals}
+              unApprovals={unApprovals}
+              getProjectTotalDuration={getProjectTotalDuration}
+          />
         </div>
         <Button
           type="primary"
