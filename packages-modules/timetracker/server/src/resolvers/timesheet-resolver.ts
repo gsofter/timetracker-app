@@ -1,28 +1,28 @@
 export const resolver = (options) => ({
   Query: {
-    getTimesheets: (root, args, { timeTrackerService, userContext }) => {
+    getTimesheets: (root, args, { timesheetService, userContext }) => {
       options.logger.trace('(Query.getTimeSheets) args %j', args);
-      if (!args.withTotalHours) return timeTrackerService.getTimesheets(userContext.orgId);
-      return timeTrackerService.getTimesheetsWithTotalHours(userContext.orgId);
+      if (!args.withTotalHours) return timesheetService.getTimesheets(userContext.orgId);
+      return timesheetService.getTimesheetsWithTotalHours(userContext.orgId);
     },
-    getDurationTimesheets: (root, args, { timeTrackerService, userContext }) => {
+    getDurationTimesheets: (root, args, { timesheetService, userContext }) => {
       options.logger.trace('(Query.getDurationTimesheets) args %j', args);
-      return timeTrackerService.getDurationTimesheets(userContext.orgId, args.start, args.end);
+      return timesheetService.getDurationTimesheets(userContext.orgId, args.start, args.end);
     },
   },
 
   Mutation: {
-    createTimesheet: (root, args, { timeTrackerService, user, userContext }) => {
+    createTimesheet: (root, args, { timesheetService, user, userContext }) => {
       options.logger.trace('(Mutation.createTimesheet) args %j', args);
-      return timeTrackerService.createTimesheet(
+      return timesheetService.createTimesheet(
         user._id || user.sub,
         userContext.orgId,
         args.request,
       );
     },
-    updateTimesheet: (root, args, { timeTrackerService, user, userContext }) => {
+    updateTimesheet: (root, args, { timesheetService, user, userContext }) => {
       options.logger.trace('(Mutation.updateTimesheet) args %j', args);
-      return timeTrackerService.updateTimesheet(
+      return timesheetService.updateTimesheet(
         user._id || user.sub,
         userContext.orgId,
         args.sheetId,
@@ -30,21 +30,17 @@ export const resolver = (options) => ({
         { ...userContext, username: user.name },
       );
     },
-    removeTimesheet: (root, args, { timeTrackerService, user, userContext }) => {
+    removeTimesheet: (root, args, { timesheetService, user, userContext }) => {
       options.logger.trace('(Mutation.removeTimesheet) args %j', args);
-      return timeTrackerService.removeTimesheet(
+      return timesheetService.removeTimesheet(
         user._id || user.sub,
         userContext.orgId,
         args.sheetId,
       );
     },
-    updateTimesheetStatus: (root, args, { timeTrackerService, user, userContext }) => {
+    updateTimesheetStatus: (root, args, { timesheetService, user, userContext }) => {
       options.logger.trace('(Mutation.updateTimesheetStatus) args %j', args);
-      return timeTrackerService.updateTimesheetStatus(
-        user._id || user.sub,
-        userContext.orgId,
-        args.request,
-      );
+      return timesheetService.updateTimesheetStatus(userContext.orgId, args.sheetId, args.state);
     },
   },
   Subscription: {},

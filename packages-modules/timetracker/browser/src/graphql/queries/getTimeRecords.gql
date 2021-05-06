@@ -8,5 +8,6 @@ query GetTimeRecords($userId: String) {
     projectId
     isBillable
     userId
+    timesheetId
   }
 }
