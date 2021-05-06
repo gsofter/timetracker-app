@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { Row, Col, Button, Dropdown, Menu, Popconfirm, Modal, Tag } from 'antd';
+import { Row, Col, Button, Dropdown, Menu, Popconfirm, Modal, Tag, Typography } from 'antd';
 import { moment } from '../../TimesheetPage';
 import { Moment } from 'moment';
 import { useFela } from 'react-fela';
@@ -10,15 +10,17 @@ import {
   IProjects as IProject,
   ITimesheetState,
   ITimesheet,
+  IOrgMember,
 } from '@admin-layout/timetracker-core';
 import { TimesheetInput } from '../../../components/TimesheetInput';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
-
 import { formatDuration } from '../../../services/timeRecordService';
 import CSS from 'csstype';
 import * as _ from 'lodash';
-import { useSelector } from 'react-redux';
 import { useTimeformat } from '../../../hooks';
+import { ExportExcel } from './ExportExcel';
+
+const { Title } = Typography;
 
 const calcDuration = (records: Array<ITimeRecord>) => {
   return records.reduce(
@@ -41,6 +43,7 @@ interface ITabularCalendar {
   projectsApproval: IProjectsApproval;
   projectsMap: Map<string, IProject>;
   loading?: boolean;
+  members: Array<IOrgMember>;
   handleRemoveDuration: Function;
   updateTimeRecord: Function;
   createTimeRecord: Function;
@@ -55,6 +58,7 @@ export const TabularCalendar = ({
   selectedUser,
   projectsApproval,
   projectsMap,
+  members,
   handleRemoveDuration,
   updateTimeRecord,
   createTimeRecord,
@@ -351,6 +355,12 @@ export const TabularCalendar = ({
     );
   };
 
+  const getUsername = () => {
+    const member = members.find((mem) => mem.userId === selectedUser);
+    if (member) return member.name;
+    return '';
+  };
+
   return (
     <div className={css(styles.root)}>
       <Modal
@@ -372,7 +382,11 @@ export const TabularCalendar = ({
           &nbsp; approval?
         </p>
       </Modal>
-
+      <Row className="table-header">
+        <Col>
+          <Title level={5}>{getUsername()}</Title>
+        </Col>
+      </Row>
       <table className={css(styles.calendarTable)}>
         <thead>{HeaderRows()}</thead>
         <tbody>
@@ -385,7 +399,16 @@ export const TabularCalendar = ({
       </table>
       <Row className="table-footer">
         {timesheet ? <Tag color="blue"> {timesheet.state} </Tag> : ''}
-        <div className="spacer"></div>
+        <div className="spacer">
+          <ExportExcel
+              weekStart={weekStart}
+              records={records}
+              projectsMap={projectsMap}
+              approvals={approvals}
+              unApprovals={unApprovals}
+              getProjectTotalDuration={getProjectTotalDuration}
+          />
+        </div>
         <Button
           type="primary"
           onClick={openSubmitApproval}

@@ -1,6 +1,6 @@
 import React, { useEffect } from 'react';
 import { Moment } from 'moment';
-import { message, Spin, Row, Col, Button } from 'antd';
+import { message, Spin, Row, Col, Button, Card } from 'antd';
 import {
   ITimesheetCreateRequest,
   IProjects as IProject,
@@ -130,8 +130,8 @@ const TabularCalendarWrapper = ({
   // create timeSheet
   const createTimesheet = (request: ITimesheetCreateRequest) => {
     createTimesheetMutation({ variables: { request } })
-      .then(() => {
-        refetchApproval();
+      .then(async () => {
+        await refetchApproval();
         message.success('Timesheet Created');
       })
       .catch((error) => {
@@ -139,8 +139,8 @@ const TabularCalendarWrapper = ({
       });
   };
 
-  const memberTimesheet = () => {
-    return _.get(approvalData, 'getDurationTimesheets', []).find((sheet) => sheet.userId === selectedUser);
+  const memberTimesheet = (userId: string) => {
+    return _.get(approvalData, 'getDurationTimesheets', []).find((sheet) => sheet.userId === userId);
   };
 
   const projectsApproval = () => {
@@ -218,64 +218,72 @@ const TabularCalendarWrapper = ({
           <Button> Month </Button>
         </Col>
       </Row>
-      {selectedUser !== '__all' ? (
-        <TabularCalendar
-          weekStart={weekStart}
-          records={filterTimeRecords(data?.getDurationTimeRecords, {
-            selectedUser,
-            selectedProject,
-            members,
-          })}
-          projects={projects}
-          projectsMap={getProjectsMap()}
-          projectsApproval={projectsApproval()}
-          timesheet={memberTimesheet()}
-          selectedUser={selectedUser}
-          loading={
-            loadingRecords ||
-            loadingApproval ||
-            loadingCreate ||
-            loadingUpdate ||
-            loadingRemove ||
-            loadingCreateTimesheet
-          }
-          handleRemoveDuration={handleRemoveDuration}
-          createTimeRecord={createTimeRecord}
-          updateTimeRecord={updateTimeRecord}
-          createTimesheet={createTimesheet}
-        />
-      ) : (
-        members.map((mem) => {
-          return (
-            <TabularCalendar
-              key={mem.userId}
-              weekStart={weekStart}
-              records={filterTimeRecords(data?.getDurationTimeRecords, {
-                selectedUser: mem.userId,
-                selectedProject,
-                members,
-              })}
-              projects={projects}
-              projectsMap={getProjectsMap()}
-              projectsApproval={projectsApproval()}
-              timesheet={memberTimesheet()}
-              selectedUser={mem.userId}
-              loading={
-                loadingRecords ||
-                loadingApproval ||
-                loadingCreate ||
-                loadingUpdate ||
-                loadingRemove ||
-                loadingCreateTimesheet
-              }
-              handleRemoveDuration={handleRemoveDuration}
-              createTimeRecord={createTimeRecord}
-              updateTimeRecord={updateTimeRecord}
-              createTimesheet={createTimesheet}
-            />
-          );
-        })
-      )}
+      <Row>
+        <Col xs={24}>
+          <Card>
+            {selectedUser !== '__all' ? (
+              <TabularCalendar
+                weekStart={weekStart}
+                records={filterTimeRecords(data?.getDurationTimeRecords, {
+                  selectedUser,
+                  selectedProject,
+                  members,
+                })}
+                projects={projects}
+                projectsMap={getProjectsMap()}
+                projectsApproval={projectsApproval()}
+                timesheet={memberTimesheet(selectedUser)}
+                selectedUser={selectedUser}
+                members={members}
+                loading={
+                  loadingRecords ||
+                  loadingApproval ||
+                  loadingCreate ||
+                  loadingUpdate ||
+                  loadingRemove ||
+                  loadingCreateTimesheet
+                }
+                handleRemoveDuration={handleRemoveDuration}
+                createTimeRecord={createTimeRecord}
+                updateTimeRecord={updateTimeRecord}
+                createTimesheet={createTimesheet}
+              />
+            ) : (
+              members.map((mem) => {
+                return (
+                  <TabularCalendar
+                    key={mem.userId}
+                    weekStart={weekStart}
+                    records={filterTimeRecords(data?.getDurationTimeRecords, {
+                      selectedUser: mem.userId,
+                      selectedProject,
+                      members,
+                    })}
+                    projects={projects}
+                    projectsMap={getProjectsMap()}
+                    projectsApproval={projectsApproval()}
+                    timesheet={memberTimesheet(mem.userId)}
+                    selectedUser={mem.userId}
+                    members={members}
+                    loading={
+                      loadingRecords ||
+                      loadingApproval ||
+                      loadingCreate ||
+                      loadingUpdate ||
+                      loadingRemove ||
+                      loadingCreateTimesheet
+                    }
+                    handleRemoveDuration={handleRemoveDuration}
+                    createTimeRecord={createTimeRecord}
+                    updateTimeRecord={updateTimeRecord}
+                    createTimesheet={createTimesheet}
+                  />
+                );
+              })
+            )}
+          </Card>
+        </Col>
+      </Row>
     </Spin>
   );
 };
