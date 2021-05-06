@@ -1,0 +1,12 @@
+query GetPlayingTimeRecord {
+  getPlayingTimeRecord {
+    id
+    startTime
+    endTime
+    taskName
+    tags
+    projectId
+    userId
+    isBillable
+  }
+}

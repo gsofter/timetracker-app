@@ -1,0 +1,3 @@
+mutation UpdateTimesheet($sheetId: String, $request: TimesheetCreateRequest) {
+  updateTimesheet(sheetId: $sheetId, request: $request)
+}

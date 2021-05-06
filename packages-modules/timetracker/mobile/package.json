@@ -1,0 +1,75 @@
+{
+  "name": "@admin-layout/timetracker-module-mobile",
+  "version": "0.0.1",
+  "description": "Sample core for higher packages to depend on",
+  "license": "ISC",
+  "author": "CDMBase LLC",
+  "main": "lib/index.js",
+  "typings": "lib/index.d.ts",
+  "scripts": {
+    "build": "npm run build:clean && npm run build:lib",
+    "build:clean": "rimraf lib",
+    "build:lib": "webpack",
+    "build:lib:watch": "npm run build:lib -- --watch",
+    "jest": "./node_modules/.bin/jest",
+    "prepublish": "npm run build",
+    "schema:download": "./node_modules/.bin/apollo-codegen download-schema http://localhost:8080/graphql --output schema.json ",
+    "schema:generate": "./node_modules/.bin/apollo-codegen generate src/browser/graphql/**/*.graphql --schema schema.json --target typescript --output src/browser/types/schema.ts",
+    "test": "cross-env ENV_FILE=../../config/test/test.env jest",
+    "test:debug": "npm test -- --runInBand",
+    "test:watch": "npm test -- --watch",
+    "watch": "npm run build:lib:watch"
+  },
+  "jest": {
+    "moduleFileExtensions": [
+      "ts",
+      "tsx",
+      "js",
+      "json"
+    ],
+    "modulePaths": [
+      "node_modules"
+    ],
+    "roots": [
+      "src"
+    ],
+    "testEnvironment": "node",
+    "testRegex": "/__tests__/.*test*\\.(ts|tsx|js)$",
+    "transform": {
+      "\\.(ts|tsx)$": "<rootDir>/../../node_modules/ts-jest/preprocessor.js"
+    }
+  },
+  "dependencies": {
+    "@admin-layout/components": "link:../../../packages/components",
+    "@admin-layout/react-shared-components": "link:../../../packages/react-shared-components",
+    "@admin-layout/timetracker-core": "link:../core",
+    "chart.js": "^2.9.4",
+    "moment-duration-format": "^2.3.2",
+    "react-chartjs-2": "^2.11.1",
+    "react-compound-timer": "^1.2.0",
+    "react-custom-scrollbars": "^4.2.1",
+    "react-date-range": "1.0.0-beta",
+    "react-easy-swipe": "0.0.21",
+    "react-simple-timefield": "^3.2.3",
+    "rifm": "^0.12.0",
+    "socket.io-client": "2.2.0",
+    "store": "^2.0.12",
+    "uuidv4": "6.2.3",
+    "yup": "0.27.0"
+  },
+  "devDependencies": {
+    "@types/react-big-calendar": "^0.30.0"
+  },
+  "peerDependencies": {
+    "@adminide-stack/core": "*",
+    "@common-stack/client-react": ">=0.0.257",
+    "@common-stack/core": ">=0.0.257",
+    "antd": "^4.5.2"
+  },
+  "publishConfig": {
+    "access": "public"
+  },
+  "typescript": {
+    "definition": "lib/index.d.ts"
+  }
+}

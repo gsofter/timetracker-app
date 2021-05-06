@@ -1,0 +1,3 @@
+mutation UpdateTimeRecord($recordId: String, $request: TimeRecordRequest) {
+  updateTimeRecord(recordId: $recordId, request: $request)
+}
