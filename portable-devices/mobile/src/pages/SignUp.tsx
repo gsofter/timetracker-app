@@ -11,7 +11,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Button, Form, Item, Input, Spinner } from 'native-base';
 import { Link, useHistory } from 'react-router-native';
 import {Formik} from 'formik';
-import { auth0, dbConnection } from "../lib/auth0";
+import { auth0, dbConnection } from "../constants/auth0";
 
 const SignUp = () => {
 
@@ -64,7 +64,7 @@ const SignUp = () => {
                 <Item last>
                   <Input
                   value={values.username}
-                  onChange={handleChange('username')}
+                  onChangeText={handleChange('username')}
                   textContentType='name'
                   placeholder="Username" />
                 </Item>
@@ -72,7 +72,7 @@ const SignUp = () => {
                 <Item last>
                   <Input 
                   value={values.email}
-                  onChange={handleChange('email')}
+                  onChangeText={handleChange('email')}
                   textContentType='emailAddress'
                   keyboardType='email-address'
                   placeholder="Email" />
@@ -82,7 +82,7 @@ const SignUp = () => {
                   <Input 
                   secureTextEntry
                   value={values.password}
-                  onChange={handleChange('password')}
+                  onChangeText={handleChange('password')}
                   textContentType='password' 
                   placeholder='Password' />
                 </Item>
@@ -93,7 +93,7 @@ const SignUp = () => {
                   <Input 
                   secureTextEntry
                   value={values.confirmPassword}
-                  onChange={handleChange('confirmPassword')}
+                  onChangeText={handleChange('confirmPassword')}
                   textContentType='password' 
                   placeholder='Confirm Password' />
                 </Item>

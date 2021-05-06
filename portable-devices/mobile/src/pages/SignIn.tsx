@@ -11,7 +11,7 @@ import { StyleSheet, View, Text } from 'react-native';
 import { Button, Form, Item, Input, Spinner } from 'native-base';
 import { Link, useHistory } from 'react-router-native';
 import { Formik } from 'formik'
-import { auth0, dbConnection } from "../lib/auth0"
+import { auth0, dbConnection } from "../constants/auth0"
 
 const SignIn = () => {
 
@@ -26,7 +26,6 @@ const SignIn = () => {
             password: ''
           }}
           onSubmit={(values: any, {setFieldError}) => {
-            alert(JSON.stringify(values))
             setIsLoading(true)
             auth0.auth
               .passwordRealm({
@@ -52,7 +51,7 @@ const SignIn = () => {
                 <Item last>
                   <Input 
                   value={values.email}
-                  onChange={handleChange('email')}
+                  onChangeText={handleChange('email')}
                   textContentType='emailAddress' 
                   keyboardType='email-address' 
                   placeholder="Email" />
@@ -61,9 +60,8 @@ const SignIn = () => {
                   <Input 
                   secureTextEntry
                   value={values.password}
-                  onChange={handleChange('password')}
+                  onChangeText={handleChange('password')}
                   textContentType='password' 
-                  keyboardType='visible-password' 
                   placeholder='Password' />
                 </Item>
                 {errors.password && <Text style={{ color: 'red' }}>{errors.password}</Text>}
