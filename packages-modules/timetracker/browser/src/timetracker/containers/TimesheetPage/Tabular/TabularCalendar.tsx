@@ -19,6 +19,7 @@ import CSS from 'csstype';
 import * as _ from 'lodash';
 import { useSelector } from 'react-redux';
 import { useTimeformat } from '../../../hooks';
+import { ExportExcel } from './ExportExcel';
 
 const calcDuration = (records: Array<ITimeRecord>) => {
   return records.reduce(
@@ -385,7 +386,9 @@ export const TabularCalendar = ({
       </table>
       <Row className="table-footer">
         {timesheet ? <Tag color="blue"> {timesheet.state} </Tag> : ''}
-        <div className="spacer"></div>
+        <div className="spacer">
+          <ExportExcel/>
+        </div>
         <Button
           type="primary"
           onClick={openSubmitApproval}
