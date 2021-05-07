@@ -25,10 +25,27 @@
       "adaptiveIcon": {
         "foregroundImage": "./assets/images/adaptive-icon.png",
         "backgroundColor": "#FFFFFF"
-      }
+      },
+      "package": "com.android.admin"
     },
     "web": {
       "favicon": "./assets/images/favicon.png"
+    },
+    "packagerOpts": {
+      "config": "metro.config.js",
+      "sourceExts": [
+        "native.tsx",
+        "native.jsx",
+        "native.ts",
+        "native.js",
+        "jsx",
+        "js",
+        "json",
+        "ts",
+        "tsx",
+        "graphql",
+        "gql"
+      ]
     }
   }
 }

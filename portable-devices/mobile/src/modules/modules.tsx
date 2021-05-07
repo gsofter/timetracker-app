@@ -1,30 +1,33 @@
-/* eslint-disable react/style-prop-object */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React, { useState, useRef } from 'react';
 import { History } from 'history';
 import { Feature, FeatureWithRouterFactory } from '@common-stack/client-react';
-import { NativeRouter } from 'react-router-native';
+import TimeModule from '@admin-layout/timetracker-module-mobile';
 import { StatusBar } from 'expo-status-bar';
-import counterModule from '@admin-layout/counter-module-browser/lib/index.native';
 import { enableScreens } from 'react-native-screens';
+import { NativeRouter, Route } from 'react-router-native';
 import LayoutModule from '../components/layout/module';
 import { renderRoutes2 } from './render';
 
-const features = new Feature(LayoutModule, counterModule);
+const features = new Feature(FeatureWithRouterFactory, LayoutModule, TimeModule);
 const configuredRoutes = features.getConfiguredRoutes();
-
-const routes = renderRoutes2({ routes: configuredRoutes });
+console.log('--GET CONFIGURED', TimeModule);
+const routes = renderRoutes2({ routes: configuredRoutes }) || [];
 enableScreens();
 
-console.log('--ROUTES', routes);
-export const MainRoute = (props: { history: History<any> }) => {
-    return (
-        <NativeRouter>
-            {routes}
-            <StatusBar style="auto" />
-        </NativeRouter>
-    );
+export const MainRoute = () => {
+  return (
+    <>
+      {configuredRoutes.map((route: any) => (
+        <Route
+          key={route.path}
+          exact={route.exact}
+          path={route.path}
+          component={(props: any) => route.component(props, route)}
+        />
+      ))}
+      <StatusBar style="auto" />
+    </>
+  );
 };
 
 export default features;
