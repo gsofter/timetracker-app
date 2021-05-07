@@ -117,6 +117,7 @@ export default function SelectableCalendar({
       style: {
         color: color.main,
         backgroundColor: color.background,
+        borderColor: color.background,
       },
     };
   };
