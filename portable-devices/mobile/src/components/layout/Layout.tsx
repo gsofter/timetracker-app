@@ -11,9 +11,8 @@ import React, { useRef } from 'react';
 import { View } from 'react-native';
 import { Feature } from '@common-stack/client-react';
 import { connect } from 'react-redux';
-import MainHeader from '../../modules/Header';
+import MainHeader from './Header';
 import { DrawerRoute } from './Drawer';
-import {TimerScreen, CalendarScreen} from "../../pages"
 
 const Layout = (props: any, route: any) => {
   const drawerRef = useRef();
@@ -32,20 +31,4 @@ export const ProLayout = connect((state: any) => {
   };
 })(Layout);
 
-export const drawer =  new Feature({
-  routeConfig: [
-    {
-      '/org/timer': {
-        exact: true,
-        component: TimerScreen,
-      } as any,
-    },
-    {
-      '/org/timesheet': {
-        exact: true,
-        component: CalendarScreen,
-      } as any,
-    },
-  ],
-});
 export default Layout;

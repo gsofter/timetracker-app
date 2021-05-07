@@ -5,19 +5,19 @@ import Layout from './Layout';
 import { Dashboard } from '../../pages';
 
 export default new Feature({
-  routeConfig: [
-    {
-      '/': {
-        exact: true,
-        component: Dashboard,
-      } as any,
-    },
-    {
-      '/org': {
-        exact: false,
-        component: Layout,
-        key: 'layout',
-      } as any,
-    },
-  ],
+    routeConfig: [
+        {
+            '/': {
+                exact: true,
+                component: Dashboard,
+            } as any,
+        },
+        {
+            '/org': {
+                exact: false,
+                component: Layout,
+                key: 'layout',
+            } as any,
+        },
+    ],
 });

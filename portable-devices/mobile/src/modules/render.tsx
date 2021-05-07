@@ -1,16 +1,8 @@
-/* eslint-disable @typescript-eslint/no-use-before-define */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-floating-promises */
-/* eslint-disable react-hooks/exhaustive-deps */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
-/* eslint-disable @typescript-eslint/ban-types */
 import * as React from 'react';
 import { useEffect, useState, createElement } from 'react';
 // import { Plugin, ApplyPluginsType } from '@umijs/runtime';
 import { IRoute, IComponent } from '@common-stack/client-react';
 import { Switch, Route, Redirect } from 'react-router-native';
-import Home from '../pages/TimerScreen';
 
 interface IOpts {
   routes: IRoute[];
@@ -158,9 +150,6 @@ function renderRoutes(opts: IOpts) {
   console.log('--OPTS', opts);
   return opts.routes ? (
     <Switch>
-      <Route exact path="/">
-        <Home />
-      </Route>
       {opts.routes.map((route, index) => {
         const renderedR = getRouteElement({
           route,
