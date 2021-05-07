@@ -10,7 +10,7 @@
 import React, { useState } from 'react';
 import { Header, Left, Right, Body, Text, Icon } from 'native-base';
 import { useHistory } from 'react-router-native';
-import {auth0} from '../auth0/auth0'
+import {auth0} from "../constants/auth0"
 
 const MainHeader = (props: any) => {
   const[isToggle, setIsToggle] = useState(false);
