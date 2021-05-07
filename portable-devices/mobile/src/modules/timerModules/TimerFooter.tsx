@@ -11,7 +11,8 @@
 /* eslint-disable prettier/prettier */
 import React, { useState } from 'react';
 import { Icon, Item, Input, Row, Col } from 'native-base';
-import { View, StyleSheet, Text, Platform, KeyboardAvoidingView } from 'react-native';
+import { View, StyleSheet, Text, Platform } from 'react-native';
+import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 
 import TimeTrack from './TimeTrack'
 import ManualTime from "./ManualTime"
@@ -58,11 +59,8 @@ const TimerFooter = ({ billable, onManual, onTrack, manual, track, toggleBillabl
   };
 
     return (
-      <KeyboardAvoidingView
-        behavior={Platform.OS === "ios" ? "padding" : "height"}
-        style={{ flex: 1 }}
-      >
-        <View style={styles.footer}>
+      <View style={styles.footer}>
+        <KeyboardAwareScrollView>
           <View style={styles.row}>
             <Item regular style={{ width: '80%', height: 40 }}>
               <Input style={{ height: 40 }} placeholder="What are you working on?" />
@@ -125,8 +123,8 @@ const TimerFooter = ({ billable, onManual, onTrack, manual, track, toggleBillabl
               <Icon onPress={() => onManual()} name="list-outline" style={{ alignSelf: 'center', color: manual? '#1890ff': 'grey' }} />
             </Col>
           </Row>
-        </View>
-      </KeyboardAvoidingView>
+        </KeyboardAwareScrollView>
+      </View>
     )
 }
 
