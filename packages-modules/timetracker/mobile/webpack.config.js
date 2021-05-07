@@ -7,7 +7,6 @@ const webpackOpts = {
     mode: 'development',
     entry: {
         index: './src/index.ts',
-        'index.native': './src/index.native.ts',
     },
     target: 'node',
     output: {

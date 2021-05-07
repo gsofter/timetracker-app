@@ -1,8 +1,0 @@
-query GetDurationTimesheets($start: DateTime, $end: DateTime) {
-  getDurationTimesheets(start: $start, end: $end) {
-    userId
-    startDate
-    endDate
-    state
-  }
-}

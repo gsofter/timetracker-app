@@ -9,7 +9,7 @@
   "scripts": {
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf lib",
-    "build:lib": "webpack",
+    "build:lib": "tsc",
     "build:lib:watch": "npm run build:lib -- --watch",
     "jest": "./node_modules/.bin/jest",
     "prepublish": "npm run build",
@@ -50,6 +50,8 @@
     "react-custom-scrollbars": "^4.2.1",
     "react-date-range": "1.0.0-beta",
     "react-easy-swipe": "0.0.21",
+    "react-native-big-calendar": "^0.8.1",
+    "react-native-calendar-picker": "^7.1.1",
     "react-simple-timefield": "^3.2.3",
     "rifm": "^0.12.0",
     "socket.io-client": "2.2.0",

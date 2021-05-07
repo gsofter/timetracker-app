@@ -1,4 +1,7 @@
 import { Feature } from '@common-stack/client-react';
 import TimeTracker from './timetracker/module';
 
-export default new Feature(TimeTracker);
+console.log('--TIME TRACKER', TimeTracker);
+export default TimeTracker;
+
+export { TimeTracker };

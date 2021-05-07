@@ -1,3 +1,0 @@
-mutation RemoveTimesheet($sheetId: String) {
-  removeTimesheet(sheetId: $sheetId)
-}

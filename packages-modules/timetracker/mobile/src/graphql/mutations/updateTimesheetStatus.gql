@@ -1,3 +1,0 @@
-mutation UpdateTimesheetStatus($sheetId: String, $state: TimesheetState) {
-  updateTimesheetStatus(sheetId: $sheetId, state: $state)
-}

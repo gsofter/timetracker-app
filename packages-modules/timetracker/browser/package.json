@@ -1,5 +1,6 @@
 {
   "name": "@admin-layout/timetracker-module-browser",
+  "sideEffects": false,
   "version": "0.0.1",
   "description": "Sample core for higher packages to depend on",
   "license": "ISC",
@@ -10,6 +11,7 @@
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf lib",
     "build:lib": "webpack",
+    "build:lib:rollup": "rollup -c rollup.config.ts",
     "build:lib:watch": "npm run build:lib -- --watch",
     "jest": "./node_modules/.bin/jest",
     "prepublish": "npm run build",
@@ -62,8 +64,8 @@
   },
   "peerDependencies": {
     "@adminide-stack/core": "*",
-    "@common-stack/client-react": ">=0.0.256",
-    "@common-stack/core": ">=0.0.256",
+    "@common-stack/client-react": ">=0.0.257",
+    "@common-stack/core": ">=0.0.257",
     "antd": "^4.5.2"
   },
   "publishConfig": {

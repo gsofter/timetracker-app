@@ -1,8 +1,0 @@
-query GetMembers{
-    getOrganizationMembers {
-        userId
-        role
-        name
-        teamNames
-    }
-}
