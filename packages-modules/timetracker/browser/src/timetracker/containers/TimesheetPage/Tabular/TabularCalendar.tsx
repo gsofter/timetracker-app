@@ -49,6 +49,11 @@ interface ITabularCalendar {
   createTimesheet: Function;
 }
 
+const enum TIMESHEET_STATE {
+  APPROVED = 'Approved',
+  PENDING = 'Pending for approval',
+}
+
 export const TabularCalendar = ({
   weekStart,
   records,
@@ -360,6 +365,12 @@ export const TabularCalendar = ({
     return '';
   };
 
+  const getTimesheetState = (): TIMESHEET_STATE | undefined => {
+    if (unApprovals.length === 0 && timesheet && timesheet.state === ITimesheetState.APPROVED)
+      return TIMESHEET_STATE.APPROVED;
+    else if (timesheet && timesheet.state === ITimesheetState.SUBMITTED) return TIMESHEET_STATE.PENDING;
+    else return undefined;
+  };
   return (
     <div className={css(styles.root)}>
       <Modal
@@ -382,9 +393,14 @@ export const TabularCalendar = ({
         </p>
       </Modal>
       <Row className="table-header">
-        <Col>
+        <Col xs={24} md={8}>
           <Title level={5}>{getUsername()}</Title>
         </Col>
+        {getTimesheetState() ? (
+          <Col xs={24} md={8}>
+            <Tag color={timesheet.state === ITimesheetState.APPROVED ? 'green' : 'orange'}>{getTimesheetState()}</Tag>
+          </Col>
+        ) : null}
       </Row>
       <table className={css(styles.calendarTable)}>
         <thead>{HeaderRows()}</thead>
@@ -397,15 +413,17 @@ export const TabularCalendar = ({
         </tbody>
       </table>
       <Row className="table-footer">
-        {timesheet ? <Tag color="blue"> {timesheet.state} </Tag> : ''}
+        {getTimesheetState() === TIMESHEET_STATE.PENDING ? (
+          <p>
+            You can still add time while time sheet is <b> Pending for approval</b>
+          </p>
+        ) : null}
         <div className="spacer"></div>
-        <Button
-          type="primary"
-          onClick={openSubmitApproval}
-          disabled={unApprovals.length === 0 || (timesheet ? timesheet.state === ITimesheetState.SUBMITTED : false)}
-        >
-          Submit For Approval
-        </Button>
+        {getTimesheetState() === undefined ? (
+          <Button type="primary" onClick={openSubmitApproval}>
+            Submit For Approval
+          </Button>
+        ) : null}
       </Row>
     </div>
   );
