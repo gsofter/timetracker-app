@@ -15943,7 +15943,7 @@ expo-web-browser@~9.1.0:
   dependencies:
     compare-urls "^2.0.0"
 
-expo-yarn-workspaces@^1.3.1:
+expo-yarn-workspaces@^1.5.1:
   version "1.5.1"
   resolved "https://registry.yarnpkg.com/expo-yarn-workspaces/-/expo-yarn-workspaces-1.5.1.tgz#508eedb99992755bcb9078daa89612884568551f"
   integrity sha512-HYggm0fralUP68RNYRzFhCRYFdRsO5Kk8KtB9hZtQ3L61MBZofOF1ep5qL9hpUOeIZThf5Wvg+zljVTdljKwJw==
