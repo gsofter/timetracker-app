@@ -1,6 +1,7 @@
 import React, { useState } from 'react';
 import { Header, Left, Right, Body, Text, Icon } from 'native-base';
 import { useHistory } from 'react-router-native';
+import {auth0} from "../../constants/auth0"
 
 const MainHeader = (props: any) => {
   const[isToggle, setIsToggle] = useState(false);
@@ -14,6 +15,12 @@ const MainHeader = (props: any) => {
     setIsToggle(!isToggle)
   }
 
+  const logout = () => {
+    auth0.webAuth.clearSession()
+    .then(res => console.log(res))
+    .catch(error => console.log(error));
+  }
+
   const history = useHistory();
   return (
     <Header style={{ backgroundColor: '#1f1f1f' }}>
@@ -24,7 +31,7 @@ const MainHeader = (props: any) => {
         <Text style={{ color: '#fff' }}>{props.title}</Text>
       </Body>
       <Right>
-        <Icon style={{ color: '#fff' }} name="home" onPress={() => history.push('/')} />
+        <Icon style={{ color: '#fff' }} name="exit-outline" onPress={() => logout()} />
       </Right>
     </Header>
   );
