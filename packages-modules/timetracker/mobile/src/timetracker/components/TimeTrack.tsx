@@ -1,5 +1,5 @@
 import React from 'react';
-import { Col, Button } from 'native-base';
+import { Col, Button, Icon } from 'native-base';
 import { Text } from 'react-native';
 import { Stopwatch } from 'react-native-stopwatch-timer';
 
@@ -10,7 +10,11 @@ const TimeTrack = ({
     isStart, 
     isStop, 
     setStopWatchStart, 
-    setIsStop 
+    setIsStop,
+    onTrack,
+    onManual,
+    track,
+    manual 
 }: any) => {
     return (
         <>
@@ -38,6 +42,10 @@ const TimeTrack = ({
                     }}>Stop</Text>
                 </Button> 
             }
+            </Col>
+            <Col>
+                <Icon onPress={() => onTrack()} name="time-outline" style={{ alignSelf: 'center', color: track? '#1890ff': 'grey' }} />
+                <Icon onPress={() => onManual()} name="list-outline" style={{ alignSelf: 'center', color: manual? '#1890ff': 'grey' }} />
             </Col>
         </>
     )
