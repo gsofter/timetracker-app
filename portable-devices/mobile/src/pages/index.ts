@@ -1,5 +1,4 @@
-import Dashboard from './dashboard';
-import Hello from './hello';
-import CalendarScreen from './Calendar';
+import SignIn from './SignIn';
+import SignUp from './SignUp';
 
-export { Dashboard, Hello, CalendarScreen };
+export { SignIn, SignUp };

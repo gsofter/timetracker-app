@@ -1,42 +1,53 @@
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
-/* eslint-disable @typescript-eslint/no-unsafe-call */
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 import React, { useState } from 'react';
 import { Container, View, Text, List, ListItem, Left, Right, Icon, Drawer } from 'native-base';
-import { Link } from 'react-router-dom';
-import { DrawerActions } from '@react-navigation/native';
+import { Link } from 'react-router-native';
 
-const SideBar = ({ descriptors, routes, navigation }: any) => {
-    console.log('---ROUTES IN SIDEBAR', routes, descriptors);
-    const [icon, setIcon] = useState('arrow-forward');
-    const [toggle, setToggle] = useState(false);
-    const expand = () => {
-        if (icon === 'arrow-forward') {
-            setIcon('arrow-down');
-            // setToggle(true);
-        } else {
-            setIcon('arrow-forward');
-            setToggle(false);
-        }
-    };
-    return (
-        <Container>
-            {routes[1].routes.map((route: any) => (
-                <List key={route.key}>
-                    <Link key={route.key} to={route.path}>
-                        <ListItem key={route.key}>
-                            <Left>
-                                <Text>{route.name}</Text>
-                            </Left>
-                            <Right>
-                                <Icon name="arrow-forward" />
-                            </Right>
-                        </ListItem>
-                    </Link>
-                </List>
-            ))}
-        </Container>
-    );
+const SideBar = ({ matchUrl }: any) => {
+  const [icon, setIcon] = useState('chevron-down-outline');
+  const [isToggle, setToggle] = useState(false);
+
+  const toggle = () => {
+    if (isToggle) {
+      setIcon('chevron-down-outline');
+      setToggle(false);
+    } else {
+      setIcon('chevron-up-outline');
+      setToggle(true)
+    }
+  }
+  return (
+    <Container style={{ backgroundColor: '#1f1f1f' }}>
+      <List>
+        <ListItem onPress={() => toggle()}>
+          <Left>
+            <Icon style={{ color: isToggle ? '#fff': '#a1a1a1' }} name="document-outline" />
+            <Text style={{ color: isToggle ? '#fff': '#a1a1a1' }}>Time Tracker</Text>
+          </Left>
+          <Right>
+            <Icon name={icon} />
+          </Right>
+        </ListItem>
+        {isToggle && (
+          <List>
+            <ListItem>
+              <Left>
+                <Link to={`${matchUrl}/timer`} underlayColor="#f0f4f7">
+                  <Text style={{ color: '#a1a1a1' }}>Timer</Text>
+                </Link>
+              </Left>
+            </ListItem>
+            <ListItem>
+              <Left>
+                <Link to={`${matchUrl}/timesheet`} underlayColor="#f0f4f7">
+                  <Text style={{ color: '#a1a1a1' }}>TimeSheet</Text>
+                </Link>
+              </Left>
+            </ListItem>
+          </List>
+        )}
+      </List>
+    </Container>
+  );
 };
 
 export default SideBar;

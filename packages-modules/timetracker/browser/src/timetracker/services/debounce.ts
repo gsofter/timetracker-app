@@ -1,5 +1,5 @@
 const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) => {
-    let timeout: number;
+    let timeout: NodeJS.Timeout;
 
     return (...args: Parameters<F>): Promise<ReturnType<F>> =>
         new Promise((resolve) => {
@@ -7,7 +7,7 @@ const debounce = <F extends (...args: any[]) => any>(func: F, waitFor: number) =
                 clearTimeout(timeout);
             }
 
-            timeout = setTimeout(() => resolve(func(...args)), waitFor) as number;
+            timeout = setTimeout(() => resolve(func(...args)), waitFor) as any;
         });
 };
 
