@@ -3,11 +3,7 @@ import classNames from 'classnames';
 import moment from 'moment';
 import { useFela } from 'react-fela';
 import { Button, Row, Col, Input, Typography, Dropdown, Menu } from 'antd';
-import {
-  ITimeRecord,
-  ITimeRecordRequest,
-  IProjects as IProject,
-} from '@admin-layout/timetracker-core';
+import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
 import CSS from 'csstype';
 import {
   PlusCircleOutlined,
@@ -39,17 +35,8 @@ const calcTotalTime = (startTime: string, endTime: string): number => {
   return Math.floor((moment(endTime).valueOf() - moment(startTime).valueOf()) / 1000);
 };
 
-export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (
-  props: ITimerActivityItemProps,
-) => {
-  const {
-    removeTimeRecord,
-    timeRecord,
-    disablePlay,
-    disableDelete,
-    updateTimeRecord,
-    handlePlayTimer,
-  } = props;
+export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITimerActivityItemProps) => {
+  const { removeTimeRecord, timeRecord, disablePlay, disableDelete, updateTimeRecord, handlePlayTimer } = props;
   const { css } = useFela(props);
   const [selectedProject, setSelectedProject] = useState(timeRecord.projectId ?? '');
   const [taskName, setTaskName] = useState(timeRecord.taskName ?? '');
@@ -70,12 +57,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (
 
   const menus = (
     <Menu>
-      <Menu.Item
-        key="remove"
-        icon={<DeleteOutlined />}
-        onClick={handleRemove}
-        disabled={disableDelete}
-      >
+      <Menu.Item key="remove" icon={<DeleteOutlined />} onClick={handleRemove} disabled={disableDelete}>
         Remove
       </Menu.Item>
     </Menu>
@@ -128,26 +110,16 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (
         <Col span={24} xl={12} className="input">
           <Row style={{ width: '100%' }}>
             <Col span={18}>
-              <Input
-                placeholder="What are you working on?"
-                size="large"
-                value={taskName}
-                onChange={handleChangeTask}
-              />
+              <Input placeholder="What are you working on?" size="large" value={taskName} onChange={handleChangeTask} />
             </Col>
             <Col span={6} className="flex-end project-selection">
               <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
                 <Button
                   icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
-                  style={
-                    selectedProject === ''
-                      ? { textAlign: 'left' }
-                      : { textAlign: 'left', color: 'green' }
-                  }
+                  style={selectedProject === '' ? { textAlign: 'left' } : { textAlign: 'left', color: 'green' }}
+                  type="text"
                 >
-                  {selectedProject === ''
-                    ? 'Projects'
-                    : projects.find((p) => p.id === selectedProject)?.name}
+                  {selectedProject === '' ? 'Projects' : projects.find((p) => p.id === selectedProject)?.name}
                 </Button>
               </Dropdown>
             </Col>
@@ -156,7 +128,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (
         <Col span={24} xl={12} className="control">
           <Row style={{ width: '100%' }}>
             <Col span={2} className="flex-center">
-              <Button icon={<TagOutlined />} size="large"></Button>
+              <Button icon={<TagOutlined />} type="text" size="large"></Button>
             </Col>
             <Col span={2} className="flex-center">
               <BillableCheck checked={isBillable} onChange={handleChangeBillable} />
@@ -169,10 +141,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (
             </Col>
             <Col span={6} className="duration">
               <Title level={5}>
-                {formatDuration(
-                  calcTotalTime(timeRecord.startTime, timeRecord.endTime),
-                  timeFormat,
-                )}
+                {formatDuration(calcTotalTime(timeRecord.startTime, timeRecord.endTime), timeFormat)}
               </Title>
             </Col>
             <Col span={4} className="flex-end">
@@ -207,7 +176,7 @@ const styles: { [key: string]: (props) => CSS.Properties } = {
       display: 'flex',
       flexDirection: 'row',
       justifyContent: 'space-between',
-      alignItems: 'start',
+      alignItems: 'center',
     },
     '& .control': {
       display: 'flex',

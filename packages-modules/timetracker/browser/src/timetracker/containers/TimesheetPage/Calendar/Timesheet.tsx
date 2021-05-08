@@ -87,7 +87,6 @@ export default function SelectableCalendar({
     const member = members.find((m) => m.userId === event.userId);
     return (
       <>
-        <p> {member && member.name}</p>
         <p> {project && project.name}</p>
         <p>{title}</p>
         <p>{start}</p>
@@ -117,6 +116,7 @@ export default function SelectableCalendar({
       style: {
         color: color.main,
         backgroundColor: color.background,
+        borderColor: color.background,
       },
     };
   };
