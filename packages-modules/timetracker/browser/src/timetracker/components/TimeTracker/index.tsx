@@ -1,42 +1,19 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState } from 'react';
 import { useFela } from 'react-fela';
-import {
-  PlusCircleOutlined,
-  TagOutlined,
-  CloseOutlined,
-  ClockCircleOutlined,
-  BarsOutlined,
-} from '@ant-design/icons';
-import {
-  ITimeRecord,
-  ITimeRecordRequest,
-  IProjects as IProject,
-} from '@admin-layout/timetracker-core';
-import {
-  Input,
-  Button,
-  Typography,
-  Row,
-  Col,
-  Dropdown,
-  Menu,
-  Select,
-  DatePicker,
-  TimePicker,
-} from 'antd';
+import { PlusCircleOutlined, TagOutlined, CloseOutlined, ClockCircleOutlined, BarsOutlined } from '@ant-design/icons';
+import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
+import { Input, Button, Typography, Row, Col, Dropdown, Menu, Select, DatePicker, TimePicker } from 'antd';
 import CSS from 'csstype';
 import Timer from 'react-compound-timer';
 import moment from 'moment';
 import BillableCheck from '../BillableCheck';
 import classNames from 'classnames';
-import { formatDuration } from '../../services/timeRecordService';
 import { TRACKER_MODE } from '../../constants';
 import DurationInput from '../DurationInput';
 import { Moment } from 'moment';
 import momentZ from 'moment-timezone';
 import { useSelector } from 'react-redux';
 import { useTimeformat } from '../../hooks';
-import debounce from '../../services/debounce';
 import * as _ from 'lodash';
 
 const { RangePicker } = TimePicker;
@@ -150,12 +127,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const tagsOverlay = (
     <Menu>
       <Menu.Item key={1}>
-        <Select
-          mode="tags"
-          style={{ width: '100%' }}
-          onChange={handleTagsChange}
-          tokenSeparators={[',']}
-        >
+        <Select mode="tags" style={{ width: '100%' }} onChange={handleTagsChange} tokenSeparators={[',']}>
           {projects.map((p) => (
             <Select.Option key={p.id} value={p.id}>
               {p.name}
@@ -190,9 +162,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
             <Col span={6} className="flex-center project-selection">
               <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
                 <Button
-                  icon={
-                    currentTimeRecord.projectId === '' ? <PlusCircleOutlined /> : <BarsOutlined />
-                  }
+                  icon={currentTimeRecord.projectId === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
                   style={currentTimeRecord.projectId === '' ? {} : { color: 'green' }}
                 >
                   {currentTimeRecord.projectId === ''
@@ -211,10 +181,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
               </Dropdown>
             </Col>
             <Col span={2} sm={4} xxl={2} className={classNames(css(styles.billing), 'flex-center')}>
-              <BillableCheck
-                checked={currentTimeRecord.isBillable}
-                onChange={handleChangeBillable}
-              />
+              <BillableCheck checked={currentTimeRecord.isBillable} onChange={handleChangeBillable} />
             </Col>
 
             {mode === TRACKER_MODE.TRACK ? (
@@ -228,24 +195,12 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
                 </Col>
 
                 <Col span={5} sm={5}>
-                  <div
-                    className={classNames(
-                      'start',
-                      { hidden: isRecording },
-                      { 'flex-end': !isRecording },
-                    )}
-                  >
+                  <div className={classNames('start', { hidden: isRecording }, { 'flex-end': !isRecording })}>
                     <Button type="primary" onClick={handleStart} disabled={disable}>
                       START
                     </Button>
                   </div>
-                  <div
-                    className={classNames(
-                      'start',
-                      { hidden: !isRecording },
-                      { 'flex-end': isRecording },
-                    )}
-                  >
+                  <div className={classNames('start', { hidden: !isRecording }, { 'flex-end': isRecording })}>
                     <Button type="primary" danger onClick={handleStop} disabled={disable}>
                       STOP
                     </Button>
@@ -278,9 +233,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
                 <Col span={0} sm={6} className="duration">
                   <div className="flex-center">
                     <DurationInput
-                      duration={Math.floor(
-                        (moment(manualEnd).valueOf() - moment(manualStart).valueOf()) / 1000,
-                      )}
+                      duration={Math.floor((moment(manualEnd).valueOf() - moment(manualStart).valueOf()) / 1000)}
                       onChange={handleChangeDur}
                     />
                   </div>
@@ -315,6 +268,7 @@ const styles: { [key: string]: (obj) => CSS.Properties } = {
   timeTracker: ({ theme }) => ({
     padding: '5px 10px',
     border: '1px solid #eee',
+    backgroundColor: '#fff',
     borderRadius: '5px',
     marginBottom: '5px',
     '& .input': {
@@ -340,8 +294,6 @@ const styles: { [key: string]: (obj) => CSS.Properties } = {
         padding: '5px 0px',
       },
       '& .divider': {
-        // marginTop: '5px',
-        // marginBottom: '5px',
         borderLeft: '1px dashed #eee',
         height: '75%',
       },
