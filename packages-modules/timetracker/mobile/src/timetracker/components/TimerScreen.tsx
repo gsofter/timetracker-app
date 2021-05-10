@@ -11,6 +11,7 @@ const TimerScreen = () => {
   const [billable, setBillable] = useState(false);
   const [track, setTrack] = useState(true);
   const [manual, setManual] = useState(false);
+  const [addManual, setAddManual] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState<any>(moment().format('MM-DD-YYYY'));
   const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
   const [isStartTime, setIsStartTime] = useState(false)
@@ -35,6 +36,11 @@ const TimerScreen = () => {
     } else {
       setSelectedStartDate(Date);
     }
+  };
+
+  const onSingleDateChange = (event: any, date: any) => {
+    setSelectedDate(date);
+    setCalendarVisible(Platform.OS === 'ios')
   };
 
   const onReset = () => {
@@ -81,7 +87,7 @@ const TimerScreen = () => {
           onDateChange={onDateChange}
           onReset={onReset}
         />
-        {manual && 
+        {addManual && 
           <ManualTime 
             toggleStart={toggleStart}
             startTime={startTime}
@@ -93,7 +99,7 @@ const TimerScreen = () => {
             setCalendarVisible={setCalendarVisible}
             selectedDate={selectedDate}
             calendarVisible={calendarVisible}
-            onDateChange={onDateChange}
+            onDateChange={onSingleDateChange}
             isEndTime={isEndTime}
           />
         }
@@ -108,6 +114,7 @@ const TimerScreen = () => {
         onTrack={onTrack}
         onManual={onManual}
         onDateChange={onDateChange}
+        setAddManual={setAddManual}
       />
     </View>
   );

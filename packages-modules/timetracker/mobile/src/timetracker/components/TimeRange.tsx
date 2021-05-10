@@ -1,5 +1,5 @@
 import React, { useState} from 'react';
-import { View, Text, StyleSheet } from 'react-native';
+import { View, Text, StyleSheet, TouchableOpacity } from 'react-native';
 import { Icon, Button } from 'native-base';
 import CalendarPicker from 'react-native-calendar-picker';
 import Dialog, { DialogContent } from 'react-native-popup-dialog';
@@ -10,16 +10,16 @@ const TimeRange = ({ onDateChange, onReset, selectedStartDate, selectedEndDate }
     return (
         <View>
             <View style={styles.textDiv}>
-                <View style={styles.textStyle}>
-                    <Text onPress={() => setModalVisible(true)}>
+                <TouchableOpacity style={styles.textStyle} onPress={() => setModalVisible(true)}>
+                    <Text>
                         {selectedStartDate ? selectedStartDate.toString() : ''}
                     </Text>
                     <Icon style={styles.font_size} name="arrow-forward-outline" />
-                    <Text onPress={() => setModalVisible(true)}>
+                    <Text>
                         {selectedEndDate ? selectedEndDate.toString() : ''}
                     </Text>
                     <Icon style={styles.font_size} name="today-outline" />
-                </View>
+                </TouchableOpacity>
                 <Button block style={styles.button} info onPress={() => onReset()} ><Text style={styles.button_text}>Rest</Text></Button>
             </View>
             <Dialog
