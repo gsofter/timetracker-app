@@ -3,6 +3,7 @@ import { Icon, Item, Input, Button } from 'native-base';
 import { View, StyleSheet, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import RadioForm from 'react-native-simple-radio-button';
+import { useHistory } from "react-router-native"
 
 import TimeTrack from './TimeTrack'
 
@@ -26,6 +27,7 @@ const TimerFooter = ({
   const [stopwatchStart, setStopWatchStart] = useState(false)
   const [isStart, setIsStart] = useState(true)
   const [isStop, setIsStop] = useState(false)
+  const history = useHistory()
 
   const getFormattedTime = (time: any) => {
     const currentTime = time;
@@ -85,7 +87,7 @@ const TimerFooter = ({
               buttonColor={'#1890ff'}
             />
             <Button info block
-            onPress={() => setAddManual(true)}
+            onPress={() => history.push('/org/create')}
             >
               <Text style={styles.add_btn}>+</Text>
             </Button>
