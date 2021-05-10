@@ -41,10 +41,11 @@ export const DoughnutChart = ({ data, labels, title }) => {
 
   let newLabels = [];
   let backgroundColor = [];
+  let count = 0;
   const newData = data.filter((d, i) => {
     if (d) {
       newLabels.push(labels[i]);
-      backgroundColor.push(bgColor[i % bgColor.length]);
+      backgroundColor.push(bgColor[(count++) % bgColor.length]);
     }
     return d;
   });
