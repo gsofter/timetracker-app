@@ -168,6 +168,9 @@ export const Reports: React.FC<IReportsProps> = ({
               weekStart={weekStart}
               records={records}
               projects={projects}
+              rounded={rounded}
+              roundValue={roundValue}
+              roundType={roundType}
               calcDurationReducer={calcDurationReducer}
             />
           </Menu.Item>
