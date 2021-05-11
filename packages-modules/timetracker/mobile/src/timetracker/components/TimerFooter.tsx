@@ -87,7 +87,7 @@ const TimerFooter = ({
               buttonColor={'#1890ff'}
             />
             <Button info block
-            onPress={() => history.push('/org/create')}
+            onPress={() => history.push('/create')}
             >
               <Text style={styles.add_btn}>+</Text>
             </Button>

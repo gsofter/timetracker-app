@@ -25,7 +25,6 @@ export const MainRoute = () => {
           component={(props: any) => route.component(props, route)}
         />
       ))}
-      <StatusBar style="auto" />
     </>
   );
 };

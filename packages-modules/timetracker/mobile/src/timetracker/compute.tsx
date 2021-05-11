@@ -26,12 +26,12 @@ export const timePageStore: any[] = [
     },
     {
         exact: true,
-        key: 'timeTracker.add',
+        key: 'add',
         name: 'CreateManual',
         component: AddManual,
         position: IMenuPosition.MIDDLE,
         // path: ROUTES.Timer,
-        path: '/org/create',
+        path: '/create',
         priority: 4,
     },
 ];
@@ -40,7 +40,7 @@ const selectedRoutesAndMenus = [
     'timeTracker',
     'timeTracker.timer',
     'timeTracker.timesheet',
-    'timerTracker.add'
+    'add'
 ];
 
 // get routes
