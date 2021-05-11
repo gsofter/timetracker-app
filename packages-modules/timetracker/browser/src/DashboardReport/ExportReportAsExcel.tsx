@@ -29,14 +29,6 @@ export const ExportReportAsExcel = (props: IExportReportAsExcel) => {
         setColumns(['Project', 'Time(h)', 'Time(decimal)']);
     }, []);
 
-    const getTotalTime = (pRecords) => {
-        const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
-        const time = rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
-        const time_h = formatDuration(time, timeFormat);
-        const time_dec = moment.duration(time_h).asHours().toFixed(2);
-        return { time, time_h, time_dec };
-    };
-
     useEffect(() => {
         let timeData = [];
         const projectDurArray = projects.map((project, index) => {
@@ -56,7 +48,15 @@ export const ExportReportAsExcel = (props: IExportReportAsExcel) => {
         const totalTime = formatDuration(timeData.length && timeData.reduce((accumulator, currentValue) => accumulator + currentValue), timeFormat);
         projectDurArray.push([`Total (${duration})`, totalTime, moment.duration(totalTime).asHours().toFixed(2)]);
         setData(projectDurArray);
-    }, [records, projects, weekStart, dateFormat, timeFormat, rounded, roundType, roundValue]);
+    }, [JSON.stringify(records), JSON.stringify(projects), weekStart, dateFormat, timeFormat, rounded, roundType, roundValue]);
+
+    const getTotalTime = (pRecords) => {
+        const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
+        const time = rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
+        const time_h = formatDuration(time, timeFormat);
+        const time_dec = moment.duration(time_h).asHours().toFixed(2);
+        return { time, time_h, time_dec };
+    };
 
     return (
         <ExcelFile element={<div>Save as Excel</div>}>
