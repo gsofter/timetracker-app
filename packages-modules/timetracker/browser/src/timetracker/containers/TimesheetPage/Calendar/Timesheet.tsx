@@ -3,7 +3,7 @@ import { Calendar } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment, { Moment } from 'moment';
 import { momentLocalizer } from 'react-big-calendar';
-import { Row, Col, Button, Typography } from 'antd';
+import { Row, Col, Button, Tag, Card } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import {
   ITimeRecord,
@@ -15,7 +15,7 @@ import {
 import TimesheetModal from './TimesheetModal';
 import * as _ from 'lodash';
 import { EVENT_COLORS } from '../../../constants';
-const { Title } = Typography;
+import { useFela } from 'react-fela';
 
 const DnDCalendar: any = withDragAndDrop(Calendar as any);
 const allViews: string[] = ['day', 'week', 'month'];
@@ -67,11 +67,7 @@ export default function SelectableCalendar({
   weekStart,
   setPathWeekStart,
 }: ITimesheetProps) {
-  const resetModal = (e: any) => {
-    e.preventDefault();
-    form.resetFields();
-  };
-
+  const { css } = useFela();
   const onEventDrop = ({ event, start, end, allDay }) => {
     const updateRequest = { ..._.omit(event, ['id', '__typename']), startTime: moment(start), endTime: moment(end) };
     handleUpdateTimeRecordEvent(event.id, updateRequest);
@@ -143,32 +139,46 @@ export default function SelectableCalendar({
           </Button>
         </Col>
       </Row>
-
-      <DnDCalendar
-        selectable={true}
-        localizer={localizer}
-        events={events}
-        defaultView="week"
-        views={allViews}
-        defaultDate={moment(weekStart).toDate()}
-        onSelectEvent={handleSelectEvent}
-        onSelectSlot={handleSelectSlot}
-        startAccessor="startTime"
-        endAccessor="endTime"
-        titleAccessor="taskName"
-        toolbar={true}
-        resizable={true}
-        onEventDrop={onEventDrop}
-        onEventResize={onEventResize}
-        components={{
-          event: EventComponent,
-          agenda: {
-            event: EventAgenda,
-          },
-        }}
-        onNavigate={handleNavigate}
-        eventPropGetter={eventStyleGetter}
-      />
+      <Card>
+        <Row>
+          <Col xs={24} md={20}>
+            <div className={css(stylesheet.styles)}>
+              <DnDCalendar
+                selectable={true}
+                localizer={localizer}
+                events={events}
+                defaultView="week"
+                views={allViews}
+                defaultDate={moment(weekStart).toDate()}
+                onSelectEvent={handleSelectEvent}
+                onSelectSlot={handleSelectSlot}
+                startAccessor="startTime"
+                endAccessor="endTime"
+                titleAccessor="taskName"
+                toolbar={true}
+                resizable={true}
+                onEventDrop={onEventDrop}
+                onEventResize={onEventResize}
+                components={{
+                  event: EventComponent,
+                  agenda: {
+                    event: EventAgenda,
+                  },
+                }}
+                onNavigate={handleNavigate}
+                eventPropGetter={eventStyleGetter}
+              />
+            </div>
+          </Col>
+          <Col xs={24} md={4} style={{ marginTop: '20px', padding: '10px' }}>
+            {members.map((m, id) => (
+              <Tag color={EVENT_COLORS[id].background} style={{ marginBottom: '5px' }}>
+                <span style={{ color: EVENT_COLORS[id].main }}> {m.name} </span>
+              </Tag>
+            ))}
+          </Col>
+        </Row>
+      </Card>
     </>
   );
 }
@@ -253,14 +263,3 @@ const stylesheet: any = {
     },
   }),
 };
-
-// export default (props: ITimesheetProps) => {
-//   const { css } = useFela();
-//   return (
-//     <div className={css(stylesheet.styles)}>
-//       <div className="calender-width">
-//         <SelectableCalendar {...props} />
-//       </div>
-//     </div>
-//   );
-// };

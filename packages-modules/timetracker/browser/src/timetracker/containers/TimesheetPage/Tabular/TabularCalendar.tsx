@@ -38,7 +38,7 @@ interface ITabularCalendar {
   weekStart: Moment;
   records: ITimeRecord[];
   projects: Array<IProject>;
-  timesheet: ITimesheet | null;
+  timesheets: Array<ITimesheet> | null;
   selectedUser: string;
   projectsApproval: IProjectsApproval;
   projectsMap: Map<string, IProject>;
@@ -59,7 +59,7 @@ export const TabularCalendar = ({
   weekStart,
   records,
   projects,
-  timesheet,
+  timesheets,
   selectedUser,
   projectsApproval,
   projectsMap,
@@ -366,10 +366,10 @@ export const TabularCalendar = ({
     return '';
   };
 
-  const getTimesheetState = (): TIMESHEET_STATE | undefined => {
-    if (unApprovals.length === 0 && timesheet && timesheet.state === ITimesheetState.APPROVED)
-      return TIMESHEET_STATE.APPROVED;
-    else if (timesheet && timesheet.state === ITimesheetState.SUBMITTED) return TIMESHEET_STATE.PENDING;
+  const getTimesheetState = (): ITimesheetState | undefined => {
+    if (timesheets.some((sheet) => sheet.state === ITimesheetState.SUBMITTED)) return ITimesheetState.SUBMITTED;
+    if (timesheets.some((sheet) => sheet.state === ITimesheetState.APPROVED) && unApprovals.length === 0)
+      return ITimesheetState.APPROVED;
     else return undefined;
   };
   return (
@@ -399,7 +399,9 @@ export const TabularCalendar = ({
         </Col>
         {getTimesheetState() ? (
           <Col xs={24} md={8}>
-            <Tag color={timesheet.state === ITimesheetState.APPROVED ? 'green' : 'orange'}>{getTimesheetState()}</Tag>
+            <Tag color={getTimesheetState() === ITimesheetState.SUBMITTED ? 'orange' : 'green'}>
+              {getTimesheetState() === ITimesheetState.SUBMITTED ? 'Pending for approval' : 'Approved'}
+            </Tag>
           </Col>
         ) : null}
       </Row>
@@ -414,7 +416,7 @@ export const TabularCalendar = ({
         </tbody>
       </table>
       <Row className="table-footer">
-        {getTimesheetState() === TIMESHEET_STATE.PENDING ? (
+        {getTimesheetState() === ITimesheetState.SUBMITTED ? (
           <p>
             You can still add time while time sheet is <b> Pending for approval</b>
           </p>
