@@ -1,6 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Row, Col, Button, Switch, Table, message, Card, Radio } from 'antd';
-import { PageContainer } from '@admin-layout/components';
+import { Switch, Table, message, Card, Radio, Dropdown, Menu, Button } from 'antd';
 import { BarChart } from './BarChart';
 import { DoughnutChart } from './DoughnutChart';
 import moment, { Moment } from 'moment';
@@ -8,8 +7,10 @@ import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { formatDuration, roundDuration } from '../timetracker/services/timeRecordService';
 import { useFirstWeekDay, useRound, useTimeformat } from '../timetracker/hooks';
 import * as _ from 'lodash';
-import { RightOutlined, LeftOutlined } from '@ant-design/icons';
+import { RightOutlined, LeftOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { useFela } from 'react-fela';
+import { ExportReportAsExcel } from './ExportReportAsExcel';
+import { ExportReportAsCSV } from './ExportReportAsCSV';
 
 interface IReportsProps {
   weekStart: Moment;
@@ -158,6 +159,40 @@ export const Reports: React.FC<IReportsProps> = ({
     setWeekStart(newWeekStart);
   };
 
+  const exportMenu = () => {
+    const menu = (
+        <Menu>
+          <Menu.Item>Save as PDF</Menu.Item>
+          <Menu.Item>
+            <ExportReportAsCSV
+                records={records}
+                projects={projects}
+                rounded={rounded}
+                roundValue={roundValue}
+                roundType={roundType}
+                calcDurationReducer={calcDurationReducer}
+            />
+          </Menu.Item>
+          <Menu.Item>
+            <ExportReportAsExcel
+              weekStart={weekStart}
+              records={records}
+              projects={projects}
+              rounded={rounded}
+              roundValue={roundValue}
+              roundType={roundType}
+              calcDurationReducer={calcDurationReducer}
+            />
+          </Menu.Item>
+        </Menu>
+    );
+    return (
+        <Dropdown overlay={menu} placement="bottomCenter">
+          <Button><span>Export</span><CaretDownOutlined /></Button>
+        </Dropdown>
+    );
+  }
+
   return (
       <div className={css(styles.container)}>
         <Card title={'Timetracker Report'} bordered={false}>
@@ -175,7 +210,8 @@ export const Reports: React.FC<IReportsProps> = ({
             </div>
             <div className={css(styles.right)}>
               <span className={css(styles.roundingLabel)}>Rounding:</span>
-              <Switch checked={rounded} onChange={handleSwitchRoundMode}/>
+              <Switch className={css(styles.mr10)} size={'small'} checked={rounded} onChange={handleSwitchRoundMode}/>
+              {exportMenu()}
             </div>
           </div>
           <div className={css(styles.title)}>
@@ -254,5 +290,8 @@ const styles = {
   title: () => ({
     width: '100%',
     textAlign: 'center',
-  })
+  }),
+  mr10: () => ({
+    marginRight: '10px',
+  }),
 };

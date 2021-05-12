@@ -18,6 +18,7 @@ import { formatDuration } from '../../../services/timeRecordService';
 import CSS from 'csstype';
 import * as _ from 'lodash';
 import { useTimeformat } from '../../../hooks';
+import { ExportExcel } from './ExportExcel';
 
 const { Title } = Typography;
 
@@ -418,7 +419,16 @@ export const TabularCalendar = ({
             You can still add time while time sheet is <b> Pending for approval</b>
           </p>
         ) : null}
-        <div className="spacer"></div>
+        <div className="spacer">
+          <ExportExcel
+              weekStart={weekStart}
+              records={records}
+              projectsMap={projectsMap}
+              approvals={approvals}
+              unApprovals={unApprovals}
+              getProjectTotalDuration={getProjectTotalDuration}
+          />
+        </div>
         {getTimesheetState() === undefined ? (
           <Button type="primary" onClick={openSubmitApproval}>
             Submit For Approval
