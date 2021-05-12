@@ -10,6 +10,7 @@ import * as _ from 'lodash';
 import { RightOutlined, LeftOutlined, CaretDownOutlined } from '@ant-design/icons';
 import { useFela } from 'react-fela';
 import { ExportReportAsExcel } from './ExportReportAsExcel';
+import { ExportReportAsCSV } from './ExportReportAsCSV';
 
 interface IReportsProps {
   weekStart: Moment;
@@ -162,12 +163,24 @@ export const Reports: React.FC<IReportsProps> = ({
     const menu = (
         <Menu>
           <Menu.Item>Save as PDF</Menu.Item>
-          <Menu.Item>Save as CSV</Menu.Item>
+          <Menu.Item>
+            <ExportReportAsCSV
+                records={records}
+                projects={projects}
+                rounded={rounded}
+                roundValue={roundValue}
+                roundType={roundType}
+                calcDurationReducer={calcDurationReducer}
+            />
+          </Menu.Item>
           <Menu.Item>
             <ExportReportAsExcel
               weekStart={weekStart}
               records={records}
               projects={projects}
+              rounded={rounded}
+              roundValue={roundValue}
+              roundType={roundType}
               calcDurationReducer={calcDurationReducer}
             />
           </Menu.Item>

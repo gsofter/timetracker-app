@@ -124,6 +124,7 @@
     moment-duration-format "^2.3.2"
     react-chartjs-2 "^2.11.1"
     react-compound-timer "^1.2.0"
+    react-csv "^2.0.3"
     react-custom-scrollbars "^4.2.1"
     react-date-range "1.0.0-beta"
     react-easy-swipe "0.0.21"
@@ -29427,6 +29428,11 @@ react-copy-to-clipboard@^5.0.2:
   dependencies:
     copy-to-clipboard "^3"
     prop-types "^15.5.8"
+
+react-csv@^2.0.3:
+  version "2.0.3"
+  resolved "https://registry.yarnpkg.com/react-csv/-/react-csv-2.0.3.tgz#f5d17a3c71107d9bcbe580049350200debdc042a"
+  integrity sha512-exyAdFLAxtuM4wNwLYrlKyPYLiJ7e0mv9tqPAd3kq+k1CiJFtznevR3yP0icv5q/y200w+lzNgi7TQn1Wrhu0w==
 
 react-custom-scrollbars@^4.2.1:
   version "4.2.1"
