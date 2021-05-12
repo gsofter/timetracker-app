@@ -78,7 +78,12 @@ export const LimitsModal = (props: ILimitsModal) => {
                 onFinish={onFinish}
                 initialValues={{ weeklyLimit, dailyLimit }}
             >
-                <Item label={'Recurring Weekly Limit'} name={'weeklyLimit'} tooltip={{ icon: <InfoCircleFilled /> }}>
+                <Item
+                    label={'Recurring Weekly Limit'}
+                    rules={[{ required: true, message: 'Please enter weekly limit!' }]}
+                    name={'weeklyLimit'}
+                    tooltip={{ icon: <InfoCircleFilled /> }}
+                >
                     <Input addonAfter={'hrs/wk'} type={'number'} placeholder={'No weekly limit'}/>
                 </Item>
                 <Item label={'Recurring Daily Limit'} tooltip={{ icon: <InfoCircleFilled /> }}>
@@ -92,7 +97,11 @@ export const LimitsModal = (props: ILimitsModal) => {
                         />
                         <div>Use shifts to set daily limits</div>
                     </div>
-                    <Item className={css(styles.mt15, styles.mb0)} name={'dailyLimit'}>
+                    <Item
+                        className={css(styles.mt15, styles.mb0)}
+                        rules={[{ required: true, message: 'Please enter daily limit!' }]}
+                        name={'dailyLimit'}
+                    >
                         <Input addonAfter={'hrs/day'} type={'number'} disabled={!isDailyLimit} placeholder={'No daily limit'}/>
                     </Item>
                 </Item>

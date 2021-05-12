@@ -3,11 +3,7 @@ import React, { useState, useEffect } from 'react';
 import { PageContainer } from '@admin-layout/components';
 import TabularCalendar from './Tabular';
 import TimesheetCalendar from './Calendar';
-import {
-  useGetProjectsQuery,
-  useGetTagsQuery,
-  useGetOrganizationMembersQuery,
-} from '../../../generated-models';
+import { useGetProjectsQuery, useGetOrganizationMembersQuery } from '../../../generated-models';
 import { Row, Col, Switch, Form, Select, Spin } from 'antd';
 import { IProjects as IProject, ITag, IOrgMember } from '@admin-layout/timetracker-core';
 import { IPermissionType } from '@adminide-stack/core';
@@ -22,7 +18,6 @@ import { useFirstWeekDay, useViewPermissions } from '../../hooks';
 import { useSelector } from 'react-redux';
 interface ITimesheetProps {
   projects: Array<IProject>;
-  tags: Array<ITag>;
   members: Array<IOrgMember>;
   localizer: any;
   weekStart: Moment;
@@ -33,7 +28,6 @@ interface ITimesheetProps {
 
 const Timesheet = ({
   projects,
-  tags,
   members,
   localizer,
   weekStart,
@@ -44,9 +38,8 @@ const Timesheet = ({
   const location = useLocation();
   const history = useHistory();
   const parsed = qs.parse(location.search);
-  const [selectedProject, setSelectedProject] = useState('');
+  const [selectedProject, setSelectedProject] = useState('__all');
   const [isShowTimeModal, setIsShowTimeModal] = useState(false);
-  const { others: viewOthersPermit } = useViewPermissions();
 
   const handleChangeViewMode = () => {
     parsed.view = parsed.view === 'calendar' ? 'tabular' : 'calendar';
@@ -68,7 +61,6 @@ const Timesheet = ({
     setSelectedUser(value);
   };
 
-  console.log('selectedUser => ', selectedUser);
   return (
     <PageContainer>
       <Row align="middle" justify="space-between" style={{ marginBottom: '10px' }}>
@@ -90,12 +82,7 @@ const Timesheet = ({
       </Row>
       <Row align="middle" gutter={[24, 16]}>
         <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
+          <Form labelCol={{ span: 20 }} wrapperCol={{ span: 20 }} layout="vertical" className="sm-screen-size">
             <Form.Item label="Timezone Picker">
               <TimezonePicker
                 value="Asia/Yerevan"
@@ -109,12 +96,7 @@ const Timesheet = ({
           </Form>
         </Col>
         <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
+          <Form labelCol={{ span: 20 }} wrapperCol={{ span: 20 }} layout="vertical" className="sm-screen-size">
             <Form.Item label="Members">
               <Select onChange={handleChangeSelectedUser} value={selectedUser}>
                 <Select.Option value="__all" key="__all">
@@ -132,12 +114,7 @@ const Timesheet = ({
           </Form>
         </Col>
         <Col md={4} xs={16}>
-          <Form
-            labelCol={{ span: 20 }}
-            wrapperCol={{ span: 20 }}
-            layout="vertical"
-            className="sm-screen-size"
-          >
+          <Form labelCol={{ span: 20 }} wrapperCol={{ span: 20 }} layout="vertical" className="sm-screen-size">
             <Form.Item label="Projects">
               <Select onChange={handleChangeProject} value={selectedProject}>
                 <Select.Option value="__all">All</Select.Option>
@@ -169,7 +146,6 @@ const Timesheet = ({
         <TabularCalendar
           projects={projects}
           members={members}
-          tags={tags}
           localizer={localizer}
           weekStart={weekStart}
           setPathWeekStart={setPathWeekStart}
@@ -184,7 +160,6 @@ const Timesheet = ({
 const TimesheetPage = () => {
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { data: membersData, loading: loadingMembers } = useGetOrganizationMembersQuery();
-  const { data: tagsData, loading: loadingTags } = useGetTagsQuery();
   const { value: dowValue } = useFirstWeekDay();
   const history = useHistory();
   const queryParsed = qs.parse(location.search);
@@ -196,9 +171,7 @@ const TimesheetPage = () => {
   };
 
   const selectedUser = () => {
-    return (
-      (queryParsed.username as string) ?? (viewSelfPermit === IPermissionType.Allow ? userId : '')
-    );
+    return (queryParsed.username as string) ?? (viewSelfPermit === IPermissionType.Allow ? userId : '');
   };
 
   useEffect(() => {
@@ -250,11 +223,10 @@ const TimesheetPage = () => {
   };
 
   return (
-    <Spin spinning={loadingProjects || loadingMembers || loadingTags}>
+    <Spin spinning={loadingProjects || loadingMembers}>
       <Timesheet
         projects={filteredProjects()}
         members={filteredMembers()}
-        tags={_.get(tagsData, 'getTags', [])}
         localizer={localizerM}
         weekStart={weekStart()}
         selectedUser={selectedUser()}

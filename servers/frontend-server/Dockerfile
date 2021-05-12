@@ -10,6 +10,7 @@ COPY .npmrc /tmp/.npmrc
 ADD package.json /tmp/package.json
 RUN set -ex \
     && apk add --no-cache \
+	git \
 	curl \
 	ca-certificates \
 	build-base \

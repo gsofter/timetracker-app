@@ -1,50 +1,43 @@
+/* eslint-disable class-methods-use-this */
 import * as ILogger from 'bunyan';
-import { inject, injectable } from 'inversify';
-import {
-  ITimesheet,
-  ITimesheetState,
-  ITimesheetCreateRequest,
-} from '@admin-layout/timetracker-core';
+import { inject, injectable, tagged } from 'inversify';
+import { ITimesheet, ITimesheetState, ITimesheetCreateRequest } from '@admin-layout/timetracker-core';
 import {
   ConfigurationTarget,
   generateOrgUri,
   IConfigFragmentName,
   ServerTypes,
   IPreferencesService,
-  IMailServiceAction,
-  IMailerServicesendArgs,
-  IMoleculerServiceName,
 } from '@adminide-stack/core';
-import { TYPES } from '../constants';
+import { IMailServiceAction, IMailerServicesendArgs, IMoleculerServiceName } from '@container-stack/mailing-api';
 import * as moment from 'moment';
-import { ITimeRecordRepository, ITimesheetRepository } from '../store/repository';
-import { EmailTemplateCodes } from '../constants';
-import { config } from '../config';
 import { ServiceBroker, CallingOptions } from 'moleculer';
-import { CommonType } from '@common-stack/core';
+import { CommonType, TaggedType } from '@common-stack/core';
+import { TYPES, EmailTemplateCodes } from '../constants';
+import { ITimeRecordRepository, ITimesheetRepository } from '../store/repository';
+
+import { config } from '../config';
+
 export interface ITimesheetService {
   getTimesheets(orgId: string): Promise<Array<ITimesheet>>;
   getTimesheetsWithTotalHours(orgId: string, userId?: string): Promise<Array<ITimesheet>>;
   getDurationTimesheets(orgId: string, start: Date, end: Date): Promise<Array<ITimesheet>>;
-  createTimesheet(
-    userId: string,
-    orgId: string,
-    request: ITimesheetCreateRequest,
-  ): Promise<Boolean>;
+  createTimesheet(userId: string, orgId: string, request: ITimesheetCreateRequest): Promise<boolean>;
   updateTimesheet(
     userId: string,
     orgId: string,
     sheetId: string,
     request: ITimesheetCreateRequest,
     userContext?: any,
-  ): Promise<Boolean>;
-  updateTimesheetStatus(orgId: string, sheetId: string, state: ITimesheetState): Promise<Boolean>;
-  removeTimesheet(userId: string, orgId: string, sheetId: string): Promise<Boolean>;
+  ): Promise<boolean>;
+  updateTimesheetStatus(orgId: string, sheetId: string, state: ITimesheetState): Promise<boolean>;
+  removeTimesheet(userId: string, orgId: string, sheetId: string): Promise<boolean>;
 }
 
 @injectable()
 export class TimesheetService implements ITimesheetService {
   private logger: ILogger;
+
   constructor(
     @inject(TYPES.ITimesheetRepository)
     protected timesheetRepository: ITimesheetRepository,
@@ -61,37 +54,31 @@ export class TimesheetService implements ITimesheetService {
     @inject(CommonType.MOLECULER_BROKER)
     private broker: ServiceBroker,
 
+    @inject('Settings')
+    @tagged(TaggedType.MICROSERVICE, true)
+    private settings: any,
     @inject('Logger')
     logger: ILogger,
   ) {
     this.logger = logger;
   }
 
-  public checkInPeriod(t: Date, A: Date, B: Date): boolean {
-    if (moment(A) < moment(B)) return moment(t) >= moment(A) && moment(t) <= moment(B);
-    else return moment(t) >= moment(B) && moment(t) <= moment(A);
-  }
-
   public async getTimesheets(orgId: string, userId?: string) {
-    return await this.timesheetRepository.getTimesheets(orgId, userId);
+    return this.timesheetRepository.getTimesheets(orgId, userId);
   }
 
   public async getTimesheetsWithTotalHours(orgId: string, userId?: string) {
     const timesheets = await this.timesheetRepository.getTimesheets(orgId, userId);
     const timeRecords = await this.timeRecordRepository.getTimeRecords(orgId, userId);
     return timesheets.map((timesheet) => {
-      let sheetTotalDuration = timeRecords
-        .filter((tr) => {
-          return (
-            tr.userId === timesheet.userId &&
-            tr.startTime > timesheet.startDate &&
-            tr.endTime < timesheet.endDate
-          );
-        })
+      const sheetTotalDuration = timeRecords
+        .filter(
+          (tr) =>
+            tr.userId === timesheet.userId && tr.startTime > timesheet.startDate && tr.endTime < timesheet.endDate,
+        )
         .reduce(
           (duration, tr) =>
-            duration +
-            Math.floor((moment(tr.endTime).valueOf() - moment(tr.startTime).valueOf()) / 1000),
+            duration + Math.floor((moment(tr.endTime).valueOf() - moment(tr.startTime).valueOf()) / 1000),
           0,
         );
       return {
@@ -135,12 +122,7 @@ export class TimesheetService implements ITimesheetService {
       await this.timesheetRepository.updateTimesheet(orgId, sheetId, request);
       if (request.state === ITimesheetState.APPROVED) {
         // approve time records from startDate to endDate
-        this.timeRecordService.approveTimeRecords(
-          orgId,
-          sheetId,
-          request.startDate,
-          request.endDate,
-        );
+        this.timeRecordService.approveTimeRecords(orgId, sheetId, request.startDate, request.endDate);
       } else if (request.state === ITimesheetState.DENYED) {
         // approve time records from startDate to endDate
         this.timeRecordService.disapproveTimeRecords(orgId, sheetId);
@@ -228,12 +210,7 @@ export class TimesheetService implements ITimesheetService {
     );
   }
 
-  private async callAction<T, P = any>(
-    command: string,
-    params?: P,
-    topic?: string,
-    opts?: CallingOptions,
-  ) {
-    return this.broker.call<T, P>(`${topic}.${command}`, params, opts);
+  private async callAction<T, P = any>(command: string, params?: P, topic?: string, opts?: CallingOptions) {
+    return this.broker.call<T, P>(`${topic}.${command}@${this.settings.adminApiNamespace}`, params, opts);
   }
 }

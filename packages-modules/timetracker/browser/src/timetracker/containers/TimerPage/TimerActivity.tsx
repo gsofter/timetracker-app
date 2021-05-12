@@ -1,7 +1,8 @@
 import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { useFela } from 'react-fela';
-import moment, { Moment } from 'moment';
+import { Moment } from 'moment';
+import { moment } from './index';
 import { PageContainer } from '@admin-layout/components';
 import PageHeader from '../../components/PageHeader';
 import { TimerSearchComponent } from '../../components/TimerSearchComponent/index';
@@ -9,7 +10,6 @@ import { TimeTracker } from '../../components/TimeTracker';
 import { CustomScrollbar } from '../../components/CustomScrollbar';
 import { TimerActivityItem } from '../../components/TimerActivityItem';
 import { TutorialComponent } from '../../components/TutorialComponent';
-import { styleSheet } from './styles';
 import {
   ITimeRecordRequest,
   ITimeRecord,
@@ -21,8 +21,22 @@ import { formatDuration } from '../../services/timeRecordService';
 import { useSelector } from 'react-redux';
 import { useTimeformat, useCreatePermissions, useDeletePermissions } from '../../hooks';
 import { TRACKER_MODE } from '../../constants';
+import { Row, Col, Card } from 'antd';
+import Spacer from '../../components/Spacer';
 
-const splitTimersByDay = (timeRecords: [ITimeRecord], dateFormat): [ITimeRecord][] => {
+const currentWeekRecords = (timeRecords: [ITimeRecord], weekStart: Moment): ITimeRecord[] => {
+  return timeRecords.filter((record) => {
+    return moment(record.startTime) >= moment(weekStart) && moment(record.endTime) < moment(weekStart).add(1, 'week');
+  });
+};
+
+const pastWeekRecords = (timeRecords: [ITimeRecord], weekStart: Moment): ITimeRecord[] => {
+  return timeRecords.filter((record) => {
+    return moment(record.startTime) < moment(weekStart);
+  });
+};
+
+const groupTimeRecords = (timeRecords: ITimeRecord[], weekStart: Moment, dateFormat?: string): [ITimeRecord][] => {
   if (!timeRecords) return [];
   timeRecords.sort((a, b) => {
     if (moment(a.endTime) < moment(b.endTime)) return 1;
@@ -32,11 +46,8 @@ const splitTimersByDay = (timeRecords: [ITimeRecord], dateFormat): [ITimeRecord]
 
   let grouppedDates = {};
   for (let i = 0; i < timeRecords.length; i++) {
-    const dispFormat = dateFormat;
     const date = moment(timeRecords[i].endTime);
-    let dateStr = date.format(dispFormat);
-    const weekStartDay = moment().startOf('week');
-    if (weekStartDay > date) dateStr = date.startOf('week').format(dispFormat);
+    const dateStr = weekStart > date ? moment(date).startOf('week').format(dateFormat) : date.format(dateFormat);
     if (!grouppedDates.hasOwnProperty(dateStr)) {
       grouppedDates[dateStr] = [];
     }
@@ -59,12 +70,8 @@ const renderDayDateString = (date: string, dateFormat: string) => {
       moment(date).startOf('week').add('7', 'day').format(dateFormat)
     );
   }
-  return moment(date).calendar(null, {
-    sameDay: '[Today]',
-    lastDay: '[Yesterday]',
-    lastWeek: 'dddd',
-    sameElse: dateFormat,
-  });
+  if (moment(date).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) return 'Today';
+  else return moment(date).format(dateFormat);
 };
 
 interface ITimerActivityProps {
@@ -111,8 +118,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
   const renderTotalTimeByDay = (timeRecords: ITimeRecord[]) => {
     let totalTime = 0;
     for (let i = 0; i < timeRecords.length; i++) {
-      totalTime +=
-        moment(timeRecords[i].endTime).valueOf() - moment(timeRecords[i].startTime).valueOf();
+      totalTime += moment(timeRecords[i].endTime).valueOf() - moment(timeRecords[i].startTime).valueOf();
     }
     return formatDuration(Math.floor(totalTime / 1000), timeFormat);
   };
@@ -140,8 +146,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
       projectId: currentTimeRecord.projectId,
       isBillable: currentTimeRecord.isBillable,
     };
-    if (currentTimeRecord.id === undefined || currentTimeRecord.id === '')
-      createTimeRecord(newTimeRecord);
+    if (currentTimeRecord.id === undefined || currentTimeRecord.id === '') createTimeRecord(newTimeRecord);
     else updateTimeRecord(currentTimeRecord.id, newTimeRecord);
   };
 
@@ -178,8 +183,39 @@ const TimerActivity = (props: ITimerActivityProps) => {
     }
   };
 
+  const TimeRecordGroup = (records: ITimeRecord[], index) => {
+    return (
+      <Card
+        title={
+          <Row>
+            <Col>{renderDayDateString(records[0].endTime, 'ddd, MMM DD')}</Col>
+            <Spacer />
+            <Col> Total time: {renderTotalTimeByDay(records)}</Col>
+          </Row>
+        }
+        style={{ marginTop: '10px' }}
+        bodyStyle={{ padding: '0px' }}
+        key={`timerecord-group-${index}`}
+      >
+        {records.map((timeRecord) => (
+          <TimerActivityItem
+            key={timeRecord.id}
+            timeRecord={timeRecord}
+            timeRecords={timeRecords}
+            projects={projects}
+            disablePlay={createPermit !== IPermissionType.Allow}
+            disableDelete={deletePermit !== IPermissionType.Allow}
+            removeTimeRecord={removeTimeRecord}
+            updateTimeRecord={updateTimeRecord}
+            handlePlayTimer={handlePlayTimer}
+          />
+        ))}
+      </Card>
+    );
+  };
+
   return (
-    <div className={css(styleSheet.mainpageStyle as any)}>
+    <div className={css(styleSheet.root as any)}>
       <PageContainer>
         <PageHeader disabledTitle={isMobile}>
           <TimerSearchComponent weekStart={weekStart} />
@@ -209,36 +245,24 @@ const TimerActivity = (props: ITimerActivityProps) => {
             </div>
             <CustomScrollbar>
               <div className="main-page__list">
-                {splitTimersByDay(timeRecords, dateFormat).map((dayRecords, index, arr) => (
-                  <div
-                    className={classNames('main-page__day', {
-                      'main-page__day--last-child': index === arr.length - 1,
-                    })}
-                    key={index}
-                  >
-                    <div className="main-page__day-header">
-                      <div className="main-page__day-date">
-                        {renderDayDateString(dayRecords[0].endTime, dateFormat)}
-                      </div>
-                      <div className="main-page__day-date-all-time">
-                        Total time: {renderTotalTimeByDay(dayRecords)}
-                      </div>
-                    </div>
-                    {dayRecords.map((timeRecord) => (
-                      <TimerActivityItem
-                        key={timeRecord.id}
-                        timeRecord={timeRecord}
-                        timeRecords={timeRecords}
-                        projects={projects}
-                        disablePlay={createPermit !== IPermissionType.Allow}
-                        disableDelete={deletePermit !== IPermissionType.Allow}
-                        removeTimeRecord={removeTimeRecord}
-                        updateTimeRecord={updateTimeRecord}
-                        handlePlayTimer={handlePlayTimer}
-                      />
-                    ))}
-                  </div>
-                ))}
+                <div className="current-week">
+                  <Row style={{ padding: '0 20px' }}>
+                    <Col>Current Week</Col>
+                    <Spacer />
+                    <Col>{renderTotalTimeByDay(currentWeekRecords(timeRecords, weekStart))}</Col>
+                  </Row>
+                  {groupTimeRecords(
+                    currentWeekRecords(timeRecords, weekStart),
+                    weekStart,
+                    dateFormat,
+                  ).map((dayRecords, index) => TimeRecordGroup(dayRecords, index))}
+                </div>
+
+                {groupTimeRecords(
+                  pastWeekRecords(timeRecords, weekStart),
+                  weekStart,
+                  dateFormat,
+                ).map((dayRecords, index) => TimeRecordGroup(dayRecords, index))}
               </div>
             </CustomScrollbar>
           </div>
@@ -249,3 +273,32 @@ const TimerActivity = (props: ITimerActivityProps) => {
 };
 
 export default TimerActivity;
+
+export const styleSheet = {
+  root: () => ({
+    position: 'relative',
+    width: '100%',
+    '& .main-page': {
+      display: 'flex',
+      flexDirection: 'column',
+      '@media(max-width: 758px)': {
+        padding: '0px',
+        marginLeft: '-20px',
+        marginRight: '-20px',
+      },
+      fontSize: '1.2rem',
+      lineHeight: '1.6rem',
+      overflow: 'hidden',
+      height: '140vh',
+    },
+    '& .main-page__list': {
+      flexGrow: '1',
+      height: '100%',
+      backgroundColor: '#f0f2f5',
+    },
+
+    '& .mainPage--mobile': {
+      padding: '0 1rem 0 1rem',
+    },
+  }),
+};

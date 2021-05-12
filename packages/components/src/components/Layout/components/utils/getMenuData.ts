@@ -1,3 +1,4 @@
+/* eslint-disable */
 import { transformRoute } from '@umijs/route-utils';
 
 import { MenuDataItem, Route, MessageDescriptor } from '../typings';

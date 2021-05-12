@@ -3,7 +3,7 @@ import { Calendar } from 'react-big-calendar';
 import withDragAndDrop from 'react-big-calendar/lib/addons/dragAndDrop';
 import moment, { Moment } from 'moment';
 import { momentLocalizer } from 'react-big-calendar';
-import { Row, Col, Button } from 'antd';
+import { Row, Col, Button, Typography } from 'antd';
 import { PlusOutlined } from '@ant-design/icons';
 import {
   ITimeRecord,
@@ -13,6 +13,9 @@ import {
   ITimeRecordRequest,
 } from '@admin-layout/timetracker-core';
 import TimesheetModal from './TimesheetModal';
+import * as _ from 'lodash';
+import { EVENT_COLORS } from '../../../constants';
+const { Title } = Typography;
 
 const DnDCalendar: any = withDragAndDrop(Calendar as any);
 const allViews: string[] = ['day', 'week', 'month'];
@@ -70,18 +73,21 @@ export default function SelectableCalendar({
   };
 
   const onEventDrop = ({ event, start, end, allDay }) => {
-    const updateRequest = { startTime: moment(start), endTime: moment(end) };
+    const updateRequest = { ..._.omit(event, ['id', '__typename']), startTime: moment(start), endTime: moment(end) };
     handleUpdateTimeRecordEvent(event.id, updateRequest);
   };
 
   const onEventResize = ({ event, start, end }) => {
-    const updateRequest = { startTime: moment(start), endTime: moment(end) };
+    const updateRequest = { ..._.omit(event, ['id', '__typename']), startTime: moment(start), endTime: moment(end) };
     handleUpdateTimeRecordEvent(event.id, updateRequest);
   };
 
-  const EventComponent = ({ start, end, title }) => {
+  const EventComponent = ({ event, start, end, title }) => {
+    const project = projects.find((p) => p.id === event.projectId);
+    const member = members.find((m) => m.userId === event.userId);
     return (
       <>
+        <p> {project && project.name}</p>
         <p>{title}</p>
         <p>{start}</p>
         <p>{end}</p>
@@ -101,6 +107,20 @@ export default function SelectableCalendar({
   const handleNavigate = (date) => {
     setPathWeekStart(moment(date));
   };
+
+  const eventStyleGetter = (event) => {
+    let memberNo = members.findIndex((m) => m.userId === event.userId);
+    if (memberNo === -1) memberNo = 0;
+    const color = EVENT_COLORS[memberNo];
+    return {
+      style: {
+        color: color.main,
+        backgroundColor: color.background,
+        borderColor: color.background,
+      },
+    };
+  };
+
   return (
     <>
       <TimesheetModal
@@ -147,9 +167,7 @@ export default function SelectableCalendar({
           },
         }}
         onNavigate={handleNavigate}
-        // resources={isViewGroup ? resourceMap : undefined}
-        // resourceIdAccessor={isViewGroup ? 'projectId' : undefined}
-        // resourceTitleAccessor={isViewGroup ? 'projectTitle' : undefined}
+        eventPropGetter={eventStyleGetter}
       />
     </>
   );

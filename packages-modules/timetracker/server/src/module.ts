@@ -8,20 +8,20 @@ import { mainLoadConfigurationPre } from './initialization';
 import { TimeTrackerRolesContribution, TimeTrackerRolesPermissionOverwrite } from './preferences';
 
 const createServiceFunc = (container: interfaces.Container) => ({
-  timeRecordService: container.get(TYPES.ITimeRecordService),
-  timesheetService: container.get(TYPES.ITimesheetService),
+    timeRecordService: container.get(TYPES.ITimeRecordService),
+    timesheetService: container.get(TYPES.ITimesheetService),
 });
 
 export default new Feature({
-  schema,
-  createResolversFunc: resolvers,
-  createContainerFunc: [timeTrackerModule],
-  createServiceFunc,
-  preStartFunc: [mainLoadConfigurationPre],
-  addPermissions: {
-    createPermissions: [TimeTrackerRolesContribution],
-  },
-  rolesUpdate: {
-    overwriteRolesPermissions: TimeTrackerRolesPermissionOverwrite,
-  },
+    schema,
+    createResolversFunc: resolvers,
+    createContainerFunc: [timeTrackerModule],
+    createServiceFunc,
+    preStartFunc: [mainLoadConfigurationPre],
+    addPermissions: {
+        createPermissions: [TimeTrackerRolesContribution],
+    },
+    rolesUpdate: {
+        overwriteRolesPermissions: TimeTrackerRolesPermissionOverwrite,
+    },
 });

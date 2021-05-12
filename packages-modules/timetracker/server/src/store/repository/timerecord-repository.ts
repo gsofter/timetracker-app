@@ -1,32 +1,27 @@
 import * as Logger from 'bunyan';
 import { injectable, inject } from 'inversify';
 import * as mongoose from 'mongoose';
-import { TimeTrackerModelType, TimeTrackerModelFunc } from './../models/timetracker-model';
 import { ITimeRecordRequest, ITimeRecord } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { CommonType } from '@common-stack/core';
 import { ServiceBroker } from 'moleculer';
+import { TimeTrackerModelType, TimeTrackerModelFunc } from '../models/timetracker-model';
 
 export interface ITimeRecordRepository {
   getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
   getOrganizationTimeRecords(orgId: string): Promise<Array<ITimeRecord>>;
   getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
   createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<string>;
-  updateTimeRecord(
-    userId: string,
-    orgId: string,
-    recordId: string,
-    request: ITimeRecordRequest,
-  ): Promise<Boolean>;
-  removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<Boolean>;
+  updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest): Promise<boolean>;
+  removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<boolean>;
   removeDurationTimeRecords(
     userId: string,
     orgId: string,
     startTime: Date,
     endTime: Date,
     projectId: string,
-  ): Promise<Boolean>;
+  ): Promise<boolean>;
   approveTimeRecords(orgId: string, sheetId: string, startDate: Date, endDate: Date);
   disapproveTimeRecords(orgId: string, sheetId: string);
 }
@@ -34,7 +29,9 @@ export interface ITimeRecordRepository {
 @injectable()
 export class TimeRecordRepository implements ITimeRecordRepository {
   private timeTrackerModel: TimeTrackerModelType;
+
   private logger: Logger;
+
   constructor(
     @inject('MongoDBConnection')
     db: mongoose.Connection,
@@ -58,12 +55,8 @@ export class TimeRecordRepository implements ITimeRecordRepository {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
     if (trackDoc && trackDoc.timeRecords) {
       return trackDoc.timeRecords;
-    } else return [];
-  }
-
-  public checkInPeriod(t: Date, A: Date, B: Date): boolean {
-    if (moment(A) < moment(B)) return moment(t) >= moment(A) && moment(t) <= moment(B);
-    else return moment(t) >= moment(B) && moment(t) <= moment(A);
+    }
+    return [];
   }
 
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
@@ -71,17 +64,17 @@ export class TimeRecordRepository implements ITimeRecordRepository {
 
     if (trackDoc) {
       let res;
-      if (trackDoc.timeRecords)
-        res = trackDoc.timeRecords.find((tr) => tr.userId === userId && tr.endTime === null);
+      if (trackDoc.timeRecords) res = trackDoc.timeRecords.find((tr) => tr.userId === userId && tr.endTime === null);
       return res;
-    } else return null;
+    }
+    return null;
   }
 
   public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
     try {
       const response = await this.timeTrackerModel.update(
-        { orgId: orgId },
-        { orgId: orgId, $push: { timeRecords: request } },
+        { orgId },
+        { orgId, $push: { timeRecords: request } },
         { upsert: true },
       );
       return response.id;
@@ -90,18 +83,12 @@ export class TimeRecordRepository implements ITimeRecordRepository {
     }
   }
 
-  public async updateTimeRecord(
-    userId: string,
-    orgId: string,
-    recordId: string,
-    request: ITimeRecordRequest,
-  ) {
+  public async updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest) {
     try {
-      if (recordId === null || recordId === undefined)
-        throw new Error('TimeRecord id not specified!');
+      if (recordId === null || recordId === undefined) throw new Error('TimeRecord id not specified!');
 
       const response = await this.timeTrackerModel.update(
-        { orgId: orgId, timeRecords: { $elemMatch: { _id: recordId } } },
+        { orgId, timeRecords: { $elemMatch: { _id: recordId } } },
         { $set: { 'timeRecords.$': request } },
       );
       return true;
@@ -187,6 +174,7 @@ export class TimeRecordRepository implements ITimeRecordRepository {
       throw new Error(e.message);
     }
   }
+
   public async disapproveTimeRecords(orgId: string, sheetId: string) {
     try {
       await this.timeTrackerModel.updateMany(

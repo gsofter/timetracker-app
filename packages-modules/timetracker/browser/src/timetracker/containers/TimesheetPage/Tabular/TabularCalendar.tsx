@@ -1,5 +1,5 @@
-import React, { useCallback, useEffect, useState } from 'react';
-import { Row, Col, Button, Spin, message, Dropdown, Menu, Popconfirm, Modal, Tag } from 'antd';
+import React, { useEffect, useState } from 'react';
+import { Row, Col, Button, Dropdown, Menu, Popconfirm, Modal, Tag, Typography } from 'antd';
 import { moment } from '../../TimesheetPage';
 import { Moment } from 'moment';
 import { useFela } from 'react-fela';
@@ -10,22 +10,21 @@ import {
   IProjects as IProject,
   ITimesheetState,
   ITimesheet,
+  IOrgMember,
 } from '@admin-layout/timetracker-core';
 import { TimesheetInput } from '../../../components/TimesheetInput';
 import { PlusOutlined, CloseOutlined } from '@ant-design/icons';
-
 import { formatDuration } from '../../../services/timeRecordService';
 import CSS from 'csstype';
 import * as _ from 'lodash';
-import { useSelector } from 'react-redux';
 import { useTimeformat } from '../../../hooks';
+
+const { Title } = Typography;
 
 const calcDuration = (records: Array<ITimeRecord>) => {
   return records.reduce(
     (duration, record) =>
-      Math.floor(
-        Math.abs(moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000,
-      ) + duration,
+      Math.floor(Math.abs(moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000) + duration,
     0,
   );
 };
@@ -42,22 +41,28 @@ interface ITabularCalendar {
   selectedUser: string;
   projectsApproval: IProjectsApproval;
   projectsMap: Map<string, IProject>;
+  loading?: boolean;
+  members: Array<IOrgMember>;
   handleRemoveDuration: Function;
   updateTimeRecord: Function;
   createTimeRecord: Function;
   createTimesheet: Function;
-  setPathWeekStart: Function;
+}
+
+const enum TIMESHEET_STATE {
+  APPROVED = 'Approved',
+  PENDING = 'Pending for approval',
 }
 
 export const TabularCalendar = ({
   weekStart,
-  setPathWeekStart,
   records,
   projects,
   timesheet,
   selectedUser,
   projectsApproval,
   projectsMap,
+  members,
   handleRemoveDuration,
   updateTimeRecord,
   createTimeRecord,
@@ -67,30 +72,12 @@ export const TabularCalendar = ({
   const [newRows, setNewRows] = useState([]);
   const [showApprovalModal, setShowApprovalModal] = useState(false);
   const { timeFormat, dateFormat } = useTimeformat();
-  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const { approvals, unApprovals } = projectsApproval;
 
   useEffect(() => {
     const rows = newRows.filter((pId) => unApprovals.findIndex((upId) => upId === pId) === -1);
     setNewRows(rows);
   }, [unApprovals]);
-  const onClickBack = (event) => {
-    event.preventDefault();
-    const newWeekStart = moment(weekStart).add('-1', 'week');
-    setPathWeekStart(newWeekStart);
-  };
-
-  const onClickNext = (event) => {
-    event.preventDefault();
-    const newWeekStart = moment(weekStart).add('1', 'week');
-    setPathWeekStart(newWeekStart);
-  };
-
-  const onClickToday = (event) => {
-    event.preventDefault();
-    const newWeekStart = moment().startOf('week');
-    setPathWeekStart(newWeekStart);
-  };
 
   const getProjectTotalDuration = (projectId, approved: boolean) => {
     return calcDuration(
@@ -116,9 +103,7 @@ export const TabularCalendar = ({
   const getTotalDuration = () => {
     return calcDuration(
       records.filter(
-        (r) =>
-          moment(r.startTime) >= moment(weekStart) &&
-          moment(r.endTime) <= moment(weekStart).add(1, 'week'),
+        (r) => moment(r.startTime) >= moment(weekStart) && moment(r.endTime) <= moment(weekStart).add(1, 'week'),
       ),
     );
   };
@@ -156,9 +141,7 @@ export const TabularCalendar = ({
   const selectableProjects = () => {
     // selectable projects should not be involved to unApprovedProjects() or newRows
     return projects.filter(
-      (p) =>
-        unApprovals.findIndex((upId) => upId === p.id) === -1 &&
-        newRows.findIndex((pId) => pId === p.id) === -1,
+      (p) => unApprovals.findIndex((upId) => upId === p.id) === -1 && newRows.findIndex((pId) => pId === p.id) === -1,
     );
   };
 
@@ -228,6 +211,7 @@ export const TabularCalendar = ({
                     dateStr={curDay.format(dateFormat)}
                     projectId={project.id}
                     records={curDayRecords}
+                    userId={selectedUser}
                     createTimeRecord={createTimeRecord}
                     updateTimeRecord={updateTimeRecord}
                     projects={projects}
@@ -273,6 +257,7 @@ export const TabularCalendar = ({
                   <TimesheetInput
                     dateStr={curDay.format(dateFormat)}
                     projectId={project.id}
+                    userId={selectedUser}
                     records={curDayRecords}
                     createTimeRecord={createTimeRecord}
                     updateTimeRecord={updateTimeRecord}
@@ -315,6 +300,7 @@ export const TabularCalendar = ({
                   <TimesheetInput
                     dateStr={curDay.format(dateFormat)}
                     projectId={pId}
+                    userId={selectedUser}
                     createTimeRecord={createTimeRecord}
                     updateTimeRecord={updateTimeRecord}
                     projects={projects}
@@ -342,11 +328,7 @@ export const TabularCalendar = ({
     return (
       <tr>
         <td>
-          <Dropdown
-            overlay={projectDropdownMenus}
-            trigger={['click']}
-            disabled={projects.length === 0}
-          >
+          <Dropdown overlay={projectDropdownMenus} trigger={['click']} disabled={projects.length === 0}>
             <Button icon={<PlusOutlined />} disabled={projects.length === 0}>
               Select Project
             </Button>
@@ -377,6 +359,18 @@ export const TabularCalendar = ({
     );
   };
 
+  const getUsername = () => {
+    const member = members.find((mem) => mem.userId === selectedUser);
+    if (member) return member.name;
+    return '';
+  };
+
+  const getTimesheetState = (): TIMESHEET_STATE | undefined => {
+    if (unApprovals.length === 0 && timesheet && timesheet.state === ITimesheetState.APPROVED)
+      return TIMESHEET_STATE.APPROVED;
+    else if (timesheet && timesheet.state === ITimesheetState.SUBMITTED) return TIMESHEET_STATE.PENDING;
+    else return undefined;
+  };
   return (
     <div className={css(styles.root)}>
       <Modal
@@ -394,32 +388,20 @@ export const TabularCalendar = ({
         ]}
       >
         <p>
-          Ready to submit from {moment(weekStart).format('MMM DD')} -
-          {moment(weekStart).add(6, 'day').format('MMM DD')}
+          Ready to submit from {moment(weekStart).format('MMM DD')} -{moment(weekStart).add(6, 'day').format('MMM DD')}
           &nbsp; approval?
         </p>
       </Modal>
-      <Row className="toolBar">
-        <Col xs={24} md={6} className="control">
-          <Button onClick={onClickToday}> Today </Button>
-          <Button onClick={onClickBack}> Back </Button>
-          <Button onClick={onClickNext}> Next </Button>
+      <Row className="table-header">
+        <Col xs={24} md={8}>
+          <Title level={5}>{getUsername()}</Title>
         </Col>
-        <Col xs={24} md={12} style={{ textAlign: 'center' }}>
-          <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
-          <span className="duration-end">
-            {moment(weekStart).format('MM') === moment(weekStart).add(1, 'week').format('MM')
-              ? moment(weekStart).add(1, 'week').format('DD')
-              : moment(weekStart).add(1, 'week').format('MMMM DD')}
-          </span>
-        </Col>
-        <Col xs={24} md={6} className="control" style={{ textAlign: 'right' }}>
-          <Button> Day </Button>
-          <Button> Week </Button>
-          <Button> Month </Button>
-        </Col>
+        {getTimesheetState() ? (
+          <Col xs={24} md={8}>
+            <Tag color={timesheet.state === ITimesheetState.APPROVED ? 'green' : 'orange'}>{getTimesheetState()}</Tag>
+          </Col>
+        ) : null}
       </Row>
-
       <table className={css(styles.calendarTable)}>
         <thead>{HeaderRows()}</thead>
         <tbody>
@@ -431,18 +413,17 @@ export const TabularCalendar = ({
         </tbody>
       </table>
       <Row className="table-footer">
-        {timesheet ? <Tag color="blue"> {timesheet.state} </Tag> : ''}
+        {getTimesheetState() === TIMESHEET_STATE.PENDING ? (
+          <p>
+            You can still add time while time sheet is <b> Pending for approval</b>
+          </p>
+        ) : null}
         <div className="spacer"></div>
-        <Button
-          type="primary"
-          onClick={openSubmitApproval}
-          disabled={
-            unApprovals.length === 0 ||
-            (timesheet ? timesheet.state === ITimesheetState.SUBMITTED : false)
-          }
-        >
-          Submit For Approval
-        </Button>
+        {getTimesheetState() === undefined ? (
+          <Button type="primary" onClick={openSubmitApproval}>
+            Submit For Approval
+          </Button>
+        ) : null}
       </Row>
     </div>
   );

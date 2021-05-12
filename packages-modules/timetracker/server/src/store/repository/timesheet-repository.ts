@@ -1,34 +1,29 @@
+/* eslint-disable class-methods-use-this */
 import * as Logger from 'bunyan';
 import { injectable, inject } from 'inversify';
 import * as mongoose from 'mongoose';
-import { TimeTrackerModelType, TimeTrackerModelFunc } from './../models/timetracker-model';
-import {
-  ITimesheet,
-  ITimesheetCreateRequest,
-  ITimesheetState,
-} from '@admin-layout/timetracker-core';
+import { ITimesheet, ITimesheetCreateRequest, ITimesheetState } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { CommonType } from '@common-stack/core';
-import { ServiceBroker, CallingOptions } from 'moleculer';
+import { ServiceBroker } from 'moleculer';
+import { TimeTrackerModelType, TimeTrackerModelFunc } from '../models/timetracker-model';
 
 export interface ITimesheetRepository {
   getTimesheets(orgId: string, userId?: string): Promise<Array<ITimesheet>>;
   getOrganizationTimesheets(orgId: string): Promise<Array<ITimesheet>>;
-  createTimesheet(
-    userId: string,
-    orgId: string,
-    request: ITimesheetCreateRequest,
-  ): Promise<Boolean>;
+  createTimesheet(userId: string, orgId: string, request: ITimesheetCreateRequest): Promise<boolean>;
   updateTimesheet(orgId: string, sheetId: string, request: ITimesheetCreateRequest);
   updateTimesheetStatus(orgId: string, sheetId: string, state: ITimesheetState);
-  removeTimesheet(userId: string, orgId: string, sheetId: string): Promise<Boolean>;
+  removeTimesheet(userId: string, orgId: string, sheetId: string): Promise<boolean>;
 }
 
 @injectable()
 export class TimesheetRepository implements ITimesheetRepository {
   private timeTrackerModel: TimeTrackerModelType;
+
   private logger: Logger;
+
   constructor(
     @inject('MongoDBConnection')
     db: mongoose.Connection,
@@ -43,18 +38,12 @@ export class TimesheetRepository implements ITimesheetRepository {
     this.timeTrackerModel = TimeTrackerModelFunc(db);
   }
 
-  public checkInPeriod(t: Date, A: Date, B: Date): boolean {
-    if (moment(A) < moment(B)) return moment(t) >= moment(A) && moment(t) <= moment(B);
-    else return moment(t) >= moment(B) && moment(t) <= moment(A);
-  }
-
   public async getOrganizationTimesheets(orgId: string) {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
     if (trackDoc && trackDoc.timesheets) {
       return trackDoc.timesheets;
-    } else {
-      return [];
     }
+    return [];
   }
 
   public async getTimesheets(orgId: string, userId?: string) {
@@ -65,7 +54,7 @@ export class TimesheetRepository implements ITimesheetRepository {
   public async createTimesheet(userId: string, orgId: string, request: ITimesheetCreateRequest) {
     try {
       const response = await this.timeTrackerModel.update(
-        { orgId: orgId },
+        { orgId },
         { $push: { timesheets: request } },
         { upsert: true },
       );

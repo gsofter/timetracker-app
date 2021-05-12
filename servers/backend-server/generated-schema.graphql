@@ -1384,12 +1384,12 @@ input TimeRecordRequest {
   isBillable: Boolean
   projectId: String
   clientId: String
+  timesheetId: String
 }
 
 extend type Query {
   getTimeRecords(userId: String): [TimeRecord] @addAccountContext
-  getDurationTimeRecords(startTime: DateTime, endTime: DateTime, userId: String): [TimeRecord]
-    @addAccountContext
+  getDurationTimeRecords(startTime: DateTime, endTime: DateTime, userId: String): [TimeRecord] @addAccountContext
   getPlayingTimeRecord: TimeRecord @addAccountContext
 }
 
@@ -1397,8 +1397,7 @@ extend type Mutation {
   createTimeRecord(request: TimeRecordRequest): String @addAccountContext
   updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean @addAccountContext
   removeTimeRecord(recordId: String): Boolean @addAccountContext
-  removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean
-    @addAccountContext
+  removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean @addAccountContext
 }
 
 # scalar DateTime
@@ -1759,11 +1758,20 @@ interface IOrgUser {
     inactive: Boolean
 }
 
+type OrgUserAccunt implements Node{
+    id: ID!
+    email: String
+    alias: [String]
+    username: String
+    emailVerified: Boolean
+}
+
 type OrgUser implements IOrgUser{
     userId: String!
     role: ApplicationRoles
     inactive: Boolean
     orgName: String!
+    user: OrgUserAccunt!
     # Todo: Will be removed once #837 will be completed
     isSelf: Boolean!
     crossCheckEmail: String
