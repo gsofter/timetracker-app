@@ -15,16 +15,16 @@ export default class TrayWindow {
             show: false, // Initially, we should hide it, in such way will remove blink-effect.
             height: 500,
             width: 500,
-            // This option will remove frame buttons.
-            // By default window has standart header buttons (close, hide, minimize).
-            // We should change this option because we want to display our window like
-            // Tray Window not like common-like window.
-            // frame: false,
             backgroundColor: '#E4ECEF',
-            // resizable: false,
+            frame: false,
+            fullscreenable: false,
+            resizable: false,
+            transparent: true,
             webPreferences: {
                 nodeIntegration: true,
+                contextIsolation: false,
                 enableRemoteModule: true,
+                devTools: false,
             },
         });
 
