@@ -38,32 +38,21 @@ const Html = ({
   return (
     <html lang="en" {...htmlAttrs}>
       <head>
-       
         {helmet.title.toComponent()}
         {helmet.meta.toComponent()}
         {helmet.link.toComponent()}
         <meta charSet="utf-8" />
-        <meta name="viewport" content="width=device-width, initial-scale=1" />
-        <link
-          rel="stylesheet"
-          href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css"
-        />
-        {
-
-          <link
-            rel="stylesheet"
-            type="text/css"
-            href={`${assetMap['index.css']}`}
-          />
-        }
-        {assetMap['vendor.css'] && (
-          <link
-            rel="stylesheet"
-            type="text/css"
-            href={`${assetMap['vendor.css']}`}
+        <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/twitter-bootstrap/3.3.7/css/bootstrap.min.css" />
+        {<link rel="stylesheet" type="text/css" href={`${assetMap['index.css']}`} />}
+        {assetMap['vendor.css'] && <link rel="stylesheet" type="text/css" href={`${assetMap['vendor.css']}`} />}
+        <style id="font-stylesheet" />
+        {!!__DEV__ && (
+          <style
+            dangerouslySetInnerHTML={{
+              __html: modules.stylesInserts.map(style => style._getCss()).join(''),
+            }}
           />
         )}
-        <style id="font-stylesheet" />
         {styleSheet.map(({ type, rehydration, css, media, support }) => (
           <style
             id="stylesheet"
@@ -82,14 +71,16 @@ const Html = ({
         })}
       </head>
       <body {...bodyAttrs}>
+        <div className="demo">
           <div
-            id="root"
-            dangerouslySetInnerHTML={{
-              __html:
-                content ||
-                'Try building the demo:<br/> ...and refreshing this page!',
-            }}
+            id="content"
+            dangerouslySetInnerHTML={
+              {
+                __html: content ||
+                  'Try building the app:<br/> ...and refreshing this page!',
+              }}
           />
+        </div>
         <script
           dangerouslySetInnerHTML={{
             __html: `window.__ENV__=${serialize(env, {
@@ -114,9 +105,7 @@ const Html = ({
           }}
           charSet="UTF-8"
         />
-        {assetMap['vendor.js'] && (
-          <script src={`${assetMap['vendor.js']}`} charSet="utf-8" />
-        )}
+        {assetMap['vendor.js'] && <script src={`${assetMap['vendor.js']}`} charSet="utf-8" />}
         <script src={`${assetMap['index.js']}`} charSet="utf-8" />
       </body>
     </html>

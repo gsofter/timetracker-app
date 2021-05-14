@@ -1,85 +1,63 @@
 import React, { useState } from 'react';
-import { Icon, Item, Input, Row, Col } from 'native-base';
-import { View, StyleSheet, Text, Platform } from 'react-native';
+import { Icon, Item, Input, Button } from 'native-base';
+import { View, StyleSheet, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import RadioForm from 'react-native-simple-radio-button';
+import { useHistory } from "react-router-native"
 
 import TimeTrack from './TimeTrack'
-import ManualTime from "./ManualTime"
 
-const TimerFooter = ({ billable, onManual, onTrack, manual, track, toggleBillable, toggleProject, isToggle }: any) => {
+var radio_props = [
+  {label: 'Manual', value: 0 },
+  {label: 'Timer', value: 1 }
+];
 
-  const [startTime, setStartTime] = useState(new Date(1598051730000))
-  const [isStartTime, setIsStartTime] = useState(false)
-  const [endTime, setEndTime] = useState(new Date(1598051730000))
-  const [isEndTime, setIsEndTime] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(new Date(1598051730000))
-  const [calendarVisible, setCalendarVisible] = useState(false)
+const TimerFooter = ({ 
+  billable, 
+  onManual, 
+  onTrack, 
+  manual, 
+  track, 
+  toggleBillable, 
+  toggleProject, 
+  isToggle,
+  setAddManual 
+}: any) => {
+
   const [stopwatchStart, setStopWatchStart] = useState(false)
   const [isStart, setIsStart] = useState(true)
   const [isStop, setIsStop] = useState(false)
-
-  const toggleStart = () =>{
-    setIsStartTime(true)
-  }
-
-  const toggleEnd = () => {
-    setIsEndTime(true)
-  }
-
-  const changeStartTime = (event: any, selectedTime: any) => {
-    const currentDate = selectedTime || startTime;
-    setStartTime(currentDate)
-    setIsStartTime(false)
-  };
-
-  const changeEndTime = (event: any, selectedTime: any) => {
-    const currentDate = selectedTime || startTime;
-    setEndTime(currentDate)
-    setIsEndTime(false)
-  };
-
-  const onDateChange = (event: any, date: any) => {
-    setSelectedDate(date);
-    setCalendarVisible(Platform.OS === 'ios')
-  };
+  const history = useHistory()
 
   const getFormattedTime = (time: any) => {
     const currentTime = time;
   };
 
+  const setTimer = () => {
+    onTrack()
+    setAddManual(false)
+  }
+
     return (
       <View style={styles.footer}>
-        <KeyboardAwareScrollView>
-          <View style={styles.row}>
-            <Item regular style={{ width: '80%', height: 40 }}>
-              <Input style={{ height: 40 }} placeholder="What are you working on?" />
-            </Item>
-            <View style={styles.row_button}>
-              <View style={styles.button}>
-                <Icon style={{ color: '#62b1f6' }} name="add-circle-outline" />
-                <Text style={{ color: '#62b1f6' }} onPress={() => toggleProject()}>
-                  Projects
-                </Text>
+        {!manual && (
+          <KeyboardAwareScrollView>
+            <View style={styles.row}>
+              <Item regular style={{ width: '80%', height: 40 }}>
+                <Input style={{ height: 40 }} placeholder="What are you working on?" />
+              </Item>
+              <View style={styles.row_button}>
+              <Button iconLeft transparent onPress={() => toggleProject()}>
+                <Icon style={{ color: '#62b1f6' }} name='add-circle-outline' />
+                <Text style={{ color: '#62b1f6' }}>Projects</Text>
+              </Button>
+                {isToggle && (
+                  <View style={{ zIndex: 1 }}>
+                    <Text>Project List</Text>
+                  </View>
+                )}
               </View>
-              {isToggle && (
-                <View>
-                  <Text>Project List</Text>
-                </View>
-              )}
             </View>
-          </View>
-          <Row style={styles.row_2}>
-          <Col style={{ width: 30 }}>
-            <Icon name="pricetag-outline" style={styles.icon_tag} />
-          </Col>
-          <Col style={{ width: 15 }}>
-            <Icon
-            onPress={() => toggleBillable()}
-            type="FontAwesome"
-            name="dollar"
-            style={[styles.icon_dollar, { color: billable ? '#1890ff' : 'grey' }]}
-            />
-          </Col>
             {track && (
               <TimeTrack 
               stopwatchStart={stopwatchStart}
@@ -89,30 +67,32 @@ const TimerFooter = ({ billable, onManual, onTrack, manual, track, toggleBillabl
               isStop={isStop}
               setStopWatchStart={setStopWatchStart}
               setIsStop={setIsStop}
+              onTrack={onTrack}
+              onManual={onManual}
+              track={track}
+              manual={manual}
+              toggleBillable={toggleBillable}
+              billable={billable}
               />
             )}
-            {manual && (
-              <ManualTime 
-              toggleStart={toggleStart}
-              startTime={startTime}
-              isStartTime={isStartTime}
-              changeStartTime={changeStartTime}
-              toggleEnd={toggleEnd}
-              endTime={endTime}
-              changeEndTime={changeEndTime}
-              setCalendarVisible={setCalendarVisible}
-              selectedDate={selectedDate}
-              calendarVisible={calendarVisible}
-              onDateChange={onDateChange}
-              isEndTime={isEndTime}
-              />
-            )}
-            <Col>
-              <Icon onPress={() => onTrack()} name="time-outline" style={{ alignSelf: 'center', color: track? '#1890ff': 'grey' }} />
-              <Icon onPress={() => onManual()} name="list-outline" style={{ alignSelf: 'center', color: manual? '#1890ff': 'grey' }} />
-            </Col>
-          </Row>
-        </KeyboardAwareScrollView>
+          </KeyboardAwareScrollView>
+        )}
+        {manual && (
+          <View style={styles.flex_row}>
+            <RadioForm
+              radio_props={radio_props}
+              initial={0}
+              onPress={(value) => value === 1 && setTimer()}
+              formHorizontal
+              buttonColor={'#1890ff'}
+            />
+            <Button info block
+            onPress={() => history.push('/create')}
+            >
+              <Text style={styles.add_btn}>+</Text>
+            </Button>
+          </View>
+        )}
       </View>
     )
 }
@@ -136,30 +116,25 @@ const styles = StyleSheet.create({
       paddingRight: 40,
       alignItems: 'center',
     },
-    row_2: {
-      display: 'flex',
-      paddingLeft: 10,
-      paddingTop: 10,
-      paddingBottom: 10,
-      alignItems: 'center',
-    },
     row_button: {
       width: '30%',
       alignItems: 'center',
-      justifyContent: 'center',
+      justifyContent: 'flex-start',
     },
     button: {
       flexDirection: 'row',
       alignItems: 'center',
-      justifyContent: 'center',
     },
-    icon_tag: {
-      color: 'black',
-      fontSize: 18
+    flex_row: {
+      padding: 30,
+      flexDirection: 'row',
+      justifyContent: 'space-between'
     },
-    icon_dollar: {
-      fontSize: 18,
-    },
+    add_btn: {
+      color: 'white',
+      paddingLeft: 20,
+      paddingRight: 20
+    }
 });
 
 export default TimerFooter;
