@@ -1,6 +1,7 @@
 import { IMenuPosition } from '@common-stack/client-react';
 import TimerScreen from './components/TimerScreen'
 import TimesheetCalendar from './components/Calendar';
+import AddManual from "./components/AddManual"
 import { getFilteredRoutes } from '../utils/menu';
 
 export const timePageStore: any[] = [
@@ -23,12 +24,23 @@ export const timePageStore: any[] = [
         path: '/org/timesheet',
         priority: 3,
     },
+    {
+        exact: true,
+        key: 'add',
+        name: 'CreateManual',
+        component: AddManual,
+        position: IMenuPosition.MIDDLE,
+        // path: ROUTES.Timer,
+        path: '/create',
+        priority: 4,
+    },
 ];
 
 const selectedRoutesAndMenus = [
     'timeTracker',
     'timeTracker.timer',
     'timeTracker.timesheet',
+    'add'
 ];
 
 // get routes

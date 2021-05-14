@@ -1,17 +1,25 @@
 import React, { useState } from 'react';
 import moment from 'moment';
-import { StyleSheet, View, ScrollView } from 'react-native';
+import { StyleSheet, View, ScrollView, Platform } from 'react-native';
 
 import TimerFooter from './TimerFooter';
 import TimeRange from './TimeRange';
+import ManualTime from "./ManualTime"
 
 const TimerScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
   const [billable, setBillable] = useState(false);
   const [track, setTrack] = useState(true);
   const [manual, setManual] = useState(false);
+  const [addManual, setAddManual] = useState(false);
   const [selectedStartDate, setSelectedStartDate] = useState<any>(moment().format('MM-DD-YYYY'));
   const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
+  const [isStartTime, setIsStartTime] = useState(false)
+  const [endTime, setEndTime] = useState(new Date(1598051730000))
+  const [isEndTime, setIsEndTime] = useState(false)
+  const [selectedDate, setSelectedDate] = useState(new Date(1598051730000))
+  const [calendarVisible, setCalendarVisible] = useState(false)
+  const [startTime, setStartTime] = useState(new Date(1598051730000))
 
   const toggleProject = () => {
     setIsToggle(!isToggle);
@@ -30,6 +38,11 @@ const TimerScreen = () => {
     }
   };
 
+  const onSingleDateChange = (event: any, date: any) => {
+    setSelectedDate(date);
+    setCalendarVisible(Platform.OS === 'ios')
+  };
+
   const onReset = () => {
     setSelectedEndDate(moment().format('MM-DD-YYYY'));
     setSelectedStartDate(moment().add(5, 'd').format('MM-DD-YYYY'));
@@ -45,6 +58,26 @@ const TimerScreen = () => {
     setTrack(false);
   };
 
+  const toggleStart = () =>{
+    setIsStartTime(true)
+  }
+
+  const toggleEnd = () => {
+    setIsEndTime(true)
+  }
+
+  const changeStartTime = (event: any, selectedTime: any) => {
+    const currentDate = selectedTime || startTime;
+    setStartTime(currentDate)
+    setIsStartTime(false)
+  };
+
+  const changeEndTime = (event: any, selectedTime: any) => {
+    const currentDate = selectedTime || startTime;
+    setEndTime(currentDate)
+    setIsEndTime(false)
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -54,6 +87,22 @@ const TimerScreen = () => {
           onDateChange={onDateChange}
           onReset={onReset}
         />
+        {addManual && 
+          <ManualTime 
+            toggleStart={toggleStart}
+            startTime={startTime}
+            isStartTime={isStartTime}
+            changeStartTime={changeStartTime}
+            toggleEnd={toggleEnd}
+            endTime={endTime}
+            changeEndTime={changeEndTime}
+            setCalendarVisible={setCalendarVisible}
+            selectedDate={selectedDate}
+            calendarVisible={calendarVisible}
+            onDateChange={onSingleDateChange}
+            isEndTime={isEndTime}
+          />
+        }
       </ScrollView>
       <TimerFooter
         isToggle={isToggle}
@@ -65,6 +114,7 @@ const TimerScreen = () => {
         onTrack={onTrack}
         onManual={onManual}
         onDateChange={onDateChange}
+        setAddManual={setAddManual}
       />
     </View>
   );

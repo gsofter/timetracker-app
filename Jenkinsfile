@@ -4,7 +4,7 @@ def GIT_BRANCH_NAME=getGitBranchName()
 pipeline {
   agent {
     kubernetes{
-      label 'jenkins-slave-v3'
+      label 'slave-2cpu-8gb'
     }
   }
   parameters {
@@ -17,6 +17,7 @@ pipeline {
     string(name: 'LOG_LEVEL', defaultValue: 'info', description: 'log level')
     string(name: 'DOMAIN_NAME', defaultValue: 'cdebase.io', description: 'domain of the ingress')
     string(name: 'DEPLOYMENT_PATH', defaultValue: '/servers', description: 'folder path to load helm charts')
+    string(name: 'PUBLISH_BRANCH', defaultValue: 'devpublish', description: 'publish branch')
     string(name: 'EXCLUDE_SETTING_NAMESPACE_FILTER', defaultValue: 'brigade', description: 'exclude setting namespace that matches search string')
     string(name: 'GIT_CREDENTIAL_ID', defaultValue: 'admin-layout-github-deploy-key', description: 'jenkins credential id of git deploy secret')
     string(name: 'REPOSITORY_SSH_URL', defaultValue: 'git@github.com:cdmbase/admin-layout.git', description: 'ssh url of the git repository')
@@ -25,7 +26,7 @@ pipeline {
     // by default first value of the choice will be choosen
     choice choices: ['auto', 'force'], description: 'Choose merge strategy', name: 'NPM_PUBLISH_STRATEGY'
     choice choices: ['yarn', 'npm'], description: 'Choose build strategy', name: 'BUILD_STRATEGY'
-    choice choices: ['0.2.0', '0.1.22'], description: 'Choose Idestack chart version', name: 'IDESTACK_CHART_VERSION'
+    choice choices: ['0.3.0', '0.1.22'], description: 'Choose Idestack chart version', name: 'IDESTACK_CHART_VERSION'
     choice choices: ['buildOnly', 'buildAndPublish', 'dev', 'stage', 'prod', 'allenv'], description: 'Where to deploy micro services?', name: 'ENV_CHOICE'
     booleanParam (defaultValue: false, description: 'Tick to enable debug mode', name: 'DEBUG')
     string(name: 'BUILD_TIME_OUT', defaultValue: '120', description: 'Build timeout in minutes', trim: true)
@@ -43,7 +44,6 @@ pipeline {
   // Initialize npm and docker commands using plugins
   tools {
     nodejs 'nodejs'
-    'org.jenkinsci.plugins.docker.commons.tools.DockerTool' 'docker'
   }
 
   stages {
@@ -93,7 +93,7 @@ pipeline {
     // Run build for all cases except when ENV_CHOICE is 'buildAndPublish' and `dev`, `stage` or `prod`
     stage ('Build packages'){
       when {
-        expression { GIT_BRANCH_NAME != 'devpublish' }
+        // expression { GIT_BRANCH_NAME != params.PUBLISH_BRANCH }  not needed
         expression { params.ENV_CHOICE == 'allenv' || params.ENV_CHOICE == 'buildOnly' }
       }
       steps{
@@ -132,24 +132,24 @@ pipeline {
       }
       steps{
         script {
-          GIT_BRANCH_NAME='devpublish'
+          GIT_BRANCH_NAME=params.PUBLISH_BRANCH
         }
         sshagent (credentials: [params.GIT_CREDENTIAL_ID]) {
           sh """
             git add -A
-            git diff-index --quiet HEAD || git commit -am 'auto build\r\n[skip ci]'
+            git diff --staged --quiet || git commit -am 'auto build\r\n[skip ci]'
             git fetch origin develop
             git checkout develop
             ${params.BUILD_STRATEGY} run devpublish:${params.NPM_PUBLISH_STRATEGY};
             git push origin develop
-            git checkout devpublish
+            git checkout ${params.PUBLISH_BRANCH}
           """
         }
       }
     }
     stage('Docker login'){
       when {
-        expression { GIT_BRANCH_NAME == 'devpublish' }
+        expression { GIT_BRANCH_NAME == params.PUBLISH_BRANCH }
       }
       steps{
         sh 'cat "$GCR_KEY" | docker login -u _json_key --password-stdin https://gcr.io'
@@ -161,7 +161,7 @@ pipeline {
          timeout(time: params.BUILD_TIME_OUT, unit: 'MINUTES')
        }
       when {
-        expression { GIT_BRANCH_NAME == 'devpublish' }
+        expression { GIT_BRANCH_NAME == params.PUBLISH_BRANCH }
         expression { params.ENV_CHOICE == 'allenv' || params.ENV_CHOICE == 'buildOnly' || params.ENV_CHOICE == 'buildAndPublish' }
       }
 
@@ -186,7 +186,7 @@ pipeline {
           DOMAIN_NAME = 'cdebase.io'
       }
       when {
-        expression { GIT_BRANCH_NAME == 'devpublish' }
+        expression { GIT_BRANCH_NAME == params.PUBLISH_BRANCH }
         expression { params.ENV_CHOICE == 'dev' || params.ENV_CHOICE == 'allenv' || params.ENV_CHOICE == 'buildOnly' || params.ENV_CHOICE == 'buildAndPublish' }
         beforeInput true
       }
@@ -221,10 +221,10 @@ pipeline {
        }
       environment{
       deployment_env = 'stage'
-      DOMAIN_NAME = 'stage.cdebase.io'
+      DOMAIN_NAME = 'cdebase.io'
       }
       when {
-        expression { GIT_BRANCH_NAME == 'devpublish' }
+        expression { GIT_BRANCH_NAME == params.PUBLISH_BRANCH }
         expression {params.ENV_CHOICE == 'stage' || params.ENV_CHOICE == 'allenv'}
         beforeInput true
       }
@@ -265,9 +265,12 @@ pipeline {
       options {
           timeout(time: 300, unit: 'SECONDS')
       }
-      environment{ deployment_env = 'prod'}
+      environment{
+          deployment_env = 'prod'
+          DOMAIN_NAME = 'cdebase.com'
+      }
       when {
-        expression { GIT_BRANCH_NAME == 'devpublish' }
+        expression { GIT_BRANCH_NAME == params.PUBLISH_BRANCH }
         expression {params.ENV_CHOICE == 'prod' || params.ENV_CHOICE == 'allenv'}
         beforeInput true
       }
@@ -281,7 +284,7 @@ pipeline {
 
       steps {
         load "./jenkins_variables.groovy"
-        withKubeConfig([credentialsId: 'kubernetes-prod-cluster', serverUrl: 'https://0.0.0.0']) {
+        withKubeConfig([credentialsId: 'kubernetes-prod-cluster', serverUrl: 'https://104.196.165.88']) {
           sh """
              helm repo add stable https://charts.helm.sh/stable
              helm repo add incubator https://charts.helm.sh/incubator

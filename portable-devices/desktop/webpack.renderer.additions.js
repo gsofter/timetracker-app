@@ -1,8 +1,11 @@
 /* eslint-disable import/no-extraneous-dependencies */
 const Dotenv = require('dotenv-webpack');
+const path = require('path');
 const webpack = require('webpack');
 const dotenv = require('dotenv-safe');
+const { merge } = require('webpack-merge');
 const CopyWebpackPlugin = require('copy-webpack-plugin');
+const utils = require('./tools/utils');
 
 const options = {
     stack: ['apollo', 'ts', 'react', 'webpack', 'css'],
@@ -24,11 +27,6 @@ const options = {
             path: process.env.ENV_FILE,
         }),
         new webpack.DefinePlugin(),
-        // Object.assign(
-        //     ...Object.entries(buildConfig).map(([k, v]) => ({
-        //         [k]: typeof v !== 'string' ? v : `'${v.replace(/\\/g, '\\\\')}'`
-        //     }))
-        // )
     ],
     defines: {
         __DEV__: process.env.NODE_ENV === 'development',
@@ -39,7 +37,7 @@ const config = {
     target: 'electron-renderer',
     entry: {
         renderer: ['./src/renderer/main.tsx'],
-        tray: ['./src/renderer/tray.tsx'],
+        tray: ['./src/renderer/tray-main.tsx'],
         about: ['./src/renderer/about.tsx'],
     },
     output: {
@@ -79,9 +77,9 @@ const config = {
             ],
         }),
     ],
-    // defines: {
-    //     __CLIENT__: true,
-    // },
+    resolve: {
+        symlinks: true,
+    },
     externals: [
         'apollo-client',
         'react',
@@ -135,26 +133,16 @@ const extraDefines = {
     __DEBUGGING__: false,
 };
 
-if (process.env.NODE_ENV !== 'production') {
-    // if (!options.ssr) {
-    //     console.log('Warning! exposing env variables in UI, only run in development.');
-    //     var dotenv = require('dotenv-safe')
-    //         .config(
-    //             {
-    //                 allowEmptyValues: true,
-    //                 path: process.env.ENV_FILE,
-    //                 example: '../../config/development/dev.env',
-    //             });
-    //     const envPlugin = {
-    //         plugins: [
-    //             new webpack.DefinePlugin({
-    //                 "__ENV__": JSON.stringify(dotenv.parsed)
-    //             }),
-    //         ],
-    //     }
-    //     config.builders.web.webpackConfig = merge(config.builders.web.webpackConfig, envPlugin);
-    // }
-}
-
-// config.defines = Object.assign(config.defines, extraDefines);
-module.exports = config;
+const workspaceRoot = path.resolve(__dirname, '../..');
+const dirsToWatch = utils.getWorkspacePackagePaths(workspaceRoot);
+// inorder to make watch to work on workspace packages
+module.exports = function (givenConfig) {
+    const updatedConfig = merge(givenConfig, config, {
+        devServer: {
+            ...givenConfig.devServer,
+            contentBase: dirsToWatch,
+            watchContentBase: true,
+        },
+    });
+    return updatedConfig;
+};

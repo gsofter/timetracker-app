@@ -14,14 +14,19 @@ cd admin-layout
 
     b. install `node-gyp` globally. For installation check [this document](https://github.com/nodejs/node-gyp#installation).
 
-    c. Node version supported is `12.18.4` and `npm` version is `6.14.6`. You can Download Node from [here](https://nodejs.org/dist/v12.18.4/)
+    c. install `watchman` for macOS users
 
-    d. Insall and build packages using following command. Run from the root folder of this project.
+    d. Node version supported is `>=12.18.4` and `yarn` version is `1.22`. You can Download Node from [here](https://nodejs.org/dist/v12.18.4/)
+
+    e. Insall and build packages using following command. Run from the root folder of this project.
 ```
-    yarn install && yarn build
+    yarn bootstrap
 ```
     
 3. Setup environment file
+
+You need to have environemnt file before you start the project. There is a sample file exist at `config/development/dev.env.sample` which you can copy as `config/development/dev.env`.
+
 ```
 cp ./config/development/dev.env.sample ./config/development/dev.env
 ```
