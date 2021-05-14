@@ -139,8 +139,8 @@ const TabularCalendarWrapper = ({
       });
   };
 
-  const memberTimesheet = (userId: string) => {
-    return _.get(approvalData, 'getDurationTimesheets', []).find((sheet) => sheet.userId === userId);
+  const memberTimesheets = (userId: string) => {
+    return _.get(approvalData, 'getDurationTimesheets', []).filter((sheet) => sheet.userId === userId);
   };
 
   const projectsApproval = () => {
@@ -232,7 +232,7 @@ const TabularCalendarWrapper = ({
                 projects={projects}
                 projectsMap={getProjectsMap()}
                 projectsApproval={projectsApproval()}
-                timesheet={memberTimesheet(selectedUser)}
+                timesheets={memberTimesheets(selectedUser)}
                 selectedUser={selectedUser}
                 members={members}
                 loading={
@@ -262,7 +262,7 @@ const TabularCalendarWrapper = ({
                     projects={projects}
                     projectsMap={getProjectsMap()}
                     projectsApproval={projectsApproval()}
-                    timesheet={memberTimesheet(mem.userId)}
+                    timesheets={memberTimesheets(mem.userId)}
                     selectedUser={mem.userId}
                     members={members}
                     loading={

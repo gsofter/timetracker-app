@@ -67,7 +67,7 @@ const renderDayDateString = (date: string, dateFormat: string) => {
     return (
       moment(date).startOf('week').format(dateFormat) +
       ' - ' +
-      moment(date).startOf('week').add('7', 'day').format(dateFormat)
+      moment(date).startOf('week').add('6', 'day').format(dateFormat)
     );
   }
   if (moment(date).format('YYYY-MM-DD') === moment().format('YYYY-MM-DD')) return 'Today';

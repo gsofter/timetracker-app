@@ -32,6 +32,16 @@ export const LimitsModal = (props: ILimitsModal) => {
         setIsDailyLimit(!!dailyLimit);
     }, [dailyLimit]);
 
+    useEffect(() => {
+        if(!isDailyLimit) {
+            form.setFields([{
+                name: 'dailyLimit',
+                value: '',
+                errors: [],
+            }]);
+        }
+    }, [isDailyLimit])
+
     const resetFields = () => {
         form.resetFields();
         setDaysAllowedState(daysAllowed);
@@ -99,7 +109,7 @@ export const LimitsModal = (props: ILimitsModal) => {
                     </div>
                     <Item
                         className={css(styles.mt15, styles.mb0)}
-                        rules={[{ required: true, message: 'Please enter daily limit!' }]}
+                        rules={[{ required: isDailyLimit, message: 'Please enter daily limit!' }]}
                         name={'dailyLimit'}
                     >
                         <Input addonAfter={'hrs/day'} type={'number'} disabled={!isDailyLimit} placeholder={'No daily limit'}/>
