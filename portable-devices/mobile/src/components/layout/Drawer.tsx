@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Drawer } from 'native-base';
 import { Route } from 'react-router-native';
-import SideBar from './SideBarNew';
+import SideBar from './SideBar';
 
 export const DrawerRoute = ({ match, drawerRef, routes }: any) => {
   const onClose = () => {

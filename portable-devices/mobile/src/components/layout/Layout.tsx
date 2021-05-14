@@ -1,6 +1,5 @@
 import React, { useRef } from 'react';
 import { View } from 'react-native';
-import { Feature } from '@common-stack/client-react';
 import { connect } from 'react-redux';
 import MainHeader from './Header';
 import { DrawerRoute } from './Drawer';

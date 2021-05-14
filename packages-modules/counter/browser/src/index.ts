@@ -5,6 +5,7 @@ import ApolloCounter from './apollo-server-n-client';
 import ConnectedReactRouter from './connected-react-router';
 import Organization from './organization';
 import Fela from './fela';
+import { ElectronTrayModule, ElectronMainModule } from './connected-react-router/index.electron';
 
 export default new Feature(
     // Common,

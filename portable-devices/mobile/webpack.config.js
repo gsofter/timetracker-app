@@ -1,6 +1,6 @@
 const webpack = require('webpack');
 const path = require('path');
-const { createWebpackConfigAsync } = require('expo-yarn-workspaces/webpack');
+const { createWebpackConfigAsync } = require('./expo-webpack');
 
 module.exports = async function (env, argv) {
     const config = await createWebpackConfigAsync(env, argv);
@@ -23,7 +23,6 @@ module.exports = async function (env, argv) {
             __CLIENT__: true,
         }),
     );
-    config.resolve.symlinks = true;
 
     return config;
 };

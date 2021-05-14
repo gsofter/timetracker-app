@@ -36,7 +36,7 @@ export const counterPageStore: IRoute[] = [
     {
         exact: true,
         name: 'Counter',
-        component: Counter as any,
+        component: Counter,
         position: IMenuPosition.MIDDLE,
         key: CONNECTED_REACT_ROUTER_KEY_TYPES.COUNTER,
         path: CONNECTED_REACT_ROUTER_ROUTES_TYPES.COUNTER,

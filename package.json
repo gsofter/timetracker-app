@@ -1,6 +1,6 @@
 {
-  "name": "admin-layout",
-  "version": "0.8.4",
+  "name": "admin-stack",
+  "version": "0.8.5",
   "private": true,
   "homepage": "https://github.com/cdmbase/admin-layout#readme",
   "bugs": {
@@ -11,7 +11,10 @@
     "url": "git+https://github.com/cdmbase/admin-layout.git"
   },
   "license": "MIT",
-  "author": "CDMBase LLC",
+  "author": {
+    "name": "CDMBase LLC",
+    "email": "none@cdmbase.com"
+  },
   "workspaces": {
     "packages": [
       "portable-devices/*",
@@ -214,11 +217,6 @@
     "csstype": "3.0.2",
     "dotenv-safe": "^8.2.0",
     "dotenv-webpack": "^6.0.0",
-    "electron": "^11.2.0",
-    "electron-builder": "^22.9.1",
-    "electron-devtools-installer": "^3.1.1",
-    "electron-webpack": "^2.8.2",
-    "electron-webpack-ts": "^4.0.1",
     "envalid": "^7.0.0",
     "enzyme": "^3.11.0",
     "enzyme-adapter-react-16": "^1.15.2",
@@ -334,7 +332,7 @@
     "ws": "^7.2.1"
   },
   "engines": {
-    "node": ">=12.18.4 < 14.0.0",
+    "node": ">=12.18.4 < 15.0.0",
     "yarn": ">=1.22"
   },
   "cacheDirectories": [
