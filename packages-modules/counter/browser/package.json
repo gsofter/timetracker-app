@@ -45,8 +45,8 @@
     "@admin-layout/components": "link:../../../packages/components"
   },
   "peerDependencies": {
-    "@common-stack/client-react": ">=0.0.257",
-    "@common-stack/core": ">=0.0.257",
+    "@common-stack/client-react": ">=0.0.258",
+    "@common-stack/core": ">=0.0.258",
     "antd": "^4.5.2",
     "@common-stack/client-react-native": "*",
     "@react-navigation/drawer": "*",
