@@ -1,56 +1,44 @@
-import { ipcRenderer } from 'electron';
-import { toInteger } from 'lodash';
-// import { createStore, applyMiddleware } from 'redux';
-// import { forwardToMain, replayActionRenderer, getInitialStateRenderer, createAliasedAction } from 'electron-redux';
-// import { connectedReactRouter_counter } from '../reducers';
+import 'reflect-metadata';
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+/* eslint-disable @typescript-eslint/no-explicit-any */
+import * as React from 'react';
+import * as ReactDOM from 'react-dom';
+// load environment config
+import './config/public-config';
+import App from './tray/index';
 
-// import { increment, decrement } from '../actions';
+// Virtual (module as any), generated in-memory by zenjs, contains count of backend rebuilds
+// tslint:disable-next-line
+import 'antd/dist/antd.css';
+import 'react-table/react-table.css';
+import 'react-big-calendar/lib/css/react-big-calendar.css';
+import 'react-big-calendar/lib/addons/dragAndDrop/styles.css';
 
-// setup store
-// const initialState = getInitialStateRenderer();
-// const store = createStore(connectedReactRouter_counter, initialState, applyMiddleware(forwardToMain));
+const rootEl = document.getElementById('root');
+let frontendReloadCount = 0;
 
-// replayActionRenderer(store);
-
-// set up renderer
-function mount() {
-    document.getElementById('app').innerHTML = `
-    <p>
-      Counter: <span id="value">0</span> 
-      <button id="increment">+</button>
-      <button id="decrement">-</button>
-      <button id="notify">Click</button>
-    </p>
-  `;
-
-    document.getElementById('increment').addEventListener('click', () => {
-        // store.dispatch(increment());
-        const current_count: string = (toInteger(document.getElementById('value').innerHTML) + 1).toString();
-        ipcRenderer.send('update-title-tray-window-event', current_count);
-    });
-
-    document.getElementById('decrement').addEventListener('click', () => {
-        // store.dispatch(decrement());
-        const current_count: string = (toInteger(document.getElementById('value').innerHTML) - 1).toString();
-        ipcRenderer.send('update-title-tray-window-event', current_count);
-    });
-
-    document.getElementById('notify').addEventListener('click', () => {
-        // var current_count:String = document.getElementById('value').innerHTML;
-        const notif = new window.Notification('My First Notification', {
-            body: 'Body of Notification',
+const renderApp = ({ key }: { key: number }) => ReactDOM.render(<App key={key} />, rootEl);
+renderApp({ key: frontendReloadCount });
+if (__DEV__) {
+    if ((module as any).hot) {
+        (module as any).hot.accept();
+        (module as any).hot.accept((err) => {
+            if (err) {
+                console.error('Cannot apply HMR update.', err);
+            }
         });
-        notif.onclick = function () {
-            ipcRenderer.send('show-about-window-event');
-        };
-    });
+        //  React-hot-loader v4 doesn't require following code any more.
+        //  but if RHL not working we can uncomment below code to make normal HMR to refresh the page
+        (module as any).hot.accept('./tray/index', () => {
+            try {
+                console.log('Updating front-end');
+                frontendReloadCount = (frontendReloadCount || 0) + 1;
+
+                renderApp({ key: frontendReloadCount });
+            } catch (err) {
+                // log(err.stack);
+            }
+        });
+    }
 }
-
-// function renderValue() {
-//     document.getElementById('value').innerHTML = store.getState().toString();
-// }
-
-mount();
-// renderValue();
-
-// store.subscribe(renderValue);

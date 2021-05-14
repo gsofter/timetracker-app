@@ -18,13 +18,13 @@ export default class TrayWindow {
             backgroundColor: '#E4ECEF',
             frame: false,
             fullscreenable: false,
-            resizable: false,
+            resizable: true,
             transparent: true,
             webPreferences: {
                 nodeIntegration: true,
                 contextIsolation: false,
                 enableRemoteModule: true,
-                devTools: false,
+                devTools: true,
             },
         });
 

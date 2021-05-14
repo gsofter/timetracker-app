@@ -40,13 +40,16 @@ export default class TrayIcon {
             }
         ]);
         if (process.platform === 'linux') {
-            this.trayIcon.setContextMenu(menu);
+            // this.trayIcon.setContextMenu(menu);
+            this.trayIcon.on('click', () => {
+                this.toggleTrayWindow()
+            });
         } else {
             this.trayIcon.on('right-click', () => {
                 this.trayIcon.setContextMenu(menu);
             });
             this.trayIcon.on('double-click', this.toggleTrayWindow)
-            this.trayIcon.on('click', function () {
+            this.trayIcon.on('click', () => {
                 this.toggleTrayWindow()
             });
         }
@@ -75,7 +78,7 @@ export default class TrayIcon {
         this.trayWindow?.focus()
     }
 
-    toggleTrayWindow = () => {
+    toggleTrayWindow() {
         if (!this.trayWindow) return;
         if (this.trayWindow.isVisible()) {
             this.trayWindow.hide();

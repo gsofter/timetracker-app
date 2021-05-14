@@ -95,6 +95,7 @@ export default class MainWindow {
                 port: config.ELECTRON_WEBPACK_WDS_PORT,
                 pathname: MAIN_HTML_PAGE,
             });
+            console.log('----------htmlDevPath----------->', htmlDevPath);
             this.window.loadURL(htmlDevPath);
         } else {
             const htmlPath = formatUrl({
@@ -102,6 +103,7 @@ export default class MainWindow {
                 protocol: 'file',
                 slashes: true,
             });
+            console.log('----------htmlDevPath----------->', htmlPath);
             this.window.loadURL(htmlPath);
         }
 
