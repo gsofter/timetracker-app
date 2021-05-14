@@ -14,9 +14,9 @@
     "target": ["nsis"]
   },
   "linux": {
-    "executableName": "sample-stack-desktop",
+    "executableName": "admin-layout-desktop",
     "category": "Application",
-    "desktop": "sample-stack-desktop",
+    "desktop": "admin-layout-desktop",
     "target": ["deb", "AppImage"]
   },
   "directories": {

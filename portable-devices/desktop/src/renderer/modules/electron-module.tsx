@@ -1,12 +1,9 @@
 import * as React from 'react';
 import { Layout } from 'antd';
 import { ConnectedRouter } from 'connected-react-router';
-import { ElectronTrayModule } from '@sample-stack/counter-module-browser';
 import { Feature, FeatureWithRouterFactory } from '@common-stack/client-react';
 
-// import counterModules from '@sample-stack/counter-module-browser';
-
-const features = new Feature(FeatureWithRouterFactory, ElectronTrayModule);
+const features = new Feature(FeatureWithRouterFactory);
 export const MainRoute = ({ history }) => (
     <>
         {features.getWrappedRoot(
