@@ -19,13 +19,20 @@ export class TrayWindow {
             show: false,
             name: 'tray-page',
             remote: true,
-            height: 500,
-            width: 500,
+            height: 300,
+            width: 300,
             backgroundColor: '#E4ECEF',
             frame: false,
             fullscreenable: false,
             resizable: !isDev,
             transparent: true,
+            webPreferences: {
+                nodeIntegration: true,
+                webSecurity: false,
+                enableRemoteModule: true,
+                // add preload to load esm
+                preload: path.resolve(path.join(__dirname, 'preload.js')),
+            },
         });
         // Object BrowserWindow has a lot of standart events
         // We will hide Tray window on blur. To emulate standart behavior of the tray-like apps.

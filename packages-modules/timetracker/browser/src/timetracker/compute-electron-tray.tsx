@@ -1,5 +1,5 @@
 import Tray from './components/HeaderTimerHandler/TimerWidget/WidgetMaximized';
-import { ROUTES } from './constants';
+import { ROUTES } from './constants/routes';
 import { getFilteredRoutes } from '../utils';
 
 const trayStore: any[] = [

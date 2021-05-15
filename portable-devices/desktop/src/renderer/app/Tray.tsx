@@ -28,10 +28,10 @@ if ((module as any).hot) {
         // Force Apollo to fetch the latest data from the server
         delete window.__APOLLO_STATE__;
     });
-    (module as any).hot.accept('../config/epic-config', () => {
+    (module as any).hot.accept('../config/tray/epic-config', () => {
         // we may need to reload epic always as we don't
         // know whether it is updated using our `modules`
-        const nextRootEpic = require('../config/epic-config').rootEpic;
+        const nextRootEpic = require('../config/tray/epic-config').rootEpic;
         // First kill any running epics
         store.dispatch({ type: 'EPIC_END' });
         // Now setup the new one

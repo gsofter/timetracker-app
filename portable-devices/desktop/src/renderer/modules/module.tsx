@@ -6,7 +6,6 @@ import PlatformModule from '@adminide-stack/platform-browser';
 import AccountsModule from '@adminide-stack/account-api-browser';
 import AuthModule from '@adminide-stack/user-auth0-browser';
 import ExtensionModule from '@adminide-stack/extension-module-browser';
-import ScheduleModule from '@admin-layout/schedule-module-browser';
 import ActivityModule from '@admin-layout/activity-module-browser';
 import TimeTrackerModule from '@admin-layout/timetracker-module-browser';
 import CounterModule from '@admin-layout/counter-module-browser';
@@ -17,7 +16,6 @@ const features = new Feature(
     AuthModule,
     AccountsModule,
     CounterModule,
-    ScheduleModule,
     TimeTrackerModule,
     ActivityModule,
     PlatformModule,

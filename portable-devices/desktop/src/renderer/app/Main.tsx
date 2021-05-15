@@ -14,7 +14,8 @@ import { ProvideAuth as CoreProvideAuth, ErrorBoundary } from '@adminide-stack/r
 import createRenderer from '../config/fela-renderer';
 import modules, { MainRoute } from '../modules';
 import { createClientContainer } from '../config/client.service';
-import { createReduxStore, storeReducer, history, persistConfig } from '../config/redux-config';
+import { createReduxStore, history, persistConfig } from '../config/redux-config';
+import { getStoreReducer } from '../../common/config/base-redux-config';
 import { epic$ } from '../config/epic-config';
 
 const ProvideAuth = ({ children }) => {
@@ -30,9 +31,9 @@ if ((module as any).hot && (module as any).hot.data && (module as any).hot.data.
     store = (module as any).hot.data.store;
     // replace the reducers always as we don't have ablity to find
     // new reducer added through our `modules`
-    store.replaceReducer(persistReducer(persistConfig, storeReducer((module as any).hot.data.history || history)));
+    store.replaceReducer(persistReducer(persistConfig, getStoreReducer((module as any).hot.data.history || history)));
 } else {
-    store = createReduxStore('renderer');
+    store = createReduxStore();
 }
 if ((module as any).hot) {
     (module as any).hot.dispose((data) => {
