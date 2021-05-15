@@ -6,8 +6,6 @@ import * as path from 'path';
 import { createWindow, provideSingleton } from '../utils';
 import { isDev } from '../../common';
 
-import { IPC_EVENTS } from '../../common';
-
 const iconPath = path.join(__dirname, '../../assets/icons/16x16.png');
 
 @provideSingleton(ElectronTypes.TrayWindow)

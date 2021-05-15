@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { Feature, FeatureWithRouterFactory, renderRoutes2 } from '@common-stack/client-react';
 import { ThemeProvider } from '@admin-layout/components';
-import LayoutModule from '@adminide-stack/react-shared-components';
+import LayoutModule from '@admin-layout/react-shared-components';
 import PlatformModule from '@adminide-stack/platform-browser';
 import AccountsModule from '@adminide-stack/account-api-browser';
 import AuthModule from '@adminide-stack/user-auth0-browser';

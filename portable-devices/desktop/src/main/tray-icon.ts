@@ -6,6 +6,7 @@ const iconPath = path.join(__dirname, '../../assets/icons/16x16.png');
 
 export default class TrayIcon {
     public trayIcon: Tray;
+
     public trayWindow: BrowserWindow;
 
     constructor(trayWindow: BrowserWindow) {
@@ -19,63 +20,60 @@ export default class TrayIcon {
         const menu = Menu.buildFromTemplate([
             {
                 label: 'Stop timer',
-                click() {
-                }
+                click() {},
             },
             {
                 label: 'Continue latest',
-                click() {
-                }
+                click() {},
             },
             {
                 label: 'Discard timer',
-                click() {
-                }
+                click() {},
             },
             {
                 label: 'Quit',
                 click() {
                     app.quit();
-                }
-            }
+                },
+            },
         ]);
         if (process.platform === 'linux') {
             // this.trayIcon.setContextMenu(menu);
             this.trayIcon.on('click', () => {
-                this.toggleTrayWindow()
+                this.toggleTrayWindow();
             });
         } else {
             this.trayIcon.on('right-click', () => {
                 this.trayIcon.setContextMenu(menu);
             });
-            this.trayIcon.on('double-click', this.toggleTrayWindow)
+            this.trayIcon.on('double-click', this.toggleTrayWindow);
             this.trayIcon.on('click', () => {
-                this.toggleTrayWindow()
+                this.toggleTrayWindow();
             });
         }
     }
 
     getTrayWindowPosition() {
         if (!this.trayWindow || !this.trayIcon) return { x: 2, y: 2 };
-        const windowBounds = this.trayWindow.getBounds()
-        const trayBounds = this.trayIcon.getBounds()
+        const windowBounds = this.trayWindow.getBounds();
+        const trayBounds = this.trayIcon.getBounds();
 
         // Center window horizontally below the tray icon
-        const x = Math.round(trayBounds.x + (trayBounds.width / 2) - (windowBounds.width / 2))
+        const x = Math.round(trayBounds.x + trayBounds.width / 2 - windowBounds.width / 2);
 
         // Position window 4 pixels vertically below the tray icon
-        const y = Math.round(trayBounds.y + trayBounds.height + 4)
+        const y = Math.round(trayBounds.y + trayBounds.height + 4);
 
-        return { x: x, y: y }
+        return { x, y };
     }
 
     showTrayWindow() {
-        const position = this.getTrayWindowPosition()
+        const position = this.getTrayWindowPosition();
         if (position) {
-            this.trayWindow?.setPosition(position.x, position.y, false)
+            this.trayWindow?.setPosition(position.x, position.y, false);
         }
-        this.trayWindow?.show()
-        this.trayWindow?.focus()
+        this.trayWindow?.show();
+        this.trayWindow?.focus();
     }
 
     toggleTrayWindow() {

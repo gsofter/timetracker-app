@@ -3,6 +3,7 @@
 import { ClientTypes } from '@common-stack/client-core';
 import { Container } from 'inversify';
 import ApolloClient from 'apollo-client';
+import { logger } from '@cdm-logger/client';
 import modules, { container } from '../modules';
 import { createApolloClient } from '../../common/config/base-apollo-client';
 import { PUBLIC_SETTINGS } from './public-config';

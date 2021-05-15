@@ -644,10 +644,6 @@ extend type Query {
 extend type Preferences {
   defaultSetting: [SettingsGroup]
 }
-
-
-
-
 type OrganizationIdentifier {
     id: String
     configPath: URI

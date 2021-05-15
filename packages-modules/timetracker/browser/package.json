@@ -1,17 +1,16 @@
 {
   "name": "@admin-layout/timetracker-module-browser",
-  "sideEffects": false,
   "version": "0.0.1",
   "description": "Sample core for higher packages to depend on",
   "license": "ISC",
   "author": "CDMBase LLC",
+  "sideEffects": false,
   "main": "lib/index.js",
   "typings": "lib/index.d.ts",
   "scripts": {
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf lib",
-    "build:lib": "webpack",
-    "build:lib:rollup": "rollup -c rollup.config.ts",
+    "build:lib": "rollup -c rollup.config.js",
     "build:lib:watch": "npm run build:lib -- --watch",
     "jest": "./node_modules/.bin/jest",
     "prepublish": "npm run build",
@@ -49,20 +48,25 @@
     "moment-duration-format": "^2.3.2",
     "react-chartjs-2": "^2.11.1",
     "react-compound-timer": "^1.2.0",
+    "react-csv": "^2.0.3",
     "react-custom-scrollbars": "^4.2.1",
     "react-date-range": "1.0.0-beta",
     "react-easy-swipe": "0.0.21",
+    "react-export-excel": "^0.5.3",
     "react-simple-timefield": "^3.2.3",
     "rifm": "^0.12.0",
     "socket.io-client": "2.2.0",
     "store": "^2.0.12",
     "uuidv4": "6.2.3",
-    "yup": "0.27.0",
-    "react-export-excel": "^0.5.3",
-    "react-csv": "^2.0.3"
+    "yup": "0.27.0"
   },
   "devDependencies": {
-    "@types/react-big-calendar": "^0.30.0"
+    "@open-wc/building-rollup": "^1.10.0",
+    "@rollup/plugin-graphql": "1.0.0",
+    "@rollup/plugin-image": "^2.0.6",
+    "@rollup/plugin-typescript": "^6.1.0",
+    "@types/react-big-calendar": "^0.30.0",
+    "rollup": "2.48.0"
   },
   "peerDependencies": {
     "@adminide-stack/core": "*",

@@ -2,7 +2,7 @@
 /* eslint-disable global-require */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-underscore-dangle */
-import { forwardToMain, replayActionRenderer, getInitialStateRenderer } from 'electron-redux';
+import { forwardToMain, replayActionRenderer, forwardToMainWithParams } from 'electron-redux';
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { createEpicMiddleware } from 'redux-observable';
@@ -38,23 +38,24 @@ export const persistConfig = {
  * Add any reducers required for this app dirctly in to
  * `combineReducers`
  */
-export const createReduxStore = (scope = 'main', url = '/') => {
-    // only in server side, url will be passed.
-    const newHistory = __CLIENT__ ? history : history(url);
-
+export const createReduxStore = () => {
     // middleware
-    const router = connectRouter(newHistory);
+    const router = connectRouter(history);
 
     const store = createBaseReduxStore({
         scope: 'browser',
         isDebug: __DEBUGGING__,
         isDev,
-        history: newHistory,
+        history,
         initialState: {},
         persistConfig,
-        middleware: [routerMiddleware(newHistory)],
+        middleware: [routerMiddleware(history)],
         epicMiddleware,
-        preMiddleware: [forwardToMain],
+        preMiddleware: [
+            forwardToMainWithParams({
+                blacklist: [/^@@/, /^redux-form/, /^contribution/, /^command/],
+            }),
+        ],
         rootEpic,
         reducers: { router, ...modules.reducers },
     });
