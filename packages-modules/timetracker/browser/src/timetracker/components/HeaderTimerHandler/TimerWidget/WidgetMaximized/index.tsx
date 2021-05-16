@@ -12,7 +12,6 @@ import { useFela } from 'react-fela';
 import { styleSheet } from './style';
 
 interface WidgetMaximizedProps {
-  onClose: () => void;
   onTrack: () => void;
   onMinimize: () => void;
   trackStarted: boolean;
@@ -23,7 +22,7 @@ const WidgetMaximized: React.FC<WidgetMaximizedProps> = (props: WidgetMaximizedP
   const { css } = useFela();
   const { Text } = Typography;
   const { Option } = Select;
-  const { onClose, onTrack, onMinimize, trackStarted, hidden } = props;
+  const { onTrack, onMinimize, trackStarted, hidden } = props;
   const [expanded, setExpanded] = useState<boolean>(true);
 
   return (
@@ -35,13 +34,6 @@ const WidgetMaximized: React.FC<WidgetMaximizedProps> = (props: WidgetMaximizedP
           size="small"
           onClick={onMinimize}
           style={{ marginLeft: '30px', border: 'none' }}
-        />
-        <Button
-          shape="circle"
-          icon={<CloseOutlined />}
-          size="small"
-          onClick={onClose}
-          style={{ border: 'none' }}
         />
       </div>
       <div className={css(styleSheet.timerHandles)}>
