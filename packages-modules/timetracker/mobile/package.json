@@ -43,6 +43,8 @@
     "@admin-layout/components": "link:../../../packages/components",
     "@admin-layout/react-shared-components": "link:../../../packages/react-shared-components",
     "@admin-layout/timetracker-core": "link:../core",
+    "@react-native-community/datetimepicker": "3.4.7",
+    "react-native-modal-datetime-picker": "9.2.3",
     "chart.js": "^2.9.4",
     "moment-duration-format": "^2.3.2",
     "moment": "2.29.1",
