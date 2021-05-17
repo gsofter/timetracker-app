@@ -1,16 +1,19 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useFela } from 'react-fela';
 import { Switch, Table, message, Card, Radio, Dropdown, Menu, Button } from 'antd';
+import { RightOutlined, LeftOutlined, CaretDownOutlined } from '@ant-design/icons';
+import moment, { Moment } from 'moment';
+import html2canvas from 'html2canvas';
+import { jsPDF } from 'jspdf';
+import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { BarChart } from './BarChart';
 import { DoughnutChart } from './DoughnutChart';
-import moment, { Moment } from 'moment';
-import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { formatDuration, roundDuration } from '../timetracker/services/timeRecordService';
 import { useFirstWeekDay, useRound, useTimeformat } from '../timetracker/hooks';
-import * as _ from 'lodash';
-import { RightOutlined, LeftOutlined, CaretDownOutlined } from '@ant-design/icons';
-import { useFela } from 'react-fela';
 import { ExportReportAsExcel } from './ExportReportAsExcel';
 import { ExportReportAsCSV } from './ExportReportAsCSV';
+import { ExportReportAsPDF } from './ExportReportAsPDF';
+import * as _ from 'lodash';
 
 interface IReportsProps {
   weekStart: Moment;
@@ -159,10 +162,22 @@ export const Reports: React.FC<IReportsProps> = ({
     setWeekStart(newWeekStart);
   };
 
+  const saveAsPdf = () => {
+    const input = document.getElementById('projects-report');
+    html2canvas(input)
+        .then((canvas) => {
+          const imgData = canvas.toDataURL('image/png');
+          const pdf = new jsPDF();
+          pdf.addImage(imgData, 'PNG', 10, 10, 200, 200);
+          pdf.save("download.pdf");
+        });
+    ;
+  }
+
   const exportMenu = () => {
     const menu = (
         <Menu>
-          <Menu.Item>Save as PDF</Menu.Item>
+          <Menu.Item onClick={saveAsPdf}>Save as PDF</Menu.Item>
           <Menu.Item>
             <ExportReportAsCSV
                 records={records}
@@ -237,6 +252,17 @@ export const Reports: React.FC<IReportsProps> = ({
                 labels={generateProjectLabels()}
             />
           </Card>
+        </div>
+        <div>
+          <ExportReportAsPDF
+              weekStart={weekStart}
+              generateBarData={generateBarData}
+              generateLabels={generateLabels}
+              generateProjectDurations={generateProjectDurations}
+              generateProjectLabels={generateProjectLabels}
+              generateTableColumns={generateTableColumns}
+              generateDatasource={generateDatasource}
+          />
         </div>
       </div>
   );
