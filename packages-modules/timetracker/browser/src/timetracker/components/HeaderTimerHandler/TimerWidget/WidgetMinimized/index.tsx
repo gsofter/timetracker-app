@@ -8,7 +8,6 @@ import {
 import { Button, Typography } from 'antd';
 
 interface WidgetMinimizedProps {
-  onClose: () => void;
   onTrack: () => void;
   onMaximize: () => void;
   trackStarted: boolean;
@@ -17,7 +16,7 @@ interface WidgetMinimizedProps {
 
 const WidgetMinimized: React.FC<WidgetMinimizedProps> = (props: WidgetMinimizedProps) => {
   const { Text } = Typography;
-  const { onClose, onTrack, onMaximize, trackStarted, hidden } = props;
+  const { onTrack, onMaximize, trackStarted, hidden } = props;
 
   return (
     <div hidden={hidden}>
@@ -36,13 +35,6 @@ const WidgetMinimized: React.FC<WidgetMinimizedProps> = (props: WidgetMinimizedP
         size="small"
         onClick={onMaximize}
         style={{ marginLeft: '30px', border: 'none' }}
-      />
-      <Button
-        shape="circle"
-        icon={<CloseOutlined />}
-        size="small"
-        onClick={onClose}
-        style={{ border: 'none' }}
       />
     </div>
   );
