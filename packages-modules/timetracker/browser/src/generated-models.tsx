@@ -320,8 +320,8 @@ export type UpdateTimesheetStatusMutationHookResult = ReturnType<typeof useUpdat
 export type UpdateTimesheetStatusMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IUpdateTimesheetStatusMutation>;
 export type UpdateTimesheetStatusMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IUpdateTimesheetStatusMutation, SchemaTypes.IUpdateTimesheetStatusMutationVariables>;
 export const GetDurationTimeRecordsDocument = gql`
-    query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime) {
-  getDurationTimeRecords(startTime: $startTime, endTime: $endTime) {
+    query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime, $userId: String) {
+  getDurationTimeRecords(startTime: $startTime, endTime: $endTime, userId: $userId) {
     id
     startTime
     endTime
@@ -355,6 +355,7 @@ export type GetDurationTimeRecordsComponentProps = Omit<ApolloReactComponents.Qu
  *   variables: {
  *      startTime: // value for 'startTime'
  *      endTime: // value for 'endTime'
+ *      userId: // value for 'userId'
  *   },
  * });
  */

@@ -15,7 +15,6 @@ import {
 } from '@ant-design/icons';
 const { Title } = Typography;
 import * as _ from 'lodash';
-import debounce from '../../services/debounce';
 import { formatDuration } from '../../services/timeRecordService';
 import BillableCheck from '../BillableCheck';
 import { useTimeformat } from '../../hooks';
@@ -81,7 +80,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
 
   const debouncedFunc = useMemo(
     () =>
-      debounce((value) => {
+      _.debounce((value) => {
         const request = { ..._.omit(timeRecord, ['__typename', 'id']), taskName: value };
         updateTimeRecord(timeRecord.id, request);
       }, debounceTimeLimit),

@@ -1,5 +1,5 @@
-query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime) {
-  getDurationTimeRecords(startTime: $startTime, endTime: $endTime) {
+query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime, $userId: String) {
+  getDurationTimeRecords(startTime: $startTime, endTime: $endTime, userId: $userId) {
     id
     startTime
     endTime
