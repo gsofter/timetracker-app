@@ -40,8 +40,9 @@ const TimerFooter = ({
 
     return (
       <View style={styles.footer}>
+        <KeyboardAwareScrollView>
         {!manual && (
-          <KeyboardAwareScrollView>
+          <View>
             <View style={styles.row}>
               <Item regular style={{ width: '80%', height: 40 }}>
                 <Input style={{ height: 40 }} placeholder="What are you working on?" />
@@ -75,7 +76,7 @@ const TimerFooter = ({
               billable={billable}
               />
             )}
-          </KeyboardAwareScrollView>
+          </View>
         )}
         {manual && (
           <View style={styles.flex_row}>
@@ -93,6 +94,7 @@ const TimerFooter = ({
             </Button>
           </View>
         )}
+      </KeyboardAwareScrollView>
       </View>
     )
 }
