@@ -40,8 +40,9 @@ const TimerFooter = ({
 
     return (
       <View style={styles.footer}>
+        <KeyboardAwareScrollView>
         {!manual && (
-          <KeyboardAwareScrollView>
+          <View>
             <View style={styles.row}>
               <Item regular style={{ width: '80%', height: 40 }}>
                 <Input style={{ height: 40 }} placeholder="What are you working on?" />
@@ -75,7 +76,7 @@ const TimerFooter = ({
               billable={billable}
               />
             )}
-          </KeyboardAwareScrollView>
+          </View>
         )}
         {manual && (
           <View style={styles.flex_row}>
@@ -89,10 +90,11 @@ const TimerFooter = ({
             <Button info block
             onPress={() => history.push('/create')}
             >
-              <Text style={styles.add_btn}>+</Text>
+              <Icon name="add-outline" style={styles.add_btn} />
             </Button>
           </View>
         )}
+      </KeyboardAwareScrollView>
       </View>
     )
 }
@@ -132,8 +134,7 @@ const styles = StyleSheet.create({
     },
     add_btn: {
       color: 'white',
-      paddingLeft: 20,
-      paddingRight: 20
+      paddingRight: 15,
     }
 });
 
