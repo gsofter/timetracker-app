@@ -165,19 +165,9 @@ const TimerActivity = (props: ITimerActivityProps) => {
     createTimeRecord(newTimeRecord);
   };
 
-  const debounceFunc = useMemo(
-    () =>
-      _.debounce((timeRecord) => {
-        updateTimeRecord(timeRecord.id, { ..._.omit(timeRecord, ['__typename', 'id']) });
-      }, 800),
-    [],
-  );
-
-  const updatePlayingTimeRecord = (timeRecord: ITimeRecord, debounce?: boolean) => {
+  const updatePlayingTimeRecord = (timeRecord: ITimeRecord) => {
     setCurrentTimeRecord(timeRecord);
-    if (debounce && currentTimeRecord.id !== undefined && currentTimeRecord.id !== '') {
-      debounceFunc(timeRecord);
-    } else if (currentTimeRecord.id !== undefined && currentTimeRecord.id !== '') {
+    if (currentTimeRecord.id !== undefined && currentTimeRecord.id !== '') {
       updateTimeRecord(timeRecord.id, { ..._.omit(timeRecord, ['__typename', 'id']) });
     }
   };
