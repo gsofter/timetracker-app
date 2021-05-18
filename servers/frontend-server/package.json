@@ -72,7 +72,6 @@
     "@common-stack/cache-api-server": "0.0.258",
     "@common-stack/client-core": "0.0.258",
     "@common-stack/client-react": "0.0.258",
-    "@common-stack/client-react-native": "0.0.258",
     "@common-stack/core": "0.0.258",
     "@common-stack/server-core": "0.0.258",
     "@workbench-stack/components": "^2.0.2",
