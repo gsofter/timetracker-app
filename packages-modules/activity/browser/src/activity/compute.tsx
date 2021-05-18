@@ -58,7 +58,7 @@ export const activityPage: any[] = [
     {
         name: 'Settings',
         exact: true,
-        key: 'timeTracker.settings',
+        key: 'activity.settings',
         position: IMenuPosition.MIDDLE,
         path: '/:orgName/activity/settings',
         hideInMenu: false,
@@ -67,7 +67,7 @@ export const activityPage: any[] = [
     },
 ];
 
-const selectedRoutesAndMenus = ['activity', 'activity.activityTime'];
+const selectedRoutesAndMenus = ['activity', 'activity.activityTime', 'activity.settings'];
 
 // get routes
 const filteredRoutes = getFilteredRoutes(activityPage, selectedRoutesAndMenus);

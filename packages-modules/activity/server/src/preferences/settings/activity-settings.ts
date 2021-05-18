@@ -2,21 +2,21 @@ import { ConfigurationScope, IConfigurationPropertySchema } from '@adminide-stac
 import { localize } from '@vscode/monaco-editor/esm/vs/nls';
 
 const enum ScreenshotFrequency {
-    'none' = 'None',
-    'oneShot' = '1x',
-    'twoShot' = '2x',
-    'threeShot' = '3x',
+    'None' = 'None',
+    'OneShot' = '1x',
+    'TwoShot' = '2x',
+    'ThreeShot' = '3x',
 }
 const enum TrackApps {
-    'off' = 'Off',
-    'apps' = 'Apps',
-    'appsUrls' = 'Apps & URLs',
+    'Off' = 'Off',
+    'Apps' = 'Apps',
+    'AppsAndURLs' = 'Apps & URLs',
 }
 export const ActivityProperties: { [path: string]: IConfigurationPropertySchema } = {
     'activity.desktopMonitoring.trackAppsAndURLs': {
         type: 'string',
-        enum: [TrackApps.off, TrackApps.apps, TrackApps.appsUrls],
-        default: TrackApps.appsUrls,
+        enum: [TrackApps.Off, TrackApps.Apps, TrackApps.AppsAndURLs],
+        default: TrackApps.AppsAndURLs,
         description: localize(
             'activity.desktopMonitoring.trackAppsAndURLs',
             'Control whether the names of apps used and the URLs visted are tracked.',
@@ -26,12 +26,12 @@ export const ActivityProperties: { [path: string]: IConfigurationPropertySchema 
     'activity.desktopMonitoring.screenshotFrequency': {
         type: 'string',
         enum: [
-            ScreenshotFrequency.none,
-            ScreenshotFrequency.oneShot,
-            ScreenshotFrequency.twoShot,
-            ScreenshotFrequency.threeShot,
+            ScreenshotFrequency.None,
+            ScreenshotFrequency.OneShot,
+            ScreenshotFrequency.TwoShot,
+            ScreenshotFrequency.ThreeShot,
         ],
-        default: ScreenshotFrequency.twoShot,
+        default: ScreenshotFrequency.TwoShot,
         enumDescriptions: [
             localize('activity.desktopMonitoring.screenshotFrequency.none', 'Disable screenshot'),
             localize(

@@ -1703,6 +1703,9 @@ export type IPreference_DesktopMonitoring = {
   waitingTime?: Maybe<Scalars['Int']>;
   idleSensitivity?: Maybe<Scalars['Int']>;
   maxTimeInADay?: Maybe<Scalars['Int']>;
+  ping?: Maybe<Scalars['Int']>;
+  timeout?: Maybe<Scalars['Int']>;
+  idle?: Maybe<Scalars['Int']>;
 };
 
 export type IPreference_Notification = {
@@ -1725,10 +1728,10 @@ export type IPreference_Project = {
 };
 
 export const enum IPreference_ScreenshotFrequency {
-  none = 'none',
-  oneShot = 'oneShot',
-  twoShot = 'twoShot',
-  threeShot = 'threeShot'
+  None = 'None',
+  OneShot = 'OneShot',
+  TwoShot = 'TwoShot',
+  ThreeShot = 'ThreeShot'
 };
 
 export type IPreference_Teams = {
@@ -1737,9 +1740,9 @@ export type IPreference_Teams = {
 };
 
 export const enum IPreference_TrackAppsAndURLs {
-  off = 'off',
-  apps = 'apps',
-  appsUrls = 'appsUrls'
+  Off = 'Off',
+  Apps = 'Apps',
+  AppsAndURLs = 'AppsAndURLs'
 };
 
 export type IPreferenceItem = {
@@ -4117,6 +4120,9 @@ export type IPreference_DesktopMonitoringResolvers<ContextType = any, ParentType
   waitingTime?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   idleSensitivity?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   maxTimeInADay?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  ping?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  timeout?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  idle?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 

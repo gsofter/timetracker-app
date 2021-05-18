@@ -1,14 +1,14 @@
 enum Preference_TrackAppsAndURLs {
-    off
-    apps
-    appsUrls
+    Off
+    Apps
+    AppsAndURLs
 }
 
 enum Preference_ScreenshotFrequency {
-    none
-    oneShot
-    twoShot
-    threeShot
+    None
+    OneShot
+    TwoShot
+    ThreeShot
 }
 
 type Preference_DesktopMonitoring {
@@ -21,6 +21,9 @@ type Preference_DesktopMonitoring {
     waitingTime: Int
     idleSensitivity: Int
     maxTimeInADay: Int
+    ping: Int
+    timeout: Int
+    idle: Int
 }
 
 type Preference_Activity {
