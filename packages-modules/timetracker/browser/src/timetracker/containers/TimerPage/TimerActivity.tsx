@@ -1,8 +1,7 @@
 import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { useFela } from 'react-fela';
-import { Moment } from 'moment';
-import { moment } from './index';
+import moment, { Moment } from 'moment';
 import { PageContainer } from '@admin-layout/components';
 import PageHeader from '../../components/PageHeader';
 import { TimerSearchComponent } from '../../components/TimerSearchComponent/index';
@@ -251,18 +250,14 @@ const TimerActivity = (props: ITimerActivityProps) => {
                     <Spacer />
                     <Col>{renderTotalTimeByDay(currentWeekRecords(timeRecords, weekStart))}</Col>
                   </Row>
-                  {groupTimeRecords(
-                    currentWeekRecords(timeRecords, weekStart),
-                    weekStart,
-                    dateFormat,
-                  ).map((dayRecords, index) => TimeRecordGroup(dayRecords, index))}
+                  {groupTimeRecords(currentWeekRecords(timeRecords, weekStart), weekStart, dateFormat).map(
+                    (dayRecords, index) => TimeRecordGroup(dayRecords, index),
+                  )}
                 </div>
 
-                {groupTimeRecords(
-                  pastWeekRecords(timeRecords, weekStart),
-                  weekStart,
-                  dateFormat,
-                ).map((dayRecords, index) => TimeRecordGroup(dayRecords, index))}
+                {groupTimeRecords(pastWeekRecords(timeRecords, weekStart), weekStart, dateFormat).map(
+                  (dayRecords, index) => TimeRecordGroup(dayRecords, index),
+                )}
               </div>
             </CustomScrollbar>
           </div>

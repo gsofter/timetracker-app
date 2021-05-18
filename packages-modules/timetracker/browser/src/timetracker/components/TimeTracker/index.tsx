@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { useFela } from 'react-fela';
 import { PlusCircleOutlined, TagOutlined, CloseOutlined, ClockCircleOutlined, BarsOutlined } from '@ant-design/icons';
 import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
@@ -55,9 +55,17 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
 
+  const debounceFunc = useMemo(
+    () =>
+      _.debounce((e) => {
+        updatePlayingTimeRecord({ ...currentTimeRecord, taskName: e.target.value });
+      }, 800),
+    [],
+  );
+
   const handleTaskChange = (e) => {
     e.persist();
-    updatePlayingTimeRecord({ ...currentTimeRecord, taskName: e.target.value }, true);
+    debounceFunc(e);
   };
 
   const handleSelectProject = (projectId) => {
