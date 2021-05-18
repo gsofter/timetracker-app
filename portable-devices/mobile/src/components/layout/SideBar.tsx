@@ -22,8 +22,8 @@ const SideBar = ({ routes, matchUrl }: any) => {
         <Container style={{ backgroundColor: '#1f1f1f' }}>
             {isMenuExist && routes.map(menu => (
                 menu.routes ? (
-                    <List>
-                        <ListItem onPress={() => toggle()}>
+                    <List key={menu.key} >
+                        <ListItem key={menu.key} onPress={() => toggle()}>
                             <Left>
                                 <Icon style={{ color: isToggle ? '#fff' : '#a1a1a1' }} name="document-outline" />
                                 <Text style={{ color: isToggle ? '#fff' : '#a1a1a1' }}>{menu.name}</Text>
@@ -36,7 +36,7 @@ const SideBar = ({ routes, matchUrl }: any) => {
                             <List>
                                 <ListItem>
                                     <Left>
-                                        <Link to={subMenu.path} underlayColor="#f0f4f7">
+                                        <Link key={subMenu.key} to={subMenu.path} underlayColor="#f0f4f7">
                                             <Text style={{ color: '#a1a1a1' }}>{subMenu.name}</Text>
                                         </Link>
                                     </Left >
