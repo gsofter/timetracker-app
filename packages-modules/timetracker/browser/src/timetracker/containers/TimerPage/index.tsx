@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import moment, { Moment } from 'moment';
 import {
   useCreateTimeRecordMutation,
-  useGetTimeRecordsQuery,
+  useGetDurationTimeRecordsQuery,
   useGetPlayingTimeRecordQuery,
   useRemoveTimeRecordMutation,
   useUpdateTimeRecordMutation,
@@ -20,7 +20,9 @@ import { useCreatePermissions, useDeletePermissions } from '../../hooks';
 const TimeTrackerWrapper = (props) => {
   const { setTime, reset, stop, start } = props.timer;
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
-  const { data, error, refetch, loading } = useGetTimeRecordsQuery({ variables: { userId } });
+  const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
+    variables: { userId, startTime: moment().startOf('month'), endTime: moment().endOf('month') },
+  });
   const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
   const [createMutation] = useCreateTimeRecordMutation();
   const [removeMutation] = useRemoveTimeRecordMutation();
@@ -30,15 +32,15 @@ const TimeTrackerWrapper = (props) => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
   const { self: createPermit } = useCreatePermissions();
   const { self: deletePermit } = useDeletePermissions();
-  useEffect(() => {
-    moment.locale('en', {
-      week: {
-        dow: dowValue,
-      },
-    });
+  // useEffect(() => {
+  //   moment.locale('en', {
+  //     week: {
+  //       dow: dowValue,
+  //     },
+  //   });
 
-    setWeekStart(moment().startOf('week'));
-  }, [dowValue]);
+  //   setWeekStart(moment().startOf('week'));
+  // }, [dowValue]);
 
   // create time record
   const createTimeRecord = (request: ITimeRecordRequest) => {
@@ -143,7 +145,7 @@ const TimeTrackerWrapper = (props) => {
         removeTimeRecord={removeTimeRecord}
         removePlayingTimeRecord={removePlayingTimeRecord}
         updateTimeRecord={updateTimeRecord}
-        timeRecords={_.get(data, 'getTimeRecords', [])}
+        timeRecords={_.get(data, 'getDurationTimeRecords', [])}
         setIsRecording={setIsRecording}
         setCurrentTimeRecord={setCurrentTimeRecord}
         currentTimeRecord={currentTimeRecord}
@@ -154,11 +156,11 @@ const TimeTrackerWrapper = (props) => {
   );
 };
 
-const withTimer = (timerProps) => (WrappedComponent) => (wrappedComponentProps) => (
-  <Timer {...timerProps}>
-    {(timerRenderProps) => <WrappedComponent {...wrappedComponentProps} timer={timerRenderProps} />}
-  </Timer>
-);
+const withTimer = (timerProps) => (WrappedComponent) => (wrappedComponentProps) =>
+  (
+    <Timer {...timerProps}>
+      {(timerRenderProps) => <WrappedComponent {...wrappedComponentProps} timer={timerRenderProps} />}
+    </Timer>
+  );
 
-export { moment };
 export default withTimer({ startImmediately: false })(TimeTrackerWrapper);
