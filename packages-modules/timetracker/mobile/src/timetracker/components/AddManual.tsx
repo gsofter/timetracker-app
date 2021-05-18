@@ -1,9 +1,10 @@
 import React, { useState, useEffect } from 'react';
-import {View, Text, StyleSheet, TouchableOpacity} from 'react-native';
-import { Header, Left, Body, Icon, Card, CardItem, Container, Content, ListItem, Input } from 'native-base';
+import {View, Text, StyleSheet, TouchableOpacity, Switch} from 'react-native';
+import { Header, Left, Body, Icon, Card, List, Right, Container, Content, ListItem, Input } from 'native-base';
 import { useHistory } from 'react-router-native'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
+
 const AddManual = () => {
     const history = useHistory();
     const [show, setShow] = useState(false)
@@ -15,6 +16,9 @@ const AddManual = () => {
         endDate: moment("2017-08-30T00:00:00"),
         totalDate: moment("2017-08-30T00:00:00")
     })
+    const [isEnabled, setIsEnabled] = useState(false);
+    
+    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
     useEffect(() => {
         var start = moment(dates.startDate, "HH:mm");
@@ -42,7 +46,7 @@ const AddManual = () => {
     };
 
     const handleEndCancel = () => {
-        setShow(false)
+        setIsEnd(false)
     }
 
     return(
@@ -55,10 +59,10 @@ const AddManual = () => {
                     <Text style={styles.color}>Time Entry Details</Text>
                 </Body>
             </Header>
-            <Content>
+            <Content padder>
                 <Card>
-                    <ListItem last>
-                        <CardItem>
+                    <List>
+                        <ListItem>
                             <View style={styles.flex_row}>
                                 <TouchableOpacity style={styles.blue_box} onPress={() => setShow(true)}>
                                     <Text style={styles.head_Text}>START</Text>
@@ -96,14 +100,46 @@ const AddManual = () => {
                             onConfirm={handleEndConfirm}
                             onCancel={handleEndCancel}
                             />
-                        </CardItem>
-                    </ListItem>
-                    <ListItem last>
-                        <CardItem style={styles.flex_col}>
+                        </ListItem>
+                        <ListItem style={styles.flex_col}>
                             <Text style={{ fontSize: 16 }}>Description</Text>
                             <Input placeholder='What have you worked on?'/>
-                        </CardItem>
-                    </ListItem>
+                        </ListItem>
+                        <ListItem>
+                            <TouchableOpacity>
+                                <Left>
+                                    <Text>Project</Text>
+                                </Left>
+                                <Right>
+                                    <Icon name='arrow-forward-outline' />
+                                </Right>
+                            </TouchableOpacity>
+                        </ListItem>
+                        <ListItem>
+                            <TouchableOpacity>
+                                <Left>
+                                    <Text>Task</Text>
+                                </Left>
+                                <Right>
+                                    <Icon name='arrow-forward-outline' />
+                                </Right>
+                            </TouchableOpacity>
+                        </ListItem>
+                        <ListItem>
+                            <Left>
+                                <Text>Billable</Text>
+                            </Left>
+                            <Right>
+                                <Switch
+                                    trackColor={{ false: "#767577", true: "#81b0ff" }}
+                                    thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                                    ios_backgroundColor="#3e3e3e"
+                                    onValueChange={toggleSwitch}
+                                    value={isEnabled}
+                                />
+                            </Right>
+                        </ListItem>
+                    </List>
                 </Card>
             </Content>
         </Container>
