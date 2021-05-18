@@ -5,6 +5,7 @@ import { BarChart } from './BarChart';
 import { DoughnutChart } from './DoughnutChart';
 import moment, { Moment } from 'moment';
 import { useTimeformat } from '../timetracker/hooks';
+import { formatDuration } from '../timetracker/services/timeRecordService';
 
 interface IExportReportAsPDF {
     weekStart: Moment;
@@ -14,21 +15,30 @@ interface IExportReportAsPDF {
     generateProjectLabels: () => any;
     generateDatasource: () => any;
     generateTableColumns: () => any;
+    getBillableDuration: () => any;
 }
 
 export const ExportReportAsPDF = (props: IExportReportAsPDF) => {
     const { weekStart, generateBarData, generateLabels, generateProjectLabels, generateProjectDurations, generateDatasource,
-        generateTableColumns } = props;
+        generateTableColumns, getBillableDuration } = props;
     const { css } = useFela();
-    const { dateFormat } = useTimeformat();
+    const { dateFormat, timeFormat } = useTimeformat();
+
+    const totalTime = generateProjectDurations().length &&
+        generateProjectDurations().reduce((accumulator, currentValue) => accumulator + currentValue);
 
     return (
-        <div style={{ display: 'none' }}>
-            <div id={'projects-report'} className={css(styles.container)}>
+        <div className={css(styles.container)}>
+            <div id={'projects-report'}>
                 <div className={css(styles.title)}>Summary Report</div>
                 <div className={css(styles.label)}>
-                    <span>{moment(weekStart).format(dateFormat)}</span> -
-                    <span>{moment(weekStart).add(6, 'day').format(dateFormat)}</span>
+                    {`${moment(weekStart).format(dateFormat)} - ${moment(weekStart).add(6, 'day').format(dateFormat)}`}
+                </div>
+                <div className={css(styles.duration)}>
+                    <span className={css(styles.label)}>Total:</span>
+                    <span className={css(styles.value)}>{formatDuration(totalTime, timeFormat)}</span>
+                    <span className={css(styles.label)}>Billable:</span>
+                    <span className={css(styles.value)}>{getBillableDuration()}</span>
                 </div>
                 <div className={css(styles.barWrapper)}>
                     <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
@@ -43,7 +53,12 @@ export const ExportReportAsPDF = (props: IExportReportAsPDF) => {
                 </div>
                 <Divider className={css(styles.divider)} />
                 <div>
-                    <Table dataSource={generateDatasource()} columns={generateTableColumns()}/>
+                    <Table
+                        rowKey="id"
+                        dataSource={generateDatasource()}
+                        columns={generateTableColumns()}
+                        pagination={false}
+                    />
                 </div>
             </div>
         </div>
@@ -53,18 +68,26 @@ export const ExportReportAsPDF = (props: IExportReportAsPDF) => {
 const styles = {
     container: () => ({
         width: '100%',
-        background: '#ffffff',
-        marginBottom: '10px'
+        opacity: '0',
     }),
     title: () => ({
-        fontSize: '24px',
+        fontSize: '36px',
+    }),
+    duration: () => ({
+        margin: '5px 0px',
     }),
     label: () => ({
-        color: '#808080',
+        color: '#696868',
+        fontSize: '18px',
+    }),
+    value: () => ({
+        fontSize: '22px',
+        marginLeft: '5px',
+        marginRight: '50px',
     }),
     barWrapper: () => ({
-        width: '80%',
-        margin: '0px auto',
+        width: '100%',
+        margin: '70px 0px',
     }),
     doughnutWrapper: () => ({
        width: '50%',
@@ -73,6 +96,7 @@ const styles = {
         margin: '0 80px',
     }),
     divider: () => ({
-       marginTop: '50px',
+       margin: '30px 0px !important',
+       borderTopColor: '#929292 !important',
     }),
 }
