@@ -1,12 +1,90 @@
 import { ConfigurationScope, IConfigurationPropertySchema } from '@adminide-stack/core';
 import { localize } from '@vscode/monaco-editor/esm/vs/nls';
 
+const enum ScreenshotFrequency {
+    'none' = 'None',
+    'oneShot' = '1x',
+    'twoShot' = '2x',
+    'threeShot' = '3x',
+}
+const enum TrackApps {
+    'off' = 'Off',
+    'apps' = 'Apps',
+    'appsUrls' = 'Apps & URLs',
+}
 export const ActivityProperties: { [path: string]: IConfigurationPropertySchema } = {
-    'activity.desktopMonitoring.autoStop': {
+    'activity.desktopMonitoring.trackAppsAndURLs': {
+        type: 'string',
+        enum: [TrackApps.off, TrackApps.apps, TrackApps.appsUrls],
+        default: TrackApps.appsUrls,
+        description: localize(
+            'activity.desktopMonitoring.trackAppsAndURLs',
+            'Control whether the names of apps used and the URLs visted are tracked.',
+        ),
+        scope: ConfigurationScope.WINDOW,
+    },
+    'activity.desktopMonitoring.screenshotFrequency': {
+        type: 'string',
+        enum: [
+            ScreenshotFrequency.none,
+            ScreenshotFrequency.oneShot,
+            ScreenshotFrequency.twoShot,
+            ScreenshotFrequency.threeShot,
+        ],
+        default: ScreenshotFrequency.twoShot,
+        enumDescriptions: [
+            localize('activity.desktopMonitoring.screenshotFrequency.none', 'Disable screenshot'),
+            localize(
+                'activity.desktopMonitoring.screenshotFrequency.oneShot',
+                'Takes one screenshot for every 10 minutes period.',
+            ),
+            localize(
+                'activity.desktopMonitoring.screenshotFrequency.twoShot',
+                'Takes two screenshot for every 10 minutes period.',
+            ),
+            localize(
+                'activity.desktopMonitoring.screenshotFrequency.threeShot',
+                'Takes three screenshot for every 10 minutes period.',
+            ),
+        ],
+        description: localize(
+            'activity.desktopMonitoring.screenshotFrequency',
+            'Control the number of screenshots taken in a 10 minute period.',
+        ),
+        scope: ConfigurationScope.WINDOW,
+    },
+    'activity.desktopMonitoring.screenshotBlur': {
+        type: 'boolean',
+        default: false,
+        description: localize(
+            'activity.desktopMonitoring.screenshotBlur',
+            'Control whether the desktop app blurs screenshots for security and privacy.',
+        ),
+        scope: ConfigurationScope.WINDOW,
+    },
+    'activity.desktopMonitoring.deleteScreenshots': {
+        type: 'boolean',
+        default: true,
+        description: localize(
+            'activity.desktopMonitoring.deleteScreenshots',
+            'Allow managers and owners to delete screenshots',
+        ),
+        scope: ConfigurationScope.WINDOW,
+    },
+    'activity.desktopMonitoring.recordActivity': {
+        type: 'boolean',
+        default: true,
+        description: localize(
+            'activity.desktopMonitoring.recordActivity',
+            'Control whether keyboard and mouse activity is monitored',
+        ),
+        scope: ConfigurationScope.WINDOW,
+    },
+    'activity.desktopMonitoring.autoStopTime': {
         type: 'number',
         default: 24,
         description: localize(
-            'timetracker.activity.autoStop',
+            'activity.desktopMonitoring.autoStopTime',
             'Tracking will stop once maximum tack length has been exceeded',
         ),
         scope: ConfigurationScope.WINDOW,
@@ -15,8 +93,17 @@ export const ActivityProperties: { [path: string]: IConfigurationPropertySchema 
         type: 'number',
         default: 120,
         description: localize(
-            'timetracker.activity.waitingTime',
+            'activity.desktopMonitoring.waitingTime',
             'Enable activity check on the time tracking to ask if you are still tracking after the choosen idle time (in seconds)',
+        ),
+        scope: ConfigurationScope.WINDOW,
+    },
+    'activity.desktopMonitoring.idleSensitivity': {
+        type: 'number',
+        default: 120,
+        description: localize(
+            'activity.desktopMonitoring.idleSensitivity',
+            "IdleSensivity time that activity must remain below the idle detection threshold before idle buffer timer count user's activity actions, in seconds.",
         ),
         scope: ConfigurationScope.WINDOW,
     },
@@ -24,7 +111,7 @@ export const ActivityProperties: { [path: string]: IConfigurationPropertySchema 
         type: 'number',
         default: 120,
         description: localize(
-            'timetracker.activity.maxTimeInADay',
+            'activity.desktopMonitoring.maxTimeInADay',
             'Enable activity check on the time tracking upto choosen max time in a day(in seconds). It can change upto 1440',
         ),
         scope: ConfigurationScope.WINDOW,

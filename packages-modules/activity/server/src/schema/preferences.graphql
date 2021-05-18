@@ -1,0 +1,32 @@
+enum Preference_TrackAppsAndURLs {
+    off
+    apps
+    appsUrls
+}
+
+enum Preference_ScreenshotFrequency {
+    none
+    oneShot
+    twoShot
+    threeShot
+}
+
+type Preference_DesktopMonitoring {
+    screenshotFrequency: Preference_ScreenshotFrequency
+    trackAppsAndURLs: Preference_TrackAppsAndURLs
+    screenshotBlur: Boolean
+    deleteScreenshots: Boolean
+    recordActivity: Boolean
+    autoStopTime: Int
+    waitingTime: Int
+    idleSensitivity: Int
+    maxTimeInADay: Int
+}
+
+type Preference_Activity {
+    desktopMonitoring: Preference_DesktopMonitoring
+}
+
+extend type Preferences {
+    activity: Preference_Activity
+}
