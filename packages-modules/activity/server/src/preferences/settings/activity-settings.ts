@@ -13,17 +13,17 @@ const enum TrackApps {
     'AppsAndURLs' = 'Apps & URLs',
 }
 export const ActivityProperties: { [path: string]: IConfigurationPropertySchema } = {
-    'activity.desktopMonitoring.trackAppsAndURLs': {
+    'activityTracker.desktopMonitoring.trackAppsAndURLs': {
         type: 'string',
         enum: [TrackApps.Off, TrackApps.Apps, TrackApps.AppsAndURLs],
         default: TrackApps.AppsAndURLs,
         description: localize(
-            'activity.desktopMonitoring.trackAppsAndURLs',
+            'activityTracker.desktopMonitoring.trackAppsAndURLs',
             'Control whether the names of apps used and the URLs visted are tracked.',
         ),
         scope: ConfigurationScope.WINDOW,
     },
-    'activity.desktopMonitoring.screenshotFrequency': {
+    'activityTracker.desktopMonitoring.screenshotFrequency': {
         type: 'string',
         enum: [
             ScreenshotFrequency.None,
@@ -33,85 +33,85 @@ export const ActivityProperties: { [path: string]: IConfigurationPropertySchema 
         ],
         default: ScreenshotFrequency.TwoShot,
         enumDescriptions: [
-            localize('activity.desktopMonitoring.screenshotFrequency.none', 'Disable screenshot'),
+            localize('activityTracker.desktopMonitoring.screenshotFrequency.none', 'Disable screenshot'),
             localize(
-                'activity.desktopMonitoring.screenshotFrequency.oneShot',
+                'activityTracker.desktopMonitoring.screenshotFrequency.oneShot',
                 'Takes one screenshot for every 10 minutes period.',
             ),
             localize(
-                'activity.desktopMonitoring.screenshotFrequency.twoShot',
+                'activityTracker.desktopMonitoring.screenshotFrequency.twoShot',
                 'Takes two screenshot for every 10 minutes period.',
             ),
             localize(
-                'activity.desktopMonitoring.screenshotFrequency.threeShot',
+                'activityTracker.desktopMonitoring.screenshotFrequency.threeShot',
                 'Takes three screenshot for every 10 minutes period.',
             ),
         ],
         description: localize(
-            'activity.desktopMonitoring.screenshotFrequency',
+            'activityTracker.desktopMonitoring.screenshotFrequency',
             'Control the number of screenshots taken in a 10 minute period.',
         ),
         scope: ConfigurationScope.WINDOW,
     },
-    'activity.desktopMonitoring.screenshotBlur': {
+    'activityTracker.desktopMonitoring.screenshotBlur': {
         type: 'boolean',
         default: false,
         description: localize(
-            'activity.desktopMonitoring.screenshotBlur',
+            'activityTracker.desktopMonitoring.screenshotBlur',
             'Control whether the desktop app blurs screenshots for security and privacy.',
         ),
         scope: ConfigurationScope.WINDOW,
     },
-    'activity.desktopMonitoring.deleteScreenshots': {
+    'activityTracker.desktopMonitoring.deleteScreenshots': {
         type: 'boolean',
         default: true,
         description: localize(
-            'activity.desktopMonitoring.deleteScreenshots',
+            'activityTracker.desktopMonitoring.deleteScreenshots',
             'Allow managers and owners to delete screenshots',
         ),
         scope: ConfigurationScope.WINDOW,
     },
-    'activity.desktopMonitoring.recordActivity': {
+    'activityTracker.desktopMonitoring.recordActivity': {
         type: 'boolean',
         default: true,
         description: localize(
-            'activity.desktopMonitoring.recordActivity',
+            'activityTracker.desktopMonitoring.recordActivity',
             'Control whether keyboard and mouse activity is monitored',
         ),
         scope: ConfigurationScope.WINDOW,
     },
-    'activity.desktopMonitoring.autoStopTime': {
+    'activityTracker.desktopMonitoring.autoStopTime': {
         type: 'number',
         default: 24,
         description: localize(
-            'activity.desktopMonitoring.autoStopTime',
+            'activityTracker.desktopMonitoring.autoStopTime',
             'Tracking will stop once maximum tack length has been exceeded',
         ),
         scope: ConfigurationScope.WINDOW,
     },
-    'activity.desktopMonitoring.waitingTime': {
+    'activityTracker.desktopMonitoring.waitingTime': {
         type: 'number',
         default: 120,
         description: localize(
-            'activity.desktopMonitoring.waitingTime',
+            'activityTracker.desktopMonitoring.waitingTime',
             'Enable activity check on the time tracking to ask if you are still tracking after the choosen idle time (in seconds)',
         ),
         scope: ConfigurationScope.WINDOW,
     },
-    'activity.desktopMonitoring.idleSensitivity': {
+    'activityTracker.desktopMonitoring.idleSensitivity': {
         type: 'number',
         default: 120,
         description: localize(
-            'activity.desktopMonitoring.idleSensitivity',
+            'activityTracker.desktopMonitoring.idleSensitivity',
             "IdleSensivity time that activity must remain below the idle detection threshold before idle buffer timer count user's activity actions, in seconds.",
         ),
         scope: ConfigurationScope.WINDOW,
     },
-    'activity.desktopMonitoring.maxTimeInADay': {
+    'activityTracker.desktopMonitoring.maxTimeInADay': {
         type: 'number',
         default: 120,
         description: localize(
-            'activity.desktopMonitoring.maxTimeInADay',
+            'activityTracker.desktopMonitoring.maxTimeInADay',
             'Enable activity check on the time tracking upto choosen max time in a day(in seconds). It can change upto 1440',
         ),
         scope: ConfigurationScope.WINDOW,
