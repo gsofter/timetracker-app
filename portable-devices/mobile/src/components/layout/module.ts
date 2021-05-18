@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
 import { Feature } from '@common-stack/client-react';
 import Layout from './Layout';
 import { SignIn, SignUp } from '../../pages';
