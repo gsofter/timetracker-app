@@ -1,5 +1,5 @@
 import React, { useState, useEffect } from 'react';
-import moment, { Moment } from 'moment';
+import moment from 'moment';
 import {
   useCreateTimeRecordMutation,
   useGetDurationTimeRecordsQuery,
@@ -32,15 +32,14 @@ const TimeTrackerWrapper = (props) => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
   const { self: createPermit } = useCreatePermissions();
   const { self: deletePermit } = useDeletePermissions();
-  // useEffect(() => {
-  //   moment.locale('en', {
-  //     week: {
-  //       dow: dowValue,
-  //     },
-  //   });
-
-  //   setWeekStart(moment().startOf('week'));
-  // }, [dowValue]);
+  useEffect(() => {
+    moment.locale('en', {
+      week: {
+        dow: dowValue,
+      },
+    });
+    setWeekStart(moment().startOf('week'));
+  }, []);
 
   // create time record
   const createTimeRecord = (request: ITimeRecordRequest) => {
