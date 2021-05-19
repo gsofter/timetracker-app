@@ -4,7 +4,6 @@ import { StyleSheet, View, ScrollView, Platform } from 'react-native';
 
 import TimerFooter from './TimerFooter';
 import TimeRange from './TimeRange';
-import ManualTime from "./ManualTime"
 
 const TimerScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
@@ -87,22 +86,6 @@ const TimerScreen = () => {
           onDateChange={onDateChange}
           onReset={onReset}
         />
-        {addManual && 
-          <ManualTime 
-            toggleStart={toggleStart}
-            startTime={startTime}
-            isStartTime={isStartTime}
-            changeStartTime={changeStartTime}
-            toggleEnd={toggleEnd}
-            endTime={endTime}
-            changeEndTime={changeEndTime}
-            setCalendarVisible={setCalendarVisible}
-            selectedDate={selectedDate}
-            calendarVisible={calendarVisible}
-            onDateChange={onSingleDateChange}
-            isEndTime={isEndTime}
-          />
-        }
       </ScrollView>
       <TimerFooter
         isToggle={isToggle}

@@ -1,6 +1,26 @@
 import React, { useState, useEffect } from 'react';
-import {View, Text, StyleSheet, TouchableOpacity, Switch} from 'react-native';
-import { Header, Left, Body, Icon, Card, List, Right, Container, Content, ListItem, Input } from 'native-base';
+import {
+    View, 
+    Text, 
+    StyleSheet, 
+    TouchableOpacity, 
+    Switch
+} from 'react-native';
+import { 
+    Header, 
+    Left, 
+    Body, 
+    Icon, 
+    Card, 
+    List, 
+    Right, 
+    Container, 
+    Content, 
+    ListItem, 
+    Input,
+    Button,
+    Badge 
+} from 'native-base';
 import { useHistory } from 'react-router-native'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
@@ -17,6 +37,24 @@ const AddManual = () => {
         totalDate: moment("2017-08-30T00:00:00")
     })
     const [isEnabled, setIsEnabled] = useState(false);
+    const [listOpen, setListOpen] = useState({
+        project: false,
+        task: false,
+        projectIcon: 'chevron-forward-outline',
+        taskIcon: 'chevron-forward-outline',
+        projectName: null,
+        taskName: null
+    })
+    const [list, setList] = useState({
+        project: [],
+        task: []
+    })
+    const [tag, setTag] = useState({
+        showTag: false,
+        btnText: 'Edit Tags',
+        tags: [],
+    })
+    const [tagName, setTagName] = useState("")
     
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -47,6 +85,34 @@ const AddManual = () => {
 
     const handleEndCancel = () => {
         setIsEnd(false)
+    }
+
+    const projectHandler = () => {
+        if(listOpen.project){
+            setListOpen(ps => ({...ps, project: false, projectIcon: 'chevron-forward-outline'}))
+        } else {
+            setListOpen(ps => ({...ps, project: true, projectIcon: 'chevron-down-outline'}))
+        }
+    }
+
+    const taskHandler = () => {
+        if(listOpen.task){
+            setListOpen(ps => ({...ps, task: false, taskIcon: 'chevron-forward-outline'}))
+        } else {
+            setListOpen(ps => ({...ps, task: true, taskIcon: 'chevron-down-outline'}))
+        }
+    }
+    
+    const tagHandler = () => {
+        if(tag.showTag){
+            setTag(ps => ({...ps, showTag: false, btnText: 'Edit Tags'}))
+        } else {
+            setTag(ps => ({...ps, showTag: true, btnText: 'Save Tags'}))
+        }
+    }
+
+    const addTag = () => {
+        setTag(ps => ({...ps, tags: [...tag.tags, tagName]}))
     }
 
     return(
@@ -105,26 +171,52 @@ const AddManual = () => {
                             <Text style={{ fontSize: 16 }}>Description</Text>
                             <Input placeholder='What have you worked on?'/>
                         </ListItem>
-                        <ListItem>
-                            <TouchableOpacity>
-                                <Left>
-                                    <Text>Project</Text>
-                                </Left>
-                                <Right>
-                                    <Icon name='arrow-forward-outline' />
-                                </Right>
-                            </TouchableOpacity>
+                        <ListItem onPress={() => projectHandler()}>
+                            <Left>
+                                <Text style={{ fontWeight: listOpen.project ? 'bold': 'normal' }}>Project</Text>
+                            </Left>
+                            <Right style={styles.flex_row}>
+                                {listOpen.projectName ? <Text style={styles.grey}>{listOpen.projectName}</Text>
+                                : <Text style={styles.grey}>(No Project Yet)</Text>}
+                                <Icon name={listOpen.projectIcon} />
+                            </Right>
                         </ListItem>
-                        <ListItem>
-                            <TouchableOpacity>
-                                <Left>
-                                    <Text>Task</Text>
-                                </Left>
-                                <Right>
-                                    <Icon name='arrow-forward-outline' />
-                                </Right>
-                            </TouchableOpacity>
+                        {listOpen.project && (
+                            <ListItem>
+                                {list.project.length ? (
+                                    <List>
+                                        {list.project.map((project: any) => (
+                                            <ListItem>{project.name}</ListItem>
+                                        ))}
+                                    </List>
+                                ): (
+                                    <Text>Project List is Empty</Text>
+                                )}
+                            </ListItem>
+                        )}
+                        <ListItem onPress={() => taskHandler()}>
+                            <Left>
+                                <Text style={{ fontWeight: listOpen.task ? 'bold': 'normal' }}>Task</Text>
+                            </Left>
+                            <Right style={styles.flex_row}>
+                                {listOpen.taskName ? <Text style={styles.grey}>{listOpen.taskName}</Text>
+                                : <Text style={styles.grey}>(No Task)</Text>}
+                                <Icon name={listOpen.taskIcon} />
+                            </Right>
                         </ListItem>
+                        {listOpen.task && (
+                            <ListItem>
+                                {list.task.length ? (
+                                    <List>
+                                        {list.task.map((task: any) => (
+                                            <ListItem>{task.name}</ListItem>
+                                        ))}
+                                    </List>
+                                ): (
+                                    <Text>Task List is Empty</Text>
+                                )}
+                            </ListItem>
+                        )}
                         <ListItem>
                             <Left>
                                 <Text>Billable</Text>
@@ -132,13 +224,41 @@ const AddManual = () => {
                             <Right>
                                 <Switch
                                     trackColor={{ false: "#767577", true: "#81b0ff" }}
-                                    thumbColor={isEnabled ? "#f5dd4b" : "#f4f3f4"}
+                                    thumbColor={isEnabled ? "black" : "#f4f3f4"}
                                     ios_backgroundColor="#3e3e3e"
                                     onValueChange={toggleSwitch}
                                     value={isEnabled}
                                 />
                             </Right>
                         </ListItem>
+                        <ListItem style={styles.flex_row}>
+                            <Text>Tags</Text>
+                            <Button block info small onPress={() => tagHandler()}>
+                                <Text style={[styles.color, styles.left_right]}>{tag.btnText}</Text>
+                            </Button>
+                        </ListItem>
+                        {tag.showTag && (
+                            <ListItem>
+                                <View style={{flexDirection: 'row'}}>
+                                    <Input 
+                                        onChangeText={(e) => setTagName(e)} 
+                                        placeholder='Enter Tag Title' 
+                                    />
+                                    <Button transparent onPress={() => addTag()}>
+                                        <Icon color='#1890ff' name='add-outline' />
+                                    </Button>
+                                </View>
+                                {tag.tags.length && (
+                                    <View>
+                                        {tag.tags.map(data => (
+                                            <Badge primary>
+                                                <Text style={styles.color}>{data}</Text>
+                                            </Badge>
+                                        ))}
+                                    </View>
+                                )}
+                            </ListItem>
+                        )}
                     </List>
                 </Card>
             </Content>
@@ -149,6 +269,9 @@ const AddManual = () => {
 const styles = StyleSheet.create({
     color: {
         color: 'white'
+    },
+    grey: {
+        color: 'grey'
     },
     blue_box: {
         flex: 1,
@@ -185,6 +308,10 @@ const styles = StyleSheet.create({
         flex: 1,
         alignItems: 'flex-start',
         flexDirection: 'column'
+    },
+    left_right: {
+        paddingLeft: 5,
+        paddingRight: 5
     }
 })
 
