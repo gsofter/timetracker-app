@@ -217,10 +217,10 @@ export const Reports: React.FC<IReportsProps> = ({
           <div className={css(styles.title)}>
             <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
             <span className="duration-end">
-                            {moment(weekStart).format('MM') === moment(weekStart).add(6, 'day').format('MM')
-                                ? moment(weekStart).add(6, 'day').format('DD')
-                                : moment(weekStart).add(6, 'day').format('MMMM DD')}
-                        </span>
+              {moment(weekStart).format('MM') === moment(weekStart).add(6, 'day').format('MM')
+                  ? moment(weekStart).add(6, 'day').format('DD')
+                  : moment(weekStart).add(6, 'day').format('MMMM DD')}
+            </span>
           </div>
           <div className={css(styles.barChartWrapper)}>
             <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
