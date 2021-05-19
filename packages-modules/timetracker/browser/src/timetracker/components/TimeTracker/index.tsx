@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useFela } from 'react-fela';
 import { PlusCircleOutlined, TagOutlined, CloseOutlined, ClockCircleOutlined, BarsOutlined } from '@ant-design/icons';
 import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
@@ -54,19 +54,24 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
+  const [taskName, setTaskName] = useState(currentTimeRecord.taskName ?? '');
 
-  const debounceFunc = useMemo(
+  const debouncedFunc = useMemo(
     () =>
-      _.debounce((e) => {
-        updatePlayingTimeRecord({ ...currentTimeRecord, taskName: e.target.value });
+      _.debounce((value) => {
+        updatePlayingTimeRecord({ ...currentTimeRecord, taskName: value });
       }, 800),
-    [],
+    [currentTimeRecord],
   );
 
-  const handleTaskChange = (e) => {
-    e.persist();
-    debounceFunc(e);
-  };
+  const handleChangeTask = useCallback(
+    (e) => {
+      e.persist();
+      setTaskName(e.target.value);
+      debouncedFunc(e.target.value);
+    },
+    [debouncedFunc],
+  );
 
   const handleSelectProject = (projectId) => {
     updatePlayingTimeRecord({ ...currentTimeRecord, projectId: projectId });
@@ -160,12 +165,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
         <Col span={24} xxl={12} className="input">
           <Row style={{ width: '100%' }}>
             <Col span={18} className="flex-center">
-              <Input
-                placeholder="What are you working on?"
-                size="large"
-                value={currentTimeRecord.taskName}
-                onChange={handleTaskChange}
-              />
+              <Input placeholder="What are you working on?" size="large" value={taskName} onChange={handleChangeTask} />
             </Col>
             <Col span={6} className="flex-center project-selection">
               <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
