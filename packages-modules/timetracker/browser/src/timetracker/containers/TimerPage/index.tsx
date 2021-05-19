@@ -20,8 +20,9 @@ import { useCreatePermissions, useDeletePermissions } from '../../hooks';
 const TimeTrackerWrapper = (props) => {
   const { setTime, reset, stop, start } = props.timer;
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
+  const [range, setRange] = useState({ startTime: moment().startOf('month'), endTime: moment().endOf('month') });
   const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
-    variables: { userId, startTime: moment().startOf('month'), endTime: moment().endOf('month') },
+    variables: { userId, startTime: range.startTime, endTime: range.endTime },
   });
   const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
   const [createMutation] = useCreateTimeRecordMutation();
@@ -139,6 +140,7 @@ const TimeTrackerWrapper = (props) => {
       <TimerActivity
         {...props}
         weekStart={weekStart}
+        range={range}
         projects={_.get(projectsData, 'getProjects', [])}
         createTimeRecord={createTimeRecord}
         removeTimeRecord={removeTimeRecord}
@@ -150,6 +152,7 @@ const TimeTrackerWrapper = (props) => {
         currentTimeRecord={currentTimeRecord}
         isRecording={isRecording}
         resetTimerValues={resetTimerValues}
+        setRange={setRange}
       />
     </Spin>
   );
