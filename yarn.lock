@@ -168,15 +168,15 @@
     humanize-duration "^3.24.0"
     moment "^2.29.1"
 
-"@adminide-stack/account-api-browser@0.0.20-alpha.46":
-  version "0.0.20-alpha.46"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-browser/-/account-api-browser-0.0.20-alpha.46.tgz#fcebf0cf56d90964dd845018a7e24576833996f0"
-  integrity sha512-s6V97yP3mPpmNQ8NYPHQD1E/oa+suvIYp1KIGiJTpYFoCAlEIewxEeB52Vb0/hMU/APonAt/OXwNg1RdlGdKxQ==
+"@adminide-stack/account-api-browser@0.0.20-alpha.49":
+  version "0.0.20-alpha.49"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-browser/-/account-api-browser-0.0.20-alpha.49.tgz#9c398c18bc1b5348e9c63f3c94fb8612aca02b9b"
+  integrity sha512-Wltgh1eU6ropNYCxTmDQpRX6VMMVlg+JyjQboX8zAZrzoxpupBh/Qi84BPoKhg3wBEGvjiCcDsJ+cM1JR8zcRg==
   dependencies:
-    "@adminide-stack/core" "0.0.20-alpha.42"
-    "@adminide-stack/extension-api" "0.0.20-alpha.46"
-    "@adminide-stack/platform-browser" "0.0.20-alpha.44"
-    "@adminide-stack/user-auth0-browser" "0.0.20-alpha.44"
+    "@adminide-stack/core" "0.0.20-alpha.47"
+    "@adminide-stack/extension-api" "0.0.20-alpha.47"
+    "@adminide-stack/platform-browser" "0.0.20-alpha.49"
+    "@adminide-stack/user-auth0-browser" "0.0.20-alpha.49"
     "@react-pdf/renderer" "^2.0.0-beta.6"
     date-fns "^2.19.0"
     react-datepicker "^3.5.0"
@@ -184,26 +184,26 @@
     react-textarea-autosize "^8.2.0"
     suneditor-react "^2.16.1"
 
-"@adminide-stack/account-api-server@0.0.20-alpha.42":
-  version "0.0.20-alpha.42"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-server/-/account-api-server-0.0.20-alpha.42.tgz#2e478406cd1890e737f88bad2757b626cd74b6d4"
-  integrity sha512-eiyCTNEsd8JtvUdIEj5wt4Kv/Odv5j8btVrCtTTHTVWuGxBV5Xyy9qG+8oK1BSg+GzhEO0szNd3ajsSu7GE4Nw==
+"@adminide-stack/account-api-server@0.0.20-alpha.48":
+  version "0.0.20-alpha.48"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-server/-/account-api-server-0.0.20-alpha.48.tgz#a2491c7f608282a5ffdc86af8e5f19b09198aa1f"
+  integrity sha512-dkwGYggvoGxYsTXdnnZmmiv4XJJ0taAg+6WRud/qCIzVmbWzHtuQKdr4cIStHFdpgxrp+DKC0kAgo46Sky9q3A==
   dependencies:
-    "@adminide-stack/core" "0.0.20-alpha.42"
-    "@adminide-stack/platform-server" "0.0.20-alpha.42"
-    "@adminide-stack/user-auth0-server" "0.0.20-alpha.42"
+    "@adminide-stack/core" "0.0.20-alpha.47"
+    "@adminide-stack/platform-server" "0.0.20-alpha.48"
+    "@adminide-stack/user-auth0-server" "0.0.20-alpha.47"
     asana "0.18.6"
     date-fns "^2.19.0"
     jsonwebtoken "^8.5.1"
     nanoid "^1.3.1"
     pluralize "8.0.0"
 
-"@adminide-stack/auth0-server-core@0.0.20-alpha.42":
-  version "0.0.20-alpha.42"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/auth0-server-core/-/auth0-server-core-0.0.20-alpha.42.tgz#e09655740169b9ff4d49906061aa7ed76175224c"
-  integrity sha512-/XW2ZH8+CW6EjXs9uzCHJ9WJ+4WE9TORzQAZmm6tzTSyijQLQ/geUWgxdaXthue2CCl8qEqBhCNL/YMHbkqWqA==
+"@adminide-stack/auth0-server-core@0.0.20-alpha.47":
+  version "0.0.20-alpha.47"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/auth0-server-core/-/auth0-server-core-0.0.20-alpha.47.tgz#aea15114030ebcda1f3f95e2c60c16ae554f891f"
+  integrity sha512-wZwKm/YsT00eLT3BOYLGxlVuCPcj3YPHz8vSPY8y9YY9OnSmzVNWKs5Lq05EN8U6DOydOLnFj7WZ3r/IQpzSHw==
   dependencies:
-    "@adminide-stack/core" "0.0.20-alpha.42"
+    "@adminide-stack/core" "0.0.20-alpha.47"
     apollo-server-errors "^2.4.2"
     auth0 "^2.19.0"
 
@@ -212,22 +212,22 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/common/-/common-0.0.20-alpha.23.tgz#6bf9f467f8362a249bad85f85037cb650726e21b"
   integrity sha512-+h4Nn/GY3+VwY3IM4EiUPklR3bYdCux8CZQZ8r0xwMWkFxtqvJpaf8wfV5xohyTnbnmoTOm7lkWsLI/NyrM6kw==
 
-"@adminide-stack/core@0.0.20-alpha.42":
-  version "0.0.20-alpha.42"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/core/-/core-0.0.20-alpha.42.tgz#8aea937ae48f8670916a859ba2e075ec0b472b0b"
-  integrity sha512-3yWVwDjLWI5GA/w2tFr27JXy3c95uJPrMXlyYMY/75sYm3irDXXtgYAnb97Vv8AVzb6LhK76B1FQHdX6pxAXfg==
+"@adminide-stack/core@0.0.20-alpha.47":
+  version "0.0.20-alpha.47"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/core/-/core-0.0.20-alpha.47.tgz#5252b3db3f77da39a65524f2d4b0043f8b9cc0e3"
+  integrity sha512-t9GncbGNCCGBiqmETsnqXAEgy9/KN0M1h9qsxCdPa5i4uYDWQK3uGH6yE65mxk/pp005N+QSAeUK6li3MgT+KA==
   dependencies:
     "@vscode/monaco-editor" "^0.21.2"
     "@workbench-stack/core" "2.0.2"
     querystring "^0.2.0"
     sort-keys "^4.0.0"
 
-"@adminide-stack/extension-api@0.0.20-alpha.46":
-  version "0.0.20-alpha.46"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-api/-/extension-api-0.0.20-alpha.46.tgz#66f76c146b6877c8154c07e5a61e63666c70f589"
-  integrity sha512-/GhZEGeP26+57HQttzxGOpCBFagnq1C2RE3gNUB+xNWiHBBxz4SFOAgsClaG9mLV5PlPIDy2/4n86B8Y0+hNjg==
+"@adminide-stack/extension-api@0.0.20-alpha.47":
+  version "0.0.20-alpha.47"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-api/-/extension-api-0.0.20-alpha.47.tgz#deefa633871841e1f2060038ac1f7733cc96b8e1"
+  integrity sha512-oIg4q+WboDiSh6w1ibQ+zE6AbPgOi3z+wPP3qvcP8w3kpr0Jji0N56ErRRcSRDl72pbUsCq9sit2ApWcwAFx4w==
   dependencies:
-    "@adminide-stack/core" "0.0.20-alpha.42"
+    "@adminide-stack/core" "0.0.20-alpha.47"
     abort-controller "^2.0.0"
     abortable-rx "^1.0.9"
     cdeops "0.0.20-alpha.11"
@@ -236,14 +236,13 @@
     utility-types "^3.10.0"
     valid-url "1.0.9"
 
-"@adminide-stack/extension-module-browser@0.0.20-alpha.46":
-  version "0.0.20-alpha.46"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-module-browser/-/extension-module-browser-0.0.20-alpha.46.tgz#0993073ca9b5f1b52543d3e6851c81e2a17933f4"
-  integrity sha512-y8XiPkcRdKPJheSzwIB8DgDmNTJUQ5jOh2gBRB7L1CscWBLxEuQ+cQdya9e7Y5u58ts2mqM9dFX5DtYZptmEJQ==
+"@adminide-stack/extension-module-browser@0.0.20-alpha.48":
+  version "0.0.20-alpha.48"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-module-browser/-/extension-module-browser-0.0.20-alpha.48.tgz#8fa8bf0e4d93b24a6db9aeaebe24b242a7944b0a"
+  integrity sha512-GO9MeaH2piL/TL+Q5U7zpYCPitqdN1oLyQtAHeg0/LqcMpGDbxKA1MXlEShUqv+qedbOlMmv8Q3suZKPNhOE4Q==
   dependencies:
-    "@adminide-stack/core" "0.0.20-alpha.42"
-    "@adminide-stack/extension-api" "0.0.20-alpha.46"
-    "@adminide-stack/react-shared-components" "0.0.20-alpha.44"
+    "@adminide-stack/core" "0.0.20-alpha.47"
+    "@adminide-stack/extension-api" "0.0.20-alpha.47"
     "@babel/polyfill" "^7.2.5"
     cdeops "0.0.20-alpha.11"
     jsonc-parser "^2.0.2"
@@ -253,23 +252,23 @@
     rxjs-websockets "^8.0.0"
     whatwg-url "^7.0.0"
 
-"@adminide-stack/platform-browser@0.0.20-alpha.44":
-  version "0.0.20-alpha.44"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-browser/-/platform-browser-0.0.20-alpha.44.tgz#6d269acedffa724920705ce23dd5564fc4417ee6"
-  integrity sha512-x/S/3RUZjnTtEXkKX6xM0LjNZbwfcu0oUP2jaDSgCAwHS6jd+/mEUvrNuoprJPVGyhf2IpUkXKlnUyddRYbjrQ==
+"@adminide-stack/platform-browser@0.0.20-alpha.49":
+  version "0.0.20-alpha.49"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-browser/-/platform-browser-0.0.20-alpha.49.tgz#1143ec0421e89d6d1637303eff20362ba17867e3"
+  integrity sha512-+FQK14Ua83YE8i3v5hTLuELKjtAgnbn6vKkv7NzmJ2bUuLyIR1uLN5rmJtpOHWJ6HItjgx9oGl9jabIp8DvsiQ==
   dependencies:
-    "@adminide-stack/core" "0.0.20-alpha.42"
-    "@adminide-stack/react-shared-components" "0.0.20-alpha.44"
+    "@adminide-stack/core" "0.0.20-alpha.47"
+    "@adminide-stack/react-shared-components" "0.0.20-alpha.49"
     "@vscode/monaco-editor" "^0.21.2"
     jsonc-parser "^2.3.0"
     query-string "^6.1.0"
 
-"@adminide-stack/platform-server@0.0.20-alpha.42":
-  version "0.0.20-alpha.42"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-server/-/platform-server-0.0.20-alpha.42.tgz#c0f46075675c37e174834960461fb99b15f5d268"
-  integrity sha512-tX3k63LV/u5tOdy5v5ohZt4xTlh8kuBy2OSvO5tdq6646Bo9rXszRxczKf1E7zfnSO6aDFDYDbu46QvzlCxIVg==
+"@adminide-stack/platform-server@0.0.20-alpha.48":
+  version "0.0.20-alpha.48"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-server/-/platform-server-0.0.20-alpha.48.tgz#ff0f9deccde198a0d7674ba6a5d461db8784172b"
+  integrity sha512-7HV9CZF67MDNqHXQtOWCOr762Qp1ujjlR+VVqhPegEcR+mzgzkz+u+3XOMzna5GIeYgJs6Byb5/CqThlny70xA==
   dependencies:
-    "@adminide-stack/core" "0.0.20-alpha.42"
+    "@adminide-stack/core" "0.0.20-alpha.47"
     "@files-stack/core" "2.0.1-alpha.0"
     "@files-stack/module-server" "2.0.1-alpha.0"
     "@vscode/monaco-editor" "^0.21.2"
@@ -284,12 +283,13 @@
     mongo-queryfilter "^0.1.20"
     query-string "^6.1.0"
 
-"@adminide-stack/react-shared-components@0.0.20-alpha.44":
-  version "0.0.20-alpha.44"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/react-shared-components/-/react-shared-components-0.0.20-alpha.44.tgz#b7b94fda261e803b65bd81ad8c6c6a9c16f23cbf"
-  integrity sha512-WMLBMOL/AjqwygdKjKrdNoH2ytSFS/4d4+QmZXH1dGLKANsAxeIrsFd3h2htFe0EaVVP+YivHPRq6DJsgdBLxw==
+"@adminide-stack/react-shared-components@0.0.20-alpha.49":
+  version "0.0.20-alpha.49"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/react-shared-components/-/react-shared-components-0.0.20-alpha.49.tgz#6af20d34e7023bfe4023dc75b9e448c7d2961b87"
+  integrity sha512-actrnPljiXM9fmO+lz18zy//QL0M1rZzn5UI7wSL6CKl3eqI1f7nP0QMX9lszXHJfm4XPsun9QpCxrNGz1sQkQ==
   dependencies:
-    "@adminide-stack/core" "0.0.20-alpha.42"
+    "@adminide-stack/core" "0.0.20-alpha.47"
+    "@adminide-stack/extension-module-browser" "0.0.20-alpha.48"
     "@ant-design/pro-provider" "0.0.6"
     "@cdm-logger/client" "^5.0.7"
     "@types/react-copy-to-clipboard" "^4.3.0"
@@ -305,13 +305,13 @@
     use-media-antd-query "^1.0.2"
     use-merge-value "^1.0.2"
 
-"@adminide-stack/user-auth0-browser@0.0.20-alpha.44":
-  version "0.0.20-alpha.44"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.20-alpha.44.tgz#1f2bca5494f6dc6cb5adb5de6106e44c728ca813"
-  integrity sha512-+x8JUgmNIKluH+1UgQ1pBy1TQJb4TtR4E3Uw9iECWig/JJWgM3bYVn+QT+HlJUvD1TxpfsN04g66vHJ7iEyQOA==
+"@adminide-stack/user-auth0-browser@0.0.20-alpha.49":
+  version "0.0.20-alpha.49"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.20-alpha.49.tgz#42318b3428c8c42b30c70dede172b4b3347e9ac7"
+  integrity sha512-IIRtgxk/UaIbj3qxBUB+CyOCJ3E71ZNpac+No2Dq7GzmcawMd2yNyvRxZrCqhf/qydH0DXuENzrUnXI3tkpHjg==
   dependencies:
     "@adminide-stack/common" "0.0.20-alpha.23"
-    "@adminide-stack/react-shared-components" "0.0.20-alpha.44"
+    "@adminide-stack/react-shared-components" "0.0.20-alpha.49"
     auth0 "^2.19.0"
     auth0-js "^9.11.3"
     auth0-lock "^11.17.2"
@@ -319,14 +319,14 @@
     react-cookie "^4.0.1"
     redux-auth-wrapper "^3.0.0"
 
-"@adminide-stack/user-auth0-server@0.0.20-alpha.42":
-  version "0.0.20-alpha.42"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-server/-/user-auth0-server-0.0.20-alpha.42.tgz#ba01c781a0261033278d9580f07ca14dfc65c016"
-  integrity sha512-9uoZkZ784+gODAwLwL2zDvs9ItNar0HZLvb0SViohDhPt2oGZC061l6fEW3Lg3UdkQSqYtPR2lTLUb63HqSeJg==
+"@adminide-stack/user-auth0-server@0.0.20-alpha.47":
+  version "0.0.20-alpha.47"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-server/-/user-auth0-server-0.0.20-alpha.47.tgz#911a3aaa9266760a60b578a1053e81cf6ffefedd"
+  integrity sha512-Cb/b3Z/girI4U1eAkt4482c5SOot1ufUoR1EBX+kslBjRVltc8dVeDto1D8pTj9JPbOIwiZCDkGRPkXnPlwIOA==
   dependencies:
-    "@adminide-stack/auth0-server-core" "0.0.20-alpha.42"
+    "@adminide-stack/auth0-server-core" "0.0.20-alpha.47"
     "@adminide-stack/common" "0.0.20-alpha.23"
-    "@adminide-stack/core" "0.0.20-alpha.42"
+    "@adminide-stack/core" "0.0.20-alpha.47"
     apollo-server-errors "^2.4.2"
     auth0 "^2.19.0"
     connect-ensure-login "^0.1.1"
@@ -2062,7 +2062,7 @@
   dependencies:
     "@common-stack/core" "^0.0.258"
 
-"@common-stack/client-react-native@0.0.258", "@common-stack/client-react-native@^0.0.258":
+"@common-stack/client-react-native@^0.0.258":
   version "0.0.258"
   resolved "https://registry.yarnpkg.com/@common-stack/client-react-native/-/client-react-native-0.0.258.tgz#b9b0dfc5b9f17d937404513f5cc4cf8de967af3f"
   integrity sha512-ODO5oaQDuAwVBLbim9+SQmU99p/EVVkJbUwfgSo9iTHCbiOp1EuAiXlU1P9/yfvXbqX70zQCF+7v5SX5IAqUEA==
