@@ -1,15 +1,9 @@
-/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable jest/no-jest-import */
-/* eslint-disable prettier/prettier */
-/* eslint-disable jest/no-test-prefixes */
-/* eslint-disable jest/no-disabled-tests */
-/* eslint-disable jest/no-done-callback */
-/* eslint-disable @typescript-eslint/no-unused-vars */
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable jest/no-hooks */
-/* eslint-disable jest/prefer-strict-equal */
 import 'jest';
-import ioHook from 'iohook';
-import robot from 'robotjs';
+import * as ioHook from 'iohook';
+import * as robot from 'robotjs';
 
 /**
  * To test `iohook` is working propertly
@@ -22,7 +16,7 @@ describe('keyboard events', () => {
         ioHook.stop();
     });
 
-    xit('receives the text "hello world" on keyup event', (done) => {
+    it('receives the text "hello world" on keyup event', (done) => {
         expect.assertions(22);
 
         const chars = [
@@ -78,7 +72,7 @@ describe('keyboard events', () => {
     });
 
     // NOTE: shift key is not recongized in the test.
-    xit('recognizes shift key being pressed', (done) => {
+    it.skip('recognizes shift key being pressed', (done) => {
         // expect.assertions(8);
 
         ioHook.on('keydown', (event) => {

@@ -16,7 +16,7 @@ import { IPreference_DesktopMonitoring as UserIdleConfig } from '@admin-layout/a
 
 const ONE_SECOND = 1000 as number;
 export class UserIdleService {
-    ping$: Observable<any>;
+    public ping$: Observable<any>;
 
     /**
      * Events that can interrupts user's inactivity timer.

@@ -340,11 +340,12 @@
   ],
   "iohook": {
     "targets": [
-      "node-72",
+      "node-87",
       "electron-85"
     ],
     "platforms": [
-      "linux"
+      "linux",
+      "darwin"
     ],
     "arches": [
       "x64",
