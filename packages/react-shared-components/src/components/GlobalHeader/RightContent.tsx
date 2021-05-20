@@ -82,7 +82,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
   return (
     <div className={css(styleSheet.container)}>
       {(
-        <Tabs>
+        <Tabs className={css(styleSheet.tabsWrap)}>
           {navBarItems.map((item, index) => {
             if (item.position === 'right' && item.component) {
               return (
@@ -96,7 +96,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
           })}
         </Tabs>
       )}
-      <div>
+      <div className={css(styleSheet.orgName)}>
         {menus.map(item => (
             <Link key={item.name} to={item.path}>
               {item.name}
