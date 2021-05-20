@@ -32,7 +32,7 @@ export class TrayWindow {
                 enableRemoteModule: true,
                 // add preload to load esm
                 preload: path.resolve(path.join(__dirname, 'preload.js')),
-                devTools: true
+                devTools: true,
             },
         });
         // Object BrowserWindow has a lot of standart events

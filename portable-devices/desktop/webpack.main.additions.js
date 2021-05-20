@@ -10,6 +10,12 @@ const config = {
     target: 'electron-main',
     entry: './src/main/index.ts',
     mode: 'development',
+    output: {
+        filename: 'main.js',
+    },
+    resolve: {
+        extensions: ['.ts', '.tsx', '.mjs', '.graphql', '.graphqls', '.gql', '.native.tsx', '.native.ts'],
+    },
     optimization: {
         minimizer: process.env.E2E_BUILD
             ? []
@@ -21,12 +27,25 @@ const config = {
                   }),
               ],
     },
+    module: {
+        rules: [
+            {
+                test: /\.mjs$/,
+                include: /node_modules/,
+                type: 'javascript/auto',
+            },
+        ],
+    },
     plugins: [
         new CopyWebpackPlugin({
             patterns: [
                 {
                     from: 'assets/preload.js',
                     to: 'preload.js',
+                },
+                {
+                    from: '../../tools/esm-wrapper.js',
+                    to: 'index.js',
                 },
             ],
         }),
