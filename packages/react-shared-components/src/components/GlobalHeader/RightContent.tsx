@@ -81,21 +81,19 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
 
   return (
     <div className={css(styleSheet.container)}>
-      {(
-        <Tabs className={css(styleSheet.tabsWrap)}>
-          {navBarItems.map((item, index) => {
-            if (item.position === 'right' && item.component) {
-              return (
-                  <TabPane
-                      key={index}
-                      tab={item.component(props)}
-                  />
-              );
-            }
-            return null;
-          })}
-        </Tabs>
-      )}
+      <div className={css(styleSheet.tabsWrap)}>
+        {navBarItems.map((item, index) => {
+          if (item.position === 'right' && item.component) {
+            return (
+                <div className={css(styleSheet.item)}>
+                  {item.component(props)}
+                </div>
+            );
+          }
+          return null;
+        })
+        }
+      </div>
       <div className={css(styleSheet.orgName)}>
         {menus.map(item => (
             <Link key={item.name} to={item.path}>
