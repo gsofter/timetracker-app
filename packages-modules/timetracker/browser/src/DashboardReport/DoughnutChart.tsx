@@ -25,11 +25,11 @@ Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
 
     const fontSize = (height / 154).toFixed(2);
     ctx.font = fontSize + 'em Verdana';
-    ctx.color = 'rgba(54, 162, 235, 1)';
+    ctx.fontColor = 'rgba(54, 162, 235, 1)';
     ctx.textBaseline = 'bottom';
 
     const text = chart.config.data.text || '',
-        textX = Math.round((width - ctx.measureText(text).width) / 2),
+        textX = Math.round((width - ctx.measureText(text).width) / 3),
         textY = height / 2;
 
     ctx.fillText(text, textX, textY);
@@ -74,7 +74,7 @@ export const DoughnutChart = ({ data, labels, title }) => {
     },
     cutoutPercentage: 70,
     legend: {
-      position: 'bottom',
+      position: 'right',
       labels: {
         boxWidth: 15,
       },
