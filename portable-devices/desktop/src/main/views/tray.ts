@@ -24,7 +24,7 @@ export class TrayWindow {
             backgroundColor: '#E4ECEF',
             frame: false,
             fullscreenable: false,
-            resizable: !isDev,
+            resizable: !!isDev,
             transparent: true,
             webPreferences: {
                 nodeIntegration: true,
@@ -32,6 +32,7 @@ export class TrayWindow {
                 enableRemoteModule: true,
                 // add preload to load esm
                 preload: path.resolve(path.join(__dirname, 'preload.js')),
+                devTools: true
             },
         });
         // Object BrowserWindow has a lot of standart events
@@ -42,12 +43,7 @@ export class TrayWindow {
 
         this.trayIcon = new Tray(iconPath);
         this.trayIcon.setToolTip('Sample Desktop'); // This tooltip will show up, when user hovers over our tray-icon.
-
-        // By clicking on the icon we have to show TrayWindow and position it in the middle under
-        // the tray icon (initially this window is hidden).
         this.trayIcon.on('click', this.toggleWidow);
-        // ipcMain.on(WB_HIDE_TRAY, this.ipcHideTray);
-        // ipcMain.on(WB_SHOW_TRAY, this.ipcShowTray);
     }
 
     private toggleWidow = (e, bounds) => {
