@@ -24,7 +24,6 @@ import {
 import { useHistory } from 'react-router-native'
 import DateTimePickerModal from "react-native-modal-datetime-picker";
 import moment from 'moment'
-
 const AddManual = () => {
     const history = useHistory();
     const [show, setShow] = useState(false)
@@ -125,7 +124,7 @@ const AddManual = () => {
                     <Text style={styles.color}>Time Entry Details</Text>
                 </Body>
             </Header>
-            <Content padder>
+            <Content>
                 <Card>
                     <List>
                         <ListItem>

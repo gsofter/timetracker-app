@@ -20,6 +20,17 @@ const SideBar = ({ routes, matchUrl }: any) => {
 
     return (
         <Container style={{ backgroundColor: '#1f1f1f' }}>
+            {/* <List>
+                <ListItem onPress={() => toggle()}>
+                    <Left>
+                        <Icon style={{ color: isToggle ? '#fff' : '#a1a1a1' }} name="document-outline" />
+                        <Text style={{ color: isToggle ? '#fff' : '#a1a1a1' }}>Time Tracker</Text>
+                    </Left>
+                    <Right>
+                        <Icon name={icon} />
+                    </Right>
+                </ListItem>
+            </List> */}
             {isMenuExist && routes.map(menu => (
                 menu.routes ? (
                     <List>

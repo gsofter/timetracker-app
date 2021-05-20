@@ -1,16 +1,18 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useFela } from 'react-fela';
 import { Switch, Table, message, Card, Radio, Dropdown, Menu, Button } from 'antd';
+import { RightOutlined, LeftOutlined, CaretDownOutlined } from '@ant-design/icons';
+import moment, { Moment } from 'moment';
+import html2PDF from 'jspdf-html2canvas';
+import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { BarChart } from './BarChart';
 import { DoughnutChart } from './DoughnutChart';
-import moment, { Moment } from 'moment';
-import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { formatDuration, roundDuration } from '../timetracker/services/timeRecordService';
 import { useFirstWeekDay, useRound, useTimeformat } from '../timetracker/hooks';
-import * as _ from 'lodash';
-import { RightOutlined, LeftOutlined, CaretDownOutlined } from '@ant-design/icons';
-import { useFela } from 'react-fela';
 import { ExportReportAsExcel } from './ExportReportAsExcel';
 import { ExportReportAsCSV } from './ExportReportAsCSV';
+import { ExportReportAsPDF } from './ExportReportAsPDF';
+import * as _ from 'lodash';
 
 interface IReportsProps {
   weekStart: Moment;
@@ -86,10 +88,16 @@ export const Reports: React.FC<IReportsProps> = ({
 
   const generateProjectLabels = () => {
     const projectLabels = projects.map((project, index) => {
-      return project.name;
+      const pRecords = records.filter((record) => record.projectId === project.id);
+      const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
+      const duration = rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
+      return `${project.name} - ${formatDuration(duration, timeFormat)}`;
     });
-    if (records.filter(r => !r.projectId).length) {
-      projectLabels.push('Unknown');
+    const unRecord = records.filter(r => !r.projectId);
+    if (unRecord.length) {
+      const unTotalDur = unRecord.reduce(calcDurationReducer, 0);
+      const unDuration = formatDuration(rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur, timeFormat);
+      projectLabels.push(`Unknown - ${unDuration}`);
     }
     return projectLabels;
   };
@@ -107,6 +115,22 @@ export const Reports: React.FC<IReportsProps> = ({
     }
     return projectDurArray;
   };
+
+  const getBillableDuration = () => {
+    const projectDurArray = projects.map((project, index) => {
+      const pRecords = records.filter((record) => (record.projectId === project.id && record.isBillable));
+      const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
+      return rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
+    });
+    const unRecords = records.filter(r => (!r.projectId && r.isBillable));
+    if (unRecords.length) {
+      const unTotalDur = unRecords.reduce(calcDurationReducer, 0);
+      projectDurArray.push(rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur)
+    }
+    const totalBillableTime = projectDurArray.length &&
+        projectDurArray.reduce((accumulator, currentValue) => accumulator + currentValue);
+    return formatDuration(totalBillableTime, timeFormat);
+  }
 
   const generateTableColumns = () => {
     return [
@@ -131,6 +155,7 @@ export const Reports: React.FC<IReportsProps> = ({
       const pRecords = records.filter((record) => record.projectId === project.id);
       const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
       return {
+        id: index,
         projectName: project.name,
         duration: rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur,
       };
@@ -139,6 +164,7 @@ export const Reports: React.FC<IReportsProps> = ({
     if (unRecord.length) {
       const unTotalDur = unRecord.reduce(calcDurationReducer, 0);
       projectDurArray.push({
+        id: projects.length,
         projectName: 'Unknown',
         duration: rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur,
       });
@@ -159,10 +185,27 @@ export const Reports: React.FC<IReportsProps> = ({
     setWeekStart(newWeekStart);
   };
 
+  const saveAsPdf = () => {
+    const input = document.getElementById('projects-report');
+    html2PDF(input, {
+      jsPDF: {
+        format: 'a4',
+      },
+      margin: {
+        top: 40,
+        right: 30,
+        bottom: 40,
+        left: 30,
+      },
+      imageType: 'image/jpeg',
+      output: 'report_pdf.pdf'
+    });
+  }
+
   const exportMenu = () => {
     const menu = (
         <Menu>
-          <Menu.Item>Save as PDF</Menu.Item>
+          <Menu.Item onClick={saveAsPdf}>Save as PDF</Menu.Item>
           <Menu.Item>
             <ExportReportAsCSV
                 records={records}
@@ -228,7 +271,12 @@ export const Reports: React.FC<IReportsProps> = ({
         </Card>
         <div className={css(styles.flexM)}>
           <Card className={css(styles.tableCard)} title={'Project Table'}>
-            <Table dataSource={generateDatasource()} columns={generateTableColumns()} pagination={{ defaultPageSize: 3 }} />
+            <Table
+                rowKey="id"
+                dataSource={generateDatasource()}
+                columns={generateTableColumns()}
+                pagination={{ defaultPageSize: 3 }}
+            />
           </Card>
           <Card className={css(styles.chartCard)} title={'Project Report'}>
             <DoughnutChart
@@ -238,6 +286,16 @@ export const Reports: React.FC<IReportsProps> = ({
             />
           </Card>
         </div>
+        <ExportReportAsPDF
+            weekStart={weekStart}
+            generateBarData={generateBarData}
+            generateLabels={generateLabels}
+            generateProjectDurations={generateProjectDurations}
+            generateProjectLabels={generateProjectLabels}
+            generateTableColumns={generateTableColumns}
+            generateDatasource={generateDatasource}
+            getBillableDuration={getBillableDuration}
+        />
       </div>
   );
 };

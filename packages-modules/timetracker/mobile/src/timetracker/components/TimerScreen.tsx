@@ -108,7 +108,6 @@ const styles = StyleSheet.create({
     flex: 1,
     alignItems: 'center',
     backgroundColor: '#f0f2f5',
-    position: 'relative'
   },
 });
 export default TimerScreen;

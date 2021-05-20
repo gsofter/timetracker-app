@@ -1571,6 +1571,7 @@ export type IOrgUser = IIOrgUser & {
   role?: Maybe<IApplicationRoles>;
   inactive?: Maybe<Scalars['Boolean']>;
   orgName: Scalars['String'];
+  user: IOrgUserAccunt;
   isSelf: Scalars['Boolean'];
   crossCheckEmail?: Maybe<Scalars['String']>;
 };
@@ -1580,6 +1581,15 @@ export type IOrgUser_Input = {
   role?: Maybe<IApplicationRoles>;
   inactive?: Maybe<Scalars['Boolean']>;
   crossCheckEmail?: Maybe<Scalars['String']>;
+};
+
+export type IOrgUserAccunt = INode & {
+   __typename?: 'OrgUserAccunt';
+  id: Scalars['ID'];
+  email?: Maybe<Scalars['String']>;
+  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
+  username?: Maybe<Scalars['String']>;
+  emailVerified?: Maybe<Scalars['Boolean']>;
 };
 
 export const enum IOrgUserRole {
@@ -2352,6 +2362,7 @@ export type ITeamMember = {
   userId?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   role?: Maybe<IApplicationRoles>;
+  status?: Maybe<Scalars['String']>;
 };
 
 export type ITeamMember_Input = {
@@ -2359,6 +2370,7 @@ export type ITeamMember_Input = {
   email?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
   role?: Maybe<IApplicationRoles>;
+  status?: Maybe<Scalars['String']>;
 };
 
 export type ITeamRemoveRequest = {
@@ -2447,6 +2459,7 @@ export type ITimeRecordRequest = {
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
   clientId?: Maybe<Scalars['String']>;
+  timesheetId?: Maybe<Scalars['String']>;
 };
 
 export type ITimesheet = {
@@ -2889,7 +2902,7 @@ export type IResolversTypes = {
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   UserAccountWhere: IUserAccountWhere,
   UserAccount: ResolverTypeWrapper<IUserAccount>,
-  Node: IResolversTypes['UserAccount'],
+  Node: IResolversTypes['UserAccount'] | IResolversTypes['OrgUserAccunt'],
   AsanaConnection: ResolverTypeWrapper<IAsanaConnection>,
   AsanaConnectionState: ResolverTypeWrapper<IAsanaConnectionState>,
   AsanaUser: ResolverTypeWrapper<IAsanaUser>,
@@ -2934,6 +2947,7 @@ export type IResolversTypes = {
   OrgUser: ResolverTypeWrapper<IOrgUser>,
   IOrgUser: IResolversTypes['OrgUser'],
   ApplicationRoles: IApplicationRoles,
+  OrgUserAccunt: ResolverTypeWrapper<IOrgUserAccunt>,
   OrganizationInvitation: ResolverTypeWrapper<IOrganizationInvitation>,
   InviteMember: ResolverTypeWrapper<IInviteMember>,
   InviteStatus: IInviteStatus,
@@ -3104,7 +3118,7 @@ export type IResolversParentTypes = {
   JSON: Scalars['JSON'],
   UserAccountWhere: IUserAccountWhere,
   UserAccount: IUserAccount,
-  Node: IResolversParentTypes['UserAccount'],
+  Node: IResolversParentTypes['UserAccount'] | IResolversParentTypes['OrgUserAccunt'],
   AsanaConnection: IAsanaConnection,
   AsanaConnectionState: IAsanaConnectionState,
   AsanaUser: IAsanaUser,
@@ -3149,6 +3163,7 @@ export type IResolversParentTypes = {
   OrgUser: IOrgUser,
   IOrgUser: IResolversParentTypes['OrgUser'],
   ApplicationRoles: IApplicationRoles,
+  OrgUserAccunt: IOrgUserAccunt,
   OrganizationInvitation: IOrganizationInvitation,
   InviteMember: IInviteMember,
   InviteStatus: IInviteStatus,
@@ -3843,7 +3858,7 @@ export type INameTypeResolvers<ContextType = any, ParentType extends IResolversP
 };
 
 export type INodeResolvers<ContextType = any, ParentType extends IResolversParentTypes['Node'] = IResolversParentTypes['Node']> = {
-  __resolveType: TypeResolveFn<'UserAccount', ParentType, ContextType>,
+  __resolveType: TypeResolveFn<'UserAccount' | 'OrgUserAccunt', ParentType, ContextType>,
   id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>,
 };
 
@@ -3995,8 +4010,18 @@ export type IOrgUserResolvers<ContextType = any, ParentType extends IResolversPa
   role?: Resolver<Maybe<IResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
   inactive?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   orgName?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
+  user?: Resolver<IResolversTypes['OrgUserAccunt'], ParentType, ContextType>,
   isSelf?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   crossCheckEmail?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type IOrgUserAccuntResolvers<ContextType = any, ParentType extends IResolversParentTypes['OrgUserAccunt'] = IResolversParentTypes['OrgUserAccunt']> = {
+  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>,
+  email?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  alias?: Resolver<Maybe<Array<Maybe<IResolversTypes['String']>>>, ParentType, ContextType>,
+  username?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  emailVerified?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4337,6 +4362,7 @@ export type ITeamMemberResolvers<ContextType = any, ParentType extends IResolver
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   username?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   role?: Resolver<Maybe<IResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
+  status?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4605,6 +4631,7 @@ export type IResolvers<ContextType = any> = {
   OrganizationSettings?: IOrganizationSettingsResolvers<ContextType>,
   OrgMember?: IOrgMemberResolvers<ContextType>,
   OrgUser?: IOrgUserResolvers<ContextType>,
+  OrgUserAccunt?: IOrgUserAccuntResolvers<ContextType>,
   Overrides?: IOverridesResolvers<ContextType>,
   PermissionSubject?: IPermissionSubjectResolvers<ContextType>,
   PolicySubject?: IPolicySubjectResolvers<ContextType>,
