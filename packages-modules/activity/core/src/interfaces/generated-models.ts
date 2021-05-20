@@ -1571,6 +1571,7 @@ export type IOrgUser = IIOrgUser & {
   role?: Maybe<IApplicationRoles>;
   inactive?: Maybe<Scalars['Boolean']>;
   orgName: Scalars['String'];
+  user: IOrgUserAccunt;
   isSelf: Scalars['Boolean'];
   crossCheckEmail?: Maybe<Scalars['String']>;
 };
@@ -1580,6 +1581,15 @@ export type IOrgUser_Input = {
   role?: Maybe<IApplicationRoles>;
   inactive?: Maybe<Scalars['Boolean']>;
   crossCheckEmail?: Maybe<Scalars['String']>;
+};
+
+export type IOrgUserAccunt = INode & {
+   __typename?: 'OrgUserAccunt';
+  id: Scalars['ID'];
+  email?: Maybe<Scalars['String']>;
+  alias?: Maybe<Array<Maybe<Scalars['String']>>>;
+  username?: Maybe<Scalars['String']>;
+  emailVerified?: Maybe<Scalars['Boolean']>;
 };
 
 export const enum IOrgUserRole {
@@ -1672,9 +1682,30 @@ export type IPreference_Account = {
   notification?: Maybe<IPreference_Notification>;
 };
 
+export type IPreference_Activity = {
+   __typename?: 'Preference_Activity';
+  desktopMonitoring?: Maybe<IPreference_DesktopMonitoring>;
+};
+
 export type IPreference_Default = {
    __typename?: 'Preference_Default';
   organization?: Maybe<Scalars['String']>;
+};
+
+export type IPreference_DesktopMonitoring = {
+   __typename?: 'Preference_DesktopMonitoring';
+  screenshotFrequency?: Maybe<IPreference_ScreenshotFrequency>;
+  trackAppsAndURLs?: Maybe<IPreference_TrackAppsAndURLs>;
+  screenshotBlur?: Maybe<Scalars['Boolean']>;
+  deleteScreenshots?: Maybe<Scalars['Boolean']>;
+  recordActivity?: Maybe<Scalars['Boolean']>;
+  autoStopTime?: Maybe<Scalars['Int']>;
+  waitingTime?: Maybe<Scalars['Int']>;
+  idleSensitivity?: Maybe<Scalars['Int']>;
+  maxTimeInADay?: Maybe<Scalars['Int']>;
+  ping?: Maybe<Scalars['Int']>;
+  timeout?: Maybe<Scalars['Int']>;
+  idle?: Maybe<Scalars['Int']>;
 };
 
 export type IPreference_Notification = {
@@ -1696,9 +1727,22 @@ export type IPreference_Project = {
   tags?: Maybe<Scalars['String']>;
 };
 
+export const enum IPreference_ScreenshotFrequency {
+  None = 'None',
+  OneShot = 'OneShot',
+  TwoShot = 'TwoShot',
+  ThreeShot = 'ThreeShot'
+};
+
 export type IPreference_Teams = {
    __typename?: 'Preference_Teams';
   visibility?: Maybe<IVisibility>;
+};
+
+export const enum IPreference_TrackAppsAndURLs {
+  Off = 'Off',
+  Apps = 'Apps',
+  AppsAndURLs = 'AppsAndURLs'
 };
 
 export type IPreferenceItem = {
@@ -1716,6 +1760,7 @@ export type IPreferenceItem = {
 export type IPreferences = {
    __typename?: 'Preferences';
   account?: Maybe<IPreference_Account>;
+  activity?: Maybe<IPreference_Activity>;
   defaultSetting?: Maybe<Array<Maybe<ISettingsGroup>>>;
   dummy?: Maybe<Scalars['Int']>;
   organization?: Maybe<IPreference_Organization>;
@@ -2352,6 +2397,7 @@ export type ITeamMember = {
   userId?: Maybe<Scalars['String']>;
   username?: Maybe<Scalars['String']>;
   role?: Maybe<IApplicationRoles>;
+  status?: Maybe<Scalars['String']>;
 };
 
 export type ITeamMember_Input = {
@@ -2359,6 +2405,7 @@ export type ITeamMember_Input = {
   email?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
   role?: Maybe<IApplicationRoles>;
+  status?: Maybe<Scalars['String']>;
 };
 
 export type ITeamRemoveRequest = {
@@ -2447,6 +2494,7 @@ export type ITimeRecordRequest = {
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
   clientId?: Maybe<Scalars['String']>;
+  timesheetId?: Maybe<Scalars['String']>;
 };
 
 export type ITimesheet = {
@@ -2877,6 +2925,10 @@ export type IResolversTypes = {
   Preference_Account: ResolverTypeWrapper<IPreference_Account>,
   Preference_Default: ResolverTypeWrapper<IPreference_Default>,
   Preference_Notification: ResolverTypeWrapper<IPreference_Notification>,
+  Preference_Activity: ResolverTypeWrapper<IPreference_Activity>,
+  Preference_DesktopMonitoring: ResolverTypeWrapper<IPreference_DesktopMonitoring>,
+  Preference_ScreenshotFrequency: IPreference_ScreenshotFrequency,
+  Preference_TrackAppsAndURLs: IPreference_TrackAppsAndURLs,
   Preference_Organization: ResolverTypeWrapper<IPreference_Organization>,
   Preference_Teams: ResolverTypeWrapper<IPreference_Teams>,
   Visibility: IVisibility,
@@ -2889,7 +2941,7 @@ export type IResolversTypes = {
   JSON: ResolverTypeWrapper<Scalars['JSON']>,
   UserAccountWhere: IUserAccountWhere,
   UserAccount: ResolverTypeWrapper<IUserAccount>,
-  Node: IResolversTypes['UserAccount'],
+  Node: IResolversTypes['UserAccount'] | IResolversTypes['OrgUserAccunt'],
   AsanaConnection: ResolverTypeWrapper<IAsanaConnection>,
   AsanaConnectionState: ResolverTypeWrapper<IAsanaConnectionState>,
   AsanaUser: ResolverTypeWrapper<IAsanaUser>,
@@ -2934,6 +2986,7 @@ export type IResolversTypes = {
   OrgUser: ResolverTypeWrapper<IOrgUser>,
   IOrgUser: IResolversTypes['OrgUser'],
   ApplicationRoles: IApplicationRoles,
+  OrgUserAccunt: ResolverTypeWrapper<IOrgUserAccunt>,
   OrganizationInvitation: ResolverTypeWrapper<IOrganizationInvitation>,
   InviteMember: ResolverTypeWrapper<IInviteMember>,
   InviteStatus: IInviteStatus,
@@ -3092,6 +3145,10 @@ export type IResolversParentTypes = {
   Preference_Account: IPreference_Account,
   Preference_Default: IPreference_Default,
   Preference_Notification: IPreference_Notification,
+  Preference_Activity: IPreference_Activity,
+  Preference_DesktopMonitoring: IPreference_DesktopMonitoring,
+  Preference_ScreenshotFrequency: IPreference_ScreenshotFrequency,
+  Preference_TrackAppsAndURLs: IPreference_TrackAppsAndURLs,
   Preference_Organization: IPreference_Organization,
   Preference_Teams: IPreference_Teams,
   Visibility: IVisibility,
@@ -3104,7 +3161,7 @@ export type IResolversParentTypes = {
   JSON: Scalars['JSON'],
   UserAccountWhere: IUserAccountWhere,
   UserAccount: IUserAccount,
-  Node: IResolversParentTypes['UserAccount'],
+  Node: IResolversParentTypes['UserAccount'] | IResolversParentTypes['OrgUserAccunt'],
   AsanaConnection: IAsanaConnection,
   AsanaConnectionState: IAsanaConnectionState,
   AsanaUser: IAsanaUser,
@@ -3149,6 +3206,7 @@ export type IResolversParentTypes = {
   OrgUser: IOrgUser,
   IOrgUser: IResolversParentTypes['OrgUser'],
   ApplicationRoles: IApplicationRoles,
+  OrgUserAccunt: IOrgUserAccunt,
   OrganizationInvitation: IOrganizationInvitation,
   InviteMember: IInviteMember,
   InviteStatus: IInviteStatus,
@@ -3843,7 +3901,7 @@ export type INameTypeResolvers<ContextType = any, ParentType extends IResolversP
 };
 
 export type INodeResolvers<ContextType = any, ParentType extends IResolversParentTypes['Node'] = IResolversParentTypes['Node']> = {
-  __resolveType: TypeResolveFn<'UserAccount', ParentType, ContextType>,
+  __resolveType: TypeResolveFn<'UserAccount' | 'OrgUserAccunt', ParentType, ContextType>,
   id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>,
 };
 
@@ -3995,8 +4053,18 @@ export type IOrgUserResolvers<ContextType = any, ParentType extends IResolversPa
   role?: Resolver<Maybe<IResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
   inactive?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   orgName?: Resolver<IResolversTypes['String'], ParentType, ContextType>,
+  user?: Resolver<IResolversTypes['OrgUserAccunt'], ParentType, ContextType>,
   isSelf?: Resolver<IResolversTypes['Boolean'], ParentType, ContextType>,
   crossCheckEmail?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type IOrgUserAccuntResolvers<ContextType = any, ParentType extends IResolversParentTypes['OrgUserAccunt'] = IResolversParentTypes['OrgUserAccunt']> = {
+  id?: Resolver<IResolversTypes['ID'], ParentType, ContextType>,
+  email?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  alias?: Resolver<Maybe<Array<Maybe<IResolversTypes['String']>>>, ParentType, ContextType>,
+  username?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  emailVerified?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4032,8 +4100,29 @@ export type IPreference_AccountResolvers<ContextType = any, ParentType extends I
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type IPreference_ActivityResolvers<ContextType = any, ParentType extends IResolversParentTypes['Preference_Activity'] = IResolversParentTypes['Preference_Activity']> = {
+  desktopMonitoring?: Resolver<Maybe<IResolversTypes['Preference_DesktopMonitoring']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type IPreference_DefaultResolvers<ContextType = any, ParentType extends IResolversParentTypes['Preference_Default'] = IResolversParentTypes['Preference_Default']> = {
   organization?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type IPreference_DesktopMonitoringResolvers<ContextType = any, ParentType extends IResolversParentTypes['Preference_DesktopMonitoring'] = IResolversParentTypes['Preference_DesktopMonitoring']> = {
+  screenshotFrequency?: Resolver<Maybe<IResolversTypes['Preference_ScreenshotFrequency']>, ParentType, ContextType>,
+  trackAppsAndURLs?: Resolver<Maybe<IResolversTypes['Preference_TrackAppsAndURLs']>, ParentType, ContextType>,
+  screenshotBlur?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  deleteScreenshots?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  recordActivity?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  autoStopTime?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  waitingTime?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  idleSensitivity?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  maxTimeInADay?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  ping?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  timeout?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  idle?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4075,6 +4164,7 @@ export type IPreferenceItemResolvers<ContextType = any, ParentType extends IReso
 
 export type IPreferencesResolvers<ContextType = any, ParentType extends IResolversParentTypes['Preferences'] = IResolversParentTypes['Preferences']> = {
   account?: Resolver<Maybe<IResolversTypes['Preference_Account']>, ParentType, ContextType>,
+  activity?: Resolver<Maybe<IResolversTypes['Preference_Activity']>, ParentType, ContextType>,
   defaultSetting?: Resolver<Maybe<Array<Maybe<IResolversTypes['SettingsGroup']>>>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   organization?: Resolver<Maybe<IResolversTypes['Preference_Organization']>, ParentType, ContextType>,
@@ -4337,6 +4427,7 @@ export type ITeamMemberResolvers<ContextType = any, ParentType extends IResolver
   userId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   username?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   role?: Resolver<Maybe<IResolversTypes['ApplicationRoles']>, ParentType, ContextType>,
+  status?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4605,12 +4696,15 @@ export type IResolvers<ContextType = any> = {
   OrganizationSettings?: IOrganizationSettingsResolvers<ContextType>,
   OrgMember?: IOrgMemberResolvers<ContextType>,
   OrgUser?: IOrgUserResolvers<ContextType>,
+  OrgUserAccunt?: IOrgUserAccuntResolvers<ContextType>,
   Overrides?: IOverridesResolvers<ContextType>,
   PermissionSubject?: IPermissionSubjectResolvers<ContextType>,
   PolicySubject?: IPolicySubjectResolvers<ContextType>,
   Position?: IPositionResolvers<ContextType>,
   Preference_Account?: IPreference_AccountResolvers<ContextType>,
+  Preference_Activity?: IPreference_ActivityResolvers<ContextType>,
   Preference_Default?: IPreference_DefaultResolvers<ContextType>,
+  Preference_DesktopMonitoring?: IPreference_DesktopMonitoringResolvers<ContextType>,
   Preference_Notification?: IPreference_NotificationResolvers<ContextType>,
   Preference_Organization?: IPreference_OrganizationResolvers<ContextType>,
   Preference_Project?: IPreference_ProjectResolvers<ContextType>,
