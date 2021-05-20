@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf lib",
-    "build:lib": "webpack",
+    "build:lib": "rollup -c rollup.config.js",
     "build:lib:watch": "yarn build:lib -- --watch",
     "jest": "./node_modules/.bin/jest",
     "prepublish": "npm run build",

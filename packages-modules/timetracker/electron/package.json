@@ -10,7 +10,7 @@
   "scripts": {
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf lib",
-    "build:lib": "rollup -c rollup.config.js",
+    "build:lib": "webpack",
     "build:lib:watch": "npm run build:lib -- --watch",
     "jest": "./node_modules/.bin/jest",
     "prepublish": "npm run build",
@@ -41,9 +41,8 @@
     }
   },
   "dependencies": {
-    "@admin-layout/components": "link:../../../packages/components",
-    "@admin-layout/react-shared-components": "link:../../../packages/react-shared-components",
     "@admin-layout/timetracker-core": "link:../core",
+    "@admin-layout/timetracker-module-browser": "link:../browser",
     "desktop-idle": "^1.3.0"
   },
   "devDependencies": {
