@@ -1,4 +1,4 @@
-import Tray from './components/HeaderTimerHandler';
+import Tray from './components/TrayTimerHandler';
 import { ROUTES } from './constants/routes';
 import { getFilteredRoutes } from '../utils';
 

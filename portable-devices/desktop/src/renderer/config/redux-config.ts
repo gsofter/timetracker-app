@@ -2,11 +2,12 @@
 /* eslint-disable global-require */
 /* eslint-disable no-nested-ternary */
 /* eslint-disable no-underscore-dangle */
-import { forwardToMain, replayActionRenderer, forwardToMainWithParams } from 'electron-redux';
+import { forwardToMain, replayActionRenderer, forwardToMainWithParams, } from 'electron-redux';
 import storage from 'redux-persist/lib/storage';
 import autoMergeLevel2 from 'redux-persist/lib/stateReconciler/autoMergeLevel2';
 import { createEpicMiddleware } from 'redux-observable';
 import thunk from 'redux-thunk';
+import { combineReducers } from 'redux';
 import { connectRouter, routerMiddleware } from 'connected-react-router';
 import modules from '../modules';
 import { createClientContainer } from './client.service';
@@ -41,6 +42,7 @@ export const persistConfig = {
 export const createReduxStore = () => {
     // middleware
     const router = connectRouter(history);
+    console.log('---modules---', modules.reducers);
 
     const store = createBaseReduxStore({
         scope: 'browser',
@@ -57,7 +59,7 @@ export const createReduxStore = () => {
             }),
         ],
         rootEpic,
-        reducers: { router, ...modules.reducers },
+        reducers: { router, aaa: "AAAA", ...modules.reducers },
     });
 
     // Delete it once we have it stored in a variable
