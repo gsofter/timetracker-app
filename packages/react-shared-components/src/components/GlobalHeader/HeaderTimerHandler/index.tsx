@@ -31,7 +31,7 @@ const HeaderTimerHandler: React.FC = (props) => {
         <div
           hidden={!visiblity}
           className={'_handler'}
-          style={{ zIndex: 999 }}
+          style={{ zIndex: 999, position: 'absolute' }}
         >
           <TimerWidget
             onClose={hidePopover}

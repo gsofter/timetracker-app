@@ -2,7 +2,7 @@ import { Properties } from 'csstype';
 
 export const styleSheet: { [key: string]: (obj) => Properties } = {
   button: () => ({
-    margin: '10px 15px 0 0',
+    margin: '10px 0 0 0',
     display: 'flex',
   }),
   icon: () => ({
