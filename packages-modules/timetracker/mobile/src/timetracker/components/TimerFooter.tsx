@@ -89,7 +89,7 @@ const TimerFooter = ({
             <Button info block
             onPress={() => history.push('/create')}
             >
-              <Text style={styles.add_btn}>+</Text>
+              <Icon style={styles.icon} name='add-outline' />
             </Button>
           </View>
         )}
@@ -134,6 +134,10 @@ const styles = StyleSheet.create({
       color: 'white',
       paddingLeft: 20,
       paddingRight: 20
+    },
+    icon: {
+      color: 'white',
+      paddingRight: 15
     }
 });
 

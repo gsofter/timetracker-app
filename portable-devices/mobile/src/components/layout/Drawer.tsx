@@ -13,7 +13,7 @@ export const DrawerRoute = ({ match, drawerRef, routes }: any) => {
     <Drawer 
     ref={drawerRef} 
     content={
-      <SideBar matchUrl={match.url} routes={routes} />
+      <SideBar onClose={onClose} matchUrl={match.url} routes={routes} />
     }
     onClose={onClose}
     >
