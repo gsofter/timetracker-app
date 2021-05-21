@@ -53,7 +53,7 @@ const AddManual = () => {
         btnText: 'Edit Tags',
         tags: [],
     })
-    const [tagName, setTagName] = useState("")
+    const [tagName, setTagName] = useState(null)
     
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
@@ -185,7 +185,9 @@ const AddManual = () => {
                                 {list.project.length ? (
                                     <List>
                                         {list.project.map((project: any) => (
-                                            <ListItem>{project.name}</ListItem>
+                                            <ListItem>
+                                                <Text>{project.name}</Text>
+                                            </ListItem>
                                         ))}
                                     </List>
                                 ): (
@@ -208,7 +210,9 @@ const AddManual = () => {
                                 {list.task.length ? (
                                     <List>
                                         {list.task.map((task: any) => (
-                                            <ListItem>{task.name}</ListItem>
+                                            <ListItem>
+                                                <Text>{task.name}</Text>
+                                            </ListItem>
                                         ))}
                                     </List>
                                 ): (
@@ -237,25 +241,23 @@ const AddManual = () => {
                             </Button>
                         </ListItem>
                         {tag.showTag && (
-                            <ListItem>
+                            <ListItem style={{ flexDirection: 'column' }}>
                                 <View style={{flexDirection: 'row'}}>
                                     <Input 
                                         onChangeText={(e) => setTagName(e)} 
                                         placeholder='Enter Tag Title' 
                                     />
-                                    <Button transparent onPress={() => addTag()}>
+                                    <Button bordered info transparent onPress={() => addTag()}>
                                         <Icon color='#1890ff' name='add-outline' />
                                     </Button>
                                 </View>
-                                {tag.tags.length && (
-                                    <View>
-                                        {tag.tags.map(data => (
-                                            <Badge primary>
-                                                <Text style={styles.color}>{data}</Text>
-                                            </Badge>
-                                        ))}
-                                    </View>
-                                )}
+                                <View style={styles.flex_row}>
+                                    {tag.tags.map((data, index) => (
+                                        <View style={styles.badge} key={index}>
+                                            <Text style={styles.color}>{data}</Text>
+                                        </View>
+                                    ))}
+                                </View>
                             </ListItem>
                         )}
                     </List>
@@ -311,6 +313,12 @@ const styles = StyleSheet.create({
     left_right: {
         paddingLeft: 5,
         paddingRight: 5
+    },
+    badge: {
+        backgroundColor: 'black',
+        borderRadius: 10,
+        padding: 5,
+        marginLeft: 5
     }
 })
 
