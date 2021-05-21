@@ -225,12 +225,36 @@
     querystring "^0.2.0"
     sort-keys "^4.0.0"
 
+"@adminide-stack/core@0.0.20-alpha.54":
+  version "0.0.20-alpha.54"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/core/-/core-0.0.20-alpha.54.tgz#6ad4e175d30fb47283b0c6c0801ebc7074b2d5ae"
+  integrity sha512-gaTmAixqnVufe7jP//zZbrDANgdKRJHrNr12SjScog5W3FA6gZQWdF1fxmRUZuH+hsH+8k5kpgLnmzE10Ox6kA==
+  dependencies:
+    "@vscode/monaco-editor" "^0.21.2"
+    "@workbench-stack/core" "2.0.2"
+    querystring "^0.2.0"
+    sort-keys "^4.0.0"
+
 "@adminide-stack/extension-api@0.0.20-alpha.47":
   version "0.0.20-alpha.47"
   resolved "https://registry.yarnpkg.com/@adminide-stack/extension-api/-/extension-api-0.0.20-alpha.47.tgz#deefa633871841e1f2060038ac1f7733cc96b8e1"
   integrity sha512-oIg4q+WboDiSh6w1ibQ+zE6AbPgOi3z+wPP3qvcP8w3kpr0Jji0N56ErRRcSRDl72pbUsCq9sit2ApWcwAFx4w==
   dependencies:
     "@adminide-stack/core" "0.0.20-alpha.47"
+    abort-controller "^2.0.0"
+    abortable-rx "^1.0.9"
+    cdeops "0.0.20-alpha.11"
+    queueing-subject "0.3.4"
+    rxjs "^6.3.3"
+    utility-types "^3.10.0"
+    valid-url "1.0.9"
+
+"@adminide-stack/extension-api@0.0.20-alpha.54":
+  version "0.0.20-alpha.54"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-api/-/extension-api-0.0.20-alpha.54.tgz#dc9870feef81fd2d2090cd1a981dd87e3492a96d"
+  integrity sha512-rJwbAGZziDzpKVhhJ7DHd2azNabiJMCMIXhGlwZM61xhC3qqZxrwHPAOC+V7l9MV+k9SMVhVX5L1yfoUsI5t4Q==
+  dependencies:
+    "@adminide-stack/core" "0.0.20-alpha.54"
     abort-controller "^2.0.0"
     abortable-rx "^1.0.9"
     cdeops "0.0.20-alpha.11"
@@ -246,6 +270,22 @@
   dependencies:
     "@adminide-stack/core" "0.0.20-alpha.47"
     "@adminide-stack/extension-api" "0.0.20-alpha.47"
+    "@babel/polyfill" "^7.2.5"
+    cdeops "0.0.20-alpha.11"
+    jsonc-parser "^2.0.2"
+    minimatch "^3.0.4"
+    queueing-subject "0.3.4"
+    react-dimensions "^1.3.1"
+    rxjs-websockets "^8.0.0"
+    whatwg-url "^7.0.0"
+
+"@adminide-stack/extension-module-browser@0.0.20-alpha.54":
+  version "0.0.20-alpha.54"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/extension-module-browser/-/extension-module-browser-0.0.20-alpha.54.tgz#044ae2978ce88e24712e705f84c7eeb1b0fc344a"
+  integrity sha512-as4yJvT5OMiTyvzVmLBwONDrNhABkrPNy8ln43aa7tTg1t+8aLZApkElwUbdf3w1mtSq8JsGgWBXR9jkG7ugog==
+  dependencies:
+    "@adminide-stack/core" "0.0.20-alpha.54"
+    "@adminide-stack/extension-api" "0.0.20-alpha.54"
     "@babel/polyfill" "^7.2.5"
     cdeops "0.0.20-alpha.11"
     jsonc-parser "^2.0.2"
@@ -308,6 +348,28 @@
     use-media-antd-query "^1.0.2"
     use-merge-value "^1.0.2"
 
+"@adminide-stack/react-shared-components@0.0.20-alpha.54":
+  version "0.0.20-alpha.54"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/react-shared-components/-/react-shared-components-0.0.20-alpha.54.tgz#1d30f4157aa018b059b1339397494f14c19a44e1"
+  integrity sha512-xr//XVeU0bx8GzJetPEqmx+Ios29sb13DqA3Jd5cLuhg2YaOePAcm3WMQSEAYuUF13Ns1KUDNoEohK2gdj7v0g==
+  dependencies:
+    "@adminide-stack/core" "0.0.20-alpha.54"
+    "@adminide-stack/extension-module-browser" "0.0.20-alpha.54"
+    "@ant-design/pro-provider" "0.0.6"
+    "@cdm-logger/client" "^5.0.7"
+    "@types/react-copy-to-clipboard" "^4.3.0"
+    "@umijs/route-utils" "^1.0.5"
+    base-64 "^0.1.0"
+    flat "^4.0.0"
+    identicon.js "^2.3.1"
+    react-copy-to-clipboard "^5.0.2"
+    react-intl "^5.10.4"
+    react-markdown "5.0.3"
+    unstated-next "^1.1.0"
+    use-json-comparison "^1.0.5"
+    use-media-antd-query "^1.0.2"
+    use-merge-value "^1.0.2"
+
 "@adminide-stack/user-auth0-browser@0.0.20-alpha.49":
   version "0.0.20-alpha.49"
   resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.20-alpha.49.tgz#42318b3428c8c42b30c70dede172b4b3347e9ac7"
@@ -320,6 +382,32 @@
     auth0-lock "^11.17.2"
     jwt-decode "^2.2.0"
     react-cookie "^4.0.1"
+    redux-auth-wrapper "^3.0.0"
+
+"@adminide-stack/user-auth0-browser@0.0.20-alpha.54":
+  version "0.0.20-alpha.54"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.20-alpha.54.tgz#2dae25829e8f97c582c16f7e51c86e0530862863"
+  integrity sha512-wLbi/QWWj2CvSq3s9Ld/oKN9pmNXl3DUH60Xut26IXoYMQL22de7eFPfVKzng34SqkJXc6lQJNyP9LTYjIDS6Q==
+  dependencies:
+    "@adminide-stack/common" "0.0.20-alpha.23"
+    "@adminide-stack/react-shared-components" "0.0.20-alpha.54"
+    auth0 "^2.19.0"
+    auth0-js "^9.11.3"
+    auth0-lock "^11.17.2"
+    jwt-decode "^2.2.0"
+    react-cookie "^4.0.1"
+    redux-auth-wrapper "^3.0.0"
+
+"@adminide-stack/user-auth0-mobile@0.0.20-alpha.54":
+  version "0.0.20-alpha.54"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-mobile/-/user-auth0-mobile-0.0.20-alpha.54.tgz#8a34d6d169fd91fb17db7dfe59ee831096517e9f"
+  integrity sha512-z0Drv4wUaGQZbGQspxfWV34ySRMqm42Wcd9o7DZBT2ljIRvsFcNYNJFIFYBO+KyhVyxJb3Ro5hGrkB1m0a3nyA==
+  dependencies:
+    "@adminide-stack/user-auth0-browser" "0.0.20-alpha.54"
+    expo-auth-session "3.2.3"
+    jwt-decode "^2.2.0"
+    react-cookie "^4.0.1"
+    react-native-auth0 "2.8.1"
     redux-auth-wrapper "^3.0.0"
 
 "@adminide-stack/user-auth0-server@0.0.20-alpha.47":

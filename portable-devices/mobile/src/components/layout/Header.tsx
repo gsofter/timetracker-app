@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Header, Left, Right, Body, Text, Icon } from 'native-base';
 import { useHistory } from 'react-router-native';
-import {auth0} from "../../constants/auth0"
+import { useDispatch, useSelector } from 'react-redux';
+import { MobileRoutes } from '../../constants/routes';
 
 const MainHeader = (props: any) => {
   const[isToggle, setIsToggle] = useState(false);
+  const user = useSelector((state: any) => state?.user)
 
   const toggle = () => {
     if(isToggle){
@@ -16,9 +18,9 @@ const MainHeader = (props: any) => {
   }
 
   const logout = () => {
-    auth0.webAuth.clearSession()
-    .then(res => console.log(res))
-    .catch(error => console.log(error));
+    if (user.auth0UserId) {
+      history.push(MobileRoutes.Logout);
+    }
   }
 
   const history = useHistory();

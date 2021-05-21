@@ -6,9 +6,11 @@ import { Route } from 'react-router-native';
 import LayoutModule from '../components/layout/module';
 import { renderRoutes2 } from './render';
 import TimeModule from '@admin-layout/timetracker-module-mobile';
+import Auth0Module from '@adminide-stack/user-auth0-mobile'
 
-const features = new Feature(FeatureWithRouterFactory, LayoutModule, TimeModule);
+const features = new Feature(FeatureWithRouterFactory, LayoutModule, TimeModule, Auth0Module);
 const configuredRoutes = features.getConfiguredRoutes();
+console.log('--configured routes', configuredRoutes)
 const routes = renderRoutes2({ routes: configuredRoutes }) || [];
 enableScreens();
 
