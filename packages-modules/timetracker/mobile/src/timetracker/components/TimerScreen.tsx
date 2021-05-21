@@ -1,9 +1,20 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
-import { StyleSheet, View, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView } from 'react-native';
+import {useHistory} from "react-router-native"
 
 import TimerFooter from './TimerFooter';
 import TimeRange from './TimeRange';
+import {
+  ITimeRecordRequest,
+  ITimeRecord
+} from '@admin-layout/timetracker-core';
+import {
+  useCreateTimeRecordMutation,
+  useGetPlayingTimeRecordQuery,
+  useGetDurationTimeRecordsQuery,
+  useUpdateTimeRecordMutation
+} from '../../generated-models';
 
 const TimerScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
@@ -11,14 +22,25 @@ const TimerScreen = () => {
   const [track, setTrack] = useState(true);
   const [manual, setManual] = useState(false);
   const [addManual, setAddManual] = useState(false);
+  const [timeRecord, setTimeRecord] = useState<ITimeRecord>({
+    userId: '',
+    taskName: '',
+    tags: [],
+    startTime: null,
+    projectId: '',
+    isBillable: billable,
+    endTime: null
+  })
   const [selectedStartDate, setSelectedStartDate] = useState<any>(moment().format('MM-DD-YYYY'));
   const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
-  const [isStartTime, setIsStartTime] = useState(false)
-  const [endTime, setEndTime] = useState(new Date(1598051730000))
-  const [isEndTime, setIsEndTime] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(new Date(1598051730000))
-  const [calendarVisible, setCalendarVisible] = useState(false)
-  const [startTime, setStartTime] = useState(new Date(1598051730000))
+  const [createMutation] = useCreateTimeRecordMutation();
+  const [updateMutation] = useUpdateTimeRecordMutation();
+  const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
+  const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
+    variables: { userId: timeRecord.userId, startTime: timeRecord.startTime, endTime: timeRecord.endTime },
+  });
+
+  const history = useHistory()
 
   const toggleProject = () => {
     setIsToggle(!isToggle);
@@ -37,11 +59,6 @@ const TimerScreen = () => {
     }
   };
 
-  const onSingleDateChange = (event: any, date: any) => {
-    setSelectedDate(date);
-    setCalendarVisible(Platform.OS === 'ios')
-  };
-
   const onReset = () => {
     setSelectedEndDate(moment().format('MM-DD-YYYY'));
     setSelectedStartDate(moment().add(5, 'd').format('MM-DD-YYYY'));
@@ -57,24 +74,28 @@ const TimerScreen = () => {
     setTrack(false);
   };
 
-  const toggleStart = () =>{
-    setIsStartTime(true)
-  }
-
-  const toggleEnd = () => {
-    setIsEndTime(true)
-  }
-
-  const changeStartTime = (event: any, selectedTime: any) => {
-    const currentDate = selectedTime || startTime;
-    setStartTime(currentDate)
-    setIsStartTime(false)
+  const createTimeRecord = (request: ITimeRecordRequest) => {
+    createMutation({ variables: { request } })
+      .then(() => {
+        alert('TimeRecord created');
+        plRefetch();
+        refetch();
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
   };
 
-  const changeEndTime = (event: any, selectedTime: any) => {
-    const currentDate = selectedTime || startTime;
-    setEndTime(currentDate)
-    setIsEndTime(false)
+  const updateTimeRecord = (recordId: string, request: ITimeRecordRequest) => {
+    updateMutation({ variables: { recordId, request } })
+      .then(() => {
+        alert('TimeRecord Updated');
+        refetch();
+        plRefetch();
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   };
 
   return (
@@ -96,8 +117,11 @@ const TimerScreen = () => {
         manual={manual}
         onTrack={onTrack}
         onManual={onManual}
-        onDateChange={onDateChange}
         setAddManual={setAddManual}
+        setTimeRecord={setTimeRecord}
+        timeRecord={timeRecord}
+        createTimeRecord={createTimeRecord}
+        updateTimeRecord={updateTimeRecord}
       />
     </View>
   );

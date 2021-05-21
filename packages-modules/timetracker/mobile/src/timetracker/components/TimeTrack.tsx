@@ -16,7 +16,10 @@ const TimeTrack = ({
     track,
     manual,
     toggleBillable,
-    billable 
+    billable,
+    handleStartTimer,
+    updatePlayingTimeRecord,
+    setTimeRecord 
 }: any) => {
     return (
         <Row style={styles.row_2}>
@@ -25,7 +28,10 @@ const TimeTrack = ({
             </Col>
             <Col style={{ width: 15 }}>
                 <Icon
-                onPress={() => toggleBillable()}
+                onPress={() => {
+                    toggleBillable()
+                    setTimeRecord(ps => ({...ps, isBillable: billable}))
+                }}
                 type="FontAwesome"
                 name="dollar"
                 style={[styles.icon_dollar, { color: billable ? '#1890ff' : 'grey' }]}
@@ -41,6 +47,7 @@ const TimeTrack = ({
                 <Button info block>
                     <Text style={{ color: 'white' }} onPress={() => {
                     setStopWatchStart(true)
+                    handleStartTimer()
                     setIsStop(true)
                     setIsStart(false)
                     }}>Start</Text>
@@ -52,6 +59,7 @@ const TimeTrack = ({
                     setStopWatchStart(false)
                     setIsStop(false)
                     setIsStart(true)
+                    updatePlayingTimeRecord()
                     }}>Stop</Text>
                 </Button> 
             }

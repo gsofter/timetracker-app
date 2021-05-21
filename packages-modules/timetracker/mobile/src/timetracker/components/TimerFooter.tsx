@@ -1,11 +1,18 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { Icon, Item, Input, Button } from 'native-base';
 import { View, StyleSheet, Text } from 'react-native';
 import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
 import RadioForm from 'react-native-simple-radio-button';
 import { useHistory } from "react-router-native"
+import * as _ from 'lodash';
+import moment from 'moment';
 
 import TimeTrack from './TimeTrack'
+import {auth0} from "../../auth0/auth0"
+import {
+  ITimeRecordRequest,
+  ITimeRecord,
+} from '@admin-layout/timetracker-core';
 
 var radio_props = [
   {label: 'Manual', value: 0 },
@@ -21,16 +28,31 @@ const TimerFooter = ({
   toggleBillable, 
   toggleProject, 
   isToggle,
-  setAddManual 
+  setAddManual,
+  setTimeRecord,
+  timeRecord,
+  createTimeRecord,
+  updateTimeRecord 
 }: any) => {
 
   const [stopwatchStart, setStopWatchStart] = useState(false)
   const [isStart, setIsStart] = useState(true)
   const [isStop, setIsStop] = useState(false)
-  const history = useHistory()
+  const history = useHistory<any>()
+
+  useEffect(() => {
+    const token = history.location.state
+    if(token){
+      auth0.auth
+        .userInfo(token)
+        .then((res) => setTimeRecord(ps => ({...ps, userId: res.sub})))
+        .catch(console.error);
+    }
+    setTimeRecord(ps => ({...ps, isBillable: billable}))
+  },[history,billable])
 
   const getFormattedTime = (time: any) => {
-    const currentTime = time;
+    //console.log("TIME", time)
   };
 
   const setTimer = () => {
@@ -38,13 +60,30 @@ const TimerFooter = ({
     setAddManual(false)
   }
 
+  const handleStartTimer = () => {
+    const newTimeRecord: ITimeRecordRequest = {
+      ..._.omit(timeRecord, ['id', '__typename']),
+      startTime: moment(),
+      endTime: null,
+    };
+    setTimeRecord(newTimeRecord)
+    createTimeRecord(newTimeRecord);
+  };
+  const updatePlayingTimeRecord = () => {
+    const newTimeRecord: ITimeRecordRequest = {
+      ..._.omit(timeRecord, ['id', '__typename']),
+      endTime: moment(),
+    };
+    updateTimeRecord(timeRecord.id, { ..._.omit(newTimeRecord, ['__typename', 'id']) });
+  };
+
     return (
       <View style={styles.footer}>
         {!manual && (
           <KeyboardAwareScrollView>
             <View style={styles.row}>
               <Item regular style={{ width: '80%', height: 40 }}>
-                <Input style={{ height: 40 }} placeholder="What are you working on?" />
+                <Input onChangeText={(value) => setTimeRecord(ps => ({...ps, taskName: value}))} style={{ height: 40 }} placeholder="What are you working on?" />
               </Item>
               <View style={styles.row_button}>
               <Button iconLeft transparent onPress={() => toggleProject()}>
@@ -73,6 +112,9 @@ const TimerFooter = ({
               manual={manual}
               toggleBillable={toggleBillable}
               billable={billable}
+              handleStartTimer={handleStartTimer}
+              updatePlayingTimeRecord={updatePlayingTimeRecord}
+              setTimeRecord={setTimeRecord}
               />
             )}
           </KeyboardAwareScrollView>
