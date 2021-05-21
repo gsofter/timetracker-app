@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
 import { Container, View, Text, List, ListItem, Left, Right, Icon, Drawer } from 'native-base';
 import { Link } from 'react-router-native';
+import {useHistory} from 'react-router-native'
 
-const SideBar = ({ routes, matchUrl }: any) => {
+const SideBar = ({ routes, matchUrl, onClose }: any) => {
     const [icon, setIcon] = useState('chevron-down-outline');
     const [isToggle, setToggle] = useState(false);
+    const history = useHistory()
 
     const toggle = () => {
         if (isToggle) {
@@ -18,9 +20,14 @@ const SideBar = ({ routes, matchUrl }: any) => {
 
     const isMenuExist = routes.length > 0;
 
+    const openMenuItem = (url: string) => {
+        history.push(url)
+        onClose()
+    }
+
     return (
         <Container style={{ backgroundColor: '#1f1f1f' }}>
-            {isMenuExist && routes.map(menu => (
+            {isMenuExist && routes.map((menu: any) => (
                 menu.routes ? (
                     <List>
                         <ListItem onPress={() => toggle()}>
@@ -32,9 +39,9 @@ const SideBar = ({ routes, matchUrl }: any) => {
                                 <Icon name={icon} />
                             </Right>
                         </ListItem>
-                        {isToggle && (menu.routes.map(subMenu => (
-                            <List>
-                                <ListItem>
+                        {isToggle && (menu.routes.map((subMenu: any) => (
+                            <List key={subMenu.key}>
+                                <ListItem key={subMenu.key}>
                                     <Left>
                                         <Link to={subMenu.path} underlayColor="#f0f4f7">
                                             <Text style={{ color: '#a1a1a1' }}>{subMenu.name}</Text>
@@ -45,12 +52,10 @@ const SideBar = ({ routes, matchUrl }: any) => {
                         )))}
                     </List>
                 ) :
-                    (<List>
+                    (<List key={menu.key}>
                         <ListItem>
                             <Left>
-                                <Link to={menu.path} underlayColor="#f0f4f7">
-                                    <Text style={{ color: '#a1a1a1' }}>{menu.name}</Text>
-                                </Link>
+                                <Text onPress={() => openMenuItem(menu.path)} style={{ color: '#a1a1a1' }}>{menu.name}</Text>
                             </Left >
                         </ListItem >
                     </List >)
