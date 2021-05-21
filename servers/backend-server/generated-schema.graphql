@@ -335,10 +335,6 @@ input ViewerSettingsInput {
      For guest user, we don't have to define it.
     """
     userResource: URI
-    """
-     Application resource to identify the core application settings.
-    """
-    applicationResource: URI
 }
 
 type ViewerSettingsSubject {
@@ -985,19 +981,6 @@ type PolicySubject {
 
 }
 
-input ViewerPoliciesInput {
-    target: Int!
-    """
-     To get the Resource or Organization resource of which we need to get the settings.
-     If we pass the <resource> URI, we can construct the orgUri in background to merge as a parent
-     configuration to the resource configuration.
-    """
-    settingsResource: URI
-    """
-     Application resource to identify the core application settings.
-    """
-    applicationResource: URI
-}
 
 union ConfigurationPolicy = DefaultPolicy | OrganizationPolicy | ResourcePolicy | ApplicationPolicy
 
@@ -1012,7 +995,7 @@ extend type Query {
     """
      Get the available policies and its descriptions
     """
-    getViewerPolicies(input: ViewerPoliciesInput!): PolicySubject
+    getViewerPolicies(input: ConfigurationInput): PolicySubject
 }
 
 extend type Mutation {
