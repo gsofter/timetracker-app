@@ -22,7 +22,7 @@ import {
     Badge 
 } from 'native-base';
 import { useHistory } from 'react-router-native'
-import DateTimePickerModal from "react-native-modal-datetime-picker";
+import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import moment from 'moment'
 const AddManual = () => {
     const history = useHistory();
@@ -31,9 +31,9 @@ const AddManual = () => {
     const [startDate, setStartDate] = useState(new Date(1598051730000));
     const [endDate, setEndDate] = useState(new Date(1598051730000));
     const [dates, setDates] = useState({
-        startDate: moment("2017-08-30T00:00:00"),
-        endDate: moment("2017-08-30T00:00:00"),
-        totalDate: moment("2017-08-30T00:00:00")
+        startDate: moment('2017-08-30T00:00:00'),
+        endDate: moment('2017-08-30T00:00:00'),
+        totalDate: moment('2017-08-30T00:00:00')
     })
     const [isEnabled, setIsEnabled] = useState(false);
     const [listOpen, setListOpen] = useState({
@@ -58,8 +58,8 @@ const AddManual = () => {
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
     useEffect(() => {
-        var start = moment(dates.startDate, "HH:mm");
-        var end = moment(dates.endDate, "HH:mm");
+        var start = moment(dates.startDate, 'HH:mm');
+        var end = moment(dates.endDate, 'HH:mm');
         var minutes = end.diff(start, 'minutes');
         var interval = moment().hour(0).minute(minutes);
         setDates(ps => ({...ps, totalDate: interval}))
