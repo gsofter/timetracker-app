@@ -1,22 +1,25 @@
 import React, { useState } from 'react';
+import { useDispatch, useSelector } from 'react-redux';
 import { FieldTimeOutlined } from '@ant-design/icons';
 import Draggable from 'react-draggable';
 import { Button } from 'antd';
 import { useFela } from 'react-fela';
 import { styleSheet } from './style';
 import TimerWidget from './TimerWidget';
+import { currentTimerSelector, setCurrentTimerAction } from '../../../redux/timetracker';
 
 const HeaderTimerHandler: React.FC = (props) => {
   const { css } = useFela();
   const [visiblity, setVisiblity] = useState<boolean>(false);
-  const [trackStarted, setTrackStarted] = useState<boolean>(false);
+  const dispatch = useDispatch();
+  const currentTimer = useSelector(currentTimerSelector);
 
   const hidePopover = () => {
     setVisiblity(false);
   }
 
   const onChangeTrack = () => {
-    setTrackStarted(!trackStarted)
+    dispatch(setCurrentTimerAction(!currentTimer));
   }
 
   return (
@@ -36,14 +39,14 @@ const HeaderTimerHandler: React.FC = (props) => {
           <TimerWidget
             onClose={hidePopover}
             onTrack={onChangeTrack}
-            trackStarted={trackStarted}
+            trackStarted={currentTimer}
           />
         </div>
       </Draggable>
 
       <Button
         className={css(styleSheet.button)}
-        type={trackStarted ? 'primary' : 'default'}
+        type={currentTimer ? 'primary' : 'default'}
         icon={
           <FieldTimeOutlined className={css(styleSheet.icon)} />
         }
