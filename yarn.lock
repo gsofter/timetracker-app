@@ -7070,11 +7070,6 @@
     "@types/react" "*"
     "@types/webpack" "^4"
 
-"@types/react-native-auth0@2.5.6":
-  version "2.5.6"
-  resolved "https://registry.yarnpkg.com/@types/react-native-auth0/-/react-native-auth0-2.5.6.tgz#4dae80d806aa3dd5ae367fd63175fa28412bb9f4"
-  integrity sha512-qQyEnG7mV/RK3JryfgZMrxqebPFgLsTENnpZAbBgA2UiR6zwLr22gl6B/zSEzS7KsTqeFcepPUP9KkJgDbbMlg==
-
 "@types/react-native-calendar-picker@^7.0.1":
   version "7.0.1"
   resolved "https://registry.yarnpkg.com/@types/react-native-calendar-picker/-/react-native-calendar-picker-7.0.1.tgz#016befa63a916e0cb227b37e5f7a92d3569f0364"

@@ -8,7 +8,7 @@ import * as _ from 'lodash';
 import moment from 'moment';
 
 import TimeTrack from './TimeTrack'
-import {auth0} from "../../auth0/auth0"
+import {auth0} from '../../auth0/auth0'
 import {
   ITimeRecordRequest,
   ITimeRecord,
