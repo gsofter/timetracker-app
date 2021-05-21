@@ -3,7 +3,6 @@ import { useEffect, useState } from 'react';
 import { useFela } from 'react-fela';
 import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
-import { Tabs } from 'antd';
 // import { Settings as ProSettings } from '@admin-layout/components';
 // import { connect, ConnectProps, SelectLang } from 'umi';
 // import { ConnectState } from '@/models/connect';
@@ -15,8 +14,6 @@ import { generateContributionId, CONTRIBUTION_ACTION_TYPES } from '@adminide-sta
 import { ProSettings } from '@admin-layout/components';
 import HeaderTimerHandler from './HeaderTimerHandler';
 import { LanguageMenu } from './LanguageMenu';
-
-const { TabPane } = Tabs;
 
 export interface GlobalHeaderRightProps {
   theme?: string;
@@ -70,6 +67,27 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
         });
   }, [controller]);
 
+  useEffect(() => {
+    const ele = document.getElementById('item-wrapper');
+    if (ele) {
+      if (check(ele)) {
+        ele.style.boxShadow = 'inset 0 0 5px #e2e2e2';
+      } else {
+        ele.style.boxShadow = 'none';
+      }
+    }
+  });
+
+  const check = (el) => {
+    const curOverflow = el.style.overflow;
+    if ( !curOverflow || curOverflow === 'visible' ) {
+      el.style.overflow = 'hidden';
+    }
+    const isOverflowing = el.clientWidth < el.scrollWidth || el.clientHeight < el.scrollHeight;
+    el.style.overflow = curOverflow;
+    return isOverflowing;
+  }
+
   let className = 'right';
   if (theme === 'dark' && layout === 'top') {
     className = 'right dark';
@@ -81,11 +99,11 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
 
   return (
     <div className={css(styleSheet.container)}>
-      <div className={css(styleSheet.tabsWrap)}>
+      <div id={'item-wrapper'} className={css(styleSheet.tabsWrap)}>
         {navBarItems.map((item, index) => {
           if (item.position === 'right' && item.component) {
             return (
-                <div className={css(styleSheet.item)}>
+                <div key={index} className={css(styleSheet.item)}>
                   {item.component(props)}
                 </div>
             );
