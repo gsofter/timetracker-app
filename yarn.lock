@@ -155,6 +155,7 @@
     react-easy-swipe "0.0.21"
     react-native-big-calendar "^0.8.1"
     react-native-calendar-picker "^7.1.1"
+    react-native-modal-datetime-picker "^9.2.3"
     react-native-simple-radio-button "2.7.4"
     react-simple-timefield "^3.2.3"
     rifm "^0.12.0"
@@ -7067,11 +7068,6 @@
   dependencies:
     "@types/react" "*"
     "@types/webpack" "^4"
-
-"@types/react-native-auth0@2.5.6":
-  version "2.5.6"
-  resolved "https://registry.yarnpkg.com/@types/react-native-auth0/-/react-native-auth0-2.5.6.tgz#4dae80d806aa3dd5ae367fd63175fa28412bb9f4"
-  integrity sha512-qQyEnG7mV/RK3JryfgZMrxqebPFgLsTENnpZAbBgA2UiR6zwLr22gl6B/zSEzS7KsTqeFcepPUP9KkJgDbbMlg==
 
 "@types/react-native-calendar-picker@^7.0.1":
   version "7.0.1"
@@ -30556,6 +30552,13 @@ react-native-mime-types@^2.3.0:
   integrity sha512-9l/kkT1QM0i0xAKkOADkP6jIMhqiS+R/eSKBS/lsUmuMYMqboClyrwTFFZwUcaVIN0SpeH4wOKhYTqCnFgRsEw==
   dependencies:
     mime-db "~1.37.0"
+
+react-native-modal-datetime-picker@^9.2.3:
+  version "9.2.3"
+  resolved "https://registry.yarnpkg.com/react-native-modal-datetime-picker/-/react-native-modal-datetime-picker-9.2.3.tgz#9a06b32f2b5a5a0e3d1ffbc81de3f91d44d280bb"
+  integrity sha512-fMQFQ5kLeKP6Z4412CvqcXzTAl8YCke2Hb1VI5M4CAnGtYYHvQS6EXzKoxwRgFOm7bqwGZHtpQP5Krc181BXvQ==
+  dependencies:
+    prop-types "^15.7.2"
 
 react-native-modal-popover@^0.0.12:
   version "0.0.12"
