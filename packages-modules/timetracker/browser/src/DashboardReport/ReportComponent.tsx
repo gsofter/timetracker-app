@@ -3,7 +3,6 @@ import { useFela } from 'react-fela';
 import { Switch, Table, message, Card, Radio, Dropdown, Menu, Button } from 'antd';
 import { RightOutlined, LeftOutlined, CaretDownOutlined } from '@ant-design/icons';
 import moment, { Moment } from 'moment';
-import html2PDF from 'jspdf-html2canvas';
 import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { BarChart } from './BarChart';
 import { DoughnutChart } from './DoughnutChart';
@@ -187,19 +186,23 @@ export const Reports: React.FC<IReportsProps> = ({
 
   const saveAsPdf = () => {
     const input = document.getElementById('projects-report');
-    html2PDF(input, {
-      jsPDF: {
-        format: 'a4',
-      },
-      margin: {
-        top: 40,
-        right: 30,
-        bottom: 40,
-        left: 30,
-      },
-      imageType: 'image/jpeg',
-      output: 'report_pdf.pdf'
-    });
+    if (input) {
+      const html2PDF = require('jspdf-html2canvas');
+
+      html2PDF(input, {
+        jsPDF: {
+          format: 'a4',
+        },
+        margin: {
+          top: 40,
+          right: 30,
+          bottom: 40,
+          left: 30,
+        },
+        imageType: 'image/jpeg',
+        output: 'report_pdf.pdf'
+      });
+    }
   }
 
   const exportMenu = () => {
