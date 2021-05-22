@@ -3,8 +3,9 @@ import { Layout } from 'antd';
 import { ConnectedRouter } from 'connected-react-router';
 import { Feature, FeatureWithRouterFactory } from '@common-stack/client-react';
 import TimeTrayModule from '@admin-layout/timetracker-module-browser/lib/index.electron';
+import TimeTrackerModule from '@admin-layout/timetracker-module-browser';
 
-const features = new Feature(FeatureWithRouterFactory, TimeTrayModule);
+const features = new Feature(FeatureWithRouterFactory, TimeTrayModule, TimeTrackerModule);
 export const MainRoute = ({ history }) => (
     <>
         {features.getWrappedRoot(

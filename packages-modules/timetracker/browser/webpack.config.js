@@ -7,6 +7,7 @@ const webpack_opts = {
     mode: 'development',
     entry: {
         index: './src/index.ts',
+        'index.electron': './src/index.electron.ts',
     },
     target: 'node',
     output: {
