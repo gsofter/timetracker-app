@@ -1,24 +1,39 @@
-import { RESET_CURRENT_TIMER, SET_CURRENT_TIMER, SET_TIMER_TICK } from '../actions/TimeWidgetAction';
+import {
+  RESET_CURRENT_TIMER,
+  SET_CURRENT_TIMER,
+} from '../actions/TimeWidgetAction';
 
 const initialState = {
-  timerTick: null,
-  currentTimer: null,
-  pagination: {
-    page: 1,
-    limit: 50,
-    disabled: false,
-  },
+  timetracker: {
+    currentTimer: {
+      endTime: null,
+      startTime: null,
+      projectId: '',
+      taskId: '',
+      id: '',
+    },
+  }
 };
 
 export function timerReducer(state = initialState, { type, payload }) {
-  console.log('------BBBB---------');
   switch (type) {
-    case SET_TIMER_TICK:
-      return { ...state };
     case SET_CURRENT_TIMER:
-      console.log('------BBBB---------');
-      return { ...state };
+      state.timetracker.currentTimer = payload.action;
+      return {
+        ...state
+      };
     case RESET_CURRENT_TIMER:
+      state = {
+        timetracker: {
+          currentTimer: {
+            endTime: null,
+            startTime: null,
+            projectId: '',
+            taskId: '',
+            id: '',
+          }
+        }
+      };
       return { ...state };
     default:
       return state;

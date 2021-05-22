@@ -1,25 +1,23 @@
 import React, { useState } from 'react';
 import TimerWidget from './TimerWidget';
 import { useDispatch, useSelector } from 'react-redux';
-import { setCurrentTimerAction } from '../../../redux/actions/TimeWidgetAction'
+import { setCurrentTimerAction } from '../../../redux/actions/TimeWidgetAction';
+import { currentTimerSelector } from '../../../redux/selector/TimeWidgetSelector';
 
 const TrayTimerHandler: React.FC = (props) => {
   const [trackStarted, setTrackStarted] = useState<boolean>(false);
   const dispatch = useDispatch();
-  const selector = useSelector((state) => {
-    console.log('--STATE---', state);
-    return state;
-  });
+  const currentTimer = useSelector(currentTimerSelector);
 
   const onChangeTrack = () => {
-    dispatch(setCurrentTimerAction("AAA"));
+    dispatch(setCurrentTimerAction(!currentTimer));
     setTrackStarted(!trackStarted)
   }
 
   return (
     <TimerWidget
       onTrack={onChangeTrack}
-      trackStarted={trackStarted}
+      trackStarted={currentTimer}
     />
   )
 }
