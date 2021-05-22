@@ -42,8 +42,7 @@
   "author": "CDMBase LLC",
   "license": "ISC",
   "dependencies": {
-    "@admin-layout/platform-browser": "link:../../../packages/admin-platform/browser",
-    "@admin-layout/components": "link:../../../packages/components",
+    "@admin-layout/activity-core": "link:../core",
     "check-internet-connected": "^2.0.5",
     "aws-sdk": "^2.883.0",
     "iohook": "^0.9.1"

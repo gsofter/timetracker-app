@@ -1,17 +1,16 @@
 import { injectable } from 'inversify';
-import ioHook from 'iohook';
+import * as ioHook from 'iohook';
 import { ITrackingService } from '../interfaces';
 
 @injectable()
-export class TrackingService implements ITrackingService {
+export class InputTrackingService implements ITrackingService {
     private keyPress: number;
 
     private mouseClick: number;
 
     private mouseWheel: number;
 
-    constructor() {
-        console.log('Tracking constructor called....');
+    public startTracking() {
         ioHook.start();
 
         ioHook.on('keyup', (event) => {
@@ -27,6 +26,7 @@ export class TrackingService implements ITrackingService {
             this.mouseWheel += 1;
         });
     }
+
 
     public countTracking() {
         const information = {

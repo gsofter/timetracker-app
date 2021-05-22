@@ -19,10 +19,8 @@ export class UserIdleService {
     public ping$: Observable<any>;
 
     /**
-     * Events that can interrupts user's inactivity timer.
+     * Idle timer start
      */
-    protected activityEvents$: Observable<any>;
-
     protected timerStart$ = new Subject<boolean>();
 
     protected idleDetected$ = new Subject<boolean>();
@@ -31,6 +29,9 @@ export class UserIdleService {
 
     protected idle$: Observable<any>;
 
+    /**
+     * Idle timer
+     */
     protected timer$: Observable<any>;
 
     /**
@@ -76,16 +77,11 @@ export class UserIdleService {
     /**
      * Start watching for user idle and setup timer and ping.
      */
-    public startWatching() {
-        if (!this.activityEvents$) {
-            this.activityEvents$ = merge(from);
-        }
-
-        this.idle$ = from(this.activityEvents$);
-
+    public startWatching(activityEvents$: Observable<any>) {
         if (this.idleSubscription) {
             this.idleSubscription.unsubscribe();
         }
+        this.idle$ = from(activityEvents$);
 
         // If any of user events is not active for idle-seconds when start timer.
         this.idleSubscription = this.idle$
@@ -97,10 +93,10 @@ export class UserIdleService {
                     this.idleDetected$.next(true);
                 }),
                 switchMap(() =>
-                    interval(1000).pipe(
+                    interval(ONE_SECOND).pipe(
                         takeUntil(
                             merge(
-                                this.activityEvents$,
+                                activityEvents$,
                                 timer(this.idleMillisec).pipe(
                                     tap(() => {
                                         this.isInactivityTimer = true;
@@ -118,7 +114,7 @@ export class UserIdleService {
             )
             .subscribe();
 
-        this.setupTimer(this.timeout);
+        this.setupInactiveTimer(this.timeout);
         this.setupPing(this.pingMilliSec);
     }
 
@@ -139,7 +135,7 @@ export class UserIdleService {
         this.isTimeout = false;
     }
 
-    public onTimerStart(): Observable<number> {
+    public onInactiveTimerStart(): Observable<number> {
         return this.timerStart$.pipe(
             distinctUntilChanged(),
             switchMap((start) => (start ? this.timer$ : of(null))),
@@ -198,19 +194,19 @@ export class UserIdleService {
         }
     }
 
-    /**
-     * Set custom activity events
-     *
-     * @param customEvents Example: merge(
-     * )
-     */
-    setCustomActivityEvents(customEvents: Observable<any>) {
-        if (this.idleSubscription && !this.idleSubscription.closed) {
-            console.error('Call stopWatching() before set custom acvitiy events');
-            return;
-        }
-        this.activityEvents$ = customEvents;
-    }
+    // /**
+    //  * Set custom activity events
+    //  *
+    //  * @param customEvents Example: merge(
+    //  * )
+    //  */
+    // setCustomActivityEvents(customEvents: Observable<any>) {
+    //     if (this.idleSubscription && !this.idleSubscription.closed) {
+    //         console.error('Call stopWatching() before set custom acvitiy events');
+    //         return;
+    //     }
+    //     this.activityEvents$ = customEvents;
+    // }
 
     /**
      * Setup timer.
@@ -218,7 +214,7 @@ export class UserIdleService {
      * Counts every second and return n+1 and fire timeout for last count.
      * @param timeout Timeout in seconds.
      */
-    protected setupTimer(timeout: number) {
+    protected setupInactiveTimer(timeout: number) {
         this.timer$ = interval(ONE_SECOND).pipe(
             take(timeout),
             map(() => 1),

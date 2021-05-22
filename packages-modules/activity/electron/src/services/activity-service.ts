@@ -1,8 +1,12 @@
+/* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-return-assign */
-import { Subscription } from 'rxjs';
+import { Subscription, merge } from 'rxjs';
 import { tap } from 'rxjs/operators';
+import * as iohook from 'iohook';
 import { UserIdleService } from './user-idle-service';
+import { keyboardKeydownEvents$, mouseClickEvents$, mouseMovementEvents$, mouseWheelEvents$ } from './interactivity';
 
+const interactivity$ = merge(mouseMovementEvents$, mouseClickEvents$, keyboardKeydownEvents$, mouseWheelEvents$);
 export class ActivityService {
     public idle: number;
 
@@ -29,6 +33,7 @@ export class ActivityService {
     constructor(private userIdle: UserIdleService) {}
 
     public onStartWatching() {
+        iohook.start();
         this.isWatching = true;
         this.timerCount = this.timeout;
         this.userIdle.setConfigValues({
@@ -38,16 +43,16 @@ export class ActivityService {
         });
 
         // Start watching for user inactivity.
-        this.userIdle.startWatching();
+        this.userIdle.startWatching(interactivity$);
 
         // Start watching when user idle is starting.
         this.timerStartSubscription = this.userIdle
-            .onTimerStart()
+            .onInactiveTimerStart()
             .pipe(tap(() => (this.isTimer = true)))
             .subscribe((count) => (this.timerCount = count));
 
         // Start watch when time is up.
-        this.timeoutSubscription = this.userIdle.onTimerStart().subscribe(() => (this.timeIsUp = true));
+        this.timeoutSubscription = this.userIdle.onInactiveTimerStart().subscribe(() => (this.timeIsUp = true));
 
         this.pingSubscription = this.userIdle.ping$.subscribe(
             (value) => (this.lastPing = `#${value} at ${new Date().toString()}`),
@@ -55,6 +60,7 @@ export class ActivityService {
     }
 
     public onStopWatching() {
+        iohook.stop();
         this.userIdle.stopWatching();
         this.timerStartSubscription.unsubscribe();
         this.timeoutSubscription.unsubscribe();
@@ -75,7 +81,7 @@ export class ActivityService {
         this.timeIsUp = false;
     }
 
-    public onIdleKeyup
+    // public onIdleKeyup
 
     /** *
      * Start session timer for the timeout after x minutes

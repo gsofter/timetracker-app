@@ -169,6 +169,7 @@ generates:
   packages-modules/activity/core/src/interfaces/generated-models.ts:
     schema:
       - packages-modules/activity/server/src/**/*.graphql
+      - packages-modules/activity/electron/src/**/*.graphql
     config:
       scalars:
         URI: URI

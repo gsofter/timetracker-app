@@ -1,0 +1,4 @@
+
+extend enum ClientContainerService {
+    ActivtyService
+}

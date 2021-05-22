@@ -243,6 +243,10 @@ export type IClientAddRequest = {
   orgName?: Maybe<Scalars['String']>;
 };
 
+export const enum IClientContainerService {
+  ActivtyService = 'ActivtyService'
+};
+
 export type IClientPhone = {
    __typename?: 'ClientPhone';
   workPhone?: Maybe<Scalars['String']>;
@@ -3106,6 +3110,7 @@ export type IResolversTypes = {
   OrganizationMember: ResolverTypeWrapper<IOrganizationMember>,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
+  ClientContainerService: IClientContainerService,
   ConfigurationContributionNames: IConfigurationContributionNames,
 };
 
@@ -3326,6 +3331,7 @@ export type IResolversParentTypes = {
   OrganizationMember: IOrganizationMember,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
+  ClientContainerService: IClientContainerService,
   ConfigurationContributionNames: IConfigurationContributionNames,
 };
 
