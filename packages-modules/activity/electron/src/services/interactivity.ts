@@ -1,4 +1,4 @@
-import * as ioHook from 'iohook';
+import ioHook from 'iohook';
 import { Observable } from 'rxjs';
 
 export const mouseMovementEvents$ = Observable.create((obs) => {

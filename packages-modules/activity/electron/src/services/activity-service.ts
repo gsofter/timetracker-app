@@ -1,12 +1,16 @@
+/* eslint-disable no-useless-constructor */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-return-assign */
 import { Subscription, merge } from 'rxjs';
+import { injectable, inject } from 'inversify';
 import { tap } from 'rxjs/operators';
-import * as iohook from 'iohook';
+import { IClientContainerService } from '@admin-layout/activity-core';
+import iohook from 'iohook';
 import { UserIdleService } from './user-idle-service';
 import { keyboardKeydownEvents$, mouseClickEvents$, mouseMovementEvents$, mouseWheelEvents$ } from './interactivity';
 
 const interactivity$ = merge(mouseMovementEvents$, mouseClickEvents$, keyboardKeydownEvents$, mouseWheelEvents$);
+@injectable()
 export class ActivityService {
     public idle: number;
 
@@ -30,9 +34,13 @@ export class ActivityService {
 
     private pingSubscription: Subscription;
 
-    constructor(private userIdle: UserIdleService) {}
+    constructor(
+        @inject(IClientContainerService.UserIdleService)
+        private userIdle: UserIdleService,
+    ) {}
 
     public onStartWatching() {
+        console.log('==STARTED ON START WATCHING');
         iohook.start();
         this.isWatching = true;
         this.timerCount = this.timeout;
@@ -60,6 +68,7 @@ export class ActivityService {
     }
 
     public onStopWatching() {
+        console.log('==STOPPED ON START WATCHING');
         iohook.stop();
         this.userIdle.stopWatching();
         this.timerStartSubscription.unsubscribe();

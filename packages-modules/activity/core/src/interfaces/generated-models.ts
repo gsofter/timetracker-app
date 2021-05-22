@@ -244,7 +244,8 @@ export type IClientAddRequest = {
 };
 
 export const enum IClientContainerService {
-  ActivtyService = 'ActivtyService'
+  ActivtyService = 'ActivtyService',
+  UserIdleService = 'UserIdleService'
 };
 
 export type IClientPhone = {

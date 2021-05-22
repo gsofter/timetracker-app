@@ -1,12 +1,15 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { Observable, of } from 'rxjs';
 import { Container } from 'inversify';
-import { mergeMap, takeUntil } from 'rxjs/operators';
+import { mergeMap, takeUntil, tap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { IClientContainerService } from '@admin-layout/activity-core';
 import { ApolloClient } from 'apollo-client';
 import { CdmLogger } from '@cdm-logger/core';
 import { ActivityService } from '../services/activity-service';
+
+export const SET_CURRENT_TIMER = '@timer/SET_CURRENT_TIMER';
+export const RESET_CURRENT_TIMER = '@timer/RESET_CURRENT_TIMER';
 
 // function* checkIdle() {
 //     const idleTime = system.getIdleTime();
@@ -28,10 +31,11 @@ export const onIdleTimeWatcherEpic = (
     },
 ) =>
     action$.pipe(
-        ofType('TIMER_START'),
+        ofType(SET_CURRENT_TIMER),
+        tap(() => console.log('---IDEL EPIC')),
         mergeMap(() => {
             const activityService = container.get<ActivityService>(IClientContainerService.ActivtyService);
             activityService.onStartWatching();
-            return takeUntil(action$.pipe(ofType('TIMER_STOP')));
+            return takeUntil(action$.pipe(ofType(RESET_CURRENT_TIMER)));
         }),
     );

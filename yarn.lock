@@ -25,10 +25,10 @@
 "@admin-layout/activity-module-electron@link:packages-modules/activity/electron":
   version "0.0.1"
   dependencies:
-    "@admin-layout/components" "link:packages/components"
-    "@admin-layout/platform-browser" "link:packages/admin-platform/browser"
+    "@admin-layout/activity-core" "link:packages-modules/activity/core"
     aws-sdk "^2.883.0"
     check-internet-connected "^2.0.5"
+    iohook "^0.9.1"
 
 "@admin-layout/components@link:packages/components":
   version "0.0.1"
@@ -135,6 +135,13 @@
     store "^2.0.12"
     uuidv4 "6.2.3"
     yup "0.27.0"
+
+"@admin-layout/timetracker-module-electron@link:packages-modules/timetracker/electron":
+  version "0.0.1"
+  dependencies:
+    "@admin-layout/timetracker-core" "link:packages-modules/timetracker/core"
+    "@admin-layout/timetracker-module-browser" "link:packages-modules/timetracker/browser"
+    desktop-idle "^1.3.0"
 
 "@admin-layout/timetracker-module-mobile@link:packages-modules/timetracker/mobile":
   version "0.0.1"

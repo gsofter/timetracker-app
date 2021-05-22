@@ -1,5 +1,6 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import { from, fromEvent, interval, merge, Observable, of, Subject, Subscription, timer } from 'rxjs';
+import { inject, injectable } from 'inversify';
 import {
     bufferTime,
     distinctUntilChanged,
@@ -15,6 +16,7 @@ import {
 import { IPreference_DesktopMonitoring as UserIdleConfig } from '@admin-layout/activity-core';
 
 const ONE_SECOND = 1000 as number;
+@injectable()
 export class UserIdleService {
     public ping$: Observable<any>;
 
