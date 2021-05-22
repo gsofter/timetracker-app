@@ -13,11 +13,12 @@ interface WidgetMinimizedProps {
   onMaximize: () => void;
   trackStarted: boolean;
   hidden: boolean;
+  timeDuration: string;
 }
 
 const WidgetMinimized: React.FC<WidgetMinimizedProps> = (props: WidgetMinimizedProps) => {
   const { Text } = Typography;
-  const { onClose, onTrack, onMaximize, trackStarted, hidden } = props;
+  const { onClose, onTrack, onMaximize, trackStarted, hidden, timeDuration } = props;
 
   return (
     <div hidden={hidden}>
@@ -28,7 +29,7 @@ const WidgetMinimized: React.FC<WidgetMinimizedProps> = (props: WidgetMinimizedP
         onClick={onTrack}
         style={{ marginRight: '30px' }}
       />
-      <Text>00:00:30</Text>
+      <Text>{timeDuration}</Text>
 
       <Button
         shape="circle"

@@ -18,6 +18,7 @@ export const epicMiddleware = createEpicMiddleware({
  * `combineReducers`
  */
 export const createReduxStore = () => {
+    console.log('---!!!modules!!!---', modules);
     const store = createBaseReduxStore({
         scope: 'ElectronMain',
         isDebug: __DEBUGGING__,

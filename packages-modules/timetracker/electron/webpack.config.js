@@ -1,9 +1,8 @@
 const nodeExternals = require('webpack-node-externals');
 const webpack = require('webpack');
 const path = require('path');
-const ExtractTextPlugin = require('extract-text-webpack-plugin');
 
-const webpack_opts = {
+const webpackOpts = {
     mode: 'development',
     entry: {
         index: './src/index.ts',
@@ -15,10 +14,9 @@ const webpack_opts = {
         libraryTarget: 'commonjs2',
     },
     resolve: {
-        extensions: ['.ts', '.tsx', '.graphql', '.graphqls', '.gql', '.native.tsx', '.native.ts'],
+        extensions: ['.ts', '.js', '.tsx', '.graphql', '.graphqls', '.gql', '.native.tsx', '.native.ts'],
     },
     plugins: [
-        new ExtractTextPlugin('styles.css'),
         new webpack.LoaderOptionsPlugin({
             options: {
                 test: /\.tsx?$/,
@@ -70,35 +68,17 @@ const webpack_opts = {
                 exclude: /node_modules/,
                 use: 'raw-loader',
             },
-            {
-                test: /\.css$/,
-                use: ExtractTextPlugin.extract({
-                    fallback: 'style-loader',
-                    use: [
-                        { loader: 'css-loader', options: { importLoaders: 1 } },
-                        {
-                            loader: 'postcss-loader',
-                            options: {
-                                plugins: () => [
-                                    require('autoprefixer')({
-                                        browsers: ['> 1%', 'last 2 versions'],
-                                    }),
-                                ],
-                                config: { path: './src/postcss.config.js' },
-                            },
-                        },
-                    ],
-                }),
-            },
         ],
     },
     externals: [
         nodeExternals({
-            allowlist: ['antd/lib/**/*.css'],
+            allowlist: [/^@admin-layout/],
             modulesDir: '../../../node_modules',
         }),
-        nodeExternals(),
+        nodeExternals({
+            allowlist: [/^@admin-layout/],
+        }),
     ],
 };
 
-module.exports = webpack_opts;
+module.exports = webpackOpts;
