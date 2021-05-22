@@ -46,5 +46,8 @@ npm run build
 node-v72-darwin-x6
 
 ```
-cp /Users/iohook/build/Release/iohook.node ./Users/admin-layout/node_modules/iohook/builds/node-v72-darwin-x64/build/Release
+// from the source location
+
+mkdir -p /Users/admin-layout/node_modules/iohook/builds/node-v72-darwin-x64/build
+cp -R ./build/Release ./Users/admin-layout/node_modules/iohook/builds/node-v72-darwin-x64/build/Release
 ```
