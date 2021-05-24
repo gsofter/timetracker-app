@@ -12,7 +12,6 @@ import { styleSheet } from './style';
 import { useExtensionController } from '@adminide-stack/extension-module-browser';
 import { generateContributionId, CONTRIBUTION_ACTION_TYPES } from '@adminide-stack/extension-api';
 import { ProSettings } from '@admin-layout/components';
-import HeaderTimerHandler from './HeaderTimerHandler';
 import { LanguageMenu } from './LanguageMenu';
 
 export interface GlobalHeaderRightProps {
@@ -66,7 +65,6 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
     const contributions = {
       [id]: {
         pageNavBar: [
-          { name: 'header-timer', position: 'right', priority: 1, component: () => <HeaderTimerHandler/> },
           { name: 'language-menu', position: 'right', priority: 2, component: () => <LanguageMenu/> },
         ],
       },
