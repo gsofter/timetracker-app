@@ -234,6 +234,25 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
     );
   };
 
+  const showAmount = () => {
+    const menu = (
+        <Menu>
+          <Menu.Item>Show amount</Menu.Item>
+          <Menu.Item>Show cost</Menu.Item>
+          <Menu.Item>Show profit</Menu.Item>
+          <Menu.Item>Hide amount</Menu.Item>
+        </Menu>
+    );
+    return (
+        <Dropdown overlay={menu} placement="bottomCenter">
+          <Button>
+            <span>Show amount</span>
+            <CaretDownOutlined />
+          </Button>
+        </Dropdown>
+    );
+  };
+
   const generateRanges = () => [
     {
       label: 'Today',
@@ -277,6 +296,22 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
     });
   };
 
+  const totalTime =
+      generateProjectDurations().length &&
+      generateProjectDurations().reduce((accumulator, currentValue) => accumulator + currentValue);
+
+  const header = (
+      <div>
+        <span className={css(styles.label)}>Total:</span>
+        <span className={css(styles.value)}>{formatDuration(totalTime, timeFormat)}</span>
+        <span className={css(styles.label)}>Billable:</span>
+        <span className={css(styles.value)}>{getBillableDuration()}</span>
+        <span className={css(styles.label)}>Amount:</span>
+        <span className={css(styles.value)}>0.00 USD</span>
+      </div>
+  );
+
+
   const panelRender = (originalPanel: React.ReactNode) => {
     return (
       <Row>
@@ -299,15 +334,16 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
   };
   return (
     <div className={css(styles.container)}>
-      <Card title={'Timetracker Report'} bordered={false}>
+      <Card title={'Timetracker Report'} bordered={false} extra={header}>
         <div className={css(styles.flex)}>
           <div className={css(styles.left)}>
             <RangePicker onChange={handleChangeRange} panelRender={panelRender} value={[range.start, range.end]} />
           </div>
           <div className={css(styles.right)}>
             <span className={css(styles.roundingLabel)}>Rounding:</span>
-            <Switch className={css(styles.mr10)} size={'small'} checked={isRounded} onChange={handleSwitchRoundMode} />
-            {exportMenu()}
+            <Switch size={'small'} checked={isRounded} onChange={handleSwitchRoundMode} />
+            <span className={css(styles.m10)}>{exportMenu()}</span>
+            <span>{showAmount()}</span>
           </div>
         </div>
         <div className={css(styles.title)}>
@@ -398,7 +434,16 @@ const styles = {
     width: '100%',
     textAlign: 'center',
   }),
-  mr10: () => ({
-    marginRight: '10px',
+  m10: () => ({
+    margin: '0 10px',
+  }),
+  label: () => ({
+    color: '#696868',
+    marginLeft: '20px',
+    marginRight: '5px',
+  }),
+  value: () => ({
+    fontSize: '16px',
+    fontWeight: '500',
   }),
 };
