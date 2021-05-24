@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useRef } from 'react';
 import { useFela } from 'react-fela';
 import { connect, useDispatch } from 'react-redux';
 import { Link } from 'react-router-dom';
@@ -29,10 +29,35 @@ const ENVTagColor = {
   pre: '#87d068',
 };
 
+export const useHorizontalScroll = () => {
+  const elRef = useRef();
+
+  useEffect(() => {
+    const el = elRef.current || null;
+    if (el) {
+      const onWheel = e => {
+        if (e.deltaY == 0) return;
+        e.preventDefault();
+        el.scrollTo({
+          left: el.scrollLeft + e.deltaY,
+          behavior: 'smooth',
+        });
+      };
+      el.addEventListener('wheel', onWheel);
+      return () => {
+        return el.removeEventListener('wheel', onWheel);
+      };
+    }
+  }, []);
+
+  return elRef;
+}
+
 const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
   const { theme, layout, upperMenus, orgName, formatMessage } = props;
   const [navBarItems, setNavBarItems] = useState([]);
   const controller = useExtensionController();
+  const scrollRef = useHorizontalScroll();
   const dispatch = useDispatch();
   const { css } = useFela();
 
@@ -99,7 +124,7 @@ const GlobalHeaderRight: React.SFC<GlobalHeaderRightProps> = props => {
 
   return (
     <div className={css(styleSheet.container)}>
-      <div id={'item-wrapper'} className={css(styleSheet.tabsWrap)}>
+      <div id={'item-wrapper'} ref={scrollRef} className={css(styleSheet.tabsWrap)}>
         {navBarItems.map((item, index) => {
           if (item.position === 'right' && item.component) {
             return (
