@@ -8,6 +8,7 @@ interface HanlderBodyProps {
   onClose: () => void;
   onTrack: () => void;
   trackStarted: boolean;
+  timeDuration: string;
 }
 enum WidgetSize {
   minimize = 'minimize',
@@ -16,7 +17,7 @@ enum WidgetSize {
 
 const TimerWidget: React.FC<HanlderBodyProps> = (props: HanlderBodyProps) => {
   const { css } = useFela();
-  const { onClose, onTrack, trackStarted } = props;
+  const { onClose, onTrack, trackStarted, timeDuration } = props;
   const [size, setSize] = useState<WidgetSize>(WidgetSize.maximize);
 
   const minimize = () => {
@@ -34,6 +35,7 @@ const TimerWidget: React.FC<HanlderBodyProps> = (props: HanlderBodyProps) => {
         onTrack={onTrack}
         onMaximize={maximize}
         hidden={!(size === WidgetSize.minimize)}
+        timeDuration={timeDuration}
       />
       <WidgetMaximized
         trackStarted={trackStarted}
@@ -41,6 +43,7 @@ const TimerWidget: React.FC<HanlderBodyProps> = (props: HanlderBodyProps) => {
         onTrack={onTrack}
         onMinimize={minimize}
         hidden={!(size === WidgetSize.maximize)}
+        timeDuration={timeDuration}
       />
     </div>
   );

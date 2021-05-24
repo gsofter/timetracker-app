@@ -1682,9 +1682,30 @@ export type IPreference_Account = {
   notification?: Maybe<IPreference_Notification>;
 };
 
+export type IPreference_Activity = {
+   __typename?: 'Preference_Activity';
+  desktopMonitoring?: Maybe<IPreference_DesktopMonitoring>;
+};
+
 export type IPreference_Default = {
    __typename?: 'Preference_Default';
   organization?: Maybe<Scalars['String']>;
+};
+
+export type IPreference_DesktopMonitoring = {
+   __typename?: 'Preference_DesktopMonitoring';
+  screenshotFrequency?: Maybe<IPreference_ScreenshotFrequency>;
+  trackAppsAndURLs?: Maybe<IPreference_TrackAppsAndURLs>;
+  screenshotBlur?: Maybe<Scalars['Boolean']>;
+  deleteScreenshots?: Maybe<Scalars['Boolean']>;
+  recordActivity?: Maybe<Scalars['Boolean']>;
+  autoStopTime?: Maybe<Scalars['Int']>;
+  waitingTime?: Maybe<Scalars['Int']>;
+  idleSensitivity?: Maybe<Scalars['Int']>;
+  maxTimeInADay?: Maybe<Scalars['Int']>;
+  ping?: Maybe<Scalars['Int']>;
+  timeout?: Maybe<Scalars['Int']>;
+  idle?: Maybe<Scalars['Int']>;
 };
 
 export type IPreference_Notification = {
@@ -1706,9 +1727,22 @@ export type IPreference_Project = {
   tags?: Maybe<Scalars['String']>;
 };
 
+export const enum IPreference_ScreenshotFrequency {
+  None = 'None',
+  OneShot = 'OneShot',
+  TwoShot = 'TwoShot',
+  ThreeShot = 'ThreeShot'
+};
+
 export type IPreference_Teams = {
    __typename?: 'Preference_Teams';
   visibility?: Maybe<IVisibility>;
+};
+
+export const enum IPreference_TrackAppsAndURLs {
+  Off = 'Off',
+  Apps = 'Apps',
+  AppsAndURLs = 'AppsAndURLs'
 };
 
 export type IPreferenceItem = {
@@ -1726,6 +1760,7 @@ export type IPreferenceItem = {
 export type IPreferences = {
    __typename?: 'Preferences';
   account?: Maybe<IPreference_Account>;
+  activity?: Maybe<IPreference_Activity>;
   defaultSetting?: Maybe<Array<Maybe<ISettingsGroup>>>;
   dummy?: Maybe<Scalars['Int']>;
   organization?: Maybe<IPreference_Organization>;
@@ -2890,6 +2925,10 @@ export type IResolversTypes = {
   Preference_Account: ResolverTypeWrapper<IPreference_Account>,
   Preference_Default: ResolverTypeWrapper<IPreference_Default>,
   Preference_Notification: ResolverTypeWrapper<IPreference_Notification>,
+  Preference_Activity: ResolverTypeWrapper<IPreference_Activity>,
+  Preference_DesktopMonitoring: ResolverTypeWrapper<IPreference_DesktopMonitoring>,
+  Preference_ScreenshotFrequency: IPreference_ScreenshotFrequency,
+  Preference_TrackAppsAndURLs: IPreference_TrackAppsAndURLs,
   Preference_Organization: ResolverTypeWrapper<IPreference_Organization>,
   Preference_Teams: ResolverTypeWrapper<IPreference_Teams>,
   Visibility: IVisibility,
@@ -3106,6 +3145,10 @@ export type IResolversParentTypes = {
   Preference_Account: IPreference_Account,
   Preference_Default: IPreference_Default,
   Preference_Notification: IPreference_Notification,
+  Preference_Activity: IPreference_Activity,
+  Preference_DesktopMonitoring: IPreference_DesktopMonitoring,
+  Preference_ScreenshotFrequency: IPreference_ScreenshotFrequency,
+  Preference_TrackAppsAndURLs: IPreference_TrackAppsAndURLs,
   Preference_Organization: IPreference_Organization,
   Preference_Teams: IPreference_Teams,
   Visibility: IVisibility,
@@ -4057,8 +4100,29 @@ export type IPreference_AccountResolvers<ContextType = any, ParentType extends I
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
+export type IPreference_ActivityResolvers<ContextType = any, ParentType extends IResolversParentTypes['Preference_Activity'] = IResolversParentTypes['Preference_Activity']> = {
+  desktopMonitoring?: Resolver<Maybe<IResolversTypes['Preference_DesktopMonitoring']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
 export type IPreference_DefaultResolvers<ContextType = any, ParentType extends IResolversParentTypes['Preference_Default'] = IResolversParentTypes['Preference_Default']> = {
   organization?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type IPreference_DesktopMonitoringResolvers<ContextType = any, ParentType extends IResolversParentTypes['Preference_DesktopMonitoring'] = IResolversParentTypes['Preference_DesktopMonitoring']> = {
+  screenshotFrequency?: Resolver<Maybe<IResolversTypes['Preference_ScreenshotFrequency']>, ParentType, ContextType>,
+  trackAppsAndURLs?: Resolver<Maybe<IResolversTypes['Preference_TrackAppsAndURLs']>, ParentType, ContextType>,
+  screenshotBlur?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  deleteScreenshots?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  recordActivity?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  autoStopTime?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  waitingTime?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  idleSensitivity?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  maxTimeInADay?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  ping?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  timeout?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
+  idle?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4100,6 +4164,7 @@ export type IPreferenceItemResolvers<ContextType = any, ParentType extends IReso
 
 export type IPreferencesResolvers<ContextType = any, ParentType extends IResolversParentTypes['Preferences'] = IResolversParentTypes['Preferences']> = {
   account?: Resolver<Maybe<IResolversTypes['Preference_Account']>, ParentType, ContextType>,
+  activity?: Resolver<Maybe<IResolversTypes['Preference_Activity']>, ParentType, ContextType>,
   defaultSetting?: Resolver<Maybe<Array<Maybe<IResolversTypes['SettingsGroup']>>>, ParentType, ContextType>,
   dummy?: Resolver<Maybe<IResolversTypes['Int']>, ParentType, ContextType>,
   organization?: Resolver<Maybe<IResolversTypes['Preference_Organization']>, ParentType, ContextType>,
@@ -4637,7 +4702,9 @@ export type IResolvers<ContextType = any> = {
   PolicySubject?: IPolicySubjectResolvers<ContextType>,
   Position?: IPositionResolvers<ContextType>,
   Preference_Account?: IPreference_AccountResolvers<ContextType>,
+  Preference_Activity?: IPreference_ActivityResolvers<ContextType>,
   Preference_Default?: IPreference_DefaultResolvers<ContextType>,
+  Preference_DesktopMonitoring?: IPreference_DesktopMonitoringResolvers<ContextType>,
   Preference_Notification?: IPreference_NotificationResolvers<ContextType>,
   Preference_Organization?: IPreference_OrganizationResolvers<ContextType>,
   Preference_Project?: IPreference_ProjectResolvers<ContextType>,

@@ -344,7 +344,8 @@
       "electron-85"
     ],
     "platforms": [
-      "linux"
+      "linux",
+      "darwin"
     ],
     "arches": [
       "x64",

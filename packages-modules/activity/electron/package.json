@@ -45,7 +45,8 @@
     "@admin-layout/platform-browser": "link:../../../packages/admin-platform/browser",
     "@admin-layout/components": "link:../../../packages/components",
     "check-internet-connected": "^2.0.5",
-    "aws-sdk": "^2.883.0"
+    "aws-sdk": "^2.883.0",
+    "iohook": "^0.9.1"
   },
   "peerDependencies": {
     "@adminide-stack/core": "*",
@@ -53,11 +54,13 @@
     "@common-stack/core": ">=0.0.258",
     "@common-stack/client-core": ">=0.0.258",
     "antd": "^4.5.2",
-    "iohook": "^0.9.0",
     "envalid": "*",
     "electron": "*",
     "inversify": "*",
     "rxjs": "*"
+  },
+  "devDependencies": {
+    "robotjs": "^0.6.0"
   },
   "typings": "lib/index.d.ts",
   "typescript": {

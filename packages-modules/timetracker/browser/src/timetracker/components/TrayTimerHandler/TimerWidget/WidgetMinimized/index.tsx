@@ -1,7 +1,6 @@
 import React from 'react';
 import {
   CaretRightFilled,
-  CloseOutlined,
   PauseOutlined,
   BorderOutlined
 } from '@ant-design/icons';
@@ -27,7 +26,7 @@ const WidgetMinimized: React.FC<WidgetMinimizedProps> = (props: WidgetMinimizedP
         onClick={onTrack}
         style={{ marginRight: '30px' }}
       />
-      <Text>00:00:30</Text>
+      <Text>00:00:70</Text>
 
       <Button
         shape="circle"
