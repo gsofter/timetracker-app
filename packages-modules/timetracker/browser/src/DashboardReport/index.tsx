@@ -8,12 +8,12 @@ import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../generate
 import { Reports } from './ReportComponent';
 
 const Report = () => {
-  const [weekStart, setWeekStart] = useState(moment().startOf('week'));
+  const [range, setRange] = useState({ start: moment().startOf('week'), end: moment().endOf('week') });
 
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
     variables: {
-      startTime: weekStart,
-      endTime: moment(weekStart).add(1, 'week'),
+      startTime: range.start,
+      endTime: range.end,
     },
   });
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
@@ -24,24 +24,30 @@ const Report = () => {
   const { value: dowValue } = useFirstWeekDay();
 
   useEffect(() => {
-    setWeekStart(moment().startOf('week'));
+    setRange({
+      start: moment().startOf('week'),
+      end: moment().endOf('week'),
+    });
   }, []);
 
   useEffect(() => {
     refetch();
-  }, [weekStart]);
+  }, [range]);
 
   useEffect(() => {
     moment.locale('en', {
       week: { dow: dowValue },
     });
-    setWeekStart(moment().startOf('week'));
+    setRange({
+      start: moment().startOf('week'),
+      end: moment().endOf('week'),
+    });
   }, [dowValue]);
 
-  const getRecords = useCallback((): Array<ITimeRecord> => (loading || !!!data ? [] : data.getDurationTimeRecords), [
-    loading,
-    data,
-  ]);
+  const getRecords = useCallback(
+    (): Array<ITimeRecord> => (loading || !!!data ? [] : data.getDurationTimeRecords),
+    [loading, data],
+  );
   const getProjects = useCallback(
     (): Array<IProject_Output> => (loadingProjects || !!!projectsData ? [] : projectsData.getProjects),
     [loadingProjects, projectsData],
@@ -49,10 +55,10 @@ const Report = () => {
 
   return (
     <Reports
-      weekStart={weekStart}
+      range={range}
       projects={getProjects()}
       records={getRecords()}
-      setWeekStart={setWeekStart}
+      setRange={setRange}
       updateConfiguration={updateConfiguration}
     />
   );
