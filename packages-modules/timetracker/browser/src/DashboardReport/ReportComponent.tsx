@@ -61,7 +61,7 @@ export const Reports: React.FC<IReportsProps> = ({
     const labels = Array(7)
       .fill(0)
       .map((itemValue, itemIndex) => {
-        return moment(weekStart).add(itemIndex, 'day').format(dateFormat);
+        return moment(weekStart).add(itemIndex, 'day').format('ddd, MMM YY');
       });
     return labels;
   };
