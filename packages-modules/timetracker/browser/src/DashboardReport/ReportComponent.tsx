@@ -65,7 +65,7 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
     const labels = Array(daysCnt)
       .fill(0)
       .map((itemValue, itemIndex) => {
-        return moment(range.start).add(itemIndex, 'day').format(dateFormat);
+        return moment(range.start).add(itemIndex, 'day').format('ddd, MMM YY');
       });
     return labels;
   };
