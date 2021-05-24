@@ -5,6 +5,7 @@ import { EditTwoTone } from '@ant-design/icons';
 import { generateContributionId, CONTRIBUTION_ACTION_TYPES } from '@adminide-stack/extension-api';
 import { Payments } from './components/Payments';
 import { Limits } from './components/Limits';
+import HeaderTimerHandler from './components/HeaderTimerHandler';
 
 const EditableComponent = (props) => {
   return (
@@ -50,6 +51,9 @@ export const RegisterContribution = () => {
             },
           ],
         },
+        pageNavBar: [
+          { name: 'header-timer', position: 'right', priority: 1, component: () => <HeaderTimerHandler/> },
+        ],
       },
     };
     // register contribution
