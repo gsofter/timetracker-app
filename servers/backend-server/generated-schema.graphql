@@ -527,6 +527,11 @@ interface IConfigurationModel {
 input ConfigurationInput {
     target: Int!
     resource: URIInput
+    """
+    User resource to identify the core user settings.
+    For guest user, we don't have to define it.
+    """
+    userResource: URI
 }
 
 type ConfigurationUpdateEvent{
@@ -1134,6 +1139,7 @@ type UserState {
   isTokenExpired: Boolean
   isLoggingInToProceed: Boolean
   loginError: LoginError
+  accessToken: String
 }
 
 interface IUser {
