@@ -57,7 +57,6 @@
     "react-native-simple-radio-button": "2.7.4",
     "react-simple-timefield": "^3.2.3",
     "react-native-auth0": "2.8.1",
-    "react-native-modal-datetime-picker": "9.2.3",
     "rifm": "^0.12.0",
     "socket.io-client": "2.2.0",
     "store": "^2.0.12",

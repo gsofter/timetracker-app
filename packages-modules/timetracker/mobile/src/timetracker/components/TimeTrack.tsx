@@ -44,23 +44,23 @@ const TimeTrack = ({
             </Col>
             <Col>
             {isStart && 
-                <Button info block>
-                    <Text style={{ color: 'white' }} onPress={() => {
+                <Button info block onPress={() => {
                     setStopWatchStart(true)
-                    handleStartTimer()
                     setIsStop(true)
                     setIsStart(false)
-                    }}>Start</Text>
+                    handleStartTimer()
+                    }}>
+                    <Text style={{ color: 'white' }}>Start</Text>
                 </Button> 
             }
             {isStop && 
-                <Button danger block>
-                    <Text style={{ color: 'white' }} onPress={() => {
+                <Button danger block onPress={() => {
                     setStopWatchStart(false)
                     setIsStop(false)
                     setIsStart(true)
                     updatePlayingTimeRecord()
-                    }}>Stop</Text>
+                    }}>
+                    <Text style={{ color: 'white' }}>Stop</Text>
                 </Button> 
             }
             </Col>

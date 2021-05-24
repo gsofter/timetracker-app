@@ -35,12 +35,10 @@ const TimerScreen = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
   const [createMutation] = useCreateTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
-  const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
   const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
     variables: { userId: timeRecord.userId, startTime: timeRecord.startTime, endTime: timeRecord.endTime },
   });
-
-  const history = useHistory()
+  const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
 
   const toggleProject = () => {
     setIsToggle(!isToggle);
@@ -82,7 +80,7 @@ const TimerScreen = () => {
         refetch();
       })
       .catch((error) => {
-        console.log(error.message);
+        alert(error.message);
       });
   };
 

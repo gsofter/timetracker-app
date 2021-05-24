@@ -42,8 +42,7 @@ const TimerFooter = ({
   const user = useSelector((state: any) => state?.user)
 
   useEffect(() => {
-    const token = history.location.state
-    if (token) {
+    if (user) {
       setTimeRecord(ps => ({ ...ps, userId: user.auth0UserId }));
     }
     setTimeRecord(ps => ({ ...ps, isBillable: billable }))
