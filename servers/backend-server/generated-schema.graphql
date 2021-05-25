@@ -595,13 +595,13 @@ type Range {
 enum SettingValueType {
     Null
     Enum
-    String 
+    String
     Integer
-    Number 
-    Boolean 
-    Exclude 
-    Complex 
-    NullableInteger 
+    Number
+    Boolean
+    Exclude
+    Complex
+    NullableInteger
     NullableNumber
 }
 
@@ -620,16 +620,20 @@ type SettingsSection {
     settings: [ContributionSettings]
 }
 
+type ContributionSettingsProperties{
+    readOnly: Boolean,
+    disabled: Boolean
+}
 type ContributionSettings {
     """ name of the settings"""
     name: String
-    range: Range 
+    range: Range
     key: String
-    keyRange: Range 
+    keyRange: Range
     """ @deprecated """
     default: String
-    value: AnyObject 
-    valueRange: Range 
+    value: AnyObject
+    valueRange: Range
     description: [String]
     descriptionIsMarkdown: Boolean
     descriptionRanges: [Range]
@@ -643,6 +647,7 @@ type ContributionSettings {
     enumDescriptionsAreMarkdown: Boolean
     tags: [String]
     extensionInfo: ConfigurationExtensionInfo
+    properties: ContributionSettingsProperties,
 }
 
 
@@ -653,6 +658,7 @@ extend type Query {
 extend type Preferences {
   defaultSetting: [SettingsGroup]
 }
+
 type OrganizationIdentifier {
     id: String
     configPath: URI
