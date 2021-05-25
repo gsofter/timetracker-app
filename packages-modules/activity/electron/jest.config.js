@@ -9,4 +9,5 @@ module.exports = {
         // Use our custom transformer only for the *.js and *.jsx files
         '\\.(js|jsx)?$': '../../../transform.js',
     },
+    roots: ['src'],
 };

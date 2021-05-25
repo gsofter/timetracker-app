@@ -2,8 +2,8 @@
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable jest/no-hooks */
 import 'jest';
-import * as ioHook from 'iohook';
-import * as robot from 'robotjs';
+import ioHook from 'iohook';
+import robot from 'robotjs';
 
 /**
  * To test `iohook` is working propertly

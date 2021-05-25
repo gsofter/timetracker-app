@@ -4,7 +4,7 @@
   "description": "Sample core for higher packages to depend on",
   "main": "lib/index.js",
   "scripts": {
-    "jest": "./node_modules/.bin/jest",
+    "jest": "../../../node_modules/.bin/jest",
     "test": "cross-env ENV_FILE=../../config/test/test.env jest",
     "test:debug": "npm test -- --runInBand",
     "test:watch": "npm test -- --watch",

@@ -36,6 +36,5 @@ export const onIdleTimeWatcherEpic = (
         mergeMap(() => {
             const activityService = container.get<ActivityService>(IClientContainerService.ActivtyService);
             activityService.onStartWatching();
-            return takeUntil(action$.pipe(ofType(RESET_CURRENT_TIMER)));
         }),
     );

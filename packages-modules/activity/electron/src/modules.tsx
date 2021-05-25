@@ -3,6 +3,6 @@ import { TimerElectronModule } from './containers';
 import { onIdleTimeWatcherEpic } from './epic/idle-epic';
 
 export default new Feature({
-    epic: [onIdleTimeWatcherEpic as any],
+    // epic: [onIdleTimeWatcherEpic as any],
     createContainerFunc: TimerElectronModule,
 });
