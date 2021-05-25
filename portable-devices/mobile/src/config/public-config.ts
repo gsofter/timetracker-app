@@ -29,7 +29,7 @@ const env = {
     GA_ID,
     LOG_LEVEL,
     LOCAL_GRAPHQL_URL: GRAPHQL_URL,
-    $typeof: 'null', // bug https://github.com/af/envalid/issues/150
+    '$typeof': 'null', // bug https://github.com/af/envalid/issues/150
 };
 
 const isBrowser = typeof window !== 'undefined';
