@@ -26,6 +26,7 @@ interface IReportsProps {
 
 export const Reports: React.FC<IReportsProps> = ({ range, projects, records, setRange, updateConfiguration }) => {
   const [isRounded, setIsRounded] = useState(false);
+  const [showType, setShowType] = useState('Show amount')
   const { roundType, roundValue, rounded, refetchRounded } = useRound();
   const { dateFormat, timeFormat } = useTimeformat();
   const { css } = useFela();
@@ -234,19 +235,23 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
     );
   };
 
+  const handleMenuClick = (e) => {
+    setShowType(e.key);
+  }
+
   const showAmount = () => {
     const menu = (
-        <Menu>
-          <Menu.Item>Show amount</Menu.Item>
-          <Menu.Item>Show cost</Menu.Item>
-          <Menu.Item>Show profit</Menu.Item>
-          <Menu.Item>Hide amount</Menu.Item>
+        <Menu onClick={handleMenuClick}>
+          <Menu.Item key={'Show amount'}>Show amount</Menu.Item>
+          <Menu.Item key={'Show cost'}>Show cost</Menu.Item>
+          <Menu.Item key={'Show profit'}>Show profit</Menu.Item>
+          <Menu.Item key={'Hide amount'}>Hide amount</Menu.Item>
         </Menu>
     );
     return (
         <Dropdown overlay={menu} placement="bottomCenter">
           <Button>
-            <span>Show amount</span>
+            <span>{showType}</span>
             <CaretDownOutlined />
           </Button>
         </Dropdown>
@@ -300,14 +305,41 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
       generateProjectDurations().length &&
       generateProjectDurations().reduce((accumulator, currentValue) => accumulator + currentValue);
 
+  const getHeader = () => {
+    switch (showType) {
+      case 'Show amount':
+        return (
+            <>
+              <span className={css(styles.label)}>Billable:</span>
+              <span className={css(styles.value)}>{getBillableDuration()}</span>
+              <span className={css(styles.label)}>Amount:</span>
+              <span className={css(styles.value)}>0.00 USD</span>
+            </>
+        );
+      case 'Show cost':
+        return (
+            <>
+              <span className={css(styles.label)}>Cost:</span>
+              <span className={css(styles.value)}>0.00 USD</span>
+            </>
+        );
+      case 'Show profit':
+        return (
+            <>
+              <span className={css(styles.label)}>Profit:</span>
+              <span className={css(styles.value)}>0.00 USD</span>
+            </>
+        );
+      default:
+        return null;
+    }
+  }
+
   const header = (
       <div>
         <span className={css(styles.label)}>Total:</span>
         <span className={css(styles.value)}>{formatDuration(totalTime, timeFormat)}</span>
-        <span className={css(styles.label)}>Billable:</span>
-        <span className={css(styles.value)}>{getBillableDuration()}</span>
-        <span className={css(styles.label)}>Amount:</span>
-        <span className={css(styles.value)}>0.00 USD</span>
+        {getHeader()}
       </div>
   );
 
