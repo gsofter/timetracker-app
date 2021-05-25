@@ -180,15 +180,15 @@
     humanize-duration "^3.24.0"
     moment "^2.29.1"
 
-"@adminide-stack/account-api-browser@0.0.20-alpha.62":
-  version "0.0.20-alpha.62"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-browser/-/account-api-browser-0.0.20-alpha.62.tgz#3b0faacadbd00bef39ee15424a1a72c07597e70d"
-  integrity sha512-KM5d8FMInuTcr6GRDmVlFDRLcHsQSsn7YTgPyZrXRNlaSdBlWU31bG/2CFObNzyh32d9f0HhZSCVc+lPA2nI2A==
+"@adminide-stack/account-api-browser@0.0.20-alpha.63":
+  version "0.0.20-alpha.63"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-browser/-/account-api-browser-0.0.20-alpha.63.tgz#650584a12e5b05ab48f68417e8aa914041bb153f"
+  integrity sha512-VWfUPUo9cyoifDhcFjubiRLSLJ7nsmvpCKQxGXMRHHV2cHdgVIAUdNtbzylZlYhC3GWdwpm1PIBRZfVxZI7/BA==
   dependencies:
     "@adminide-stack/core" "0.0.20-alpha.58"
     "@adminide-stack/extension-api" "0.0.20-alpha.58"
     "@adminide-stack/platform-browser" "0.0.20-alpha.58"
-    "@adminide-stack/user-auth0-browser" "0.0.20-alpha.62"
+    "@adminide-stack/user-auth0-browser" "0.0.20-alpha.63"
     "@react-pdf/renderer" "^2.0.0-beta.6"
     date-fns "^2.19.0"
     react-datepicker "^3.5.0"
@@ -319,10 +319,10 @@
     use-media-antd-query "^1.0.2"
     use-merge-value "^1.0.2"
 
-"@adminide-stack/user-auth0-browser@0.0.20-alpha.62":
-  version "0.0.20-alpha.62"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.20-alpha.62.tgz#9745443ee5e289bf7f6e0d0666db06bf8df9c7ee"
-  integrity sha512-1Us40HLNc16C8/AXZNLyl0iJv+r4vE38tjxYhh4F0rtrCbNKqLYW4d0JpMUdUg2+PYpF/CfgZGLf8AM/D6ZP4A==
+"@adminide-stack/user-auth0-browser@0.0.20-alpha.63":
+  version "0.0.20-alpha.63"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-browser/-/user-auth0-browser-0.0.20-alpha.63.tgz#f0a9eaac021ca6463ba00ba037dc1484476ebff0"
+  integrity sha512-eP1z2vWtj+EL7/6W10dm9Ef7Eq9PsqBJbJBklq7iJzUHnTgAWDv48h4tPh1kc7ai+GF5OAX399xqb1CDlnJJwg==
   dependencies:
     "@adminide-stack/common" "0.0.20-alpha.23"
     "@adminide-stack/react-shared-components" "0.0.20-alpha.58"
@@ -339,10 +339,10 @@
   resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-client/-/user-auth0-client-0.0.20-alpha.62.tgz#cc9290029ea03b0f7a213eb7d6c86e77849a8194"
   integrity sha512-+yb6hQXL3ZpKczY7Nl2jIdmIEOY5AShsT25hG9F///EtRUaUl3yH62+vo0zNixQwwrQ7dQizycVd/eliuyccZA==
 
-"@adminide-stack/user-auth0-mobile@0.0.20-alpha.62":
-  version "0.0.20-alpha.62"
-  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-mobile/-/user-auth0-mobile-0.0.20-alpha.62.tgz#52f1703975754fe939a37af8dd893ee6ebbea616"
-  integrity sha512-MGMJJIabJXq6DD8J5cyt1chWpoDSgVop2430qQd62uu2GQoGKppt0u0pyrrzQtq4X1sKflZfgnvtJRu4v0OzQg==
+"@adminide-stack/user-auth0-mobile@0.0.20-alpha.63":
+  version "0.0.20-alpha.63"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/user-auth0-mobile/-/user-auth0-mobile-0.0.20-alpha.63.tgz#e449e2cc670530b7c1d8078874b245b8f2b19f59"
+  integrity sha512-gRarBAr+J3w8oqu7Fo/DF3fVPqPLWfXox7xvZM/xDN0iimbKlqHh0r0Gb+uEBh0hF/s7Xu+xoa5s+WbSE0MeUA==
   dependencies:
     "@adminide-stack/core" "0.0.20-alpha.58"
     "@adminide-stack/user-auth0-client" "0.0.20-alpha.62"
