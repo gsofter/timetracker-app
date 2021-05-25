@@ -6,7 +6,7 @@ import { Button } from 'antd';
 import { useFela } from 'react-fela';
 import { styleSheet } from './style';
 import TimerWidget from './TimerWidget';
-import { currentTimerSelector, resetCurrentTimerAction, setCurrentTimerAction } from '../../../redux/timetracker';
+import { currentTimerSelector, resetCurrentTimerAction, setCurrentTimerAction } from '../../../redux';
 
 const HeaderTimerHandler: React.FC = (props) => {
   const { css } = useFela();
