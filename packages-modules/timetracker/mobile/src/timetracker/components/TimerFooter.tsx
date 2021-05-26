@@ -42,10 +42,10 @@ const TimerFooter = ({
   const user = useSelector((state: any) => state?.user)
 
   useEffect(() => {
+    setTimeRecord(ps => ({ ...ps, isBillable: billable }))
     if (user) {
       setTimeRecord(ps => ({ ...ps, userId: user.auth0UserId }));
     }
-    setTimeRecord(ps => ({ ...ps, isBillable: billable }))
   }, [history, billable])
 
   const getFormattedTime = (time: any) => {
@@ -77,7 +77,11 @@ const TimerFooter = ({
   return (
     <View style={styles.footer}>
       {!manual && (
-        <KeyboardAwareScrollView>
+        <KeyboardAwareScrollView
+          enableOnAndroid
+          enableAutomaticScroll
+          keyboardOpeningTime={0}
+        >
           <View style={styles.row}>
             <Item regular style={{ width: '80%', height: 40 }}>
               <Input onChangeText={(value) => setTimeRecord(ps => ({ ...ps, taskName: value }))} style={{ height: 40 }} placeholder="What are you working on?" />

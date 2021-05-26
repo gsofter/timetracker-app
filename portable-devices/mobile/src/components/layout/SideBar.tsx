@@ -53,11 +53,11 @@ const SideBar = ({ routes, matchUrl, onClose }: any) => {
                     </List>
                 ) :
                     (<List key={menu.key}>
-                        <ListItem>
+                        <ListItem onPress={() => openMenuItem(menu.path)}>
                             <Left>
-                                <Text onPress={() => openMenuItem(menu.path)} style={{ color: '#a1a1a1' }}>{menu.name}</Text>
-                            </Left >
-                        </ListItem >
+                                <Text style={{ color: '#a1a1a1' }}>{menu.name}</Text>
+                            </Left>
+                        </ListItem>
                     </List >)
             ))}
         </Container >
