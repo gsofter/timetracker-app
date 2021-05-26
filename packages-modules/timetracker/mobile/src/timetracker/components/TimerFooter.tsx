@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Icon, Item, Input, Button } from 'native-base';
-import { View, StyleSheet, Text } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { View, StyleSheet, Text, Platform } from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
 import { useHistory } from 'react-router-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as _ from 'lodash';
 import moment from 'moment';
 
 import TimeTrack from './TimeTrack'
 import {
   ITimeRecordRequest,
-  ITimeRecord,
 } from '@admin-layout/timetracker-core';
 
 var radio_props = [
@@ -75,10 +73,9 @@ const TimerFooter = ({
   };
 
   return (
-    <View style={styles.footer}>
+    <View style={[styles.footer, Platform.OS === 'android' && {position: 'absolute', bottom: 0}]}>
       {!manual && (
-        <View
-        >
+        <View>
           <View style={styles.row}>
             <Item regular style={{ width: '80%', height: 40 }}>
               <Input onChangeText={(value) => setTimeRecord(ps => ({ ...ps, taskName: value }))} style={{ height: 40 }} placeholder="What are you working on?" />

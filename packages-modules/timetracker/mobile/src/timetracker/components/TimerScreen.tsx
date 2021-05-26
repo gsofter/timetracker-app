@@ -1,11 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
-import { StyleSheet, View, ScrollView } from 'react-native';
-import { useHistory } from "react-router-native"
+import { StyleSheet, View, ScrollView, Platform } from 'react-native';
 import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import TimerFooter from './TimerFooter';
 import TimeRange from './TimeRange';
+import TimeList from "./TimeList"
 import {
   ITimeRecordRequest,
   ITimeRecord
@@ -20,7 +20,8 @@ import {
 const TimerScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
   const [billable, setBillable] = useState(false);
-  const [track, setTrack] = useState(true);
+  const [track, setTrack] = useState
+  (true);
   const [manual, setManual] = useState(false);
   const [addManual, setAddManual] = useState(false);
   const [timeRecord, setTimeRecord] = useState<ITimeRecord>({
@@ -99,13 +100,14 @@ const TimerScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={{ flex: 1 }}>
+      <ScrollView style={{ flex: Platform.OS === "android"? 0: 1 }}>
         <TimeRange
           selectedStartDate={selectedStartDate}
           selectedEndDate={selectedEndDate}
           onDateChange={onDateChange}
           onReset={onReset}
         />
+        <TimeList/>
       </ScrollView>
       <TimerFooter
         isToggle={isToggle}
@@ -122,7 +124,8 @@ const TimerScreen = () => {
         createTimeRecord={createTimeRecord}
         updateTimeRecord={updateTimeRecord}
       />
-      <KeyboardSpacer />
+      {Platform.OS === 'ios' &&
+      <KeyboardSpacer />}
     </View>
   );
 };

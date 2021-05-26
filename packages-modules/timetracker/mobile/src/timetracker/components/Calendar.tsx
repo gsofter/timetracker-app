@@ -10,7 +10,7 @@ const allEvents = [
         projectId: "",
         startTime: "2021-05-25T12:10:58.721Z",
         tags: [],
-        taskName: "",
+        taskName: "Test Task",
         timesheetId: null,
         userId: "google-oauth2|104797814715925535941"
     }
