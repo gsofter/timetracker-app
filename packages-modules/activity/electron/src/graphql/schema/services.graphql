@@ -1,5 +1,7 @@
 
 extend enum ClientContainerService {
     ActivtyService
+    """ Tracks the Activity """
+    ActivityTracking
     UserIdleService
 }

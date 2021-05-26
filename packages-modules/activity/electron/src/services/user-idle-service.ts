@@ -83,7 +83,8 @@ export class UserIdleService {
         if (this.idleSubscription) {
             this.idleSubscription.unsubscribe();
         }
-        this.idle$ = from(activityEvents$);
+        console.log('---ACTIVITY', activityEvents$);
+        this.idle$ = of(activityEvents$);
 
         // If any of user events is not active for idle-seconds when start timer.
         this.idleSubscription = this.idle$

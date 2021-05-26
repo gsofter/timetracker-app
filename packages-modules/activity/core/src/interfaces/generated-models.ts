@@ -245,6 +245,8 @@ export type IClientAddRequest = {
 
 export const enum IClientContainerService {
   ActivtyService = 'ActivtyService',
+  /**  Tracks the Activity  */
+  ActivityTracking = 'ActivityTracking',
   UserIdleService = 'UserIdleService'
 };
 

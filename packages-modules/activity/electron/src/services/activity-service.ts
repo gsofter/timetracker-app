@@ -1,15 +1,13 @@
 /* eslint-disable no-useless-constructor */
 /* eslint-disable import/no-extraneous-dependencies */
 /* eslint-disable no-return-assign */
-import { Subscription, merge } from 'rxjs';
+import { Subscription } from 'rxjs';
 import { injectable, inject } from 'inversify';
 import { tap } from 'rxjs/operators';
 import { IClientContainerService } from '@admin-layout/activity-core';
-import iohook from 'iohook';
 import { UserIdleService } from './user-idle-service';
-import { keyboardKeydownEvents$, mouseClickEvents$, mouseMovementEvents$, mouseWheelEvents$ } from './interactivity';
+import { IActivityTracking } from '../interfaces';
 
-const interactivity$ = merge(mouseMovementEvents$, mouseClickEvents$, keyboardKeydownEvents$, mouseWheelEvents$);
 @injectable()
 export class ActivityService {
     public idle: number;
@@ -37,11 +35,13 @@ export class ActivityService {
     constructor(
         @inject(IClientContainerService.UserIdleService)
         private userIdle: UserIdleService,
+        @inject(IClientContainerService.ActivityTracking)
+        private tracker: IActivityTracking,
     ) {}
 
     public onStartWatching() {
         console.log('==STARTED ON START WATCHING');
-        iohook.start();
+        this.tracker.startMonitoring();
         this.isWatching = true;
         this.timerCount = this.timeout;
         this.userIdle.setConfigValues({
@@ -51,7 +51,7 @@ export class ActivityService {
         });
 
         // Start watching for user inactivity.
-        this.userIdle.startWatching(interactivity$);
+        this.userIdle.startWatching(this.tracker.interactivity);
 
         // Start watching when user idle is starting.
         this.timerStartSubscription = this.userIdle
@@ -69,7 +69,7 @@ export class ActivityService {
 
     public onStopWatching() {
         console.log('==STOPPED ON START WATCHING');
-        iohook.stop();
+        this.tracker.startMonitoring();
         this.userIdle.stopWatching();
         this.timerStartSubscription.unsubscribe();
         this.timeoutSubscription.unsubscribe();

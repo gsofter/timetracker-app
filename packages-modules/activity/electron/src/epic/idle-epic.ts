@@ -4,7 +4,6 @@ import { Container } from 'inversify';
 import { mergeMap, takeUntil, tap } from 'rxjs/operators';
 import { ofType } from 'redux-observable';
 import { IClientContainerService } from '@admin-layout/activity-core';
-import { ApolloClient } from 'apollo-client';
 import { CdmLogger } from '@cdm-logger/core';
 import { ActivityService } from '../services/activity-service';
 
@@ -19,14 +18,10 @@ export const onIdleTimeWatcherEpic = (
     action$: Observable<any>,
     state$: Observable<any>,
     {
-        apolloClient,
         container,
         logger,
     }: {
-        apolloClient: ApolloClient<any>;
-        routes?: any;
         container: Container;
-        // services: { userIdleService: UserIdleService; activityService: ActivityService };
         logger: CdmLogger.ILogger;
     },
 ) =>
@@ -36,5 +31,6 @@ export const onIdleTimeWatcherEpic = (
         mergeMap(() => {
             const activityService = container.get<ActivityService>(IClientContainerService.ActivtyService);
             activityService.onStartWatching();
+            return of({ type: 'TIMER_DONE' });
         }),
     );
