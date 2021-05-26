@@ -1,9 +1,11 @@
 import React, { useEffect, useState, useMemo } from 'react';
+import { useSelector } from 'react-redux';
 import { useFela } from 'react-fela';
 import { Switch, Table, message, Card, Dropdown, Menu, Button, Space, DatePicker, Row, Col } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import moment, { Moment } from 'moment';
-import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
+import { useSetting, useGetUserAccountQuery } from '@adminide-stack/react-shared-components';
+import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 import { BarChart } from './BarChart';
 import { DoughnutChart } from './DoughnutChart';
 import { formatDuration, roundDuration } from '../timetracker/services/timeRecordService';
@@ -11,7 +13,9 @@ import { useRound, useTimeformat } from '../timetracker/hooks';
 import { ExportReportAsExcel } from './ExportReportAsExcel';
 import { ExportReportAsCSV } from './ExportReportAsCSV';
 import { ExportReportAsPDF } from './ExportReportAsPDF';
+import { calculateCost, calculateProfit } from '../utils';
 import * as _ from 'lodash';
+
 const { RangePicker } = DatePicker;
 interface IReportsProps {
   range: {
@@ -29,7 +33,26 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
   const [showType, setShowType] = useState('Show amount')
   const { roundType, roundValue, rounded, refetchRounded } = useRound();
   const { dateFormat, timeFormat } = useTimeformat();
+  const userId = useSelector((state: any) => state.user.auth0UserId);
   const { css } = useFela();
+
+  const { data: { getUserAccount } = {} } = useGetUserAccountQuery({
+    variables: { userId },
+    skip: !userId,
+  });
+
+  const { data: billRateConfig } = useSetting({
+    configKey: 'timetracker.user.payment.billRate',
+    overrides: { overrideIdentifier: getUserAccount?.username },
+  });
+
+  const { data: payRateConfig } = useSetting({
+    configKey: 'timetracker.user.payment.payRate',
+    overrides: { overrideIdentifier: getUserAccount?.username },
+  });
+
+  const billRate = billRateConfig?.resolveConfiguration;
+  const payRate = payRateConfig?.resolveConfiguration;
 
   const debounceFunc = useMemo(
     () =>
@@ -132,9 +155,7 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
       const unTotalDur = unRecords.reduce(calcDurationReducer, 0);
       projectDurArray.push(rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur);
     }
-    const totalBillableTime =
-      projectDurArray.length && projectDurArray.reduce((accumulator, currentValue) => accumulator + currentValue);
-    return formatDuration(totalBillableTime, timeFormat);
+    return projectDurArray.length && projectDurArray.reduce((accumulator, currentValue) => accumulator + currentValue);
   };
 
   const generateTableColumns = () => {
@@ -305,29 +326,31 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
       generateProjectDurations().length &&
       generateProjectDurations().reduce((accumulator, currentValue) => accumulator + currentValue);
 
-  const getHeader = () => {
+  const getHeader = (labelStyle, valueStyle) => {
+    const hours: number = (getBillableDuration() / 3600);
+    const amount = (hours * payRate)?.toFixed(2);
     switch (showType) {
       case 'Show amount':
         return (
             <>
-              <span className={css(styles.label)}>Billable:</span>
-              <span className={css(styles.value)}>{getBillableDuration()}</span>
-              <span className={css(styles.label)}>Amount:</span>
-              <span className={css(styles.value)}>0.00 USD</span>
+              <span className={css(labelStyle)}>Billable:</span>
+              <span className={css(valueStyle)}>{formatDuration(getBillableDuration(), timeFormat)}</span>
+              <span className={css(labelStyle)}>Amount:</span>
+              <span className={css(valueStyle)}>{amount} USD</span>
             </>
         );
       case 'Show cost':
         return (
             <>
-              <span className={css(styles.label)}>Cost:</span>
-              <span className={css(styles.value)}>0.00 USD</span>
+              <span className={css(labelStyle)}>Cost:</span>
+              <span className={css(valueStyle)}>{calculateCost(payRate, hours)?.toFixed(2)} USD</span>
             </>
         );
       case 'Show profit':
         return (
             <>
-              <span className={css(styles.label)}>Profit:</span>
-              <span className={css(styles.value)}>0.00 USD</span>
+              <span className={css(labelStyle)}>Profit:</span>
+              <span className={css(valueStyle)}>{calculateProfit(payRate, billRate, hours)?.toFixed(2)} USD</span>
             </>
         );
       default:
@@ -339,7 +362,7 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
       <div>
         <span className={css(styles.label)}>Total:</span>
         <span className={css(styles.value)}>{formatDuration(totalTime, timeFormat)}</span>
-        {getHeader()}
+        {getHeader(styles.label, styles.value)}
       </div>
   );
 
@@ -411,7 +434,7 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
         generateProjectLabels={generateProjectLabels}
         generateTableColumns={generateTableColumns}
         generateDatasource={generateDatasource}
-        getBillableDuration={getBillableDuration}
+        getHeader={getHeader}
       />
     </div>
   );
