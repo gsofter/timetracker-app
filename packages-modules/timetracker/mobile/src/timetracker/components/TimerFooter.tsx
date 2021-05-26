@@ -77,10 +77,7 @@ const TimerFooter = ({
   return (
     <View style={styles.footer}>
       {!manual && (
-        <KeyboardAwareScrollView
-          enableOnAndroid
-          enableAutomaticScroll
-          keyboardOpeningTime={0}
+        <View
         >
           <View style={styles.row}>
             <Item regular style={{ width: '80%', height: 40 }}>
@@ -118,7 +115,7 @@ const TimerFooter = ({
               setTimeRecord={setTimeRecord}
             />
           )}
-        </KeyboardAwareScrollView>
+        </View>
       )}
       {manual && (
         <View style={styles.flex_row}>
@@ -143,9 +140,6 @@ const TimerFooter = ({
 const styles = StyleSheet.create({
   footer: {
     borderTopColor: '#1f1f1f',
-    width: '100%',
-    position: 'absolute',
-    bottom: 0,
     right: 0,
     left: 0,
     backgroundColor: 'white',

@@ -1,7 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { StyleSheet, View, ScrollView } from 'react-native';
-import {useHistory} from "react-router-native"
+import { useHistory } from "react-router-native"
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import TimerFooter from './TimerFooter';
 import TimeRange from './TimeRange';
@@ -98,7 +99,7 @@ const TimerScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView>
+      <ScrollView style={{ flex: 1 }}>
         <TimeRange
           selectedStartDate={selectedStartDate}
           selectedEndDate={selectedEndDate}
@@ -121,6 +122,7 @@ const TimerScreen = () => {
         createTimeRecord={createTimeRecord}
         updateTimeRecord={updateTimeRecord}
       />
+      <KeyboardSpacer />
     </View>
   );
 };
@@ -128,7 +130,7 @@ const TimerScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    position: 'relative',
     backgroundColor: '#f0f2f5',
   },
 });
