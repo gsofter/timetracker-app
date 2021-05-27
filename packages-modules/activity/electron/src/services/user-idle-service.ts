@@ -1,5 +1,5 @@
 /* eslint-disable import/no-extraneous-dependencies */
-import { from, fromEvent, interval, merge, Observable, of, Subject, Subscription, timer } from 'rxjs';
+import { from, fromEvent, interval, merge, Observable, of, Subject, Subscription, timer, isObservable } from 'rxjs';
 import { inject, injectable } from 'inversify';
 import {
     bufferTime,
@@ -83,13 +83,15 @@ export class UserIdleService {
         if (this.idleSubscription) {
             this.idleSubscription.unsubscribe();
         }
-        console.log('---ACTIVITY', activityEvents$);
-        this.idle$ = of(activityEvents$);
+        console.log('---ACTIVITY', isObservable(activityEvents$));
+
+        this.idle$ = activityEvents$;
 
         // If any of user events is not active for idle-seconds when start timer.
         this.idleSubscription = this.idle$
             .pipe(
                 bufferTime(this.idleSensitivityMillisec), // Starting point of detecting of user's inactivity
+                tap((arr) => console.log('log activity', arr)),
                 filter((arr) => !arr.length && !this.isIdleDetected && !this.isInactivityTimer),
                 tap(() => {
                     this.isIdleDetected = true;

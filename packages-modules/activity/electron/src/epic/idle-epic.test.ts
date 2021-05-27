@@ -19,13 +19,36 @@ require('dotenv').config({ path: process.env.ENV_FILE });
 describe('idle check', () => {
     let testScheduler: TestScheduler;
     const TestTracking1 = (cold) => ({
-        interactivity$: cold('--a|', {
-            a: {
-                data: { },
-            },
+        interactivity$: cold('--a---a-----a----a-------a--a--a-a----|', {
+            a: [
+                { button: 0, clicks: 0, x: 926, y: 936, type: 'mousemove' },
+                { button: 0, clicks: 0, x: 900, y: 949, type: 'mousemove' },
+                { button: 0, clicks: 0, x: 900, y: 949, type: 'mousemove' },
+                { button: 0, clicks: 0, x: 899, y: 949, type: 'mousemove' },
+            ],
+            b: [
+                {
+                    amount: 10,
+                    clicks: 1,
+                    direction: 3,
+                    rotation: -2,
+                    type: 'mousewheel',
+                    x: 793,
+                    y: 909,
+                },
+                {
+                    amount: 12,
+                    clicks: 1,
+                    direction: 3,
+                    rotation: -2,
+                    type: 'mousewheel',
+                    x: 793,
+                    y: 909,
+                },
+            ],
         }),
-        startMonitoring: () => {},
-        stopMonitoring: () => {},
+        startMonitoring: () => { },
+        stopMonitoring: () => { },
     });
     const timerMarble = {
         a: {
@@ -40,12 +63,35 @@ describe('idle check', () => {
         console.log('---Here', cold);
         const testObservable = {
             interactivity: cold('-a-a-a-a|', {
-                a: {
-                    data: null,
-                },
+                a: [
+                    { button: 0, clicks: 0, x: 926, y: 936, type: 'mousemove' },
+                    { button: 0, clicks: 0, x: 900, y: 949, type: 'mousemove' },
+                    { button: 0, clicks: 0, x: 900, y: 949, type: 'mousemove' },
+                    { button: 0, clicks: 0, x: 899, y: 949, type: 'mousemove' },
+                ],
+                b: [
+                    {
+                        amount: 10,
+                        clicks: 1,
+                        direction: 3,
+                        rotation: -2,
+                        type: 'mousewheel',
+                        x: 793,
+                        y: 909,
+                    },
+                    {
+                        amount: 12,
+                        clicks: 1,
+                        direction: 3,
+                        rotation: -2,
+                        type: 'mousewheel',
+                        x: 793,
+                        y: 909,
+                    },
+                ],
             }),
-            startMonitoring: () => {},
-            stopMonitoring: () => {},
+            startMonitoring: () => { },
+            stopMonitoring: () => { },
         };
         const idleService = new UserIdleService();
         const activityService = new ActivityService(idleService, testObservable);

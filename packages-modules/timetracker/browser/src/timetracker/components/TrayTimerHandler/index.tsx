@@ -10,6 +10,7 @@ const TrayTimerHandler: React.FC = (props) => {
   const [timeDuration, setTimeDuration] = useState<number>(0);
 
   const onChangeTrack = () => {
+    console.log('----START TIMER', currentTimer);
     if (currentTimer.startTime === null) {
       dispatch(setCurrentTimerAction({
         endTime: null,
@@ -19,6 +20,7 @@ const TrayTimerHandler: React.FC = (props) => {
         id: '#1'
       }));
     } else {
+      console.log('--DISPATCH')
       dispatch(resetCurrentTimerAction());
     }
   }

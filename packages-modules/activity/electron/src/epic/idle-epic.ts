@@ -31,6 +31,27 @@ export const onIdleTimeWatcherEpic = (
         mergeMap(() => {
             const activityService = container.get<ActivityService>(IClientContainerService.ActivtyService);
             activityService.onStartWatching();
-            return of({ type: 'TIMER_DONE' });
+            return of({ type: 'TIMER_START' });
+        }),
+    );
+
+export const onIdleTimerWatcherStopEpic = (
+    action$: Observable<any>,
+    state$: Observable<any>,
+    {
+        container,
+        logger,
+    }: {
+        container: Container;
+        logger: CdmLogger.ILogger;
+    },
+) =>
+    action$.pipe(
+        ofType(RESET_CURRENT_TIMER),
+        tap(() => console.log('----')),
+        mergeMap(() => {
+            const activityService = container.get<ActivityService>(IClientContainerService.ActivtyService);
+            activityService.onStopWatching();
+            return of({ type: 'TIMER_STOP' });
         }),
     );

@@ -1,8 +1,8 @@
 import { Feature } from '@common-stack/client-react';
-import { TimerElectronModule } from './containers';
-import { onIdleTimeWatcherEpic } from './epic/idle-epic';
+import { ActivityElectronModule } from './containers';
+import { onIdleTimeWatcherEpic, onIdleTimerWatcherStopEpic } from './epic/idle-epic';
 
 export default new Feature({
-    // epic: [onIdleTimeWatcherEpic as any],
-    createContainerFunc: TimerElectronModule,
+    epic: [onIdleTimeWatcherEpic as any, onIdleTimerWatcherStopEpic as any],
+    createContainerFunc: ActivityElectronModule,
 });

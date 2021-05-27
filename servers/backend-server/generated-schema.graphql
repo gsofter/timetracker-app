@@ -335,6 +335,10 @@ input ViewerSettingsInput {
      For guest user, we don't have to define it.
     """
     userResource: URI
+    """
+     Application resource to identify the core application settings.
+    """
+    applicationResource: URI
 }
 
 type ViewerSettingsSubject {
@@ -523,6 +527,11 @@ interface IConfigurationModel {
 input ConfigurationInput {
     target: Int!
     resource: URIInput
+    """
+    User resource to identify the core user settings.
+    For guest user, we don't have to define it.
+    """
+    userResource: URI
 }
 
 type ConfigurationUpdateEvent{
@@ -586,13 +595,13 @@ type Range {
 enum SettingValueType {
     Null
     Enum
-    String 
+    String
     Integer
-    Number 
-    Boolean 
-    Exclude 
-    Complex 
-    NullableInteger 
+    Number
+    Boolean
+    Exclude
+    Complex
+    NullableInteger
     NullableNumber
 }
 
@@ -611,16 +620,20 @@ type SettingsSection {
     settings: [ContributionSettings]
 }
 
+type ContributionSettingsProperties{
+    readOnly: Boolean,
+    disabled: Boolean
+}
 type ContributionSettings {
     """ name of the settings"""
     name: String
-    range: Range 
+    range: Range
     key: String
-    keyRange: Range 
+    keyRange: Range
     """ @deprecated """
     default: String
-    value: AnyObject 
-    valueRange: Range 
+    value: AnyObject
+    valueRange: Range
     description: [String]
     descriptionIsMarkdown: Boolean
     descriptionRanges: [Range]
@@ -634,6 +647,7 @@ type ContributionSettings {
     enumDescriptionsAreMarkdown: Boolean
     tags: [String]
     extensionInfo: ConfigurationExtensionInfo
+    properties: ContributionSettingsProperties,
 }
 
 
@@ -644,6 +658,7 @@ extend type Query {
 extend type Preferences {
   defaultSetting: [SettingsGroup]
 }
+
 type OrganizationIdentifier {
     id: String
     configPath: URI
@@ -981,6 +996,19 @@ type PolicySubject {
 
 }
 
+input ViewerPoliciesInput {
+    target: Int!
+    """
+     To get the Resource or Organization resource of which we need to get the settings.
+     If we pass the <resource> URI, we can construct the orgUri in background to merge as a parent
+     configuration to the resource configuration.
+    """
+    settingsResource: URI
+    """
+     Application resource to identify the core application settings.
+    """
+    applicationResource: URI
+}
 
 union ConfigurationPolicy = DefaultPolicy | OrganizationPolicy | ResourcePolicy | ApplicationPolicy
 
@@ -995,7 +1023,7 @@ extend type Query {
     """
      Get the available policies and its descriptions
     """
-    getViewerPolicies(input: ConfigurationInput): PolicySubject
+    getViewerPolicies(input: ViewerPoliciesInput!): PolicySubject
 }
 
 extend type Mutation {
@@ -1117,6 +1145,7 @@ type UserState {
   isTokenExpired: Boolean
   isLoggingInToProceed: Boolean
   loginError: LoginError
+  accessToken: String
 }
 
 interface IUser {

@@ -69,7 +69,7 @@ export class ActivityService {
 
     public onStopWatching() {
         console.log('==STOPPED ON START WATCHING');
-        this.tracker.startMonitoring();
+        this.tracker.stopMonitoring();
         this.userIdle.stopWatching();
         this.timerStartSubscription.unsubscribe();
         this.timeoutSubscription.unsubscribe();

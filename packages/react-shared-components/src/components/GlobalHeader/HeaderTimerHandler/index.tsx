@@ -20,6 +20,7 @@ const HeaderTimerHandler: React.FC = (props) => {
   }
 
   const onChangeTrack = () => {
+    console.log('---CURRENT TIMER', currentTimer)
     if (currentTimer.startTime === null) {
       dispatch(setCurrentTimerAction({
         endTime: null,
