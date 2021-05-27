@@ -109,21 +109,23 @@ const TimerScreen = () => {
         />
         <TimeList />
       </ScrollView>
-      <TimerFooter
-        isToggle={isToggle}
-        billable={billable}
-        toggleProject={toggleProject}
-        toggleBillable={toggleBillable}
-        track={track}
-        manual={manual}
-        onTrack={onTrack}
-        onManual={onManual}
-        setAddManual={setAddManual}
-        setTimeRecord={setTimeRecord}
-        timeRecord={timeRecord}
-        createTimeRecord={createTimeRecord}
-        updateTimeRecord={updateTimeRecord}
-      />
+      <View style={{ flex: Platform.OS === 'ios' ? 1 : 0 }}>
+        <TimerFooter
+          isToggle={isToggle}
+          billable={billable}
+          toggleProject={toggleProject}
+          toggleBillable={toggleBillable}
+          track={track}
+          manual={manual}
+          onTrack={onTrack}
+          onManual={onManual}
+          setAddManual={setAddManual}
+          setTimeRecord={setTimeRecord}
+          timeRecord={timeRecord}
+          createTimeRecord={createTimeRecord}
+          updateTimeRecord={updateTimeRecord}
+        />
+      </View>
       {Platform.OS === 'ios' &&
         <KeyboardSpacer />}
     </View>
