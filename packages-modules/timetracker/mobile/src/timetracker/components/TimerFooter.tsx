@@ -73,12 +73,12 @@ const TimerFooter = ({
   };
 
   return (
-    <View style={[styles.footer, Platform.OS === 'android' && {position: 'absolute', bottom: 0}]}>
+    <View style={[styles.footer, Platform.OS === 'android' && { position: 'absolute', bottom: 0 }]}>
       {!manual && (
         <View>
           <View style={styles.row}>
             <Item regular style={{ width: '80%', height: 40 }}>
-              <Input onChangeText={(value) => setTimeRecord(ps => ({ ...ps, taskName: value }))} style={{ height: 40 }} placeholder="What are you working on?" />
+              <Input onChangeText={(value) => setTimeRecord(ps => ({ ...ps, taskName: value }))} placeholder="What are you working on?" />
             </Item>
             <View style={styles.row_button}>
               <Button iconLeft transparent onPress={() => toggleProject()}>

@@ -21,7 +21,7 @@ const TimerScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
   const [billable, setBillable] = useState(false);
   const [track, setTrack] = useState
-  (true);
+    (true);
   const [manual, setManual] = useState(false);
   const [addManual, setAddManual] = useState(false);
   const [timeRecord, setTimeRecord] = useState<ITimeRecord>({
@@ -100,14 +100,14 @@ const TimerScreen = () => {
 
   return (
     <View style={styles.container}>
-      <ScrollView style={{ flex: Platform.OS === "android"? 0: 1 }}>
+      <ScrollView>
         <TimeRange
           selectedStartDate={selectedStartDate}
           selectedEndDate={selectedEndDate}
           onDateChange={onDateChange}
           onReset={onReset}
         />
-        <TimeList/>
+        <TimeList />
       </ScrollView>
       <TimerFooter
         isToggle={isToggle}
@@ -125,7 +125,7 @@ const TimerScreen = () => {
         updateTimeRecord={updateTimeRecord}
       />
       {Platform.OS === 'ios' &&
-      <KeyboardSpacer />}
+        <KeyboardSpacer />}
     </View>
   );
 };
