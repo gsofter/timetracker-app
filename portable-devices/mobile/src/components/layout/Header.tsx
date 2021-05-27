@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Header, Left, Right, Body, Text, Icon } from 'native-base';
+import {TouchableHighlight} from 'react-native'
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { MobileRoutes } from '../../constants/routes';
@@ -27,7 +28,9 @@ const MainHeader = (props: any) => {
   return (
     <Header style={{ backgroundColor: '#1f1f1f' }}>
       <Left>
-        <Icon style={{ color: '#fff' }} name="menu" onPress={() => toggle()} />
+        <TouchableHighlight style={{borderRadius: 50}} underlayColor='grey' onPress={() => toggle()}>
+        <Icon style={{ color: '#fff' }} name="menu" />
+        </TouchableHighlight>
       </Left>
       <Body>
         <Text style={{ color: '#fff' }}>{props.title}</Text>
