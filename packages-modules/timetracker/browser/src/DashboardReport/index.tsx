@@ -1,15 +1,63 @@
 import * as React from 'react';
 import moment from 'moment';
-import { useCallback, useEffect, useState } from 'react';
-import { useSetting } from '@adminide-stack/react-shared-components';
+import {useCallback, useEffect, useMemo, useState} from 'react';
+import { useSetting, useGetOrganizationMembersQuery, useGetUserAccountQuery } from '@adminide-stack/react-shared-components';
 import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 import { useFirstWeekDay } from '../timetracker/hooks';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../generated-models';
 import { Reports } from './ReportComponent';
 
+let Records = {};
+
+const GetDurationTimeRecordsByUserIdQuery = ({ range, userId }) => {
+  const [records, setRecords]: any = useState({});
+  const { data, loading, refetch } = useGetDurationTimeRecordsQuery({
+    variables: {
+      startTime: range.start,
+      endTime: range.end,
+      userId: userId,
+    },
+  });
+  const { data: { getUserAccount } = {} } = useGetUserAccountQuery({
+    variables: { userId },
+    skip: !userId,
+  });
+
+  const { data: billRateConfig } = useSetting({
+    configKey: 'timetracker.user.payment.billRate',
+    overrides: { overrideIdentifier: getUserAccount?.username },
+  });
+
+  const { data: payRateConfig } = useSetting({
+    configKey: 'timetracker.user.payment.payRate',
+    overrides: { overrideIdentifier: getUserAccount?.username },
+  });
+  const billRate = billRateConfig?.resolveConfiguration;
+  const payRate = payRateConfig?.resolveConfiguration;
+
+  useEffect(() => {
+    refetch();
+  }, [range, userId]);
+
+  useEffect(() => {
+    if (data && !loading) {
+      setRecords({ data: data.getDurationTimeRecords });
+    }
+  }, [data, userId, range, loading]);
+
+  useEffect(() => {
+    if (records?.data) {
+      setRecords({ ...records, payRate, billRate });
+      Records = { ...Records, [userId]: { ...records, payRate, billRate } };
+    }
+  }, [payRate, billRate, records?.data]);
+
+  return null;
+}
+
 const Report = () => {
   const [range, setRange] = useState({ start: moment().startOf('week'), end: moment().endOf('week') });
-
+  const { data: { getOrganizationMembers: orgMembers } = {} } = useGetOrganizationMembersQuery();
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
     variables: {
       startTime: range.start,
@@ -53,14 +101,24 @@ const Report = () => {
     [loadingProjects, projectsData],
   );
 
-  return (
-    <Reports
-      range={range}
-      projects={getProjects()}
-      records={getRecords()}
-      setRange={setRange}
-      updateConfiguration={updateConfiguration}
-    />
-  );
+  return useMemo(() => {
+    return (
+        <>
+          {
+            orgMembers?.map((member) => {
+              return <GetDurationTimeRecordsByUserIdQuery range={range} userId={member.userId}/>
+            })
+          }
+          <Reports
+              range={range}
+              projects={getProjects()}
+              records={getRecords()}
+              setRange={setRange}
+              updateConfiguration={updateConfiguration}
+              recordsByUserId={Records}
+          />
+        </>
+    )
+  }, [range, data?.getDurationTimeRecords, projectsData?.getProjects, Records]);
 };
 export default Report;
