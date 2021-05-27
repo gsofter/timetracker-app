@@ -139,6 +139,7 @@ const styles = StyleSheet.create({
     borderTopColor: '#1f1f1f',
     right: 0,
     left: 0,
+    bottom: 0,
     backgroundColor: 'white',
   },
   row: {
