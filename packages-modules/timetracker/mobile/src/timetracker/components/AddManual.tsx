@@ -4,7 +4,8 @@ import {
     Text, 
     StyleSheet, 
     TouchableOpacity, 
-    Switch
+    Switch,
+    ScrollView
 } from 'react-native';
 import { 
     Header, 
@@ -45,8 +46,8 @@ const AddManual = () => {
         taskName: null
     })
     const [list, setList] = useState({
-        project: [],
-        task: []
+        project: ["Project 1", 'Project 2', 'Project 3', 'Project 4', 'Project 5', 'Project 6', 'Project 7', 'Project 8', 'Project 9', 'Project 10'],
+        task: ["Task 1", 'Task 2', 'Task 3', 'Task 4', 'Task 5', 'Task 6', 'Task 7', 'Task 8', 'Task 9', 'Task 10']
     })
     const [tag, setTag] = useState({
         showTag: false,
@@ -181,15 +182,15 @@ const AddManual = () => {
                             </Right>
                         </ListItem>
                         {listOpen.project && (
-                            <ListItem>
+                            <ListItem style={{height: 150}}>
                                 {list.project.length ? (
-                                    <List>
-                                        {list.project.map((project: any) => (
-                                            <ListItem>
-                                                <Text>{project.name}</Text>
-                                            </ListItem>
-                                        ))}
-                                    </List>
+                                    <ScrollView>
+                                        <List>
+                                            {list.project.map((project, index: any) => (
+                                                <Text key={index} style={{padding: 10}}>{project}</Text>
+                                            ))}
+                                        </List>
+                                    </ScrollView>
                                 ): (
                                     <Text>Project List is Empty</Text>
                                 )}
@@ -206,15 +207,15 @@ const AddManual = () => {
                             </Right>
                         </ListItem>
                         {listOpen.task && (
-                            <ListItem>
+                            <ListItem style={{height: 150}}>
                                 {list.task.length ? (
-                                    <List>
-                                        {list.task.map((task: any) => (
-                                            <ListItem>
-                                                <Text>{task.name}</Text>
-                                            </ListItem>
-                                        ))}
-                                    </List>
+                                    <ScrollView>
+                                        <List>
+                                            {list.task.map((task, index: any) => (
+                                                <Text key={index} style={{padding: 10}}>{task}</Text>
+                                            ))}
+                                        </List>
+                                    </ScrollView>
                                 ): (
                                     <Text>Task List is Empty</Text>
                                 )}
@@ -261,6 +262,9 @@ const AddManual = () => {
                             </ListItem>
                         )}
                     </List>
+                    <Button block info>
+                        <Text style={[styles.color]}>Submit</Text>
+                    </Button>
                 </Card>
             </Content>
         </Container>
