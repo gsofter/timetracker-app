@@ -18,7 +18,7 @@ interface IExportReportAsPDF {
   generateProjectLabels: () => any;
   generateDatasource: () => any;
   generateTableColumns: () => any;
-  getBillableDuration: () => any;
+  getHeader: (labelStyle, valueStyle) => any;
 }
 
 export const ExportReportAsPDF = (props: IExportReportAsPDF) => {
@@ -30,7 +30,7 @@ export const ExportReportAsPDF = (props: IExportReportAsPDF) => {
     generateProjectDurations,
     generateDatasource,
     generateTableColumns,
-    getBillableDuration,
+    getHeader,
   } = props;
   const { css } = useFela();
   const { dateFormat, timeFormat } = useTimeformat();
@@ -49,8 +49,7 @@ export const ExportReportAsPDF = (props: IExportReportAsPDF) => {
         <div className={css(styles.duration)}>
           <span className={css(styles.label)}>Total:</span>
           <span className={css(styles.value)}>{formatDuration(totalTime, timeFormat)}</span>
-          <span className={css(styles.label)}>Billable:</span>
-          <span className={css(styles.value)}>{getBillableDuration()}</span>
+          {getHeader(styles.label, styles.value)}
         </div>
         <div className={css(styles.barWrapper)}>
           <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
@@ -87,6 +86,7 @@ const styles = {
   }),
   value: () => ({
     fontSize: '22px',
+    fontWeight: '500',
     marginLeft: '5px',
     marginRight: '50px',
   }),
