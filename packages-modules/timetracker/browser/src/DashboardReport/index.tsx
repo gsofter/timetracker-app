@@ -7,9 +7,7 @@ import { useFirstWeekDay } from '../timetracker/hooks';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../generated-models';
 import { Reports } from './ReportComponent';
 
-let Records = {};
-
-const GetDurationTimeRecordsByUserIdQuery = ({ range, userId }) => {
+const GetDurationTimeRecordsByUserIdQuery = ({ range, userId, recordsByUserId, setRecordsByUserId }) => {
   const [records, setRecords]: any = useState({});
   const { data, loading, refetch } = useGetDurationTimeRecordsQuery({
     variables: {
@@ -48,7 +46,7 @@ const GetDurationTimeRecordsByUserIdQuery = ({ range, userId }) => {
   useEffect(() => {
     if (records?.data) {
       setRecords({ ...records, payRate, billRate });
-      Records = { ...Records, [userId]: { ...records, payRate, billRate } };
+      setRecordsByUserId({ ...recordsByUserId, [userId]: { ...records, payRate, billRate } })
     }
   }, [payRate, billRate, records?.data]);
 
@@ -56,6 +54,7 @@ const GetDurationTimeRecordsByUserIdQuery = ({ range, userId }) => {
 }
 
 const Report = () => {
+  const [recordsByUserId, setRecordsByUserId] = useState({});
   const [range, setRange] = useState({ start: moment().startOf('week'), end: moment().endOf('week') });
   const { data: { getOrganizationMembers: orgMembers } = {} } = useGetOrganizationMembersQuery();
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
@@ -101,24 +100,29 @@ const Report = () => {
     [loadingProjects, projectsData],
   );
 
-  return useMemo(() => {
-    return (
-        <>
-          {
-            orgMembers?.map((member) => {
-              return <GetDurationTimeRecordsByUserIdQuery range={range} userId={member.userId}/>
-            })
-          }
-          <Reports
-              range={range}
-              projects={getProjects()}
-              records={getRecords()}
-              setRange={setRange}
-              updateConfiguration={updateConfiguration}
-              recordsByUserId={Records}
-          />
-        </>
-    )
-  }, [range, data?.getDurationTimeRecords, projectsData?.getProjects, Records]);
+  return useMemo(() => (
+      <>
+        {
+          orgMembers?.map((member) => {
+            return (
+                <GetDurationTimeRecordsByUserIdQuery
+                    range={range}
+                    userId={member.userId}
+                    recordsByUserId={recordsByUserId}
+                    setRecordsByUserId={setRecordsByUserId}
+                />
+            )
+          })
+        }
+        <Reports
+            range={range}
+            projects={getProjects()}
+            records={getRecords()}
+            setRange={setRange}
+            updateConfiguration={updateConfiguration}
+            recordsByUserId={recordsByUserId}
+        />
+      </>
+  ), [range, data?.getDurationTimeRecords, projectsData?.getProjects, recordsByUserId]);
 };
 export default Report;

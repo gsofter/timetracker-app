@@ -1,4 +1,4 @@
-import React, { useEffect, useState, useMemo } from 'react';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useFela } from 'react-fela';
 import { Switch, Table, message, Card, Dropdown, Menu, Button, Space, DatePicker, Row, Col } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
@@ -303,7 +303,7 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
     });
   };
 
-  const getAmount = () => {
+  const getAmount = useCallback(() => {
     let amount = 0;
     let cost = 0;
     let profit = 0;
@@ -318,7 +318,7 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
       }
     });
     return { amount, cost, profit };
-  }
+  }, [JSON.stringify(recordsByUserId)])
 
   const totalTime =
       generateProjectDurations().length &&
