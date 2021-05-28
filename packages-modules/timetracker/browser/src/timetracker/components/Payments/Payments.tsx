@@ -31,7 +31,7 @@ export const Payments = (props) => {
         overrides: { overrideIdentifier: props.value.record.name },
     });
 
-    const { data: requireTimesheetApprovalConfig, loading, refetch } = useSetting({
+    const { data: requireTimesheetApprovalConfig, loading, refetch: refetchTimeApproval } = useSetting({
         configKey: 'timetracker.user.payment.requireTimesheetApproval',
         overrides: { overrideIdentifier: props.value.record.name },
     });
@@ -88,7 +88,7 @@ export const Payments = (props) => {
                 updateOverrides: { overrideIdentifier: props.value.record.name },
                 target: ConfigurationTarget.ORGANIZATION,
             });
-            await refetch();
+            await refetchTimeApproval();
         }
     };
 

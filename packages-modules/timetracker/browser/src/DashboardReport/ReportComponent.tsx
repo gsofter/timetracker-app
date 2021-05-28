@@ -15,6 +15,14 @@ import { calculateCost, calculateProfit } from '../utils';
 import * as _ from 'lodash';
 
 const { RangePicker } = DatePicker;
+
+interface IRecord {
+  data: Array<ITimeRecord>;
+  payRate: number;
+  billRate: number;
+}
+interface IRecordsByUserId extends Partial<Record<string, IRecord>> {}
+
 interface IReportsProps {
   range: {
     start: Moment;
@@ -24,13 +32,20 @@ interface IReportsProps {
   records: Array<ITimeRecord>;
   setRange: Function;
   updateConfiguration: Function;
-  recordsByUserId: any;
+  recordsByUserId: IRecordsByUserId;
+}
+
+enum ShowType {
+  SHOW_AMOUNT = 'Show amount',
+  SHOW_COST = 'Show cost',
+  SHOW_PROFIT = 'Show profit',
+  HIDE_AMOUNT = 'Hide amount',
 }
 
 export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
                                                    recordsByUserId, setRange, updateConfiguration }) => {
   const [isRounded, setIsRounded] = useState(false);
-  const [showType, setShowType] = useState('Show amount')
+  const [showType, setShowType] = useState(ShowType.SHOW_AMOUNT);
   const { roundType, roundValue, rounded, refetchRounded } = useRound();
   const { dateFormat, timeFormat } = useTimeformat();
   const { css } = useFela();
@@ -244,10 +259,10 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
   const showAmount = () => {
     const menu = (
         <Menu onClick={handleMenuClick}>
-          <Menu.Item key={'Show amount'}>Show amount</Menu.Item>
-          <Menu.Item key={'Show cost'}>Show cost</Menu.Item>
-          <Menu.Item key={'Show profit'}>Show profit</Menu.Item>
-          <Menu.Item key={'Hide amount'}>Hide amount</Menu.Item>
+          <Menu.Item key={ShowType.SHOW_AMOUNT}>{ShowType.SHOW_AMOUNT}</Menu.Item>
+          <Menu.Item key={ShowType.SHOW_COST}>{ShowType.SHOW_COST}</Menu.Item>
+          <Menu.Item key={ShowType.SHOW_PROFIT}>{ShowType.SHOW_PROFIT}</Menu.Item>
+          <Menu.Item key={ShowType.HIDE_AMOUNT}>{ShowType.HIDE_AMOUNT}</Menu.Item>
         </Menu>
     );
     return (
@@ -307,7 +322,7 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
     let amount = 0;
     let cost = 0;
     let profit = 0;
-    Object.values(recordsByUserId)?.map((record: any) => {
+    Object.values(recordsByUserId)?.forEach((record: IRecord) => {
       const { data, payRate = 0, billRate = 0 } = record;
       if (data) {
         const billable = getBillableDuration(data);
@@ -318,7 +333,7 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
       }
     });
     return { amount, cost, profit };
-  }, [JSON.stringify(recordsByUserId)])
+  }, [recordsByUserId])
 
   const totalTime =
       generateProjectDurations().length &&
@@ -327,7 +342,7 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
   const getHeader = (labelStyle, valueStyle) => {
     const { amount, cost, profit } = getAmount();
     switch (showType) {
-      case 'Show amount':
+      case ShowType.SHOW_AMOUNT:
         return (
             <>
               <span className={css(labelStyle)}>Billable:</span>
@@ -336,14 +351,14 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
               <span className={css(valueStyle)}>{amount.toFixed(2)} USD</span>
             </>
         );
-      case 'Show cost':
+      case ShowType.SHOW_COST:
         return (
             <>
               <span className={css(labelStyle)}>Cost:</span>
               <span className={css(valueStyle)}>{cost.toFixed(2)} USD</span>
             </>
         );
-      case 'Show profit':
+      case ShowType.SHOW_PROFIT:
         return (
             <>
               <span className={css(labelStyle)}>Profit:</span>

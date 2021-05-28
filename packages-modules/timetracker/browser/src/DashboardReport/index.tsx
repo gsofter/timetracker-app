@@ -1,6 +1,6 @@
 import * as React from 'react';
 import moment from 'moment';
-import {useCallback, useEffect, useMemo, useState} from 'react';
+import { useCallback, useEffect, useMemo, useState } from 'react';
 import { useSetting, useGetOrganizationMembersQuery, useGetUserAccountQuery } from '@adminide-stack/react-shared-components';
 import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 import { useFirstWeekDay } from '../timetracker/hooks';
@@ -103,9 +103,10 @@ const Report = () => {
   return useMemo(() => (
       <>
         {
-          orgMembers?.map((member) => {
+          orgMembers?.map((member, index) => {
             return (
                 <GetDurationTimeRecordsByUserIdQuery
+                    key={index}
                     range={range}
                     userId={member.userId}
                     recordsByUserId={recordsByUserId}
