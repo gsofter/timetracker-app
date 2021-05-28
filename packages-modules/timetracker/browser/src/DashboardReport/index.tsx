@@ -1,11 +1,24 @@
 import * as React from 'react';
 import moment from 'moment';
 import { useCallback, useEffect, useMemo, useState } from 'react';
+import { useFela } from 'react-fela';
+import { Card, Dropdown, Menu, Button, Divider, Checkbox } from 'antd';
+import { CaretDownOutlined } from '@ant-design/icons';
 import { useSetting, useGetOrganizationMembersQuery, useGetUserAccountQuery } from '@adminide-stack/react-shared-components';
 import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 import { useFirstWeekDay } from '../timetracker/hooks';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../generated-models';
 import { Reports } from './ReportComponent';
+
+const FilterValues = [
+  { value: 'Team', selected: true },
+  { value: 'Client', selected: true },
+  { value: 'Project', selected: true },
+  { value: 'Task', selected: true },
+  { value: 'Tag', selected: true },
+  { value: 'Status', selected: true },
+  { value: 'Description', selected: true },
+];
 
 const GetDurationTimeRecordsByUserIdQuery = ({ range, userId, recordsByUserId, setRecordsByUserId }) => {
   const [records, setRecords]: any = useState({});
@@ -55,9 +68,12 @@ const GetDurationTimeRecordsByUserIdQuery = ({ range, userId, recordsByUserId, s
 
 const Report = () => {
   const [recordsByUserId, setRecordsByUserId] = useState({});
+  const [visible, setVisible] = useState(false);
+  const [filterValues, setFilterValues] = useState(FilterValues);
+  const [filterValuesItem, setFilterValuesItem] = useState(FilterValues);
   const [range, setRange] = useState({ start: moment().startOf('week'), end: moment().endOf('week') });
   const { data: { getOrganizationMembers: orgMembers } = {} } = useGetOrganizationMembersQuery();
-  const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
+  const { data, loading, refetch } = useGetDurationTimeRecordsQuery({
     variables: {
       startTime: range.start,
       endTime: range.end,
@@ -69,6 +85,7 @@ const Report = () => {
     configKey: 'timetracker.report.timeRoundingInReports',
   });
   const { value: dowValue } = useFirstWeekDay();
+  const { css } = useFela();
 
   useEffect(() => {
     setRange({
@@ -100,6 +117,32 @@ const Report = () => {
     [loadingProjects, projectsData],
   );
 
+  const onClickItem = ({ key }) => {
+    const index = parseInt(key, 10);
+    const updatedValue: any = { ...filterValuesItem[index], selected: !filterValuesItem[index].selected };
+    let valuesArray = filterValuesItem.slice(0);
+    valuesArray.splice(index, 1, updatedValue);
+    setFilterValuesItem(valuesArray);
+  }
+
+  const handleVisibleChange = (value) => {
+    setVisible(value);
+    if (!value) {
+      setFilterValues(filterValuesItem);
+    }
+  }
+
+  const menu = (
+      <Menu className={css(styles.dropdown)} onClick={onClickItem}>
+        {
+          filterValuesItem.map((data, i) => (
+              <Menu.Item key={i}>
+                <Checkbox className={css(styles.checkbox)} checked={data.selected}>{data.value}</Checkbox>
+              </Menu.Item>
+          ))
+        }
+      </Menu>
+  )
   return useMemo(() => (
       <>
         {
@@ -115,6 +158,30 @@ const Report = () => {
             )
           })
         }
+        <Card className={css(styles.card)} bordered={false}>
+          <div className={css(styles.flex)}>
+            <Dropdown overlay={menu} trigger={['click']} visible={visible} onVisibleChange={handleVisibleChange}>
+              <div className={css(styles.m10, styles.flex)}>
+                <div>Filter</div>
+                <CaretDownOutlined className={css(styles.m4)}/>
+              </div>
+            </Dropdown>
+            {filterValues.map((data, index) => {
+              return (
+                data.selected ? (
+                  <div className={css(styles.flex)} key={index}>
+                    <Divider className={css(styles.divider)} type={'vertical'}/>
+                    <div className={css(styles.m10, styles.flex)}>
+                      <div>{data.value}</div>
+                      <CaretDownOutlined className={css(styles.m4)}/>
+                    </div>
+                  </div>
+                ) : null
+              )
+            })}
+            <Button className={css(styles.button)} size={'large'} type={'primary'}>APPLY FILTER</Button>
+          </div>
+        </Card>
         <Reports
             range={range}
             projects={getProjects()}
@@ -124,6 +191,40 @@ const Report = () => {
             recordsByUserId={recordsByUserId}
         />
       </>
-  ), [range, data?.getDurationTimeRecords, projectsData?.getProjects, recordsByUserId]);
+  ), [range, data?.getDurationTimeRecords, projectsData?.getProjects, recordsByUserId, visible, filterValues, filterValuesItem]);
 };
+
+const styles = {
+  card: () => ({
+    marginBottom: '25px',
+    '& .ant-card-body': {
+      padding: '10px',
+    },
+  }),
+  flex: () => ({
+    display: 'flex',
+  }),
+  divider: () => ({
+    height: '45px',
+  }),
+  m10: () => ({
+    margin: '10px',
+  }),
+  m4: () => ({
+    margin: '4px',
+  }),
+  button: () => ({
+    marginRight: 0,
+    marginLeft: 'auto',
+    marginBottom: 'auto',
+    marginTop: 'auto',
+  }),
+  dropdown: () => ({
+    padding: '15px 0',
+  }),
+  checkbox: () => ({
+    padding: '3px 10px',
+    width: '100%',
+  })
+}
 export default Report;
