@@ -13,7 +13,7 @@ export const timePageStore: any[] = [
         component: TimerScreen,
         position: IMenuPosition.MIDDLE,
         // path: ROUTES.Timer,
-        path: '/orgName:/timer',
+        path: '/:orgName/timer',
         priority: 2,
     },
     {
@@ -22,7 +22,7 @@ export const timePageStore: any[] = [
         name: 'Timesheet',
         component: TimesheetCalendar,
         position: IMenuPosition.MIDDLE,
-        path: '/orgName:/timesheet',
+        path: '/:orgName/timesheet',
         priority: 3,
     },
     {

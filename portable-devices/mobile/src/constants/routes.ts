@@ -3,6 +3,6 @@ export enum MobileRoutes {
     login = '/login',
     Signup = '/sign-up',
     Logout = '/logout',
-    Welcome = '/orgName:/welcome',
-    Org = '/orgName:',
+    Welcome = '/:orgName/welcome',
+    Org = '/:orgName',
 }

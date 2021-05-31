@@ -18,7 +18,7 @@ export default new Feature({
         //     } as any,
         // },
         {
-            '/org': {
+            '/:orgName': {
                 exact: false,
                 component: Layout,
                 key: 'layout',
