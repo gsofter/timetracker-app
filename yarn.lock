@@ -196,6 +196,13 @@
     react-textarea-autosize "^8.2.0"
     suneditor-react "^2.16.1"
 
+"@adminide-stack/account-api-mobile@0.0.20-alpha.74":
+  version "0.0.20-alpha.74"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-mobile/-/account-api-mobile-0.0.20-alpha.74.tgz#699da393f2d55c806a7ed8b0d8a2a4982470e131"
+  integrity sha512-sRYYzj5TrT/maNlNfnK7DrK+YRn2hYy6ZGr3/gFHAubO0B+g5ycDNO0oGyGcopEtjqTtALgpUzbXy11ZmG28zA==
+  dependencies:
+    "@adminide-stack/core" "0.0.20-alpha.74"
+
 "@adminide-stack/account-api-server@0.0.20-alpha.74":
   version "0.0.20-alpha.74"
   resolved "https://registry.yarnpkg.com/@adminide-stack/account-api-server/-/account-api-server-0.0.20-alpha.74.tgz#7d64688cc840f467c1bf8cd0d983e6b19ff66136"
@@ -274,6 +281,19 @@
     "@vscode-alt/monaco-editor" "^0.21.2"
     jsonc-parser "^2.3.0"
     query-string "^6.1.0"
+
+"@adminide-stack/platform-client@0.0.20-alpha.73":
+  version "0.0.20-alpha.73"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-client/-/platform-client-0.0.20-alpha.73.tgz#2afdc972fd9ac9bcdf9406aa0329560949d1802e"
+  integrity sha512-KNUk2JPy67T5VDll7CuArZ+6EGdzwSQbAiYfvVwgZr/Ac/I+Y64DvTj0DbGPBUsUkHGinZDb2QxhHKEbaI+uxA==
+
+"@adminide-stack/platform-mobile@0.0.20-alpha.74":
+  version "0.0.20-alpha.74"
+  resolved "https://registry.yarnpkg.com/@adminide-stack/platform-mobile/-/platform-mobile-0.0.20-alpha.74.tgz#6f55235120217482f94543a57e3aa6e0acf1fd38"
+  integrity sha512-0EuyoD7Kl0NBtBpTpLEbkuzYkHZttfxSPkAil20t4kyCJ7xG4O2m7dF5B3mP7nVwF5kcDf1fBTpVNerqGJ3s7w==
+  dependencies:
+    "@adminide-stack/core" "0.0.20-alpha.74"
+    "@adminide-stack/platform-client" "0.0.20-alpha.73"
 
 "@adminide-stack/platform-server@0.0.20-alpha.74":
   version "0.0.20-alpha.74"
