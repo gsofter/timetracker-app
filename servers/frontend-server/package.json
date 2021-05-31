@@ -59,7 +59,7 @@
     "@admin-layout/react-shared-components": "link:../../packages/react-shared-components",
     "@admin-layout/schedule-module-browser": "link:../../packages-modules/schedule/browser",
     "@admin-layout/timetracker-module-browser": "link:../../packages-modules/timetracker/browser",
-    "@adminide-stack/account-api-browser": "0.0.20-alpha.74",
+    "@adminide-stack/account-api-browser": "0.0.20-alpha.75",
     "@adminide-stack/extension-module-browser": "0.0.20-alpha.74",
     "@adminide-stack/platform-browser": "0.0.20-alpha.74",
     "@adminide-stack/react-shared-components": "0.0.20-alpha.74",

@@ -23,7 +23,7 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@adminide-stack/user-auth0-mobile": "0.0.20-alpha.74",
+    "@adminide-stack/user-auth0-mobile": "0.0.20-alpha.75",
     "@admin-layout/components": "link:../../packages/components",
     "@admin-layout/counter-module-browser": "link:../../packages-modules/counter/browser",
     "@admin-layout/timetracker-module-mobile": "link:../../packages-modules/timetracker/mobile",
