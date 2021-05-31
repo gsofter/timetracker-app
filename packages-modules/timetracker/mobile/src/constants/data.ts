@@ -71,3 +71,28 @@ export const allEvents = [
         userId: 'google-oauth2|104797814715925535941',
     },
 ];
+
+export const projects = [
+    { label: 'Project 1', value: 1 },
+    { label: 'Project 2', value: 2 },
+    { label: 'Project 3', value: 3 },
+    { label: 'Project 4', value: 4 },
+    { label: 'Project 5', value: 5 },
+    { label: 'Project 6', value: 6 },
+    { label: 'Project 7', value: 7 },
+    { label: 'Project 8', value: 8 },
+    { label: 'Project 9', value: 9 },
+    { label: 'Project 10', value: 10 },
+];
+export const tasks = [
+    { label: 'Tasks 1', value: 1 },
+    { label: 'Tasks 2', value: 2 },
+    { label: 'Tasks 3', value: 3 },
+    { label: 'Tasks 4', value: 4 },
+    { label: 'Tasks 5', value: 5 },
+    { label: 'Tasks 6', value: 6 },
+    { label: 'Tasks 7', value: 7 },
+    { label: 'Tasks 8', value: 8 },
+    { label: 'Tasks 9', value: 9 },
+    { label: 'Tasks 10', value: 10 },
+];

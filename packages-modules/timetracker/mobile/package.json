@@ -50,6 +50,7 @@
     "react-compound-timer": "^1.2.0",
     "react-custom-scrollbars": "^4.2.1",
     "react-date-range": "1.0.0-beta",
+    "react-native-dropdown-picker": "5.1.19",
     "react-easy-swipe": "0.0.21",
     "react-native-big-calendar": "^0.8.1",
     "react-native-calendar-picker": "^7.1.1",

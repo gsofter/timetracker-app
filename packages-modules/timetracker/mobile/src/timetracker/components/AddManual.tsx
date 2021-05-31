@@ -24,7 +24,10 @@ import {
 } from 'native-base';
 import { useHistory } from 'react-router-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
+import DropDownPicker from 'react-native-dropdown-picker';
 import moment from 'moment'
+import {projects, tasks} from "../../constants/data"
+
 const AddManual = () => {
     const history = useHistory();
     const [show, setShow] = useState(false)
@@ -46,9 +49,13 @@ const AddManual = () => {
         taskName: null
     })
     const [list, setList] = useState({
-        project: ["Project 1", 'Project 2', 'Project 3', 'Project 4', 'Project 5', 'Project 6', 'Project 7', 'Project 8', 'Project 9', 'Project 10'],
-        task: ["Task 1", 'Task 2', 'Task 3', 'Task 4', 'Task 5', 'Task 6', 'Task 7', 'Task 8', 'Task 9', 'Task 10']
+        project: projects,
+        task: tasks
     })
+    const [projectOpen, setProjectOpen] = useState(false);
+    const [projectValue, setProjectValue] = useState(null);
+    const [taskOpen, setTaskOpen] = useState(false);
+    const [taskValue, setTaskValue] = useState(null);
     const [tag, setTag] = useState({
         showTag: false,
         btnText: 'Edit Tags',
@@ -65,6 +72,13 @@ const AddManual = () => {
         var interval = moment().hour(0).minute(minutes);
         setDates(ps => ({...ps, totalDate: interval}))
     }, [dates.startDate, dates.endDate])
+
+    useEffect(() => {
+        const data = projects.find(project => project.value === projectValue)
+        if(data){
+            setListOpen(ps => ({...ps, projectName: data?.label}))
+        }
+    }, [projectValue])
 
     const handleStartConfirm = (selectedDate) => {
         const currentDate = selectedDate || startDate;
@@ -117,12 +131,12 @@ const AddManual = () => {
 
     return(
         <Container>
-            <Header style={{ backgroundColor: '#1f1f1f' }}>
+            <Header style={{ backgroundColor: '#fff' }}>
                 <Left>
-                    <Icon onPress={() => history.goBack()} style={styles.color} name='arrow-back-outline'/>
+                    <Icon onPress={() => history.goBack()} name='arrow-back-outline'/>
                 </Left>
                 <Body>
-                    <Text style={styles.color}>Time Entry Details</Text>
+                    <Text>Time Entry Details</Text>
                 </Body>
             </Header>
             <Content>
@@ -171,56 +185,33 @@ const AddManual = () => {
                             <Text style={{ fontSize: 16 }}>Description</Text>
                             <Input placeholder='What have you worked on?'/>
                         </ListItem>
-                        <ListItem onPress={() => projectHandler()}>
-                            <Left>
-                                <Text style={{ fontWeight: listOpen.project ? 'bold': 'normal' }}>Project</Text>
-                            </Left>
-                            <Right style={styles.flex_row}>
-                                {listOpen.projectName ? <Text style={styles.grey}>{listOpen.projectName}</Text>
-                                : <Text style={styles.grey}>(No Project Yet)</Text>}
-                                <Icon name={listOpen.projectIcon} />
-                            </Right>
-                        </ListItem>
-                        {listOpen.project && (
-                            <ListItem style={{height: 150}}>
-                                {list.project.length ? (
-                                    <ScrollView>
-                                        <List>
-                                            {list.project.map((project, index: any) => (
-                                                <Text key={index} style={{padding: 10}}>{project}</Text>
-                                            ))}
-                                        </List>
-                                    </ScrollView>
-                                ): (
-                                    <Text>Project List is Empty</Text>
-                                )}
-                            </ListItem>
-                        )}
-                        <ListItem onPress={() => taskHandler()}>
-                            <Left>
-                                <Text style={{ fontWeight: listOpen.task ? 'bold': 'normal' }}>Task</Text>
-                            </Left>
-                            <Right style={styles.flex_row}>
-                                {listOpen.taskName ? <Text style={styles.grey}>{listOpen.taskName}</Text>
-                                : <Text style={styles.grey}>(No Task)</Text>}
-                                <Icon name={listOpen.taskIcon} />
-                            </Right>
-                        </ListItem>
-                        {listOpen.task && (
-                            <ListItem style={{height: 150}}>
-                                {list.task.length ? (
-                                    <ScrollView>
-                                        <List>
-                                            {list.task.map((task, index: any) => (
-                                                <Text key={index} style={{padding: 10}}>{task}</Text>
-                                            ))}
-                                        </List>
-                                    </ScrollView>
-                                ): (
-                                    <Text>Task List is Empty</Text>
-                                )}
-                            </ListItem>
-                        )}
+                        <DropDownPicker
+                            disableBorderRadius={true}
+                            open={projectOpen}
+                            placeholder="Select a Project"
+                            mode="BADGE"
+                            maxHeight={120}
+                            zIndex={1}
+                            value={projectOpen}
+                            items={list.project}
+                            setOpen={setProjectOpen}
+                            setValue={setProjectValue}
+                            setItems={(data) => console.log(data)}
+                        /> 
+                        <View>
+                            <DropDownPicker
+                                disableBorderRadius={true}
+                                open={taskOpen}
+                                placeholder="Select a Task"
+                                mode="BADGE" 
+                                maxHeight={120}
+                                value={taskValue}
+                                items={list.task}
+                                setOpen={setTaskOpen}
+                                setValue={setTaskValue}
+                                setItems={(data) => console.log(data)}
+                            />
+                        </View>
                         <ListItem>
                             <Left>
                                 <Text>Billable</Text>
