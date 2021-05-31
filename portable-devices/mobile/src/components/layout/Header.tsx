@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { Header, Left, Right, Body, Text, Icon } from 'native-base';
+import {TouchableHighlight, StyleSheet} from 'react-native'
 import { useHistory } from 'react-router-native';
 import { useDispatch, useSelector } from 'react-redux';
 import { MobileRoutes } from '../../constants/routes';
@@ -25,18 +26,26 @@ const MainHeader = (props: any) => {
 
   const history = useHistory();
   return (
-    <Header style={{ backgroundColor: '#1f1f1f' }}>
+    <Header style={{ backgroundColor: '#fff' }}>
       <Left>
-        <Icon style={{ color: '#fff' }} name="menu" onPress={() => toggle()} />
+        <TouchableHighlight style={styles.container} underlayColor='#eff0f1' onPress={() => toggle()}>
+        <Icon name="menu" />
+        </TouchableHighlight>
       </Left>
       <Body>
-        <Text style={{ color: '#fff' }}>{props.title}</Text>
+        <Text>{props.title}</Text>
       </Body>
       <Right>
-        <Icon style={{ color: '#fff' }} name="exit-outline" onPress={() => logout()} />
+        <Icon name="exit-outline" onPress={() => logout()} />
       </Right>
     </Header>
   );
 };
+
+const styles = StyleSheet.create({
+  container: {
+    borderRadius: 50,
+  }
+})
 
 export default MainHeader;

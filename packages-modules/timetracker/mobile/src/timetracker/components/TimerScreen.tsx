@@ -1,10 +1,11 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
-import { StyleSheet, View, ScrollView } from 'react-native';
-import {useHistory} from "react-router-native"
+import { StyleSheet, View, ScrollView, Platform } from 'react-native';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import TimerFooter from './TimerFooter';
 import TimeRange from './TimeRange';
+import TimeList from "./TimeList"
 import {
   ITimeRecordRequest,
   ITimeRecord
@@ -19,7 +20,8 @@ import {
 const TimerScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
   const [billable, setBillable] = useState(false);
-  const [track, setTrack] = useState(true);
+  const [track, setTrack] = useState
+    (true);
   const [manual, setManual] = useState(false);
   const [addManual, setAddManual] = useState(false);
   const [timeRecord, setTimeRecord] = useState<ITimeRecord>({
@@ -105,22 +107,27 @@ const TimerScreen = () => {
           onDateChange={onDateChange}
           onReset={onReset}
         />
+        <TimeList />
       </ScrollView>
-      <TimerFooter
-        isToggle={isToggle}
-        billable={billable}
-        toggleProject={toggleProject}
-        toggleBillable={toggleBillable}
-        track={track}
-        manual={manual}
-        onTrack={onTrack}
-        onManual={onManual}
-        setAddManual={setAddManual}
-        setTimeRecord={setTimeRecord}
-        timeRecord={timeRecord}
-        createTimeRecord={createTimeRecord}
-        updateTimeRecord={updateTimeRecord}
-      />
+      <View style={{ flex: Platform.OS === 'ios' ? 1 : 0 }}>
+        <TimerFooter
+          isToggle={isToggle}
+          billable={billable}
+          toggleProject={toggleProject}
+          toggleBillable={toggleBillable}
+          track={track}
+          manual={manual}
+          onTrack={onTrack}
+          onManual={onManual}
+          setAddManual={setAddManual}
+          setTimeRecord={setTimeRecord}
+          timeRecord={timeRecord}
+          createTimeRecord={createTimeRecord}
+          updateTimeRecord={updateTimeRecord}
+        />
+      </View>
+      {Platform.OS === 'ios' &&
+        <KeyboardSpacer />}
     </View>
   );
 };
@@ -128,7 +135,7 @@ const TimerScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    position: 'relative',
     backgroundColor: '#f0f2f5',
   },
 });

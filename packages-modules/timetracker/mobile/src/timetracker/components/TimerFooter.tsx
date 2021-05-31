@@ -1,17 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import { Icon, Item, Input, Button } from 'native-base';
-import { View, StyleSheet, Text } from 'react-native';
-import { KeyboardAwareScrollView } from 'react-native-keyboard-aware-scroll-view'
+import { View, StyleSheet, Text, Platform } from 'react-native';
 import RadioForm from 'react-native-simple-radio-button';
 import { useHistory } from 'react-router-native';
-import { useDispatch, useSelector } from 'react-redux';
+import { useSelector } from 'react-redux';
 import * as _ from 'lodash';
 import moment from 'moment';
 
 import TimeTrack from './TimeTrack'
 import {
   ITimeRecordRequest,
-  ITimeRecord,
 } from '@admin-layout/timetracker-core';
 
 var radio_props = [
@@ -42,10 +40,10 @@ const TimerFooter = ({
   const user = useSelector((state: any) => state?.user)
 
   useEffect(() => {
+    setTimeRecord(ps => ({ ...ps, isBillable: billable }))
     if (user) {
       setTimeRecord(ps => ({ ...ps, userId: user.auth0UserId }));
     }
-    setTimeRecord(ps => ({ ...ps, isBillable: billable }))
   }, [history, billable])
 
   const getFormattedTime = (time: any) => {
@@ -75,12 +73,12 @@ const TimerFooter = ({
   };
 
   return (
-    <View style={styles.footer}>
+    <View style={[styles.footer, Platform.OS === 'android' && { position: 'absolute', bottom: 0 }]}>
       {!manual && (
-        <KeyboardAwareScrollView>
+        <View>
           <View style={styles.row}>
             <Item regular style={{ width: '80%', height: 40 }}>
-              <Input onChangeText={(value) => setTimeRecord(ps => ({ ...ps, taskName: value }))} style={{ height: 40 }} placeholder="What are you working on?" />
+              <Input onChangeText={(value) => setTimeRecord(ps => ({ ...ps, taskName: value }))} placeholder="What are you working on?" />
             </Item>
             <View style={styles.row_button}>
               <Button iconLeft transparent onPress={() => toggleProject()}>
@@ -114,7 +112,7 @@ const TimerFooter = ({
               setTimeRecord={setTimeRecord}
             />
           )}
-        </KeyboardAwareScrollView>
+        </View>
       )}
       {manual && (
         <View style={styles.flex_row}>
@@ -139,15 +137,13 @@ const TimerFooter = ({
 const styles = StyleSheet.create({
   footer: {
     borderTopColor: '#1f1f1f',
-    width: '100%',
-    position: 'absolute',
-    bottom: 0,
     right: 0,
     left: 0,
+    position: 'absolute',
+    bottom: 0,
     backgroundColor: 'white',
   },
   row: {
-    display: 'flex',
     flexDirection: 'row',
     paddingLeft: 10,
     paddingTop: 10,

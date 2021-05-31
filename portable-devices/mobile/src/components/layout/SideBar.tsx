@@ -26,7 +26,7 @@ const SideBar = ({ routes, matchUrl, onClose }: any) => {
     }
 
     return (
-        <Container style={{ backgroundColor: '#1f1f1f' }}>
+        <Container style={{ backgroundColor: '#fff' }}>
             {isMenuExist && routes.map((menu: any) => (
                 menu.routes ? (
                     <List>
@@ -53,11 +53,11 @@ const SideBar = ({ routes, matchUrl, onClose }: any) => {
                     </List>
                 ) :
                     (<List key={menu.key}>
-                        <ListItem>
+                        <ListItem onPress={() => openMenuItem(menu.path)}>
                             <Left>
-                                <Text onPress={() => openMenuItem(menu.path)} style={{ color: '#a1a1a1' }}>{menu.name}</Text>
-                            </Left >
-                        </ListItem >
+                                <Text>{menu.name}</Text>
+                            </Left>
+                        </ListItem>
                     </List >)
             ))}
         </Container >
