@@ -310,6 +310,11 @@ export type ConfigurationExtensionInfo = {
 export type ConfigurationInput = {
   target: Scalars['Int'];
   resource?: Maybe<Scalars['URIInput']>;
+  /**
+   * User resource to identify the core user settings.
+   * For guest user, we don't have to define it.
+   */
+  userResource?: Maybe<Scalars['URI']>;
 };
 
 export type ConfigurationModel = {
@@ -403,6 +408,13 @@ export type ContributionSettings = {
   enumDescriptionsAreMarkdown?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   extensionInfo?: Maybe<ConfigurationExtensionInfo>;
+  properties?: Maybe<ContributionSettingsProperties>;
+};
+
+export type ContributionSettingsProperties = {
+   __typename?: 'ContributionSettingsProperties';
+  readOnly?: Maybe<Scalars['Boolean']>;
+  disabled?: Maybe<Scalars['Boolean']>;
 };
 
 /**  Database counter  */
@@ -2077,7 +2089,7 @@ export type QueryGetViewerPermissionsArgs = {
 
 
 export type QueryGetViewerPoliciesArgs = {
-  input?: Maybe<ConfigurationInput>;
+  input: ViewerPoliciesInput;
 };
 
 
@@ -2758,6 +2770,19 @@ export type UserState = {
   isTokenExpired?: Maybe<Scalars['Boolean']>;
   isLoggingInToProceed?: Maybe<Scalars['Boolean']>;
   loginError?: Maybe<LoginError>;
+  accessToken?: Maybe<Scalars['String']>;
+};
+
+export type ViewerPoliciesInput = {
+  target: Scalars['Int'];
+  /**
+   * To get the Resource or Organization resource of which we need to get the settings.
+   * If we pass the <resource> URI, we can construct the orgUri in background to merge as a parent
+   * configuration to the resource configuration.
+   */
+  settingsResource?: Maybe<Scalars['URI']>;
+  /** Application resource to identify the core application settings. */
+  applicationResource?: Maybe<Scalars['URI']>;
 };
 
 export type ViewerSettingsInput = {
@@ -2773,6 +2798,8 @@ export type ViewerSettingsInput = {
    * For guest user, we don't have to define it.
    */
   userResource?: Maybe<Scalars['URI']>;
+  /** Application resource to identify the core application settings. */
+  applicationResource?: Maybe<Scalars['URI']>;
 };
 
 export type ViewerSettingsSubject = {
@@ -2967,6 +2994,7 @@ export type ResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   ConfigurationScope: ConfigurationScope,
   ConfigurationExtensionInfo: ResolverTypeWrapper<ConfigurationExtensionInfo>,
+  ContributionSettingsProperties: ResolverTypeWrapper<ContributionSettingsProperties>,
   PreferencesResponse: ResolverTypeWrapper<PreferencesResponse>,
   PreferencesType: ResolverTypeWrapper<PreferencesType>,
   DefaultSettings: ResolverTypeWrapper<DefaultSettings>,
@@ -3068,6 +3096,7 @@ export type ResolversTypes = {
   ResourceUser: ResolverTypeWrapper<ResourceUser>,
   IResourceUserRole: ResolversTypes['ResourceUser'],
   PermissionSubject: ResolverTypeWrapper<PermissionSubject>,
+  ViewerPoliciesInput: ViewerPoliciesInput,
   PolicySubject: ResolverTypeWrapper<PolicySubject>,
   ViewerSettingsInput: ViewerSettingsInput,
   ViewerSettingsSubject: ResolverTypeWrapper<ViewerSettingsSubject>,
@@ -3183,6 +3212,7 @@ export type ResolversParentTypes = {
   Boolean: Scalars['Boolean'],
   ConfigurationScope: ConfigurationScope,
   ConfigurationExtensionInfo: ConfigurationExtensionInfo,
+  ContributionSettingsProperties: ContributionSettingsProperties,
   PreferencesResponse: PreferencesResponse,
   PreferencesType: PreferencesType,
   DefaultSettings: DefaultSettings,
@@ -3284,6 +3314,7 @@ export type ResolversParentTypes = {
   ResourceUser: ResourceUser,
   IResourceUserRole: ResolversParentTypes['ResourceUser'],
   PermissionSubject: PermissionSubject,
+  ViewerPoliciesInput: ViewerPoliciesInput,
   PolicySubject: PolicySubject,
   ViewerSettingsInput: ViewerSettingsInput,
   ViewerSettingsSubject: ViewerSettingsSubject,
@@ -3616,6 +3647,13 @@ export type ContributionSettingsResolvers<ContextType = any, ParentType extends 
   enumDescriptionsAreMarkdown?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   tags?: Resolver<Maybe<Array<Maybe<ResolversTypes['String']>>>, ParentType, ContextType>,
   extensionInfo?: Resolver<Maybe<ResolversTypes['ConfigurationExtensionInfo']>, ParentType, ContextType>,
+  properties?: Resolver<Maybe<ResolversTypes['ContributionSettingsProperties']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type ContributionSettingsPropertiesResolvers<ContextType = any, ParentType extends ResolversParentTypes['ContributionSettingsProperties'] = ResolversParentTypes['ContributionSettingsProperties']> = {
+  readOnly?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
+  disabled?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4311,7 +4349,7 @@ export type QueryResolvers<ContextType = any, ParentType extends ResolversParent
   getUserOrganizationsWithRole?: Resolver<Maybe<Array<Maybe<ResolversTypes['Organization']>>>, ParentType, ContextType, RequireFields<QueryGetUserOrganizationsWithRoleArgs, never>>,
   getUsers?: Resolver<Maybe<Array<Maybe<ResolversTypes['UserAccount']>>>, ParentType, ContextType, RequireFields<QueryGetUsersArgs, never>>,
   getViewerPermissions?: Resolver<Maybe<ResolversTypes['PermissionSubject']>, ParentType, ContextType, RequireFields<QueryGetViewerPermissionsArgs, never>>,
-  getViewerPolicies?: Resolver<Maybe<ResolversTypes['PolicySubject']>, ParentType, ContextType, RequireFields<QueryGetViewerPoliciesArgs, never>>,
+  getViewerPolicies?: Resolver<Maybe<ResolversTypes['PolicySubject']>, ParentType, ContextType, RequireFields<QueryGetViewerPoliciesArgs, 'input'>>,
   mergedApplicationPermissions?: Resolver<Maybe<Array<Maybe<ResolversTypes['ContributionSettings']>>>, ParentType, ContextType, RequireFields<QueryMergedApplicationPermissionsArgs, never>>,
   moleculerCounter?: Resolver<Maybe<ResolversTypes['Counter']>, ParentType, ContextType>,
   organizations?: Resolver<Maybe<Array<Maybe<ResolversTypes['Organization']>>>, ParentType, ContextType>,
@@ -4653,6 +4691,7 @@ export type UserStateResolvers<ContextType = any, ParentType extends ResolversPa
   isTokenExpired?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   isLoggingInToProceed?: Resolver<Maybe<ResolversTypes['Boolean']>, ParentType, ContextType>,
   loginError?: Resolver<Maybe<ResolversTypes['LoginError']>, ParentType, ContextType>,
+  accessToken?: Resolver<Maybe<ResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4688,6 +4727,7 @@ export type Resolvers<ContextType = any> = {
   ConfigurationUpdateEvent?: ConfigurationUpdateEventResolvers<ContextType>,
   ContributionRoles?: ContributionRolesResolvers<ContextType>,
   ContributionSettings?: ContributionSettingsResolvers<ContextType>,
+  ContributionSettingsProperties?: ContributionSettingsPropertiesResolvers<ContextType>,
   Counter?: CounterResolvers<ContextType>,
   CustomerInvoice?: CustomerInvoiceResolvers<ContextType>,
   Date?: GraphQLScalarType,

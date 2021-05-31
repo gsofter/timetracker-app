@@ -70,7 +70,7 @@
     "@casl/ability": "^4.1.5",
     "@cdm-logger/client": "^5.0.7",
     "@cdm-logger/server": "^6.0.0",
-    "@cdmbase/graphql-type-uri": "^1.1.0",
+    "@cdmbase/graphql-type-uri": "^2.0.0",
     "@common-stack/cache-api-server": "0.0.260",
     "@common-stack/client-core": "0.0.260",
     "@common-stack/core": "0.0.260",

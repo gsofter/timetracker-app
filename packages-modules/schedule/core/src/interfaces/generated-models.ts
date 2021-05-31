@@ -1,5 +1,5 @@
 /* tslint:disable */
-import { URI,  UriComponents } from '@vscode/monaco-editor/esm/vs/base/common/uri';
+import { URI,  UriComponents } from '@vscode-alt/monaco-editor/esm/vs/base/common/uri';
 
 import { GraphQLResolveInfo, GraphQLScalarType, GraphQLScalarTypeConfig } from 'graphql';
 import gql from 'graphql-tag';
@@ -306,6 +306,11 @@ export type IConfigurationExtensionInfo = {
 export type IConfigurationInput = {
   target: Scalars['Int'];
   resource?: Maybe<Scalars['URIInput']>;
+  /**
+   * User resource to identify the core user settings.
+   * For guest user, we don't have to define it.
+   */
+  userResource?: Maybe<Scalars['URI']>;
 };
 
 export type IConfigurationModel = {
@@ -399,6 +404,13 @@ export type IContributionSettings = {
   enumDescriptionsAreMarkdown?: Maybe<Scalars['Boolean']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   extensionInfo?: Maybe<IConfigurationExtensionInfo>;
+  properties?: Maybe<IContributionSettingsProperties>;
+};
+
+export type IContributionSettingsProperties = {
+   __typename?: 'ContributionSettingsProperties';
+  readOnly?: Maybe<Scalars['Boolean']>;
+  disabled?: Maybe<Scalars['Boolean']>;
 };
 
 /**  Database counter  */
@@ -2066,7 +2078,7 @@ export type IQuerygetViewerPermissionsArgs = {
 
 
 export type IQuerygetViewerPoliciesArgs = {
-  input?: Maybe<IConfigurationInput>;
+  input: IViewerPoliciesInput;
 };
 
 
@@ -2747,6 +2759,19 @@ export type IUserState = {
   isTokenExpired?: Maybe<Scalars['Boolean']>;
   isLoggingInToProceed?: Maybe<Scalars['Boolean']>;
   loginError?: Maybe<ILoginError>;
+  accessToken?: Maybe<Scalars['String']>;
+};
+
+export type IViewerPoliciesInput = {
+  target: Scalars['Int'];
+  /**
+   * To get the Resource or Organization resource of which we need to get the settings.
+   * If we pass the <resource> URI, we can construct the orgUri in background to merge as a parent
+   * configuration to the resource configuration.
+   */
+  settingsResource?: Maybe<Scalars['URI']>;
+  /** Application resource to identify the core application settings. */
+  applicationResource?: Maybe<Scalars['URI']>;
 };
 
 export type IViewerSettingsInput = {
@@ -2762,6 +2787,8 @@ export type IViewerSettingsInput = {
    * For guest user, we don't have to define it.
    */
   userResource?: Maybe<Scalars['URI']>;
+  /** Application resource to identify the core application settings. */
+  applicationResource?: Maybe<Scalars['URI']>;
 };
 
 export type IViewerSettingsSubject = {
@@ -3027,6 +3054,7 @@ export type IResolversTypes = {
   Boolean: ResolverTypeWrapper<Scalars['Boolean']>,
   ConfigurationScope: IConfigurationScope,
   ConfigurationExtensionInfo: ResolverTypeWrapper<IConfigurationExtensionInfo>,
+  ContributionSettingsProperties: ResolverTypeWrapper<IContributionSettingsProperties>,
   PreferencesResponse: ResolverTypeWrapper<IPreferencesResponse>,
   PreferencesType: ResolverTypeWrapper<IPreferencesType>,
   DefaultSettings: ResolverTypeWrapper<IDefaultSettings>,
@@ -3128,6 +3156,7 @@ export type IResolversTypes = {
   ResourceUser: ResolverTypeWrapper<IResourceUser>,
   IResourceUserRole: IResolversTypes['ResourceUser'],
   PermissionSubject: ResolverTypeWrapper<IPermissionSubject>,
+  ViewerPoliciesInput: IViewerPoliciesInput,
   PolicySubject: ResolverTypeWrapper<IPolicySubject>,
   ViewerSettingsInput: IViewerSettingsInput,
   ViewerSettingsSubject: ResolverTypeWrapper<IViewerSettingsSubject>,
@@ -3242,6 +3271,7 @@ export type IResolversParentTypes = {
   Boolean: Scalars['Boolean'],
   ConfigurationScope: IConfigurationScope,
   ConfigurationExtensionInfo: IConfigurationExtensionInfo,
+  ContributionSettingsProperties: IContributionSettingsProperties,
   PreferencesResponse: IPreferencesResponse,
   PreferencesType: IPreferencesType,
   DefaultSettings: IDefaultSettings,
@@ -3343,6 +3373,7 @@ export type IResolversParentTypes = {
   ResourceUser: IResourceUser,
   IResourceUserRole: IResolversParentTypes['ResourceUser'],
   PermissionSubject: IPermissionSubject,
+  ViewerPoliciesInput: IViewerPoliciesInput,
   PolicySubject: IPolicySubject,
   ViewerSettingsInput: IViewerSettingsInput,
   ViewerSettingsSubject: IViewerSettingsSubject,
@@ -3670,6 +3701,13 @@ export type IContributionSettingsResolvers<ContextType = any, ParentType extends
   enumDescriptionsAreMarkdown?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   tags?: Resolver<Maybe<Array<Maybe<IResolversTypes['String']>>>, ParentType, ContextType>,
   extensionInfo?: Resolver<Maybe<IResolversTypes['ConfigurationExtensionInfo']>, ParentType, ContextType>,
+  properties?: Resolver<Maybe<IResolversTypes['ContributionSettingsProperties']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
+};
+
+export type IContributionSettingsPropertiesResolvers<ContextType = any, ParentType extends IResolversParentTypes['ContributionSettingsProperties'] = IResolversParentTypes['ContributionSettingsProperties']> = {
+  readOnly?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
+  disabled?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4363,7 +4401,7 @@ export type IQueryResolvers<ContextType = any, ParentType extends IResolversPare
   getUserOrganizationsWithRole?: Resolver<Maybe<Array<Maybe<IResolversTypes['Organization']>>>, ParentType, ContextType, RequireFields<IQuerygetUserOrganizationsWithRoleArgs, never>>,
   getUsers?: Resolver<Maybe<Array<Maybe<IResolversTypes['UserAccount']>>>, ParentType, ContextType, RequireFields<IQuerygetUsersArgs, never>>,
   getViewerPermissions?: Resolver<Maybe<IResolversTypes['PermissionSubject']>, ParentType, ContextType, RequireFields<IQuerygetViewerPermissionsArgs, never>>,
-  getViewerPolicies?: Resolver<Maybe<IResolversTypes['PolicySubject']>, ParentType, ContextType, RequireFields<IQuerygetViewerPoliciesArgs, never>>,
+  getViewerPolicies?: Resolver<Maybe<IResolversTypes['PolicySubject']>, ParentType, ContextType, RequireFields<IQuerygetViewerPoliciesArgs, 'input'>>,
   mergedApplicationPermissions?: Resolver<Maybe<Array<Maybe<IResolversTypes['ContributionSettings']>>>, ParentType, ContextType, RequireFields<IQuerymergedApplicationPermissionsArgs, never>>,
   moleculerCounter?: Resolver<Maybe<IResolversTypes['Counter']>, ParentType, ContextType>,
   organizations?: Resolver<Maybe<Array<Maybe<IResolversTypes['Organization']>>>, ParentType, ContextType>,
@@ -4705,6 +4743,7 @@ export type IUserStateResolvers<ContextType = any, ParentType extends IResolvers
   isTokenExpired?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   isLoggingInToProceed?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   loginError?: Resolver<Maybe<IResolversTypes['LoginError']>, ParentType, ContextType>,
+  accessToken?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
@@ -4739,6 +4778,7 @@ export type IResolvers<ContextType = any> = {
   ConfigurationUpdateEvent?: IConfigurationUpdateEventResolvers<ContextType>,
   ContributionRoles?: IContributionRolesResolvers<ContextType>,
   ContributionSettings?: IContributionSettingsResolvers<ContextType>,
+  ContributionSettingsProperties?: IContributionSettingsPropertiesResolvers<ContextType>,
   Counter?: ICounterResolvers<ContextType>,
   CustomerInvoice?: ICustomerInvoiceResolvers<ContextType>,
   Date?: GraphQLScalarType,

@@ -12,7 +12,7 @@ import { config } from '../config';
 export const settings = {
     // mongoConnection: generateMongo(config.MONGO_URL),
     subTopic: config.CONNECTION_ID, // usually versioning
-    adminApiNamespace: 'api-admin',
+    adminApiNamespace: config.ADMIN_API_NAMESPACE,
 };
 
 const defaultModule = () =>

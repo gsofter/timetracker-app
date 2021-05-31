@@ -1,5 +1,5 @@
 import { ConfigurationScope, IConfigurationPropertySchema } from '@adminide-stack/core';
-import { localize } from '@vscode/monaco-editor/esm/vs/nls';
+import { localize } from '@vscode-alt/monaco-editor/esm/vs/nls';
 
 const enum ScreenshotFrequency {
     'None' = 'None',

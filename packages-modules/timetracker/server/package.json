@@ -49,7 +49,7 @@
     "@adminide-stack/core": "*",
     "@common-stack/core": "*",
     "@common-stack/server-core": ">=0.0.260",
-    "@vscode/monaco-editor": "*",
+    "@vscode-alt/monaco-editor": "*",
     "bunyan": "*",
     "lodash": "*",
     "inversify": "*",
