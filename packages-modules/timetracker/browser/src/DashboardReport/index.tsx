@@ -9,6 +9,7 @@ import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 import { useFirstWeekDay } from '../timetracker/hooks';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../generated-models';
 import { Reports } from './ReportComponent';
+import { TeamDropdown } from './FilterDropdown/TeamDropdown';
 
 const FilterValues = [
   { value: 'Team', selected: true },
@@ -171,9 +172,8 @@ const Report = () => {
                 data.selected ? (
                   <div className={css(styles.flex)} key={index}>
                     <Divider className={css(styles.divider)} type={'vertical'}/>
-                    <div className={css(styles.m10, styles.flex)}>
-                      <div>{data.value}</div>
-                      <CaretDownOutlined className={css(styles.m4)}/>
+                    <div className={css(styles.m10)}>
+                      <TeamDropdown title={data.value}/>
                     </div>
                   </div>
                 ) : null
