@@ -1,10 +1,8 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { useSelector } from 'react-redux';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useFela } from 'react-fela';
 import { Switch, Table, message, Card, Dropdown, Menu, Button, Space, DatePicker, Row, Col } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import moment, { Moment } from 'moment';
-import { useSetting, useGetUserAccountQuery } from '@adminide-stack/react-shared-components';
 import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 import { BarChart } from './BarChart';
 import { DoughnutChart } from './DoughnutChart';
@@ -17,6 +15,14 @@ import { calculateCost, calculateProfit } from '../utils';
 import * as _ from 'lodash';
 
 const { RangePicker } = DatePicker;
+
+interface IRecord {
+  data: Array<ITimeRecord>;
+  payRate: number;
+  billRate: number;
+}
+interface IRecordsByUserId extends Partial<Record<string, IRecord>> {}
+
 interface IReportsProps {
   range: {
     start: Moment;
@@ -26,33 +32,23 @@ interface IReportsProps {
   records: Array<ITimeRecord>;
   setRange: Function;
   updateConfiguration: Function;
+  recordsByUserId: IRecordsByUserId;
 }
 
-export const Reports: React.FC<IReportsProps> = ({ range, projects, records, setRange, updateConfiguration }) => {
+enum ShowType {
+  SHOW_AMOUNT = 'Show amount',
+  SHOW_COST = 'Show cost',
+  SHOW_PROFIT = 'Show profit',
+  HIDE_AMOUNT = 'Hide amount',
+}
+
+export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
+                                                   recordsByUserId, setRange, updateConfiguration }) => {
   const [isRounded, setIsRounded] = useState(false);
-  const [showType, setShowType] = useState('Show amount')
+  const [showType, setShowType] = useState(ShowType.SHOW_AMOUNT);
   const { roundType, roundValue, rounded, refetchRounded } = useRound();
   const { dateFormat, timeFormat } = useTimeformat();
-  const userId = useSelector((state: any) => state.user.auth0UserId);
   const { css } = useFela();
-
-  const { data: { getUserAccount } = {} } = useGetUserAccountQuery({
-    variables: { userId },
-    skip: !userId,
-  });
-
-  const { data: billRateConfig } = useSetting({
-    configKey: 'timetracker.user.payment.billRate',
-    overrides: { overrideIdentifier: getUserAccount?.username },
-  });
-
-  const { data: payRateConfig } = useSetting({
-    configKey: 'timetracker.user.payment.payRate',
-    overrides: { overrideIdentifier: getUserAccount?.username },
-  });
-
-  const billRate = billRateConfig?.resolveConfiguration;
-  const payRate = payRateConfig?.resolveConfiguration;
 
   const debounceFunc = useMemo(
     () =>
@@ -144,7 +140,7 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
     return projectDurArray;
   };
 
-  const getBillableDuration = () => {
+  const getBillableDuration = (records) => {
     const projectDurArray = projects.map((project, index) => {
       const pRecords = records.filter((record) => record.projectId === project.id && record.isBillable);
       const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
@@ -263,10 +259,10 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
   const showAmount = () => {
     const menu = (
         <Menu onClick={handleMenuClick}>
-          <Menu.Item key={'Show amount'}>Show amount</Menu.Item>
-          <Menu.Item key={'Show cost'}>Show cost</Menu.Item>
-          <Menu.Item key={'Show profit'}>Show profit</Menu.Item>
-          <Menu.Item key={'Hide amount'}>Hide amount</Menu.Item>
+          <Menu.Item key={ShowType.SHOW_AMOUNT}>{ShowType.SHOW_AMOUNT}</Menu.Item>
+          <Menu.Item key={ShowType.SHOW_COST}>{ShowType.SHOW_COST}</Menu.Item>
+          <Menu.Item key={ShowType.SHOW_PROFIT}>{ShowType.SHOW_PROFIT}</Menu.Item>
+          <Menu.Item key={ShowType.HIDE_AMOUNT}>{ShowType.HIDE_AMOUNT}</Menu.Item>
         </Menu>
     );
     return (
@@ -322,35 +318,51 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records, set
     });
   };
 
+  const getAmount = useCallback(() => {
+    let amount = 0;
+    let cost = 0;
+    let profit = 0;
+    Object.values(recordsByUserId)?.forEach((record: IRecord) => {
+      const { data, payRate = 0, billRate = 0 } = record;
+      if (data) {
+        const billable = getBillableDuration(data);
+        const hours = (billable / 3600);
+        amount += (hours * payRate);
+        cost += calculateCost(payRate, hours);
+        profit += calculateProfit(payRate, billRate, hours);
+      }
+    });
+    return { amount, cost, profit };
+  }, [recordsByUserId])
+
   const totalTime =
       generateProjectDurations().length &&
       generateProjectDurations().reduce((accumulator, currentValue) => accumulator + currentValue);
 
   const getHeader = (labelStyle, valueStyle) => {
-    const hours: number = (getBillableDuration() / 3600);
-    const amount = (hours * payRate)?.toFixed(2);
+    const { amount, cost, profit } = getAmount();
     switch (showType) {
-      case 'Show amount':
+      case ShowType.SHOW_AMOUNT:
         return (
             <>
               <span className={css(labelStyle)}>Billable:</span>
-              <span className={css(valueStyle)}>{formatDuration(getBillableDuration(), timeFormat)}</span>
+              <span className={css(valueStyle)}>{formatDuration(getBillableDuration(records), timeFormat)}</span>
               <span className={css(labelStyle)}>Amount:</span>
-              <span className={css(valueStyle)}>{amount} USD</span>
+              <span className={css(valueStyle)}>{amount.toFixed(2)} USD</span>
             </>
         );
-      case 'Show cost':
+      case ShowType.SHOW_COST:
         return (
             <>
               <span className={css(labelStyle)}>Cost:</span>
-              <span className={css(valueStyle)}>{calculateCost(payRate, hours)?.toFixed(2)} USD</span>
+              <span className={css(valueStyle)}>{cost.toFixed(2)} USD</span>
             </>
         );
-      case 'Show profit':
+      case ShowType.SHOW_PROFIT:
         return (
             <>
               <span className={css(labelStyle)}>Profit:</span>
-              <span className={css(valueStyle)}>{calculateProfit(payRate, billRate, hours)?.toFixed(2)} USD</span>
+              <span className={css(valueStyle)}>{profit?.toFixed(2)} USD</span>
             </>
         );
       default:
