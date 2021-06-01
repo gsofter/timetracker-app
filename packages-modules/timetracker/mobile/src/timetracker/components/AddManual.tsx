@@ -188,22 +188,32 @@ const AddManual = () => {
                         <DropDownPicker
                             disableBorderRadius={true}
                             open={projectOpen}
+                            style={styles.dropdownStyle}
+                            dropDownDirection='TOP'
+                            dropDownContainerStyle={styles.dropdownContainerStyle}
                             placeholder="Select a Project"
                             mode="BADGE"
                             maxHeight={120}
-                            zIndex={1}
-                            value={projectOpen}
+                            zIndex={1000}
+                            value={projectValue}
                             items={list.project}
                             setOpen={setProjectOpen}
                             setValue={setProjectValue}
                             setItems={(data) => console.log(data)}
                         /> 
+                        <View
+                        style={styles.divider}
+                        />
                         <View>
                             <DropDownPicker
                                 disableBorderRadius={true}
                                 open={taskOpen}
+                                dropDownDirection='TOP'
                                 placeholder="Select a Task"
+                                style={styles.dropdownStyle}
+                                dropDownContainerStyle={styles.dropdownContainerStyle}
                                 mode="BADGE" 
+                                zIndex={1}
                                 maxHeight={120}
                                 value={taskValue}
                                 items={list.task}
@@ -212,6 +222,9 @@ const AddManual = () => {
                                 setItems={(data) => console.log(data)}
                             />
                         </View>
+                        <View
+                        style={styles.divider}
+                        />
                         <ListItem>
                             <Left>
                                 <Text>Billable</Text>
@@ -253,7 +266,7 @@ const AddManual = () => {
                             </ListItem>
                         )}
                     </List>
-                    <Button block info>
+                    <Button block info style={{marginTop: 20}}>
                         <Text style={[styles.color]}>Submit</Text>
                     </Button>
                 </Card>
@@ -314,6 +327,21 @@ const styles = StyleSheet.create({
         borderRadius: 10,
         padding: 5,
         marginLeft: 5
+    },
+    dropdownStyle: {
+        borderRadius: 0,
+        borderColor: '#ff000000',
+        marginLeft: 5,
+        marginRight: 30
+    },
+    dropdownContainerStyle:{
+        borderRadius: 0,
+        borderColor: 'grey'
+    },
+    divider: {
+        borderBottomColor: '#dcdcdc',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+        marginLeft: 18
     }
 })
 

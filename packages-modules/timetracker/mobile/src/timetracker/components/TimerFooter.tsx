@@ -172,7 +172,6 @@ const styles = StyleSheet.create({
   },
   icon: {
     color: 'white',
-    paddingRight: 15
   }
 });
 
