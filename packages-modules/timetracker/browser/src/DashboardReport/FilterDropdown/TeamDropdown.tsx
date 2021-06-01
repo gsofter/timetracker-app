@@ -1,9 +1,10 @@
 import * as React from 'react';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { useFela } from 'react-fela';
-import { Input, Divider, Checkbox, Menu, Dropdown } from 'antd';
+import { Input, Checkbox, Menu, Dropdown } from 'antd';
 import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
-import { useGetOrganizationMembersQuery } from "@adminide-stack/react-shared-components";
+import { useGetOrganizationMembersQuery } from '@adminide-stack/react-shared-components';
+import { styles } from './styles';
 
 interface ITeamDropdown {
     title: string;
@@ -18,39 +19,56 @@ export const TeamDropdown = (props: ITeamDropdown) => {
     const [visible, setVisible] = useState(false);
     const [show, setShow] = useState(false);
     const [checkedList, setCheckedList] = React.useState([]);
-    const [indeterminate, setIndeterminate] = React.useState(true);
     const [checkAll, setCheckAll] = React.useState(false);
     const [status, setStatus] = useState(Status.ACTIVE);
+    const [filteredUsers, setFilteredUsers] = useState([]);
     const { css } = useFela();
 
     const { data: { getOrganizationMembers: users } = {} } = useGetOrganizationMembersQuery();
 
+    useEffect(() => {
+        if (users?.length) {
+            setFilteredUsers(users);
+        }
+    }, [users])
+
     const handleVisibleChange = (value) => {
         setVisible(value);
-    }
+    };
     const showStatus = () => {
         setShow(!show);
-    }
+    };
     const onClickStatus = ({ key }) => {
         setStatus(key);
         setShow(false);
-    }
+    };
     const onChange = list => {
         setCheckedList(list);
-        setIndeterminate(!!list.length && list.length < users?.length);
         setCheckAll(list.length === users.length);
     };
-
     const onCheckAllChange = e => {
         setCheckedList(e.target.checked ? users?.map(user => user.userId) : []);
-        setIndeterminate(false);
         setCheckAll(e.target.checked);
+    };
+    const onChangeInput = (e) => {
+        let newUsers = [];
+        if (e.target.value.trim()) {
+            newUsers = filterUsers(e.target.value);
+        } else {
+            newUsers = users;
+        }
+        setFilteredUsers(newUsers);
+    };
+    const filterUsers = (str) => {
+        return users?.filter((user) => {
+            return user.name.toLowerCase().includes(str.toLowerCase());
+        });
     };
 
     const content = (
       <Menu>
           <Menu.Item className={css(styles.item)}>
-              <Input placeholder={'Find member...'}/>
+              <Input onChange={onChangeInput} placeholder={'Find member...'}/>
           </Menu.Item>
           <Menu.Divider className={css(styles.divider)}/>
           <Menu.Item className={css(styles.item)}>
@@ -79,25 +97,37 @@ export const TeamDropdown = (props: ITeamDropdown) => {
                   <Menu.Divider className={css(styles.divider)}/>
               </>
           ) : null}
-          <Menu.Item className={css(styles.item)}>
-              <Checkbox className={css(styles.checkbox)} onChange={onCheckAllChange} checked={checkAll}>Select all</Checkbox>
-          </Menu.Item>
-          <Menu.Divider className={css(styles.divider, styles.space)}/>
-          <Menu.Divider className={css(styles.divider)}/>
-          <Menu.Item disabled={true} className={css(styles.item)}>
-              <div className={css(styles.label)}>USERS</div>
-          </Menu.Item>
-          <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
-            <Menu>
-                {users?.map((user) => (
-                    <>
-                        <Menu.Item key={user.userId} className={css(styles.item)}>
-                            <Checkbox value={user.userId} className={css(styles.checkbox)}>{user.name}</Checkbox>
-                        </Menu.Item>
-                    </>
-                ))}
-            </Menu>
-          </Checkbox.Group>
+          {filteredUsers.length ? (
+              <>
+                  <Menu.Item className={css(styles.item)}>
+                      <Checkbox
+                          className={css(styles.checkbox)}
+                          onChange={onCheckAllChange}
+                          checked={checkAll}
+                      >
+                          Select all
+                      </Checkbox>
+                  </Menu.Item>
+                  <Menu.Divider className={css(styles.divider, styles.space)}/>
+                  <Menu.Divider className={css(styles.divider)}/>
+                  <Menu.Item disabled={true} className={css(styles.item)}>
+                      <div className={css(styles.label)}>USERS</div>
+                  </Menu.Item>
+                  <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
+                      <Menu>
+                          {filteredUsers?.map((user) => (
+                              <Menu.Item key={user.userId} className={css(styles.item, styles.mTB0)}>
+                                  <Checkbox value={user.userId} className={css(styles.checkbox)}>{user.name}</Checkbox>
+                              </Menu.Item>
+                          ))}
+                      </Menu>
+                  </Checkbox.Group>
+              </>
+              ) : (
+                  <Menu.Item className={css(styles.item)}>
+                      <div>No team</div>
+                  </Menu.Item>
+          )}
       </Menu>
     );
     return (
@@ -115,42 +145,3 @@ export const TeamDropdown = (props: ITeamDropdown) => {
         </Dropdown>
     );
 }
-const styles = {
-    item: () => ({
-        padding: '10px 12px',
-        ':hover': {
-            backgroundColor: '#f5f5f5',
-        },
-    }),
-    flex: () => ({
-        display: 'flex',
-    }),
-    divider: () => ({
-        margin: '0',
-    }),
-    m4: () => ({
-        margin: '4px',
-    }),
-    checkbox: () => ({
-        width: '100%',
-    }),
-    icon: () => ({
-       fontSize: '11px',
-       margin: '0 2px',
-    }),
-    label: () => ({
-        color: '#999',
-        fontSize: '13px',
-        textTransform: 'uppercase',
-    }),
-    statusItem: () => ({
-        padding: '10px 12px',
-        background: '#e4eaee',
-    }),
-    space: () => ({
-       marginBottom: '10px',
-    }),
-    checkboxGroup: () => ({
-        width: '100%',
-    })
-};

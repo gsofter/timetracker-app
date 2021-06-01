@@ -9,16 +9,16 @@ import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 import { useFirstWeekDay } from '../timetracker/hooks';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../generated-models';
 import { Reports } from './ReportComponent';
-import { TeamDropdown } from './FilterDropdown/TeamDropdown';
+import { TeamDropdown, ClientDropdown, ProjectDropdown, StatusDropdown, DescriptionDropdown, TaskDropdown, TagDropdown } from './FilterDropdown';
 
 const FilterValues = [
-  { value: 'Team', selected: true },
-  { value: 'Client', selected: true },
-  { value: 'Project', selected: true },
-  { value: 'Task', selected: true },
-  { value: 'Tag', selected: true },
-  { value: 'Status', selected: true },
-  { value: 'Description', selected: true },
+  { value: 'Team', selected: true, dropdown: (props) => <TeamDropdown {...props}/> },
+  { value: 'Client', selected: true, dropdown: (props) => <ClientDropdown {...props}/> },
+  { value: 'Project', selected: true, dropdown: (props) => <ProjectDropdown {...props}/> },
+  { value: 'Task', selected: true, dropdown: (props) => <TaskDropdown {...props}/> },
+  { value: 'Tag', selected: true, dropdown: (props) => <TagDropdown {...props}/> },
+  { value: 'Status', selected: true, dropdown: (props) => <StatusDropdown {...props}/> },
+  { value: 'Description', selected: true, dropdown: (props) => <DescriptionDropdown {...props}/> },
 ];
 
 const GetDurationTimeRecordsByUserIdQuery = ({ range, userId, recordsByUserId, setRecordsByUserId }) => {
@@ -173,7 +173,7 @@ const Report = () => {
                   <div className={css(styles.flex)} key={index}>
                     <Divider className={css(styles.divider)} type={'vertical'}/>
                     <div className={css(styles.m10)}>
-                      <TeamDropdown title={data.value}/>
+                      {data.dropdown({ title: data.value })}
                     </div>
                   </div>
                 ) : null
