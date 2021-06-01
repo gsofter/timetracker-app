@@ -100,22 +100,6 @@ const AddManual = () => {
     const handleEndCancel = () => {
         setIsEnd(false)
     }
-
-    const projectHandler = () => {
-        if(listOpen.project){
-            setListOpen(ps => ({...ps, project: false, projectIcon: 'chevron-forward-outline'}))
-        } else {
-            setListOpen(ps => ({...ps, project: true, projectIcon: 'chevron-down-outline'}))
-        }
-    }
-
-    const taskHandler = () => {
-        if(listOpen.task){
-            setListOpen(ps => ({...ps, task: false, taskIcon: 'chevron-forward-outline'}))
-        } else {
-            setListOpen(ps => ({...ps, task: true, taskIcon: 'chevron-down-outline'}))
-        }
-    }
     
     const tagHandler = () => {
         if(tag.showTag){
@@ -196,7 +180,7 @@ const AddManual = () => {
                             maxHeight={120}
                             zIndex={1000}
                             value={projectValue}
-                            items={list.project}
+                            items={projects}
                             setOpen={setProjectOpen}
                             setValue={setProjectValue}
                             setItems={(data) => console.log(data)}
@@ -216,7 +200,7 @@ const AddManual = () => {
                                 zIndex={1}
                                 maxHeight={120}
                                 value={taskValue}
-                                items={list.task}
+                                items={tasks}
                                 setOpen={setTaskOpen}
                                 setValue={setTaskValue}
                                 setItems={(data) => console.log(data)}
