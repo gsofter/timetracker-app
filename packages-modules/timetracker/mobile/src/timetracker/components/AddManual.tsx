@@ -27,6 +27,7 @@ import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import moment from 'moment'
 import {projects, tasks} from "../../constants/data"
+import { useGetProjectsQuery } from '../../generated-models';
 
 const AddManual = () => {
     const history = useHistory();
@@ -62,6 +63,7 @@ const AddManual = () => {
         tags: [],
     })
     const [tagName, setTagName] = useState(null)
+    const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
     
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
