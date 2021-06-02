@@ -28,20 +28,20 @@ export const StatusDropdown = (props: IStatusDropdown) => {
                 <div className={css(styles.label)}>Billing</div>
             </Menu.Item>
             <Menu.Item key={Status.BILLABLE} className={css(styles.item)}>
-                <Checkbox value={Status.BILLABLE} className={css(styles.checkbox)}>{Status.BILLABLE}</Checkbox>
+                <Checkbox className={css(styles.checkbox)}>{Status.BILLABLE}</Checkbox>
             </Menu.Item>
             <Menu.Item key={Status.NON_BILLABLE} className={css(styles.item)}>
-                <Checkbox value={Status.NON_BILLABLE} className={css(styles.checkbox)}>{Status.NON_BILLABLE}</Checkbox>
+                <Checkbox className={css(styles.checkbox)}>{Status.NON_BILLABLE}</Checkbox>
             </Menu.Item>
             <Menu.Divider className={css(styles.divider)}/>
             <Menu.Item disabled={true}>
                 <div className={css(styles.label)}>Approval</div>
             </Menu.Item>
             <Menu.Item key={Status.APPROVED} className={css(styles.item)}>
-                <Checkbox value={Status.APPROVED} className={css(styles.checkbox)}>{Status.APPROVED}</Checkbox>
+                <Checkbox className={css(styles.checkbox)}>{Status.APPROVED}</Checkbox>
             </Menu.Item>
             <Menu.Item key={Status.UNAPPROVED} className={css(styles.item)}>
-                <Checkbox value={Status.UNAPPROVED} className={css(styles.checkbox)}>{Status.UNAPPROVED}</Checkbox>
+                <Checkbox className={css(styles.checkbox)}>{Status.UNAPPROVED}</Checkbox>
             </Menu.Item>
         </Menu>
     )

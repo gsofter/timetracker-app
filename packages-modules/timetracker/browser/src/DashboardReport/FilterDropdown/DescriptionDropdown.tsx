@@ -29,7 +29,7 @@ export const DescriptionDropdown = (props: IStatusDropdown) => {
             </Menu.Item>
             <Menu.Divider className={css(styles.divider)}/>
             <Menu.Item key={'without'} className={css(styles.item)}>
-                <Checkbox value={'without'} className={css(styles.checkbox)}>{'Without description'}</Checkbox>
+                <Checkbox className={css(styles.checkbox)}>{'Without description'}</Checkbox>
             </Menu.Item>
         </Menu>
     )

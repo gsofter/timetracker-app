@@ -113,15 +113,17 @@ export const TeamDropdown = (props: ITeamDropdown) => {
                   <Menu.Item disabled={true} className={css(styles.item)}>
                       <div className={css(styles.label)}>USERS</div>
                   </Menu.Item>
-                  <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
-                      <Menu>
-                          {filteredUsers?.map((user) => (
-                              <Menu.Item key={user.userId} className={css(styles.item, styles.mTB0)}>
-                                  <Checkbox value={user.userId} className={css(styles.checkbox)}>{user.name}</Checkbox>
-                              </Menu.Item>
-                          ))}
-                      </Menu>
-                  </Checkbox.Group>
+                  <Menu.Item className={css(styles.disabledItem)}>
+                      <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
+                          <Menu>
+                              {filteredUsers?.map((user) => (
+                                  <Menu.Item key={user.userId} className={css(styles.item, styles.mTB0)}>
+                                      <Checkbox value={user.userId} className={css(styles.checkbox)}>{user.name}</Checkbox>
+                                  </Menu.Item>
+                              ))}
+                          </Menu>
+                      </Checkbox.Group>
+                  </Menu.Item>
               </>
               ) : (
                   <Menu.Item className={css(styles.item)}>

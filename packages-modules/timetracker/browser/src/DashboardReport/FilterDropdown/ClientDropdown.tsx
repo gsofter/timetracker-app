@@ -113,21 +113,23 @@ export const ClientDropdown = (props: IClientDropdown) => {
                         </Checkbox>
                     </Menu.Item>
                     <Menu.Divider className={css(styles.divider)}/>
-                    <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
-                        <Menu>
-                            <Menu.Item key={'without'} className={css(styles.item, styles.mTB0)}>
-                                <Checkbox value={'without'} className={css(styles.checkbox)}>{'Without client'}</Checkbox>
-                            </Menu.Item>
-                            {filteredClients?.map((client) => (
-                                <>
-                                    <Menu.Divider className={css(styles.divider)}/>
-                                    <Menu.Item key={client.id} className={css(styles.item, styles.mTB0)}>
-                                        <Checkbox value={client.id} className={css(styles.checkbox)}>{client.displayName}</Checkbox>
-                                    </Menu.Item>
-                                </>
-                            ))}
-                        </Menu>
-                    </Checkbox.Group>
+                    <Menu.Item className={css(styles.disabledItem)}>
+                        <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
+                            <Menu>
+                                <Menu.Item key={'without'} className={css(styles.item, styles.mTB0)}>
+                                    <Checkbox value={'without'} className={css(styles.checkbox)}>{'Without client'}</Checkbox>
+                                </Menu.Item>
+                                {filteredClients?.map((client) => (
+                                    <>
+                                        <Menu.Divider className={css(styles.divider)}/>
+                                        <Menu.Item key={client.id} className={css(styles.item, styles.mTB0)}>
+                                            <Checkbox value={client.id} className={css(styles.checkbox)}>{client.displayName}</Checkbox>
+                                        </Menu.Item>
+                                    </>
+                                ))}
+                            </Menu>
+                        </Checkbox.Group>
+                    </Menu.Item>
                 </>
             ) : (
                 <Menu.Item className={css(styles.item)}>

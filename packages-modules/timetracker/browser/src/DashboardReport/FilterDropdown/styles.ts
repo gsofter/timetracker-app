@@ -41,5 +41,12 @@ export const styles = {
     mTB0: () => ({
        marginBottom: '0 !important',
        marginTop: '0 !important',
+       padding: '0 12px !important',
     }),
+    disabledItem: () => ({
+        padding: '0 !important',
+        ':hover': {
+          backgroundColor: '#ffffff !important',
+        },
+    })
 };

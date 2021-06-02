@@ -52,10 +52,10 @@ export const ProjectDropdown = (props: IProjectDropdown) => {
     };
     const onChange = list => {
         setCheckedList(list);
-        setCheckAll(list.length === (clients.length + 1));
+        setCheckAll(list.length === (projects.length + 1));
     };
     const onCheckAllChange = e => {
-        let list = e.target.checked ? clients?.map(client => client.id) : []
+        let list = e.target.checked ? projects?.map(project => project.id) : []
         if (e.target.checked) {
             list.push('without');
         }
@@ -131,28 +131,30 @@ export const ProjectDropdown = (props: IProjectDropdown) => {
                         </Checkbox>
                     </Menu.Item>
                     <Menu.Divider className={css(styles.divider)}/>
-                    <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
-                        <Menu>
-                            <Menu.Item key={'without'} className={css(styles.item, styles.mTB0)}>
-                                <Checkbox value={'without'} className={css(styles.checkbox)}>{'Without client'}</Checkbox>
-                            </Menu.Item>
-                            {filteredProjects?.map(({ projects, clientId }) => (
-                                <>
-                                    <Menu.Divider className={css(styles.divider)}/>
-                                    <Menu.Item disabled={true} className={css(styles.item, styles.mTB0)}>
-                                        <div className={css(styles.label)}>{getClientName(clientId)}</div>
-                                    </Menu.Item>
-                                    {
-                                        projects?.map((project) => (
-                                            <Menu.Item key={project.id} className={css(styles.item, styles.mTB0)}>
-                                                <Checkbox value={project.id} className={css(styles.checkbox)}>{project.name}</Checkbox>
-                                            </Menu.Item>
-                                        ))
-                                    }
-                                </>
-                            ))}
-                        </Menu>
-                    </Checkbox.Group>
+                    <Menu.Item className={css(styles.disabledItem)}>
+                        <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
+                            <Menu>
+                                <Menu.Item key={'without'} className={css(styles.item, styles.mTB0)}>
+                                    <Checkbox value={'without'} className={css(styles.checkbox)}>{'Without client'}</Checkbox>
+                                </Menu.Item>
+                                {filteredProjects?.map(({ projects, clientId }) => (
+                                    <>
+                                        <Menu.Divider className={css(styles.divider)}/>
+                                        <Menu.Item disabled={true} className={css(styles.item, styles.mTB0)}>
+                                            <div className={css(styles.label)}>{getClientName(clientId)}</div>
+                                        </Menu.Item>
+                                        {
+                                            projects?.map((project) => (
+                                                <Menu.Item key={project.id} className={css(styles.item, styles.mTB0)}>
+                                                    <Checkbox value={project.id} className={css(styles.checkbox)}>{project.name}</Checkbox>
+                                                </Menu.Item>
+                                            ))
+                                        }
+                                    </>
+                                ))}
+                            </Menu>
+                        </Checkbox.Group>
+                    </Menu.Item>
                 </>
             ) : (
                 <Menu.Item className={css(styles.item)}>

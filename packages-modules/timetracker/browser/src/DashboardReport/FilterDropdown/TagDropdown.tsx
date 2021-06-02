@@ -118,19 +118,20 @@ export const TagDropdown = (props: ITagDropdown) => {
                 </>
             ) : null}
             <Menu.Item className={css(styles.item)}>
-                <Checkbox className={css(styles.checkbox)} onChange={onCheckAllChange} checked={checkAll}
-                >
+                <Checkbox className={css(styles.checkbox)} onChange={onCheckAllChange} checked={checkAll}>
                     Select all
                 </Checkbox>
             </Menu.Item>
             <Menu.Divider className={css(styles.divider)}/>
-            <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
-                <Menu>
-                    <Menu.Item key={'without'} className={css(styles.item, styles.mTB0)}>
-                        <Checkbox value={'without'} className={css(styles.checkbox)}>{'Without tag'}</Checkbox>
-                    </Menu.Item>
-                </Menu>
-            </Checkbox.Group>
+            <Menu.Item className={css(styles.disabledItem)}>
+                <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
+                    <Menu>
+                        <Menu.Item key={'without'} className={css(styles.item, styles.mTB0)}>
+                            <Checkbox value={'without'} className={css(styles.checkbox)}>{'Without tag'}</Checkbox>
+                        </Menu.Item>
+                    </Menu>
+                </Checkbox.Group>
+            </Menu.Item>
         </Menu>
     );
     return (
