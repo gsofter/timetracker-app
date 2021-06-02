@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useFela } from 'react-fela';
 import { useState } from 'react';
-import { Checkbox, Dropdown, Input, Menu } from 'antd';
+import { Badge, Checkbox, Dropdown, Input, Menu } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { styles } from './styles';
 
@@ -12,10 +12,18 @@ interface IStatusDropdown {
 export const DescriptionDropdown = (props: IStatusDropdown) => {
     const { title } = props;
     const [visible, setVisible] = useState(false);
+    const [count, setCount] = useState(0);
     const [description, setDescription] = useState('');
     const { css } = useFela();
 
     const handleVisibleChange = (value) => {
+        if(!value) {
+            let tempCount = 0;
+            if (description?.trim()) {
+                tempCount += 1;
+            }
+            setCount(tempCount);
+        }
         setVisible(value);
     };
     const onChangeInput = (e) => {
@@ -41,10 +49,12 @@ export const DescriptionDropdown = (props: IStatusDropdown) => {
             visible={visible}
             onVisibleChange={handleVisibleChange}
         >
-            <div className={css(styles.flex)}>
-                <div>{title}</div>
-                <CaretDownOutlined className={css(styles.m4)}/>
-            </div>
+            <Badge count={count} style={{ background: '#2a90fe' }}>
+                <div className={css(styles.flex, styles.m5)}>
+                    <div>{title}</div>
+                    <CaretDownOutlined className={css(styles.m4)}/>
+                </div>
+            </Badge>
         </Dropdown>
     );
 }

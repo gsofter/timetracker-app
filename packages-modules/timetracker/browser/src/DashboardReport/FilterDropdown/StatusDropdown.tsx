@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useFela } from 'react-fela';
 import { useState } from 'react';
-import { Checkbox, Dropdown, Menu } from 'antd';
+import { Badge, Checkbox, Dropdown, Menu } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { styles } from './styles';
 
@@ -17,31 +17,46 @@ enum Status {
 export const StatusDropdown = (props: IStatusDropdown) => {
     const { title } = props;
     const [visible, setVisible] = useState(false);
+    const [checkedList, setCheckedList] = React.useState([]);
+    const [count, setCount] = useState(0);
     const { css } = useFela();
 
     const handleVisibleChange = (value) => {
+        if (!value) {
+            setCount(checkedList.length);
+        }
         setVisible(value);
     };
+    const onChange = list => {
+        setCheckedList(list);
+    };
+
     const content = (
         <Menu>
-            <Menu.Item disabled={true}>
-                <div className={css(styles.label)}>Billing</div>
-            </Menu.Item>
-            <Menu.Item key={Status.BILLABLE} className={css(styles.item)}>
-                <Checkbox className={css(styles.checkbox)}>{Status.BILLABLE}</Checkbox>
-            </Menu.Item>
-            <Menu.Item key={Status.NON_BILLABLE} className={css(styles.item)}>
-                <Checkbox className={css(styles.checkbox)}>{Status.NON_BILLABLE}</Checkbox>
-            </Menu.Item>
-            <Menu.Divider className={css(styles.divider)}/>
-            <Menu.Item disabled={true}>
-                <div className={css(styles.label)}>Approval</div>
-            </Menu.Item>
-            <Menu.Item key={Status.APPROVED} className={css(styles.item)}>
-                <Checkbox className={css(styles.checkbox)}>{Status.APPROVED}</Checkbox>
-            </Menu.Item>
-            <Menu.Item key={Status.UNAPPROVED} className={css(styles.item)}>
-                <Checkbox className={css(styles.checkbox)}>{Status.UNAPPROVED}</Checkbox>
+            <Menu.Item className={css(styles.disabledItem)}>
+                <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
+                    <Menu>
+                        <Menu.Item disabled={true}>
+                            <div className={css(styles.label)}>Billing</div>
+                        </Menu.Item>
+                        <Menu.Item key={Status.BILLABLE} className={css(styles.item, styles.mTB0)}>
+                            <Checkbox value={Status.BILLABLE} className={css(styles.checkbox)}>{Status.BILLABLE}</Checkbox>
+                        </Menu.Item>
+                        <Menu.Item key={Status.NON_BILLABLE} className={css(styles.item, styles.mTB0)}>
+                            <Checkbox value={Status.NON_BILLABLE} className={css(styles.checkbox)}>{Status.NON_BILLABLE}</Checkbox>
+                        </Menu.Item>
+                        <Menu.Divider className={css(styles.divider)}/>
+                        <Menu.Item disabled={true}>
+                            <div className={css(styles.label)}>Approval</div>
+                        </Menu.Item>
+                        <Menu.Item key={Status.APPROVED} className={css(styles.item, styles.mTB0)}>
+                            <Checkbox value={Status.APPROVED} className={css(styles.checkbox)}>{Status.APPROVED}</Checkbox>
+                        </Menu.Item>
+                        <Menu.Item key={Status.UNAPPROVED} className={css(styles.item, styles.mTB0)}>
+                            <Checkbox value={Status.UNAPPROVED} className={css(styles.checkbox)}>{Status.UNAPPROVED}</Checkbox>
+                        </Menu.Item>
+                    </Menu>
+                </Checkbox.Group>
             </Menu.Item>
         </Menu>
     )
@@ -53,10 +68,12 @@ export const StatusDropdown = (props: IStatusDropdown) => {
             visible={visible}
             onVisibleChange={handleVisibleChange}
         >
-            <div className={css(styles.flex)}>
-                <div>{title}</div>
-                <CaretDownOutlined className={css(styles.m4)}/>
-            </div>
+            <Badge count={count} style={{ background: '#2a90fe' }}>
+                <div className={css(styles.flex, styles.m5)}>
+                    <div>{title}</div>
+                    <CaretDownOutlined className={css(styles.m4)}/>
+                </div>
+            </Badge>
         </Dropdown>
     );
 }

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState } from 'react';
 import { useFela } from 'react-fela';
-import { Input, Checkbox, Menu, Dropdown } from 'antd';
+import { Input, Checkbox, Menu, Dropdown, Badge } from 'antd';
 import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
 import { styles } from './styles';
 
@@ -20,9 +20,13 @@ export const TaskDropdown = (props: ITaskDropdown) => {
     const [checkedList, setCheckedList] = React.useState([]);
     const [checkAll, setCheckAll] = React.useState(false);
     const [status, setStatus] = useState(Status.ACTIVE);
+    const [count, setCount] = useState(0);
     const { css } = useFela();
 
     const handleVisibleChange = (value) => {
+        if(!value) {
+            setCount(checkedList.length);
+        }
         setVisible(value);
     };
     const showStatus = () => {
@@ -101,10 +105,12 @@ export const TaskDropdown = (props: ITaskDropdown) => {
             visible={visible}
             onVisibleChange={handleVisibleChange}
         >
-            <div className={css(styles.flex)}>
-                <div>{title}</div>
-                <CaretDownOutlined className={css(styles.m4)}/>
-            </div>
+            <Badge count={count} style={{ background: '#2a90fe' }}>
+                <div className={css(styles.flex, styles.m5)}>
+                    <div>{title}</div>
+                    <CaretDownOutlined className={css(styles.m4)}/>
+                </div>
+            </Badge>
         </Dropdown>
     );
 }

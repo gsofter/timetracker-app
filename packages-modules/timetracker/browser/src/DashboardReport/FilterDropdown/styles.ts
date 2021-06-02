@@ -14,7 +14,7 @@ export const styles = {
         backgroundColor: '#f0f0f0',
     }),
     m4: () => ({
-        margin: '4px',
+        margin: '0 4px',
     }),
     checkbox: () => ({
         width: '100%',
@@ -48,5 +48,8 @@ export const styles = {
         ':hover': {
           backgroundColor: '#ffffff !important',
         },
-    })
+    }),
+    m5: () => ({
+        margin: '5px',
+    }),
 };
