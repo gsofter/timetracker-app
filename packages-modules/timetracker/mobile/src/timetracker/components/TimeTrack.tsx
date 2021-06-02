@@ -86,7 +86,6 @@ const TimeTrack = ({
             <TagModal
                 modalVisible={modalVisible}
                 setModalVisible={setModalVisible}
-                styles={styles}
                 setTagName={setTagName}
                 addTag={addTag}
                 tag={tag}
@@ -126,65 +125,6 @@ const styles = StyleSheet.create({
         paddingBottom: 10,
         alignItems: 'center',
     },
-    centeredView: {
-        flex: 1,
-        justifyContent: "center",
-        alignItems: "center",
-        marginTop: 22
-    },
-    modalView: {
-        margin: 20,
-        backgroundColor: "white",
-        borderRadius: 20,
-        padding: 35,
-        alignItems: "center",
-        shadowColor: "#000",
-        shadowOffset: {
-            width: 0,
-            height: 2
-        },
-        shadowOpacity: 0.25,
-        shadowRadius: 4,
-        elevation: 5
-    },
-    button: {
-        borderRadius: 5,
-        padding: 10,
-        elevation: 2,
-        marginTop: 10
-    },
-    buttonClose: {
-        backgroundColor: "#2196F3",
-    },
-    textStyle: {
-        color: "white",
-        fontWeight: "bold",
-        textAlign: "center"
-    },
-    modalText: {
-        marginBottom: 15,
-        textAlign: "center"
-    },
-    divider: {
-        borderBottomColor: '#dcdcdc',
-        borderBottomWidth: StyleSheet.hairlineWidth,
-    },
-    flex_row: {
-        flexDirection: 'row', 
-        width: '100%', 
-    },
-    badge: {
-        backgroundColor: 'black',
-        borderRadius: 10,
-        padding: 5,
-        marginLeft: 5,
-        marginTop: 10,
-        marginBottom: 10,
-        height: 30
-    },
-    color: {
-        color: 'white'
-    }
 })
 
 export default TimeTrack;

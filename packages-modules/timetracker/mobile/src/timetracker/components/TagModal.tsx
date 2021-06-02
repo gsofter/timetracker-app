@@ -1,12 +1,11 @@
 import React from 'react'
-import {View, Modal, Pressable, Alert, Text} from 'react-native';
+import {View, Modal, Pressable, Alert, Text, StyleSheet} from 'react-native';
 import {Form, Input, Icon, Button} from 'native-base'
 import Grid from 'react-native-grid-component';
 
 const TagModal = ({
     modalVisible,
     setModalVisible,
-    styles,
     setTagName,
     addTag,
     tag,
@@ -62,5 +61,68 @@ const TagModal = ({
         </Modal>
     )
 }
+
+const styles = StyleSheet.create({
+    centeredView: {
+        flex: 1,
+        justifyContent: "center",
+        alignItems: "center",
+        marginTop: 22
+    },
+    modalView: {
+        margin: 20,
+        height: 'auto',
+        backgroundColor: "white",
+        borderRadius: 20,
+        padding: 35,
+        alignItems: "center",
+        shadowColor: "#000",
+        shadowOffset: {
+            width: 0,
+            height: 2
+        },
+        shadowOpacity: 0.25,
+        shadowRadius: 4,
+        elevation: 5
+    },
+    button: {
+        borderRadius: 5,
+        padding: 10,
+        elevation: 2,
+        marginTop: 10
+    },
+    buttonClose: {
+        backgroundColor: "#2196F3",
+    },
+    textStyle: {
+        color: "white",
+        fontWeight: "bold",
+        textAlign: "center"
+    },
+    modalText: {
+        marginBottom: 15,
+        textAlign: "center"
+    },
+    divider: {
+        borderBottomColor: '#dcdcdc',
+        borderBottomWidth: StyleSheet.hairlineWidth,
+    },
+    flex_row: {
+        flexDirection: 'row', 
+        width: '100%', 
+    },
+    badge: {
+        backgroundColor: 'black',
+        borderRadius: 10,
+        padding: 5,
+        marginLeft: 5,
+        marginTop: 10,
+        marginBottom: 10,
+        height: 30
+    },
+    color: {
+        color: 'white'
+    }
+})
 
 export default TagModal

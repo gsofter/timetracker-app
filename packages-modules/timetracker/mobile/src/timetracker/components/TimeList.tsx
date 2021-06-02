@@ -1,8 +1,21 @@
-import React from 'react';
-import {View, Text, StyleSheet} from 'react-native';
+import React, {useState} from 'react';
+import {View, Text, StyleSheet, TouchableHighlight} from 'react-native';
 import {Card, CardItem, Left, Right, Icon} from 'native-base'
 
+import TagModal from "./TagModal"
+
 const TimeList = () => {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [tagName, setTagName] = useState(null)
+    const [tag, setTag] = useState({
+        showTag: false,
+        tags: [],
+    })
+
+    const addTag = () => {
+        setTag(ps => ({...ps, tags: [...tag.tags, tagName], showTag: true}))
+    }
+
     return(
         <View style={styles.container}>
             <Card>
@@ -20,7 +33,13 @@ const TimeList = () => {
                     </Left>
                     <Right style={styles.row}>
                         <Icon type="FontAwesome" name="dollar" />
-                        <Icon style={styles.tag_icon} name="pricetag-outline" />
+                        <TouchableHighlight
+                            onPress={() => setModalVisible(true)}
+                            style={styles.icon_press} 
+                            underlayColor='#eff0f1'
+                        >
+                            <Icon style={styles.tag_icon} name="pricetag-outline" />
+                        </TouchableHighlight>
                     </Right>
                 </CardItem>
                 <CardItem>
@@ -32,6 +51,13 @@ const TimeList = () => {
                     </Right>
                 </CardItem>
             </Card>
+            <TagModal
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                setTagName={setTagName}
+                addTag={addTag}
+                tag={tag}
+            />
         </View>
     )
 }
@@ -56,7 +82,12 @@ const styles = StyleSheet.create({
     tag_icon: {
         color: 'black',
         marginLeft: 10
-    }
+    },
+    icon_press: {
+        borderRadius: 50,
+        justifyContent: 'center',
+        alignItems: 'center'
+    },
 })
 
 export default TimeList;
