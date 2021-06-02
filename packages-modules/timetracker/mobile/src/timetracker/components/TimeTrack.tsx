@@ -1,8 +1,9 @@
 import React, {useState} from 'react';
-import { Col, Button, Icon, Row, Input, Form } from 'native-base';
-import { Text, StyleSheet, Modal, View, Pressable, Alert } from 'react-native';
+import { Col, Button, Icon, Row } from 'native-base';
+import { Text, StyleSheet, TouchableHighlight } from 'react-native';
 import { Stopwatch } from 'react-native-stopwatch-timer';
-import Grid from 'react-native-grid-component';
+
+import TagModal from "./TagModal"
 
 const TimeTrack = ({
     stopwatchStart,
@@ -32,16 +33,13 @@ const TimeTrack = ({
     const addTag = () => {
         setTag(ps => ({...ps, tags: [...tag.tags, tagName], showTag: true}))
     }
-    const _renderItem = (data, i) => (
-        <View style={styles.badge} key={i}>
-            <Text style={styles.color}>{data}</Text>
-        </View>
-    );
 
     return (
         <Row style={styles.row_2}>
             <Col style={{ width: 30 }}>
-                <Icon onPress={() => setModalVisible(true)} name="pricetag-outline" style={styles.icon_tag} />
+                <TouchableHighlight style={styles.icon_press} underlayColor='#eff0f1' onPress={() => setModalVisible(true)}>
+                    <Icon name="pricetag-outline" style={styles.icon_tag} />
+                </TouchableHighlight>
             </Col>
             <Col style={{ width: 15 }}>
                 <Icon
@@ -85,46 +83,14 @@ const TimeTrack = ({
                 <Icon onPress={() => onTrack()} name="time-outline" style={{ alignSelf: 'center', color: track ? '#1890ff' : 'grey' }} />
                 <Icon onPress={() => onManual()} name="list-outline" style={{ alignSelf: 'center', color: manual ? '#1890ff' : 'grey' }} />
             </Col>
-            <Modal
-                animationType="slide"
-                transparent={true}
-                visible={modalVisible}
-                onRequestClose={() => {
-                Alert.alert("Modal has been closed.");
-                setModalVisible(!modalVisible);
-                }}
-            >
-                <View style={styles.centeredView}>
-                <View style={styles.modalView}>
-                    <Form>
-                        <View style={styles.flex_row}>
-                            <Input 
-                            onChangeText={(e) => setTagName(e)} 
-                            placeholder="Enter tags here"
-                            />
-                            <Button bordered info transparent small onPress={() => addTag()}>
-                                <Icon name="add-outline" />
-                            </Button>
-                        </View>
-                        <View style={styles.divider}/>
-                    </Form>
-                    {tag.showTag && (
-                        <Grid
-                            style={{height: 'auto'}}
-                            renderItem={_renderItem}
-                            data={tag.tags}
-                            numColumns={2}
-                        />
-                    )}
-                    <Pressable
-                        style={[styles.button, styles.buttonClose]}
-                        onPress={() => setModalVisible(!modalVisible)}
-                    >
-                        <Text style={styles.textStyle}>Close Modal</Text>
-                    </Pressable>
-                </View>
-                </View>
-            </Modal>
+            <TagModal
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                styles={styles}
+                setTagName={setTagName}
+                addTag={addTag}
+                tag={tag}
+            />
         </Row>
     )
 }
@@ -143,6 +109,10 @@ const option = {
 };
 
 const styles = StyleSheet.create({
+    icon_press: {
+        borderRadius: 50,
+        paddingLeft: 5
+    },
     icon_tag: {
         color: 'black',
         fontSize: 18
