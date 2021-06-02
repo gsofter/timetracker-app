@@ -21,14 +21,13 @@ const TimeTrack = ({
     billable,
     handleStartTimer,
     updatePlayingTimeRecord,
-    setTimeRecord
+    setTimeRecord,
+    tag, 
+    setTag
 }: any) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [tagName, setTagName] = useState(null)
-    const [tag, setTag] = useState({
-        showTag: false,
-        tags: [],
-    })
+    const [reset, setReset] = useState(false)
 
     const addTag = () => {
         setTag(ps => ({...ps, tags: [...tag.tags, tagName], showTag: true}))
@@ -55,7 +54,8 @@ const TimeTrack = ({
             <Col>
                 <Stopwatch laps start={stopwatchStart}
                     options={option}
-                    getTime={getFormattedTime} />
+                    getTime={getFormattedTime}
+                    reset={reset} />
             </Col>
             <Col>
                 {isStart &&
@@ -73,6 +73,7 @@ const TimeTrack = ({
                         setStopWatchStart(false)
                         setIsStop(false)
                         setIsStart(true)
+                        setReset(true)
                         updatePlayingTimeRecord()
                     }}>
                         <Text style={{ color: 'white' }}>Stop</Text>

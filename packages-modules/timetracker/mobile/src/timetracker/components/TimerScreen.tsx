@@ -1,7 +1,7 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import moment from 'moment';
 import { StyleSheet, View, ScrollView, Platform } from 'react-native';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
+//import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import TimerFooter from './TimerFooter';
 import TimeRange from './TimeRange';
@@ -14,17 +14,21 @@ import {
   useCreateTimeRecordMutation,
   useGetPlayingTimeRecordQuery,
   useGetDurationTimeRecordsQuery,
-  useUpdateTimeRecordMutation
+  useUpdateTimeRecordMutation,
+  useGetProjectsQuery
 } from '../../generated-models';
+import { useSelector } from 'react-redux';
 
 const TimerScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
   const [billable, setBillable] = useState(false);
+  const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const [track, setTrack] = useState
     (true);
   const [manual, setManual] = useState(false);
   const [addManual, setAddManual] = useState(false);
   const [timeRecord, setTimeRecord] = useState<ITimeRecord>({
+    id: '',
     userId: '',
     taskName: '',
     tags: [],
@@ -37,8 +41,9 @@ const TimerScreen = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
   const [createMutation] = useCreateTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
+  const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
-    variables: { userId: timeRecord.userId, startTime: timeRecord.startTime, endTime: timeRecord.endTime },
+    variables: { userId: userId, startTime: timeRecord.startTime, endTime: timeRecord.endTime },
   });
   const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
 
@@ -82,19 +87,19 @@ const TimerScreen = () => {
         refetch();
       })
       .catch((error) => {
-        alert(error.message);
+        console.log(error);
       });
   };
 
   const updateTimeRecord = (recordId: string, request: ITimeRecordRequest) => {
     updateMutation({ variables: { recordId, request } })
-      .then(() => {
+      .then((res) => {
         alert('TimeRecord Updated');
         refetch();
         plRefetch();
       })
       .catch((error) => {
-        alert(error.message);
+        console.log(error);
       });
   };
 
@@ -107,7 +112,9 @@ const TimerScreen = () => {
           onDateChange={onDateChange}
           onReset={onReset}
         />
-        <TimeList />
+        {data && data.getDurationTimeRecords.length && (
+          <TimeList data={data} />
+        )}
       </ScrollView>
       <View style={{ flex: Platform.OS === 'ios' ? 1 : 0 }}>
         <TimerFooter
@@ -122,12 +129,14 @@ const TimerScreen = () => {
           setAddManual={setAddManual}
           setTimeRecord={setTimeRecord}
           timeRecord={timeRecord}
+          plData={plData}
           createTimeRecord={createTimeRecord}
           updateTimeRecord={updateTimeRecord}
+          projectsData={projectsData}
         />
       </View>
-      {Platform.OS === 'ios' &&
-        <KeyboardSpacer />}
+     {/*  {Platform.OS === 'ios' &&
+        <KeyboardSpacer />} */}
     </View>
   );
 };

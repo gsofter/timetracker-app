@@ -8,6 +8,7 @@ import * as _ from 'lodash';
 import moment from 'moment';
 
 import TimeTrack from './TimeTrack'
+import ProjectModal from "./ProjectModal"
 import {
   ITimeRecordRequest,
 } from '@admin-layout/timetracker-core';
@@ -30,21 +31,28 @@ const TimerFooter = ({
   setTimeRecord,
   timeRecord,
   createTimeRecord,
-  updateTimeRecord
+  updateTimeRecord,
+  plData,
+  projectsData
 }: any) => {
 
   const [stopwatchStart, setStopWatchStart] = useState(false)
+  const [modalVisible, setModalVisible] = useState(false)
   const [isStart, setIsStart] = useState(true)
   const [isStop, setIsStop] = useState(false)
   const history = useHistory<any>()
   const user = useSelector((state: any) => state?.user)
+  const [tag, setTag] = useState({
+    showTag: false,
+    tags: [],
+  })
 
   useEffect(() => {
-    setTimeRecord(ps => ({ ...ps, isBillable: billable }))
+    setTimeRecord(ps => ({ ...ps, isBillable: billable, tags: tag.tags }))
     if (user) {
       setTimeRecord(ps => ({ ...ps, userId: user.auth0UserId }));
     }
-  }, [history, billable])
+  }, [history, billable, tag.tags])
 
   const getFormattedTime = (time: any) => {
     //console.log("TIME", time)
@@ -65,11 +73,13 @@ const TimerFooter = ({
     createTimeRecord(newTimeRecord);
   };
   const updatePlayingTimeRecord = () => {
+    const {id, ...rest} = timeRecord;
     const newTimeRecord: ITimeRecordRequest = {
-      ..._.omit(timeRecord, ['id', '__typename']),
+      ...rest,
       endTime: moment(),
     };
-    updateTimeRecord(timeRecord.id, { ..._.omit(newTimeRecord, ['__typename', 'id']) });
+    setTimeRecord(newTimeRecord)
+    updateTimeRecord(plData.getPlayingTimeRecord.id, newTimeRecord);
   };
 
   return (
@@ -81,15 +91,11 @@ const TimerFooter = ({
               <Input onChangeText={(value) => setTimeRecord(ps => ({ ...ps, taskName: value }))} placeholder="What are you working on?" />
             </Item>
             <View style={styles.row_button}>
-              <Button iconLeft transparent onPress={() => toggleProject()}>
+              <Button iconLeft transparent onPress={() => setModalVisible(true)}>
                 <Icon style={{ color: '#62b1f6' }} name='add-circle-outline' />
                 <Text style={{ color: '#62b1f6' }}>Projects</Text>
               </Button>
-              {isToggle && (
-                <View style={{ zIndex: 1 }}>
-                  <Text>Project List</Text>
-                </View>
-              )}
+              <ProjectModal projectsData={projectsData} setModalVisible={setModalVisible} modalVisible={modalVisible}/>
             </View>
           </View>
           {track && (
@@ -110,6 +116,8 @@ const TimerFooter = ({
               handleStartTimer={handleStartTimer}
               updatePlayingTimeRecord={updatePlayingTimeRecord}
               setTimeRecord={setTimeRecord}
+              setTag={setTag}
+              tag={tag}
             />
           )}
         </View>
