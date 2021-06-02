@@ -1,0 +1,15 @@
+fragment TimeRecord on TimeRecord {
+    id
+    startTime
+    endTime
+    taskId
+    taskName
+    tags
+    isBillable
+    projectId
+    clientId
+    userId
+    orgId
+    timesheetId
+    editable
+}

@@ -38,3 +38,7 @@ extend type Mutation {
   removeTimeRecord(recordId: String): Boolean @addAccountContext
   removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean @addAccountContext
 }
+
+extend type Subscription {
+  SubscribeToTimeTracker(orgName: String, userId: String): TimeRecord
+}

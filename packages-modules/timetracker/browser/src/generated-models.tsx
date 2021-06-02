@@ -26,6 +26,24 @@ export type Omit<T, K extends keyof T> = Pick<T, Exclude<keyof T, K>>;
 
 
 
+
+export const TimeRecordFragmentDoc = gql`
+    fragment TimeRecord on TimeRecord {
+  id
+  startTime
+  endTime
+  taskId
+  taskName
+  tags
+  isBillable
+  projectId
+  clientId
+  userId
+  orgId
+  timesheetId
+  editable
+}
+    `;
 export const CreateTimeRecordDocument = gql`
     mutation CreateTimeRecord($request: TimeRecordRequest) {
   createTimeRecord(request: $request)
@@ -679,3 +697,39 @@ export function useGetMembersLazyQuery(baseOptions?: ApolloReactHooks.LazyQueryH
 export type GetMembersQueryHookResult = ReturnType<typeof useGetMembersQuery>;
 export type GetMembersLazyQueryHookResult = ReturnType<typeof useGetMembersLazyQuery>;
 export type GetMembersQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IGetMembersQuery, SchemaTypes.IGetMembersQueryVariables>;
+export const SubscribeToTimeTrackerDocument = gql`
+    subscription SubscribeToTimeTracker($orgName: String, $userId: String) {
+  SubscribeToTimeTracker(orgName: $orgName, userId: $userId) {
+    ...TimeRecord
+  }
+}
+    ${TimeRecordFragmentDoc}`;
+export type SubscribeToTimeTrackerComponentProps = Omit<ApolloReactComponents.SubscriptionComponentOptions<SchemaTypes.ISubscribeToTimeTrackerSubscription, SchemaTypes.ISubscribeToTimeTrackerSubscriptionVariables>, 'subscription'>;
+
+    export const SubscribeToTimeTrackerComponent = (props: SubscribeToTimeTrackerComponentProps) => (
+      <ApolloReactComponents.Subscription<SchemaTypes.ISubscribeToTimeTrackerSubscription, SchemaTypes.ISubscribeToTimeTrackerSubscriptionVariables> subscription={SubscribeToTimeTrackerDocument} {...props} />
+    );
+    
+
+/**
+ * __useSubscribeToTimeTrackerSubscription__
+ *
+ * To run a query within a React component, call `useSubscribeToTimeTrackerSubscription` and pass it any options that fit your needs.
+ * When your component renders, `useSubscribeToTimeTrackerSubscription` returns an object from Apollo Client that contains loading, error, and data properties
+ * you can use to render your UI.
+ *
+ * @param baseOptions options that will be passed into the subscription, supported options are listed on: https://www.apollographql.com/docs/react/api/react-hooks/#options;
+ *
+ * @example
+ * const { data, loading, error } = useSubscribeToTimeTrackerSubscription({
+ *   variables: {
+ *      orgName: // value for 'orgName'
+ *      userId: // value for 'userId'
+ *   },
+ * });
+ */
+export function useSubscribeToTimeTrackerSubscription(baseOptions?: ApolloReactHooks.SubscriptionHookOptions<SchemaTypes.ISubscribeToTimeTrackerSubscription, SchemaTypes.ISubscribeToTimeTrackerSubscriptionVariables>) {
+        return ApolloReactHooks.useSubscription<SchemaTypes.ISubscribeToTimeTrackerSubscription, SchemaTypes.ISubscribeToTimeTrackerSubscriptionVariables>(SubscribeToTimeTrackerDocument, baseOptions);
+      }
+export type SubscribeToTimeTrackerSubscriptionHookResult = ReturnType<typeof useSubscribeToTimeTrackerSubscription>;
+export type SubscribeToTimeTrackerSubscriptionResult = ApolloReactCommon.SubscriptionResult<SchemaTypes.ISubscribeToTimeTrackerSubscription>;

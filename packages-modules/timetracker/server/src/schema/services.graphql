@@ -7,3 +7,13 @@ extend enum ConfigCollectionName{
 extend enum ConfigurationContributionNames {
     timeTracker
 }
+
+"""
+ Subscription event for timer
+"""
+enum TimeRecordPubSubEvents {
+    TimeRecordCreated
+    TimeRecordUpdated
+    TimeRecordDeleted
+    TimeRecordConfigurationUpdate
+}

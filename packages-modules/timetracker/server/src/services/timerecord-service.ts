@@ -1,9 +1,11 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import * as ILogger from 'bunyan';
 import { inject, injectable } from 'inversify';
-import { ITimeRecord, ITimeRecordRequest, ITimesheet } from '@admin-layout/timetracker-core';
+import { ITimeRecord, ITimeRecordRequest, ITimesheet, ITimeRecordPubSubEvents } from '@admin-layout/timetracker-core';
 import { ServerTypes, IPreferencesService } from '@adminide-stack/core';
 import { IMoleculerServiceName, IMailServiceAction, IMailerServicesendArgs } from '@container-stack/mailing-api';
 import * as moment from 'moment';
+import { PubSubEngine } from 'graphql-subscriptions';
 
 import { ServiceBroker, CallingOptions } from 'moleculer';
 import { CommonType } from '@common-stack/core';
@@ -45,6 +47,9 @@ export class TimeRecordService implements ITimeRecordService {
     @inject(CommonType.MOLECULER_BROKER)
     private broker: ServiceBroker,
 
+    @inject('PubSub')
+    private pubsub: PubSubEngine,
+
     @inject('Logger')
     logger: ILogger,
   ) {
@@ -76,15 +81,21 @@ export class TimeRecordService implements ITimeRecordService {
   }
 
   public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
-    return this.timeRecordRepository.createTimeRecord(userId, orgId, request);
+    const data = await this.timeRecordRepository.createTimeRecord(userId, orgId, request);
+    this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordCreated, { SubscribeToTimeTracker: data });
+    return data;
   }
 
   public async updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest) {
-    return this.timeRecordRepository.updateTimeRecord(userId, orgId, recordId, request);
+    const data = await this.timeRecordRepository.updateTimeRecord(userId, orgId, recordId, request);
+    this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordCreated, { SubscribeToTimeTracker: data });
+    return data;
   }
 
   public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
-    return this.timeRecordRepository.removeTimeRecord(userId, orgId, recordId);
+    const data = await this.timeRecordRepository.removeTimeRecord(userId, orgId, recordId);
+    this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordDeleted, { SubscribeToTimeTracker: data });
+    return data;
   }
 
   public async removeDurationTimeRecords(

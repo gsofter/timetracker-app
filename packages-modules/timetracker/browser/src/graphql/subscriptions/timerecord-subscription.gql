@@ -1,0 +1,5 @@
+subscription SubscribeToTimeTracker($orgName: String, $userId: String) {
+    SubscribeToTimeTracker(orgName: $orgName, userId: $userId){
+        ...TimeRecord
+    }
+}

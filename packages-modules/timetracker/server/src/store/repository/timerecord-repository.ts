@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 import * as Logger from 'bunyan';
 import { injectable, inject } from 'inversify';
 import * as mongoose from 'mongoose';
@@ -77,6 +78,7 @@ export class TimeRecordRepository implements ITimeRecordRepository {
         { orgId, $push: { timeRecords: request } },
         { upsert: true },
       );
+      console.log('---RESPONSE FROM CREATE TIMER RECORD', response);
       return response.id;
     } catch (err) {
       throw new Error(err.message);

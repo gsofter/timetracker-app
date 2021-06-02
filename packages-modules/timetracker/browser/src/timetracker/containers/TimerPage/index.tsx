@@ -7,6 +7,7 @@ import {
   useRemoveTimeRecordMutation,
   useUpdateTimeRecordMutation,
   useGetProjectsQuery,
+  useSubscribeToTimeTrackerSubscription,
 } from '../../../generated-models';
 import { ITimeRecordRequest, ITimeRecord, IPermissionType } from '@admin-layout/timetracker-core';
 import { message, Spin } from 'antd';
@@ -24,7 +25,7 @@ const TimeTrackerWrapper = (props) => {
   const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
     variables: { userId, startTime: range.startTime, endTime: range.endTime },
   });
-  const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
+  const { data: plData, refetch: plRefetch, loading: plLoading, subscribeToMore: {} } = useGetPlayingTimeRecordQuery();
   const [createMutation] = useCreateTimeRecordMutation();
   const [removeMutation] = useRemoveTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
@@ -33,6 +34,9 @@ const TimeTrackerWrapper = (props) => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
   const { self: createPermit } = useCreatePermissions();
   const { self: deletePermit } = useDeletePermissions();
+  const { data: subscribedData, loading: subscribeLoading } = useSubscribeToTimeTrackerSubscription({ variables: { userId, }});
+
+  console.log('--- SUBSCRIBED DATA', subscribedData, subscribeLoading);
   useEffect(() => {
     moment.locale('en', {
       week: {
