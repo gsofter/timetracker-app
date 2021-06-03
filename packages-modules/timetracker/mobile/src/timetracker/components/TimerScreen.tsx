@@ -41,7 +41,7 @@ const TimerScreen = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
   const [createMutation] = useCreateTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
-  const [range, setRange] = useState({ startTime: moment().startOf('month'), endTime: moment().endOf('month') });
+  const [range, setRange] = useState({ startTime: moment().startOf('week'), endTime: moment().endOf('week') });
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
     variables: { userId: userId, startTime: range.startTime, endTime: range.endTime },
@@ -59,15 +59,21 @@ const TimerScreen = () => {
   const onDateChange = (date: any, type: any) => {
     const Date = moment(date).format('MM-DD-YYYY')
     if (type === 'END_DATE') {
+      setRange(ps => ({...ps, endTime: date}))
+      refetch()
       setSelectedEndDate(Date);
     } else {
+      setRange(ps => ({...ps, startTime: date}))
+      refetch()
       setSelectedStartDate(Date);
     }
   };
 
   const onReset = () => {
-    setSelectedEndDate(moment().format('MM-DD-YYYY'));
-    setSelectedStartDate(moment().add(5, 'd').format('MM-DD-YYYY'));
+    setRange({startTime: moment().startOf('week'), endTime: moment().endOf('week')})
+    refetch()
+    setSelectedStartDate(moment().format('MM-DD-YYYY'));
+    setSelectedEndDate(moment().add(5, 'd').format('MM-DD-YYYY'));
   };
 
   const onTrack = () => {
