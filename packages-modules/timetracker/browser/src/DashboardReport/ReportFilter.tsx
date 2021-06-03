@@ -13,15 +13,25 @@ interface IReportFilter {
     records: Array<ITimeRecord>;
     setFilteredRecords: Function;
 }
+export enum FilterName {
+    TEAM = 'team',
+    CLIENT = 'client',
+    PROJECT = 'project',
+    TASK = 'task',
+    TAG = 'tag',
+    STATUS = 'status',
+    DESCRIPTION = 'description',
+}
+export const WITHOUT = 'without';
 
 const FilterTypes = [
-    { value: 'Team', selected: true, dropdown: (props) => <TeamDropdown {...props}/> },
-    { value: 'Client', selected: true, dropdown: (props) => <ClientDropdown {...props}/> },
-    { value: 'Project', selected: true, dropdown: (props) => <ProjectDropdown {...props}/> },
-    { value: 'Task', selected: true, dropdown: (props) => <TaskDropdown {...props}/> },
-    { value: 'Tag', selected: true, dropdown: (props) => <TagDropdown {...props}/> },
-    { value: 'Status', selected: true, dropdown: (props) => <StatusDropdown {...props}/> },
-    { value: 'Description', selected: true, dropdown: (props) => <DescriptionDropdown {...props}/> },
+    { value: FilterName.TEAM, selected: true, dropdown: (props) => <TeamDropdown {...props}/> },
+    { value: FilterName.CLIENT, selected: true, dropdown: (props) => <ClientDropdown {...props}/> },
+    { value: FilterName.PROJECT, selected: true, dropdown: (props) => <ProjectDropdown {...props}/> },
+    { value: FilterName.TASK, selected: true, dropdown: (props) => <TaskDropdown {...props}/> },
+    { value: FilterName.TAG, selected: true, dropdown: (props) => <TagDropdown {...props}/> },
+    { value: FilterName.STATUS, selected: true, dropdown: (props) => <StatusDropdown {...props}/> },
+    { value: FilterName.DESCRIPTION, selected: true, dropdown: (props) => <DescriptionDropdown {...props}/> },
 ];
 
 export const ReportFilter = (props: IReportFilter) => {
@@ -50,7 +60,7 @@ export const ReportFilter = (props: IReportFilter) => {
     const clientFilter = (clientIds) => {
         let filteredProjects = projects.slice(0);
         if (clientIds.length) {
-            if (clientIds.length === 1 && clientIds.includes('without')) {
+            if (clientIds.length === 1 && clientIds.includes(WITHOUT)) {
                 filteredProjects = projects.filter((project) => !project.clientId);
             } else {
                 filteredProjects = projects.filter((project) => clientIds.includes(project.clientId));
@@ -64,30 +74,41 @@ export const ReportFilter = (props: IReportFilter) => {
         setFilteredRecords(filteredRecords);
     }
 
+    const projectFilter = (projectIds) => {
+        let filteredProjects = projects.slice(0);
+        if (projectIds.length) {
+            if (projectIds.length === 1 && projectIds.includes(WITHOUT)) {
+                filteredProjects = [];
+            } else {
+                filteredProjects = projects.filter((project) => projectIds.includes(project.id));
+            }
+            setFilteredProjects(filteredProjects);
+        } else {
+            setFilteredProjects(filteredProjects);
+        }
+        const projectId = filteredProjects.map((project) => project.id);
+        const filteredRecords = records.filter((record) => projectId.includes(record.projectId));
+        setFilteredRecords(filteredRecords);
+    }
+
     const applyFilter = () => {
         _.forIn(filteredData, (value, key) => {
             switch (key) {
-                case 'team':
-                    console.log('<<<Team-filter--')
+                case FilterName.TEAM:
                     break;
-                case 'client':
-                    console.log('<<<Client-filter--')
+                case FilterName.CLIENT:
                     clientFilter(filteredData[key].selectedIds);
                     break;
-                case 'project':
-                    console.log('<<<Project-filter--')
+                case FilterName.PROJECT:
+                    projectFilter(filteredData[key].selectedIds);
                     break;
-                case 'task':
-                    console.log('<<<Task-filter--')
+                case FilterName.TASK:
                     break;
-                case 'tag':
-                    console.log('<<<Tag-filter--')
+                case FilterName.TAG:
                     break;
-                case 'status':
-                    console.log('<<<status-filter--')
+                case FilterName.STATUS:
                     break;
-                case 'description':
-                    console.log('<<<Description-filter--')
+                case FilterName.DESCRIPTION:
                     break;
                 default:
                     break;

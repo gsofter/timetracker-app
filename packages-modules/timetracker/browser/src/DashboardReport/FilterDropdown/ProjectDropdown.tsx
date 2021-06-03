@@ -5,10 +5,13 @@ import { Input, Checkbox, Menu, Dropdown, Badge } from 'antd';
 import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
 import { useGetOrganizationClientsQuery, useGetProjectsQuery } from '@adminide-stack/react-shared-components';
 import { styles } from './styles';
+import { FilterName, WITHOUT } from '../ReportFilter';
 import * as _ from 'lodash';
 
 interface IProjectDropdown {
     title: string;
+    filteredData: any;
+    setFilteredData: Function;
 }
 enum Status {
     ACTIVE ='Active',
@@ -16,7 +19,7 @@ enum Status {
     ACTIVE_ARCHIVED = 'Active & Archived',
 }
 export const ProjectDropdown = (props: IProjectDropdown) => {
-    const { title } = props;
+    const { title, filteredData, setFilteredData } = props;
     const [visible, setVisible] = useState(false);
     const [show, setShow] = useState(false);
     const [checkedList, setCheckedList] = React.useState([]);
@@ -39,10 +42,20 @@ export const ProjectDropdown = (props: IProjectDropdown) => {
             setClientProjects(projectList);
             setFilteredProjects(projectList);
         }
-    }, [projects])
+    }, [projects]);
+
+    useEffect(() => {
+        setFilteredProjects(filterProjectsByStatus(status));
+    }, [status]);
 
     const handleVisibleChange = (value) => {
         if(!value) {
+            setFilteredData({
+                ...filteredData,
+                [FilterName.PROJECT]: {
+                    selectedIds: [...checkedList],
+                },
+            });
             setCount(checkedList.length);
         }
         setVisible(value);
@@ -53,15 +66,26 @@ export const ProjectDropdown = (props: IProjectDropdown) => {
     const onClickStatus = ({ key }) => {
         setStatus(key);
         setShow(false);
+        setCheckAll(false);
+        setCheckedList([]);
+    };
+    const getProjectsId = () => {
+        let ids = [];
+        filteredProjects.forEach(({ projects }) => {
+            projects.forEach((project) => {
+                ids.push(project.id);
+            });
+        });
+        return ids;
     };
     const onChange = list => {
         setCheckedList(list);
-        setCheckAll(list.length === (projects.length + 1));
+        setCheckAll(list.length === (getProjectsId().length + 1));
     };
     const onCheckAllChange = e => {
-        let list = e.target.checked ? projects?.map(project => project.id) : []
+        let list = e.target.checked ? getProjectsId() : []
         if (e.target.checked) {
-            list.push('without');
+            list.push(WITHOUT);
         }
         setCheckedList(list);
         setCheckAll(e.target.checked);
@@ -69,18 +93,33 @@ export const ProjectDropdown = (props: IProjectDropdown) => {
     const onChangeInput = (e) => {
         let newProjects = [];
         if (e.target.value.trim()) {
-            newProjects = filterProjects(e.target.value);
+            newProjects = filterProjectsByName(e.target.value);
         } else {
             newProjects = clientProjects;
         }
         setFilteredProjects(newProjects);
     };
-    const filterProjects = (str) => {
+    const filterProjectsByName = (str) => {
         const projectList =  clientProjects?.map(({ clientId, projects }) => {
             return ({
                 clientId,
                 projects: projects.filter((project) => {
                     return project.name.toLowerCase().includes(str.toLowerCase());
+                }),
+            })
+        });
+        return projectList.filter(({ projects }) => projects.length);
+    };
+    const filterProjectsByStatus = (status) => {
+        const projectList =  clientProjects?.map(({ clientId, projects }) => {
+            return ({
+                clientId,
+                projects: projects.filter((project) => {
+                    if (status === Status.ACTIVE_ARCHIVED) {
+                        return (project.status === Status.ACTIVE || project.status === Status.ARCHIVED);
+                    } else {
+                        return (project.status === status);
+                    }
                 }),
             })
         });
@@ -138,8 +177,8 @@ export const ProjectDropdown = (props: IProjectDropdown) => {
                     <Menu.Item className={css(styles.disabledItem)}>
                         <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
                             <Menu>
-                                <Menu.Item key={'without'} className={css(styles.item, styles.mTB0)}>
-                                    <Checkbox value={'without'} className={css(styles.checkbox)}>{'Without client'}</Checkbox>
+                                <Menu.Item key={WITHOUT} className={css(styles.item, styles.mTB0)}>
+                                    <Checkbox value={WITHOUT} className={css(styles.checkbox)}>{'Without project'}</Checkbox>
                                 </Menu.Item>
                                 {filteredProjects?.map(({ projects, clientId }) => (
                                     <>
@@ -177,7 +216,7 @@ export const ProjectDropdown = (props: IProjectDropdown) => {
         >
             <Badge count={count} style={{ background: '#2a90fe' }}>
                 <div className={css(styles.flex, styles.m5)}>
-                    <div>{title}</div>
+                    <div className={css(styles.capitalize)}>{title}</div>
                     <CaretDownOutlined className={css(styles.m4)}/>
                 </div>
             </Badge>

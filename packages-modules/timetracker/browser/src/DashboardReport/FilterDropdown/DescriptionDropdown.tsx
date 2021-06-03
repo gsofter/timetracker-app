@@ -4,6 +4,7 @@ import { useState } from 'react';
 import { Badge, Checkbox, Dropdown, Input, Menu } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { styles } from './styles';
+import { WITHOUT } from '../ReportFilter';
 
 interface IStatusDropdown {
     title: string;
@@ -36,7 +37,7 @@ export const DescriptionDropdown = (props: IStatusDropdown) => {
                 <Input onChange={onChangeInput} placeholder={'Enter description...'}/>
             </Menu.Item>
             <Menu.Divider className={css(styles.divider)}/>
-            <Menu.Item key={'without'} className={css(styles.item)}>
+            <Menu.Item key={WITHOUT} className={css(styles.item)}>
                 <Checkbox className={css(styles.checkbox)}>{'Without description'}</Checkbox>
             </Menu.Item>
         </Menu>
@@ -51,7 +52,7 @@ export const DescriptionDropdown = (props: IStatusDropdown) => {
         >
             <Badge count={count} style={{ background: '#2a90fe' }}>
                 <div className={css(styles.flex, styles.m5)}>
-                    <div>{title}</div>
+                    <div className={css(styles.capitalize)}>{title}</div>
                     <CaretDownOutlined className={css(styles.m4)}/>
                 </div>
             </Badge>
