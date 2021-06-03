@@ -18,6 +18,7 @@ const TimeList = ({
         showTag: false,
         tags: [],
     })
+    const [dataTime, setData] = useState(null)
 
     const addTag = () => {
         setTag(ps => ({...ps, tags: [...tag.tags, tagName], showTag: true}))
@@ -33,49 +34,65 @@ const TimeList = ({
         updateTimeRecord(recordId, newTimeRecord);
     };
 
+    const updateTags = (recordId, time) => {
+        const {id, timesheetId, __typename, ...rest} = time;
+        const newTimeRecord: ITimeRecordRequest = {
+          ...rest,
+          tags: tag.tags
+        };
+        debugger
+        setTimeRecord(newTimeRecord)
+        updateTimeRecord(recordId, newTimeRecord);
+    };
+
     return(
         <ScrollView style={{paddingBottom: 160}}>
             <View style={styles.container}>
                 {data.getDurationTimeRecords.map(time => (
-                    <Card>
-                        <CardItem style={styles.header} header>
-                            <Left>
-                                <Text>{moment(time.endTime).format("dddd")}</Text>
-                            </Left>
-                            <Right>
-                                <Text>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).format("HH:mm:ss")}</Text>
-                            </Right>
-                        </CardItem>
-                        <CardItem>
-                            <Left>
-                                <Text style={styles.title}>{time.taskName}</Text>
-                            </Left>
-                            <Right style={styles.row}>
-                                <Icon onPress={() =>{
-                                    if(time.isBillable){
-                                        updateBillable(time.id, false, time)
-                                    } else{
-                                        updateBillable(time.id, true, time)
-                                    }
-                                }} style={{ color: time.isBillable ? '#1890ff' : 'grey' }} type="FontAwesome" name="dollar" />
-                                <TouchableHighlight
-                                    onPress={() => setModalVisible(true)}
-                                    style={styles.icon_press} 
-                                    underlayColor='#eff0f1'
-                                >
-                                    <Icon style={styles.tag_icon} name="pricetag-outline" />
-                                </TouchableHighlight>
-                            </Right>
-                        </CardItem>
-                        <CardItem>
-                            <Left>
-                                <Text style={styles.grey}>(No Description)</Text>
-                            </Left>
-                            <Right>
-                                <Text>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).format("HH:mm:ss")}</Text>
-                            </Right>
-                        </CardItem>
-                    </Card>
+                    <>
+                        <Card>
+                            <CardItem style={styles.header} header>
+                                <Left>
+                                    <Text>{moment(time.endTime).format("dddd")}</Text>
+                                </Left>
+                                <Right>
+                                    <Text>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).format("HH:mm:ss")}</Text>
+                                </Right>
+                            </CardItem>
+                            <CardItem>
+                                <Left>
+                                    <Text style={styles.title}>{time.taskName}</Text>
+                                </Left>
+                                <Right style={styles.row}>
+                                    <Icon onPress={() =>{
+                                        if(time.isBillable){
+                                            updateBillable(time.id, false, time)
+                                        } else{
+                                            updateBillable(time.id, true, time)
+                                        }
+                                    }} style={{ color: time.isBillable ? '#1890ff' : 'grey' }} type="FontAwesome" name="dollar" />
+                                    <TouchableHighlight
+                                        onPress={() => {
+                                            setData(time)
+                                            setModalVisible(true)
+                                        }}
+                                        style={styles.icon_press} 
+                                        underlayColor='#eff0f1'
+                                    >
+                                        <Icon style={styles.tag_icon} name="pricetag-outline" />
+                                    </TouchableHighlight>
+                                </Right>
+                            </CardItem>
+                            <CardItem>
+                                <Left>
+                                    <Text style={styles.grey}>(No Description)</Text>
+                                </Left>
+                                <Right>
+                                    <Text>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).format("HH:mm:ss")}</Text>
+                                </Right>
+                            </CardItem>
+                        </Card>
+                    </>
                 ))}
                 <TagModal
                     modalVisible={modalVisible}
@@ -83,6 +100,9 @@ const TimeList = ({
                     setTagName={setTagName}
                     addTag={addTag}
                     tag={tag}
+                    updateTags={updateTags}
+                    timeData={dataTime}
+                    setTag={setTag}
                 />
             </View>
         </ScrollView>

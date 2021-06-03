@@ -1,4 +1,4 @@
-import React from 'react'
+import React, {useEffect} from 'react'
 import {View, Modal, Pressable, Alert, Text, StyleSheet} from 'react-native';
 import {Form, Input, Icon, Button} from 'native-base'
 import Grid from 'react-native-grid-component';
@@ -9,7 +9,16 @@ const TagModal = ({
     setTagName,
     addTag,
     tag,
-}) => {
+    updateTags,
+    timeData,
+    setTag,
+}: any) => {
+
+    useEffect(() => {
+        if(timeData?.tags){
+            setTag(ps => ({...ps, tags: timeData.tags, showTag: true}))
+        }
+    }, [timeData?.tags])
 
     const _renderItem = (data, index) => (
         <View style={styles.badge} key={`${index}`}>
@@ -32,10 +41,14 @@ const TagModal = ({
                 <Form>
                     <View style={styles.flex_row}>
                         <Input 
-                        onChangeText={(e) => setTagName(e)} 
+                        onChangeText={(e) => {
+                            setTagName(e)
+                        }} 
                         placeholder="Enter tags here"
                         />
-                        <Button bordered info transparent small onPress={() => addTag()}>
+                        <Button bordered info transparent small onPress={() => {
+                            addTag()
+                        }}>
                             <Icon name="add-outline" />
                         </Button>
                     </View>
@@ -50,12 +63,26 @@ const TagModal = ({
                         numColumns={2}
                     />
                 )}
-                <Pressable
-                    style={[styles.button, styles.buttonClose]}
-                    onPress={() => setModalVisible(!modalVisible)}
-                >
-                    <Text style={styles.textStyle}>Close Modal</Text>
-                </Pressable>
+                <View style={{flexDirection: 'row'}}>
+                    <Pressable
+                        style={[styles.button, styles.buttonClose]}
+                        onPress={() => setModalVisible(!modalVisible)}
+                    >
+                        <Text style={styles.textStyle}>Close Modal</Text>
+                    </Pressable>
+                    <Pressable
+                        style={[styles.button, styles.buttonSave]}
+                        onPress={() => {
+                            if(timeData){
+                                updateTags(timeData.id, timeData)
+                            } else{
+                                updateTags()
+                            }
+                        }}
+                    >
+                        <Text style={styles.textStyle}>Save Tags</Text>
+                    </Pressable>
+                </View>
             </View>
             </View>
         </Modal>
@@ -92,6 +119,10 @@ const styles = StyleSheet.create({
         marginTop: 10
     },
     buttonClose: {
+        backgroundColor: "red",
+        marginRight: 10
+    },
+    buttonSave: {
         backgroundColor: "#2196F3",
     },
     textStyle: {

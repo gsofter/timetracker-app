@@ -37,6 +37,16 @@ const TimeTrack = ({
         setTag(ps => ({...ps, tags: [...tag.tags, tagName], showTag: true}))
     }
 
+    const updateTags = () => {
+        const {id, ...rest} = timeRecord;
+        const newTimeRecord: ITimeRecordRequest = {
+          ...rest,
+          tags: tag.tags
+        };
+        setTimeRecord(newTimeRecord)
+        updateTimeRecord(plData.getPlayingTimeRecord.id, newTimeRecord);
+    };
+
     const updateBillable = (data) => {
         const {id, ...rest} = timeRecord;
         const newTimeRecord: ITimeRecordRequest = {
@@ -109,6 +119,7 @@ const TimeTrack = ({
                 setTagName={setTagName}
                 addTag={addTag}
                 tag={tag}
+                updateTags={updateTags}
             />
         </Row>
     )
