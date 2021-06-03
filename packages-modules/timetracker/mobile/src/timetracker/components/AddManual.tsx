@@ -150,7 +150,7 @@ const AddManual = () => {
     const handleStartTimer = () => {
         const newTimeRecord: ITimeRecordRequest = {
           ..._.omit(timeRecord, ['id', '__typename']),
-          userId: userId
+          userId: userId,
         };
         setTimeRecord(newTimeRecord)
         createTimeRecord(newTimeRecord);
