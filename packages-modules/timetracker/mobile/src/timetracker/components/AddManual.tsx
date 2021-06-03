@@ -26,8 +26,21 @@ import { useHistory } from 'react-router-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import moment from 'moment'
-import {tasks} from "../../constants/data"
-import { useGetProjectsQuery } from '../../generated-models';
+import _ from 'lodash'
+import TaskModal from "./TaskModal"
+import {
+    ITimeRecordRequest,
+    ITimeRecord
+  } from '@admin-layout/timetracker-core';
+  import {
+    useCreateTimeRecordMutation,
+    useGetPlayingTimeRecordQuery,
+    useGetDurationTimeRecordsQuery,
+    useUpdateTimeRecordMutation,
+    useGetProjectsQuery,
+    useRemoveTimeRecordMutation
+  } from '../../generated-models';
+import { useSelector } from 'react-redux';
 
 const AddManual = () => {
     const history = useHistory();
@@ -41,30 +54,38 @@ const AddManual = () => {
         totalDate: moment('2017-08-30T00:00:00')
     })
     const [isEnabled, setIsEnabled] = useState(false);
-    const [listOpen, setListOpen] = useState({
-        project: false,
-        task: false,
-        projectIcon: 'chevron-forward-outline',
-        taskIcon: 'chevron-forward-outline',
-        projectName: null,
-        taskName: null
-    })
-    const [list, setList] = useState({
-        task: tasks
-    })
     const [projectOpen, setProjectOpen] = useState(false);
     const [projectValue, setProjectValue] = useState(null);
-    const [taskOpen, setTaskOpen] = useState(false);
-    const [taskValue, setTaskValue] = useState(null);
+    const [modalVisible, setModalVisible] = useState(false)
     const [tag, setTag] = useState({
         showTag: false,
         btnText: 'Edit Tags',
         tags: [],
     })
     const [tagName, setTagName] = useState(null)
+    const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
     const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
+    const [timeRecord, setTimeRecord] = useState<ITimeRecord>({
+        id: '',
+        userId: '',
+        taskName: '',
+        tags: [],
+        startTime: null,
+        projectId: '',
+        isBillable: false,
+        endTime: null
+      })
+    const [createMutation] = useCreateTimeRecordMutation();
+    const [range, setRange] = useState({ startTime: moment().startOf('week'), endTime: moment().endOf('week') });
+    const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
+        variables: { userId: userId, startTime: range.startTime, endTime: range.endTime },
+      });
+      const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery()
     
-    const toggleSwitch = () => setIsEnabled(previousState => !previousState);
+    const toggleSwitch = () => {
+        setIsEnabled(previousState => !previousState)
+        setTimeRecord(ps => ({...ps, isBillable: !timeRecord.isBillable}))
+    };
 
     const projects = projectsData?.getProjects.map(project => ({value: project.id, label: project.name}))
 
@@ -79,6 +100,7 @@ const AddManual = () => {
     const handleStartConfirm = (selectedDate) => {
         const currentDate = selectedDate || startDate;
         setStartDate(currentDate);
+        setTimeRecord(ps => ({...ps, startTime: moment(currentDate)}))
         setDates(ps => ({...ps, startDate: moment(currentDate)}))
         handleStartCancel()
     };
@@ -89,6 +111,7 @@ const AddManual = () => {
     const handleEndConfirm = (selectedDate) => {
         const currentDate = selectedDate || endDate;
         setEndDate(currentDate);
+        setTimeRecord(ps => ({...ps, endTime: moment(currentDate)}))
         setDates(ps => ({...ps, endDate: moment(currentDate)}))
         handleEndCancel()
     };
@@ -108,6 +131,30 @@ const AddManual = () => {
     const addTag = () => {
         setTag(ps => ({...ps, tags: [...tag.tags, tagName]}))
     }
+    const saveTags = () => {
+        setTimeRecord(ps => ({...ps, tags: tag.tags}))
+    }
+
+    const createTimeRecord = (request: ITimeRecordRequest) => {
+        createMutation({ variables: { request } })
+          .then(() => {
+            alert('TimeRecord created');
+            plRefetch();
+            refetch();
+          })
+          .catch((error) => {
+            console.log(error);
+          });
+    };
+
+    const handleStartTimer = () => {
+        const newTimeRecord: ITimeRecordRequest = {
+          ..._.omit(timeRecord, ['id', '__typename']),
+          userId: userId
+        };
+        setTimeRecord(newTimeRecord)
+        createTimeRecord(newTimeRecord);
+    };
 
     return(
         <Container>
@@ -178,33 +225,21 @@ const AddManual = () => {
                             value={projectValue}
                             items={projects}
                             setOpen={setProjectOpen}
-                            setValue={setProjectValue}
+                            setValue={(text) => {
+                                const value = text(null)
+                                setTimeRecord(ps => ({...ps, projectId: `${value}`}))
+                                setProjectValue(text)
+                            }}
                             setItems={(data) => console.log(data)}
                         /> 
                         <View
                         style={styles.divider}
                         />
-                        <View>
-                            <DropDownPicker
-                                disableBorderRadius={true}
-                                open={taskOpen}
-                                dropDownDirection='TOP'
-                                placeholder="Select a Task"
-                                style={styles.dropdownStyle}
-                                dropDownContainerStyle={styles.dropdownContainerStyle}
-                                mode="BADGE" 
-                                zIndex={1}
-                                maxHeight={120}
-                                value={taskValue}
-                                items={tasks}
-                                setOpen={setTaskOpen}
-                                setValue={setTaskValue}
-                                setItems={(data) => console.log(data)}
-                            />
-                        </View>
-                        <View
-                        style={styles.divider}
-                        />
+                        <ListItem  onPress={() => setModalVisible(true)}>
+                            <TouchableOpacity style={{width: '100%'}}>
+                                <Text>Task</Text>
+                            </TouchableOpacity>
+                        </ListItem>
                         <ListItem>
                             <Left>
                                 <Text>Billable</Text>
@@ -221,7 +256,13 @@ const AddManual = () => {
                         </ListItem>
                         <ListItem style={styles.flex_row}>
                             <Text>Tags</Text>
-                            <Button block info small onPress={() => tagHandler()}>
+                            <Button block info small onPress={() => {
+                                if(tag.btnText === 'Save Tags'){
+                                    saveTags()
+                                } else{
+                                    tagHandler()
+                                }
+                            }}>
                                 <Text style={[styles.color, styles.left_right]}>{tag.btnText}</Text>
                             </Button>
                         </ListItem>
@@ -246,11 +287,16 @@ const AddManual = () => {
                             </ListItem>
                         )}
                     </List>
-                    <Button block info style={{marginTop: 20}}>
+                    <Button block info style={{marginTop: 20}} onPress={() => handleStartTimer()}>
                         <Text style={[styles.color]}>Submit</Text>
                     </Button>
                 </Card>
             </Content>
+            <TaskModal
+            modalVisible={modalVisible}
+            setModalVisible={setModalVisible}
+            setTimeRecord={setTimeRecord}
+            />
         </Container>
     )
 }

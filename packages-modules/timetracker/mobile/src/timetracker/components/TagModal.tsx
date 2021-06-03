@@ -46,7 +46,7 @@ const TagModal = ({
                         }} 
                         placeholder="Enter tags here"
                         />
-                        <Button bordered info transparent small onPress={() => {
+                        <Button bordered info transparent onPress={() => {
                             addTag()
                         }}>
                             <Icon name="add-outline" />

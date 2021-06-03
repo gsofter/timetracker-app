@@ -42,7 +42,6 @@ const TimeList = ({
           ...rest,
           tags: tag.tags
         };
-        debugger
         setTimeRecord(newTimeRecord)
         updateTimeRecord(recordId, newTimeRecord);
     };
@@ -58,15 +57,20 @@ const TimeList = ({
                                     <Text>{moment(time.endTime).format("dddd")}</Text>
                                 </Left>
                                 <Right style={styles.header_icon}>
-                                    <Text>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).format("HH:mm:ss")}</Text>
+                                    <Text style={{marginRight: 10}}>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).subtract(1, 'seconds').format("HH:mm:ss")}</Text>
                                     <Button danger small onPress={() => removeTimeRecord(time.id)}>
                                         <Icon name="trash" color="#fff" />
                                     </Button>
                                 </Right>
                             </CardItem>
                             <CardItem>
-                                <Left>
-                                    <Text style={styles.title}>{projectsData.find(project => project.id === time.projectId)?.name || 'No Project'}</Text>
+                                <Left style={{flexDirection: 'row'}}>
+                                    <Text style={styles.title}>
+                                        {projectsData.find(project => project.id === time.projectId)?.name || 'No Project'}
+                                    </Text>
+                                    {time.taskName && (
+                                        <Text style={styles.darkGrey}>{" "}:{time.taskName}</Text>
+                                    )}
                                 </Left>
                                 <Right style={styles.row}>
                                     <Icon onPress={() =>{
@@ -90,11 +94,7 @@ const TimeList = ({
                             </CardItem>
                             <CardItem>
                                 <Left>
-                                    {time.taskName ? 
-                                    <Text>{time.taskName}</Text>
-                                    :
                                     <Text style={styles.grey}>(No Description)</Text>
-                                    }
                                 </Left>
                                 <Right>
                                     <Text>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).format("HH:mm:ss")}</Text>
@@ -127,6 +127,9 @@ const styles = StyleSheet.create({
     },
     grey: {
         color: '#e5eaee'
+    },
+    darkGrey: {
+        color: "grey"
     },
     title: {
         color: '#07988b'
