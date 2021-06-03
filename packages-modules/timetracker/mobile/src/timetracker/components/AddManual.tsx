@@ -26,7 +26,7 @@ import { useHistory } from 'react-router-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
 import DropDownPicker from 'react-native-dropdown-picker';
 import moment from 'moment'
-import {projects, tasks} from "../../constants/data"
+import {tasks} from "../../constants/data"
 import { useGetProjectsQuery } from '../../generated-models';
 
 const AddManual = () => {
@@ -50,7 +50,6 @@ const AddManual = () => {
         taskName: null
     })
     const [list, setList] = useState({
-        project: projects,
         task: tasks
     })
     const [projectOpen, setProjectOpen] = useState(false);
@@ -67,6 +66,8 @@ const AddManual = () => {
     
     const toggleSwitch = () => setIsEnabled(previousState => !previousState);
 
+    const projects = projectsData?.getProjects.map(project => ({value: project.id, label: project.name}))
+
     useEffect(() => {
         var start = moment(dates.startDate, 'HH:mm');
         var end = moment(dates.endDate, 'HH:mm');
@@ -74,13 +75,6 @@ const AddManual = () => {
         var interval = moment().hour(0).minute(minutes);
         setDates(ps => ({...ps, totalDate: interval}))
     }, [dates.startDate, dates.endDate])
-
-    useEffect(() => {
-        const data = projects.find(project => project.value === projectValue)
-        if(data){
-            setListOpen(ps => ({...ps, projectName: data?.label}))
-        }
-    }, [projectValue])
 
     const handleStartConfirm = (selectedDate) => {
         const currentDate = selectedDate || startDate;

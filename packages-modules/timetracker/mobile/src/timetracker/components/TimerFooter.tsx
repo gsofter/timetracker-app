@@ -95,7 +95,7 @@ const TimerFooter = ({
                 <Icon style={{ color: '#62b1f6' }} name='add-circle-outline' />
                 <Text style={{ color: '#62b1f6' }}>Projects</Text>
               </Button>
-              <ProjectModal projectsData={projectsData} setModalVisible={setModalVisible} modalVisible={modalVisible}/>
+              <ProjectModal setTimeRecord={setTimeRecord} projectsData={projectsData} setModalVisible={setModalVisible} modalVisible={modalVisible}/>
             </View>
           </View>
           {track && (

@@ -1,12 +1,14 @@
-import React from "react";
-import {View, Text, Modal, Pressable, Alert, StyleSheet} from 'react-native'
+import React, {useState} from "react";
+import {View, Text, Modal, Pressable, Alert, StyleSheet, ScrollView} from 'react-native'
 import {List, ListItem} from "native-base"
 
 const ProjectModal = ({
     setModalVisible,
     modalVisible,
-    projectsData
+    projectsData,
+    setTimeRecord
 }) => {
+    const [selectedId, setSelectedId] = useState('')
     return (
         <Modal
             animationType="slide"
@@ -22,11 +24,18 @@ const ProjectModal = ({
                 {projectsData?.getProjects.length === 0 ? (
                     <Text>No Projects Found</Text>
                 ): 
-                <List style={{height: 150, overflow: 'scroll'}}>
-                    {projectsData?.map(project => (
-                        <ListItem>No Projects Found</ListItem>
-                    ))}
-                </List>}
+                <ScrollView style={{height: 150}} scrollEnabled={true}>
+                    <List>
+                        {projectsData?.getProjects.map(project => (
+                            <ListItem onPress={() => {
+                                setTimeRecord(ps => ({...ps, projectId: project.id}))
+                                setSelectedId(project.id)
+                            }}>
+                                <Text style={selectedId === project.id && styles.selected}>{project.name}</Text>
+                            </ListItem>
+                        ))}
+                    </List>
+                </ScrollView>}
                 <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => setModalVisible(!modalVisible)}
@@ -99,6 +108,9 @@ const styles = StyleSheet.create({
     },
     color: {
         color: 'white'
+    },
+    selected: {
+        fontWeight: 'bold',
     }
 })
 
