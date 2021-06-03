@@ -4,6 +4,7 @@ import { Text, StyleSheet, TouchableHighlight } from 'react-native';
 import { Stopwatch } from 'react-native-stopwatch-timer';
 
 import TagModal from "./TagModal"
+import { ITimeRecordRequest } from '@admin-layout/timetracker-core';
 
 const TimeTrack = ({
     stopwatchStart,
@@ -23,7 +24,10 @@ const TimeTrack = ({
     updatePlayingTimeRecord,
     setTimeRecord,
     tag, 
-    setTag
+    setTag,
+    timeRecord,
+    plData,
+    updateTimeRecord
 }: any) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [tagName, setTagName] = useState(null)
@@ -33,17 +37,32 @@ const TimeTrack = ({
         setTag(ps => ({...ps, tags: [...tag.tags, tagName], showTag: true}))
     }
 
+    const updateBillable = (data) => {
+        const {id, ...rest} = timeRecord;
+        const newTimeRecord: ITimeRecordRequest = {
+          ...rest,
+          isBillable: data
+        };
+        setTimeRecord(newTimeRecord)
+        updateTimeRecord(plData.getPlayingTimeRecord.id, newTimeRecord);
+    };
+
     return (
         <Row style={styles.row_2}>
-            <Col style={{ width: 30 }}>
+            <Col>
                 <TouchableHighlight style={styles.icon_press} underlayColor='#eff0f1' onPress={() => setModalVisible(true)}>
                     <Icon name="pricetag-outline" style={styles.icon_tag} />
                 </TouchableHighlight>
             </Col>
-            <Col style={{ width: 15 }}>
+            <Col>
                 <Icon
                     onPress={() => {
                         toggleBillable()
+                        if(billable){
+                            updateBillable(false)
+                        } else{
+                            updateBillable(true)
+                        }
                         setTimeRecord(ps => ({ ...ps, isBillable: billable }))
                     }}
                     type="FontAwesome"

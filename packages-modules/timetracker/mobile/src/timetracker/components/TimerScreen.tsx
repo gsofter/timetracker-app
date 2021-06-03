@@ -120,7 +120,12 @@ const TimerScreen = () => {
           onReset={onReset}
         />
         {data && data.getDurationTimeRecords.length ? (
-          <TimeList data={data} />
+          <TimeList 
+            data={data} 
+            timeRecord={timeRecord}
+            setTimeRecord={setTimeRecord}
+            updateTimeRecord={updateTimeRecord}
+          />
         ): (
           <Text style={{textAlign: 'center'}}>No Data</Text>
         )}

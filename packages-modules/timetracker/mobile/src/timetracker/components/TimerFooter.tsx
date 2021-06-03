@@ -95,7 +95,7 @@ const TimerFooter = ({
                 <Icon style={{ color: '#62b1f6' }} name='add-circle-outline' />
                 <Text style={{ color: '#62b1f6' }}>Projects</Text>
               </Button>
-              <ProjectModal setTimeRecord={setTimeRecord} projectsData={projectsData} setModalVisible={setModalVisible} modalVisible={modalVisible}/>
+              <ProjectModal plData={plData} updateTimeRecord={updateTimeRecord} timeRecord={timeRecord} setTimeRecord={setTimeRecord} projectsData={projectsData} setModalVisible={setModalVisible} modalVisible={modalVisible}/>
             </View>
           </View>
           {track && (
@@ -114,10 +114,13 @@ const TimerFooter = ({
               toggleBillable={toggleBillable}
               billable={billable}
               handleStartTimer={handleStartTimer}
+              updateTimeRecord={updateTimeRecord}
               updatePlayingTimeRecord={updatePlayingTimeRecord}
               setTimeRecord={setTimeRecord}
               setTag={setTag}
               tag={tag}
+              plData={plData}
+              timeRecord={timeRecord}
             />
           )}
         </View>

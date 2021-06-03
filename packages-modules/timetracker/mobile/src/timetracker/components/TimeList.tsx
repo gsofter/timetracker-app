@@ -4,8 +4,14 @@ import {Card, CardItem, Left, Right, Icon} from 'native-base'
 
 import TagModal from "./TagModal"
 import moment from 'moment';
+import { ITimeRecordRequest } from '@admin-layout/timetracker-core';
 
-const TimeList = ({data}) => {
+const TimeList = ({
+    data,
+    timeRecord,
+    setTimeRecord,
+    updateTimeRecord,
+}) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [tagName, setTagName] = useState(null)
     const [tag, setTag] = useState({
@@ -16,6 +22,16 @@ const TimeList = ({data}) => {
     const addTag = () => {
         setTag(ps => ({...ps, tags: [...tag.tags, tagName], showTag: true}))
     }
+
+    const updateBillable = (recordId, billable, time) => {
+        const {id, timesheetId, __typename, ...rest} = time;
+        const newTimeRecord: ITimeRecordRequest = {
+          ...rest,
+          isBillable: billable
+        };
+        setTimeRecord(newTimeRecord)
+        updateTimeRecord(recordId, newTimeRecord);
+    };
 
     return(
         <ScrollView style={{paddingBottom: 160}}>
@@ -35,7 +51,13 @@ const TimeList = ({data}) => {
                                 <Text style={styles.title}>{time.taskName}</Text>
                             </Left>
                             <Right style={styles.row}>
-                                <Icon type="FontAwesome" name="dollar" />
+                                <Icon onPress={() =>{
+                                    if(time.isBillable){
+                                        updateBillable(time.id, false, time)
+                                    } else{
+                                        updateBillable(time.id, true, time)
+                                    }
+                                }} style={{ color: time.isBillable ? '#1890ff' : 'grey' }} type="FontAwesome" name="dollar" />
                                 <TouchableHighlight
                                     onPress={() => setModalVisible(true)}
                                     style={styles.icon_press} 

@@ -2,13 +2,32 @@ import React, {useState} from "react";
 import {View, Text, Modal, Pressable, Alert, StyleSheet, ScrollView} from 'react-native'
 import {List, ListItem} from "native-base"
 
+import {
+    ITimeRecordRequest,
+  } from '@admin-layout/timetracker-core';
+import moment from "moment";
+
 const ProjectModal = ({
     setModalVisible,
     modalVisible,
     projectsData,
-    setTimeRecord
+    setTimeRecord,
+    updateTimeRecord,
+    timeRecord,
+    plData
 }) => {
-    const [selectedId, setSelectedId] = useState('')
+    const [selectedId, setSelectedId] = useState('');
+
+    const updateProjectId = (projectId) => {
+        const {id, ...rest} = timeRecord;
+        const newTimeRecord: ITimeRecordRequest = {
+          ...rest,
+          projectId: projectId
+        };
+        setTimeRecord(newTimeRecord)
+        updateTimeRecord(plData.getPlayingTimeRecord.id, newTimeRecord);
+    };
+
     return (
         <Modal
             animationType="slide"
@@ -28,7 +47,7 @@ const ProjectModal = ({
                     <List>
                         {projectsData?.getProjects.map(project => (
                             <ListItem onPress={() => {
-                                setTimeRecord(ps => ({...ps, projectId: project.id}))
+                                updateProjectId(project.id)
                                 setSelectedId(project.id)
                             }}>
                                 <Text style={selectedId === project.id && styles.selected}>{project.name}</Text>
