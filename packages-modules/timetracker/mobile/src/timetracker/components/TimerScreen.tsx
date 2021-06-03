@@ -139,6 +139,7 @@ const TimerScreen = () => {
             setTimeRecord={setTimeRecord}
             updateTimeRecord={updateTimeRecord}
             removeTimeRecord={removeTimeRecord}
+            projectsData={projectsData?.getProjects}
           />
         ): (
           <Text style={{textAlign: 'center'}}>No Data</Text>

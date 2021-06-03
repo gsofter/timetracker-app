@@ -59,7 +59,7 @@ const ProjectModal = ({
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => setModalVisible(!modalVisible)}
                 >
-                    <Text style={styles.textStyle}>Close Modal</Text>
+                    <Text style={styles.textStyle}>Close</Text>
                 </Pressable>
             </View>
             </View>

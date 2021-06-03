@@ -11,7 +11,8 @@ const TimeList = ({
     timeRecord,
     setTimeRecord,
     updateTimeRecord,
-    removeTimeRecord
+    removeTimeRecord,
+    projectsData
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [tagName, setTagName] = useState(null)
@@ -65,7 +66,7 @@ const TimeList = ({
                             </CardItem>
                             <CardItem>
                                 <Left>
-                                    <Text style={styles.title}>{time.taskName}</Text>
+                                    <Text style={styles.title}>{projectsData.find(project => project.id === time.projectId)?.name || 'No Project'}</Text>
                                 </Left>
                                 <Right style={styles.row}>
                                     <Icon onPress={() =>{
@@ -89,7 +90,11 @@ const TimeList = ({
                             </CardItem>
                             <CardItem>
                                 <Left>
+                                    {time.taskName ? 
+                                    <Text>{time.taskName}</Text>
+                                    :
                                     <Text style={styles.grey}>(No Description)</Text>
+                                    }
                                 </Left>
                                 <Right>
                                     <Text>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).format("HH:mm:ss")}</Text>

@@ -68,7 +68,7 @@ const TagModal = ({
                         style={[styles.button, styles.buttonClose]}
                         onPress={() => setModalVisible(!modalVisible)}
                     >
-                        <Text style={styles.textStyle}>Close Modal</Text>
+                        <Text style={styles.textStyle}>Close</Text>
                     </Pressable>
                     <Pressable
                         style={[styles.button, styles.buttonSave]}
