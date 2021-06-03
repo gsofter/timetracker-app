@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
-import { StyleSheet, View, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, Platform, Text } from 'react-native';
 //import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import TimerFooter from './TimerFooter';
@@ -41,9 +41,10 @@ const TimerScreen = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
   const [createMutation] = useCreateTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
+  const [range, setRange] = useState({ startTime: moment().startOf('month'), endTime: moment().endOf('month') });
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
-    variables: { userId: userId, startTime: timeRecord.startTime, endTime: timeRecord.endTime },
+    variables: { userId: userId, startTime: range.startTime, endTime: range.endTime },
   });
   const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
 
@@ -112,8 +113,10 @@ const TimerScreen = () => {
           onDateChange={onDateChange}
           onReset={onReset}
         />
-        {data && data.getDurationTimeRecords.length && (
+        {data && data.getDurationTimeRecords.length ? (
           <TimeList data={data} />
+        ): (
+          <Text style={{textAlign: 'center'}}>No Data</Text>
         )}
       </ScrollView>
       <View style={{ flex: Platform.OS === 'ios' ? 1 : 0 }}>
