@@ -8,6 +8,8 @@ import { styles } from './styles';
 
 interface IClientDropdown {
     title: string;
+    filteredData: any;
+    setFilteredData: Function;
 }
 enum Status {
     ACTIVE ='Active',
@@ -15,7 +17,7 @@ enum Status {
     ACTIVE_ARCHIVED = 'Active & Archived',
 }
 export const ClientDropdown = (props: IClientDropdown) => {
-    const { title } = props;
+    const { title, filteredData, setFilteredData } = props;
     const [visible, setVisible] = useState(false);
     const [show, setShow] = useState(false);
     const [checkedList, setCheckedList] = React.useState([]);
@@ -34,8 +36,14 @@ export const ClientDropdown = (props: IClientDropdown) => {
     }, [clients])
 
     const handleVisibleChange = (value) => {
-        if(!value) {
+        if (!value) {
             setCount(checkedList.length);
+            setFilteredData({
+                ...filteredData,
+                client: {
+                    selectedIds: [...checkedList]
+                }
+            });
         }
         setVisible(value);
     };
