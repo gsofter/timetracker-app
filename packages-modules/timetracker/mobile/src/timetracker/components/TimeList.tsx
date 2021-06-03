@@ -1,6 +1,6 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableHighlight, ScrollView, Dimensions} from 'react-native';
-import {Card, CardItem, Left, Right, Icon} from 'native-base'
+import {Card, CardItem, Left, Right, Icon, Button} from 'native-base'
 
 import TagModal from "./TagModal"
 import moment from 'moment';
@@ -11,6 +11,7 @@ const TimeList = ({
     timeRecord,
     setTimeRecord,
     updateTimeRecord,
+    removeTimeRecord
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
     const [tagName, setTagName] = useState(null)
@@ -55,8 +56,11 @@ const TimeList = ({
                                 <Left>
                                     <Text>{moment(time.endTime).format("dddd")}</Text>
                                 </Left>
-                                <Right>
+                                <Right style={styles.header_icon}>
                                     <Text>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).format("HH:mm:ss")}</Text>
+                                    <Button danger small onPress={() => removeTimeRecord(time.id)}>
+                                        <Icon name="trash" color="#fff" />
+                                    </Button>
                                 </Right>
                             </CardItem>
                             <CardItem>
@@ -135,6 +139,11 @@ const styles = StyleSheet.create({
         justifyContent: 'center',
         alignItems: 'center'
     },
+    header_icon: {
+        flexDirection: 'row', 
+        justifyContent: 'flex-end', 
+        alignItems: 'center'
+    }
 })
 
 export default TimeList;

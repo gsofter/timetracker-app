@@ -15,7 +15,8 @@ import {
   useGetPlayingTimeRecordQuery,
   useGetDurationTimeRecordsQuery,
   useUpdateTimeRecordMutation,
-  useGetProjectsQuery
+  useGetProjectsQuery,
+  useRemoveTimeRecordMutation
 } from '../../generated-models';
 import { useSelector } from 'react-redux';
 
@@ -41,6 +42,7 @@ const TimerScreen = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
   const [createMutation] = useCreateTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
+  const [removeMutation] = useRemoveTimeRecordMutation();
   const [range, setRange] = useState({ startTime: moment().startOf('week'), endTime: moment().endOf('week') });
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
@@ -110,6 +112,17 @@ const TimerScreen = () => {
       });
   };
 
+  const removeTimeRecord = (recordId: string) => {
+    removeMutation({ variables: { recordId } })
+      .then(() => {
+        alert('TimeRecord Removed');
+        refetch();
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -125,6 +138,7 @@ const TimerScreen = () => {
             timeRecord={timeRecord}
             setTimeRecord={setTimeRecord}
             updateTimeRecord={updateTimeRecord}
+            removeTimeRecord={removeTimeRecord}
           />
         ): (
           <Text style={{textAlign: 'center'}}>No Data</Text>
