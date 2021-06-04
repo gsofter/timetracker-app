@@ -4,6 +4,7 @@ query GetDurationTimeRecords($startTime: DateTime, $endTime: DateTime, $userId: 
     startTime
     endTime
     taskName
+    description
     tags
     projectId
     isBillable

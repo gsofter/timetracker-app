@@ -4,6 +4,7 @@ type TimeRecord {
   endTime: DateTime
   taskId: String
   taskName: String
+  description: String
   tags: [String]
   isBillable: Boolean
   projectId: String
@@ -19,6 +20,7 @@ input TimeRecordRequest {
   startTime: DateTime
   endTime: DateTime
   taskName: String
+  description: String
   tags: [String]
   isBillable: Boolean
   projectId: String
