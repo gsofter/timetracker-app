@@ -1,4 +1,4 @@
-import React, {useState} from 'react';
+import React, { useState } from 'react';
 import { Col, Button, Icon, Row } from 'native-base';
 import { Text, StyleSheet, TouchableHighlight } from 'react-native';
 import { Stopwatch } from 'react-native-stopwatch-timer';
@@ -6,7 +6,7 @@ import { Stopwatch } from 'react-native-stopwatch-timer';
 import TagModal from "./TagModal"
 import {
     ITimeRecordRequest
-  } from '@admin-layout/timetracker-core/src/interfaces/generated-models';
+} from '@admin-layout/timetracker-core/src/interfaces/generated-models';
 
 const TimeTrack = ({
     stopwatchStart,
@@ -25,7 +25,7 @@ const TimeTrack = ({
     handleStartTimer,
     updatePlayingTimeRecord,
     setTimeRecord,
-    tag, 
+    tag,
     setTag,
     timeRecord,
     plData,
@@ -36,24 +36,24 @@ const TimeTrack = ({
     const [reset, setReset] = useState(false)
 
     const addTag = () => {
-        setTag(ps => ({...ps, tags: [...tag.tags, tagName], showTag: true}))
+        setTag(ps => ({ ...ps, tags: [...tag.tags, tagName], showTag: true }))
     }
 
     const updateTags = () => {
-        const {id, ...rest} = timeRecord;
+        const { id, ...rest } = timeRecord;
         const newTimeRecord: ITimeRecordRequest = {
-          ...rest,
-          tags: tag.tags
+            ...rest,
+            tags: tag.tags
         };
         setTimeRecord(newTimeRecord)
         updateTimeRecord(plData.getPlayingTimeRecord.id, newTimeRecord);
     };
 
     const updateBillable = (data) => {
-        const {id, ...rest} = timeRecord;
+        const { id, ...rest } = timeRecord;
         const newTimeRecord: ITimeRecordRequest = {
-          ...rest,
-          isBillable: data
+            ...rest,
+            isBillable: data
         };
         setTimeRecord(newTimeRecord)
         updateTimeRecord(plData.getPlayingTimeRecord.id, newTimeRecord);
@@ -66,13 +66,13 @@ const TimeTrack = ({
                     <Icon name="pricetag-outline" style={styles.icon_tag} />
                 </TouchableHighlight>
             </Col>
-            <Col>
+            <Col style={{ width: 30 }}>
                 <Icon
                     onPress={() => {
                         toggleBillable()
-                        if(billable){
+                        if (billable) {
                             updateBillable(false)
-                        } else{
+                        } else {
                             updateBillable(true)
                         }
                         setTimeRecord(ps => ({ ...ps, isBillable: billable }))

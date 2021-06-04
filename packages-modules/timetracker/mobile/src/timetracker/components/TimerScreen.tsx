@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 import { StyleSheet, View, ScrollView, Platform, Text } from 'react-native';
-//import KeyboardSpacer from 'react-native-keyboard-spacer';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import TimerFooter from './TimerFooter';
 import TimeRange from './TimeRange';
@@ -62,18 +62,18 @@ const TimerScreen = () => {
   const onDateChange = (date: any, type: any) => {
     const Date = moment(date).format('MM-DD-YYYY')
     if (type === 'END_DATE') {
-      setRange(ps => ({...ps, endTime: date}))
+      setRange(ps => ({ ...ps, endTime: date }))
       refetch()
       setSelectedEndDate(Date);
     } else {
-      setRange(ps => ({...ps, startTime: date}))
+      setRange(ps => ({ ...ps, startTime: date }))
       refetch()
       setSelectedStartDate(Date);
     }
   };
 
   const onReset = () => {
-    setRange({startTime: moment().startOf('week'), endTime: moment().endOf('week')})
+    setRange({ startTime: moment().startOf('week'), endTime: moment().endOf('week') })
     refetch()
     setSelectedStartDate(moment().format('MM-DD-YYYY'));
     setSelectedEndDate(moment().add(5, 'd').format('MM-DD-YYYY'));
@@ -134,16 +134,16 @@ const TimerScreen = () => {
           onReset={onReset}
         />
         {data && data.getDurationTimeRecords.length ? (
-          <TimeList 
-            data={data} 
+          <TimeList
+            data={data}
             timeRecord={timeRecord}
             setTimeRecord={setTimeRecord}
             updateTimeRecord={updateTimeRecord}
             removeTimeRecord={removeTimeRecord}
             projectsData={projectsData?.getProjects}
           />
-        ): (
-          <Text style={{textAlign: 'center'}}>No Data</Text>
+        ) : (
+          <Text style={{ textAlign: 'center' }}>No Data</Text>
         )}
       </ScrollView>
       <View style={{ flex: Platform.OS === 'ios' ? 1 : 0 }}>
@@ -165,8 +165,8 @@ const TimerScreen = () => {
           projectsData={projectsData}
         />
       </View>
-     {/*  {Platform.OS === 'ios' &&
-        <KeyboardSpacer />} */}
+      {Platform.OS === 'ios' &&
+        <KeyboardSpacer />}
     </View>
   );
 };
