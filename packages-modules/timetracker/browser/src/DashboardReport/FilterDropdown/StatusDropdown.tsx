@@ -4,18 +4,25 @@ import { useState } from 'react';
 import { Badge, Checkbox, Dropdown, Menu } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { styles } from './styles';
+import { FilterName } from '../ReportFilter';
 
+interface IData {
+    selectedIds: [string];
+}
+interface IFilteredData extends Partial<Record<string, IData>> {}
 interface IStatusDropdown {
     title: string;
+    filteredData: IFilteredData;
+    setFilteredData: Function;
 }
-enum Status {
+export enum Status {
     BILLABLE= 'Billable',
     NON_BILLABLE = 'Non-billable',
     APPROVED = 'Approved',
     UNAPPROVED = 'Unapproved',
 }
 export const StatusDropdown = (props: IStatusDropdown) => {
-    const { title } = props;
+    const { title, filteredData, setFilteredData } = props;
     const [visible, setVisible] = useState(false);
     const [checkedList, setCheckedList] = React.useState([]);
     const [count, setCount] = useState(0);
@@ -24,6 +31,12 @@ export const StatusDropdown = (props: IStatusDropdown) => {
     const handleVisibleChange = (value) => {
         if (!value) {
             setCount(checkedList.length);
+            setFilteredData({
+                ...filteredData,
+                [FilterName.STATUS]: {
+                    selectedIds: [...checkedList]
+                }
+            });
         }
         setVisible(value);
     };
@@ -70,7 +83,7 @@ export const StatusDropdown = (props: IStatusDropdown) => {
         >
             <Badge count={count} style={{ background: '#2a90fe' }}>
                 <div className={css(styles.flex, styles.m5)}>
-                    <div>{title}</div>
+                    <div className={css(styles.capitalize)}>{title}</div>
                     <CaretDownOutlined className={css(styles.m4)}/>
                 </div>
             </Badge>

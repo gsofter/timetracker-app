@@ -52,4 +52,7 @@ export const styles = {
     m5: () => ({
         margin: '5px',
     }),
+    capitalize: () => ({
+        textTransform: 'capitalize',
+    }),
 };

@@ -3,10 +3,17 @@ import { useState } from 'react';
 import { useFela } from 'react-fela';
 import { Input, Checkbox, Menu, Dropdown, Badge } from 'antd';
 import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
+import { FilterName, WITHOUT } from '../ReportFilter';
 import { styles } from './styles';
 
+interface IData {
+    selectedIds: [string];
+}
+interface IFilteredData extends Partial<Record<string, IData>> {}
 interface ITaskDropdown {
     title: string;
+    filteredData: IFilteredData;
+    setFilteredData: Function;
 }
 enum Status {
     ACTIVE ='Active',
@@ -14,7 +21,7 @@ enum Status {
     ACTIVE_COMPLETED = 'Active & Completed',
 }
 export const TaskDropdown = (props: ITaskDropdown) => {
-    const { title } = props;
+    const { title, filteredData, setFilteredData } = props;
     const [visible, setVisible] = useState(false);
     const [show, setShow] = useState(false);
     const [checkedList, setCheckedList] = React.useState([]);
@@ -26,6 +33,12 @@ export const TaskDropdown = (props: ITaskDropdown) => {
     const handleVisibleChange = (value) => {
         if(!value) {
             setCount(checkedList.length);
+            setFilteredData({
+                ...filteredData,
+                [FilterName.TASK]: {
+                    selectedIds: [...checkedList]
+                }
+            });
         }
         setVisible(value);
     };
@@ -41,7 +54,7 @@ export const TaskDropdown = (props: ITaskDropdown) => {
         setCheckAll(list.length === 1);
     };
     const onCheckAllChange = e => {
-        const list = e.target.checked ? ['without'] : []
+        const list = e.target.checked ? [WITHOUT] : []
         setCheckedList(list);
         setCheckAll(e.target.checked);
     };
@@ -89,8 +102,8 @@ export const TaskDropdown = (props: ITaskDropdown) => {
             <Menu.Item className={css(styles.disabledItem)}>
                 <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
                     <Menu>
-                        <Menu.Item key={'without'} className={css(styles.item, styles.mTB0)}>
-                            <Checkbox value={'without'} className={css(styles.checkbox)}>{'Without task'}</Checkbox>
+                        <Menu.Item key={WITHOUT} className={css(styles.item, styles.mTB0)}>
+                            <Checkbox value={WITHOUT} className={css(styles.checkbox)}>{'Without task'}</Checkbox>
                         </Menu.Item>
                     </Menu>
                 </Checkbox.Group>
@@ -107,7 +120,7 @@ export const TaskDropdown = (props: ITaskDropdown) => {
         >
             <Badge count={count} style={{ background: '#2a90fe' }}>
                 <div className={css(styles.flex, styles.m5)}>
-                    <div>{title}</div>
+                    <div className={css(styles.capitalize)}>{title}</div>
                     <CaretDownOutlined className={css(styles.m4)}/>
                 </div>
             </Badge>

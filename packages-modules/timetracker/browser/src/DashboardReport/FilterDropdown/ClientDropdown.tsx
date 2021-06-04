@@ -5,9 +5,16 @@ import { Input, Checkbox, Menu, Dropdown, Badge } from 'antd';
 import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
 import { useGetOrganizationClientsQuery } from '@adminide-stack/react-shared-components';
 import { styles } from './styles';
+import { FilterName, WITHOUT } from '../ReportFilter';
 
+interface IData {
+    selectedIds: [string];
+}
+interface IFilteredData extends Partial<Record<string, IData>> {}
 interface IClientDropdown {
     title: string;
+    filteredData: IFilteredData;
+    setFilteredData: Function;
 }
 enum Status {
     ACTIVE ='Active',
@@ -15,7 +22,7 @@ enum Status {
     ACTIVE_ARCHIVED = 'Active & Archived',
 }
 export const ClientDropdown = (props: IClientDropdown) => {
-    const { title } = props;
+    const { title, filteredData, setFilteredData } = props;
     const [visible, setVisible] = useState(false);
     const [show, setShow] = useState(false);
     const [checkedList, setCheckedList] = React.useState([]);
@@ -34,8 +41,14 @@ export const ClientDropdown = (props: IClientDropdown) => {
     }, [clients])
 
     const handleVisibleChange = (value) => {
-        if(!value) {
+        if (!value) {
             setCount(checkedList.length);
+            setFilteredData({
+                ...filteredData,
+                [FilterName.CLIENT]: {
+                    selectedIds: [...checkedList]
+                }
+            });
         }
         setVisible(value);
     };
@@ -53,7 +66,7 @@ export const ClientDropdown = (props: IClientDropdown) => {
     const onCheckAllChange = e => {
         let list = e.target.checked ? clients?.map(client => client.id) : []
         if (e.target.checked) {
-            list.push('without');
+            list.push(WITHOUT);
         }
         setCheckedList(list);
         setCheckAll(e.target.checked);
@@ -120,8 +133,8 @@ export const ClientDropdown = (props: IClientDropdown) => {
                     <Menu.Item className={css(styles.disabledItem)}>
                         <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
                             <Menu>
-                                <Menu.Item key={'without'} className={css(styles.item, styles.mTB0)}>
-                                    <Checkbox value={'without'} className={css(styles.checkbox)}>{'Without client'}</Checkbox>
+                                <Menu.Item key={WITHOUT} className={css(styles.item, styles.mTB0)}>
+                                    <Checkbox value={WITHOUT} className={css(styles.checkbox)}>{'Without client'}</Checkbox>
                                 </Menu.Item>
                                 {filteredClients?.map((client) => (
                                     <>
@@ -152,7 +165,7 @@ export const ClientDropdown = (props: IClientDropdown) => {
         >
             <Badge count={count} style={{ background: '#2a90fe' }}>
                 <div className={css(styles.flex, styles.m5)}>
-                    <div>{title}</div>
+                    <div className={css(styles.capitalize)}>{title}</div>
                     <CaretDownOutlined className={css(styles.m4)}/>
                 </div>
             </Badge>
