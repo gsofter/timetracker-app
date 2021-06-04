@@ -67,6 +67,7 @@ const AddManual = () => {
     const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
     const [timeRecord, setTimeRecord] = useState<ITimeRecord>({
         id: '',
+        description: '',
         userId: '',
         taskName: '',
         tags: [],
@@ -210,7 +211,7 @@ const AddManual = () => {
                         </ListItem>
                         <ListItem style={styles.flex_col}>
                             <Text style={{ fontSize: 16 }}>Description</Text>
-                            <Input placeholder='What have you worked on?'/>
+                            <Input placeholder='What have you worked on?' onChangeText={(value) => setTimeRecord(ps => ({...ps, description: value}))}/>
                         </ListItem>
                         <DropDownPicker
                             disableBorderRadius={true}
