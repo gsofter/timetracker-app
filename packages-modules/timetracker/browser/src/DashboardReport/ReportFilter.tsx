@@ -147,6 +147,23 @@ export const ReportFilter = (props: IReportFilter) => {
         return ({ projects: newProjects, records: newRecords });
     }
 
+    const tagFilter = (newProjects, newRecords, tags) => {
+        let filteredRecords = newRecords.slice(0);
+        if (tags.length) {
+            filteredRecords = newRecords.filter((record) => {
+                const diff = _.difference(record.tags || [], tags);
+                if (tags.includes(WITHOUT)) {
+                    return ((diff.length < ((record.tags || []).length)) || !record.tags.length);
+                }
+                return (diff.length < ((record.tags || []).length));
+            });
+            const projectIds = filteredRecords.map(record => record.projectId);
+            const filteredProjects = newProjects.filter(project => projectIds.includes(project.id));
+            return ({ projects: filteredProjects, records: filteredRecords });
+        }
+        return ({ projects: newProjects, records: newRecords });
+    }
+
     const applyFilter = () => {
         let filteredProjects = projects.slice(0);
         let filteredRecords = records.slice(0);
@@ -173,6 +190,9 @@ export const ReportFilter = (props: IReportFilter) => {
                     filteredProjects = sData.projects;
                     break;
                 case FilterName.TAG:
+                    const gData =  tagFilter(filteredProjects, filteredRecords, filteredData[key].selectedIds);
+                    filteredRecords = gData.records;
+                    filteredProjects = gData.projects;
                     break;
                 case FilterName.STATUS:
                     break;

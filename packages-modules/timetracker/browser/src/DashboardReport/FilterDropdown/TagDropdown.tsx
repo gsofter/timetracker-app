@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { useFela } from 'react-fela';
 import { Input, Checkbox, Menu, Dropdown, Badge } from 'antd';
 import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
-import { WITHOUT } from '../ReportFilter';
+import { FilterName, WITHOUT } from '../ReportFilter';
 import { styles } from './styles';
 
 interface ITagDropdown {
     title: string;
+    filteredData: any;
+    setFilteredData: Function;
 }
 enum Status {
     ACTIVE ='Active',
@@ -21,7 +23,7 @@ enum ContainStatus {
 }
 
 export const TagDropdown = (props: ITagDropdown) => {
-    const { title } = props;
+    const { title, filteredData, setFilteredData } = props;
     const [visible, setVisible] = useState(false);
     const [showStatus, setShowStatus] = useState(false);
     const [showContainStatus, setShowContainStatus] = useState(false);
@@ -35,6 +37,12 @@ export const TagDropdown = (props: ITagDropdown) => {
     const handleVisibleChange = (value) => {
         if (!value) {
             setCount(checkedList.length);
+            setFilteredData({
+                ...filteredData,
+                [FilterName.TAG]: {
+                    selectedIds: [...checkedList]
+                }
+            });
         }
         setVisible(value);
     };
