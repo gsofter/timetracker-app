@@ -9,7 +9,7 @@ import TimeList from "./TimeList"
 import {
   ITimeRecordRequest,
   ITimeRecord
-} from '@admin-layout/timetracker-core';
+} from '@admin-layout/timetracker-core/src/interfaces/generated-models';
 import {
   useCreateTimeRecordMutation,
   useGetPlayingTimeRecordQuery,
@@ -30,6 +30,7 @@ const TimerScreen = () => {
   const [addManual, setAddManual] = useState(false);
   const [timeRecord, setTimeRecord] = useState<ITimeRecord>({
     id: '',
+    description: '',
     userId: '',
     taskName: '',
     tags: [],

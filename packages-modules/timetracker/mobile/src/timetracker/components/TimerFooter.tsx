@@ -11,7 +11,7 @@ import TimeTrack from './TimeTrack'
 import ProjectModal from "./ProjectModal"
 import {
   ITimeRecordRequest,
-} from '@admin-layout/timetracker-core';
+} from '@admin-layout/timetracker-core/src/interfaces/generated-models';
 
 var radio_props = [
   { label: 'Manual', value: 0 },
@@ -25,8 +25,6 @@ const TimerFooter = ({
   manual,
   track,
   toggleBillable,
-  toggleProject,
-  isToggle,
   setAddManual,
   setTimeRecord,
   timeRecord,

@@ -4,7 +4,7 @@ import {List, ListItem} from "native-base"
 
 import {
     ITimeRecordRequest,
-  } from '@admin-layout/timetracker-core';
+  } from '@admin-layout/timetracker-core/src/interfaces/generated-models';
 import moment from "moment";
 
 const ProjectModal = ({

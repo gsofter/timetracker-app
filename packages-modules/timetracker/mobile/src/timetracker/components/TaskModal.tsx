@@ -2,11 +2,6 @@ import React, {useState} from "react";
 import {View, Text, Modal, Pressable, Alert, StyleSheet, ScrollView} from 'react-native'
 import {List, ListItem, Input, Button, Icon} from "native-base"
 
-import {
-    ITimeRecordRequest,
-  } from '@admin-layout/timetracker-core';
-import moment from "moment";
-
 const TaskModal = ({
     setModalVisible,
     modalVisible,

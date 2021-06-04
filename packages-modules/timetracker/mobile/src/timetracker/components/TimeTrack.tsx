@@ -4,7 +4,9 @@ import { Text, StyleSheet, TouchableHighlight } from 'react-native';
 import { Stopwatch } from 'react-native-stopwatch-timer';
 
 import TagModal from "./TagModal"
-import { ITimeRecordRequest } from '@admin-layout/timetracker-core';
+import {
+    ITimeRecordRequest
+  } from '@admin-layout/timetracker-core/src/interfaces/generated-models';
 
 const TimeTrack = ({
     stopwatchStart,

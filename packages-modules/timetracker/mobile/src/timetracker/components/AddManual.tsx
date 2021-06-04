@@ -31,7 +31,7 @@ import TaskModal from "./TaskModal"
 import {
     ITimeRecordRequest,
     ITimeRecord
-  } from '@admin-layout/timetracker-core';
+  } from '@admin-layout/timetracker-core/src/interfaces/generated-models';
   import {
     useCreateTimeRecordMutation,
     useGetPlayingTimeRecordQuery,

@@ -1,10 +1,12 @@
 import React, {useState, useEffect} from 'react';
 import {View, Text, StyleSheet, TouchableHighlight, ScrollView, Dimensions} from 'react-native';
-import {Card, CardItem, Left, Right, Icon, Button} from 'native-base'
+import {Card, CardItem, Left, Right, Icon, Button, Input} from 'native-base'
 
 import TagModal from "./TagModal"
 import moment from 'moment';
-import { ITimeRecordRequest } from '@admin-layout/timetracker-core';
+import {
+    ITimeRecordRequest,
+} from '@admin-layout/timetracker-core/src/interfaces/generated-models';
 
 const TimeList = ({
     data,
@@ -15,6 +17,7 @@ const TimeList = ({
     projectsData
 }) => {
     const [modalVisible, setModalVisible] = useState(false);
+    const [description, setDescription] = useState("(No Description)")
     const [tagName, setTagName] = useState(null)
     const [tag, setTag] = useState({
         showTag: false,
@@ -45,6 +48,18 @@ const TimeList = ({
         setTimeRecord(newTimeRecord)
         updateTimeRecord(recordId, newTimeRecord);
     };
+
+    const updateDescription = (event, recordId, time) => {
+        if(event.nativeEvent.key === 'Enter'){
+            const {id, timesheetId, __typename, ...rest} = time;
+            const newTimeRecord: ITimeRecordRequest = {
+                ...rest,
+                description: event.target.value
+            };
+            setTimeRecord(newTimeRecord)
+            updateTimeRecord(recordId, newTimeRecord);
+        }
+    }
 
     return(
         <ScrollView style={{paddingBottom: 160}}>
@@ -94,7 +109,14 @@ const TimeList = ({
                             </CardItem>
                             <CardItem>
                                 <Left>
-                                    <Text style={styles.grey}>(No Description)</Text>
+                                    <Input 
+                                        returnKeyType="done" 
+                                        style={styles.description}
+                                        value={time.description}
+                                        onChangeText={setDescription}
+                                        onKeyPress={(e) => updateDescription(e, time.id, time)} 
+                                        placeholder={"Enter Description"}
+                                    />
                                 </Left>
                                 <Right>
                                     <Text>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).format("HH:mm:ss")}</Text>
@@ -151,6 +173,10 @@ const styles = StyleSheet.create({
         flexDirection: 'row', 
         justifyContent: 'flex-end', 
         alignItems: 'center'
+    },
+    description: {
+        fontSize: 14, 
+        color: 'grey'
     }
 })
 
