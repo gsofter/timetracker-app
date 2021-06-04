@@ -57,50 +57,85 @@ export const ReportFilter = (props: IReportFilter) => {
         }
     }
 
-    const clientFilter = (clientIds) => {
-        let filteredProjects = projects.slice(0);
-        if (clientIds.length) {
-            if (clientIds.length === 1 && clientIds.includes(WITHOUT)) {
-                filteredProjects = projects.filter((project) => !project.clientId);
-            } else {
-                filteredProjects = projects.filter((project) => clientIds.includes(project.clientId));
-            }
-            setFilteredProjects(filteredProjects);
-        } else {
-            setFilteredProjects(projects);
-        }
+    const filterRecordsByProject = (filteredProjects, newRecords, isWithoutProject) => {
         const projectIds = filteredProjects.map((project) => project.id);
-        const filteredRecords = records.filter((record) => projectIds.includes(record.projectId));
-        setFilteredRecords(filteredRecords);
+        return newRecords.filter((record) => {
+            if (isWithoutProject) {
+                return (projectIds.includes(record.projectId) || !record.projectId);
+            }
+            return projectIds.includes(record.projectId);
+        });
     }
 
-    const projectFilter = (projectIds) => {
-        let filteredProjects = projects.slice(0);
-        if (projectIds.length) {
-            if (projectIds.length === 1 && projectIds.includes(WITHOUT)) {
-                filteredProjects = [];
-            } else {
-                filteredProjects = projects.filter((project) => projectIds.includes(project.id));
-            }
-            setFilteredProjects(filteredProjects);
-        } else {
-            setFilteredProjects(filteredProjects);
+    const clientFilter = (newProjects, newRecords, clientIds) => {
+        let filteredProjects = newProjects.slice(0);
+        if (clientIds.length) {
+            filteredProjects = newProjects.filter((project) => {
+                if (clientIds.includes(WITHOUT)) {
+                    return (clientIds.includes(project.clientId) || !project.clientId);
+                }
+                return clientIds.includes(project.clientId);
+            });
+            return ({
+                projects: filteredProjects,
+                records: filterRecordsByProject(filteredProjects, newRecords, true),
+            });
         }
-        const projectId = filteredProjects.map((project) => project.id);
-        const filteredRecords = records.filter((record) => projectId.includes(record.projectId));
-        setFilteredRecords(filteredRecords);
+        return ({ projects: newProjects, records: newRecords });
+    }
+
+    const projectFilter = (newProjects, newRecords, projectIds) => {
+        let filteredProjects = newProjects.slice(0);
+        if (projectIds.length) {
+            filteredProjects = newProjects.filter((project) => {
+                if (projectIds.includes(WITHOUT)) {
+                    return (projectIds.includes(project.id) || !project.id);
+                }
+                return projectIds.includes(project.id);
+            });
+            return ({
+                projects: filteredProjects,
+                records: filterRecordsByProject(filteredProjects, newRecords, projectIds.includes(WITHOUT)),
+            });
+        }
+        return ({ projects: newProjects, records: newRecords });
+    }
+
+    const descriptionFilter = (newProjects, newRecords, input, isWithout) => {
+        let filteredRecords = newRecords.slice(0);
+        if (input.trim() || isWithout) {
+            filteredRecords = newRecords.filter((record) => {
+                if (input.trim() && isWithout) {
+                    return (record.description?.includes(input) || !record.description);
+                } else if (input.trim() && !isWithout) {
+                    return record.description?.includes(input);
+                } else {
+                    return !record.description;
+                }
+            });
+            const projectIds = filteredRecords.map(record => record.projectId);
+            const filteredProjects = newProjects.filter(project => projectIds.includes(project.id));
+            return ({ projects: filteredProjects, records: filteredRecords });
+        }
+        return ({ projects: newProjects, records: newRecords });
     }
 
     const applyFilter = () => {
+        let filteredProjects = projects.slice(0);
+        let filteredRecords = records.slice(0);
         _.forIn(filteredData, (value, key) => {
             switch (key) {
                 case FilterName.TEAM:
                     break;
                 case FilterName.CLIENT:
-                    clientFilter(filteredData[key].selectedIds);
+                    const cData = clientFilter(filteredProjects, filteredRecords, filteredData[key].selectedIds);
+                    filteredRecords = cData.records;
+                    filteredProjects = cData.projects;
                     break;
                 case FilterName.PROJECT:
-                    projectFilter(filteredData[key].selectedIds);
+                    const pData =  projectFilter(filteredProjects, filteredRecords, filteredData[key].selectedIds);
+                    filteredRecords = pData.records;
+                    filteredProjects = pData.projects;
                     break;
                 case FilterName.TASK:
                     break;
@@ -109,11 +144,16 @@ export const ReportFilter = (props: IReportFilter) => {
                 case FilterName.STATUS:
                     break;
                 case FilterName.DESCRIPTION:
+                    const dData = descriptionFilter(filteredProjects, filteredRecords, filteredData[key].input, filteredData[key].isWithout)
+                    filteredRecords = dData.records;
+                    filteredProjects = dData.projects;
                     break;
                 default:
                     break;
             }
         });
+        setFilteredProjects(filteredProjects);
+        setFilteredRecords(filteredRecords);
     };
 
     const menu = (
