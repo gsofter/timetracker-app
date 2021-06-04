@@ -3,7 +3,7 @@ import { useEffect, useState } from 'react';
 import { useFela } from 'react-fela';
 import { Input, Checkbox, Menu, Dropdown, Badge } from 'antd';
 import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
-import { useGetOrganizationClientsQuery, useGetProjectsQuery } from '@adminide-stack/react-shared-components';
+import { useGetOrganizationClientsQuery, useGetProjectsQuery } from '@adminide-stack/account-api-client';
 import { styles } from './styles';
 import { FilterName, WITHOUT } from '../ReportFilter';
 import * as _ from 'lodash';

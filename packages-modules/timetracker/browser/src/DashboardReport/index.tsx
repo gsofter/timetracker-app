@@ -1,7 +1,8 @@
 import * as React from 'react';
 import moment from 'moment';
 import { useCallback, useEffect, useMemo, useState } from 'react';
-import { useSetting, useGetOrganizationMembersQuery, useGetUserAccountQuery } from '@adminide-stack/react-shared-components';
+import { useGetOrganizationMembersQuery, useGetUserAccountQuery } from '@adminide-stack/account-api-client';
+import { useSetting } from '@adminide-stack/platform-browser/lib/components'
 import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 import { useFirstWeekDay } from '../timetracker/hooks';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../generated-models';

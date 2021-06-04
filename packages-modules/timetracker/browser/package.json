@@ -44,6 +44,7 @@
     "@admin-layout/components": "link:../../../packages/components",
     "@admin-layout/react-shared-components": "link:../../../packages/react-shared-components",
     "@admin-layout/timetracker-core": "link:../core",
+    "@adminide-stack/account-api-client": "0.0.20-alpha.79",
     "chart.js": "^2.9.4",
     "moment-duration-format": "^2.3.2",
     "react-chartjs-2": "^2.11.1",
