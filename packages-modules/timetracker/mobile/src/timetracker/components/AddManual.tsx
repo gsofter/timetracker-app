@@ -5,7 +5,6 @@ import {
     StyleSheet, 
     TouchableOpacity, 
     Switch,
-    ScrollView
 } from 'react-native';
 import { 
     Header, 
@@ -20,7 +19,6 @@ import {
     ListItem, 
     Input,
     Button,
-    Badge 
 } from 'native-base';
 import { useHistory } from 'react-router-native'
 import DateTimePickerModal from 'react-native-modal-datetime-picker';
@@ -36,9 +34,7 @@ import {
     useCreateTimeRecordMutation,
     useGetPlayingTimeRecordQuery,
     useGetDurationTimeRecordsQuery,
-    useUpdateTimeRecordMutation,
     useGetProjectsQuery,
-    useRemoveTimeRecordMutation
   } from '../../generated-models';
 import { useSelector } from 'react-redux';
 
