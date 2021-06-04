@@ -5,9 +5,12 @@ import { Input, Checkbox, Menu, Dropdown, Badge } from 'antd';
 import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
 import { useGetOrganizationMembersQuery } from '@adminide-stack/react-shared-components';
 import { styles } from './styles';
+import { FilterName } from '../ReportFilter';
 
 interface ITeamDropdown {
     title: string;
+    filteredData: any;
+    setFilteredData: Function;
 }
 enum Status {
     ACTIVE ='Active',
@@ -15,7 +18,7 @@ enum Status {
     ACTIVE_INACTIVE = 'Active & Inactive',
 }
 export const TeamDropdown = (props: ITeamDropdown) => {
-    const { title } = props;
+    const { title, filteredData, setFilteredData } = props;
     const [visible, setVisible] = useState(false);
     const [show, setShow] = useState(false);
     const [checkedList, setCheckedList] = React.useState([]);
@@ -36,6 +39,12 @@ export const TeamDropdown = (props: ITeamDropdown) => {
     const handleVisibleChange = (value) => {
         if(!value) {
             setCount(checkedList.length);
+            setFilteredData({
+                ...filteredData,
+                [FilterName.TEAM]: {
+                    selectedIds: [...checkedList]
+                }
+            });
         }
         setVisible(value);
     };

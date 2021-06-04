@@ -120,12 +120,26 @@ export const ReportFilter = (props: IReportFilter) => {
         return ({ projects: newProjects, records: newRecords });
     }
 
+    const teamFilter = (newProjects, newRecords, userIds) => {
+        let filteredRecords = newRecords.slice(0);
+        if (userIds.length) {
+            filteredRecords = newRecords.filter((record) => userIds.includes(record.userId));
+            const projectIds = filteredRecords.map(record => record.projectId);
+            const filteredProjects = newProjects.filter(project => projectIds.includes(project.id));
+            return ({ projects: filteredProjects, records: filteredRecords });
+        }
+        return ({ projects: newProjects, records: newRecords });
+    }
+
     const applyFilter = () => {
         let filteredProjects = projects.slice(0);
         let filteredRecords = records.slice(0);
         _.forIn(filteredData, (value, key) => {
             switch (key) {
                 case FilterName.TEAM:
+                    const tData = teamFilter(filteredProjects, filteredRecords, filteredData[key].selectedIds);
+                    filteredRecords = tData.records;
+                    filteredProjects = tData.projects;
                     break;
                 case FilterName.CLIENT:
                     const cData = clientFilter(filteredProjects, filteredRecords, filteredData[key].selectedIds);
