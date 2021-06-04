@@ -2449,6 +2449,7 @@ export type ITimelineCreateRequest = {
 export type ITimeRecord = {
    __typename?: 'TimeRecord';
   clientId?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
   editable?: Maybe<Scalars['Boolean']>;
   endTime?: Maybe<Scalars['DateTime']>;
   id?: Maybe<Scalars['String']>;
@@ -2465,6 +2466,7 @@ export type ITimeRecord = {
 
 export type ITimeRecordRequest = {
   clientId?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
   endTime?: Maybe<Scalars['DateTime']>;
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
@@ -2905,7 +2907,7 @@ export type IGetDurationTimeRecordsQuery = (
   { __typename?: 'Query' }
   & { getDurationTimeRecords?: Maybe<Array<Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId' | 'timesheetId'>
+    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'description' | 'tags' | 'projectId' | 'isBillable' | 'userId' | 'timesheetId'>
   )>>> }
 );
 
@@ -2941,7 +2943,7 @@ export type IGetPlayingTimeRecordQuery = (
   { __typename?: 'Query' }
   & { getPlayingTimeRecord?: Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'userId' | 'isBillable'>
+    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'description' | 'tags' | 'projectId' | 'userId' | 'isBillable'>
   )> }
 );
 
@@ -2965,7 +2967,7 @@ export type IGetTimeRecordsQuery = (
   { __typename?: 'Query' }
   & { getTimeRecords?: Maybe<Array<Maybe<(
     { __typename?: 'TimeRecord' }
-    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'tags' | 'projectId' | 'isBillable' | 'userId' | 'timesheetId'>
+    & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskName' | 'description' | 'tags' | 'projectId' | 'isBillable' | 'userId' | 'timesheetId'>
   )>>> }
 );
 
@@ -3058,6 +3060,7 @@ export const GetDurationTimeRecordsDocument = gql`
     startTime
     endTime
     taskName
+    description
     tags
     projectId
     isBillable
@@ -3097,6 +3100,7 @@ export const GetPlayingTimeRecordDocument = gql`
     startTime
     endTime
     taskName
+    description
     tags
     projectId
     userId
@@ -3125,6 +3129,7 @@ export const GetTimeRecordsDocument = gql`
     startTime
     endTime
     taskName
+    description
     tags
     projectId
     isBillable
@@ -4781,6 +4786,7 @@ export type ITimelineResolvers<ContextType = any, ParentType extends IResolversP
 
 export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolversParentTypes['TimeRecord'] = IResolversParentTypes['TimeRecord']> = {
   clientId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   editable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   endTime?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   id?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
