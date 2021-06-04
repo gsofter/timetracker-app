@@ -5,6 +5,7 @@ import { Button, Card, Checkbox, Divider, Dropdown, Menu } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import { ClientDropdown, DescriptionDropdown, ProjectDropdown, StatusDropdown, TagDropdown, TaskDropdown, TeamDropdown } from './FilterDropdown';
 import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
+import { Status } from './FilterDropdown';
 import * as _ from 'lodash';
 
 interface IReportFilter {
@@ -67,6 +68,11 @@ export const ReportFilter = (props: IReportFilter) => {
         });
     }
 
+    const filterProjectsByRecord = (filteredRecords, newProjects) => {
+        const projectIds = filteredRecords.map(record => record.projectId);
+        return newProjects.filter(project => projectIds.includes(project.id));
+    }
+
     const clientFilter = (newProjects, newRecords, clientIds) => {
         let filteredProjects = newProjects.slice(0);
         if (clientIds.length) {
@@ -113,9 +119,10 @@ export const ReportFilter = (props: IReportFilter) => {
                     return !record.description;
                 }
             });
-            const projectIds = filteredRecords.map(record => record.projectId);
-            const filteredProjects = newProjects.filter(project => projectIds.includes(project.id));
-            return ({ projects: filteredProjects, records: filteredRecords });
+            return ({
+                projects: filterProjectsByRecord(filteredRecords, newProjects),
+                records: filteredRecords,
+            });
         }
         return ({ projects: newProjects, records: newRecords });
     }
@@ -124,9 +131,10 @@ export const ReportFilter = (props: IReportFilter) => {
         let filteredRecords = newRecords.slice(0);
         if (userIds.length) {
             filteredRecords = newRecords.filter((record) => userIds.includes(record.userId));
-            const projectIds = filteredRecords.map(record => record.projectId);
-            const filteredProjects = newProjects.filter(project => projectIds.includes(project.id));
-            return ({ projects: filteredProjects, records: filteredRecords });
+            return ({
+                projects: filterProjectsByRecord(filteredRecords, newProjects),
+                records: filteredRecords,
+            });
         }
         return ({ projects: newProjects, records: newRecords });
     }
@@ -140,9 +148,10 @@ export const ReportFilter = (props: IReportFilter) => {
                 }
                 return tasks.includes(record.taskName);
             });
-            const projectIds = filteredRecords.map(record => record.projectId);
-            const filteredProjects = newProjects.filter(project => projectIds.includes(project.id));
-            return ({ projects: filteredProjects, records: filteredRecords });
+            return ({
+                projects: filterProjectsByRecord(filteredRecords, newProjects),
+                records: filteredRecords,
+            });
         }
         return ({ projects: newProjects, records: newRecords });
     }
@@ -157,9 +166,31 @@ export const ReportFilter = (props: IReportFilter) => {
                 }
                 return (diff.length < ((record.tags || []).length));
             });
-            const projectIds = filteredRecords.map(record => record.projectId);
-            const filteredProjects = newProjects.filter(project => projectIds.includes(project.id));
-            return ({ projects: filteredProjects, records: filteredRecords });
+            return ({
+                projects: filterProjectsByRecord(filteredRecords, newProjects),
+                records: filteredRecords,
+            });
+        }
+        return ({ projects: newProjects, records: newRecords });
+    }
+
+    const statusFilter = (newProjects, newRecords, statuses) => {
+        let filteredRecords = newRecords.slice(0);
+        if (statuses.length) {
+            filteredRecords = newRecords.filter((record) => {
+                if (statuses.includes(Status.BILLABLE) && statuses.includes(Status.NON_BILLABLE)) {
+                    return (record.isBillable || !record.isBillable);
+                } else if (statuses.includes(Status.BILLABLE)) {
+                    return record.isBillable;
+                } else if (statuses.includes(Status.NON_BILLABLE)) {
+                    return !record.isBillable;
+                }
+                return true;
+            });
+            return ({
+                projects: filterProjectsByRecord(filteredRecords, newProjects),
+                records: filteredRecords,
+            });
         }
         return ({ projects: newProjects, records: newRecords });
     }
@@ -195,6 +226,9 @@ export const ReportFilter = (props: IReportFilter) => {
                     filteredProjects = gData.projects;
                     break;
                 case FilterName.STATUS:
+                    const uData = statusFilter(filteredProjects, filteredRecords, filteredData[key].selectedIds);
+                    filteredRecords = uData.records;
+                    filteredProjects = uData.projects;
                     break;
                 case FilterName.DESCRIPTION:
                     const dData = descriptionFilter(filteredProjects, filteredRecords, filteredData[key].input, filteredData[key].isWithout)
