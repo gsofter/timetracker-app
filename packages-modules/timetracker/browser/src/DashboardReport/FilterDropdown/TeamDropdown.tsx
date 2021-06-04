@@ -7,9 +7,13 @@ import { useGetOrganizationMembersQuery } from '@adminide-stack/react-shared-com
 import { styles } from './styles';
 import { FilterName } from '../ReportFilter';
 
+interface IData {
+    selectedIds: [string];
+}
+interface IFilteredData extends Partial<Record<string, IData>> {}
 interface ITeamDropdown {
     title: string;
-    filteredData: any;
+    filteredData: IFilteredData;
     setFilteredData: Function;
 }
 enum Status {

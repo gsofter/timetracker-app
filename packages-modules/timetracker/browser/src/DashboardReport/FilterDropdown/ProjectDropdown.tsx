@@ -8,9 +8,13 @@ import { styles } from './styles';
 import { FilterName, WITHOUT } from '../ReportFilter';
 import * as _ from 'lodash';
 
+interface IData {
+    selectedIds: [string];
+}
+interface IFilteredData extends Partial<Record<string, IData>> {}
 interface IProjectDropdown {
     title: string;
-    filteredData: any;
+    filteredData: IFilteredData;
     setFilteredData: Function;
 }
 enum Status {

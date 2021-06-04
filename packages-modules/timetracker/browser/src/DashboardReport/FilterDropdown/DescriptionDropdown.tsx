@@ -6,9 +6,14 @@ import { CaretDownOutlined } from '@ant-design/icons';
 import { styles } from './styles';
 import { FilterName, WITHOUT } from '../ReportFilter';
 
+interface IData {
+    input: string;
+    isWithout: boolean;
+}
+interface IFilteredData extends Partial<Record<string, IData>> {}
 interface IStatusDropdown {
     title: string;
-    filteredData: any;
+    filteredData: IFilteredData;
     setFilteredData: Function;
 }
 

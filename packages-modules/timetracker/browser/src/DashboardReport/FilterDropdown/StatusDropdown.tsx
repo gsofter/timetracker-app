@@ -6,9 +6,13 @@ import { CaretDownOutlined } from '@ant-design/icons';
 import { styles } from './styles';
 import { FilterName } from '../ReportFilter';
 
+interface IData {
+    selectedIds: [string];
+}
+interface IFilteredData extends Partial<Record<string, IData>> {}
 interface IStatusDropdown {
     title: string;
-    filteredData: any;
+    filteredData: IFilteredData;
     setFilteredData: Function;
 }
 export enum Status {

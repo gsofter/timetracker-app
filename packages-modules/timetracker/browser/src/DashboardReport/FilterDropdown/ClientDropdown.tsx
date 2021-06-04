@@ -7,9 +7,13 @@ import { useGetOrganizationClientsQuery } from '@adminide-stack/react-shared-com
 import { styles } from './styles';
 import { FilterName, WITHOUT } from '../ReportFilter';
 
+interface IData {
+    selectedIds: [string];
+}
+interface IFilteredData extends Partial<Record<string, IData>> {}
 interface IClientDropdown {
     title: string;
-    filteredData: any;
+    filteredData: IFilteredData;
     setFilteredData: Function;
 }
 enum Status {
