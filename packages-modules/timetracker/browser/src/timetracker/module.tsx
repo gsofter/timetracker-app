@@ -3,7 +3,7 @@ import { Feature } from '@common-stack/client-react';
 import { filteredRoutes } from './compute';
 import { RegisterContribution } from './register-contribution';
 import Report from '../DashboardReport';
-import { DashboardFill } from '@adminide-stack/react-shared-components';
+import { DashboardFill } from '@adminide-stack/platform-browser/lib/components';
 
 const ReportProvider = () => {
   return (

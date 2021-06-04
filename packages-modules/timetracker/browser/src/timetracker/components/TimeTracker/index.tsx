@@ -54,12 +54,12 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
-  const [taskName, setTaskName] = useState(currentTimeRecord.taskName ?? '');
+  const [description, setDescription] = useState(currentTimeRecord.description ?? '');
 
   const debouncedFunc = useMemo(
     () =>
       _.debounce((value) => {
-        updatePlayingTimeRecord({ ...currentTimeRecord, taskName: value });
+        updatePlayingTimeRecord({ ...currentTimeRecord, description: value });
       }, 800),
     [currentTimeRecord],
   );
@@ -67,7 +67,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const handleChangeTask = useCallback(
     (e) => {
       e.persist();
-      setTaskName(e.target.value);
+      setDescription(e.target.value);
       debouncedFunc(e.target.value);
     },
     [debouncedFunc],
@@ -114,7 +114,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
       startTime: manualStart,
       endTime: manualEnd,
       isBillable: currentTimeRecord.isBillable,
-      taskName: currentTimeRecord.taskName,
+      description: currentTimeRecord.description,
       projectId: currentTimeRecord.projectId,
     };
     createTimeRecord(newRecordReq);
@@ -165,7 +165,12 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
         <Col span={24} xxl={12} className="input">
           <Row style={{ width: '100%' }}>
             <Col span={18} className="flex-center">
-              <Input placeholder="What are you working on?" size="large" value={taskName} onChange={handleChangeTask} />
+              <Input
+                placeholder="What are you working on?"
+                size="large"
+                value={description}
+                onChange={handleChangeTask}
+              />
             </Col>
             <Col span={6} className="flex-center project-selection">
               <Dropdown overlay={projectDropdownMenus} trigger={['click']}>

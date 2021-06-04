@@ -344,6 +344,7 @@ export const GetDurationTimeRecordsDocument = gql`
     startTime
     endTime
     taskName
+    description
     tags
     projectId
     isBillable
@@ -478,6 +479,7 @@ export const GetPlayingTimeRecordDocument = gql`
     startTime
     endTime
     taskName
+    description
     tags
     projectId
     userId
@@ -566,6 +568,7 @@ export const GetTimeRecordsDocument = gql`
     startTime
     endTime
     taskName
+    description
     tags
     projectId
     isBillable

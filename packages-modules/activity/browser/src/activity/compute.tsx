@@ -9,7 +9,7 @@ import {
     WithPermissionBehaviour,
     WithPermissionEnhanced,
     ResourceSettings,
-} from '@adminide-stack/react-shared-components';
+} from '@adminide-stack/platform-browser/lib/components';
 import { getFilteredRoutes } from '../utils';
 
 const Home = React.lazy(() => import('./containers/Home'));

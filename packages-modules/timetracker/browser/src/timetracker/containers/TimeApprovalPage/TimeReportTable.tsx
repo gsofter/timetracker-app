@@ -7,7 +7,7 @@ import { ITimesheetCreateRequest, IOrgMember } from '@admin-layout/timetracker-c
 import { useManagePermissions, useTimeformat, useViewPermissions } from '../../hooks';
 import { useHistory } from 'react-router';
 import { generatePath } from 'react-router-dom';
-import { useGetOrgContextQuery } from '@adminide-stack/react-shared-components';
+import { useGetOrgContextQuery } from '@adminide-stack/platform-browser/lib/components';
 import { ROUTES } from '../../constants';
 import * as qs from 'query-string';
 import * as _ from 'lodash';

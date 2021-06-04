@@ -1,5 +1,5 @@
 import React, { useEffect, useState } from 'react';
-import { useSetting, usePermissionAutoFetch } from '@adminide-stack/react-shared-components';
+import { useSetting, usePermissionAutoFetch } from '@adminide-stack/platform-browser/lib/components';
 import { useLocation } from 'react-router';
 import { TimeRoundedType, TimeRoundingUpToValue } from '../constants';
 import { IPermissionType } from '@adminide-stack/core';

@@ -3,7 +3,7 @@ import moment from 'moment';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../../../generated-models';
 import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { useFirstWeekDay } from '../../hooks';
-import { useSetting } from '@adminide-stack/react-shared-components';
+import { useSetting } from '@adminide-stack/platform-browser/lib/components';
 import * as _ from 'lodash';
 import Reports from './Reports';
 
