@@ -7,6 +7,7 @@ import moment from 'moment';
 import {
     ITimeRecordRequest,
 } from '@admin-layout/timetracker-core/src/interfaces/generated-models';
+import { formatDuration } from '@admin-layout/timetracker-module-browser/src/timetracker/services/timeRecordService';
 
 const TimeList = ({
     data,
@@ -28,6 +29,10 @@ const TimeList = ({
     const addTag = () => {
         setTag(ps => ({...ps, tags: [...tag.tags, tagName], showTag: true}))
     }
+
+    const calcTotalTime = (startTime: string, endTime: string): number => {
+        return Math.floor((moment(endTime).valueOf() - moment(startTime).valueOf()) / 1000);
+    };
 
     const updateBillable = (recordId, billable, time) => {
         const {id, timesheetId, __typename, ...rest} = time;
@@ -72,7 +77,7 @@ const TimeList = ({
                                     <Text>{moment(time.endTime).format("dddd")}</Text>
                                 </Left>
                                 <Right style={styles.header_icon}>
-                                    <Text style={{marginRight: 10}}>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).subtract(1, 'seconds').format("HH:mm:ss")}</Text>
+                                    <Text style={{marginRight: 10}}>{formatDuration(calcTotalTime(time.startTime, time.endTime), "HH:mm:ss")}</Text>
                                     <Button danger small onPress={() => removeTimeRecord(time.id)}>
                                         <Icon name="trash" color="#fff" />
                                     </Button>
@@ -119,7 +124,7 @@ const TimeList = ({
                                     />
                                 </Left>
                                 <Right>
-                                    <Text>{moment.utc(moment(time.endTime, "HH:mm:ss").diff(moment(time.startTime, "HH:mm:ss"))).format("HH:mm:ss")}</Text>
+                                    <Text>{formatDuration(calcTotalTime(time.startTime, time.endTime), "HH:mm:ss")}</Text>
                                 </Right>
                             </CardItem>
                         </Card>

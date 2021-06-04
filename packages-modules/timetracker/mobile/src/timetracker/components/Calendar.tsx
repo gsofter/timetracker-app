@@ -47,7 +47,6 @@ const CalendarScreen = () => {
 
 const styles = StyleSheet.create({
     container:{
-        textAlign: 'center',
         flex: 1,
     }
 })
