@@ -3,10 +3,17 @@ import { useState } from 'react';
 import { useFela } from 'react-fela';
 import { Input, Checkbox, Menu, Dropdown, Badge } from 'antd';
 import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
+import { FilterName, WITHOUT } from '../ReportFilter';
 import { styles } from './styles';
 
+interface IData {
+    selectedIds: [string];
+}
+interface IFilteredData extends Partial<Record<string, IData>> {}
 interface ITagDropdown {
     title: string;
+    filteredData: IFilteredData;
+    setFilteredData: Function;
 }
 enum Status {
     ACTIVE ='Active',
@@ -20,7 +27,7 @@ enum ContainStatus {
 }
 
 export const TagDropdown = (props: ITagDropdown) => {
-    const { title } = props;
+    const { title, filteredData, setFilteredData } = props;
     const [visible, setVisible] = useState(false);
     const [showStatus, setShowStatus] = useState(false);
     const [showContainStatus, setShowContainStatus] = useState(false);
@@ -34,6 +41,12 @@ export const TagDropdown = (props: ITagDropdown) => {
     const handleVisibleChange = (value) => {
         if (!value) {
             setCount(checkedList.length);
+            setFilteredData({
+                ...filteredData,
+                [FilterName.TAG]: {
+                    selectedIds: [...checkedList]
+                }
+            });
         }
         setVisible(value);
     };
@@ -56,7 +69,7 @@ export const TagDropdown = (props: ITagDropdown) => {
         setCheckAll(list.length === 1);
     };
     const onCheckAllChange = e => {
-        const list = e.target.checked ? ['without'] : []
+        const list = e.target.checked ? [WITHOUT] : []
         setCheckedList(list);
         setCheckAll(e.target.checked);
     };
@@ -130,8 +143,8 @@ export const TagDropdown = (props: ITagDropdown) => {
             <Menu.Item className={css(styles.disabledItem)}>
                 <Checkbox.Group className={css(styles.checkboxGroup)} onChange={onChange} value={checkedList}>
                     <Menu>
-                        <Menu.Item key={'without'} className={css(styles.item, styles.mTB0)}>
-                            <Checkbox value={'without'} className={css(styles.checkbox)}>{'Without tag'}</Checkbox>
+                        <Menu.Item key={WITHOUT} className={css(styles.item, styles.mTB0)}>
+                            <Checkbox value={WITHOUT} className={css(styles.checkbox)}>{'Without tag'}</Checkbox>
                         </Menu.Item>
                     </Menu>
                 </Checkbox.Group>
@@ -148,7 +161,7 @@ export const TagDropdown = (props: ITagDropdown) => {
         >
             <Badge count={count} style={{ background: '#2a90fe' }}>
                 <div className={css(styles.flex, styles.m5)}>
-                    <div>{title}</div>
+                    <div className={css(styles.capitalize)}>{title}</div>
                     <CaretDownOutlined className={css(styles.m4)}/>
                 </div>
             </Badge>
