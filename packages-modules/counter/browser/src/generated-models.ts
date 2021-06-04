@@ -2315,6 +2315,7 @@ export type Subscription = {
   SubscribeToOrganizationContext?: Maybe<SubscribedOrganizationData>;
   SubscribeToPermissionUpdate?: Maybe<ConfigurationUpdateEvent>;
   SubscribeToPolicyUpdate?: Maybe<ConfigurationUpdateEvent>;
+  SubscribeToTimeTracker?: Maybe<TimeRecord>;
   /**  Subscription fired when anyone increases counter  */
   counterUpdated?: Maybe<Counter>;
   dummy?: Maybe<Scalars['Int']>;
@@ -2339,6 +2340,12 @@ export type SubscriptionSubscribeToPermissionUpdateArgs = {
 
 export type SubscriptionSubscribeToPolicyUpdateArgs = {
   orgName?: Maybe<Scalars['String']>;
+};
+
+
+export type SubscriptionSubscribeToTimeTrackerArgs = {
+  orgName?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type Tag = {
@@ -4481,6 +4488,7 @@ export type SubscriptionResolvers<ContextType = any, ParentType extends Resolver
   SubscribeToOrganizationContext?: SubscriptionResolver<Maybe<ResolversTypes['SubscribedOrganizationData']>, "SubscribeToOrganizationContext", ParentType, ContextType, RequireFields<SubscriptionSubscribeToOrganizationContextArgs, never>>,
   SubscribeToPermissionUpdate?: SubscriptionResolver<Maybe<ResolversTypes['ConfigurationUpdateEvent']>, "SubscribeToPermissionUpdate", ParentType, ContextType, RequireFields<SubscriptionSubscribeToPermissionUpdateArgs, never>>,
   SubscribeToPolicyUpdate?: SubscriptionResolver<Maybe<ResolversTypes['ConfigurationUpdateEvent']>, "SubscribeToPolicyUpdate", ParentType, ContextType, RequireFields<SubscriptionSubscribeToPolicyUpdateArgs, never>>,
+  SubscribeToTimeTracker?: SubscriptionResolver<Maybe<ResolversTypes['TimeRecord']>, "SubscribeToTimeTracker", ParentType, ContextType, RequireFields<SubscriptionSubscribeToTimeTrackerArgs, never>>,
   counterUpdated?: SubscriptionResolver<Maybe<ResolversTypes['Counter']>, "counterUpdated", ParentType, ContextType>,
   dummy?: SubscriptionResolver<Maybe<ResolversTypes['Int']>, "dummy", ParentType, ContextType>,
   moleculerCounterUpdate?: SubscriptionResolver<Maybe<ResolversTypes['Counter']>, "moleculerCounterUpdate", ParentType, ContextType>,

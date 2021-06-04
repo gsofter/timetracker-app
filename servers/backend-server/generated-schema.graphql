@@ -1427,6 +1427,9 @@ extend type Mutation {
   removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean @addAccountContext
 }
 
+extend type Subscription {
+  SubscribeToTimeTracker(orgName: String, userId: String): TimeRecord
+}
 # scalar DateTime
 enum TimesheetState {
   OPEN

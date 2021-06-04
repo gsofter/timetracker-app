@@ -2343,6 +2343,7 @@ export type ISubscription = {
   SubscribeToOrganizationContext?: Maybe<ISubscribedOrganizationData>;
   SubscribeToPermissionUpdate?: Maybe<IConfigurationUpdateEvent>;
   SubscribeToPolicyUpdate?: Maybe<IConfigurationUpdateEvent>;
+  SubscribeToTimeTracker?: Maybe<ITimeRecord>;
   /**  Subscription fired when anyone increases counter  */
   counterUpdated?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
@@ -2367,6 +2368,12 @@ export type ISubscriptionSubscribeToPermissionUpdateArgs = {
 
 export type ISubscriptionSubscribeToPolicyUpdateArgs = {
   orgName?: Maybe<Scalars['String']>;
+};
+
+
+export type ISubscriptionSubscribeToTimeTrackerArgs = {
+  orgName?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
 };
 
 export type ITag = {
@@ -4443,6 +4450,7 @@ export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolv
   SubscribeToOrganizationContext?: SubscriptionResolver<Maybe<IResolversTypes['SubscribedOrganizationData']>, "SubscribeToOrganizationContext", ParentType, ContextType, RequireFields<ISubscriptionSubscribeToOrganizationContextArgs, never>>,
   SubscribeToPermissionUpdate?: SubscriptionResolver<Maybe<IResolversTypes['ConfigurationUpdateEvent']>, "SubscribeToPermissionUpdate", ParentType, ContextType, RequireFields<ISubscriptionSubscribeToPermissionUpdateArgs, never>>,
   SubscribeToPolicyUpdate?: SubscriptionResolver<Maybe<IResolversTypes['ConfigurationUpdateEvent']>, "SubscribeToPolicyUpdate", ParentType, ContextType, RequireFields<ISubscriptionSubscribeToPolicyUpdateArgs, never>>,
+  SubscribeToTimeTracker?: SubscriptionResolver<Maybe<IResolversTypes['TimeRecord']>, "SubscribeToTimeTracker", ParentType, ContextType, RequireFields<ISubscriptionSubscribeToTimeTrackerArgs, never>>,
   counterUpdated?: SubscriptionResolver<Maybe<IResolversTypes['Counter']>, "counterUpdated", ParentType, ContextType>,
   dummy?: SubscriptionResolver<Maybe<IResolversTypes['Int']>, "dummy", ParentType, ContextType>,
   moleculerCounterUpdate?: SubscriptionResolver<Maybe<IResolversTypes['Counter']>, "moleculerCounterUpdate", ParentType, ContextType>,
