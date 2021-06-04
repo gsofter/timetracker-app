@@ -131,6 +131,22 @@ export const ReportFilter = (props: IReportFilter) => {
         return ({ projects: newProjects, records: newRecords });
     }
 
+    const taskFilter = (newProjects, newRecords, tasks) => {
+        let filteredRecords = newRecords.slice(0);
+        if (tasks.length) {
+            filteredRecords = newRecords.filter((record) => {
+                if (tasks.includes(WITHOUT)) {
+                    return (tasks.includes(record.taskName) || !record.taskName);
+                }
+                return tasks.includes(record.taskName);
+            });
+            const projectIds = filteredRecords.map(record => record.projectId);
+            const filteredProjects = newProjects.filter(project => projectIds.includes(project.id));
+            return ({ projects: filteredProjects, records: filteredRecords });
+        }
+        return ({ projects: newProjects, records: newRecords });
+    }
+
     const applyFilter = () => {
         let filteredProjects = projects.slice(0);
         let filteredRecords = records.slice(0);
@@ -152,6 +168,9 @@ export const ReportFilter = (props: IReportFilter) => {
                     filteredProjects = pData.projects;
                     break;
                 case FilterName.TASK:
+                    const sData =  taskFilter(filteredProjects, filteredRecords, filteredData[key].selectedIds);
+                    filteredRecords = sData.records;
+                    filteredProjects = sData.projects;
                     break;
                 case FilterName.TAG:
                     break;

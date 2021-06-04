@@ -3,11 +3,13 @@ import { useState } from 'react';
 import { useFela } from 'react-fela';
 import { Input, Checkbox, Menu, Dropdown, Badge } from 'antd';
 import { CaretDownOutlined, DownOutlined } from '@ant-design/icons';
-import { WITHOUT } from '../ReportFilter';
+import { FilterName, WITHOUT } from '../ReportFilter';
 import { styles } from './styles';
 
 interface ITaskDropdown {
     title: string;
+    filteredData: any;
+    setFilteredData: Function;
 }
 enum Status {
     ACTIVE ='Active',
@@ -15,7 +17,7 @@ enum Status {
     ACTIVE_COMPLETED = 'Active & Completed',
 }
 export const TaskDropdown = (props: ITaskDropdown) => {
-    const { title } = props;
+    const { title, filteredData, setFilteredData } = props;
     const [visible, setVisible] = useState(false);
     const [show, setShow] = useState(false);
     const [checkedList, setCheckedList] = React.useState([]);
@@ -27,6 +29,12 @@ export const TaskDropdown = (props: ITaskDropdown) => {
     const handleVisibleChange = (value) => {
         if(!value) {
             setCount(checkedList.length);
+            setFilteredData({
+                ...filteredData,
+                [FilterName.TASK]: {
+                    selectedIds: [...checkedList]
+                }
+            });
         }
         setVisible(value);
     };
