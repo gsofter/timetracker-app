@@ -127,7 +127,8 @@ generates:
   packages-modules/timetracker/browser/src/generated-models.tsx:
     schema:
       - packages/adminide-core/src/core-schema.graphql
-      - 'packages-modules/timetracker/server/src/**/*.graphql'
+      - packages-modules/timetracker/browser/src/**/*.graphql
+      - packages-modules/timetracker/server/src/**/*.graphql
     documents: 'packages-modules/timetracker/browser/src/**/*.gql'
     config:
       typesPrefix: I
@@ -146,6 +147,7 @@ generates:
   packages-modules/timetracker/core/src/interfaces/generated-models.ts:
     schema:
       - packages-modules/timetracker/server/src/**/*.graphql
+      - packages-modules/timetracker/browser/src/**/*.graphql
     documents: 'packages-modules/timetracker/browser/src/**/*.gql'
     config:
       scalars:

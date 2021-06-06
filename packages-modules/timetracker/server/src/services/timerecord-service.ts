@@ -1,7 +1,8 @@
+/* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-extraneous-dependencies */
 import * as ILogger from 'bunyan';
 import { inject, injectable } from 'inversify';
-import { ITimeRecord, ITimeRecordRequest, ITimesheet, ITimeRecordPubSubEvents } from '@admin-layout/timetracker-core';
+import { ITimeRecord, ITimeRecordRequest, ITimesheet, ITimeRecordPubSubEvents, ITagResolvers, ITimeTracker } from '@admin-layout/timetracker-core';
 import { ServerTypes, IPreferencesService } from '@adminide-stack/core';
 import { IMoleculerServiceName, IMailServiceAction, IMailerServicesendArgs } from '@container-stack/mailing-api';
 import * as moment from 'moment';
@@ -16,7 +17,7 @@ export interface ITimeRecordService {
   getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
   getDurationTimeRecords(orgId: string, startTime: Date, endTime: Date, userId?: string): Promise<Array<ITimeRecord>>;
   getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
-  createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<string>;
+  createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<Partial<ITimeTracker>>;
   updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest): Promise<boolean>;
   removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<boolean>;
   removeDurationTimeRecords(
@@ -82,8 +83,13 @@ export class TimeRecordService implements ITimeRecordService {
 
   public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
     const data = await this.timeRecordRepository.createTimeRecord(userId, orgId, request);
-    this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordCreated, { SubscribeToTimeTracker: data });
-    return data;
+    console.log('---Data_--', data);
+    const parseData = JSON.parse(JSON.stringify(data.timeRecords[0]));
+    console.log('---parseData', parseData);
+    const record = { orgName: data.orgId, ...parseData };
+    // const dd = await this.timeRecordRepository.getTimeRecords();
+    this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordCreated, { SubscribeToTimeTracker: record });
+    return (data as any)._id;
   }
 
   public async updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest) {

@@ -1,11 +1,19 @@
 /* eslint-disable no-underscore-dangle */
 import { Schema, Model, Document, Connection } from 'mongoose';
-import { ITimeTracker } from '@admin-layout/timetracker-core';
+import { ITimeTracker, ITimeRecord, ITimesheet } from '@admin-layout/timetracker-core';
 
 export declare type Maybe<T> = T | null;
 
+interface ITimeRecordModel extends ITimeRecord, Document {
+  id?: any;
+}
+interface ITimeSheetModel extends ITimesheet, Document {
+  id?: any;
+}
 interface ITimeTrackerModel extends ITimeTracker, Document {
   id: any;
+  timeRecords: ITimeRecordModel[];
+  timesheets: ITimeSheetModel[];
 }
 
 enum TimesheetState {

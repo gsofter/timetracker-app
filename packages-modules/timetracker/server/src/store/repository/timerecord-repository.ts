@@ -2,7 +2,7 @@
 import * as Logger from 'bunyan';
 import { injectable, inject } from 'inversify';
 import * as mongoose from 'mongoose';
-import { ITimeRecordRequest, ITimeRecord } from '@admin-layout/timetracker-core';
+import { ITimeRecordRequest, ITimeRecord, ITimeTracker } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
 import * as moment from 'moment';
 import { CommonType } from '@common-stack/core';
@@ -13,7 +13,7 @@ export interface ITimeRecordRepository {
   getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
   getOrganizationTimeRecords(orgId: string): Promise<Array<ITimeRecord>>;
   getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
-  createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<string>;
+  createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<Partial<ITimeTracker>>;
   updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest): Promise<boolean>;
   removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<boolean>;
   removeDurationTimeRecords(
@@ -73,13 +73,17 @@ export class TimeRecordRepository implements ITimeRecordRepository {
 
   public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
     try {
-      const response = await this.timeTrackerModel.update(
+      const response = await this.timeTrackerModel.findOneAndUpdate(
         { orgId },
         { orgId, $push: { timeRecords: request } },
-        { upsert: true },
+        {
+          upsert: true,
+          new: true,
+          projection: { userId, orgId, timeRecords: { $elemMatch: { startTime: request.startTime } } },
+        },
       );
       console.log('---RESPONSE FROM CREATE TIMER RECORD', response);
-      return response.id;
+      return response;
     } catch (err) {
       throw new Error(err.message);
     }

@@ -244,6 +244,12 @@ export type IClientAddRequest = {
   orgName?: Maybe<Scalars['String']>;
 };
 
+export const enum IClientCacheTypeNames {
+  TimeTracker = 'TimeTracker',
+  TimeRecord = 'TimeRecord',
+  Timesheet = 'Timesheet'
+};
+
 export type IClientPhone = {
    __typename?: 'ClientPhone';
   workPhone?: Maybe<Scalars['String']>;
@@ -3512,6 +3518,7 @@ export type IResolversTypes = {
   OrganizationMember: ResolverTypeWrapper<IOrganizationMember>,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
+  ClientCacheTypeNames: IClientCacheTypeNames,
   ConfigurationContributionNames: IConfigurationContributionNames,
   TimeRecordPubSubEvents: ITimeRecordPubSubEvents,
 };
@@ -3731,6 +3738,7 @@ export type IResolversParentTypes = {
   OrganizationMember: IOrganizationMember,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
+  ClientCacheTypeNames: IClientCacheTypeNames,
   ConfigurationContributionNames: IConfigurationContributionNames,
   TimeRecordPubSubEvents: ITimeRecordPubSubEvents,
 };

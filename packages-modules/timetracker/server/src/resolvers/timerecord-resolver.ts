@@ -51,7 +51,7 @@ export const resolver = (options) => ({
     },
   },
   Subscription: {
-    SubscribeToOrganizationContext: {
+    SubscribeToTimeTracker: {
       subscribe: withFilter(
         () =>
           options.pubsub.asyncIterator([
@@ -60,8 +60,8 @@ export const resolver = (options) => ({
             ITimeRecordPubSubEvents.TimeRecordDeleted,
           ]),
         async (payload, variables, context: {}) =>
-          payload.SubscribeToOrganizationContext.orgId === variables.orgNameFilter &&
-          payload.SubscribeToOrganizationContext.userId === variables.userId,
+          payload.SubscribeToTimeTracker.orgName === variables.orgName &&
+          payload.SubscribeToTimeTracker.userId === variables.userId,
       ),
     },
   },
