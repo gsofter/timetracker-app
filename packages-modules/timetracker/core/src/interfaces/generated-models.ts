@@ -2834,7 +2834,7 @@ export const enum IVisibility {
 
 export type ITimeRecordFragment = (
   { __typename?: 'TimeRecord' }
-  & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskId' | 'taskName' | 'tags' | 'isBillable' | 'projectId' | 'clientId' | 'userId' | 'orgId' | 'timesheetId' | 'editable'>
+  & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskId' | 'taskName' | 'description' | 'tags' | 'isBillable' | 'projectId' | 'clientId' | 'userId' | 'orgId' | 'timesheetId' | 'editable'>
 );
 
 export type ICreateTimeRecordMutationVariables = {
@@ -3043,6 +3043,7 @@ export const TimeRecordFragmentDoc = gql`
   endTime
   taskId
   taskName
+  description
   tags
   isBillable
   projectId

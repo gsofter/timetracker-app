@@ -34,6 +34,7 @@ export const TimeRecordFragmentDoc = gql`
   endTime
   taskId
   taskName
+  description
   tags
   isBillable
   projectId

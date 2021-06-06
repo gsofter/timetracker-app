@@ -21,6 +21,7 @@ import { useCreatePermissions, useDeletePermissions } from '../../hooks';
 const TimeTrackerWrapper = (props) => {
   const { setTime, reset, stop, start } = props.timer;
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
+  const orgName = useSelector<any>((state) => state.platform.orgName) as string;
   const [range, setRange] = useState({ startTime: moment().startOf('month'), endTime: moment().endOf('month') });
   const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
     variables: { userId, startTime: range.startTime, endTime: range.endTime },
@@ -34,9 +35,9 @@ const TimeTrackerWrapper = (props) => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
   const { self: createPermit } = useCreatePermissions();
   const { self: deletePermit } = useDeletePermissions();
-  const { data: subscribedData, loading: subscribeLoading } = useSubscribeToTimeTrackerSubscription({ variables: { userId, }});
-
-  console.log('--- SUBSCRIBED DATA', subscribedData, subscribeLoading);
+  const { data: subData, error: subErrro, loading: subLoading } = useSubscribeToTimeTrackerSubscription({ variables: { userId, orgName}, onSubscriptionData: (result) => {
+    console.log('---RESULT UPDATED', result);
+  }});
   useEffect(() => {
     moment.locale('en', {
       week: {
@@ -56,7 +57,7 @@ const TimeTrackerWrapper = (props) => {
       .then(() => {
         message.info('TimeRecord created');
         plRefetch();
-        refetch();
+        // refetch();
       })
       .catch((error) => {
         message.error(error.message);

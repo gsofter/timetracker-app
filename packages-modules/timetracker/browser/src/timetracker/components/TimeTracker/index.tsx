@@ -55,16 +55,25 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
   const [description, setDescription] = useState(currentTimeRecord.description ?? '');
-
+  const [taskName, setTaskName] = useState(currentTimeRecord.taskName ?? '');
   const debouncedFunc = useMemo(
     () =>
       _.debounce((value) => {
-        updatePlayingTimeRecord({ ...currentTimeRecord, description: value });
+        updatePlayingTimeRecord({ ...currentTimeRecord, taskName: value, description: value });
       }, 800),
     [currentTimeRecord],
   );
 
   const handleChangeTask = useCallback(
+    (e) => {
+      e.persist();
+      setTaskName(e.target.value);
+      debouncedFunc(e.target.value);
+    },
+    [debouncedFunc],
+  );
+
+  const handleDescriptionTask = useCallback(
     (e) => {
       e.persist();
       setDescription(e.target.value);
@@ -114,6 +123,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
       startTime: manualStart,
       endTime: manualEnd,
       isBillable: currentTimeRecord.isBillable,
+      taskName: currentTimeRecord.taskName,
       description: currentTimeRecord.description,
       projectId: currentTimeRecord.projectId,
     };
@@ -169,7 +179,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
                 placeholder="What are you working on?"
                 size="large"
                 value={description}
-                onChange={handleChangeTask}
+                onChange={handleDescriptionTask}
               />
             </Col>
             <Col span={6} className="flex-center project-selection">

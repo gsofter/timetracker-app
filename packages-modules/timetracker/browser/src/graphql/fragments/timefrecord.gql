@@ -4,6 +4,7 @@ fragment TimeRecord on TimeRecord {
     endTime
     taskId
     taskName
+    description
     tags
     isBillable
     projectId
