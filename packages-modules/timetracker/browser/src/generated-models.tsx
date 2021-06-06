@@ -156,7 +156,7 @@ export type RemoveDurationTimeRecordsMutationHookResult = ReturnType<typeof useR
 export type RemoveDurationTimeRecordsMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IRemoveDurationTimeRecordsMutation>;
 export type RemoveDurationTimeRecordsMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IRemoveDurationTimeRecordsMutation, SchemaTypes.IRemoveDurationTimeRecordsMutationVariables>;
 export const RemoveTimeRecordDocument = gql`
-    mutation RemoveTimeRecord($recordId: String) {
+    mutation RemoveTimeRecord($recordId: String!) {
   removeTimeRecord(recordId: $recordId)
 }
     `;
@@ -228,7 +228,7 @@ export type RemoveTimesheetMutationHookResult = ReturnType<typeof useRemoveTimes
 export type RemoveTimesheetMutationResult = ApolloReactCommon.MutationResult<SchemaTypes.IRemoveTimesheetMutation>;
 export type RemoveTimesheetMutationOptions = ApolloReactCommon.BaseMutationOptions<SchemaTypes.IRemoveTimesheetMutation, SchemaTypes.IRemoveTimesheetMutationVariables>;
 export const UpdateTimeRecordDocument = gql`
-    mutation UpdateTimeRecord($recordId: String, $request: TimeRecordRequest) {
+    mutation UpdateTimeRecord($recordId: String!, $request: TimeRecordRequest) {
   updateTimeRecord(recordId: $recordId, request: $request)
 }
     `;
@@ -704,7 +704,10 @@ export type GetMembersQueryResult = ApolloReactCommon.QueryResult<SchemaTypes.IG
 export const SubscribeToTimeTrackerDocument = gql`
     subscription SubscribeToTimeTracker($orgName: String, $userId: String) {
   SubscribeToTimeTracker(orgName: $orgName, userId: $userId) {
-    ...TimeRecord
+    mutation
+    timeRecord {
+      ...TimeRecord
+    }
   }
 }
     ${TimeRecordFragmentDoc}`;

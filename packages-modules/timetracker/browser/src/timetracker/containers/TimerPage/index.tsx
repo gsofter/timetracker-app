@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import moment from 'moment';
+import { SubscribeToMoreOptions } from '@apollo/client';
 import {
   useCreateTimeRecordMutation,
   useGetDurationTimeRecordsQuery,
@@ -9,7 +10,7 @@ import {
   useGetProjectsQuery,
   useSubscribeToTimeTrackerSubscription,
 } from '../../../generated-models';
-import { ITimeRecordRequest, ITimeRecord, IPermissionType } from '@admin-layout/timetracker-core';
+import { ITimeRecordRequest, ITimeRecord, IPermissionType, IGetPlayingTimeRecordQuery, IGetPlayingTimeRecordQueryVariables, SubscribeToTimeTrackerDocument, ISubscribeToTimeTrackerSubscriptionVariables, ISubscribeToTimeTrackerSubscription } from '@admin-layout/timetracker-core';
 import { message, Spin } from 'antd';
 import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
@@ -18,15 +19,18 @@ import { useFirstWeekDay } from '../../hooks';
 import TimerActivity from './TimerActivity';
 import { useCreatePermissions, useDeletePermissions } from '../../hooks';
 
+
+type TimeTrackerSubscription = SubscribeToMoreOptions<IGetPlayingTimeRecordQuery, ISubscribeToTimeTrackerSubscriptionVariables, ISubscribeToTimeTrackerSubscription>
+
 const TimeTrackerWrapper = (props) => {
   const { setTime, reset, stop, start } = props.timer;
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const orgName = useSelector<any>((state) => state.platform.orgName) as string;
   const [range, setRange] = useState({ startTime: moment().startOf('month'), endTime: moment().endOf('month') });
-  const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
+  const { data, error, refetch, loading, subscribeToMore: subscribeDurationTimeRecord } = useGetDurationTimeRecordsQuery({
     variables: { userId, startTime: range.startTime, endTime: range.endTime },
   });
-  const { data: plData, refetch: plRefetch, loading: plLoading, subscribeToMore: {} } = useGetPlayingTimeRecordQuery();
+  const { data: plData, refetch: plRefetch, loading: plLoading, subscribeToMore } = useGetPlayingTimeRecordQuery();
   const [createMutation] = useCreateTimeRecordMutation();
   const [removeMutation] = useRemoveTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
@@ -35,9 +39,10 @@ const TimeTrackerWrapper = (props) => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
   const { self: createPermit } = useCreatePermissions();
   const { self: deletePermit } = useDeletePermissions();
-  const { data: subData, error: subErrro, loading: subLoading } = useSubscribeToTimeTrackerSubscription({ variables: { userId, orgName}, onSubscriptionData: (result) => {
-    console.log('---RESULT UPDATED', result);
-  }});
+  // const { data: subData, error: subErrro, loading: subLoading } = useSubscribeToTimeTrackerSubscription({ variables: { userId, orgName}, onSubscriptionData: (result) => {
+  //   console.log('---RESULT UPDATED', result);
+  //   subscribeToMore({})
+  // }});
   useEffect(() => {
     moment.locale('en', {
       week: {
@@ -56,7 +61,7 @@ const TimeTrackerWrapper = (props) => {
     createMutation({ variables: { request } })
       .then(() => {
         message.info('TimeRecord created');
-        plRefetch();
+        // plRefetch();
         // refetch();
       })
       .catch((error) => {
@@ -86,7 +91,7 @@ const TimeTrackerWrapper = (props) => {
       .then(() => {
         message.success('TimeRecord Updated');
         refetch();
-        plRefetch();
+        // plRefetch();
       })
       .catch((error) => {
         message.error(error.message);
@@ -98,7 +103,7 @@ const TimeTrackerWrapper = (props) => {
     removeMutation({ variables: { recordId: currentTimeRecord.id } })
       .then(() => {
         // message.success('TimeRecord Removed');
-        plRefetch();
+        // plRefetch();
         resetTimerValues();
       })
       .catch((error) => {
@@ -120,6 +125,23 @@ const TimeTrackerWrapper = (props) => {
     stop();
   };
 
+  const getSubscriptionOptions = ({ userId, orgName }: { userId: string, orgName: string }): TimeTrackerSubscription => {
+    return {
+      document: SubscribeToTimeTrackerDocument,
+      variables: { userId, orgName },
+      updateQuery: (prev, { subscriptionData }) => {
+        const { } = prev;
+        if (!subscriptionData.data.SubscribeToTimeTracker) {
+          return prev;
+        }
+        // return null;
+        const newData = _.merge({}, prev, { getPlayingTimeRecord: subscriptionData.data.SubscribeToTimeTracker});
+        console.log('---Subscribed DATA UPDATED', newData);
+        return newData;
+      }
+    }
+  }
+
   const [currentTimeRecord, setCurrentTimeRecord] = useState<ITimeRecord>({
     startTime: null,
     endTime: null,
@@ -128,6 +150,11 @@ const TimeTrackerWrapper = (props) => {
     taskName: '',
   });
   const [isRecording, setIsRecording] = useState(false);
+  useEffect(() => {
+    const unsubscribe = subscribeToMore(getSubscriptionOptions({ userId, orgName }))
+    return () => unsubscribe();
+  }, [orgName, userId, subscribeToMore]);
+
 
   useEffect(() => {
     if (plData && plData.getPlayingTimeRecord) {

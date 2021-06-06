@@ -2,7 +2,14 @@
 /* eslint-disable import/no-extraneous-dependencies */
 import * as ILogger from 'bunyan';
 import { inject, injectable } from 'inversify';
-import { ITimeRecord, ITimeRecordRequest, ITimesheet, ITimeRecordPubSubEvents, ITagResolvers, ITimeTracker } from '@admin-layout/timetracker-core';
+import {
+  ITimeRecord,
+  ITimeRecordRequest,
+  ITimesheet,
+  ITimeRecordPubSubEvents,
+  ITagResolvers,
+  ITimeTracker,
+} from '@admin-layout/timetracker-core';
 import { ServerTypes, IPreferencesService } from '@adminide-stack/core';
 import { IMoleculerServiceName, IMailServiceAction, IMailerServicesendArgs } from '@container-stack/mailing-api';
 import * as moment from 'moment';
@@ -83,19 +90,16 @@ export class TimeRecordService implements ITimeRecordService {
 
   public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
     const data = await this.timeRecordRepository.createTimeRecord(userId, orgId, request);
-    console.log('---Data_--', data);
-    const parseData = JSON.parse(JSON.stringify(data.timeRecords[0]));
-    console.log('---parseData', parseData);
-    const record = { orgName: data.orgId, ...parseData };
-    // const dd = await this.timeRecordRepository.getTimeRecords();
+    const record = { orgName: data.orgId, ...data?.timeRecords[0] };
     this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordCreated, { SubscribeToTimeTracker: record });
     return (data as any)._id;
   }
 
   public async updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest) {
     const data = await this.timeRecordRepository.updateTimeRecord(userId, orgId, recordId, request);
-    this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordCreated, { SubscribeToTimeTracker: data });
-    return data;
+    const record = { orgName: data.orgId, ...data?.timeRecords[0] };
+    this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordUpdated, { SubscribeToTimeTracker: record });
+    return true;
   }
 
   public async removeTimeRecord(userId: string, orgId: string, recordId: string) {

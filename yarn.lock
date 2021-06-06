@@ -2155,6 +2155,15 @@
   resolved "https://registry.yarnpkg.com/@common-stack/core/-/core-0.0.260.tgz#6d4b12dc599ac19a1969b337fd546ada34284389"
   integrity sha512-1Y7trbjpk1zYy4hrOhAQ/OAEAmOX716TPV8TOsLV3d1pxPKDprZgiVGXCCwVuZXHZYHlpP0FVibU83Nc6kT1cg==
 
+"@common-stack/graphql-api@0.0.261":
+  version "0.0.261"
+  resolved "https://registry.yarnpkg.com/@common-stack/graphql-api/-/graphql-api-0.0.261.tgz#880606f726e66d93858467aa1311744155b83511"
+  integrity sha512-MGD37nuWk0oEnk4tJjAw/MHOBm9ZvRkHZWZAKmxkAcNdpCMbTYKUfZhb5XqZv/GjFE01XN3DdptKvgNzaxPH8w==
+  dependencies:
+    "@cdmbase/graphql-type-uri" "^2.0.0"
+    graphql-iso-date "^3.6.1"
+    graphql-type-json "^0.3.2"
+
 "@common-stack/server-core@0.0.260", "@common-stack/server-core@^0.0.260":
   version "0.0.260"
   resolved "https://registry.yarnpkg.com/@common-stack/server-core/-/server-core-0.0.260.tgz#26a5755432b2f43b3bf446c2e650be081e4f68c3"
@@ -18843,7 +18852,7 @@ graphql-tools@^4.0.8:
     iterall "^1.1.3"
     uuid "^3.1.0"
 
-graphql-type-json@^0.3.1:
+graphql-type-json@^0.3.1, graphql-type-json@^0.3.2:
   version "0.3.2"
   resolved "https://registry.yarnpkg.com/graphql-type-json/-/graphql-type-json-0.3.2.tgz#f53a851dbfe07bd1c8157d24150064baab41e115"
   integrity sha512-J+vjof74oMlCWXSvt0DOf2APEdZOCdubEvGDUAlqH//VBYcOYsGgRW7Xzorr44LvkjiuvecWc8fChxuZZbChtg==

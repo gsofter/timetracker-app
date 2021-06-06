@@ -75,6 +75,7 @@
     "@common-stack/client-core": "0.0.260",
     "@common-stack/core": "0.0.260",
     "@common-stack/server-core": "0.0.260",
+    "@common-stack/graphql-api": "0.0.261",
     "@container-stack/mailing-api": "^0.0.26-61",
     "apollo-datasource": "^0.7.0",
     "apollo-datasource-rest": "^0.8.0",

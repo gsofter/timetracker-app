@@ -14,7 +14,12 @@ export interface ITimeRecordRepository {
   getOrganizationTimeRecords(orgId: string): Promise<Array<ITimeRecord>>;
   getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
   createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<Partial<ITimeTracker>>;
-  updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest): Promise<boolean>;
+  updateTimeRecord(
+    userId: string,
+    orgId: string,
+    recordId: string,
+    request: ITimeRecordRequest,
+  ): Promise<Partial<ITimeTracker>>;
   removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<boolean>;
   removeDurationTimeRecords(
     userId: string,
@@ -83,7 +88,7 @@ export class TimeRecordRepository implements ITimeRecordRepository {
         },
       );
       console.log('---RESPONSE FROM CREATE TIMER RECORD', response);
-      return response;
+      return response.toObject();
     } catch (err) {
       throw new Error(err.message);
     }
@@ -93,11 +98,15 @@ export class TimeRecordRepository implements ITimeRecordRepository {
     try {
       if (recordId === null || recordId === undefined) throw new Error('TimeRecord id not specified!');
 
-      const response = await this.timeTrackerModel.update(
+      const response = await this.timeTrackerModel.findOneAndUpdate(
         { orgId, timeRecords: { $elemMatch: { _id: recordId } } },
         { $set: { 'timeRecords.$': request } },
+        {
+          projection: { userId, orgId, timeRecords: { $elemMatch: { _id: recordId } } },
+        },
       );
-      return true;
+      console.log('---UPDATE TIME RECORD', response);
+      return response.toObject();
     } catch (err) {
       throw new Error(err.message);
     }
