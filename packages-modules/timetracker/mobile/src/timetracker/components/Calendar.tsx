@@ -1,6 +1,9 @@
+import moment from 'moment';
 import React, {useState} from 'react';
 import { StyleSheet, View, Dimensions, Switch, Text } from 'react-native';
 import { Calendar } from 'react-native-big-calendar';
+import { useSelector } from 'react-redux';
+import { useGetDurationTimeRecordsQuery } from '../../generated-models';
 
 import TabularScreen from "./TabularScreen"
 
@@ -18,20 +21,27 @@ const allEvents = [
     }
 ]
 
-const events = allEvents.map(event => {
-    const {endTime, startTime, taskName, ...rest} = event
-    return {
-        end: new Date(endTime),
-        start: new Date(startTime),
-        title: taskName,
-        ...rest
-    }
-})
-
 const CalendarScreen = () => {
     const [isEnabled, setIsEnabled] = useState(true)
+    const [weekStart, setWeekStart] = useState(moment().clone().startOf('week'))
+    const [weekEnd, setWeekEnd] = useState(moment().clone().endOf('week'))
+    const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
+
+    const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
+        variables: { userId: userId, startTime: weekStart, endTime: weekEnd },
+    });
 
     const screenHeight = Dimensions.get('window').height
+
+    const events = allEvents.map(event => {
+        const {endTime, startTime, taskName, ...rest} = event
+        return {
+            end: new Date(endTime),
+            start: new Date(startTime),
+            title: taskName,
+            ...rest
+        }
+    })
 
     const toggleSwitch = () => {
         setIsEnabled(!isEnabled)
