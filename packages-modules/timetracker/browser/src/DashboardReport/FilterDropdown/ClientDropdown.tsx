@@ -87,7 +87,7 @@ export const ClientDropdown = (props: IClientDropdown) => {
     };
 
     const content = (
-        <Menu>
+        <Menu className={css(styles.menu)}>
             <Menu.Item className={css(styles.item)}>
                 <Input onChange={onChangeInput} placeholder={'Find client...'}/>
             </Menu.Item>
