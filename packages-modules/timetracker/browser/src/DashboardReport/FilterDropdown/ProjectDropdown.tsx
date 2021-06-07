@@ -135,7 +135,7 @@ export const ProjectDropdown = (props: IProjectDropdown) => {
     }
 
     const content = (
-        <Menu>
+        <Menu className={css(styles.menu)}>
             <Menu.Item className={css(styles.item)}>
                 <Input onChange={onChangeInput} placeholder={'Find client...'}/>
             </Menu.Item>
@@ -185,7 +185,7 @@ export const ProjectDropdown = (props: IProjectDropdown) => {
                                     <Checkbox value={WITHOUT} className={css(styles.checkbox)}>{'Without project'}</Checkbox>
                                 </Menu.Item>
                                 {filteredProjects?.map(({ projects, clientId }) => (
-                                    <>
+                                    <React.Fragment key={clientId}>
                                         <Menu.Divider className={css(styles.divider)}/>
                                         <Menu.Item disabled={true} className={css(styles.item, styles.mTB0)}>
                                             <div className={css(styles.label)}>{getClientName(clientId)}</div>
@@ -197,7 +197,7 @@ export const ProjectDropdown = (props: IProjectDropdown) => {
                                                 </Menu.Item>
                                             ))
                                         }
-                                    </>
+                                    </React.Fragment>
                                 ))}
                             </Menu>
                         </Checkbox.Group>

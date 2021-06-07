@@ -83,7 +83,7 @@ export const TeamDropdown = (props: ITeamDropdown) => {
     };
 
     const content = (
-      <Menu>
+      <Menu className={css(styles.menu)}>
           <Menu.Item className={css(styles.item)}>
               <Input onChange={onChangeInput} placeholder={'Find member...'}/>
           </Menu.Item>
