@@ -5,9 +5,6 @@ import { injectable, inject } from 'inversify';
 import * as mongoose from 'mongoose';
 import { ITimeRecordRequest, ITimeRecord, ITimeTracker } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
-import * as moment from 'moment';
-import { CommonType } from '@common-stack/core';
-import { ServiceBroker } from 'moleculer';
 import { TimeTrackerModelType, TimeTrackerModelFunc } from '../models/timetracker-model';
 
 export interface ITimeRecordRepository {
