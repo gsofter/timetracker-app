@@ -95,7 +95,6 @@ export class TimeRecordRepository implements ITimeRecordRepository {
         { orgId, timeRecords: { $elemMatch: { _id: recordId } } },
         { $set: { 'timeRecords.$': request } },
         {
-
           projection: { userId, orgId, timeRecords: { $elemMatch: { _id: recordId } } },
         },
       );

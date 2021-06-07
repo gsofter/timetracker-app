@@ -120,7 +120,6 @@ export class TimeRecordService implements ITimeRecordService {
 
   public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
     const data = await this.timeRecordRepository.removeTimeRecord(userId, orgId, recordId);
-    console.log('--DATA---REMOVE TIMERECORD', data);
     this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordDeleted, { SubscribeToTimeTracker: data });
     return true;
   }
