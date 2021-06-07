@@ -136,13 +136,13 @@ export const ClientDropdown = (props: IClientDropdown) => {
                                 <Menu.Item key={WITHOUT} className={css(styles.item, styles.mTB0)}>
                                     <Checkbox value={WITHOUT} className={css(styles.checkbox)}>{'Without client'}</Checkbox>
                                 </Menu.Item>
-                                {filteredClients?.map((client) => (
-                                    <>
+                                {filteredClients?.map((client, index) => (
+                                    <React.Fragment key={index}>
                                         <Menu.Divider className={css(styles.divider)}/>
                                         <Menu.Item key={client.id} className={css(styles.item, styles.mTB0)}>
                                             <Checkbox value={client.id} className={css(styles.checkbox)}>{client.displayName}</Checkbox>
                                         </Menu.Item>
-                                    </>
+                                    </React.Fragment>
                                 ))}
                             </Menu>
                         </Checkbox.Group>
