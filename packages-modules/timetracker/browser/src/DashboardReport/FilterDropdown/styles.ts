@@ -1,4 +1,9 @@
 export const styles = {
+    menu: () => ({
+        '& .ant-dropdown-menu-title-content': {
+            width: '100%',
+        }
+    }),
     item: () => ({
         padding: '10px 12px',
         ':hover': {
