@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 import { StyleSheet, View, ScrollView, Platform, Text } from 'react-native';
-import KeyboardSpacer from 'react-native-keyboard-spacer';
+//import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import TimerFooter from './TimerFooter';
 import TimeRange from './TimeRange';
@@ -165,8 +165,8 @@ const TimerScreen = () => {
           projectsData={projectsData}
         />
       </View>
-      {Platform.OS === 'ios' &&
-        <KeyboardSpacer />}
+{/*       {Platform.OS === 'ios' &&
+        <KeyboardSpacer />} */}
     </View>
   );
 };
