@@ -6,6 +6,9 @@ import { withFilter } from 'graphql-subscriptions';
 import { ITimeRecordPubSubEvents } from '@admin-layout/timetracker-core';
 
 export const resolver = (options) => ({
+  TimeRecord: {
+    id: (root) => root.id || root._id,
+  },
   Query: {
     getTimeRecords: (root, args, { timeRecordService, user, userContext }) => {
       options.logger.trace('(Query.getTimeRecords) args %j', args);

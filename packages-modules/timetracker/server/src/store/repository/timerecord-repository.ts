@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable no-underscore-dangle */
 import * as Logger from 'bunyan';
 import { injectable, inject } from 'inversify';
@@ -20,7 +21,7 @@ export interface ITimeRecordRepository {
     recordId: string,
     request: ITimeRecordRequest,
   ): Promise<Partial<ITimeTracker>>;
-  removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<boolean>;
+  removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<Partial<ITimeTracker>>;
   removeDurationTimeRecords(
     userId: string,
     orgId: string,
@@ -44,9 +45,6 @@ export class TimeRecordRepository implements ITimeRecordRepository {
 
     @inject('Logger')
     logger: Logger,
-
-    @inject(CommonType.MOLECULER_BROKER)
-    private broker: ServiceBroker,
   ) {
     this.logger = logger.child({ className: 'ScheduleRepository' });
     this.timeTrackerModel = TimeTrackerModelFunc(db);
@@ -87,7 +85,6 @@ export class TimeRecordRepository implements ITimeRecordRepository {
           projection: { userId, orgId, timeRecords: { $elemMatch: { startTime: request.startTime } } },
         },
       );
-      console.log('---RESPONSE FROM CREATE TIMER RECORD', response);
       return response.toObject();
     } catch (err) {
       throw new Error(err.message);
@@ -97,15 +94,14 @@ export class TimeRecordRepository implements ITimeRecordRepository {
   public async updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest) {
     try {
       if (recordId === null || recordId === undefined) throw new Error('TimeRecord id not specified!');
-
       const response = await this.timeTrackerModel.findOneAndUpdate(
         { orgId, timeRecords: { $elemMatch: { _id: recordId } } },
         { $set: { 'timeRecords.$': request } },
         {
+
           projection: { userId, orgId, timeRecords: { $elemMatch: { _id: recordId } } },
         },
       );
-      console.log('---UPDATE TIME RECORD', response);
       return response.toObject();
     } catch (err) {
       throw new Error(err.message);
@@ -114,24 +110,15 @@ export class TimeRecordRepository implements ITimeRecordRepository {
 
   public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
     try {
-      const trackerDoc = await this.timeTrackerModel.find({ orgId });
-      if (trackerDoc && trackerDoc.length > 0) {
-        const timeRecords = trackerDoc[0].timeRecords.filter((tr) => tr.id !== recordId);
-        await this.timeTrackerModel.update(
-          {
-            orgId,
-          },
-          {
-            timeRecords,
-          },
-        );
-
-        if (trackerDoc && trackerDoc.length > 0) {
-          console.log('trackerDoc length', trackerDoc.length);
-        }
-        return true;
-      }
-      return false;
+      await this.timeTrackerModel.update(
+        {
+          orgId,
+        },
+        {
+          $pull: { timeRecords: { _id: recordId } } as any,
+        },
+      );
+      return { userId, orgId, timeRecords: [{ _id: recordId, id: recordId } as any] as ITimeRecord[] };
     } catch (err) {
       throw new Error(err.message);
     }

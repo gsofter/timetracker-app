@@ -90,22 +90,39 @@ export class TimeRecordService implements ITimeRecordService {
 
   public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
     const data = await this.timeRecordRepository.createTimeRecord(userId, orgId, request);
-    const record = { orgName: data.orgId, ...data?.timeRecords[0] };
-    this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordCreated, { SubscribeToTimeTracker: record });
+    const timeRecord = data?.timeRecords[0];
+    if (timeRecord) {
+      const record = {
+        orgName: data.orgId,
+        userId: timeRecord.userId,
+        mutation: ITimeRecordPubSubEvents.TimeRecordCreated,
+        timeRecord,
+      };
+      this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordCreated, { SubscribeToTimeTracker: record });
+    }
     return (data as any)._id;
   }
 
   public async updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest) {
     const data = await this.timeRecordRepository.updateTimeRecord(userId, orgId, recordId, request);
-    const record = { orgName: data.orgId, ...data?.timeRecords[0] };
-    this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordUpdated, { SubscribeToTimeTracker: record });
+    const timeRecord = data?.timeRecords[0];
+    if (timeRecord) {
+      const record = {
+        orgName: data.orgId,
+        userId: timeRecord.userId,
+        mutation: ITimeRecordPubSubEvents.TimeRecordUpdated,
+        timeRecord,
+      };
+      this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordUpdated, { SubscribeToTimeTracker: record });
+    }
     return true;
   }
 
   public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
     const data = await this.timeRecordRepository.removeTimeRecord(userId, orgId, recordId);
+    console.log('--DATA---REMOVE TIMERECORD', data);
     this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordDeleted, { SubscribeToTimeTracker: data });
-    return data;
+    return true;
   }
 
   public async removeDurationTimeRecords(

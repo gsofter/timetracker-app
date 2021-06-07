@@ -10,7 +10,7 @@ import {
   useGetProjectsQuery,
   useSubscribeToTimeTrackerSubscription,
 } from '../../../generated-models';
-import { ITimeRecordRequest, ITimeRecord, IPermissionType, IGetPlayingTimeRecordQuery, IGetPlayingTimeRecordQueryVariables, SubscribeToTimeTrackerDocument, ISubscribeToTimeTrackerSubscriptionVariables, ISubscribeToTimeTrackerSubscription } from '@admin-layout/timetracker-core';
+import { ITimeRecordRequest, ITimeRecord, IPermissionType, IGetPlayingTimeRecordQuery, IGetPlayingTimeRecordQueryVariables, SubscribeToTimeTrackerDocument, ISubscribeToTimeTrackerSubscriptionVariables, ISubscribeToTimeTrackerSubscription, ITimeRecordPubSubEvents } from '@admin-layout/timetracker-core';
 import { message, Spin } from 'antd';
 import * as _ from 'lodash';
 import Timer from 'react-compound-timer';
@@ -39,10 +39,7 @@ const TimeTrackerWrapper = (props) => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
   const { self: createPermit } = useCreatePermissions();
   const { self: deletePermit } = useDeletePermissions();
-  // const { data: subData, error: subErrro, loading: subLoading } = useSubscribeToTimeTrackerSubscription({ variables: { userId, orgName}, onSubscriptionData: (result) => {
-  //   console.log('---RESULT UPDATED', result);
-  //   subscribeToMore({})
-  // }});
+
   useEffect(() => {
     moment.locale('en', {
       week: {
@@ -115,6 +112,7 @@ const TimeTrackerWrapper = (props) => {
     setIsRecording(false);
     setCurrentTimeRecord({
       startTime: moment(),
+      description: '',
       endTime: null,
       isBillable: false,
       projectId: '',
@@ -134,10 +132,27 @@ const TimeTrackerWrapper = (props) => {
         if (!subscriptionData.data.SubscribeToTimeTracker) {
           return prev;
         }
-        // return null;
-        const newData = _.merge({}, prev, { getPlayingTimeRecord: subscriptionData.data.SubscribeToTimeTracker});
-        console.log('---Subscribed DATA UPDATED', newData);
-        return newData;
+        const subscribedData = subscriptionData.data.SubscribeToTimeTracker;
+        if (
+          (subscribedData.mutation === ITimeRecordPubSubEvents.TimeRecordCreated
+          || subscribedData.mutation === ITimeRecordPubSubEvents.TimeRecordUpdated) && subscribedData.timeRecord?.endTime === null) {
+            const newData = _.merge({}, prev, { getPlayingTimeRecord: subscriptionData.data.SubscribeToTimeTracker.timeRecord });
+            console.log('---Subscribed DATA UPDATED', newData);
+            return newData;
+        } else if (subscribedData.mutation === ITimeRecordPubSubEvents.TimeRecordUpdated && subscribedData.timeRecord?.endTime === null) {
+          return {
+            getPlayingTimeRecord: {
+              description: '',
+              endTime: '',
+              isBillable: false,
+              projectId: '',
+              taskName: '',
+              tags: [],
+              startTime: '',
+              userId: '',
+            }
+          }
+        }
       }
     }
   }
@@ -146,6 +161,7 @@ const TimeTrackerWrapper = (props) => {
     startTime: null,
     endTime: null,
     isBillable: false,
+    description: '',
     projectId: '',
     taskName: '',
   });
