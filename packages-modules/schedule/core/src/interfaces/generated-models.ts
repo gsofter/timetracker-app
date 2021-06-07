@@ -2448,6 +2448,7 @@ export type ITimeRecord = {
   endTime?: Maybe<Scalars['DateTime']>;
   taskId?: Maybe<Scalars['String']>;
   taskName?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
@@ -2463,6 +2464,7 @@ export type ITimeRecordRequest = {
   startTime?: Maybe<Scalars['DateTime']>;
   endTime?: Maybe<Scalars['DateTime']>;
   taskName?: Maybe<Scalars['String']>;
+  description?: Maybe<Scalars['String']>;
   tags?: Maybe<Array<Maybe<Scalars['String']>>>;
   isBillable?: Maybe<Scalars['Boolean']>;
   projectId?: Maybe<Scalars['String']>;
@@ -4587,6 +4589,7 @@ export type ITimeRecordResolvers<ContextType = any, ParentType extends IResolver
   endTime?: Resolver<Maybe<IResolversTypes['DateTime']>, ParentType, ContextType>,
   taskId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   taskName?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
+  description?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
   tags?: Resolver<Maybe<Array<Maybe<IResolversTypes['String']>>>, ParentType, ContextType>,
   isBillable?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType>,
   projectId?: Resolver<Maybe<IResolversTypes['String']>, ParentType, ContextType>,
