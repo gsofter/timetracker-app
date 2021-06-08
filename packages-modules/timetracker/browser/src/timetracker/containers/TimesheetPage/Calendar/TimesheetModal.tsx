@@ -21,6 +21,7 @@ import moment from 'moment';
 import Spacer from '../../../components/Spacer';
 import { useTimeformat } from '../../../hooks';
 const { RangePicker } = TimePicker;
+const { TextArea } = Input;
 
 export interface ITimesheetModalProps {
   userId: string;
@@ -68,6 +69,7 @@ const TimesheetModal = ({
       endTime: moment(values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[1].format('HH:mm:ss')).toDate(),
       projectId: values.projectId,
       isBillable: values.isBillable,
+      description: values.description,
     };
     if (event.id === undefined) handleAddTimeRecordEvent(request);
     else handleUpdateTimeRecordEvent(event.id, request);
@@ -82,6 +84,8 @@ const TimesheetModal = ({
     if (user !== undefined) return user.name;
     return '';
   };
+
+  console.log({ event });
   return (
     <Modal
       title={event.id === undefined ? 'Add time record' : 'Edit time record'}
@@ -159,8 +163,8 @@ const TimesheetModal = ({
         <Form.Item label="Tags" name="tags">
           <Select mode="tags" />
         </Form.Item>
-        <Form.Item label="Tags" name="tags">
-          <Input />
+        <Form.Item label="Description" name="description">
+          <TextArea value={event?.description} />
         </Form.Item>
 
         <Form.Item>

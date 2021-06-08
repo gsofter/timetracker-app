@@ -77,7 +77,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
     updatePlayingTimeRecord({ ...currentTimeRecord, projectId: projectId });
   };
 
-  const handleChangeBillable = (event) => {
+  const handleChangeBillable = () => {
     updatePlayingTimeRecord({ ...currentTimeRecord, isBillable: !currentTimeRecord.isBillable });
   };
 
