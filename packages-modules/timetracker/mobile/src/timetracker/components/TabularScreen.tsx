@@ -7,15 +7,14 @@ import { useSelector } from 'react-redux';
 import DayHeader from './DayHeader'
 import { useGetDurationTimeRecordsQuery } from '../../generated-models';
 import { formatDuration } from '@admin-layout/timetracker-module-browser/src/timetracker/services/timeRecordService';
+import ProjectTrack from "./ProjectTrack"
 
 const TabularScreen = () => {
     const [weekStart, setWeekStart] = useState(moment().clone().startOf('week'))
     const [weekEnd, setWeekEnd] = useState(moment().clone().endOf('week'))
-    const [totalTime, setTotalTime] = useState(moment().format('HH:mm'))
     const [title, setTitle] = useState("This Week")
     const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
     const [time, setTime] = useState([])
-    const [total, setTotal] = useState('')
 
     const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
         variables: { userId: userId, startTime: weekStart, endTime: weekEnd },
@@ -97,6 +96,7 @@ const TabularScreen = () => {
                 </View>
                 <View style={styles.divider} />
                 <DayHeader days={days} time={time} styles={styles}/>
+                <ProjectTrack/>
             </View>
         </View>
     )
