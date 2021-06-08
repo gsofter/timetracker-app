@@ -1,0 +1,8 @@
+subscription SubscribeToTimeTracker($orgName: String, $userId: String) {
+    SubscribeToTimeTracker(orgName: $orgName, userId: $userId){
+        mutation
+        timeRecord {
+            ...TimeRecord
+        }
+    }
+}

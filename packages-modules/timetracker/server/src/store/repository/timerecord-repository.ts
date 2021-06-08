@@ -1,20 +1,24 @@
+/* eslint-disable @typescript-eslint/explicit-module-boundary-types */
+/* eslint-disable no-underscore-dangle */
 import * as Logger from 'bunyan';
 import { injectable, inject } from 'inversify';
 import * as mongoose from 'mongoose';
-import { ITimeRecordRequest, ITimeRecord } from '@admin-layout/timetracker-core';
+import { ITimeRecordRequest, ITimeRecord, ITimeTracker } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
-import * as moment from 'moment';
-import { CommonType } from '@common-stack/core';
-import { ServiceBroker } from 'moleculer';
 import { TimeTrackerModelType, TimeTrackerModelFunc } from '../models/timetracker-model';
 
 export interface ITimeRecordRepository {
   getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
   getOrganizationTimeRecords(orgId: string): Promise<Array<ITimeRecord>>;
   getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
-  createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<string>;
-  updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest): Promise<boolean>;
-  removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<boolean>;
+  createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<Partial<ITimeTracker>>;
+  updateTimeRecord(
+    userId: string,
+    orgId: string,
+    recordId: string,
+    request: ITimeRecordRequest,
+  ): Promise<Partial<ITimeTracker>>;
+  removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<Partial<ITimeTracker>>;
   removeDurationTimeRecords(
     userId: string,
     orgId: string,
@@ -38,9 +42,6 @@ export class TimeRecordRepository implements ITimeRecordRepository {
 
     @inject('Logger')
     logger: Logger,
-
-    @inject(CommonType.MOLECULER_BROKER)
-    private broker: ServiceBroker,
   ) {
     this.logger = logger.child({ className: 'ScheduleRepository' });
     this.timeTrackerModel = TimeTrackerModelFunc(db);
@@ -72,12 +73,16 @@ export class TimeRecordRepository implements ITimeRecordRepository {
 
   public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
     try {
-      const response = await this.timeTrackerModel.update(
+      const response = await this.timeTrackerModel.findOneAndUpdate(
         { orgId },
         { orgId, $push: { timeRecords: request } },
-        { upsert: true },
+        {
+          upsert: true,
+          new: true,
+          projection: { userId, orgId, timeRecords: { $elemMatch: { startTime: request.startTime } } },
+        },
       );
-      return response.id;
+      return response.toObject();
     } catch (err) {
       throw new Error(err.message);
     }
@@ -86,12 +91,14 @@ export class TimeRecordRepository implements ITimeRecordRepository {
   public async updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest) {
     try {
       if (recordId === null || recordId === undefined) throw new Error('TimeRecord id not specified!');
-
-      const response = await this.timeTrackerModel.update(
+      const response = await this.timeTrackerModel.findOneAndUpdate(
         { orgId, timeRecords: { $elemMatch: { _id: recordId } } },
         { $set: { 'timeRecords.$': request } },
+        {
+          projection: { userId, orgId, timeRecords: { $elemMatch: { _id: recordId } } },
+        },
       );
-      return true;
+      return response.toObject();
     } catch (err) {
       throw new Error(err.message);
     }
@@ -99,24 +106,15 @@ export class TimeRecordRepository implements ITimeRecordRepository {
 
   public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
     try {
-      const trackerDoc = await this.timeTrackerModel.find({ orgId });
-      if (trackerDoc && trackerDoc.length > 0) {
-        const timeRecords = trackerDoc[0].timeRecords.filter((tr) => tr.id !== recordId);
-        await this.timeTrackerModel.update(
-          {
-            orgId,
-          },
-          {
-            timeRecords,
-          },
-        );
-
-        if (trackerDoc && trackerDoc.length > 0) {
-          console.log('trackerDoc length', trackerDoc.length);
-        }
-        return true;
-      }
-      return false;
+      await this.timeTrackerModel.update(
+        {
+          orgId,
+        },
+        {
+          $pull: { timeRecords: { _id: recordId } } as any,
+        },
+      );
+      return { userId, orgId, timeRecords: [{ _id: recordId, id: recordId } as any] as ITimeRecord[] };
     } catch (err) {
       throw new Error(err.message);
     }

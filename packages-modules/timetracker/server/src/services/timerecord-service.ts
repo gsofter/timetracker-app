@@ -1,9 +1,19 @@
+/* eslint-disable no-underscore-dangle */
+/* eslint-disable import/no-extraneous-dependencies */
 import * as ILogger from 'bunyan';
 import { inject, injectable } from 'inversify';
-import { ITimeRecord, ITimeRecordRequest, ITimesheet } from '@admin-layout/timetracker-core';
+import {
+  ITimeRecord,
+  ITimeRecordRequest,
+  ITimesheet,
+  ITimeRecordPubSubEvents,
+  ITagResolvers,
+  ITimeTracker,
+} from '@admin-layout/timetracker-core';
 import { ServerTypes, IPreferencesService } from '@adminide-stack/core';
 import { IMoleculerServiceName, IMailServiceAction, IMailerServicesendArgs } from '@container-stack/mailing-api';
 import * as moment from 'moment';
+import { PubSubEngine } from 'graphql-subscriptions';
 
 import { ServiceBroker, CallingOptions } from 'moleculer';
 import { CommonType } from '@common-stack/core';
@@ -14,7 +24,7 @@ export interface ITimeRecordService {
   getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
   getDurationTimeRecords(orgId: string, startTime: Date, endTime: Date, userId?: string): Promise<Array<ITimeRecord>>;
   getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
-  createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<string>;
+  createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<Partial<ITimeTracker>>;
   updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest): Promise<boolean>;
   removeTimeRecord(userId: string, orgId: string, recordId: string): Promise<boolean>;
   removeDurationTimeRecords(
@@ -44,6 +54,9 @@ export class TimeRecordService implements ITimeRecordService {
 
     @inject(CommonType.MOLECULER_BROKER)
     private broker: ServiceBroker,
+
+    @inject('PubSub')
+    private pubsub: PubSubEngine,
 
     @inject('Logger')
     logger: ILogger,
@@ -76,15 +89,39 @@ export class TimeRecordService implements ITimeRecordService {
   }
 
   public async createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest) {
-    return this.timeRecordRepository.createTimeRecord(userId, orgId, request);
+    const data = await this.timeRecordRepository.createTimeRecord(userId, orgId, request);
+    const timeRecord = data?.timeRecords[0];
+    if (timeRecord) {
+      const record = {
+        orgName: data.orgId,
+        userId: timeRecord.userId,
+        mutation: ITimeRecordPubSubEvents.TimeRecordCreated,
+        timeRecord,
+      };
+      this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordCreated, { SubscribeToTimeTracker: record });
+    }
+    return (data as any)._id;
   }
 
   public async updateTimeRecord(userId: string, orgId: string, recordId: string, request: ITimeRecordRequest) {
-    return this.timeRecordRepository.updateTimeRecord(userId, orgId, recordId, request);
+    const data = await this.timeRecordRepository.updateTimeRecord(userId, orgId, recordId, request);
+    const timeRecord = data?.timeRecords[0];
+    if (timeRecord) {
+      const record = {
+        orgName: data.orgId,
+        userId: timeRecord.userId,
+        mutation: ITimeRecordPubSubEvents.TimeRecordUpdated,
+        timeRecord,
+      };
+      this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordUpdated, { SubscribeToTimeTracker: record });
+    }
+    return true;
   }
 
   public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
-    return this.timeRecordRepository.removeTimeRecord(userId, orgId, recordId);
+    const data = await this.timeRecordRepository.removeTimeRecord(userId, orgId, recordId);
+    this.pubsub.publish(ITimeRecordPubSubEvents.TimeRecordDeleted, { SubscribeToTimeTracker: data });
+    return true;
   }
 
   public async removeDurationTimeRecords(

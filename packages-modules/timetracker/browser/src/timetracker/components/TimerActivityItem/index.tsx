@@ -38,6 +38,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
   const { removeTimeRecord, timeRecord, disablePlay, disableDelete, updateTimeRecord, handlePlayTimer } = props;
   const { css } = useFela(props);
   const [selectedProject, setSelectedProject] = useState(timeRecord.projectId ?? '');
+  const [taskName, setTaskName] = useState(timeRecord.taskName ?? '');
   const [description, setDescription] = useState(timeRecord.description ?? '');
   const [isBillable, setIsBillable] = useState(timeRecord.isBillable);
   const { timeFormat } = useTimeformat();
@@ -81,12 +82,20 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
   const debouncedFunc = useMemo(
     () =>
       _.debounce((value) => {
-        const request = { ..._.omit(timeRecord, ['__typename', 'id']), description: value };
+        const request = { ..._.omit(timeRecord, ['__typename', 'id']), description: value, taskName: value };
         updateTimeRecord(timeRecord.id, request);
       }, debounceTimeLimit),
     [],
   );
   const handleChangeTask = useCallback(
+    (e) => {
+      e.persist();
+      setTaskName(e.target.value);
+      debouncedFunc(e.target.value);
+    },
+    [debouncedFunc],
+  );
+  const handleDescriptionTask = useCallback(
     (e) => {
       e.persist();
       setDescription(e.target.value);
@@ -113,7 +122,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
                 placeholder="What are you working on?"
                 size="large"
                 value={description}
-                onChange={handleChangeTask}
+                onChange={handleDescriptionTask}
                 disabled={!!timeRecord.timesheetId}
               />
             </Col>

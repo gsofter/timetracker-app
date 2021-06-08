@@ -150,6 +150,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
       startTime: startTime,
       endTime: endTime,
       taskName: currentTimeRecord.taskName,
+      description: currentTimeRecord.description,
       projectId: currentTimeRecord.projectId,
       isBillable: currentTimeRecord.isBillable,
     };
