@@ -23,8 +23,8 @@ const allEvents = [
 
 const CalendarScreen = () => {
     const [isEnabled, setIsEnabled] = useState(true)
-    const [weekStart, setWeekStart] = useState(moment().clone().startOf('week'))
-    const [weekEnd, setWeekEnd] = useState(moment().clone().endOf('week'))
+    const [weekStart] = useState(moment().clone().startOf('week'))
+    const [weekEnd] = useState(moment().clone().endOf('week'))
     const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
 
     const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
@@ -33,7 +33,7 @@ const CalendarScreen = () => {
 
     const screenHeight = Dimensions.get('window').height
 
-    const events = allEvents.map(event => {
+    const events = data?.getDurationTimeRecords.map(event => {
         const {endTime, startTime, taskName, ...rest} = event
         return {
             end: new Date(endTime),
@@ -59,13 +59,9 @@ const CalendarScreen = () => {
                     value={isEnabled}
                 />
             </View>
-            {isEnabled ? 
-            <Calendar 
-                hideNowIndicator
-                swipeEnabled 
-                mode='week' 
-                showTime 
-                ampm
+            {isEnabled && events ? 
+            <Calendar
+                eventCellStyle={{height: 25}}
                 events={events} 
                 height={screenHeight} 
             />: 

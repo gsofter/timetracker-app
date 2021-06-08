@@ -86,7 +86,7 @@ const TimeList = ({
                             <CardItem>
                                 <Left style={{flexDirection: 'row'}}>
                                     <Text style={styles.title}>
-                                        {projectsData.find(project => project.id === time.projectId)?.name || 'No Project'}
+                                        {projectsData ? projectsData.find(project => project.id === time.projectId)?.name : 'No Project'}
                                     </Text>
                                     {time.taskName && (
                                         <Text style={styles.darkGrey}>{" "}:{time.taskName}</Text>

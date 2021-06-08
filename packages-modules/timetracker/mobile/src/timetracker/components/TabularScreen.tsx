@@ -5,7 +5,7 @@ import moment from 'moment'
 import { useSelector } from 'react-redux';
 
 import DayHeader from './DayHeader'
-import { useGetDurationTimeRecordsQuery } from '../../generated-models';
+import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../../generated-models';
 import { formatDuration } from '@admin-layout/timetracker-module-browser/src/timetracker/services/timeRecordService';
 import ProjectTrack from "./ProjectTrack"
 
@@ -19,6 +19,7 @@ const TabularScreen = () => {
     const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
         variables: { userId: userId, startTime: weekStart, endTime: weekEnd },
     });
+    const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
 
     let days = [];
     for (let i = 0; i <= 6; i++) {
@@ -96,7 +97,9 @@ const TabularScreen = () => {
                 </View>
                 <View style={styles.divider} />
                 <DayHeader days={days} time={time} styles={styles}/>
-                <ProjectTrack/>
+            </View>
+            <View style={{marginTop: 20}}>
+                <ProjectTrack projectsData={projectsData} data={data}/>
             </View>
         </View>
     )

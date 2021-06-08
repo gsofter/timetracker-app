@@ -5,15 +5,16 @@ import {Row, Col} from 'native-base'
 const DayHeader = ({
     styles,
     time,
-    days
-}) => {
+    days,
+    header=true
+}: any) => {
     return(
-        <View style={styles.dayHeader}>
-            <Text style={styles.light_grey}>TOTAL BY DAY</Text>
+        <View style={[styles?.dayHeader, {width: '100%'}]}>
+            {header && <Text style={styles?.light_grey}>TOTAL BY DAY</Text>}
             <Row>
                 {days.map(day => (
                     <Col>
-                        <Text style={styles.grey}>{day}</Text>
+                        <Text style={styles?.grey}>{day}</Text>
                     </Col>
                 ))}
             </Row>
