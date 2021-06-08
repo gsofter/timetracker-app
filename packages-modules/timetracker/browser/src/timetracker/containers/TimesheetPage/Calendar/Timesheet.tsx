@@ -52,7 +52,6 @@ export default function SelectableCalendar({
   events,
   projects,
   members,
-  form,
   isShowModal,
   loading,
   selectedEvent,
@@ -80,7 +79,6 @@ export default function SelectableCalendar({
 
   const EventComponent = ({ event, start, end, title }) => {
     const project = projects.find((p) => p.id === event.projectId);
-    const member = members.find((m) => m.userId === event.userId);
     return (
       <>
         <p> {project && project.name}</p>

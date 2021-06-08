@@ -36,6 +36,7 @@ const defaultRecord: ITimeRecord = {
   endTime: undefined,
   isBillable: false,
   tags: [],
+  description: undefined,
 };
 
 const TimesheetCalendar = ({
@@ -108,6 +109,7 @@ const TimesheetCalendar = ({
       endTime: moment(event.endTime),
       isBillable: event.isBillable || false,
       tags: event.tags || [],
+      description: event.description,
     });
     setIsShowTimeModal(true);
   };
