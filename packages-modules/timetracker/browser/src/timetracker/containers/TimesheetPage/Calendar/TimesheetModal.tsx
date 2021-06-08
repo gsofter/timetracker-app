@@ -12,15 +12,11 @@ import {
   Checkbox,
   Button,
   Popconfirm,
+  Input,
 } from 'antd';
 import { UserOutlined, DeleteOutlined } from '@ant-design/icons';
 import { useFela } from 'react-fela';
-import {
-  ITimeRecord,
-  ITimeRecordRequest,
-  IOrgMember,
-  IProjects as IProject,
-} from '@admin-layout/timetracker-core';
+import { ITimeRecord, ITimeRecordRequest, IOrgMember, IProjects as IProject } from '@admin-layout/timetracker-core';
 import moment from 'moment';
 import Spacer from '../../../components/Spacer';
 import { useTimeformat } from '../../../hooks';
@@ -53,7 +49,7 @@ const TimesheetModal = ({
 }: ITimesheetModalProps) => {
   const { css } = useFela();
   const [form] = Form.useForm();
-  const { timeFormat, dateFormat } = useTimeformat();
+  const { timeFormat } = useTimeformat();
   useEffect(() => {
     form.setFieldsValue({
       userId: event?.userId || '',
@@ -61,18 +57,15 @@ const TimesheetModal = ({
       isBillable: event?.isBillable || false,
       timeRange: [event?.startTime || moment(), event?.endTime || moment()],
       date: event?.startTime || moment(),
+      description: event?.description || '',
     });
   }, [event]);
 
   const onFinish = (values) => {
     const request: ITimeRecordRequest = {
       userId: values.userId,
-      startTime: moment(
-        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[0].format('HH:mm:ss'),
-      ).toDate(),
-      endTime: moment(
-        values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[1].format('HH:mm:ss'),
-      ).toDate(),
+      startTime: moment(values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[0].format('HH:mm:ss')).toDate(),
+      endTime: moment(values.date.format('YYYY-MM-DD') + ' ' + values.timeRange[1].format('HH:mm:ss')).toDate(),
       projectId: values.projectId,
       isBillable: values.isBillable,
     };
@@ -108,11 +101,7 @@ const TimesheetModal = ({
           <Avatar style={{ backgroundColor: '#3174ad' }} icon={<UserOutlined />} />
           <span style={{ marginLeft: '10px' }}>{generateUserName()}</span>
         </div>
-        <Form.Item
-          label="User"
-          name="userId"
-          rules={[{ required: true, message: 'Required field' }]}
-        >
+        <Form.Item label="User" name="userId" rules={[{ required: true, message: 'Required field' }]}>
           <Select>
             {members.map((member) => {
               return (
@@ -124,11 +113,7 @@ const TimesheetModal = ({
           </Select>
         </Form.Item>
 
-        <Form.Item
-          label="Projects"
-          name="projectId"
-          rules={[{ required: true, message: 'Required field' }]}
-        >
+        <Form.Item label="Projects" name="projectId" rules={[{ required: true, message: 'Required field' }]}>
           <Select>
             {projects.map((res) => {
               return (
@@ -154,11 +139,7 @@ const TimesheetModal = ({
 
         <Row gutter={10}>
           <Col>
-            <Form.Item
-              label="Pick a date"
-              name="date"
-              rules={[{ required: true, message: 'Required field' }]}
-            >
+            <Form.Item label="Pick a date" name="date" rules={[{ required: true, message: 'Required field' }]}>
               <DatePicker />
             </Form.Item>
           </Col>
@@ -178,6 +159,9 @@ const TimesheetModal = ({
         <Form.Item label="Tags" name="tags">
           <Select mode="tags" />
         </Form.Item>
+        <Form.Item label="Tags" name="tags">
+          <Input />
+        </Form.Item>
 
         <Form.Item>
           <Row className="footer">
@@ -192,13 +176,7 @@ const TimesheetModal = ({
                 cancelText="Cancel"
                 onConfirm={handleRemoveTimeRecordEvent}
               >
-                <Button
-                  type="primary"
-                  htmlType="button"
-                  loading={loading}
-                  icon={<DeleteOutlined />}
-                  danger
-                >
+                <Button type="primary" htmlType="button" loading={loading} icon={<DeleteOutlined />} danger>
                   Remove
                 </Button>
               </Popconfirm>
