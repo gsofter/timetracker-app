@@ -1,14 +1,13 @@
 import * as React from 'react';
 import moment from 'moment';
 import { CSVLink } from 'react-csv';
-import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 import { useEffect, useState } from 'react';
 import { useTimeformat } from '../timetracker/hooks';
 import { formatDuration, roundDuration } from '../timetracker/services/timeRecordService';
 
 interface IExportReportAsCSV {
-  records: Array<ITimeRecord>;
-  projects: Array<IProject_Output>;
+  groupBy: string;
+  groupByRecords: any;
   roundType: string;
   roundValue: number;
   rounded: boolean;
@@ -16,32 +15,31 @@ interface IExportReportAsCSV {
 }
 
 export const ExportReportAsCSV = (props: IExportReportAsCSV) => {
-  const { records, projects, calcDurationReducer, roundType, roundValue, rounded } = props;
+  const { groupBy, groupByRecords, calcDurationReducer, roundType, roundValue, rounded } = props;
   const [headers, setHeaders] = useState([]);
   const [data, setData] = useState([]);
   const { timeFormat } = useTimeformat();
 
   useEffect(() => {
     setHeaders([
-      { label: 'Project', key: 'project' },
+      { label: capitalize(groupBy), key: groupBy },
       { label: 'Time(h)', key: 'time_h' },
       { label: 'Time(decimal)', key: 'time_dec' },
     ]);
-  }, []);
+  }, [groupBy]);
 
   useEffect(() => {
-    const reportData = projects.map((project, index) => {
-      const pRecords = records.filter((record) => record.projectId === project.id);
-      const { time_h, time_dec } = getTotalTime(pRecords);
-      return { project: project.name, time_h, time_dec };
+    const reportData = groupByRecords.map((item) => {
+      const { time_h, time_dec } = getTotalTime(item.records);
+      return { [groupBy]: item.name, time_h, time_dec };
     });
-    const unRecord = records.filter((r) => !r.projectId);
-    if (unRecord.length) {
-      const { time_h, time_dec } = getTotalTime(unRecord);
-      reportData.push({ project: 'Unknown', time_h, time_dec });
-    }
     setData(reportData);
-  }, [JSON.stringify(records), JSON.stringify(projects), rounded, roundValue, roundType, timeFormat]);
+  }, [JSON.stringify(groupByRecords), rounded, roundValue, roundType, timeFormat]);
+
+  const capitalize = (word) => {
+    const lower = word.toLowerCase();
+    return word.charAt(0).toUpperCase() + lower.slice(1);
+  };
 
   const getTotalTime = (pRecords) => {
     const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
