@@ -85,7 +85,6 @@ const TimesheetModal = ({
     return '';
   };
 
-  console.log({ event });
   return (
     <Modal
       title={event.id === undefined ? 'Add time record' : 'Edit time record'}
