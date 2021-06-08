@@ -119,7 +119,7 @@ generates:
     plugins:
       - add: |
           /* tslint:disable */
-          import { URI,  UriComponents } from '@vscode/monaco-editor/esm/vs/base/common/uri';
+          import { URI,  UriComponents } from '@vscode-alt/monaco-editor/esm/vs/base/common/uri';
       - typescript
       - typescript-operations
       - typescript-react-apollo
@@ -161,7 +161,7 @@ generates:
     plugins:
       - add: |
           /* tslint:disable */
-          import { URI,  UriComponents } from '@vscode/monaco-editor/esm/vs/base/common/uri';
+          import { URI,  UriComponents } from '@vscode-alt/monaco-editor/esm/vs/base/common/uri';
       - typescript
       - typescript-operations
       - typescript-react-apollo
@@ -183,7 +183,7 @@ generates:
     plugins:
       - add: |
           /* tslint:disable */
-          import { URI,  UriComponents } from '@vscode/monaco-editor/esm/vs/base/common/uri';
+          import { URI,  UriComponents } from '@vscode-alt/monaco-editor/esm/vs/base/common/uri';
       - typescript
       - typescript-operations
       - typescript-react-apollo

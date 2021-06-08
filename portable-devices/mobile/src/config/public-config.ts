@@ -1,13 +1,37 @@
-import { NODE_ENV, GRAPHQL_URL, FACEBOOK_APP_ID, GA_ID, LOG_LEVEL } from '@env';
+import {
+    NODE_ENV,
+    GRAPHQL_URL,
+    FACEBOOK_APP_ID,
+    CLIENT_URL,
+    AUTH0_CLIENT_ID,
+    AUTH0_DOMAIN,
+    AUTH0_MOBILE_CLIENT_ID,
+    AUTH0_API_AUDIENCE,
+    AUTH0_TOKEN_GRANTED_TIME,
+    AUTH0_REALM,
+    DEFAULT_EXTENDED_RENEWAL_TIME,
+    APP_URL,
+    GA_ID,
+    LOG_LEVEL,
+} from '@env';
 
-console.log('---LOGLEVE', LOG_LEVEL);
 const env = {
     NODE_ENV,
     GRAPHQL_URL,
     FACEBOOK_APP_ID,
+    CLIENT_URL,
+    AUTH0_CLIENT_ID,
+    AUTH0_DOMAIN,
+    AUTH0_MOBILE_CLIENT_ID,
+    AUTH0_API_AUDIENCE,
+    AUTH0_TOKEN_GRANTED_TIME,
+    AUTH0_REALM,
+    DEFAULT_EXTENDED_RENEWAL_TIME,
+    APP_URL,
     GA_ID,
     LOG_LEVEL,
     LOCAL_GRAPHQL_URL: GRAPHQL_URL,
+    '$typeof': 'null', // bug https://github.com/af/envalid/issues/150
 };
 
 const isBrowser = typeof window !== 'undefined';

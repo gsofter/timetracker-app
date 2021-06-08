@@ -1,25 +1,46 @@
 import React, { useState } from 'react';
 import moment from 'moment';
 import { StyleSheet, View, ScrollView, Platform } from 'react-native';
+import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import TimerFooter from './TimerFooter';
 import TimeRange from './TimeRange';
-import ManualTime from "./ManualTime"
+import TimeList from "./TimeList"
+import {
+  ITimeRecordRequest,
+  ITimeRecord
+} from '@admin-layout/timetracker-core';
+import {
+  useCreateTimeRecordMutation,
+  useGetPlayingTimeRecordQuery,
+  useGetDurationTimeRecordsQuery,
+  useUpdateTimeRecordMutation
+} from '../../generated-models';
 
 const TimerScreen = () => {
   const [isToggle, setIsToggle] = useState(false);
   const [billable, setBillable] = useState(false);
-  const [track, setTrack] = useState(true);
+  const [track, setTrack] = useState
+    (true);
   const [manual, setManual] = useState(false);
   const [addManual, setAddManual] = useState(false);
+  const [timeRecord, setTimeRecord] = useState<ITimeRecord>({
+    userId: '',
+    taskName: '',
+    tags: [],
+    startTime: null,
+    projectId: '',
+    isBillable: billable,
+    endTime: null
+  })
   const [selectedStartDate, setSelectedStartDate] = useState<any>(moment().format('MM-DD-YYYY'));
   const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
-  const [isStartTime, setIsStartTime] = useState(false)
-  const [endTime, setEndTime] = useState(new Date(1598051730000))
-  const [isEndTime, setIsEndTime] = useState(false)
-  const [selectedDate, setSelectedDate] = useState(new Date(1598051730000))
-  const [calendarVisible, setCalendarVisible] = useState(false)
-  const [startTime, setStartTime] = useState(new Date(1598051730000))
+  const [createMutation] = useCreateTimeRecordMutation();
+  const [updateMutation] = useUpdateTimeRecordMutation();
+  const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
+    variables: { userId: timeRecord.userId, startTime: timeRecord.startTime, endTime: timeRecord.endTime },
+  });
+  const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
 
   const toggleProject = () => {
     setIsToggle(!isToggle);
@@ -38,11 +59,6 @@ const TimerScreen = () => {
     }
   };
 
-  const onSingleDateChange = (event: any, date: any) => {
-    setSelectedDate(date);
-    setCalendarVisible(Platform.OS === 'ios')
-  };
-
   const onReset = () => {
     setSelectedEndDate(moment().format('MM-DD-YYYY'));
     setSelectedStartDate(moment().add(5, 'd').format('MM-DD-YYYY'));
@@ -58,24 +74,28 @@ const TimerScreen = () => {
     setTrack(false);
   };
 
-  const toggleStart = () =>{
-    setIsStartTime(true)
-  }
-
-  const toggleEnd = () => {
-    setIsEndTime(true)
-  }
-
-  const changeStartTime = (event: any, selectedTime: any) => {
-    const currentDate = selectedTime || startTime;
-    setStartTime(currentDate)
-    setIsStartTime(false)
+  const createTimeRecord = (request: ITimeRecordRequest) => {
+    createMutation({ variables: { request } })
+      .then(() => {
+        alert('TimeRecord created');
+        plRefetch();
+        refetch();
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   };
 
-  const changeEndTime = (event: any, selectedTime: any) => {
-    const currentDate = selectedTime || startTime;
-    setEndTime(currentDate)
-    setIsEndTime(false)
+  const updateTimeRecord = (recordId: string, request: ITimeRecordRequest) => {
+    updateMutation({ variables: { recordId, request } })
+      .then(() => {
+        alert('TimeRecord Updated');
+        refetch();
+        plRefetch();
+      })
+      .catch((error) => {
+        alert(error.message);
+      });
   };
 
   return (
@@ -87,35 +107,27 @@ const TimerScreen = () => {
           onDateChange={onDateChange}
           onReset={onReset}
         />
-        {addManual && 
-          <ManualTime 
-            toggleStart={toggleStart}
-            startTime={startTime}
-            isStartTime={isStartTime}
-            changeStartTime={changeStartTime}
-            toggleEnd={toggleEnd}
-            endTime={endTime}
-            changeEndTime={changeEndTime}
-            setCalendarVisible={setCalendarVisible}
-            selectedDate={selectedDate}
-            calendarVisible={calendarVisible}
-            onDateChange={onSingleDateChange}
-            isEndTime={isEndTime}
-          />
-        }
+        <TimeList />
       </ScrollView>
-      <TimerFooter
-        isToggle={isToggle}
-        billable={billable}
-        toggleProject={toggleProject}
-        toggleBillable={toggleBillable}
-        track={track}
-        manual={manual}
-        onTrack={onTrack}
-        onManual={onManual}
-        onDateChange={onDateChange}
-        setAddManual={setAddManual}
-      />
+      <View style={{ flex: Platform.OS === 'ios' ? 1 : 0 }}>
+        <TimerFooter
+          isToggle={isToggle}
+          billable={billable}
+          toggleProject={toggleProject}
+          toggleBillable={toggleBillable}
+          track={track}
+          manual={manual}
+          onTrack={onTrack}
+          onManual={onManual}
+          setAddManual={setAddManual}
+          setTimeRecord={setTimeRecord}
+          timeRecord={timeRecord}
+          createTimeRecord={createTimeRecord}
+          updateTimeRecord={updateTimeRecord}
+        />
+      </View>
+      {Platform.OS === 'ios' &&
+        <KeyboardSpacer />}
     </View>
   );
 };
@@ -123,7 +135,7 @@ const TimerScreen = () => {
 const styles = StyleSheet.create({
   container: {
     flex: 1,
-    alignItems: 'center',
+    position: 'relative',
     backgroundColor: '#f0f2f5',
   },
 });

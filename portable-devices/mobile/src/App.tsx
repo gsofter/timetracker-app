@@ -1,4 +1,4 @@
-import { StatusBar } from 'expo-status-bar';
+import "reflect-metadata";
 import React from 'react';
 import { NativeRouter, Route } from 'react-router-native';
 import { SafeAreaProvider } from 'react-native-safe-area-context';
@@ -11,34 +11,15 @@ import { persistStore, persistReducer } from 'redux-persist';
 import { PersistGate } from 'redux-persist/integration/react';
 // import { RendererProvider } from 'react-fela';
 import { ConnectedRouter } from 'connected-react-router';
-// import { NavigationContainer, DefaultTheme, DarkTheme } from '@react-navigation/native';
-// import { NativeRouter } from 'react-router-native';
 import {
   createReduxStore,
   history,
 } from './config/redux-config';
-import { createApolloClient } from './config/apollo-client';
-// import env from './config/public-config';
-// import config from './config';
-// import useColorScheme from './hooks/useColorScheme';
-// import useCachedResources from './hooks/useCachedResources';
+import { Root } from 'native-base';
+import { createClientContainer } from "./config/client.service";
 
-// import { MainRoute } from './modules';
 
-const client = createApolloClient();
-
-// let store: any;
-// if ((module as any).hot && (module as any).hot.data && (module as any).hot.data.store) {
-//   // console.log('Restoring Redux store:', JSON.stringify((module as any).hot.data.store.getState()));
-//   store = (module as any).hot.data.store;
-//   // replace the reducers always as we don't have ablity to find
-//   // new reducer added through our `modules`
-//   store.replaceReducer(
-//     persistReducer(persistConfig, storeReducer((module as any).hot.data.history || history)),
-//   );
-// } else {
-//   store = createReduxStore();
-// }
+const { apolloClient: client } = createClientContainer();
 
 const store = createReduxStore();
 const renderer = createRenderer();
@@ -52,19 +33,21 @@ export default function App() {
   // }
   let persistor = persistStore(store as any);
   return (
-    <SafeAreaProvider>
-      <Provider store={store}>
-        <ApolloProvider client={client}>
-          <PersistGate persistor={persistor}>
-            <NativeRouter>
-              <ConnectedRouter history={history}>
-                <MainRoute />
-              </ConnectedRouter>
-            </NativeRouter>
-          </PersistGate>
-        </ApolloProvider>
-      </Provider>
-    </SafeAreaProvider>
+    <Root>
+      <SafeAreaProvider>
+        <Provider store={store}>
+          <ApolloProvider client={client}>
+            <PersistGate persistor={persistor}>
+              <NativeRouter>
+                <ConnectedRouter history={history}>
+                  <MainRoute />
+                </ConnectedRouter>
+              </NativeRouter>
+            </PersistGate>
+          </ApolloProvider>
+        </Provider>
+      </SafeAreaProvider>
+    </Root>
   );
 }
 

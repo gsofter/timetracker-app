@@ -1,6 +1,5 @@
 const path = require('path');
 var nodeExternals = require('webpack-node-externals');
-const MonacoWebpackPlugin = require('@vscode-alt/monaco-editor-webpack-plugin');
 const debug = process.env.DEBUGGING || false;
 const { merge } = require('webpack-merge');
 const webpack = require('webpack');
@@ -34,7 +33,6 @@ const config = {
             enabled: true,
             webpackConfig: {
                 plugins: [
-                    new MonacoWebpackPlugin(),
                     // Bug: will make timesheet component fail
                     // new LodashModuleReplacementPlugin({
                     //     // Necessary as a workaround for https://github.com/apollographql/react-apollo/issues/1831

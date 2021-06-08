@@ -48,8 +48,8 @@
   "peerDependencies": {
     "@adminide-stack/core": "*",
     "@common-stack/core": "*",
-    "@common-stack/server-core": ">=0.0.258",
-    "@vscode/monaco-editor": "*",
+    "@common-stack/server-core": ">=0.0.260",
+    "@vscode-alt/monaco-editor": "*",
     "bunyan": "*",
     "lodash": "*",
     "inversify": "*",

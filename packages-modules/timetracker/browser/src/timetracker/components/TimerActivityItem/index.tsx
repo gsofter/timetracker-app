@@ -15,7 +15,6 @@ import {
 } from '@ant-design/icons';
 const { Title } = Typography;
 import * as _ from 'lodash';
-import debounce from '../../services/debounce';
 import { formatDuration } from '../../services/timeRecordService';
 import BillableCheck from '../BillableCheck';
 import { useTimeformat } from '../../hooks';
@@ -39,7 +38,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
   const { removeTimeRecord, timeRecord, disablePlay, disableDelete, updateTimeRecord, handlePlayTimer } = props;
   const { css } = useFela(props);
   const [selectedProject, setSelectedProject] = useState(timeRecord.projectId ?? '');
-  const [taskName, setTaskName] = useState(timeRecord.taskName ?? '');
+  const [description, setDescription] = useState(timeRecord.description ?? '');
   const [isBillable, setIsBillable] = useState(timeRecord.isBillable);
   const { timeFormat } = useTimeformat();
   const { projects } = props;
@@ -81,8 +80,8 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
 
   const debouncedFunc = useMemo(
     () =>
-      debounce((value) => {
-        const request = { ..._.omit(timeRecord, ['__typename', 'id']), taskName: value };
+      _.debounce((value) => {
+        const request = { ..._.omit(timeRecord, ['__typename', 'id']), description: value };
         updateTimeRecord(timeRecord.id, request);
       }, debounceTimeLimit),
     [],
@@ -90,13 +89,13 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
   const handleChangeTask = useCallback(
     (e) => {
       e.persist();
-      setTaskName(e.target.value);
+      setDescription(e.target.value);
       debouncedFunc(e.target.value);
     },
     [debouncedFunc],
   );
 
-  const handleChangeBillable = (event) => {
+  const handleChangeBillable = () => {
     setIsBillable(!isBillable);
     updateTimeRecord(timeRecord.id, {
       ..._.omit(timeRecord, ['__typename', 'id']),
@@ -106,18 +105,25 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
 
   return (
     <div className={css(styles.timeRecord)}>
-      <Row>
+      <Row style={{ backgroundColor: timeRecord.timesheetId ? '#f0f0f0' : 'white' }}>
         <Col span={24} xl={12} className="input">
           <Row style={{ width: '100%' }}>
             <Col span={18}>
-              <Input placeholder="What are you working on?" size="large" value={taskName} onChange={handleChangeTask} />
+              <Input
+                placeholder="What are you working on?"
+                size="large"
+                value={description}
+                onChange={handleChangeTask}
+                disabled={!!timeRecord.timesheetId}
+              />
             </Col>
             <Col span={6} className="flex-end project-selection">
-              <Dropdown overlay={projectDropdownMenus} trigger={['click']}>
+              <Dropdown overlay={projectDropdownMenus} trigger={['click']} disabled={!!timeRecord.timesheetId}>
                 <Button
                   icon={selectedProject === '' ? <PlusCircleOutlined /> : <BarsOutlined />}
                   style={selectedProject === '' ? { textAlign: 'left' } : { textAlign: 'left', color: 'green' }}
                   type="text"
+                  disabled={!!timeRecord.timesheetId}
                 >
                   {selectedProject === '' ? 'Projects' : projects.find((p) => p.id === selectedProject)?.name}
                 </Button>
@@ -131,7 +137,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
               <Button icon={<TagOutlined />} type="text" size="large"></Button>
             </Col>
             <Col span={2} className="flex-center">
-              <BillableCheck checked={isBillable} onChange={handleChangeBillable} />
+              <BillableCheck checked={isBillable} onChange={handleChangeBillable} disabled={!!timeRecord.timesheetId} />
             </Col>
             <Col span={14} sm={6} className="flex-center">
               <Title level={5}>
@@ -152,7 +158,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
                 onClick={() => handlePlayTimer(timeRecord)}
                 disabled={disablePlay}
               ></Button>
-              <Dropdown overlay={menus} trigger={['click']}>
+              <Dropdown overlay={menus} trigger={['click']} disabled={!!timeRecord.timesheetId}>
                 <Button icon={<MoreOutlined />} size="large"></Button>
               </Dropdown>
             </Col>

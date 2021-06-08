@@ -1,6 +1,7 @@
 import { IMenuPosition } from '@common-stack/client-react';
 import TimerScreen from './components/TimerScreen'
 import TimesheetCalendar from './components/Calendar';
+import TimesheetPage from '@admin-layout/timetracker-module-browser/src/timetracker/containers/TimesheetPage'
 import AddManual from "./components/AddManual"
 import { getFilteredRoutes } from '../utils/menu';
 
@@ -12,7 +13,7 @@ export const timePageStore: any[] = [
         component: TimerScreen,
         position: IMenuPosition.MIDDLE,
         // path: ROUTES.Timer,
-        path: '/org/timer',
+        path: '/:orgName/timer',
         priority: 2,
     },
     {
@@ -21,7 +22,7 @@ export const timePageStore: any[] = [
         name: 'Timesheet',
         component: TimesheetCalendar,
         position: IMenuPosition.MIDDLE,
-        path: '/org/timesheet',
+        path: '/:orgName/timesheet',
         priority: 3,
     },
     {

@@ -6,7 +6,7 @@ import { Button } from 'antd';
 import { useFela } from 'react-fela';
 import { styleSheet } from './style';
 import TimerWidget from './TimerWidget';
-import { currentTimerSelector, resetCurrentTimerAction, setCurrentTimerAction } from '../../../redux/timetracker';
+import { currentTimerSelector, resetCurrentTimerAction, setCurrentTimerAction } from '../../../redux';
 
 const HeaderTimerHandler: React.FC = (props) => {
   const { css } = useFela();
@@ -74,7 +74,7 @@ const HeaderTimerHandler: React.FC = (props) => {
         <div
           hidden={!visiblity}
           className={'_handler'}
-          style={{ zIndex: 999 }}
+          style={{ zIndex: 999, position: 'absolute' }}
         >
           <TimerWidget
             onClose={hidePopover}

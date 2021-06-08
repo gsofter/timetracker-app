@@ -4,6 +4,7 @@ query GetPlayingTimeRecord {
     startTime
     endTime
     taskName
+    description
     tags
     projectId
     userId

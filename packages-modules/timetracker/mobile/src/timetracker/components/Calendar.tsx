@@ -2,23 +2,29 @@ import React from 'react';
 import { StyleSheet, View, Dimensions } from 'react-native';
 import { Calendar } from 'react-native-big-calendar';
 
-const events = [
+const allEvents = [
     {
-      title: 'Meeting',
-      start: new Date("2021-04-02T12:00:00Z"),
-      end: new Date("2021-04-02T16:30:00Z"),
-    },
-    {
-      title: 'Coffee break',
-      start: new Date("2021-04-02T17:00:00Z"),
-      end: new Date("2021-04-02T17:30:00Z"),
-    },
-    {
-        title: 'Lunch',
-        start: new Date("2021-04-03T17:00:00Z"),
-        end: new Date("2021-04-03T18:00:00Z"),
-      },
+        endTime: "2021-05-25T12:40:49.682Z",
+        id: "60aceb9ffedb6a08eb36a951",
+        isBillable: false,
+        projectId: "",
+        startTime: "2021-05-25T12:10:58.721Z",
+        tags: [],
+        taskName: "Test Task",
+        timesheetId: null,
+        userId: "google-oauth2|104797814715925535941"
+    }
 ]
+
+const events = allEvents.map(event => {
+    const {endTime, startTime, taskName, ...rest} = event
+    return {
+        end: new Date(endTime),
+        start: new Date(startTime),
+        title: taskName,
+        ...rest
+    }
+})
 
 const CalendarScreen = () => {
 
@@ -26,7 +32,15 @@ const CalendarScreen = () => {
 
     return (
         <View style={styles.container}>
-            <Calendar events={events} height={screenHeight} />
+            <Calendar 
+                hideNowIndicator
+                swipeEnabled 
+                mode='week' 
+                showTime 
+                ampm
+                events={events} 
+                height={screenHeight} 
+            />
         </View>
     )
 }

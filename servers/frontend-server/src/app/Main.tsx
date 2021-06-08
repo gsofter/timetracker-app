@@ -80,7 +80,6 @@ export class Main extends React.Component<{}, {}> {
             <ProvideAuth>
               <ApolloProvider client={client}>
                 <InversifyProvider container={container} modules={modules}>
-                  <Lifecycle setPhaseReady={true}>
                     <RendererProvider renderer={renderer}>
                       <PersistGate persistor={persistor}>
                         <PluginArea />
@@ -93,7 +92,6 @@ export class Main extends React.Component<{}, {}> {
                         )}
                       </PersistGate>
                     </RendererProvider>
-                  </Lifecycle>
                 </InversifyProvider>
               </ApolloProvider>
             </ProvideAuth>

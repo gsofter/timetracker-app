@@ -1,33 +1,51 @@
-import React, { useEffect, useState, useMemo } from 'react';
-import { Switch, Table, message, Card, Radio, Dropdown, Menu, Button } from 'antd';
+import React, { useEffect, useState, useMemo, useCallback } from 'react';
+import { useFela } from 'react-fela';
+import { Switch, Table, message, Card, Dropdown, Menu, Button, Space, DatePicker, Row, Col } from 'antd';
+import { CaretDownOutlined } from '@ant-design/icons';
+import moment, { Moment } from 'moment';
+import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 import { BarChart } from './BarChart';
 import { DoughnutChart } from './DoughnutChart';
-import moment, { Moment } from 'moment';
-import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { formatDuration, roundDuration } from '../timetracker/services/timeRecordService';
-import { useFirstWeekDay, useRound, useTimeformat } from '../timetracker/hooks';
-import * as _ from 'lodash';
-import { RightOutlined, LeftOutlined, CaretDownOutlined } from '@ant-design/icons';
-import { useFela } from 'react-fela';
+import { useRound, useTimeformat } from '../timetracker/hooks';
 import { ExportReportAsExcel } from './ExportReportAsExcel';
 import { ExportReportAsCSV } from './ExportReportAsCSV';
+import { ExportReportAsPDF } from './ExportReportAsPDF';
+import { calculateCost, calculateProfit } from '../utils';
+import * as _ from 'lodash';
+
+const { RangePicker } = DatePicker;
+
+interface IRecord {
+  data: Array<ITimeRecord>;
+  payRate: number;
+  billRate: number;
+}
+interface IRecordsByUserId extends Partial<Record<string, IRecord>> {}
 
 interface IReportsProps {
-  weekStart: Moment;
+  range: {
+    start: Moment;
+    end: Moment;
+  };
   projects: Array<IProject_Output>;
   records: Array<ITimeRecord>;
-  setWeekStart: Function;
+  setRange: Function;
   updateConfiguration: Function;
+  recordsByUserId: IRecordsByUserId;
 }
 
-export const Reports: React.FC<IReportsProps> = ({
-  weekStart,
-  projects,
-  records,
-  setWeekStart,
-  updateConfiguration,
-}) => {
+enum ShowType {
+  SHOW_AMOUNT = 'Show amount',
+  SHOW_COST = 'Show cost',
+  SHOW_PROFIT = 'Show profit',
+  HIDE_AMOUNT = 'Hide amount',
+}
+
+export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
+                                                   recordsByUserId, setRange, updateConfiguration }) => {
   const [isRounded, setIsRounded] = useState(false);
+  const [showType, setShowType] = useState(ShowType.SHOW_AMOUNT);
   const { roundType, roundValue, rounded, refetchRounded } = useRound();
   const { dateFormat, timeFormat } = useTimeformat();
   const { css } = useFela();
@@ -52,15 +70,22 @@ export const Reports: React.FC<IReportsProps> = ({
     debounceFunc(checked);
   };
 
+  const handleChangeRange = (range, str) => {
+    const start = moment(range[0]);
+    const end = moment(range[1]);
+    setRange({ start, end });
+  };
+
   useEffect(() => {
     setIsRounded(rounded);
   }, [rounded]);
 
   const generateLabels = (): Array<string> => {
-    const labels = Array(7)
+    const daysCnt = Math.abs(moment(range.end).diff(range.start, 'days'));
+    const labels = Array(daysCnt)
       .fill(0)
       .map((itemValue, itemIndex) => {
-        return moment(weekStart).add(itemIndex, 'day').format(dateFormat);
+        return moment(range.start).add(itemIndex, 'day').format('ddd, MMM D');
       });
     return labels;
   };
@@ -69,16 +94,14 @@ export const Reports: React.FC<IReportsProps> = ({
     totalDur + Math.abs(Math.floor((moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000));
 
   const generateBarData = () => {
-    const dataSet = Array(7)
+    const daysCnt = Math.abs(moment(range.start).diff(range.end, 'days'));
+    const dataSet = Array(daysCnt)
       .fill(0)
-      .map((itemValue, index) => {
-        // filter current day records
-        const dayRecords = records.filter(
-          (r) => moment(r.startTime).format(dateFormat) === moment(weekStart).add(index, 'day').format(dateFormat),
-        );
+      .map((itemValue, itemIndex) => {
+        const curDayStr = moment(range.start).add(itemIndex, 'day').format(dateFormat);
+        const curDayRecords = records.filter((r) => curDayStr === moment(r.startTime).format(dateFormat));
 
-        // calc total duration as seconds
-        const totalDuration = dayRecords.reduce(calcDurationReducer, 0);
+        const totalDuration = curDayRecords.reduce(calcDurationReducer, 0);
         return rounded ? roundDuration(totalDuration, roundValue, roundType) : totalDuration;
       });
     return dataSet;
@@ -86,10 +109,19 @@ export const Reports: React.FC<IReportsProps> = ({
 
   const generateProjectLabels = () => {
     const projectLabels = projects.map((project, index) => {
-      return project.name;
+      const pRecords = records.filter((record) => record.projectId === project.id);
+      const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
+      const duration = rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
+      return `${project.name} - ${formatDuration(duration, timeFormat)}`;
     });
-    if (records.filter(r => !r.projectId).length) {
-      projectLabels.push('Unknown');
+    const unRecord = records.filter((r) => !r.projectId);
+    if (unRecord.length) {
+      const unTotalDur = unRecord.reduce(calcDurationReducer, 0);
+      const unDuration = formatDuration(
+        rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur,
+        timeFormat,
+      );
+      projectLabels.push(`Unknown - ${unDuration}`);
     }
     return projectLabels;
   };
@@ -100,12 +132,26 @@ export const Reports: React.FC<IReportsProps> = ({
       const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
       return rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
     });
-    const unRecord = records.filter(r => !r.projectId);
+    const unRecord = records.filter((r) => !r.projectId);
     if (unRecord.length) {
       const unTotalDur = unRecord.reduce(calcDurationReducer, 0);
-      projectDurArray.push(rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur)
+      projectDurArray.push(rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur);
     }
     return projectDurArray;
+  };
+
+  const getBillableDuration = (records) => {
+    const projectDurArray = projects.map((project, index) => {
+      const pRecords = records.filter((record) => record.projectId === project.id && record.isBillable);
+      const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
+      return rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
+    });
+    const unRecords = records.filter((r) => !r.projectId && r.isBillable);
+    if (unRecords.length) {
+      const unTotalDur = unRecords.reduce(calcDurationReducer, 0);
+      projectDurArray.push(rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur);
+    }
+    return projectDurArray.length && projectDurArray.reduce((accumulator, currentValue) => accumulator + currentValue);
   };
 
   const generateTableColumns = () => {
@@ -131,14 +177,16 @@ export const Reports: React.FC<IReportsProps> = ({
       const pRecords = records.filter((record) => record.projectId === project.id);
       const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
       return {
+        id: index,
         projectName: project.name,
         duration: rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur,
       };
     });
-    const unRecord = records.filter(r => !r.projectId);
+    const unRecord = records.filter((r) => !r.projectId);
     if (unRecord.length) {
       const unTotalDur = unRecord.reduce(calcDurationReducer, 0);
       projectDurArray.push({
+        id: projects.length,
         projectName: 'Unknown',
         duration: rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur,
       });
@@ -146,99 +194,261 @@ export const Reports: React.FC<IReportsProps> = ({
     return projectDurArray;
   };
 
-  const onClick = (e) => {
-    const { value } = e.target;
-    let newWeekStart;
-    if (value === 'today') {
-      newWeekStart = moment().startOf('week');
-    } else if (value === 'back') {
-      newWeekStart = moment(weekStart).add('-1', 'week');
-    } else {
-      newWeekStart = moment(weekStart).add('1', 'week');
+  const saveAsPdf = () => {
+    const input = document.getElementById('projects-report');
+    if (input) {
+      const html2PDF = require('jspdf-html2canvas');
+
+      html2PDF(input, {
+        jsPDF: {
+          format: 'a4',
+        },
+        margin: {
+          top: 40,
+          right: 30,
+          bottom: 40,
+          left: 30,
+        },
+        imageType: 'image/jpeg',
+        output: 'report_pdf.pdf',
+      });
     }
-    setWeekStart(newWeekStart);
   };
 
   const exportMenu = () => {
     const menu = (
-        <Menu>
-          <Menu.Item>Save as PDF</Menu.Item>
-          <Menu.Item>
-            <ExportReportAsCSV
-                records={records}
-                projects={projects}
-                rounded={rounded}
-                roundValue={roundValue}
-                roundType={roundType}
-                calcDurationReducer={calcDurationReducer}
-            />
-          </Menu.Item>
-          <Menu.Item>
-            <ExportReportAsExcel
-              weekStart={weekStart}
-              records={records}
-              projects={projects}
-              rounded={rounded}
-              roundValue={roundValue}
-              roundType={roundType}
-              calcDurationReducer={calcDurationReducer}
-            />
-          </Menu.Item>
+      <Menu>
+        <Menu.Item onClick={saveAsPdf}>Save as PDF</Menu.Item>
+        <Menu.Item>
+          <ExportReportAsCSV
+            records={records}
+            projects={projects}
+            rounded={rounded}
+            roundValue={roundValue}
+            roundType={roundType}
+            calcDurationReducer={calcDurationReducer}
+          />
+        </Menu.Item>
+        <Menu.Item>
+          <ExportReportAsExcel
+            range={range}
+            records={records}
+            projects={projects}
+            rounded={rounded}
+            roundValue={roundValue}
+            roundType={roundType}
+            calcDurationReducer={calcDurationReducer}
+          />
+        </Menu.Item>
+      </Menu>
+    );
+    return (
+      <Dropdown overlay={menu} placement="bottomCenter">
+        <Button>
+          <span>Export</span>
+          <CaretDownOutlined />
+        </Button>
+      </Dropdown>
+    );
+  };
+
+  const handleMenuClick = (e) => {
+    setShowType(e.key);
+  }
+
+  const showAmount = () => {
+    const menu = (
+        <Menu onClick={handleMenuClick}>
+          <Menu.Item key={ShowType.SHOW_AMOUNT}>{ShowType.SHOW_AMOUNT}</Menu.Item>
+          <Menu.Item key={ShowType.SHOW_COST}>{ShowType.SHOW_COST}</Menu.Item>
+          <Menu.Item key={ShowType.SHOW_PROFIT}>{ShowType.SHOW_PROFIT}</Menu.Item>
+          <Menu.Item key={ShowType.HIDE_AMOUNT}>{ShowType.HIDE_AMOUNT}</Menu.Item>
         </Menu>
     );
     return (
         <Dropdown overlay={menu} placement="bottomCenter">
-          <Button><span>Export</span><CaretDownOutlined /></Button>
+          <Button>
+            <span>{showType}</span>
+            <CaretDownOutlined />
+          </Button>
         </Dropdown>
     );
+  };
+
+  const generateRanges = () => [
+    {
+      label: 'Today',
+      start: moment().startOf('day'),
+      end: moment().endOf('day'),
+    },
+    {
+      label: 'Yesterday',
+
+      start: moment().add(-1, 'day').startOf('day'),
+      end: moment().add(-1, 'day').endOf('day'),
+    },
+    {
+      label: 'This week',
+
+      start: moment().startOf('week'),
+      end: moment().endOf('week'),
+    },
+    {
+      label: 'Last week',
+
+      start: moment().add(-1, 'week').startOf('week'),
+      end: moment().add(-1, 'week').endOf('week'),
+    },
+    {
+      label: 'This month',
+      start: moment().startOf('month'),
+      end: moment().endOf('month'),
+    },
+    {
+      label: 'Last month',
+      start: moment().add(-1, 'month').startOf('month'),
+      end: moment().add(-1, 'month').endOf('month'),
+    },
+  ];
+
+  const handleClickRange = (range) => {
+    setRange({
+      start: moment(range.start),
+      end: moment(range.end),
+    });
+  };
+
+  const getAmount = useCallback(() => {
+    let amount = 0;
+    let cost = 0;
+    let profit = 0;
+    Object.values(recordsByUserId)?.forEach((record: IRecord) => {
+      const { data, payRate = 0, billRate = 0 } = record;
+      if (data) {
+        const billable = getBillableDuration(data);
+        const hours = (billable / 3600);
+        amount += (hours * payRate);
+        cost += calculateCost(payRate, hours);
+        profit += calculateProfit(payRate, billRate, hours);
+      }
+    });
+    return { amount, cost, profit };
+  }, [recordsByUserId])
+
+  const totalTime =
+      generateProjectDurations().length &&
+      generateProjectDurations().reduce((accumulator, currentValue) => accumulator + currentValue);
+
+  const getHeader = (labelStyle, valueStyle) => {
+    const { amount, cost, profit } = getAmount();
+    switch (showType) {
+      case ShowType.SHOW_AMOUNT:
+        return (
+            <>
+              <span className={css(labelStyle)}>Billable:</span>
+              <span className={css(valueStyle)}>{formatDuration(getBillableDuration(records), timeFormat)}</span>
+              <span className={css(labelStyle)}>Amount:</span>
+              <span className={css(valueStyle)}>{amount.toFixed(2)} USD</span>
+            </>
+        );
+      case ShowType.SHOW_COST:
+        return (
+            <>
+              <span className={css(labelStyle)}>Cost:</span>
+              <span className={css(valueStyle)}>{cost.toFixed(2)} USD</span>
+            </>
+        );
+      case ShowType.SHOW_PROFIT:
+        return (
+            <>
+              <span className={css(labelStyle)}>Profit:</span>
+              <span className={css(valueStyle)}>{profit?.toFixed(2)} USD</span>
+            </>
+        );
+      default:
+        return null;
+    }
   }
 
-  return (
-      <div className={css(styles.container)}>
-        <Card title={'Timetracker Report'} bordered={false}>
-          <div className={css(styles.flex)}>
-            <div className={css(styles.left)}>
-              <Radio.Group>
-                <Radio.Button onClick={onClick} value={'back'}>
-                  <LeftOutlined /><span>Back</span>
-                </Radio.Button>
-                <Radio.Button onClick={onClick} value={'today'}>Today</Radio.Button>
-                <Radio.Button onClick={onClick} value={'next'}>
-                  <span>Next</span><RightOutlined/>
-                </Radio.Button>
-              </Radio.Group>
-            </div>
-            <div className={css(styles.right)}>
-              <span className={css(styles.roundingLabel)}>Rounding:</span>
-              <Switch className={css(styles.mr10)} size={'small'} checked={rounded} onChange={handleSwitchRoundMode}/>
-              {exportMenu()}
-            </div>
-          </div>
-          <div className={css(styles.title)}>
-            <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
-            <span className="duration-end">
-                            {moment(weekStart).format('MM') === moment(weekStart).add(6, 'day').format('MM')
-                                ? moment(weekStart).add(6, 'day').format('DD')
-                                : moment(weekStart).add(6, 'day').format('MMMM DD')}
-                        </span>
-          </div>
-          <div className={css(styles.barChartWrapper)}>
-            <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
-          </div>
-        </Card>
-        <div className={css(styles.flexM)}>
-          <Card className={css(styles.tableCard)} title={'Project Table'}>
-            <Table dataSource={generateDatasource()} columns={generateTableColumns()} pagination={{ defaultPageSize: 3 }} />
-          </Card>
-          <Card className={css(styles.chartCard)} title={'Project Report'}>
-            <DoughnutChart
-                title="Reports"
-                data={generateProjectDurations()}
-                labels={generateProjectLabels()}
-            />
-          </Card>
-        </div>
+  const header = (
+      <div>
+        <span className={css(styles.label)}>Total:</span>
+        <span className={css(styles.value)}>{formatDuration(totalTime, timeFormat)}</span>
+        {getHeader(styles.label, styles.value)}
       </div>
+  );
+
+
+  const panelRender = (originalPanel: React.ReactNode) => {
+    return (
+      <Row>
+        <Col xs={24} md={5}>
+          <Space direction="vertical" style={{ width: '100%' }}>
+            {generateRanges().map((range) => {
+              return (
+                <Button onClick={() => handleClickRange(range)} key={range.label} style={{ width: '100%' }}>
+                  {range.label}
+                </Button>
+              );
+            })}
+          </Space>
+        </Col>
+        <Col xs={24} md={18} style={{ paddingRight: '50px' }}>
+          {originalPanel}
+        </Col>
+      </Row>
+    );
+  };
+  return (
+    <div className={css(styles.container)}>
+      <Card title={'Timetracker Report'} bordered={false} extra={header}>
+        <div className={css(styles.flex)}>
+          <div className={css(styles.left)}>
+            <RangePicker onChange={handleChangeRange} panelRender={panelRender} value={[range.start, range.end]} />
+          </div>
+          <div className={css(styles.right)}>
+            <span className={css(styles.roundingLabel)}>Rounding:</span>
+            <Switch size={'small'} checked={isRounded} onChange={handleSwitchRoundMode} />
+            <span className={css(styles.m10)}>{exportMenu()}</span>
+            <span>{showAmount()}</span>
+          </div>
+        </div>
+        <div className={css(styles.title)}>
+          <span className="duration-start"> {moment(range.start).format('MMMM DD')}</span> -
+          <span className="duration-end">
+            {moment(range.start).format('MM') === moment(range.end).format('MM')
+              ? moment(range.end).format('DD')
+              : moment(range.end).format('MMMM DD')}
+          </span>
+        </div>
+        <div className={css(styles.barChartWrapper)}>
+          <BarChart title="Reports" data={generateBarData()} labels={generateLabels()} />
+        </div>
+      </Card>
+      <div className={css(styles.flexM)}>
+        <Card className={css(styles.tableCard)} title={'Project Table'}>
+          <Table
+            rowKey="id"
+            dataSource={generateDatasource()}
+            columns={generateTableColumns()}
+            pagination={{ defaultPageSize: 3 }}
+          />
+        </Card>
+        <Card className={css(styles.chartCard)} title={'Project Report'}>
+          <DoughnutChart title="Reports" data={generateProjectDurations()} labels={generateProjectLabels()} />
+        </Card>
+      </div>
+      <ExportReportAsPDF
+        range={range}
+        generateBarData={generateBarData}
+        generateLabels={generateLabels}
+        generateProjectDurations={generateProjectDurations}
+        generateProjectLabels={generateProjectLabels}
+        generateTableColumns={generateTableColumns}
+        generateDatasource={generateDatasource}
+        getHeader={getHeader}
+      />
+    </div>
   );
 };
 
@@ -291,7 +501,16 @@ const styles = {
     width: '100%',
     textAlign: 'center',
   }),
-  mr10: () => ({
-    marginRight: '10px',
+  m10: () => ({
+    margin: '0 10px',
+  }),
+  label: () => ({
+    color: '#696868',
+    marginLeft: '20px',
+    marginRight: '5px',
+  }),
+  value: () => ({
+    fontSize: '16px',
+    fontWeight: '500',
   }),
 };

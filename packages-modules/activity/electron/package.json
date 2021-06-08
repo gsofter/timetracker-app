@@ -50,17 +50,14 @@
   },
   "peerDependencies": {
     "@adminide-stack/core": "*",
-    "@common-stack/client-react": ">=0.0.258",
-    "@common-stack/core": ">=0.0.258",
-    "@common-stack/client-core": ">=0.0.258",
+    "@common-stack/client-react": ">=0.0.260",
+    "@common-stack/core": ">=0.0.260",
+    "@common-stack/client-core": ">=0.0.260",
     "antd": "^4.5.2",
     "envalid": "*",
     "electron": "*",
     "inversify": "*",
     "rxjs": "*"
-  },
-  "devDependencies": {
-    "robotjs": "^0.6.0"
   },
   "typings": "lib/index.d.ts",
   "typescript": {
