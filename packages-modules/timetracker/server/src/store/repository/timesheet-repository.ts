@@ -102,7 +102,7 @@ export class TimesheetRepository implements ITimesheetRepository {
           orgId,
         },
         {
-          $pull: { 'timesheets._id': sheetId },
+          $pull: { timesheets: { _id: sheetId } },
         },
       );
       return true;
