@@ -4,6 +4,7 @@ import { CSVLink } from 'react-csv';
 import { useEffect, useState } from 'react';
 import { useTimeformat } from '../timetracker/hooks';
 import { formatDuration, roundDuration } from '../timetracker/services/timeRecordService';
+import { capitalize } from '../utils';
 
 interface IExportReportAsCSV {
   groupBy: string;
@@ -35,11 +36,6 @@ export const ExportReportAsCSV = (props: IExportReportAsCSV) => {
     });
     setData(reportData);
   }, [JSON.stringify(groupByRecords), rounded, roundValue, roundType, timeFormat]);
-
-  const capitalize = (word) => {
-    const lower = word.toLowerCase();
-    return word.charAt(0).toUpperCase() + lower.slice(1);
-  };
 
   const getTotalTime = (pRecords) => {
     const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
