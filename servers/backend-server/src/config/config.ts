@@ -22,5 +22,8 @@ export const config = envalid.cleanEnv(process.env, {
     CONNECTION_ID: str({ devDefault: 'CONNECTION_ID' }),
     NAMESPACE: str({ default: 'default' }),
     apolloLogging: bool({ default: false, devDefault: true }),
+    ACTIVITY_NAMESPACE: str({ devDefault: 'default' }),
+    API_NAMESPACE: str({ devDefault: 'default'}),
+    ADMIN_API_NAMESPACE: str({ devDefault: 'default'}),
 });
 

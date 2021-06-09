@@ -1,1 +1,1 @@
-export * from './generated-models'
+export * from './generated-models';

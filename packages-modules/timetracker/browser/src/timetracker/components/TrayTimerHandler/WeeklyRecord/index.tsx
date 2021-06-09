@@ -1,21 +1,31 @@
 import React, { useState } from 'react';
 import { Typography } from 'antd';
+import { useFela } from 'react-fela';
+import { styleSheet } from './style';
 import DailyRecord from './DailyRecord';
+import { weeklyLog } from '..';
+import { msToHMS } from '../../../../utils';
 
-const WeeklyRecord: React.FC = () => {
+interface WeeklyRecordProps {
+  log: weeklyLog;
+}
+
+const WeeklyRecord: React.FC<WeeklyRecordProps> = (props: WeeklyRecordProps) => {
   const { Text } = Typography;
+  const { css } = useFela();
+  const { log } = props;
 
   return (
     <>
-      <div>
-        <Text>Feb 08 - Feb 14</Text>
+      <div className={css(styleSheet.weeklyRecord)}>
+        <Text className="date-text">{log.dates}</Text>
         <div>
-          <Text>Weekly Total</Text>
-          <Text>60:47:20</Text>
+          <Text className="title">Weekly Total</Text>
+          <Text className="duration">{msToHMS(log.duration)}</Text>
         </div>
       </div>
-      <div>
-        <DailyRecord></DailyRecord>
+      <div className="daily">
+        {log.days.map(day => <DailyRecord record={day} />)}
       </div>
     </>
   );

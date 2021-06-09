@@ -16,7 +16,7 @@ import {
   useCreateTimeRecordMutation,
   useCreateTimesheetMutation,
 } from '../../../../generated-models';
-import { moment } from '../../TimesheetPage';
+import moment from 'moment';
 
 import { TabularCalendar } from './TabularCalendar';
 interface ITabularCalendarWrapperProps {
@@ -59,14 +59,23 @@ const TabularCalendarWrapper = ({
   selectedProject,
   setPathWeekStart,
 }: ITabularCalendarWrapperProps) => {
-  const { data, loading: loadingRecords, refetch, error } = useGetDurationTimeRecordsQuery({
+  const {
+    data,
+    loading: loadingRecords,
+    refetch,
+    error,
+  } = useGetDurationTimeRecordsQuery({
     variables: {
       startTime: weekStart,
       endTime: moment(weekStart).add(1, 'week'),
     },
   });
 
-  const { data: approvalData, loading: loadingApproval, refetch: refetchApproval } = useGetDurationTimesheetsQuery({
+  const {
+    data: approvalData,
+    loading: loadingApproval,
+    refetch: refetchApproval,
+  } = useGetDurationTimesheetsQuery({
     variables: {
       start: moment(weekStart),
       end: moment(weekStart).add(1, 'week'),

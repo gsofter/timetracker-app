@@ -1,4 +1,4 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo, useCallback } from 'react';
 import { useFela } from 'react-fela';
 import { PlusCircleOutlined, TagOutlined, CloseOutlined, ClockCircleOutlined, BarsOutlined } from '@ant-design/icons';
 import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
@@ -54,17 +54,39 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
+  const [description, setDescription] = useState(currentTimeRecord.description ?? '');
+  const [taskName, setTaskName] = useState(currentTimeRecord.taskName ?? '');
+  const debouncedFunc = useMemo(
+    () =>
+      _.debounce((value) => {
+        updatePlayingTimeRecord({ ...currentTimeRecord, taskName: value, description: value });
+      }, 800),
+    [currentTimeRecord],
+  );
 
-  const handleTaskChange = (e) => {
-    e.persist();
-    updatePlayingTimeRecord({ ...currentTimeRecord, taskName: e.target.value }, true);
-  };
+  const handleChangeTask = useCallback(
+    (e) => {
+      e.persist();
+      setTaskName(e.target.value);
+      debouncedFunc(e.target.value);
+    },
+    [debouncedFunc],
+  );
+
+  const handleDescriptionTask = useCallback(
+    (e) => {
+      e.persist();
+      setDescription(e.target.value);
+      debouncedFunc(e.target.value);
+    },
+    [debouncedFunc],
+  );
 
   const handleSelectProject = (projectId) => {
     updatePlayingTimeRecord({ ...currentTimeRecord, projectId: projectId });
   };
 
-  const handleChangeBillable = (event) => {
+  const handleChangeBillable = () => {
     updatePlayingTimeRecord({ ...currentTimeRecord, isBillable: !currentTimeRecord.isBillable });
   };
 
@@ -102,6 +124,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
       endTime: manualEnd,
       isBillable: currentTimeRecord.isBillable,
       taskName: currentTimeRecord.taskName,
+      description: currentTimeRecord.description,
       projectId: currentTimeRecord.projectId,
     };
     createTimeRecord(newRecordReq);
@@ -155,8 +178,8 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
               <Input
                 placeholder="What are you working on?"
                 size="large"
-                value={currentTimeRecord.taskName}
-                onChange={handleTaskChange}
+                value={description}
+                onChange={handleDescriptionTask}
               />
             </Col>
             <Col span={6} className="flex-center project-selection">

@@ -25,7 +25,7 @@ Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
 
     const fontSize = (height / 154).toFixed(2);
     ctx.font = fontSize + 'em Verdana';
-    ctx.color = 'rgba(54, 162, 235, 1)';
+    ctx.fontColor = 'rgba(54, 162, 235, 1)';
     ctx.textBaseline = 'bottom';
 
     const text = chart.config.data.text || '',

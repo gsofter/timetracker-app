@@ -1,23 +1,24 @@
 import { Feature } from '@common-stack/client-react';
+import { MobileRoutes } from '../../constants/routes';
 import Layout from './Layout';
-import { SignIn, SignUp } from '../../pages';
+import { Home } from '../../pages/Home';
 
 export default new Feature({
     routeConfig: [
         {
-            '/': {
-                exact: true,
-                component: SignIn,
+            [MobileRoutes.Home]: {
+              exact: true,
+              component: Home,
             } as any,
-        },
+          },
+        // {
+        //     '/sign-up': {
+        //         exact: false,
+        //         component: SignUp,
+        //     } as any,
+        // },
         {
-            '/sign-up': {
-                exact: false,
-                component: SignUp,
-            } as any,
-        },
-        {
-            '/org': {
+            '/:orgName': {
                 exact: false,
                 component: Layout,
                 key: 'layout',

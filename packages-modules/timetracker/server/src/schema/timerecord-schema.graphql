@@ -4,6 +4,7 @@ type TimeRecord {
   endTime: DateTime
   taskId: String
   taskName: String
+  description: String
   tags: [String]
   isBillable: Boolean
   projectId: String
@@ -19,11 +20,28 @@ input TimeRecordRequest {
   startTime: DateTime
   endTime: DateTime
   taskName: String
+  description: String
   tags: [String]
   isBillable: Boolean
   projectId: String
   clientId: String
   timesheetId: String
+}
+
+"""
+ Subscription event for timer
+"""
+enum TimeRecordPubSubEvents {
+    TimeRecordCreated
+    TimeRecordUpdated
+    TimeRecordStopped
+    TimeRecordDeleted
+    TimeRecordConfigurationUpdate
+}
+
+type SubscriptionTimeRecord {
+  mutation: TimeRecordPubSubEvents
+  timeRecord: TimeRecord
 }
 
 extend type Query {
@@ -34,7 +52,11 @@ extend type Query {
 
 extend type Mutation {
   createTimeRecord(request: TimeRecordRequest): String @addAccountContext
-  updateTimeRecord(recordId: String, request: TimeRecordRequest): Boolean @addAccountContext
-  removeTimeRecord(recordId: String): Boolean @addAccountContext
+  updateTimeRecord(recordId: String!, request: TimeRecordRequest): Boolean @addAccountContext
+  removeTimeRecord(recordId: String!): Boolean @addAccountContext
   removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean @addAccountContext
+}
+
+extend type Subscription {
+  SubscribeToTimeTracker(orgName: String, userId: String): SubscriptionTimeRecord
 }

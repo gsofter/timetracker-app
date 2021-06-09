@@ -35,10 +35,10 @@
   "dependencies": {
     "@cdm-logger/client": "^5.0.7",
     "@cdm-logger/server": "^6.0.0",
-    "@cdmbase/graphql-type-uri": "^1.1.0",
-    "@common-stack/client-core": "0.0.258",
-    "@common-stack/core": "0.0.258",
-    "@common-stack/server-core": "0.0.258",
+    "@cdmbase/graphql-type-uri": "^2.0.0",
+    "@common-stack/client-core": "0.0.260",
+    "@common-stack/core": "0.0.260",
+    "@common-stack/server-core": "0.0.260",
     "@admin-layout/core": "link:../../packages/admin-core",
     "@admin-layout/counter-module-server": "link:../../packages-modules/counter/server",
     "@admin-layout/platform-server": "link:../../packages/admin-platform/server",
@@ -67,7 +67,7 @@
     "moleculer": "^0.14.2",
     "moleculer-zipkin": "0.2.2",
     "mongodb": "^3.5.9",
-    "mongoose": "5.10.0",
+    "mongoose": "5.12.0",
     "nats": "^1.3.2",
     "reflect-metadata": "^0.1.13"
   },

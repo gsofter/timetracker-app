@@ -1,40 +1,69 @@
-import React from 'react';
-import { StyleSheet, View, Dimensions } from 'react-native';
+import moment from 'moment';
+import React, {useState} from 'react';
+import { StyleSheet, View, Dimensions, Switch, Text } from 'react-native';
 import { Calendar } from 'react-native-big-calendar';
+import { useSelector } from 'react-redux';
+import { useGetDurationTimeRecordsQuery } from '../../generated-models';
 
-const events = [
-    {
-      title: 'Meeting',
-      start: new Date("2021-04-02T12:00:00Z"),
-      end: new Date("2021-04-02T16:30:00Z"),
-    },
-    {
-      title: 'Coffee break',
-      start: new Date("2021-04-02T17:00:00Z"),
-      end: new Date("2021-04-02T17:30:00Z"),
-    },
-    {
-        title: 'Lunch',
-        start: new Date("2021-04-03T17:00:00Z"),
-        end: new Date("2021-04-03T18:00:00Z"),
-      },
-]
+import TabularScreen from "./TabularScreen"
 
 const CalendarScreen = () => {
+    const [isEnabled, setIsEnabled] = useState(true)
+    const [weekStart] = useState(moment().clone().startOf('week'))
+    const [weekEnd] = useState(moment().clone().endOf('week'))
+    const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
+
+    const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
+        variables: { userId: userId, startTime: weekStart, endTime: weekEnd },
+    });
 
     const screenHeight = Dimensions.get('window').height
 
+    const events = data?.getDurationTimeRecords.map(event => {
+        const {endTime, startTime, taskName, ...rest} = event
+        return {
+            end: new Date(endTime),
+            start: new Date(startTime),
+            title: taskName,
+            ...rest
+        }
+    })
+
+    const toggleSwitch = () => {
+        setIsEnabled(!isEnabled)
+    }
+
     return (
         <View style={styles.container}>
-            <Calendar events={events} height={screenHeight} />
+            <View style={styles.toggle}>
+                <Text>Calendar: </Text>
+                <Switch
+                    trackColor={{ false: "#767577", true: "#81b0ff" }}
+                    thumbColor={isEnabled ? "black" : "#f4f3f4"}
+                    ios_backgroundColor="#3e3e3e"
+                    onValueChange={toggleSwitch}
+                    value={isEnabled}
+                />
+            </View>
+            {isEnabled && events ? 
+            <Calendar
+                eventCellStyle={{height: 25}}
+                events={events} 
+                height={screenHeight} 
+            />: 
+            <TabularScreen/>}
         </View>
     )
 }
 
 const styles = StyleSheet.create({
     container:{
-        textAlign: 'center',
         flex: 1,
+    },
+    toggle: {
+        flexDirection: 'row',
+        alignItems: 'center',
+        padding: 10
     }
 })
 

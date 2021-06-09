@@ -3,15 +3,19 @@ import { useFela } from 'react-fela';
 import CSS from 'csstype';
 
 interface IBillableCheck {
-  onChange: (any) => void;
+  onChange: () => void;
+  disabled?: boolean;
   checked: boolean;
 }
 
 export default function BillableCheck(props: IBillableCheck) {
-  const { onChange, checked } = props;
+  const { onChange, checked, disabled } = props;
   const { css } = useFela({ checked });
+  const handleChange = (e?: any) => {
+    if (!disabled) onChange();
+  };
   return (
-    <div onClick={onChange} className={css(styles.billable)}>
+    <div onClick={handleChange} className={css(styles.billable)}>
       <span> $ </span>
     </div>
   );

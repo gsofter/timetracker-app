@@ -1,7 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import { Row, Col, Button, Dropdown, Menu, Popconfirm, Modal, Tag, Typography } from 'antd';
-import { moment } from '../../TimesheetPage';
-import { Moment } from 'moment';
+import moment, { Moment } from 'moment';
 import { useFela } from 'react-fela';
 import cls from 'classnames';
 import {
@@ -423,12 +422,12 @@ export const TabularCalendar = ({
         ) : null}
         <div className="spacer">
           <ExportExcel
-              weekStart={weekStart}
-              records={records}
-              projectsMap={projectsMap}
-              approvals={approvals}
-              unApprovals={unApprovals}
-              getProjectTotalDuration={getProjectTotalDuration}
+            weekStart={weekStart}
+            records={records}
+            projectsMap={projectsMap}
+            approvals={approvals}
+            unApprovals={unApprovals}
+            getProjectTotalDuration={getProjectTotalDuration}
           />
         </div>
         {getTimesheetState() === undefined ? (

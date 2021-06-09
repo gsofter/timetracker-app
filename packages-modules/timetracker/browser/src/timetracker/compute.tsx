@@ -8,7 +8,7 @@ import {
   WithPermissionBehaviour,
   WithPermissionEnhanced,
   ResourceSettings,
-} from '@adminide-stack/react-shared-components';
+} from '@adminide-stack/platform-browser/lib/components';
 import { IPreDefineAccountPermissions, ConfigurationTarget } from '@adminide-stack/core';
 import { getFilteredRoutes } from '../utils';
 import { ROUTES } from './constants';

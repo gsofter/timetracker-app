@@ -49,9 +49,9 @@
     "@adminide-stack/react-shared-components": "*",
     "@adminide-stack/user-auth0-browser": "*",
     "@ant-design/icons": "*",
-    "@common-stack/client-core": ">=0.0.258",
-    "@common-stack/client-react": ">=0.0.258",
-    "@common-stack/core": ">=0.0.258",
+    "@common-stack/client-core": ">=0.0.260",
+    "@common-stack/client-react": ">=0.0.260",
+    "@common-stack/core": ">=0.0.260",
     "antd": "^4.5.2",
     "react": "*"
   },

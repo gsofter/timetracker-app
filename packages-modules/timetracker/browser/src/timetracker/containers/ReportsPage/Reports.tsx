@@ -1,5 +1,5 @@
 import React, { useEffect, useState, useMemo } from 'react';
-import { Row, Col, Button, Switch, Table, message } from 'antd';
+import { Row, Col, Button, Switch, Table, message, DatePicker, Space } from 'antd';
 import { PageContainer } from '@admin-layout/components';
 import { BarChart, DoughnutChart } from '../../components/Charts';
 import moment, { Moment } from 'moment';
@@ -7,33 +7,23 @@ import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { formatDuration, roundDuration } from '../../services/timeRecordService';
 import { useRound, useTimeformat } from '../../hooks';
 import * as _ from 'lodash';
+const { RangePicker } = DatePicker;
 
 interface IReportsProps {
-  weekStart: Moment;
+  range: {
+    start: Moment;
+    end: Moment;
+  };
   projects: Array<IProject_Output>;
   records: Array<ITimeRecord>;
-  setWeekStart: Function;
+  setRange: Function;
   updateConfiguration: Function;
 }
 
-const Reports: React.FC<IReportsProps> = ({ weekStart, projects, records, setWeekStart, updateConfiguration }) => {
+const Reports: React.FC<IReportsProps> = ({ range, projects, records, setRange, updateConfiguration }) => {
   const [isRounded, setIsRounded] = useState(false);
   const { roundType, roundValue, rounded, refetchRounded } = useRound();
   const { dateFormat, timeFormat } = useTimeformat();
-  const onClickBack = (event) => {
-    const newWeekStart = moment(weekStart).add('-1', 'week');
-    setWeekStart(newWeekStart);
-  };
-
-  const onClickNext = (event) => {
-    const newWeekStart = moment(weekStart).add('1', 'week');
-    setWeekStart(newWeekStart);
-  };
-
-  const onClickToday = (event) => {
-    const newWeekStart = moment().startOf('week');
-    setWeekStart(newWeekStart);
-  };
 
   const debounceFunc = useMemo(
     () =>
@@ -59,11 +49,19 @@ const Reports: React.FC<IReportsProps> = ({ weekStart, projects, records, setWee
     setIsRounded(rounded);
   }, [rounded]);
 
+  const handleChangeRange = (range, str) => {
+    const start = range[0];
+    const end = range[1];
+    setRange({ startTime: start, endTime: end });
+  };
+
   const generateLabels = (): Array<string> => {
-    const labels = Array(7)
+    const daysCnt = moment(range.start).diff(range.end, 'days');
+
+    const labels = Array(daysCnt)
       .fill(0)
       .map((itemValue, itemIndex) => {
-        return moment(weekStart).add(itemIndex, 'day').format(dateFormat);
+        return moment(range.start).add(itemIndex, 'day').format(dateFormat);
       });
     return labels;
   };
@@ -72,16 +70,15 @@ const Reports: React.FC<IReportsProps> = ({ weekStart, projects, records, setWee
     totalDur + Math.abs(Math.floor((moment(record.endTime).valueOf() - moment(record.startTime).valueOf()) / 1000));
 
   const generateBarData = () => {
-    const dataSet = Array(7)
+    const daysCnt = moment(range.start).diff(range.end, 'days');
+    const DATE_FORMAT = 'YYYY-MM-DD';
+    const dataSet = Array(daysCnt)
       .fill(0)
-      .map((itemValue, index) => {
-        // filter current day records
-        const dayRecords = records.filter(
-          (r) => moment(r.startTime).format(dateFormat) === moment(weekStart).add(index, 'day').format(dateFormat),
-        );
+      .map((itemValue, itemIndex) => {
+        const curDayStr = moment(range.start).add(itemIndex, 'day').format(DATE_FORMAT);
+        const curDayRecords = records.filter((r) => curDayStr === moment(r.startTime).format(DATE_FORMAT));
 
-        // calc total duration as seconds
-        const totalDuration = dayRecords.reduce(calcDurationReducer, 0);
+        const totalDuration = curDayRecords.reduce(calcDurationReducer, 0);
         return rounded ? roundDuration(totalDuration, roundValue, roundType) : totalDuration;
       });
     return dataSet;
@@ -133,20 +130,75 @@ const Reports: React.FC<IReportsProps> = ({ weekStart, projects, records, setWee
     return projectDurArray;
   };
 
+  const generateRanges = () => [
+    {
+      label: 'Today',
+
+      start: moment().startOf('day'),
+      end: moment().endOf('day'),
+    },
+    {
+      label: 'Yesterday',
+
+      start: moment().add(-1, 'day').startOf('day'),
+      end: moment().add(-1, 'day').endOf('day'),
+    },
+    {
+      label: 'This week',
+
+      start: moment().startOf('week'),
+      end: moment().endOf('week'),
+    },
+    {
+      label: 'Last week',
+
+      start: moment().add(-1, 'week').startOf('week'),
+      end: moment().add(-1, 'week').endOf('week'),
+    },
+    {
+      label: 'This month',
+      start: moment().startOf('month'),
+      end: moment().endOf('month'),
+    },
+    {
+      label: 'Last month',
+      start: moment().add(-1, 'month').startOf('month'),
+      end: moment().add(-1, 'month').endOf('month'),
+    },
+  ];
+
+  const handleClickRange = (range) => {};
+  const panelRender = (originalPanel) => {
+    return (
+      <Row>
+        <Col xs={24} md={6}>
+          <Space direction="vertical">
+            {generateRanges().map((range) => {
+              <Button onClick={() => handleClickRange(range)} key={range.label}>
+                {range.label}
+              </Button>;
+            })}
+          </Space>
+        </Col>
+        <Col xs={24} md={18}>
+          {originalPanel}
+        </Col>
+      </Row>
+    );
+  };
+
   return (
     <PageContainer>
       <Row>
         <Col xs={24} md={6} className="control">
-          <Button onClick={onClickToday}> Today </Button>
-          <Button onClick={onClickBack}> Back </Button>
-          <Button onClick={onClickNext}> Next </Button>
+          <RangePicker onChange={handleChangeRange} panelRender={panelRender} />
         </Col>
         <Col xs={24} md={12} style={{ textAlign: 'center' }}>
-          <span className="duration-start"> {moment(weekStart).format('MMMM DD')}</span> -
+          <span className="duration-start"> {moment(range.start).format('MMMM DD')}</span> -
           <span className="duration-end">
-            {moment(weekStart).format('MM') === moment(weekStart).add(6, 'day').format('MM')
-              ? moment(weekStart).add(6, 'day').format('DD')
-              : moment(weekStart).add(6, 'day').format('MMMM DD')}
+            {moment(range.start).format('MM') === moment(range.end).format('MM')
+              ? moment(range.end).format('DD')
+              : moment(range.end).format('MMMM DD')}
           </span>
         </Col>
         <Col xs={24} md={6} className="control">

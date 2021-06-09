@@ -3,16 +3,16 @@ import moment from 'moment';
 import { useGetDurationTimeRecordsQuery, useGetProjectsQuery } from '../../../generated-models';
 import { ITimeRecord, IProject_Output } from '@admin-layout/timetracker-core';
 import { useFirstWeekDay } from '../../hooks';
-import { useSetting } from '@adminide-stack/react-shared-components';
+import { useSetting } from '@adminide-stack/platform-browser/lib/components';
 import * as _ from 'lodash';
 import Reports from './Reports';
 
 const ReportsPage = () => {
-  const [weekStart, setWeekStart] = useState(moment().startOf('week'));
+  const [range, setRange] = useState({ start: moment().startOf('week'), end: moment().endOf('week') });
   const { data, loading, refetch, error } = useGetDurationTimeRecordsQuery({
     variables: {
-      startTime: weekStart,
-      endTime: moment(weekStart).add(1, 'week'),
+      startTime: range.start,
+      endTime: range.end,
     },
   });
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
@@ -23,18 +23,20 @@ const ReportsPage = () => {
         dow: dowValue,
       },
     });
-
-    setWeekStart(moment().startOf('week'));
+    setRange({
+      start: moment().startOf('week'),
+      end: moment().endOf('week'),
+    });
   }, [dowValue]);
 
   const { updateConfiguration } = useSetting({
     configKey: 'timetracker.report.timeRoundingInReports',
   });
 
-  const getRecords = useCallback((): Array<ITimeRecord> => (loading || !!!data ? [] : data.getDurationTimeRecords), [
-    loading,
-    data,
-  ]);
+  const getRecords = useCallback(
+    (): Array<ITimeRecord> => (loading || !!!data ? [] : data.getDurationTimeRecords),
+    [loading, data],
+  );
 
   const getProjects = useCallback(
     (): Array<IProject_Output> => (loadingProjects || !!!projectsData ? [] : projectsData.getProjects),
@@ -42,21 +44,25 @@ const ReportsPage = () => {
   );
 
   useEffect(() => {
-    setWeekStart(moment().startOf('week'));
+    setRange({
+      start: moment().startOf('week'),
+      end: moment().endOf('week'),
+    });
   }, []);
 
   useEffect(() => {
     refetch();
-  }, [weekStart]);
+  }, [range]);
 
   return (
-    <Reports
-      weekStart={weekStart}
-      projects={getProjects()}
-      records={getRecords()}
-      setWeekStart={setWeekStart}
-      updateConfiguration={updateConfiguration}
-    />
+    <> Reports </>
+    // <Reports
+    //   range={range}
+    //   projects={getProjects()}
+    //   records={getRecords()}
+    //   setRange={setRange}
+    //   updateConfiguration={updateConfiguration}
+    // />
   );
 };
 

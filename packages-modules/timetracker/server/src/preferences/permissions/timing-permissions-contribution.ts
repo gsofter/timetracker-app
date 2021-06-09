@@ -1,5 +1,5 @@
 import { ConfigurationScope, IPermissionType } from '@adminide-stack/core';
-import * as nls from '@vscode/monaco-editor/esm/vs/nls';
+import * as nls from '@vscode-alt/monaco-editor/esm/vs/nls';
 import { IRoles } from '@common-stack/server-core';
 import { IPreDefineAccountPermissions } from '../../constants';
 

@@ -3,7 +3,7 @@ import { useState } from 'react';
 import { useFela } from 'react-fela';
 import { message } from 'antd';
 import { EditTwoTone } from '@ant-design/icons';
-import { useSetting } from '@adminide-stack/react-shared-components';
+import { useSetting } from '@adminide-stack/platform-browser/lib/components';
 import { ConfigurationTarget } from '@adminide-stack/core';
 import { PaymentsModal } from './PaymentsModal';
 
@@ -11,27 +11,27 @@ export const Payments = (props) => {
     const [visible, setVisible] = useState(false);
     const { css } = useFela();
 
-    const { data: payPeriodConfig, loading: loadPayPeriod, updateConfiguration } = useSetting({
+    const { data: payPeriodConfig, loading: loadPayPeriod, updateConfiguration, refetch: refetchPeriod } = useSetting({
         configKey: 'timetracker.user.payment.payPeriod',
         overrides: { overrideIdentifier: props.value.record.name },
     });
 
-    const { data: payTypeConfig, loading: loadPayType } = useSetting({
+    const { data: payTypeConfig, loading: loadPayType, refetch: refetchType } = useSetting({
         configKey: 'timetracker.user.payment.payType',
         overrides: { overrideIdentifier: props.value.record.name },
     });
 
-    const { data: billRateConfig, loading: loadBillRate } = useSetting({
+    const { data: billRateConfig, loading: loadBillRate, refetch: refetchBillRate } = useSetting({
         configKey: 'timetracker.user.payment.billRate',
         overrides: { overrideIdentifier: props.value.record.name },
     });
 
-    const { data: payRateConfig, loading: loadPayRate } = useSetting({
+    const { data: payRateConfig, loading: loadPayRate, refetch: refetchPayRate } = useSetting({
         configKey: 'timetracker.user.payment.payRate',
         overrides: { overrideIdentifier: props.value.record.name },
     });
 
-    const { data: requireTimesheetApprovalConfig, loading } = useSetting({
+    const { data: requireTimesheetApprovalConfig, loading, refetch: refetchTimeApproval } = useSetting({
         configKey: 'timetracker.user.payment.requireTimesheetApproval',
         overrides: { overrideIdentifier: props.value.record.name },
     });
@@ -52,6 +52,7 @@ export const Payments = (props) => {
                 updateOverrides: { overrideIdentifier: props.value.record.name },
                 target: ConfigurationTarget.ORGANIZATION,
             });
+            await refetchPeriod();
         }
         if (payType !== request.payType) {
             await updateConfiguration({
@@ -60,22 +61,25 @@ export const Payments = (props) => {
                 updateOverrides: { overrideIdentifier: props.value.record.name },
                 target: ConfigurationTarget.ORGANIZATION,
             });
+            await refetchType();
         }
-        if (billRate !== parseInt(request.billRate, 10)) {
+        if (billRate !== parseFloat(request.billRate)) {
             await updateConfiguration({
                 updateKey: 'timetracker.user.payment.billRate',
-                value: parseInt(request.billRate, 10) || '',
+                value: parseFloat(request.billRate),
                 updateOverrides: { overrideIdentifier: props.value.record.name },
                 target: ConfigurationTarget.ORGANIZATION,
             });
+            await refetchBillRate();
         }
-        if (payRate !== parseInt(request.payRate, 10)) {
+        if (payRate !== parseFloat(request.payRate)) {
             await updateConfiguration({
                 updateKey: 'timetracker.user.payment.payRate',
-                value: parseInt(request.payRate, 10) || '',
+                value: parseFloat(request.payRate),
                 updateOverrides: { overrideIdentifier: props.value.record.name },
                 target: ConfigurationTarget.ORGANIZATION,
             });
+            await refetchPayRate();
         }
         if (requireTimesheetApproval !== request.requireTimesheetApproval) {
             await updateConfiguration({
@@ -84,6 +88,7 @@ export const Payments = (props) => {
                 updateOverrides: { overrideIdentifier: props.value.record.name },
                 target: ConfigurationTarget.ORGANIZATION,
             });
+            await refetchTimeApproval();
         }
     };
 

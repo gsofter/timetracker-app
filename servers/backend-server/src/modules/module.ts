@@ -12,7 +12,7 @@ import { config } from '../config';
 export const settings = {
     // mongoConnection: generateMongo(config.MONGO_URL),
     subTopic: config.CONNECTION_ID, // usually versioning
-    adminApiNamespace: 'api-admin',
+    adminApiNamespace: config.ADMIN_API_NAMESPACE,
 };
 
 const defaultModule = () =>
@@ -35,14 +35,14 @@ if (config.isDev) {
     DevModules = MailingModule.default;
 }
 
+export const ExternalModules = new Feature<any>(PlatformModule, AuthModule, OrganizationModule);
+
 export default new Feature<any>(
     DefaultFeature,
-    PlatformModule,
-    AuthModule,
     CounterModule,
+    ExternalModules,
     ScheduleModule,
     TimeTrackerModule,
-    OrganizationModule,
     DevModules,
 );
 

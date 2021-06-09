@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import { isUrl, isImg } from '../../../../utils';
 
-import { MenuMode, MenuProps } from 'antd/lib/menu';
+import { MenuProps } from 'antd/lib/menu';
 import { MenuTheme } from 'antd/lib/menu/MenuContext';
 import defaultSettings, { PureSettings } from '../defaultSettings';
 import { getOpenKeysFromMenuData } from '../utils/utils';
@@ -15,6 +15,8 @@ import MenuCounter from './Counter';
 import { PrivateSiderMenuProps } from './SiderMenu';
 import PageLoading from '../PageLoading';
 
+// todo
+export type MenuMode = 'vertical'| 'horizontal' | 'inline';
 export interface BaseMenuProps
   extends Partial<RouterTypes<Route>>,
   Omit<MenuProps, 'openKeys' | 'onOpenChange' | 'title'>,
@@ -137,7 +139,7 @@ class MenuUtil {
     }
 
     return (
-      <Menu.Item inlineIndent={24} disabled={item.disabled} key={item.key || item.path}>
+      <Menu.Item disabled={item.disabled} key={item.key || item.path}>
         {this.getMenuItemPath(item, isChildren)}
       </Menu.Item>
     );

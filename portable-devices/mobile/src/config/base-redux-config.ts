@@ -17,13 +17,13 @@ import {
 import { EpicMiddleware, Epic } from 'redux-observable';
 import { History } from 'history';
 import { persistReducer, PersistConfig } from 'redux-persist';
+import thunkMiddleware from 'redux-thunk'
 
 const getStoreReducer = (reducers: ReducersMapObject) =>
     combineReducers({
         ...reducers,
     });
-
-interface IReduxStore<S> {
+interface IReduxStore<S = any> {
     history: History;
     scope: 'browser' | 'server' | 'native';
     isDebug: boolean;
@@ -60,7 +60,7 @@ export const createReduxStore = ({
      * Add middleware that required for this app.
      */
 
-    const middlewares: Middleware[] = [];
+    const middlewares: Middleware[] = [thunkMiddleware];
     // add epicMiddleware
     if (epicMiddleware) {
         middlewares.push(epicMiddleware);

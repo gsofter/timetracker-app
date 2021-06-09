@@ -4,17 +4,24 @@ import { ITimesheetResponse, ITimesheetState } from '@admin-layout/timetracker-c
 import { MoreOutlined } from '@ant-design/icons';
 import moment from 'moment';
 import { ITimesheetCreateRequest, IOrgMember } from '@admin-layout/timetracker-core';
-import { VIEW_MODE } from './index';
 import { useManagePermissions, useTimeformat, useViewPermissions } from '../../hooks';
 import { useHistory } from 'react-router';
 import { generatePath } from 'react-router-dom';
-import { useGetOrgContextQuery } from '@adminide-stack/react-shared-components';
+import { useGetOrgContextQuery } from '@adminide-stack/platform-browser/lib/components';
 import { ROUTES } from '../../constants';
 import * as qs from 'query-string';
 import * as _ from 'lodash';
 import { IPermissionType } from '@adminide-stack/core';
 import { useSelector } from 'react-redux';
 import { formatDuration } from '../../services/timeRecordService';
+
+enum VIEW_MODE {
+  OPEN,
+  SUBMITTED,
+  APPROVED,
+  DENYED,
+  ALL,
+}
 interface ITimesheetProps {
   timesheets: Array<ITimesheetResponse>;
   viewMode: VIEW_MODE;

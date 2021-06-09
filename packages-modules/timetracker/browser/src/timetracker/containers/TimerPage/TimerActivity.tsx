@@ -1,11 +1,10 @@
 import React, { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import { useFela } from 'react-fela';
-import { Moment } from 'moment';
-import { moment } from './index';
+import moment, { Moment } from 'moment';
 import { PageContainer } from '@admin-layout/components';
 import PageHeader from '../../components/PageHeader';
-import { TimerSearchComponent } from '../../components/TimerSearchComponent/index';
+import { TimerSearchComponent } from '../../components/TimerSearchComponent';
 import { TimeTracker } from '../../components/TimeTracker';
 import { CustomScrollbar } from '../../components/CustomScrollbar';
 import { TimerActivityItem } from '../../components/TimerActivityItem';
@@ -74,6 +73,10 @@ const renderDayDateString = (date: string, dateFormat: string) => {
   else return moment(date).format(dateFormat);
 };
 
+interface IRange {
+  startTime: Moment;
+  endTime: Moment;
+}
 interface ITimerActivityProps {
   isMobile: any;
   currentTeam: any;
@@ -84,6 +87,7 @@ interface ITimerActivityProps {
   isRecording: boolean;
   projects: Array<IProject>;
   weekStart: Moment;
+  range: IRange;
   createTimeRecord: (ITimeRecordRequest) => void;
   removeTimeRecord: (string) => void;
   updateTimeRecord: (string, ITimeRecordRequest) => void;
@@ -91,6 +95,7 @@ interface ITimerActivityProps {
   resetTimerValues: Function;
   setCurrentTimeRecord: Function;
   setIsRecording: Function;
+  setRange: Function;
 }
 
 const TimerActivity = (props: ITimerActivityProps) => {
@@ -102,6 +107,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
     isRecording,
     projects,
     weekStart,
+    range,
     currentTimeRecord,
     createTimeRecord,
     removeTimeRecord,
@@ -109,6 +115,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
     setCurrentTimeRecord,
     removePlayingTimeRecord,
     resetTimerValues,
+    setRange,
   } = props;
   const [mode, setMode] = useState(TRACKER_MODE.TRACK);
   const { timeFormat, dateFormat } = useTimeformat();
@@ -143,6 +150,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
       startTime: startTime,
       endTime: endTime,
       taskName: currentTimeRecord.taskName,
+      description: currentTimeRecord.description,
       projectId: currentTimeRecord.projectId,
       isBillable: currentTimeRecord.isBillable,
     };
@@ -166,19 +174,9 @@ const TimerActivity = (props: ITimerActivityProps) => {
     createTimeRecord(newTimeRecord);
   };
 
-  const debounceFunc = useMemo(
-    () =>
-      _.debounce((timeRecord) => {
-        updateTimeRecord(timeRecord.id, { ..._.omit(timeRecord, ['__typename', 'id']) });
-      }, 800),
-    [],
-  );
-
-  const updatePlayingTimeRecord = (timeRecord: ITimeRecord, debounce?: boolean) => {
+  const updatePlayingTimeRecord = (timeRecord: ITimeRecord) => {
     setCurrentTimeRecord(timeRecord);
-    if (debounce && currentTimeRecord.id !== undefined && currentTimeRecord.id !== '') {
-      debounceFunc(timeRecord);
-    } else if (currentTimeRecord.id !== undefined && currentTimeRecord.id !== '') {
+    if (currentTimeRecord.id !== undefined && currentTimeRecord.id !== '') {
       updateTimeRecord(timeRecord.id, { ..._.omit(timeRecord, ['__typename', 'id']) });
     }
   };
@@ -218,7 +216,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
     <div className={css(styleSheet.root as any)}>
       <PageContainer>
         <PageHeader disabledTitle={isMobile}>
-          <TimerSearchComponent weekStart={weekStart} />
+          <TimerSearchComponent weekStart={weekStart} {...range} setRange={setRange} />
         </PageHeader>
         <TutorialComponent>
           <div
@@ -251,18 +249,14 @@ const TimerActivity = (props: ITimerActivityProps) => {
                     <Spacer />
                     <Col>{renderTotalTimeByDay(currentWeekRecords(timeRecords, weekStart))}</Col>
                   </Row>
-                  {groupTimeRecords(
-                    currentWeekRecords(timeRecords, weekStart),
-                    weekStart,
-                    dateFormat,
-                  ).map((dayRecords, index) => TimeRecordGroup(dayRecords, index))}
+                  {groupTimeRecords(currentWeekRecords(timeRecords, weekStart), weekStart, dateFormat).map(
+                    (dayRecords, index) => TimeRecordGroup(dayRecords, index),
+                  )}
                 </div>
 
-                {groupTimeRecords(
-                  pastWeekRecords(timeRecords, weekStart),
-                  weekStart,
-                  dateFormat,
-                ).map((dayRecords, index) => TimeRecordGroup(dayRecords, index))}
+                {groupTimeRecords(pastWeekRecords(timeRecords, weekStart), weekStart, dateFormat).map(
+                  (dayRecords, index) => TimeRecordGroup(dayRecords, index),
+                )}
               </div>
             </CustomScrollbar>
           </div>

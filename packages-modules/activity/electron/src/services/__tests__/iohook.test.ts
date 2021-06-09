@@ -66,7 +66,7 @@ describe('keyboard events', () => {
         setTimeout(() => {
             // Make sure ioHook starts before anything gets typed
             for (const char of chars) {
-                robot.keyTap(char.value);
+                // robot.keyTap(char.value);
             }
         }, 5);
     });
@@ -98,9 +98,9 @@ describe('keyboard events', () => {
 
         setTimeout(() => {
             // Make sure ioHook starts before anything gets typed
-            robot.keyToggle('shift', 'down');
-            robot.keyTap('1');
-            robot.keyToggle('shift', 'up');
+            // robot.keyToggle('shift', 'down');
+            // robot.keyTap('1');
+            // robot.keyToggle('shift', 'up');
         }, 5);
     });
 });

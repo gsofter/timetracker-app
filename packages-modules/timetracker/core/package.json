@@ -12,7 +12,7 @@
     "watch": "npm run build:lib:watch",
     "build": "npm run build:clean && npm run build:lib",
     "build:clean": "rimraf lib",
-    "build:lib": "webpack",
+    "build:lib": "rollup -c rollup.config.js",
     "build:lib:watch": "npm run build:lib -- --watch",
     "schema:download": "./node_modules/.bin/apollo-codegen download-schema http://localhost:8080/graphql --output schema.json ",
     "schema:generate": "./node_modules/.bin/apollo-codegen generate src/browser/graphql/**/*.graphql --schema schema.json --target typescript --output src/browser/types/schema.ts"
@@ -44,11 +44,16 @@
   "dependencies": {},
   "devDependencies": {
     "@types/react-calendar-timeline": "^0.26.2",
-    "@types/react-big-calendar": "^0.30.0"
+    "@types/react-big-calendar": "^0.30.0",
+    "@rollup/plugin-graphql": "1.0.0",
+    "@rollup/plugin-image": "^2.0.6",
+    "@rollup/plugin-typescript": "^6.1.0",
+    "rollup-plugin-string": "3.0.0",
+    "rollup": "latest"
   },
   "peerDependencies": {
-    "@common-stack/client-react": ">=0.0.258",
-    "@common-stack/core": ">=0.0.258",
+    "@common-stack/client-react": ">=0.0.260",
+    "@common-stack/core": ">=0.0.260",
     "antd": "^4.5.2"
   },
   "typings": "lib/index.d.ts",
