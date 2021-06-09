@@ -47,8 +47,8 @@
     "@types/react-big-calendar": "^0.30.0"
   },
   "peerDependencies": {
-    "@common-stack/client-react": ">=0.0.260",
-    "@common-stack/core": ">=0.0.260",
+    "@common-stack/client-react": ">=0.0.261",
+    "@common-stack/core": ">=0.0.261",
     "antd": "^4.5.2"
   },
   "typings": "lib/index.d.ts",

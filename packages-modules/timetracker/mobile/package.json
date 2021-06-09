@@ -71,8 +71,8 @@
   },
   "peerDependencies": {
     "@adminide-stack/core": "*",
-    "@common-stack/client-react": ">=0.0.260",
-    "@common-stack/core": ">=0.0.260",
+    "@common-stack/client-react": ">=0.0.261",
+    "@common-stack/core": ">=0.0.261",
     "antd": "^4.5.2"
   },
   "publishConfig": {
