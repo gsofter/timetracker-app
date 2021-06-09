@@ -13,6 +13,7 @@ import {
     APP_URL,
     GA_ID,
     LOG_LEVEL,
+    AUTH0_AUTHENTICATION_CUSTOM_API_IDENTIFIER,
 } from '@env';
 
 const env = {
@@ -30,6 +31,7 @@ const env = {
     APP_URL,
     GA_ID,
     LOG_LEVEL,
+    AUTH0_AUTHENTICATION_CUSTOM_API_IDENTIFIER,
     LOCAL_GRAPHQL_URL: GRAPHQL_URL,
     '$typeof': 'null', // bug https://github.com/af/envalid/issues/150
 };
