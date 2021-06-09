@@ -35,14 +35,14 @@ if (config.isDev) {
     DevModules = MailingModule.default;
 }
 
+export const ExternalModules = new Feature<any>(PlatformModule, AuthModule, OrganizationModule);
+
 export default new Feature<any>(
     DefaultFeature,
-    PlatformModule,
-    AuthModule,
     CounterModule,
+    ExternalModules,
     ScheduleModule,
     TimeTrackerModule,
-    OrganizationModule,
     DevModules,
 );
 

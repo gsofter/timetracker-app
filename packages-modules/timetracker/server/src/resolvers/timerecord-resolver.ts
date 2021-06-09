@@ -1,6 +1,14 @@
+/* eslint-disable import/no-extraneous-dependencies */
+/* eslint-disable @typescript-eslint/ban-types */
+/* eslint-disable no-underscore-dangle */
 import * as _ from 'lodash';
+import { withFilter } from 'graphql-subscriptions';
+import { ITimeRecordPubSubEvents } from '@admin-layout/timetracker-core';
 
 export const resolver = (options) => ({
+  TimeRecord: {
+    id: (root) => root.id || root._id,
+  },
   Query: {
     getTimeRecords: (root, args, { timeRecordService, user, userContext }) => {
       options.logger.trace('(Query.getTimeRecords) args %j', args);
@@ -45,5 +53,19 @@ export const resolver = (options) => ({
       );
     },
   },
-  Subscription: {},
+  Subscription: {
+    SubscribeToTimeTracker: {
+      subscribe: withFilter(
+        () =>
+          options.pubsub.asyncIterator([
+            ITimeRecordPubSubEvents.TimeRecordCreated,
+            ITimeRecordPubSubEvents.TimeRecordUpdated,
+            ITimeRecordPubSubEvents.TimeRecordDeleted,
+          ]),
+        async (payload, variables, context: {}) =>
+          payload.SubscribeToTimeTracker.orgName === variables.orgName &&
+          payload.SubscribeToTimeTracker.userId === variables.userId,
+      ),
+    },
+  },
 });

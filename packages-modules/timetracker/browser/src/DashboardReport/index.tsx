@@ -143,6 +143,7 @@ const Report = () => {
         />
         <Reports
             range={range}
+            users={orgMembers}
             projects={filteredProjects}
             records={filteredRecords}
             setRange={setRange}

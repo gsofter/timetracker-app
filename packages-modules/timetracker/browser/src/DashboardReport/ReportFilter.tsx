@@ -248,7 +248,7 @@ export const ReportFilter = (props: IReportFilter) => {
             {
                 filterTypes.map((data, i) => (
                     <Menu.Item key={i}>
-                        <Checkbox className={css(styles.checkbox)} checked={data.selected}>{data.value}</Checkbox>
+                        <Checkbox className={css(styles.checkbox, styles.capitalize)} checked={data.selected}>{data.value}</Checkbox>
                     </Menu.Item>
                 ))
             }
@@ -312,5 +312,8 @@ const styles = {
     checkbox: () => ({
         padding: '3px 10px',
         width: '100%',
+    }),
+    capitalize: () => ({
+        textTransform: 'capitalize',
     }),
 };

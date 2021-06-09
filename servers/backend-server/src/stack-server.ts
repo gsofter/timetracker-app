@@ -1,7 +1,7 @@
 /* eslint-disable import/namespace */
 import * as http from 'http';
 import * as express from 'express';
-import { logger, logger as serverLogger } from '@cdm-logger/server';
+import { logger as serverLogger } from '@cdm-logger/server';
 import { Feature } from '@common-stack/server-core';
 import { Container, ContainerModule, interfaces } from 'inversify';
 import { ServiceBroker } from 'moleculer';

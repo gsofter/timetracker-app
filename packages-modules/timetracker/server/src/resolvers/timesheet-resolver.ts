@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 export const resolver = (options) => ({
   Query: {
     getTimesheets: (root, args, { timesheetService, userContext }) => {
@@ -32,5 +33,4 @@ export const resolver = (options) => ({
       return timesheetService.updateTimesheetStatus(userContext.orgId, args.sheetId, args.state);
     },
   },
-  Subscription: {},
 });

@@ -4,7 +4,6 @@ import ReactExport from 'react-export-excel';
 import moment, { Moment } from 'moment';
 import { useTimeformat } from '../timetracker/hooks';
 import { formatDuration, roundDuration } from '../timetracker/services/timeRecordService';
-import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -14,8 +13,8 @@ interface IExportReportAsExcel {
     start: Moment;
     end: Moment;
   };
-  records: Array<ITimeRecord>;
-  projects: Array<IProject_Output>;
+  groupBy: string;
+  groupByRecords: any;
   roundType: string;
   roundValue: number;
   rounded: boolean;
@@ -23,40 +22,32 @@ interface IExportReportAsExcel {
 }
 
 export const ExportReportAsExcel = (props: IExportReportAsExcel) => {
-  const { records, projects, calcDurationReducer, range, roundType, roundValue, rounded } = props;
+  const { groupBy, groupByRecords, calcDurationReducer, range, roundType, roundValue, rounded } = props;
   const [columns, setColumns] = useState([]);
   const [data, setData] = useState([]);
   const { timeFormat, dateFormat } = useTimeformat();
 
   useEffect(() => {
-    setColumns(['Project', 'Time(h)', 'Time(decimal)']);
-  }, []);
+    setColumns([capitalize(groupBy), 'Time(h)', 'Time(decimal)']);
+  }, [groupBy]);
 
   useEffect(() => {
     let timeData = [];
-    const projectDurArray = projects.map((project, index) => {
-      const pRecords = records.filter((record) => record.projectId === project.id);
-      const { time, time_h, time_dec } = getTotalTime(pRecords);
+    const durArray = groupByRecords.map((item) => {
+      const { time, time_h, time_dec } = getTotalTime(item.records);
       timeData.push(time);
-      return [project.name, time_h, time_dec];
+      return [item.name, time_h, time_dec];
     });
-    const unRecord = records.filter((r) => !r.projectId);
-    if (unRecord.length) {
-      const { time, time_h, time_dec } = getTotalTime(unRecord);
-      timeData.push(time);
-      projectDurArray.push(['Unknown', time_h, time_dec]);
-    }
-    projectDurArray.push([]);
+
     const duration = `${moment(range.start).format(dateFormat)} - ${moment(range.end).format(dateFormat)}`;
     const totalTime = formatDuration(
       timeData.length && timeData.reduce((accumulator, currentValue) => accumulator + currentValue),
       timeFormat,
     );
-    projectDurArray.push([`Total (${duration})`, totalTime, moment.duration(totalTime).asHours().toFixed(2)]);
-    setData(projectDurArray);
+    durArray.push([`Total (${duration})`, totalTime, moment.duration(totalTime).asHours().toFixed(2)]);
+    setData(durArray);
   }, [
-    JSON.stringify(records),
-    JSON.stringify(projects),
+    JSON.stringify(groupByRecords),
     range,
     dateFormat,
     timeFormat,
@@ -64,6 +55,11 @@ export const ExportReportAsExcel = (props: IExportReportAsExcel) => {
     roundType,
     roundValue,
   ]);
+
+  const capitalize = (word) => {
+    const lower = word.toLowerCase();
+    return word.charAt(0).toUpperCase() + lower.slice(1);
+  };
 
   const getTotalTime = (pRecords) => {
     const pTotalDur = pRecords.reduce(calcDurationReducer, 0);

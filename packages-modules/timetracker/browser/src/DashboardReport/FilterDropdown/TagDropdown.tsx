@@ -77,7 +77,7 @@ export const TagDropdown = (props: ITagDropdown) => {
     };
 
     const content = (
-        <Menu>
+        <Menu className={css(styles.menu)}>
             <Menu.Item className={css(styles.item)}>
                 <Input onChange={onChangeInput} placeholder={'Find tags...'}/>
             </Menu.Item>

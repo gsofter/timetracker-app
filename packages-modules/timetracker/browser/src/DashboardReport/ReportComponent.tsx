@@ -1,6 +1,6 @@
 import React, { useEffect, useState, useMemo, useCallback } from 'react';
 import { useFela } from 'react-fela';
-import { Switch, Table, message, Card, Dropdown, Menu, Button, Space, DatePicker, Row, Col } from 'antd';
+import { Switch, message, Card, Dropdown, Menu, Button, Space, DatePicker, Row, Col } from 'antd';
 import { CaretDownOutlined } from '@ant-design/icons';
 import moment, { Moment } from 'moment';
 import { IProject_Output, ITimeRecord } from '@admin-layout/timetracker-core';
@@ -12,6 +12,7 @@ import { ExportReportAsExcel } from './ExportReportAsExcel';
 import { ExportReportAsCSV } from './ExportReportAsCSV';
 import { ExportReportAsPDF } from './ExportReportAsPDF';
 import { calculateCost, calculateProfit } from '../utils';
+import { ReportTable } from './ReportTable';
 import * as _ from 'lodash';
 
 const { RangePicker } = DatePicker;
@@ -28,6 +29,7 @@ interface IReportsProps {
     start: Moment;
     end: Moment;
   };
+  users: any;
   projects: Array<IProject_Output>;
   records: Array<ITimeRecord>;
   setRange: Function;
@@ -42,10 +44,19 @@ enum ShowType {
   HIDE_AMOUNT = 'Hide amount',
 }
 
+export enum GroupBy {
+  USER = 'user',
+  DESCRIPTION = 'description',
+  PROJECT = 'project',
+  TAG = 'tag',
+}
+
 export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
-                                                   recordsByUserId, setRange, updateConfiguration }) => {
+                                                   recordsByUserId, setRange, updateConfiguration, users }) => {
   const [isRounded, setIsRounded] = useState(false);
   const [showType, setShowType] = useState(ShowType.SHOW_AMOUNT);
+  const [groupBy, setGroupBy] = useState(GroupBy.PROJECT);
+  const [groupByRecords, setGroupByRecords] = useState([]);
   const { roundType, roundValue, rounded, refetchRounded } = useRound();
   const { dateFormat, timeFormat } = useTimeformat();
   const { css } = useFela();
@@ -80,6 +91,50 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
     setIsRounded(rounded);
   }, [rounded]);
 
+  useEffect(() => {
+    let list = [];
+    switch (groupBy) {
+      case GroupBy.PROJECT:
+        list = _.chain(records)
+            .groupBy('projectId')
+            .map((value, key) => {
+              const name = projects?.find(p => (p.id === key))?.name || 'Unknown';
+              return ({ id: key, name, records: value });
+            })
+            .value();
+        break;
+      case GroupBy.USER:
+        list = _.chain(records)
+            .groupBy('userId')
+            .map((value, key) => {
+              const name = users?.find((u) => (u.userId === key))?.name || '(Without user)';
+              return ({ id: key, name, records: value });
+            })
+            .value();
+        break;
+      case GroupBy.DESCRIPTION:
+        list = _.chain(records)
+            .groupBy('description')
+            .map((value, key) => {
+              const name = (key && key !== 'null') ? key : '(Without description)';
+              return ({ id: key, name, records: value })
+            })
+            .value();
+        break;
+      case GroupBy.TAG:
+        list = _.chain(records)
+            .groupBy('tags')
+            .map((value, key) => {
+              return ({ id: key, name: key || '(Without tag)', records: value })
+            })
+            .value();
+        break;
+      default:
+        break;
+    }
+    setGroupByRecords(list);
+  }, [groupBy, records, projects, users]);
+
   const generateLabels = (): Array<string> => {
     const daysCnt = Math.abs(moment(range.end).diff(range.start, 'days'));
     const labels = Array(daysCnt)
@@ -108,58 +163,34 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
   };
 
   const generateProjectLabels = () => {
-    const projectLabels = projects.map((project, index) => {
-      const pRecords = records.filter((record) => record.projectId === project.id);
-      const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
+    const pLabels = groupByRecords.map((item, index) => {
+      const pTotalDur = item.records.reduce(calcDurationReducer, 0);
       const duration = rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
-      return `${project.name} - ${formatDuration(duration, timeFormat)}`;
+      return `${item.name} - ${formatDuration(duration, timeFormat)}`;
     });
-    const unRecord = records.filter((r) => !r.projectId);
-    if (unRecord.length) {
-      const unTotalDur = unRecord.reduce(calcDurationReducer, 0);
-      const unDuration = formatDuration(
-        rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur,
-        timeFormat,
-      );
-      projectLabels.push(`Unknown - ${unDuration}`);
-    }
-    return projectLabels;
+    return pLabels;
   };
 
   const generateProjectDurations = () => {
-    const projectDurArray = projects.map((project, index) => {
-      const pRecords = records.filter((record) => record.projectId === project.id);
-      const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
+    const pDurArray = groupByRecords.map((item, index) => {
+      const pTotalDur = item.records.reduce(calcDurationReducer, 0);
       return rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
     });
-    const unRecord = records.filter((r) => !r.projectId);
-    if (unRecord.length) {
-      const unTotalDur = unRecord.reduce(calcDurationReducer, 0);
-      projectDurArray.push(rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur);
-    }
-    return projectDurArray;
+    return pDurArray;
   };
 
   const getBillableDuration = (records) => {
-    const projectDurArray = projects.map((project, index) => {
-      const pRecords = records.filter((record) => record.projectId === project.id && record.isBillable);
-      const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
-      return rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
-    });
-    const unRecords = records.filter((r) => !r.projectId && r.isBillable);
-    if (unRecords.length) {
-      const unTotalDur = unRecords.reduce(calcDurationReducer, 0);
-      projectDurArray.push(rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur);
-    }
-    return projectDurArray.length && projectDurArray.reduce((accumulator, currentValue) => accumulator + currentValue);
+    const billableRecords = records.filter((record) => record.isBillable);
+    const totalDur = billableRecords.reduce(calcDurationReducer, 0);
+    return rounded ? roundDuration(totalDur, roundValue, roundType) : totalDur;
   };
 
   const generateTableColumns = () => {
     return [
       {
-        key: 'projectName',
-        dataIndex: 'projectName',
-        title: 'Project Name',
+        key: 'title',
+        dataIndex: 'title',
+        title: 'Title',
       },
       {
         key: 'duration',
@@ -173,25 +204,15 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
   };
 
   const generateDatasource = () => {
-    const projectDurArray = projects.map((project, index) => {
-      const pRecords = records.filter((record) => record.projectId === project.id);
-      const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
+    const pDuration = groupByRecords.map((item, index) => {
+      const pTotalDur = item.records.reduce(calcDurationReducer, 0);
       return {
         id: index,
-        projectName: project.name,
+        title: item.name,
         duration: rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur,
       };
     });
-    const unRecord = records.filter((r) => !r.projectId);
-    if (unRecord.length) {
-      const unTotalDur = unRecord.reduce(calcDurationReducer, 0);
-      projectDurArray.push({
-        id: projects.length,
-        projectName: 'Unknown',
-        duration: rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur,
-      });
-    }
-    return projectDurArray;
+    return pDuration;
   };
 
   const saveAsPdf = () => {
@@ -221,8 +242,8 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
         <Menu.Item onClick={saveAsPdf}>Save as PDF</Menu.Item>
         <Menu.Item>
           <ExportReportAsCSV
-            records={records}
-            projects={projects}
+            groupBy={groupBy}
+            groupByRecords={groupByRecords}
             rounded={rounded}
             roundValue={roundValue}
             roundType={roundType}
@@ -232,8 +253,8 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
         <Menu.Item>
           <ExportReportAsExcel
             range={range}
-            records={records}
-            projects={projects}
+            groupBy={groupBy}
+            groupByRecords={groupByRecords}
             rounded={rounded}
             roundValue={roundValue}
             roundType={roundType}
@@ -378,7 +399,6 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
       </div>
   );
 
-
   const panelRender = (originalPanel: React.ReactNode) => {
     return (
       <Row>
@@ -426,15 +446,13 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
         </div>
       </Card>
       <div className={css(styles.flexM)}>
-        <Card className={css(styles.tableCard)} title={'Project Table'}>
-          <Table
-            rowKey="id"
-            dataSource={generateDatasource()}
-            columns={generateTableColumns()}
-            pagination={{ defaultPageSize: 3 }}
-          />
-        </Card>
-        <Card className={css(styles.chartCard)} title={'Project Report'}>
+        <ReportTable
+            groupBy={groupBy}
+            setGroupBy={setGroupBy}
+            generateDatasource={generateDatasource}
+            generateTableColumns={generateTableColumns}
+        />
+        <Card className={css(styles.chartCard)} title={'Report'}>
           <DoughnutChart title="Reports" data={generateProjectDurations()} labels={generateProjectLabels()} />
         </Card>
       </div>
@@ -469,13 +487,6 @@ const styles = {
   roundingLabel: () => ({
     margin: '-1px 6px',
     fontWeight: 400,
-  }),
-  tableCard: () => ({
-    '@media (min-width: 800px)': {
-      width: '50%',
-      marginRight: '25px',
-    },
-    marginTop: '25px',
   }),
   chartCard: () => ({
     '@media (min-width: 800px)': {

@@ -62,7 +62,7 @@ export const TaskDropdown = (props: ITaskDropdown) => {
     };
 
     const content = (
-        <Menu>
+        <Menu className={css(styles.menu)}>
             <Menu.Item className={css(styles.item)}>
                 <Input onChange={onChangeInput} placeholder={'Find tasks...'}/>
             </Menu.Item>
