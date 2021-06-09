@@ -11,7 +11,7 @@ import TimeTrack from './TimeTrack'
 import ProjectModal from "./ProjectModal"
 import {
   ITimeRecordRequest,
-} from '@admin-layout/timetracker-core';
+} from '@admin-layout/timetracker-core/src/interfaces/generated-models';
 
 var radio_props = [
   { label: 'Manual', value: 0 },
@@ -25,8 +25,6 @@ const TimerFooter = ({
   manual,
   track,
   toggleBillable,
-  toggleProject,
-  isToggle,
   setAddManual,
   setTimeRecord,
   timeRecord,
@@ -95,7 +93,7 @@ const TimerFooter = ({
                 <Icon style={{ color: '#62b1f6' }} name='add-circle-outline' />
                 <Text style={{ color: '#62b1f6' }}>Projects</Text>
               </Button>
-              <ProjectModal projectsData={projectsData} setModalVisible={setModalVisible} modalVisible={modalVisible}/>
+              <ProjectModal plData={plData} updateTimeRecord={updateTimeRecord} timeRecord={timeRecord} setTimeRecord={setTimeRecord} projectsData={projectsData} setModalVisible={setModalVisible} modalVisible={modalVisible}/>
             </View>
           </View>
           {track && (
@@ -114,10 +112,13 @@ const TimerFooter = ({
               toggleBillable={toggleBillable}
               billable={billable}
               handleStartTimer={handleStartTimer}
+              updateTimeRecord={updateTimeRecord}
               updatePlayingTimeRecord={updatePlayingTimeRecord}
               setTimeRecord={setTimeRecord}
               setTag={setTag}
               tag={tag}
+              plData={plData}
+              timeRecord={timeRecord}
             />
           )}
         </View>

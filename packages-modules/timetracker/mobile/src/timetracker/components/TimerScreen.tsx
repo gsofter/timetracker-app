@@ -1,6 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState } from 'react';
 import moment from 'moment';
-import { StyleSheet, View, ScrollView, Platform } from 'react-native';
+import { StyleSheet, View, ScrollView, Platform, Text } from 'react-native';
 //import KeyboardSpacer from 'react-native-keyboard-spacer';
 
 import TimerFooter from './TimerFooter';
@@ -9,13 +9,14 @@ import TimeList from "./TimeList"
 import {
   ITimeRecordRequest,
   ITimeRecord
-} from '@admin-layout/timetracker-core';
+} from '@admin-layout/timetracker-core/src/interfaces/generated-models';
 import {
   useCreateTimeRecordMutation,
   useGetPlayingTimeRecordQuery,
   useGetDurationTimeRecordsQuery,
   useUpdateTimeRecordMutation,
-  useGetProjectsQuery
+  useGetProjectsQuery,
+  useRemoveTimeRecordMutation
 } from '../../generated-models';
 import { useSelector } from 'react-redux';
 
@@ -29,6 +30,7 @@ const TimerScreen = () => {
   const [addManual, setAddManual] = useState(false);
   const [timeRecord, setTimeRecord] = useState<ITimeRecord>({
     id: '',
+    description: '',
     userId: '',
     taskName: '',
     tags: [],
@@ -41,9 +43,11 @@ const TimerScreen = () => {
   const [selectedEndDate, setSelectedEndDate] = useState<any>(moment().add(5, 'd').format('MM-DD-YYYY'));
   const [createMutation] = useCreateTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
+  const [removeMutation] = useRemoveTimeRecordMutation();
+  const [range, setRange] = useState({ startTime: moment().startOf('week'), endTime: moment().endOf('week') });
   const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
   const { data, error, refetch, loading } = useGetDurationTimeRecordsQuery({
-    variables: { userId: userId, startTime: timeRecord.startTime, endTime: timeRecord.endTime },
+    variables: { userId: userId, startTime: range.startTime, endTime: range.endTime },
   });
   const { data: plData, refetch: plRefetch, loading: plLoading } = useGetPlayingTimeRecordQuery();
 
@@ -58,15 +62,21 @@ const TimerScreen = () => {
   const onDateChange = (date: any, type: any) => {
     const Date = moment(date).format('MM-DD-YYYY')
     if (type === 'END_DATE') {
+      setRange(ps => ({ ...ps, endTime: date }))
+      refetch()
       setSelectedEndDate(Date);
     } else {
+      setRange(ps => ({ ...ps, startTime: date }))
+      refetch()
       setSelectedStartDate(Date);
     }
   };
 
   const onReset = () => {
-    setSelectedEndDate(moment().format('MM-DD-YYYY'));
-    setSelectedStartDate(moment().add(5, 'd').format('MM-DD-YYYY'));
+    setRange({ startTime: moment().startOf('week'), endTime: moment().endOf('week') })
+    refetch()
+    setSelectedStartDate(moment().format('MM-DD-YYYY'));
+    setSelectedEndDate(moment().add(5, 'd').format('MM-DD-YYYY'));
   };
 
   const onTrack = () => {
@@ -103,6 +113,17 @@ const TimerScreen = () => {
       });
   };
 
+  const removeTimeRecord = (recordId: string) => {
+    removeMutation({ variables: { recordId } })
+      .then(() => {
+        alert('TimeRecord Removed');
+        refetch();
+      })
+      .catch((error) => {
+        console.log(error.message);
+      });
+  };
+
   return (
     <View style={styles.container}>
       <ScrollView>
@@ -112,8 +133,17 @@ const TimerScreen = () => {
           onDateChange={onDateChange}
           onReset={onReset}
         />
-        {data && data.getDurationTimeRecords.length && (
-          <TimeList data={data} />
+        {data && data.getDurationTimeRecords.length ? (
+          <TimeList
+            data={data}
+            timeRecord={timeRecord}
+            setTimeRecord={setTimeRecord}
+            updateTimeRecord={updateTimeRecord}
+            removeTimeRecord={removeTimeRecord}
+            projectsData={projectsData?.getProjects}
+          />
+        ) : (
+          <Text style={{ textAlign: 'center' }}>No Data</Text>
         )}
       </ScrollView>
       <View style={{ flex: Platform.OS === 'ios' ? 1 : 0 }}>
@@ -135,7 +165,7 @@ const TimerScreen = () => {
           projectsData={projectsData}
         />
       </View>
-     {/*  {Platform.OS === 'ios' &&
+{/*       {Platform.OS === 'ios' &&
         <KeyboardSpacer />} */}
     </View>
   );

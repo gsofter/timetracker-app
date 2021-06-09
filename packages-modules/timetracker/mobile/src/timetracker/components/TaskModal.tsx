@@ -1,33 +1,15 @@
 import React, {useState} from "react";
 import {View, Text, Modal, Pressable, Alert, StyleSheet, ScrollView} from 'react-native'
-import {List, ListItem} from "native-base"
+import {List, ListItem, Input, Button, Icon} from "native-base"
 
-import {
-    ITimeRecordRequest,
-  } from '@admin-layout/timetracker-core/src/interfaces/generated-models';
-import moment from "moment";
-
-const ProjectModal = ({
+const TaskModal = ({
     setModalVisible,
     modalVisible,
-    projectsData,
-    setTimeRecord,
-    updateTimeRecord,
-    timeRecord,
-    plData
+    setTimeRecord
 }) => {
-    const [selectedId, setSelectedId] = useState('');
-
-    const updateProjectId = (projectId) => {
-        const {id, ...rest} = timeRecord;
-        const newTimeRecord: ITimeRecordRequest = {
-          ...rest,
-          projectId: projectId
-        };
-        setTimeRecord(newTimeRecord)
-        updateTimeRecord(plData.getPlayingTimeRecord.id, newTimeRecord);
-    };
-
+    const [tasks, setTasks] = useState([])
+    const [taskname, setTaskname] = useState("")
+    const [selectedTask, setSelectedTask] = useState("")
     return (
         <Modal
             animationType="slide"
@@ -40,21 +22,25 @@ const ProjectModal = ({
         >
             <View style={styles.centeredView}>
             <View style={styles.modalView}>
-                {projectsData?.getProjects.length === 0 ? (
-                    <Text>No Projects Found</Text>
-                ): 
+                <ListItem style={{flexDirection: 'row', alignItems: 'center'}}>
+                    <Input onChangeText={(value) => setTaskname(value)} placeholder={'Enter Task Name'}/>
+                    <Button bordered transparent info onPress={() => setTasks(ps => ([...ps, taskname]))}>
+                        <Icon color="white" name={'add-outline'} />
+                    </Button>
+                </ListItem>
                 <ScrollView style={{height: 150}} scrollEnabled={true}>
                     <List>
-                        {projectsData?.getProjects.map(project => (
+                        {tasks && tasks?.map(task => (
                             <ListItem onPress={() => {
-                                updateProjectId(project.id)
-                                setSelectedId(project.id)
+                                setTimeRecord(ps => ({...ps, taskName: task}))
+                                setSelectedTask(task)
                             }}>
-                                <Text style={selectedId === project.id && styles.selected}>{project.name}</Text>
+                                <Text style={selectedTask === task && styles.selected}>{task}</Text>
                             </ListItem>
                         ))}
+                        {!tasks.length && <ListItem>No task</ListItem>}
                     </List>
-                </ScrollView>}
+                </ScrollView>
                 <Pressable
                     style={[styles.button, styles.buttonClose]}
                     onPress={() => setModalVisible(!modalVisible)}
@@ -133,4 +119,4 @@ const styles = StyleSheet.create({
     }
 })
 
-export default ProjectModal
+export default TaskModal
