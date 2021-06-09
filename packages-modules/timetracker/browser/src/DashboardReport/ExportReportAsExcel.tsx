@@ -4,6 +4,7 @@ import ReactExport from 'react-export-excel';
 import moment, { Moment } from 'moment';
 import { useTimeformat } from '../timetracker/hooks';
 import { formatDuration, roundDuration } from '../timetracker/services/timeRecordService';
+import { capitalize } from '../utils';
 
 const ExcelFile = ReactExport.ExcelFile;
 const ExcelSheet = ReactExport.ExcelFile.ExcelSheet;
@@ -55,11 +56,6 @@ export const ExportReportAsExcel = (props: IExportReportAsExcel) => {
     roundType,
     roundValue,
   ]);
-
-  const capitalize = (word) => {
-    const lower = word.toLowerCase();
-    return word.charAt(0).toUpperCase() + lower.slice(1);
-  };
 
   const getTotalTime = (pRecords) => {
     const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
