@@ -1,10 +1,14 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import { generatePath, useHistory, useParams } from 'react-router-dom';
 import { useFela } from 'react-fela';
 import { Card } from 'antd';
+import * as qs from 'query-string';
+import moment from 'moment';
 import { capitalize } from '../../utils';
 import { useGetOrganizationMembersQuery, useGetTimesheetsQuery } from '../../generated-models';
 import { TimesheetTable } from './TimesheetTable';
+import { ROUTES } from '../../timetracker/constants';
 import * as _ from 'lodash';
 
 enum VIEW_MODE {
@@ -25,14 +29,24 @@ export const Timesheet = () => {
     const [tabKey, setTabKey] = useState(VIEW_MODE.OPENED);
     const [timesheetData, setTimesheetData] = useState([]);
     const [filteredTimesheet, setFilteredTimesheet] = useState([]);
+    const history = useHistory();
+    const { orgName } = useParams();
     const { css } = useFela();
 
-    const { data, loading } = useGetTimesheetsQuery({ variables: { withTotalHours: true } });
+    const { data, loading } = useGetTimesheetsQuery({
+        variables: {
+            withTotalHours: true,
+        },
+        fetchPolicy: 'no-cache',
+    });
     const { data: membersData, loading: loadingMembers } = useGetOrganizationMembersQuery();
 
     useEffect(() => {
         if (data) {
-            setTimesheetData(data.getTimesheets?.reverse());
+            const tempData = data.getTimesheets?.reverse().filter((timesheet) => {
+               return moment().subtract(2, 'weeks') < moment(timesheet.startDate);
+            });
+            setTimesheetData(tempData);
         }
     }, [data]);
 
@@ -61,6 +75,17 @@ export const Timesheet = () => {
         setTabKey(key);
     };
 
+    const gotoTimesheetPage = () => {
+        history.push({
+            pathname: generatePath(ROUTES.Timesheet, { orgName }),
+            search: qs.stringify({
+                view: 'tabular',
+                weekStart: moment().format('YYYY-MM-DD'),
+                strict: 'true',
+            }),
+        });
+    }
+
     const tabList = [
         { key: VIEW_MODE.OPENED, tab: capitalize(VIEW_MODE.OPENED) },
         { key: VIEW_MODE.SUBMITTED, tab: capitalize(VIEW_MODE.SUBMITTED) },
@@ -76,7 +101,7 @@ export const Timesheet = () => {
     return (
         <Card
             className={css(styles.card)}
-            title={'Timesheet'}
+            title={'Timesheet(Last 2 week status)'}
             tabList={tabList}
             activeTabKey={tabKey}
             onTabChange={onTabChange}
@@ -85,6 +110,7 @@ export const Timesheet = () => {
                 timeSheets={filteredTimesheet}
                 members={_.get(membersData, 'getOrganizationMembers', [])}
             />
+            <a onClick={gotoTimesheetPage}>Check more...</a>
         </Card>
     );
 };
