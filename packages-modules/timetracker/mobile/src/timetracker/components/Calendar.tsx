@@ -7,20 +7,6 @@ import { useGetDurationTimeRecordsQuery } from '../../generated-models';
 
 import TabularScreen from "./TabularScreen"
 
-const allEvents = [
-    {
-        endTime: "2021-05-25T12:40:49.682Z",
-        id: "60aceb9ffedb6a08eb36a951",
-        isBillable: false,
-        projectId: "",
-        startTime: "2021-05-25T12:10:58.721Z",
-        tags: [],
-        taskName: "Test Task",
-        timesheetId: null,
-        userId: "google-oauth2|104797814715925535941"
-    }
-]
-
 const CalendarScreen = () => {
     const [isEnabled, setIsEnabled] = useState(true)
     const [weekStart] = useState(moment().clone().startOf('week'))
