@@ -1,5 +1,6 @@
+/* eslint-disable import/no-extraneous-dependencies */
 import { Schema, Model, Document, Connection } from 'mongoose';
-import { ITimesheet } from '@admin-layout/schedule-module-core';
+import { ITimesheet } from '@admin-layout/timetracker-core';
 export interface ITimesheetModel extends ITimesheet, Document {
   id: any;
 }

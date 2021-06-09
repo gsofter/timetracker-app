@@ -1,22 +1,34 @@
 import React, { useState } from 'react';
 import { Card, Typography } from 'antd';
+import { TagOutlined } from '@ant-design/icons';
+import { useFela } from 'react-fela';
+import { styleSheet } from './style';
+import { dailyLog } from '../..';
+import { msToHMS } from '../../../../../utils';
 
-const DailyRecord: React.FC = () => {
+interface DailyRecordProps {
+  record: dailyLog;
+}
+
+const DailyRecord: React.FC<DailyRecordProps> = (props: DailyRecordProps) => {
   const { Text } = Typography;
+  const { css } = useFela();
+  const { record } = props;
+
   return (
-    <div>
+    <div className={css(styleSheet.dailyRecord)}>
       <div className="header">
-        <Text>Sat 13, Feb'21</Text>
-        <Text>0:05:07</Text>
+        <Text disabled>{record.dates}</Text>
+        <Text disabled>{msToHMS(record.duration)}</Text>
       </div>
       <div className="body">
         <div className="price">
-          <Text>Test</Text>
-          <Text>$</Text>
+          <Text style={{ color: 'green', fontWeight: 'bold' }}>{record.title}</Text>
+          <Text style={{ color: 'green', fontWeight: 'bold' }}>$ <TagOutlined style={{ fontSize: '14px' }} /></Text>
         </div>
         <div className="description">
-          <Text>(No description)</Text>
-          <Text>0:05:00</Text>
+          <Text disabled>{record.description}</Text>
+          <Text>{msToHMS(record.duration)}</Text>
         </div>
       </div>
     </div>

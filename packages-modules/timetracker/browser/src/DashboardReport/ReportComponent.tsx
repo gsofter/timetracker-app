@@ -180,17 +180,9 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
   };
 
   const getBillableDuration = (records) => {
-    const projectDurArray = projects.map((project, index) => {
-      const pRecords = records.filter((record) => record.projectId === project.id && record.isBillable);
-      const pTotalDur = pRecords.reduce(calcDurationReducer, 0);
-      return rounded ? roundDuration(pTotalDur, roundValue, roundType) : pTotalDur;
-    });
-    const unRecords = records.filter((r) => !r.projectId && r.isBillable);
-    if (unRecords.length) {
-      const unTotalDur = unRecords.reduce(calcDurationReducer, 0);
-      projectDurArray.push(rounded ? roundDuration(unTotalDur, roundValue, roundType) : unTotalDur);
-    }
-    return projectDurArray.length && projectDurArray.reduce((accumulator, currentValue) => accumulator + currentValue);
+    const billableRecords = records.filter((record) => record.isBillable);
+    const totalDur = billableRecords.reduce(calcDurationReducer, 0);
+    return rounded ? roundDuration(totalDur, roundValue, roundType) : totalDur;
   };
 
   const generateTableColumns = () => {
@@ -250,8 +242,8 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
         <Menu.Item onClick={saveAsPdf}>Save as PDF</Menu.Item>
         <Menu.Item>
           <ExportReportAsCSV
-            records={records}
-            projects={projects}
+            groupBy={groupBy}
+            groupByRecords={groupByRecords}
             rounded={rounded}
             roundValue={roundValue}
             roundType={roundType}
@@ -261,8 +253,8 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
         <Menu.Item>
           <ExportReportAsExcel
             range={range}
-            records={records}
-            projects={projects}
+            groupBy={groupBy}
+            groupByRecords={groupByRecords}
             rounded={rounded}
             roundValue={roundValue}
             roundType={roundType}

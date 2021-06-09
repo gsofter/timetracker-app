@@ -1,3 +1,3 @@
-mutation RemoveTimeRecord($recordId: String) {
+mutation RemoveTimeRecord($recordId: String!) {
   removeTimeRecord(recordId: $recordId)
 }

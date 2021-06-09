@@ -4,6 +4,7 @@ import { filteredRoutes } from './compute';
 import { RegisterContribution } from './register-contribution';
 import Report from '../DashboardReport';
 import { DashboardFill } from '@adminide-stack/platform-browser/lib/components';
+import { dataIdFromObject } from '@admin-layout/timetracker-core';
 
 const ReportProvider = () => {
   return (
@@ -15,6 +16,7 @@ const ReportProvider = () => {
 
 export default new Feature({
   routeConfig: filteredRoutes,
+  dataIdFromObject: dataIdFromObject,
   clientStateParams: {
     // resolvers,
     // defaults

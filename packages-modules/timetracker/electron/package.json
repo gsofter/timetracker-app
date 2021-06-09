@@ -41,8 +41,7 @@
     }
   },
   "dependencies": {
-    "@admin-layout/timetracker-core": "link:../core",
-    "@admin-layout/timetracker-module-browser": "link:../browser"
+    "@admin-layout/timetracker-core": "link:../core"
   },
   "devDependencies": {
     "@open-wc/building-rollup": "^1.10.0",
