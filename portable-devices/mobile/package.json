@@ -29,7 +29,7 @@
     "@admin-layout/timetracker-module-mobile": "link:../../packages-modules/timetracker/mobile",
     "@ant-design/react-native": "^4.0.7",
     "@adminide-stack/account-api-mobile": "0.0.20-alpha.79",
-    "@adminide-stack/platform-mobile": "0.0.20-alpha.81",
+    "@adminide-stack/platform-mobile": "0.0.20-alpha.89",
     "@cdm-logger/client": "^5.0.7",
     "@codler/react-native-keyboard-aware-scroll-view": "1.0.0",
     "@common-stack/client-core": "^0.0.260",
