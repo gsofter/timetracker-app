@@ -132,7 +132,7 @@ generates:
       - typescript-operations
       - typescript-react-apollo
       - typescript-resolvers
-  packages-modules/timetracker/browser/src/generated-models.tsx:
+  packages-modules/timetracker/core/src/generated/react-hooks.ts:
     schema:
       - packages/adminide-core/src/core-schema.graphql
       - packages-modules/timetracker/browser/src/**/*.graphql
@@ -142,11 +142,11 @@ generates:
       typesPrefix: I
       withMutationFn: false
       withHOC: false
-      withComponent: true
+      withComponent: false
       withHooks: true
     preset: import-types-preset
     presetConfig:
-      typesPath: '@admin-layout/timetracker-core'
+      typesPath: '../interfaces'
       importTypesNamespace: SchemaTypes
     plugins:
       - add: |

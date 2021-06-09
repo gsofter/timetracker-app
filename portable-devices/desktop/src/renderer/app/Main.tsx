@@ -66,18 +66,16 @@ export class Main extends React.Component<{}, {}> {
                         <ProvideAuth>
                             <ApolloProvider client={client}>
                                 <InversifyProvider container={container} modules={modules}>
-                                    <Lifecycle setPhaseReady>
-                                        <RendererProvider renderer={renderer}>
-                                            <PersistGate persistor={persistor}>
-                                                <PluginArea />
-                                                {modules.getWrappedRoot(
-                                                    <ConnectedRouter history={history}>
-                                                        <MainRoute />
-                                                    </ConnectedRouter>,
-                                                )}
-                                            </PersistGate>
-                                        </RendererProvider>
-                                    </Lifecycle>
+                                    <RendererProvider renderer={renderer}>
+                                        <PersistGate persistor={persistor}>
+                                            <PluginArea />
+                                            {modules.getWrappedRoot(
+                                                <ConnectedRouter history={history}>
+                                                    <MainRoute />
+                                                </ConnectedRouter>,
+                                            )}
+                                        </PersistGate>
+                                    </RendererProvider>
                                 </InversifyProvider>
                             </ApolloProvider>
                         </ProvideAuth>

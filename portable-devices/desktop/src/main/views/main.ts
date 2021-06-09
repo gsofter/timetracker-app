@@ -69,14 +69,9 @@ export class MainWindow {
             const expiresAt = JSON.stringify(hashObj.expires_in * 1000 + new Date().getTime());
 
             setLocalStorage('access_token', hashObj.access_token, () => {
-                console.log('FINISH ACCESS TOKEN 11111111111');
                 setLocalStorage('id_token', hashObj.id_token, () => {
-                    console.log('FINISH ACCESS TOKEN 222222222222');
                     setLocalStorage('expires_at', expiresAt, () => {
-                        console.log('FINISH ACCESS TOKEN 333333333333');
-                        console.log('--Loaded Storage');
                         this.window.reload();
-                        console.log('---COMPLETED RELOAD');
                     });
                 });
             });

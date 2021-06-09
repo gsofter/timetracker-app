@@ -2337,6 +2337,7 @@ export type ITimeRecord = {
 export const enum ITimeRecordPubSubEvents {
   TimeRecordCreated = 'TimeRecordCreated',
   TimeRecordUpdated = 'TimeRecordUpdated',
+  TimeRecordStopped = 'TimeRecordStopped',
   TimeRecordDeleted = 'TimeRecordDeleted',
   TimeRecordConfigurationUpdate = 'TimeRecordConfigurationUpdate'
 };
