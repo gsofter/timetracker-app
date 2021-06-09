@@ -54,12 +54,12 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
+  const [description, setDescription] = useState(currentTimeRecord.description ?? '');
   const [taskName, setTaskName] = useState(currentTimeRecord.taskName ?? '');
-
   const debouncedFunc = useMemo(
     () =>
       _.debounce((value) => {
-        updatePlayingTimeRecord({ ...currentTimeRecord, taskName: value });
+        updatePlayingTimeRecord({ ...currentTimeRecord, taskName: value, description: value });
       }, 800),
     [currentTimeRecord],
   );
@@ -73,11 +73,20 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
     [debouncedFunc],
   );
 
+  const handleDescriptionTask = useCallback(
+    (e) => {
+      e.persist();
+      setDescription(e.target.value);
+      debouncedFunc(e.target.value);
+    },
+    [debouncedFunc],
+  );
+
   const handleSelectProject = (projectId) => {
     updatePlayingTimeRecord({ ...currentTimeRecord, projectId: projectId });
   };
 
-  const handleChangeBillable = (event) => {
+  const handleChangeBillable = () => {
     updatePlayingTimeRecord({ ...currentTimeRecord, isBillable: !currentTimeRecord.isBillable });
   };
 
@@ -115,6 +124,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
       endTime: manualEnd,
       isBillable: currentTimeRecord.isBillable,
       taskName: currentTimeRecord.taskName,
+      description: currentTimeRecord.description,
       projectId: currentTimeRecord.projectId,
     };
     createTimeRecord(newRecordReq);
@@ -165,7 +175,12 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
         <Col span={24} xxl={12} className="input">
           <Row style={{ width: '100%' }}>
             <Col span={18} className="flex-center">
-              <Input placeholder="What are you working on?" size="large" value={taskName} onChange={handleChangeTask} />
+              <Input
+                placeholder="What are you working on?"
+                size="large"
+                value={description}
+                onChange={handleDescriptionTask}
+              />
             </Col>
             <Col span={6} className="flex-center project-selection">
               <Dropdown overlay={projectDropdownMenus} trigger={['click']}>

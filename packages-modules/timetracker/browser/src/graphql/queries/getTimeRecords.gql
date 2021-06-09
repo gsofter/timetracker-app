@@ -4,6 +4,7 @@ query GetTimeRecords($userId: String) {
     startTime
     endTime
     taskName
+    description
     tags
     projectId
     isBillable

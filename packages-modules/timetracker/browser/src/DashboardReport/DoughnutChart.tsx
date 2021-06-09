@@ -29,7 +29,7 @@ Chart.helpers.extend(Chart.controllers.doughnut.prototype, {
     ctx.textBaseline = 'bottom';
 
     const text = chart.config.data.text || '',
-        textX = Math.round((width - ctx.measureText(text).width) / 3),
+        textX = Math.round((width - ctx.measureText(text).width) / 2),
         textY = height / 2;
 
     ctx.fillText(text, textX, textY);
@@ -74,7 +74,7 @@ export const DoughnutChart = ({ data, labels, title }) => {
     },
     cutoutPercentage: 70,
     legend: {
-      position: 'right',
+      position: 'bottom',
       labels: {
         boxWidth: 15,
       },

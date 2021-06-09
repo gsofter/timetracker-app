@@ -16,13 +16,14 @@ interface WidgetMaximizedProps {
   onMinimize: () => void;
   trackStarted: boolean;
   hidden: boolean;
+  timeDuration: string;
 }
 
 const WidgetMaximized: React.FC<WidgetMaximizedProps> = (props: WidgetMaximizedProps) => {
   const { css } = useFela();
   const { Text } = Typography;
   const { Option } = Select;
-  const { onTrack, onMinimize, trackStarted, hidden } = props;
+  const { onTrack, onMinimize, trackStarted, hidden, timeDuration } = props;
   const [expanded, setExpanded] = useState<boolean>(true);
 
   return (
@@ -45,7 +46,7 @@ const WidgetMaximized: React.FC<WidgetMaximizedProps> = (props: WidgetMaximizedP
           onClick={onTrack}
           style={{ marginRight: '30px' }}
         />
-        <Text className="timer-text">00:00:50</Text>
+        <Text className="timer-text">{timeDuration}</Text>
       </div>
       <div className={css(styleSheet.filters)} hidden={!expanded}>
         <Select className="select-project" placeholder="Select a project">

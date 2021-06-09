@@ -11,7 +11,7 @@ interface IBillableCheck {
 export default function BillableCheck(props: IBillableCheck) {
   const { onChange, checked, disabled } = props;
   const { css } = useFela({ checked });
-  const handleChange = () => {
+  const handleChange = (e?: any) => {
     if (!disabled) onChange();
   };
   return (

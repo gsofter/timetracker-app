@@ -44,7 +44,12 @@
     "@admin-layout/components": "link:../../../packages/components",
     "@admin-layout/react-shared-components": "link:../../../packages/react-shared-components",
     "@admin-layout/timetracker-core": "link:../core",
+    "@adminide-stack/account-api-client": "0.0.20-alpha.89",
+    "@adminide-stack/platform-client": "0.0.20-alpha.89",
     "chart.js": "^2.9.4",
+    "html2canvas": "^1.0.0-rc.7",
+    "jspdf": "^2.3.1",
+    "jspdf-html2canvas": "^1.4.9",
     "moment-duration-format": "^2.3.2",
     "react-chartjs-2": "^2.11.1",
     "react-compound-timer": "^1.2.0",
@@ -58,10 +63,7 @@
     "socket.io-client": "2.2.0",
     "store": "^2.0.12",
     "uuidv4": "6.2.3",
-    "yup": "0.27.0",
-    "html2canvas": "^1.0.0-rc.7",
-    "jspdf": "^2.3.1",
-    "jspdf-html2canvas": "^1.4.9"
+    "yup": "0.27.0"
   },
   "devDependencies": {
     "@open-wc/building-rollup": "^1.10.0",

@@ -1,5 +1,5 @@
 import React from 'react';
-import { useSetting } from '@adminide-stack/react-shared-components';
+import { useSetting } from '@adminide-stack/platform-browser/lib/components';
 
 const getQuoteWrappedString = (str: string) => {
   const startId = str.indexOf('"')

@@ -1,3 +1,4 @@
+/* eslint-disable no-underscore-dangle */
 export const resolver = (options) => ({
   Query: {
     getTimesheets: (root, args, { timesheetService, userContext }) => {
@@ -14,34 +15,22 @@ export const resolver = (options) => ({
   Mutation: {
     createTimesheet: (root, args, { timesheetService, user, userContext }) => {
       options.logger.trace('(Mutation.createTimesheet) args %j', args);
-      return timesheetService.createTimesheet(
-        user._id || user.sub,
-        userContext.orgId,
-        args.request,
-      );
+      return timesheetService.createTimesheet(user._id || user.sub, userContext.orgId, args.request);
     },
     updateTimesheet: (root, args, { timesheetService, user, userContext }) => {
       options.logger.trace('(Mutation.updateTimesheet) args %j', args);
-      return timesheetService.updateTimesheet(
-        user._id || user.sub,
-        userContext.orgId,
-        args.sheetId,
-        args.request,
-        { ...userContext, username: user.name },
-      );
+      return timesheetService.updateTimesheet(user._id || user.sub, userContext.orgId, args.sheetId, args.request, {
+        ...userContext,
+        username: user.name,
+      });
     },
     removeTimesheet: (root, args, { timesheetService, user, userContext }) => {
       options.logger.trace('(Mutation.removeTimesheet) args %j', args);
-      return timesheetService.removeTimesheet(
-        user._id || user.sub,
-        userContext.orgId,
-        args.sheetId,
-      );
+      return timesheetService.removeTimesheet(user._id || user.sub, userContext.orgId, args.sheetId);
     },
     updateTimesheetStatus: (root, args, { timesheetService, user, userContext }) => {
       options.logger.trace('(Mutation.updateTimesheetStatus) args %j', args);
       return timesheetService.updateTimesheetStatus(userContext.orgId, args.sheetId, args.state);
     },
   },
-  Subscription: {},
 });
