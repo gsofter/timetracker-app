@@ -117,6 +117,7 @@ const TimeTrackerWrapper = (props) => {
       isBillable: false,
       projectId: '',
       taskName: '',
+      description: '',
     });
     setTime(0);
     reset();
@@ -164,6 +165,7 @@ const TimeTrackerWrapper = (props) => {
     description: '',
     projectId: '',
     taskName: '',
+    description: '',
   });
   const [isRecording, setIsRecording] = useState(false);
   useEffect(() => {
