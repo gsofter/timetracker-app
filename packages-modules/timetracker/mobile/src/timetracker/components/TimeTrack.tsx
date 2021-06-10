@@ -1,7 +1,12 @@
-import React from 'react';
+import React, { useState } from 'react';
 import { Col, Button, Icon, Row } from 'native-base';
-import { Text, StyleSheet } from 'react-native';
+import { Text, StyleSheet, TouchableHighlight } from 'react-native';
 import { Stopwatch } from 'react-native-stopwatch-timer';
+
+import TagModal from "./TagModal"
+import {
+    ITimeRecordRequest
+} from '@admin-layout/timetracker-core/src/interfaces/generated-models';
 
 const TimeTrack = ({
     stopwatchStart,
@@ -19,17 +24,57 @@ const TimeTrack = ({
     billable,
     handleStartTimer,
     updatePlayingTimeRecord,
-    setTimeRecord
+    setTimeRecord,
+    tag,
+    setTag,
+    timeRecord,
+    plData,
+    updateTimeRecord
 }: any) => {
+    const [modalVisible, setModalVisible] = useState(false);
+    const [tagName, setTagName] = useState(null)
+    const [reset, setReset] = useState(false)
+
+    const addTag = () => {
+        setTag(ps => ({ ...ps, tags: [...tag.tags, tagName], showTag: true }))
+    }
+
+    const updateTags = () => {
+        const { id, ...rest } = timeRecord;
+        const newTimeRecord: ITimeRecordRequest = {
+            ...rest,
+            tags: tag.tags
+        };
+        setTimeRecord(newTimeRecord)
+        updateTimeRecord(plData.getPlayingTimeRecord.id, newTimeRecord);
+    };
+
+    const updateBillable = (data) => {
+        const { id, ...rest } = timeRecord;
+        const newTimeRecord: ITimeRecordRequest = {
+            ...rest,
+            isBillable: data
+        };
+        setTimeRecord(newTimeRecord)
+        updateTimeRecord(plData.getPlayingTimeRecord.id, newTimeRecord);
+    };
+
     return (
         <Row style={styles.row_2}>
-            <Col style={{ width: 30 }}>
-                <Icon name="pricetag-outline" style={styles.icon_tag} />
+            <Col>
+                <TouchableHighlight style={styles.icon_press} underlayColor='#eff0f1' onPress={() => setModalVisible(true)}>
+                    <Icon name="pricetag-outline" style={styles.icon_tag} />
+                </TouchableHighlight>
             </Col>
-            <Col style={{ width: 15 }}>
+            <Col style={{ width: 30 }}>
                 <Icon
                     onPress={() => {
                         toggleBillable()
+                        if (billable) {
+                            updateBillable(false)
+                        } else {
+                            updateBillable(true)
+                        }
                         setTimeRecord(ps => ({ ...ps, isBillable: billable }))
                     }}
                     type="FontAwesome"
@@ -40,7 +85,8 @@ const TimeTrack = ({
             <Col>
                 <Stopwatch laps start={stopwatchStart}
                     options={option}
-                    getTime={getFormattedTime} />
+                    getTime={getFormattedTime}
+                    reset={reset} />
             </Col>
             <Col>
                 {isStart &&
@@ -58,6 +104,7 @@ const TimeTrack = ({
                         setStopWatchStart(false)
                         setIsStop(false)
                         setIsStart(true)
+                        setReset(true)
                         updatePlayingTimeRecord()
                     }}>
                         <Text style={{ color: 'white' }}>Stop</Text>
@@ -68,6 +115,14 @@ const TimeTrack = ({
                 <Icon onPress={() => onTrack()} name="time-outline" style={{ alignSelf: 'center', color: track ? '#1890ff' : 'grey' }} />
                 <Icon onPress={() => onManual()} name="list-outline" style={{ alignSelf: 'center', color: manual ? '#1890ff' : 'grey' }} />
             </Col>
+            <TagModal
+                modalVisible={modalVisible}
+                setModalVisible={setModalVisible}
+                setTagName={setTagName}
+                addTag={addTag}
+                tag={tag}
+                updateTags={updateTags}
+            />
         </Row>
     )
 }
@@ -86,6 +141,10 @@ const option = {
 };
 
 const styles = StyleSheet.create({
+    icon_press: {
+        borderRadius: 50,
+        paddingLeft: 5
+    },
     icon_tag: {
         color: 'black',
         fontSize: 18

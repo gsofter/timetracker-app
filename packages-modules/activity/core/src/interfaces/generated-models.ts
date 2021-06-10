@@ -3085,11 +3085,12 @@ export type IResolversTypes = {
   ConfigurationUpdateEvent: ResolverTypeWrapper<IConfigurationUpdateEvent>,
   ConfigurationOverrides: ResolverTypeWrapper<IConfigurationOverrides>,
   SubscribedOrganizationData: ResolverTypeWrapper<ISubscribedOrganizationData>,
+  ConfigCollectionName: IConfigCollectionName,
+  ConfigurationContributionNames: IConfigurationContributionNames,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   Time: ResolverTypeWrapper<Scalars['Time']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<IFieldError>,
-  ConfigCollectionName: IConfigCollectionName,
   ConfigFragmentName: IConfigFragmentName,
   KeyPathSegment: IKeyPathSegment,
   PreferenceItem: ResolverTypeWrapper<IPreferenceItem>,
@@ -3137,7 +3138,6 @@ export type IResolversTypes = {
   OrganizationMember: ResolverTypeWrapper<IOrganizationMember>,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
-  ConfigurationContributionNames: IConfigurationContributionNames,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -3307,11 +3307,12 @@ export type IResolversParentTypes = {
   ConfigurationUpdateEvent: IConfigurationUpdateEvent,
   ConfigurationOverrides: IConfigurationOverrides,
   SubscribedOrganizationData: ISubscribedOrganizationData,
+  ConfigCollectionName: IConfigCollectionName,
+  ConfigurationContributionNames: IConfigurationContributionNames,
   Date: Scalars['Date'],
   Time: Scalars['Time'],
   JSONObject: Scalars['JSONObject'],
   FieldError: IFieldError,
-  ConfigCollectionName: IConfigCollectionName,
   ConfigFragmentName: IConfigFragmentName,
   KeyPathSegment: IKeyPathSegment,
   PreferenceItem: IPreferenceItem,
@@ -3359,7 +3360,6 @@ export type IResolversParentTypes = {
   OrganizationMember: IOrganizationMember,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
-  ConfigurationContributionNames: IConfigurationContributionNames,
 };
 
 export type IisAuthenticatedDirectiveArgs = {  };

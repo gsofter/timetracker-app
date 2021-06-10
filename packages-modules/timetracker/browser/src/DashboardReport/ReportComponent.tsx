@@ -13,6 +13,7 @@ import { ExportReportAsCSV } from './ExportReportAsCSV';
 import { ExportReportAsPDF } from './ExportReportAsPDF';
 import { calculateCost, calculateProfit } from '../utils';
 import { ReportTable } from './ReportTable';
+import { Timesheet } from './Timesheet/Timesheet';
 import * as _ from 'lodash';
 
 const { RangePicker } = DatePicker;
@@ -456,6 +457,7 @@ export const Reports: React.FC<IReportsProps> = ({ range, projects, records,
           <DoughnutChart title="Reports" data={generateProjectDurations()} labels={generateProjectLabels()} />
         </Card>
       </div>
+      <Timesheet/>
       <ExportReportAsPDF
         range={range}
         generateBarData={generateBarData}

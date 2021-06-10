@@ -3086,6 +3086,7 @@ export type IResolversTypes = {
   ConfigurationUpdateEvent: ResolverTypeWrapper<IConfigurationUpdateEvent>,
   ConfigurationOverrides: ResolverTypeWrapper<IConfigurationOverrides>,
   SubscribedOrganizationData: ResolverTypeWrapper<ISubscribedOrganizationData>,
+  ClientCacheTypeNames: IClientCacheTypeNames,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   Time: ResolverTypeWrapper<Scalars['Time']>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
@@ -3138,7 +3139,6 @@ export type IResolversTypes = {
   OrganizationMember: ResolverTypeWrapper<IOrganizationMember>,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
-  ClientCacheTypeNames: IClientCacheTypeNames,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -3305,6 +3305,7 @@ export type IResolversParentTypes = {
   ConfigurationUpdateEvent: IConfigurationUpdateEvent,
   ConfigurationOverrides: IConfigurationOverrides,
   SubscribedOrganizationData: ISubscribedOrganizationData,
+  ClientCacheTypeNames: IClientCacheTypeNames,
   Date: Scalars['Date'],
   Time: Scalars['Time'],
   JSONObject: Scalars['JSONObject'],
@@ -3357,7 +3358,6 @@ export type IResolversParentTypes = {
   OrganizationMember: IOrganizationMember,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
-  ClientCacheTypeNames: IClientCacheTypeNames,
 };
 
 export type IisAuthenticatedDirectiveArgs = {  };

@@ -1,49 +1,45 @@
-import { GraphQLSchema } from 'graphql';
+/* eslint-disable @typescript-eslint/no-var-requires */
+/* eslint-disable global-require */
+import { GraphQLSchema, OperationDefinitionNode } from 'graphql';
 import mergeSchemas from 'graphql-tools/dist/stitching/mergeSchemas';
+import { rootSchemaDef, resolvers as rootResolver } from '@common-stack/graphql-api';
 import {
     introspectSchema,
     makeExecutableSchema,
     makeRemoteExecutableSchema,
     RenameRootFields,
-    RenameTypes, transformSchema,
+    RenameTypes,
+    transformSchema,
     addErrorLoggingToSchema,
 } from 'graphql-tools';
-const fetch =  require('node-fetch');
 import { HttpLink } from 'apollo-link-http';
-import { remoteSchemaDetails } from './remote-config';
-import { logger } from '@common-stack/server-core';
-import { IResolverOptions } from '@common-stack/server-core';
-import rootSchemaDef from './root-schema.graphqls';
-import { settings } from '../modules/module';
+import { logger, IResolverOptions } from '@common-stack/server-core';
+
 import * as ws from 'ws';
 import { getMainDefinition } from 'apollo-utilities';
 import { WebSocketLink } from 'apollo-link-ws';
-import { OperationDefinitionNode } from 'graphql';
-import { split } from 'apollo-link';
-import { resolvers as rootResolver } from './resolver';
 
+import { split } from 'apollo-link';
+import { settings } from '../modules/module';
+import { remoteSchemaDetails } from './remote-config';
+
+const fetch = require('node-fetch');
 
 export class GatewaySchemaBuilder {
-
-    constructor(private options: {schema: string | string[], resolvers, directives, logger}) {
-
-    }
+    constructor(private options: { schema: string | string[]; resolvers; directives; logger }) { }
 
     public async build(): Promise<GraphQLSchema> {
-        let schema, ownSchema;
+        let schema;
+        let ownSchema;
         try {
             ownSchema = this.createOwnSchema();
-            let remoteSchema = await this.load();
+            const remoteSchema = await this.load();
             // techSchema = this.patchSchema(techSchema, 'TechService');
 
             schema = mergeSchemas({
-                schemas: [
-                    ownSchema,
-                    remoteSchema,
-                ],
+                schemas: [ownSchema, remoteSchema],
             });
             addErrorLoggingToSchema(schema, { log: (e) => logger.error(e as Error) });
-
         } catch (err) {
             logger.error('[Graphql Schema Errors] when building schema::', err.message);
             schema = ownSchema;
@@ -71,13 +67,15 @@ export class GatewaySchemaBuilder {
             if (iteration && iteration > 2) {
                 return Promise.reject(`tried upto ${iteration} attempts, now failing...`);
             }
-            return new Promise<GraphQLSchema>(((resolve, reject) => {
+            return new Promise<GraphQLSchema>((resolve, reject) => {
                 const timeout = iteration ? 1000 * iteration : 1000;
                 logger.info('Wait for service startup %s', timeout);
                 setTimeout(() => {
-                    this.createRemoteSchema(service, iteration ? iteration + 1 : 1).then(resolve).catch(reject);
+                    this.createRemoteSchema(service, iteration ? iteration + 1 : 1)
+                        .then(resolve)
+                        .catch(reject);
                 }, timeout);
-            }));
+            });
         }
         // instead need to loop it
         // https://github.com/j-colter/graphql-gateway/blob/9c64d90a74727d2002d10b06f47e1f4a316070fc/src/schema.js#L50
@@ -94,16 +92,12 @@ export class GatewaySchemaBuilder {
             schema: remoteSchema,
             link,
         });
-
-
     }
-
 
     private async loadRemoteSchema({ uri, wsUri }) {
         try {
             const httpLink = new HttpLink({ uri, fetch });
             let link = null;
-
 
             if (wsUri) {
                 const wsLink = new WebSocketLink({
@@ -136,12 +130,14 @@ export class GatewaySchemaBuilder {
             return {};
         }
     }
+
     private patchSchema(schema: GraphQLSchema, systemName: string) {
         return transformSchema(schema, [
             new RenameTypes((name: string) => (name === 'StatusInfo' ? `${systemName}StatusInfo` : undefined)),
-            new RenameRootFields(
-                (_operation: string, name: string) =>
-                    name === 'status' ? `${systemName.substring(0, 1).toLowerCase()}${systemName.substring(1)}Status` : name,
+            new RenameRootFields((_operation: string, name: string) =>
+                name === 'status'
+                    ? `${systemName.substring(0, 1).toLowerCase()}${systemName.substring(1)}Status`
+                    : name,
             ),
         ]);
     }
@@ -149,9 +145,11 @@ export class GatewaySchemaBuilder {
     private createOwnSchema(): GraphQLSchema {
         const typeDefs = [rootSchemaDef, this.options.schema].join('\n');
         if (__DEV__) {
-           const fs =  require('fs');
-           const writeData = `${typeDefs}`;
-           fs.writeFileSync('./generated-schema.graphql', writeData);
+            const { ExternalModules } = require('../modules/module');
+            const externalSchema = ExternalModules.schemas;
+            const fs = require('fs');
+            const writeData = `${externalSchema}`;
+            fs.writeFileSync('./generated-schema.graphql', writeData);
         }
         return makeExecutableSchema({
             resolvers: [rootResolver, this.options.resolvers],
@@ -162,5 +160,4 @@ export class GatewaySchemaBuilder {
             },
         });
     }
-
 }

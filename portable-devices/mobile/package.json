@@ -23,13 +23,13 @@
     "preset": "jest-expo"
   },
   "dependencies": {
-    "@adminide-stack/user-auth0-mobile": "0.0.20-alpha.83",
+    "@adminide-stack/user-auth0-mobile": "0.0.20-alpha.88",
     "@admin-layout/components": "link:../../packages/components",
     "@admin-layout/counter-module-browser": "link:../../packages-modules/counter/browser",
     "@admin-layout/timetracker-module-mobile": "link:../../packages-modules/timetracker/mobile",
     "@ant-design/react-native": "^4.0.7",
     "@adminide-stack/account-api-mobile": "0.0.20-alpha.79",
-    "@adminide-stack/platform-mobile": "0.0.20-alpha.81",
+    "@adminide-stack/platform-mobile": "0.0.20-alpha.89",
     "@cdm-logger/client": "^5.0.7",
     "@codler/react-native-keyboard-aware-scroll-view": "1.0.0",
     "@common-stack/client-core": "^0.0.260",

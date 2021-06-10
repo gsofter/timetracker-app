@@ -65,7 +65,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const debouncedFunc = useMemo(
     () =>
       _.debounce((value) => {
-        updatePlayingTimeRecord({ ...currentTimeRecord, description: value });
+        updatePlayingTimeRecord({ ...currentTimeRecord, taskName: value, description: value });
       }, 800),
     [currentTimeRecord],
   );
@@ -120,6 +120,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
       startTime: manualStart,
       endTime: manualEnd,
       isBillable: currentTimeRecord.isBillable,
+      taskName: currentTimeRecord.taskName,
       description: currentTimeRecord.description,
       projectId: currentTimeRecord.projectId,
     };

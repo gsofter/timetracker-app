@@ -244,6 +244,12 @@ export type IClientAddRequest = {
   orgName?: Maybe<Scalars['String']>;
 };
 
+export const enum IClientCacheTypeNames {
+  TimeTracker = 'TimeTracker',
+  TimeRecord = 'TimeRecord',
+  Timesheet = 'Timesheet'
+};
+
 export type IClientPhone = {
    __typename?: 'ClientPhone';
   workPhone?: Maybe<Scalars['String']>;
@@ -1083,7 +1089,7 @@ export type IMutationremoveTeamMemberArgs = {
 
 
 export type IMutationremoveTimeRecordArgs = {
-  recordId?: Maybe<Scalars['String']>;
+  recordId: Scalars['String'];
 };
 
 
@@ -1228,7 +1234,7 @@ export type IMutationupdateScheduleEventArgs = {
 
 
 export type IMutationupdateTimeRecordArgs = {
-  recordId?: Maybe<Scalars['String']>;
+  recordId: Scalars['String'];
   request?: Maybe<ITimeRecordRequest>;
 };
 
@@ -2309,6 +2315,7 @@ export type ISubscription = {
   SubscribeToOrganizationContext?: Maybe<ISubscribedOrganizationData>;
   SubscribeToPermissionUpdate?: Maybe<IConfigurationUpdateEvent>;
   SubscribeToPolicyUpdate?: Maybe<IConfigurationUpdateEvent>;
+  SubscribeToTimeTracker?: Maybe<ISubscriptionTimeRecord>;
   /**  Subscription fired when anyone increases counter  */
   counterUpdated?: Maybe<ICounter>;
   dummy?: Maybe<Scalars['Int']>;
@@ -2333,6 +2340,18 @@ export type ISubscriptionSubscribeToPermissionUpdateArgs = {
 
 export type ISubscriptionSubscribeToPolicyUpdateArgs = {
   orgName?: Maybe<Scalars['String']>;
+};
+
+
+export type ISubscriptionSubscribeToTimeTrackerArgs = {
+  orgName?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+};
+
+export type ISubscriptionTimeRecord = {
+   __typename?: 'SubscriptionTimeRecord';
+  mutation?: Maybe<ITimeRecordPubSubEvents>;
+  timeRecord?: Maybe<ITimeRecord>;
 };
 
 export type ITag = {
@@ -2462,6 +2481,15 @@ export type ITimeRecord = {
   taskName?: Maybe<Scalars['String']>;
   timesheetId?: Maybe<Scalars['String']>;
   userId?: Maybe<Scalars['String']>;
+};
+
+/** Subscription event for timer */
+export const enum ITimeRecordPubSubEvents {
+  TimeRecordCreated = 'TimeRecordCreated',
+  TimeRecordUpdated = 'TimeRecordUpdated',
+  TimeRecordStopped = 'TimeRecordStopped',
+  TimeRecordDeleted = 'TimeRecordDeleted',
+  TimeRecordConfigurationUpdate = 'TimeRecordConfigurationUpdate'
 };
 
 export type ITimeRecordRequest = {
@@ -2811,6 +2839,11 @@ export const enum IVisibility {
   public = 'public'
 };
 
+export type ITimeRecordFragment = (
+  { __typename?: 'TimeRecord' }
+  & Pick<ITimeRecord, 'id' | 'startTime' | 'endTime' | 'taskId' | 'taskName' | 'description' | 'tags' | 'isBillable' | 'projectId' | 'clientId' | 'userId' | 'orgId' | 'timesheetId' | 'editable'>
+);
+
 export type ICreateTimeRecordMutationVariables = {
   request?: Maybe<ITimeRecordRequest>;
 };
@@ -2844,7 +2877,7 @@ export type IRemoveDurationTimeRecordsMutation = (
 );
 
 export type IRemoveTimeRecordMutationVariables = {
-  recordId?: Maybe<Scalars['String']>;
+  recordId: Scalars['String'];
 };
 
 
@@ -2864,7 +2897,7 @@ export type IRemoveTimesheetMutation = (
 );
 
 export type IUpdateTimeRecordMutationVariables = {
-  recordId?: Maybe<Scalars['String']>;
+  recordId: Scalars['String'];
   request?: Maybe<ITimeRecordRequest>;
 };
 
@@ -2996,7 +3029,42 @@ export type IGetMembersQuery = (
   )>>> }
 );
 
+export type ISubscribeToTimeTrackerSubscriptionVariables = {
+  orgName?: Maybe<Scalars['String']>;
+  userId?: Maybe<Scalars['String']>;
+};
 
+
+export type ISubscribeToTimeTrackerSubscription = (
+  { __typename?: 'Subscription' }
+  & { SubscribeToTimeTracker?: Maybe<(
+    { __typename?: 'SubscriptionTimeRecord' }
+    & Pick<ISubscriptionTimeRecord, 'mutation'>
+    & { timeRecord?: Maybe<(
+      { __typename?: 'TimeRecord' }
+      & ITimeRecordFragment
+    )> }
+  )> }
+);
+
+export const TimeRecordFragmentDoc = gql`
+    fragment TimeRecord on TimeRecord {
+  id
+  startTime
+  endTime
+  taskId
+  taskName
+  description
+  tags
+  isBillable
+  projectId
+  clientId
+  userId
+  orgId
+  timesheetId
+  editable
+}
+    `;
 export const CreateTimeRecordDocument = gql`
     mutation CreateTimeRecord($request: TimeRecordRequest) {
   createTimeRecord(request: $request)
@@ -3019,7 +3087,7 @@ export const RemoveDurationTimeRecordsDocument = gql`
 export type RemoveDurationTimeRecordsMutationResult = ApolloReactCommon.MutationResult<IRemoveDurationTimeRecordsMutation>;
 export type RemoveDurationTimeRecordsMutationOptions = ApolloReactCommon.BaseMutationOptions<IRemoveDurationTimeRecordsMutation, IRemoveDurationTimeRecordsMutationVariables>;
 export const RemoveTimeRecordDocument = gql`
-    mutation RemoveTimeRecord($recordId: String) {
+    mutation RemoveTimeRecord($recordId: String!) {
   removeTimeRecord(recordId: $recordId)
 }
     `;
@@ -3033,7 +3101,7 @@ export const RemoveTimesheetDocument = gql`
 export type RemoveTimesheetMutationResult = ApolloReactCommon.MutationResult<IRemoveTimesheetMutation>;
 export type RemoveTimesheetMutationOptions = ApolloReactCommon.BaseMutationOptions<IRemoveTimesheetMutation, IRemoveTimesheetMutationVariables>;
 export const UpdateTimeRecordDocument = gql`
-    mutation UpdateTimeRecord($recordId: String, $request: TimeRecordRequest) {
+    mutation UpdateTimeRecord($recordId: String!, $request: TimeRecordRequest) {
   updateTimeRecord(recordId: $recordId, request: $request)
 }
     `;
@@ -3168,6 +3236,17 @@ export const GetMembersDocument = gql`
 }
     `;
 export type GetMembersQueryResult = ApolloReactCommon.QueryResult<IGetMembersQuery, IGetMembersQueryVariables>;
+export const SubscribeToTimeTrackerDocument = gql`
+    subscription SubscribeToTimeTracker($orgName: String, $userId: String) {
+  SubscribeToTimeTracker(orgName: $orgName, userId: $userId) {
+    mutation
+    timeRecord {
+      ...TimeRecord
+    }
+  }
+}
+    ${TimeRecordFragmentDoc}`;
+export type SubscribeToTimeTrackerSubscriptionResult = ApolloReactCommon.SubscriptionResult<ISubscribeToTimeTrackerSubscription>;
 
 
 export type ResolverTypeWrapper<T> = Promise<T> | T;
@@ -3402,11 +3481,19 @@ export type IResolversTypes = {
   ConfigurationUpdateEvent: ResolverTypeWrapper<IConfigurationUpdateEvent>,
   ConfigurationOverrides: ResolverTypeWrapper<IConfigurationOverrides>,
   SubscribedOrganizationData: ResolverTypeWrapper<ISubscribedOrganizationData>,
+  SubscriptionTimeRecord: ResolverTypeWrapper<ISubscriptionTimeRecord>,
+  TimeRecordPubSubEvents: ITimeRecordPubSubEvents,
+  ClientCacheTypeNames: IClientCacheTypeNames,
   Date: ResolverTypeWrapper<Scalars['Date']>,
   Time: ResolverTypeWrapper<Scalars['Time']>,
+  StartYearWeekType: IStartYearWeekType,
+  Task: ResolverTypeWrapper<ITask>,
+  ConfigCollectionName: IConfigCollectionName,
+  ConfigurationContributionNames: IConfigurationContributionNames,
+  Timesheet: ResolverTypeWrapper<ITimesheet>,
+  TimeTracker: ResolverTypeWrapper<ITimeTracker>,
   JSONObject: ResolverTypeWrapper<Scalars['JSONObject']>,
   FieldError: ResolverTypeWrapper<IFieldError>,
-  ConfigCollectionName: IConfigCollectionName,
   ConfigFragmentName: IConfigFragmentName,
   KeyPathSegment: IKeyPathSegment,
   PreferenceItem: ResolverTypeWrapper<IPreferenceItem>,
@@ -3431,10 +3518,6 @@ export type IResolversTypes = {
   AuthUser_Input: IAuthUser_Input,
   UserPreviousValues: ResolverTypeWrapper<IUserPreviousValues>,
   UserOrderBy: IUserOrderBy,
-  Timesheet: ResolverTypeWrapper<ITimesheet>,
-  TimeTracker: ResolverTypeWrapper<ITimeTracker>,
-  StartYearWeekType: IStartYearWeekType,
-  Task: ResolverTypeWrapper<ITask>,
   UserAccountCreateRequest: IUserAccountCreateRequest,
   UserAccountCreatedEvent: ResolverTypeWrapper<IUserAccountCreatedEvent>,
   UserAccountCreatedDetailedEvent: ResolverTypeWrapper<IUserAccountCreatedDetailedEvent>,
@@ -3454,7 +3537,6 @@ export type IResolversTypes = {
   OrganizationMember: ResolverTypeWrapper<IOrganizationMember>,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
-  ConfigurationContributionNames: IConfigurationContributionNames,
 };
 
 /** Mapping between all available schema types and the resolvers parents */
@@ -3620,11 +3702,19 @@ export type IResolversParentTypes = {
   ConfigurationUpdateEvent: IConfigurationUpdateEvent,
   ConfigurationOverrides: IConfigurationOverrides,
   SubscribedOrganizationData: ISubscribedOrganizationData,
+  SubscriptionTimeRecord: ISubscriptionTimeRecord,
+  TimeRecordPubSubEvents: ITimeRecordPubSubEvents,
+  ClientCacheTypeNames: IClientCacheTypeNames,
   Date: Scalars['Date'],
   Time: Scalars['Time'],
+  StartYearWeekType: IStartYearWeekType,
+  Task: ITask,
+  ConfigCollectionName: IConfigCollectionName,
+  ConfigurationContributionNames: IConfigurationContributionNames,
+  Timesheet: ITimesheet,
+  TimeTracker: ITimeTracker,
   JSONObject: Scalars['JSONObject'],
   FieldError: IFieldError,
-  ConfigCollectionName: IConfigCollectionName,
   ConfigFragmentName: IConfigFragmentName,
   KeyPathSegment: IKeyPathSegment,
   PreferenceItem: IPreferenceItem,
@@ -3649,10 +3739,6 @@ export type IResolversParentTypes = {
   AuthUser_Input: IAuthUser_Input,
   UserPreviousValues: IUserPreviousValues,
   UserOrderBy: IUserOrderBy,
-  Timesheet: ITimesheet,
-  TimeTracker: ITimeTracker,
-  StartYearWeekType: IStartYearWeekType,
-  Task: ITask,
   UserAccountCreateRequest: IUserAccountCreateRequest,
   UserAccountCreatedEvent: IUserAccountCreatedEvent,
   UserAccountCreatedDetailedEvent: IUserAccountCreatedDetailedEvent,
@@ -3672,7 +3758,6 @@ export type IResolversParentTypes = {
   OrganizationMember: IOrganizationMember,
   ClientTypes: IClientTypes,
   PortalLanguage: IPortalLanguage,
-  ConfigurationContributionNames: IConfigurationContributionNames,
 };
 
 export type IisAuthenticatedDirectiveArgs = {  };
@@ -4216,7 +4301,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   removeScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveScheduleEventArgs, never>>,
   removeTeam?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTeamArgs, 'teamId'>>,
   removeTeamMember?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTeamMemberArgs, 'orgName' | 'teamName' | 'memberId'>>,
-  removeTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimeRecordArgs, never>>,
+  removeTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimeRecordArgs, 'recordId'>>,
   removeTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimelineEventArgs, never>>,
   removeTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationremoveTimesheetArgs, never>>,
   resendOrganizationInvitation?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationresendOrganizationInvitationArgs, 'id'>>,
@@ -4239,7 +4324,7 @@ export type IMutationResolvers<ContextType = any, ParentType extends IResolversP
   updateProjectStatus?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateProjectStatusArgs, 'id'>>,
   updateRoleValue?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateRoleValueArgs, 'key' | 'value'>>,
   updateScheduleEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateScheduleEventArgs, never>>,
-  updateTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimeRecordArgs, never>>,
+  updateTimeRecord?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimeRecordArgs, 'recordId'>>,
   updateTimelineEvent?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimelineEventArgs, never>>,
   updateTimesheet?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimesheetArgs, never>>,
   updateTimesheetStatus?: Resolver<Maybe<IResolversTypes['Boolean']>, ParentType, ContextType, RequireFields<IMutationupdateTimesheetStatusArgs, never>>,
@@ -4734,9 +4819,16 @@ export type ISubscriptionResolvers<ContextType = any, ParentType extends IResolv
   SubscribeToOrganizationContext?: SubscriptionResolver<Maybe<IResolversTypes['SubscribedOrganizationData']>, "SubscribeToOrganizationContext", ParentType, ContextType, RequireFields<ISubscriptionSubscribeToOrganizationContextArgs, never>>,
   SubscribeToPermissionUpdate?: SubscriptionResolver<Maybe<IResolversTypes['ConfigurationUpdateEvent']>, "SubscribeToPermissionUpdate", ParentType, ContextType, RequireFields<ISubscriptionSubscribeToPermissionUpdateArgs, never>>,
   SubscribeToPolicyUpdate?: SubscriptionResolver<Maybe<IResolversTypes['ConfigurationUpdateEvent']>, "SubscribeToPolicyUpdate", ParentType, ContextType, RequireFields<ISubscriptionSubscribeToPolicyUpdateArgs, never>>,
+  SubscribeToTimeTracker?: SubscriptionResolver<Maybe<IResolversTypes['SubscriptionTimeRecord']>, "SubscribeToTimeTracker", ParentType, ContextType, RequireFields<ISubscriptionSubscribeToTimeTrackerArgs, never>>,
   counterUpdated?: SubscriptionResolver<Maybe<IResolversTypes['Counter']>, "counterUpdated", ParentType, ContextType>,
   dummy?: SubscriptionResolver<Maybe<IResolversTypes['Int']>, "dummy", ParentType, ContextType>,
   moleculerCounterUpdate?: SubscriptionResolver<Maybe<IResolversTypes['Counter']>, "moleculerCounterUpdate", ParentType, ContextType>,
+};
+
+export type ISubscriptionTimeRecordResolvers<ContextType = any, ParentType extends IResolversParentTypes['SubscriptionTimeRecord'] = IResolversParentTypes['SubscriptionTimeRecord']> = {
+  mutation?: Resolver<Maybe<IResolversTypes['TimeRecordPubSubEvents']>, ParentType, ContextType>,
+  timeRecord?: Resolver<Maybe<IResolversTypes['TimeRecord']>, ParentType, ContextType>,
+  __isTypeOf?: isTypeOfResolverFn<ParentType>,
 };
 
 export type ITagResolvers<ContextType = any, ParentType extends IResolversParentTypes['Tag'] = IResolversParentTypes['Tag']> = {
@@ -5064,6 +5156,7 @@ export type IResolvers<ContextType = any> = {
   SocialConnect?: ISocialConnectResolvers<ContextType>,
   SubscribedOrganizationData?: ISubscribedOrganizationDataResolvers<ContextType>,
   Subscription?: ISubscriptionResolvers<ContextType>,
+  SubscriptionTimeRecord?: ISubscriptionTimeRecordResolvers<ContextType>,
   Tag?: ITagResolvers<ContextType>,
   Task?: ITaskResolvers<ContextType>,
   TeamMember?: ITeamMemberResolvers<ContextType>,
