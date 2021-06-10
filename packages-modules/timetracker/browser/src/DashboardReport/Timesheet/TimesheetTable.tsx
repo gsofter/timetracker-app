@@ -92,8 +92,8 @@ export const TimesheetTable = (props: ITimesheetTable) => {
         <Table
             rowKey="id"
             columns={columns}
-            dataSource={timeSheets.slice(0, 5)}
-            pagination={false}
+            dataSource={timeSheets}
+            pagination={{ defaultPageSize: 5 }}
             onRow={onRow}
         />
     );
