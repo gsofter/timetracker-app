@@ -16,6 +16,7 @@
     "tests:watch": "jest --watch",
     "tslint": "tslint --fix -p tsconfig.json -c ../../tslint.json",
     "watch": "cross-env NODE_ENV=development ENV_FILE=../../config/development/dev.env expo start --clear",
+    "watch:mobile": "cross-env NODE_ENV=development ENV_FILE=../../config/development/mobile.dev.env  expo start --clear",
     "watch:android": "expo start --android",
     "watch:ios": "expo start --ios"
   },
