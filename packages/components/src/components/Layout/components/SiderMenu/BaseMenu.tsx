@@ -5,7 +5,7 @@ import classNames from 'classnames';
 import useMergedState from 'rc-util/lib/hooks/useMergedState';
 import { isUrl, isImg } from '../../../../utils';
 
-import { MenuProps } from 'antd/lib/menu';
+import { MenuProps, MenuMode } from 'antd/lib/menu';
 import { MenuTheme } from 'antd/lib/menu/MenuContext';
 import defaultSettings, { PureSettings } from '../defaultSettings';
 import { getOpenKeysFromMenuData } from '../utils/utils';
@@ -16,7 +16,7 @@ import { PrivateSiderMenuProps } from './SiderMenu';
 import PageLoading from '../PageLoading';
 
 // todo
-export type MenuMode = 'vertical'| 'horizontal' | 'inline';
+// export type MenuMode = 'vertical'| 'horizontal' | 'inline';
 export interface BaseMenuProps
   extends Partial<RouterTypes<Route>>,
   Omit<MenuProps, 'openKeys' | 'onOpenChange' | 'title'>,
