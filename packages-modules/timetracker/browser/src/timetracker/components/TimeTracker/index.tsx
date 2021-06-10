@@ -1,4 +1,4 @@
-import React, { useState, useMemo, useCallback } from 'react';
+import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useFela } from 'react-fela';
 import { PlusCircleOutlined, TagOutlined, CloseOutlined, ClockCircleOutlined, BarsOutlined } from '@ant-design/icons';
 import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
@@ -28,11 +28,12 @@ export interface ITimeTracker {
   weekStart: Moment;
   disable: boolean;
   setMode: Function;
-  handleStart: () => void;
+  handleStart: (desc?: string) => void;
   handleStop: () => void;
   createTimeRecord: (ITimeRecordRequest) => void;
   removePlayingTimeRecord: Function;
   updatePlayingTimeRecord: (record: ITimeRecord, debounce?: boolean) => void;
+  setCurrentTimeRecord: Function;
 }
 
 export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
@@ -48,6 +49,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
     removePlayingTimeRecord,
     createTimeRecord,
     updatePlayingTimeRecord,
+    setCurrentTimeRecord,
   } = props;
   const { css } = useFela(props);
   const { timeFormat, dateFormat } = useTimeformat();
@@ -55,6 +57,10 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
   const [manualStart, setManualStart] = useState(moment());
   const [manualEnd, setManualEnd] = useState(moment());
   const [description, setDescription] = useState(currentTimeRecord.description ?? '');
+
+  useEffect(() => {
+    setDescription(currentTimeRecord.description);
+  }, [currentTimeRecord.description]);
 
   const debouncedFunc = useMemo(
     () =>
@@ -64,7 +70,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
     [currentTimeRecord],
   );
 
-  const handleChangeTask = useCallback(
+  const handleChangeDescription = useCallback(
     (e) => {
       e.persist();
       setDescription(e.target.value);
@@ -169,7 +175,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
                 placeholder="What are you working on?"
                 size="large"
                 value={description}
-                onChange={handleChangeTask}
+                onChange={handleChangeDescription}
               />
             </Col>
             <Col span={6} className="flex-center project-selection">
@@ -209,7 +215,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
 
                 <Col span={5} sm={5}>
                   <div className={classNames('start', { hidden: isRecording }, { 'flex-end': !isRecording })}>
-                    <Button type="primary" onClick={handleStart} disabled={disable}>
+                    <Button type="primary" onClick={() => handleStart(description)} disabled={disable}>
                       START
                     </Button>
                   </div>

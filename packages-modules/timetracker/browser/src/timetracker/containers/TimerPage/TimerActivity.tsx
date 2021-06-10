@@ -130,12 +130,13 @@ const TimerActivity = (props: ITimerActivityProps) => {
     return formatDuration(Math.floor(totalTime / 1000), timeFormat);
   };
 
-  const startTimer = () => {
+  const startTimer = (description?: string) => {
     const newTimeRecord: ITimeRecordRequest = {
       ...currentTimeRecord,
       userId,
       startTime: moment(),
       endTime: null,
+      description,
     };
     createTimeRecord(newTimeRecord);
   };
@@ -149,7 +150,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
       userId: userId,
       startTime: startTime,
       endTime: endTime,
-      taskName: currentTimeRecord.taskName,
+      description: currentTimeRecord.description,
       projectId: currentTimeRecord.projectId,
       isBillable: currentTimeRecord.isBillable,
     };
@@ -236,6 +237,7 @@ const TimerActivity = (props: ITimerActivityProps) => {
                 disable={createPermit !== IPermissionType.Allow}
                 createTimeRecord={createTimeRecord}
                 currentTimeRecord={currentTimeRecord}
+                setCurrentTimeRecord={setCurrentTimeRecord}
                 updatePlayingTimeRecord={updatePlayingTimeRecord}
                 removePlayingTimeRecord={removePlayingTimeRecord}
               />
