@@ -15,7 +15,8 @@ import momentZ from 'moment-timezone';
 import { useSelector } from 'react-redux';
 import { useTimeformat } from '../../hooks';
 import * as _ from 'lodash';
-
+const { SubMenu } = Menu;
+const { Option } = Select;
 const { RangePicker } = TimePicker;
 const { Title } = Typography;
 
@@ -137,6 +138,21 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
             onClick={() => handleSelectProject(project.id)}
           >
             {project.name}
+
+            <Button onClick={(event) => event.stopPropagation()}> Create Task </Button>
+            <Select
+              defaultValue="lucy"
+              style={{ width: 120 }}
+              onChange={() => {}}
+              onClick={(event) => event.stopPropagation()}
+            >
+              <Option value="jack">Jack</Option>
+              <Option value="lucy">Lucy</Option>
+              <Option value="disabled" disabled>
+                Disabled
+              </Option>
+              <Option value="Yiminghe">yiminghe</Option>
+            </Select>
           </Menu.Item>
         );
       })}
@@ -281,6 +297,43 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
         </Col>
       </Row>
     </div>
+  );
+};
+
+interface IProjectDropdownMenuProps {
+  projects?: IProject[];
+  handleSelectProject: Function;
+}
+const ProjectDropdownMenu: React.FC<IProjectDropdownMenuProps> = ({ projects, handleSelectProject }) => {
+  const { css } = useFela();
+  return (
+    <Menu className={css(styles.projectDown)}>
+      {projects.map((project) => {
+        return (
+          <Menu.Item key={project.id} onClick={() => handleSelectProject(project.id)}>
+            <Row>
+              <Col xs={12}>{project.name}</Col>
+              <Col xs={12}>
+                <Button onClick={(event) => event.stopPropagation()}> Create Task </Button>
+                <Select
+                  defaultValue="lucy"
+                  style={{ width: 120 }}
+                  onChange={() => {}}
+                  onClick={(event) => event.stopPropagation()}
+                >
+                  <Option value="jack">Jack</Option>
+                  <Option value="lucy">Lucy</Option>
+                  <Option value="disabled" disabled>
+                    Disabled
+                  </Option>
+                  <Option value="Yiminghe">yiminghe</Option>
+                </Select>
+              </Col>
+            </Row>
+          </Menu.Item>
+        );
+      })}
+    </Menu>
   );
 };
 
