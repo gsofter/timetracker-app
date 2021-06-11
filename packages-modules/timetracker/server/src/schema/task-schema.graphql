@@ -1,62 +1,18 @@
-type TimeRecord {
+type Task {
   id: String
-  startTime: DateTime
-  endTime: DateTime
-  taskId: String
-  taskName: String
-  description: String
-  tags: [String]
-  isBillable: Boolean
   projectId: String
-  clientId: String
-  userId: String
-  orgId: String
-  timesheetId: String
-  editable: Boolean
-}
-
-input TimeRecordRequest {
-  userId: String
-  startTime: DateTime
-  endTime: DateTime
   taskName: String
-  description: String
-  tags: [String]
-  isBillable: Boolean
+}
+
+input TaskRequest {
   projectId: String
-  clientId: String
-  timesheetId: String
-}
-
-"""
-Subscription event for timer
-"""
-enum TimeRecordPubSubEvents {
-  TimeRecordCreated
-  TimeRecordUpdated
-  TimeRecordStopped
-  TimeRecordDeleted
-  TimeRecordConfigurationUpdate
-}
-
-type SubscriptionTimeRecord {
-  mutation: TimeRecordPubSubEvents
-  timeRecord: TimeRecord
+  taskName: String
 }
 
 extend type Query {
-  getTimeRecords(userId: String): [TimeRecord] @addAccountContext
-  getDurationTimeRecords(startTime: DateTime, endTime: DateTime, userId: String): [TimeRecord] @addAccountContext
-  getPlayingTimeRecord: TimeRecord @addAccountContext
+  getTasks(projectId: String): [Task] @addAccountContext
 }
 
 extend type Mutation {
-  createTimeRecord(request: TimeRecordRequest): String @addAccountContext
-  updateTimeRecord(recordId: String!, request: TimeRecordRequest): Boolean @addAccountContext
-  removeTimeRecord(recordId: String!): Boolean @addAccountContext
-  removeDurationTimeRecords(startTime: DateTime, endTime: DateTime, projectId: String): Boolean @addAccountContext
-}
-
-extend type Subscription {
-  SubscribeToTimeTracker(orgName: String, userId: String): SubscriptionTimeRecord
+  createTask(request: TaskRequest): String @addAccountContext
 }
