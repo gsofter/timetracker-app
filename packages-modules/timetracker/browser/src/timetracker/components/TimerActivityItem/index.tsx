@@ -119,7 +119,7 @@ export const TimerActivityItem: React.FC<ITimerActivityItemProps> = (props: ITim
           <Row style={{ width: '100%' }}>
             <Col span={18}>
               <Input
-                placeholder="What are you working on?"
+                placeholder={!timeRecord.timesheetId ? 'What are you working on?' : ''}
                 size="large"
                 value={description}
                 onChange={handleDescriptionTask}

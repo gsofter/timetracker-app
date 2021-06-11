@@ -81,3 +81,21 @@ export type TimeTrackerModelType = Model<ITimeTrackerModel>;
 
 export const TimeTrackerModelFunc: (db: Connection) => TimeTrackerModelType = (db) =>
   db.model<ITimeTrackerModel>('timetracker', TimeTrackerSchema);
+
+const TaskSchema = new Schema({
+  projectId: { type: String },
+  taskName: { type: String },
+});
+
+TaskSchema.virtual('id').get(function () {
+  return this._id.toHexString();
+});
+
+interface ITaskModel extends Document {
+  id: any;
+  projectId: string;
+  taskName: string;
+}
+
+export type TaskModelType = Model<ITaskModel>;
+export const TaskModelFunc: (db: Connection) => TaskModelType = (db) => db.model<ITaskModel>('timetracker', TaskSchema);
