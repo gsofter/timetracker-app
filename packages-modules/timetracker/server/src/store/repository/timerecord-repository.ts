@@ -48,8 +48,17 @@ export class TimeRecordRepository implements ITimeRecordRepository {
   }
 
   public async getTimeRecords(orgId: string, userId?: string) {
-    const orgRecords = await this.getOrganizationTimeRecords(orgId);
-    return orgRecords.filter((tr) => (!userId || tr.userId === userId) && tr.endTime !== null);
+    const result = await this.timeTrackerModel.findOne(
+      {
+        orgId,
+        timeRecords: { $elemMatch: { userId } },
+      },
+      {
+        orgId,
+        timeRecords: { $elemMatch: { userId } },
+      },
+    );
+    return result.timeRecords;
   }
 
   public async getOrganizationTimeRecords(orgId: string) {
@@ -62,7 +71,6 @@ export class TimeRecordRepository implements ITimeRecordRepository {
 
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
     const trackDoc = await this.timeTrackerModel.findOne({ orgId });
-
     if (trackDoc) {
       let res;
       if (trackDoc.timeRecords) res = trackDoc.timeRecords.find((tr) => tr.userId === userId && tr.endTime === null);
@@ -95,7 +103,13 @@ export class TimeRecordRepository implements ITimeRecordRepository {
         { orgId, timeRecords: { $elemMatch: { _id: recordId } } },
         { $set: { 'timeRecords.$': request } },
         {
-          projection: { userId, orgId, timeRecords: { $elemMatch: { _id: recordId } } },
+          new: true,
+          projection: {
+            userId,
+            orgId,
+            // used elemMatch `startTime` instead of `_id` as it keep changing after update.
+            timeRecords: { $elemMatch: { startTime: request.startTime } },
+          },
         },
       );
       return response.toObject();
@@ -106,15 +120,18 @@ export class TimeRecordRepository implements ITimeRecordRepository {
 
   public async removeTimeRecord(userId: string, orgId: string, recordId: string) {
     try {
-      await this.timeTrackerModel.update(
+      const result = await this.timeTrackerModel.update(
         {
           orgId,
         },
         {
-          $pull: { timeRecords: { _id: recordId } } as any,
+          $pull: { timeRecords: { _id: recordId } },
         },
       );
-      return { userId, orgId, timeRecords: [{ _id: recordId, id: recordId } as any] as ITimeRecord[] };
+      if (result.nModified !== 1) {
+        throw new Error('TimeRecord is not modified');
+      }
+      return { userId, orgId, timeRecords: [{ _id: recordId } as any] as ITimeRecord[] };
     } catch (err) {
       throw new Error(err.message);
     }

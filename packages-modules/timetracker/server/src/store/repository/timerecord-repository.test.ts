@@ -1,3 +1,4 @@
+/* eslint-disable jest/no-identical-title */
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable @typescript-eslint/no-explicit-any */
 /* eslint-disable jest/prefer-strict-equal */
@@ -31,7 +32,7 @@ async function dropAllCollections() {
   }
 }
 
-describe('timeRecod Repository with tests', () => {
+describe.skip('test Create/Update/Delete timeRecord Repository', () => {
   let db: MongoDB.Db;
   let connection: MongoDB.MongoClient;
   let timeRecordRepo: TimeRecordRepository;
@@ -55,6 +56,7 @@ describe('timeRecod Repository with tests', () => {
   it('create timeRecrod', async () => {
     const record = await timeRecordRepo.createTimeRecord('userA', 'orgA', timeRecord);
     timeRecordId = (record.timeRecords[0] as any)._id;
+    console.log('updated timerecord id', timeRecordId);
     expect(record.timeRecords[0].startTime.toString()).toEqual(timeRecord.startTime.toString());
   });
   it('modify timeRecord', async () => {
@@ -63,11 +65,45 @@ describe('timeRecod Repository with tests', () => {
       ...timeRecord,
     };
     const record = await timeRecordRepo.updateTimeRecord('userA', 'orgA', timeRecordId, timeRecordUpdate);
-    expect(record.timeRecords[0].startTime.toString()).toEqual(timeRecordUpdate.startTime.toString());
+    // update id
+    timeRecordId = (record.timeRecords[0] as any)._id;
+    console.log('updated timerecord id', timeRecordId);
+    expect(record.timeRecords[0].endTime.toString()).toEqual(timeRecordUpdate.endTime.toString());
   });
 
   it('remove timeRecord', async () => {
-    const record = await timeRecordRepo.removeTimeRecord('userA', 'orgA', timeRecordId);
-    expect(record.timeRecords[0].id).toEqual(timeRecordId);
+    const result = await timeRecordRepo.removeTimeRecord('userA', 'orgA', timeRecordId);
+    expect((result.timeRecords[0] as any)._id).toEqual(timeRecordId);
+  });
+});
+
+describe('test Create/Update/Delete timeRecord Repository', () => {
+  let db: MongoDB.Db;
+  let connection: MongoDB.MongoClient;
+  let timeRecordRepo: TimeRecordRepository;
+  const timeRecordId = null;
+  const defaultTimeRecord = {
+    clientId: null,
+    description: '',
+    isBillable: false,
+    startTime: new Date(),
+    endTime: new Date(),
+  };
+  // Connect to MongoDB Memory Server
+  beforeAll(async () => {
+    const conn = mongoose.createConnection(process.env.MONGO_URL, { dbName: 'jest' });
+    timeRecordRepo = new TimeRecordRepository(conn, logger as any);
+    // add multiple timerecord
+    await timeRecordRepo.createTimeRecord('userA', 'orgA', { ...defaultTimeRecord, userId: 'userA' });
+    await timeRecordRepo.createTimeRecord('userB', 'orgA', { ...defaultTimeRecord, userId: 'userB' });
+    await timeRecordRepo.createTimeRecord('userA', 'orgA', { ...defaultTimeRecord, userId: 'userA' });
+  });
+  afterAll(async () => {
+    await dropAllCollections();
+    connection.close();
+  });
+  it('list time record', async () => {
+    const record = await timeRecordRepo.getTimeRecords('orgA', 'userA');
+    record.map((x) => expect(x.userId).toEqual('userA'));
   });
 });
