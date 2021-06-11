@@ -1,0 +1,18 @@
+type Task {
+  id: String
+  projectId: String
+  taskName: String
+}
+
+input TaskRequest {
+  projectId: String
+  taskName: String
+}
+
+extend type Query {
+  getTasks(projectId: String): [Task] @addAccountContext
+}
+
+extend type Mutation {
+  createTask(request: TaskRequest): String @addAccountContext
+}
