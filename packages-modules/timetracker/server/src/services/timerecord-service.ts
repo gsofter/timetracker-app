@@ -4,13 +4,10 @@ import { CdmLogger } from '@cdm-logger/core';
 import { inject, injectable } from 'inversify';
 import { ITimeRecord, ITimeRecordRequest, ITimeRecordPubSubEvents, ITimeTracker } from '@admin-layout/timetracker-core';
 import { ServerTypes, IPreferencesService } from '@adminide-stack/core';
-import { IMoleculerServiceName, IMailServiceAction, IMailerServicesendArgs } from '@container-stack/mailing-api';
-import * as moment from 'moment';
 import { PubSubEngine } from 'graphql-subscriptions';
-
 import { ServiceBroker, CallingOptions } from 'moleculer';
 import { CommonType } from '@common-stack/core';
-import { ITimeRecordRepository, ITimesheetRepository } from '../store/repository';
+import { ITimeRecordRepository } from '../store/repository';
 import { TYPES } from '../constants';
 
 export interface ITimeRecordService {
@@ -64,14 +61,8 @@ export class TimeRecordService implements ITimeRecordService {
     endTime: Date,
     userId?: string,
   ): Promise<Array<ITimeRecord>> {
-    const timeRecords = await this.timeRecordRepository.getTimeRecords(orgId, userId);
-    console.log('---TIMERECORDS', timeRecords);
-    return timeRecords.filter(
-      (r) =>
-        moment(startTime) <= moment(r.startTime) &&
-        moment(r.endTime) <= moment(endTime) &&
-        r.endTime !== null,
-    );
+    const timeRecords = await this.timeRecordRepository.getTimeRecords(orgId, userId, startTime, endTime);
+    return timeRecords.filter((r) => r.endTime !== null);
   }
 
   public async getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord> {
@@ -130,25 +121,5 @@ export class TimeRecordService implements ITimeRecordService {
 
   public async disapproveTimeRecords(orgId: string, sheetId: string) {
     this.timeRecordRepository.disapproveTimeRecords(orgId, sheetId);
-  }
-
-  private sendMail(topic, to, from, templateId, templateVars) {
-    return this.callAction<void, IMailerServicesendArgs>(
-      IMailServiceAction.send,
-      {
-        request: {
-          topic,
-          to,
-          templateId,
-          from,
-          variables: templateVars,
-        },
-      },
-      IMoleculerServiceName.MailService,
-    );
-  }
-
-  private async callAction<T, P = any>(command: string, params?: P, topic?: string, opts?: CallingOptions) {
-    return this.broker.call<T, P>(`${topic}.${command}`, params, opts);
   }
 }

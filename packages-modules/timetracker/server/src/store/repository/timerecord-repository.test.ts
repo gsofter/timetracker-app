@@ -32,7 +32,7 @@ async function dropAllCollections() {
   }
 }
 
-xdescribe('test Create/Update/Delete timeRecord Repository', () => {
+describe('test Create/Update/Delete timeRecord Repository', () => {
   let db: MongoDB.Db;
   let connection: MongoDB.MongoClient;
   let timeRecordRepo: TimeRecordRepository;
@@ -110,8 +110,7 @@ describe('test Create/Update/Delete timeRecord Repository', () => {
 
   it('getTimeRecords without UserID', async () => {
     const record = await timeRecordRepo.getTimeRecords('orgA');
-    expect(record.length).toEqual(2);
-    record.map((x) => expect(x.userId).toEqual('userA'));
+    expect(record.length).toEqual(3);
   });
 
   it('getTimeRecords with NOT existed data', async () => {

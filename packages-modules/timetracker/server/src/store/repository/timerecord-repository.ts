@@ -1,3 +1,4 @@
+/* eslint-disable no-param-reassign */
 /* eslint-disable @typescript-eslint/explicit-module-boundary-types */
 /* eslint-disable no-underscore-dangle */
 import * as Logger from 'bunyan';
@@ -5,10 +6,11 @@ import { injectable, inject } from 'inversify';
 import * as mongoose from 'mongoose';
 import { ITimeRecordRequest, ITimeRecord, ITimeTracker } from '@admin-layout/timetracker-core';
 import * as _ from 'lodash';
+import * as moment from 'moment';
 import { TimeTrackerModelType, TimeTrackerModelFunc } from '../models/timetracker-model';
 
 export interface ITimeRecordRepository {
-  getTimeRecords(orgId: string, userId?: string): Promise<Array<ITimeRecord>>;
+  getTimeRecords(orgId: string, userId?: string, startTime?: Date, endTime?: Date): Promise<Array<ITimeRecord>>;
   getOrganizationTimeRecords(orgId: string): Promise<Array<ITimeRecord>>;
   getPlayingTimeRecord(userId: string, orgId: string): Promise<ITimeRecord>;
   createTimeRecord(userId: string, orgId: string, request: ITimeRecordRequest): Promise<Partial<ITimeTracker>>;
@@ -30,6 +32,8 @@ export interface ITimeRecordRepository {
   disapproveTimeRecords(orgId: string, sheetId: string);
 }
 
+// setback Days for default search
+const SETBACK_DAYS = 7; // 7 days
 @injectable()
 export class TimeRecordRepository implements ITimeRecordRepository {
   private timeTrackerModel: TimeTrackerModelType;
@@ -47,7 +51,25 @@ export class TimeRecordRepository implements ITimeRecordRepository {
     this.timeTrackerModel = TimeTrackerModelFunc(db);
   }
 
-  public async getTimeRecords(orgId: string, userId?: string) {
+  public async getTimeRecords(orgId: string, userId?: string | RegExp, from?: Date, until?: Date) {
+    if (!userId) {
+      userId = /.*/;
+    }
+    let startTime: Date;
+    let endTime: Date;
+    if (!from) {
+      const dt = new Date();
+      startTime = moment(dt).subtract(SETBACK_DAYS, 'day').toDate();
+    } else {
+      startTime = from;
+    }
+    if (!until) {
+      const dt = new Date();
+      endTime = moment(dt).toDate();
+    } else {
+      endTime = until;
+    }
+
     const result = await this.timeTrackerModel.aggregate([
       {
         $match: {
@@ -60,6 +82,8 @@ export class TimeRecordRepository implements ITimeRecordRepository {
       {
         $match: {
           'timeRecords.userId': userId,
+          'timeRecords.startTime': { $gte: startTime },
+          'timeRecords.endTime': { $lte: endTime },
         },
       },
       {
