@@ -8,7 +8,6 @@ import {
   useRemoveTimeRecordMutation,
   useUpdateTimeRecordMutation,
   useGetProjectsQuery,
-  useSubscribeToTimeTrackerSubscription,
 } from '../../../generated-models';
 import {
   ITimeRecordRequest,
@@ -49,7 +48,7 @@ const TimeTrackerWrapper = (props) => {
   } = useGetDurationTimeRecordsQuery({
     variables: { userId, startTime: range.startTime, endTime: range.endTime },
   });
-  const { data: plData, refetch: plRefetch, loading: plLoading, subscribeToMore } = useGetPlayingTimeRecordQuery();
+  const { data: plData, loading: plLoading, subscribeToMore } = useGetPlayingTimeRecordQuery();
   const [createMutation] = useCreateTimeRecordMutation();
   const [removeMutation] = useRemoveTimeRecordMutation();
   const [updateMutation] = useUpdateTimeRecordMutation();
@@ -77,7 +76,6 @@ const TimeTrackerWrapper = (props) => {
     createMutation({ variables: { request } })
       .then(() => {
         message.info('TimeRecord created');
-        // plRefetch();
         // refetch();
       })
       .catch((error) => {
@@ -107,7 +105,6 @@ const TimeTrackerWrapper = (props) => {
       .then(() => {
         message.success('TimeRecord Updated');
         refetch();
-        // plRefetch();
       })
       .catch((error) => {
         message.error(error.message);
@@ -118,8 +115,7 @@ const TimeTrackerWrapper = (props) => {
   const removePlayingTimeRecord = () => {
     removeMutation({ variables: { recordId: currentTimeRecord.id } })
       .then(() => {
-        // message.success('TimeRecord Removed');
-        // plRefetch();
+        message.success('TimeRecord Removed');
         resetTimerValues();
       })
       .catch((error) => {
@@ -166,7 +162,6 @@ const TimeTrackerWrapper = (props) => {
           const newData = _.merge({}, prev, {
             getPlayingTimeRecord: subscriptionData.data.SubscribeToTimeTracker.timeRecord,
           });
-          console.log('---Subscribed DATA UPDATED', newData);
           return newData;
         } else if (
           subscribedData.mutation === ITimeRecordPubSubEvents.TimeRecordUpdated &&
