@@ -28,7 +28,7 @@ enum TimesheetState {
 
 // ===> TimeRecord
 const TimeRecordSchema = new Schema({
-  userId: { type: String },
+  userId: { type: String, index: true },
   startTime: { type: Date },
   endTime: { type: Date, default: null },
   taskName: { type: String },
@@ -39,6 +39,8 @@ const TimeRecordSchema = new Schema({
   projectId: { type: String }, // ----> project
   timesheetId: { type: String }, // ----> timesheet
 });
+
+TimeRecordSchema.index({ endTime: 1, startTime: 1, userId: 1 });
 
 // ===> Timesheet
 const TimesheetSchema = new Schema({

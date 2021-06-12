@@ -39,7 +39,9 @@ module.exports = {
         // because we don't need to use any kind of tree shaking right?!
         '^lodash-es$': '<rootDir>/node_modules/lodash/index.js',
     },
-    transformIgnorePatterns: ['/node_modules/(?!(babel-runtime|antd)).*/', '<rootDir>/node_modules/(?!lodash-es/.*)'],
+    transformIgnorePatterns: [
+        '/node_modules/(?!(@vscode-alt/monaco-editor|@files-stack/server-core|abortable-rx|lodash-es|react-dnd-html5-backend|react-sortable-tree|react-dnd|dnd-core)/).+\\.js$',
+    ],
     clearMocks: true,
     verbose: true,
     // projects: ['<rootDir>'], // TODO need to test with it https://github.com/bryan-hunter/yarn-workspace-lerna-monorepo/blob/master/jest.config.base.js

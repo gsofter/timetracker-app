@@ -32,7 +32,7 @@ async function dropAllCollections() {
   }
 }
 
-describe.skip('test Create/Update/Delete timeRecord Repository', () => {
+xdescribe('test Create/Update/Delete timeRecord Repository', () => {
   let db: MongoDB.Db;
   let connection: MongoDB.MongoClient;
   let timeRecordRepo: TimeRecordRepository;
@@ -102,8 +102,25 @@ describe('test Create/Update/Delete timeRecord Repository', () => {
     await dropAllCollections();
     connection.close();
   });
-  it('list time record', async () => {
+  it('getTimeRecords with existed data', async () => {
     const record = await timeRecordRepo.getTimeRecords('orgA', 'userA');
+    expect(record.length).toEqual(2);
     record.map((x) => expect(x.userId).toEqual('userA'));
+  });
+
+  it('getTimeRecords without UserID', async () => {
+    const record = await timeRecordRepo.getTimeRecords('orgA');
+    expect(record.length).toEqual(2);
+    record.map((x) => expect(x.userId).toEqual('userA'));
+  });
+
+  it('getTimeRecords with NOT existed data', async () => {
+    const record = await timeRecordRepo.getTimeRecords('orgA', 'userC');
+    expect(record.length).toEqual(0);
+  });
+
+  it('getTimeRecords of unkown Org', async () => {
+    const record = await timeRecordRepo.getTimeRecords('orgC', 'userC');
+    expect(record.length).toEqual(0);
   });
 });

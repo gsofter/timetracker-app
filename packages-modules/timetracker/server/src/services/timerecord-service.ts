@@ -1,15 +1,8 @@
 /* eslint-disable no-underscore-dangle */
 /* eslint-disable import/no-extraneous-dependencies */
-import * as ILogger from 'bunyan';
+import { CdmLogger } from '@cdm-logger/core';
 import { inject, injectable } from 'inversify';
-import {
-  ITimeRecord,
-  ITimeRecordRequest,
-  ITimesheet,
-  ITimeRecordPubSubEvents,
-  ITagResolvers,
-  ITimeTracker,
-} from '@admin-layout/timetracker-core';
+import { ITimeRecord, ITimeRecordRequest, ITimeRecordPubSubEvents, ITimeTracker } from '@admin-layout/timetracker-core';
 import { ServerTypes, IPreferencesService } from '@adminide-stack/core';
 import { IMoleculerServiceName, IMailServiceAction, IMailerServicesendArgs } from '@container-stack/mailing-api';
 import * as moment from 'moment';
@@ -40,14 +33,11 @@ export interface ITimeRecordService {
 
 @injectable()
 export class TimeRecordService implements ITimeRecordService {
-  private logger: ILogger;
+  private logger: CdmLogger.ILogger;
 
   constructor(
     @inject(TYPES.ITimeRecordRepository)
     protected timeRecordRepository: ITimeRecordRepository,
-
-    @inject(TYPES.ITimesheetRepository)
-    protected timesheetRepository: ITimesheetRepository,
 
     @inject(ServerTypes.IPreferenceEditorService)
     private preferencesService: IPreferencesService,
@@ -59,7 +49,7 @@ export class TimeRecordService implements ITimeRecordService {
     private pubsub: PubSubEngine,
 
     @inject('Logger')
-    logger: ILogger,
+    logger: CdmLogger.ILogger,
   ) {
     this.logger = logger;
   }
@@ -75,9 +65,9 @@ export class TimeRecordService implements ITimeRecordService {
     userId?: string,
   ): Promise<Array<ITimeRecord>> {
     const timeRecords = await this.timeRecordRepository.getTimeRecords(orgId, userId);
+    console.log('---TIMERECORDS', timeRecords);
     return timeRecords.filter(
       (r) =>
-        (!userId || r.userId === userId) &&
         moment(startTime) <= moment(r.startTime) &&
         moment(r.endTime) <= moment(endTime) &&
         r.endTime !== null,

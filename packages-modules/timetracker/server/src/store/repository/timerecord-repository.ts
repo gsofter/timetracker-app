@@ -48,17 +48,39 @@ export class TimeRecordRepository implements ITimeRecordRepository {
   }
 
   public async getTimeRecords(orgId: string, userId?: string) {
-    const result = await this.timeTrackerModel.findOne(
+    const result = await this.timeTrackerModel.aggregate([
       {
-        orgId,
-        timeRecords: { $elemMatch: { userId } },
+        $match: {
+          orgId,
+        },
       },
       {
-        orgId,
-        timeRecords: { $elemMatch: { userId } },
+        $unwind: '$timeRecords',
       },
-    );
-    return result.timeRecords;
+      {
+        $match: {
+          'timeRecords.userId': userId,
+        },
+      },
+      {
+        $group: {
+          _id: '$orgId',
+          timeRecords: {
+            $push: '$timeRecords',
+          },
+        },
+      },
+      {
+        $project: {
+          orgId: 1,
+          timeRecords: 1,
+        },
+      },
+    ]);
+    if (result.length === 0) {
+      return [];
+    }
+    return result[0].timeRecords;
   }
 
   public async getOrganizationTimeRecords(orgId: string) {
