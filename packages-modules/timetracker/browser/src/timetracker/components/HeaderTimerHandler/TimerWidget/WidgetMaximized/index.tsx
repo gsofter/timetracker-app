@@ -9,6 +9,7 @@ import {
 } from '@ant-design/icons';
 import { Button, Typography, Select } from 'antd';
 import { useFela } from 'react-fela';
+import { IProjects as IProject } from '@admin-layout/timetracker-core';
 import { styleSheet } from './style';
 
 interface WidgetMaximizedProps {
@@ -18,6 +19,7 @@ interface WidgetMaximizedProps {
   trackStarted: boolean;
   hidden: boolean;
   timeDuration: string;
+  projects: IProject[];
 }
 
 const WidgetMaximized: React.FC<WidgetMaximizedProps> = (props: WidgetMaximizedProps) => {
@@ -26,6 +28,7 @@ const WidgetMaximized: React.FC<WidgetMaximizedProps> = (props: WidgetMaximizedP
   const { Option } = Select;
   const { onClose, onTrack, onMinimize, trackStarted, hidden, timeDuration } = props;
   const [expanded, setExpanded] = useState<boolean>(true);
+  const { projects } = props;
 
   return (
     <div hidden={hidden} className={css(styleSheet.container)}>
@@ -58,9 +61,9 @@ const WidgetMaximized: React.FC<WidgetMaximizedProps> = (props: WidgetMaximizedP
       </div>
       <div className={css(styleSheet.filters)} hidden={!expanded}>
         <Select className="select-project" placeholder="Select a project">
-          <Option key="0" value="1">Admin Project</Option>
-          <Option key="1" value="2">IDE project</Option>
-          <Option key="2" value="3">Project 1</Option>
+          {projects.map((project) => (
+            <Option key={project.id} value="1">{project.name}</Option>
+          ))}
         </Select>
         <Select className="select-to-do" placeholder="Select a to do">
           <Option key="0" value="2">Task 1</Option>

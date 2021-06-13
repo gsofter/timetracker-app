@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import { useFela } from 'react-fela';
+import { IProjects as IProject } from '@admin-layout/timetracker-core';
 import { styleSheet } from './style';
 import WidgetMinimized from './WidgetMinimized';
 import WidgetMaximized from './WidgetMaximized';
@@ -9,6 +10,7 @@ interface HanlderBodyProps {
   onTrack: () => void;
   trackStarted: boolean;
   timeDuration: string;
+  projects: IProject[];
 }
 enum WidgetSize {
   minimize = 'minimize',
@@ -19,6 +21,7 @@ const TimerWidget: React.FC<HanlderBodyProps> = (props: HanlderBodyProps) => {
   const { css } = useFela();
   const { onClose, onTrack, trackStarted, timeDuration } = props;
   const [size, setSize] = useState<WidgetSize>(WidgetSize.maximize);
+  const { projects } = props;
 
   const minimize = () => {
     setSize(WidgetSize.minimize);
@@ -39,6 +42,7 @@ const TimerWidget: React.FC<HanlderBodyProps> = (props: HanlderBodyProps) => {
       />
       <WidgetMaximized
         trackStarted={trackStarted}
+        projects={projects}
         onClose={onClose}
         onTrack={onTrack}
         onMinimize={minimize}

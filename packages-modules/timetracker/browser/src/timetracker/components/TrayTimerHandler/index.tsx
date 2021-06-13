@@ -1,8 +1,7 @@
 import React, { useState } from 'react';
 import TimerWidget from './TimerWidget';
 import { useDispatch, useSelector } from 'react-redux';
-import { resetCurrentTimerAction, setCurrentTimerAction } from '../../../redux/actions/TimeWidgetAction';
-import { currentTimerSelector } from '../../../redux/selector/TimeWidgetSelector';
+import { resetCurrentTimerAction, setCurrentTimerAction, currentTimerSelector } from '@admin-layout/timetracker-core';
 import WeeklyRecord from './WeeklyRecord';
 import { msToHMS } from '../../../utils/timeConverter';
 

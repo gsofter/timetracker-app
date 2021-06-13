@@ -7,9 +7,11 @@ import {
   DownOutlined,
   UpOutlined
 } from '@ant-design/icons';
+import { get } from 'lodash';
 import { Button, Typography, Select } from 'antd';
 import { useFela } from 'react-fela';
 import { styleSheet } from './style';
+import { useGetProjectsQuery } from '../../../../../generated-models';
 
 interface WidgetMaximizedProps {
   onTrack: () => void;
@@ -25,7 +27,8 @@ const WidgetMaximized: React.FC<WidgetMaximizedProps> = (props: WidgetMaximizedP
   const { Option } = Select;
   const { onTrack, onMinimize, trackStarted, hidden, timeDuration } = props;
   const [expanded, setExpanded] = useState<boolean>(true);
-
+  const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
+  const projects = get(projectsData, 'getProjects', [] as any);
   return (
     <div hidden={hidden} className={css(styleSheet.container)}>
       <div className={css(styleSheet.headerTools)}>
@@ -50,9 +53,9 @@ const WidgetMaximized: React.FC<WidgetMaximizedProps> = (props: WidgetMaximizedP
       </div>
       <div className={css(styleSheet.filters)} hidden={!expanded}>
         <Select className="select-project" placeholder="Select a project">
-          <Option key="0" value="1">Admin Project</Option>
-          <Option key="1" value="2">IDE project</Option>
-          <Option key="2" value="3">Project 1</Option>
+          {projects.map((project) => (
+            <Option key={project.id} value="1">{project.name}</Option>
+          ))}
         </Select>
         <Select className="select-to-do" placeholder="Select a to do">
           <Option key="0" value="2">Task 1</Option>
