@@ -1,26 +1,46 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { FieldTimeOutlined } from '@ant-design/icons';
 import Draggable from 'react-draggable';
 import { Button } from 'antd';
 import { useFela } from 'react-fela';
+import { get } from 'lodash';
+import moment from 'moment';
 import { styleSheet } from './style';
 import TimerWidget from './TimerWidget';
-import { currentTimerSelector, resetCurrentTimerAction, setCurrentTimerAction } from '../../../redux';
+import { useStopwatch } from 'react-timer-hook';
+import { currentTimerSelector, resetCurrentTimerAction, setCurrentTimerAction } from '@admin-layout/timetracker-core';
+import { useGetProjectsQuery } from '../../../generated-models'; // convert to Lazy Loading
 
 const HeaderTimerHandler: React.FC = (props) => {
   const { css } = useFela();
   const [visiblity, setVisiblity] = useState<boolean>(false);
   const dispatch = useDispatch();
   const currentTimer = useSelector(currentTimerSelector);
-  const [timeDuration, setTimeDuration] = useState<number>(0);
-
+  const [startTimer, setStartTimer] = useState<boolean>();
+  const { data: projectsData, loading: loadingProjects } = useGetProjectsQuery();
+  const projects = get(projectsData, 'getProjects', [] as any);
+  const { reset, hours, minutes, seconds } = useStopwatch({ autoStart: false, offsetTimestamp: 0 });
   const hidePopover = () => {
     setVisiblity(false);
   }
 
+  useEffect(() => {
+    if (currentTimer && (currentTimer.startTime === null || currentTimer.endTime !== null)) {
+      if (startTimer) {
+        reset(0, false);
+        setStartTimer(false);
+      }
+    } else {
+      const passDur = moment().valueOf() - moment(currentTimer.startTime).valueOf();
+      const currentDate = new Date();
+      const stopwatchOffset = currentDate.setSeconds(currentDate.getSeconds() + passDur/1000);
+      reset(stopwatchOffset);
+      setStartTimer(true);
+    }
+  }, [currentTimer]);
+
   const onChangeTrack = () => {
-    console.log('---CURRENT TIMER', currentTimer)
     if (currentTimer.startTime === null) {
       dispatch(setCurrentTimerAction({
         endTime: null,
@@ -34,34 +54,7 @@ const HeaderTimerHandler: React.FC = (props) => {
     }
   }
 
-  const calculateTimeDuration = () => {
-    const now = new Date().getTime();
-    const statedTime = new Date(currentTimer.startTime).getTime();
-
-    setTimeDuration((currentTimer.startTime === null) ? 0 : now - statedTime);
-  }
-
-  const msToHMS = (milliseconds: number) => {
-    const hours = milliseconds / (3600 * 1000);
-    const absoluteHours = Math.floor(hours);
-    const hoursString = absoluteHours > 9 ? `${absoluteHours}` : `0${absoluteHours}`;
-
-    const minutes = (hours - absoluteHours) * 60;
-    const absoluteMinutes = Math.floor(minutes);
-    const minutesStrinig = absoluteMinutes > 9 ? `${absoluteMinutes}` : `0${absoluteMinutes}`;
-
-    const seconds = (minutes - absoluteMinutes) * 60;
-    const absoluteSeconds = Math.floor(seconds);
-    const secondsString = absoluteSeconds > 9 ? `${absoluteSeconds}` : `0${absoluteSeconds}`;
-
-
-    return `${hoursString}:${minutesStrinig}:${secondsString}`;
-  }
-
-  setTimeout(() => {
-    calculateTimeDuration();
-  }, 1000);
-
+  const timerValue = `${hours}:${minutes}:${seconds}`;
   return (
     <>
       <Draggable
@@ -78,10 +71,11 @@ const HeaderTimerHandler: React.FC = (props) => {
           style={{ zIndex: 999, position: 'absolute' }}
         >
           <TimerWidget
+            projects={projects}
             onClose={hidePopover}
             onTrack={onChangeTrack}
             trackStarted={currentTimer.startTime}
-            timeDuration={msToHMS(timeDuration)}
+            timeDuration={timerValue}
           />
         </div>
       </Draggable>
@@ -94,7 +88,7 @@ const HeaderTimerHandler: React.FC = (props) => {
         }
         onClick={() => setVisiblity(!visiblity)}
       >
-        {msToHMS(timeDuration)}
+        {timerValue}
       </Button>
     </>
   )
