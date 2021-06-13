@@ -2,23 +2,20 @@ import React, { useState, useMemo, useCallback, useEffect } from 'react';
 import { useFela } from 'react-fela';
 import { PlusCircleOutlined, TagOutlined, CloseOutlined, ClockCircleOutlined, BarsOutlined } from '@ant-design/icons';
 import { ITimeRecord, ITimeRecordRequest, IProjects as IProject } from '@admin-layout/timetracker-core';
-import { Input, Button, Typography, Row, Col, Dropdown, Menu, Select, DatePicker, TimePicker } from 'antd';
+import { Input, Button, Row, Col, Dropdown, Menu, Select, DatePicker, TimePicker } from 'antd';
 import CSS from 'csstype';
-import Timer from 'react-compound-timer';
 import moment from 'moment';
 import BillableCheck from '../BillableCheck';
 import classNames from 'classnames';
 import { TRACKER_MODE } from '../../constants';
 import DurationInput from '../DurationInput';
 import { Moment } from 'moment';
-import momentZ from 'moment-timezone';
 import { useSelector } from 'react-redux';
 import { useTimeformat } from '../../hooks';
+import { TimerComponent } from './TimerComponent';
 import * as _ from 'lodash';
-const { SubMenu } = Menu;
 const { Option } = Select;
 const { RangePicker } = TimePicker;
-const { Title } = Typography;
 
 export interface ITimeTracker {
   currentTimeRecord: ITimeRecord;
@@ -143,7 +140,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
             <Select
               defaultValue="lucy"
               style={{ width: 120 }}
-              onChange={() => {}}
+              onChange={() => { }}
               onClick={(event) => event.stopPropagation()}
             >
               <Option value="jack">Jack</Option>
@@ -223,11 +220,7 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
             {mode === TRACKER_MODE.TRACK ? (
               <>
                 <Col span={14} sm={10} xxl={14} className="flex-center">
-                  <Title level={5} style={{ marginBottom: '0px' }}>
-                    <Timer.Hours formatValue={(val) => `${val < 10 ? `0${val}` : val}`} />:
-                    <Timer.Minutes formatValue={(val) => `${val < 10 ? `0${val}` : val}`} />:
-                    <Timer.Seconds formatValue={(val) => `${val < 10 ? `0${val}` : val}`} />
-                  </Title>
+                  <TimerComponent />
                 </Col>
 
                 <Col span={5} sm={5}>
@@ -250,37 +243,37 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
                 </Col>
               </>
             ) : (
-              <>
-                <Col span={16} sm={6} xxl={10} className="flex-row flex-center">
-                  <RangePicker
-                    format={timeFormat}
-                    defaultValue={[moment(), moment()]}
-                    bordered={false}
-                    onChange={handleChangeRange}
-                    value={[manualStart, manualEnd]}
-                  />
-                  <DatePicker
-                    defaultValue={moment()}
-                    bordered={false}
-                    onChange={handleChangeDurDate}
-                    format={dateFormat}
-                  />
-                </Col>
-                <Col span={0} sm={6} className="duration">
-                  <div className="flex-center">
-                    <DurationInput
-                      duration={Math.floor((moment(manualEnd).valueOf() - moment(manualStart).valueOf()) / 1000)}
-                      onChange={handleChangeDur}
+                <>
+                  <Col span={16} sm={6} xxl={10} className="flex-row flex-center">
+                    <RangePicker
+                      format={timeFormat}
+                      defaultValue={[moment(), moment()]}
+                      bordered={false}
+                      onChange={handleChangeRange}
+                      value={[manualStart, manualEnd]}
                     />
-                  </div>
-                </Col>
-                <Col span={3} className="flex-center">
-                  <Button type="primary" size="small" onClick={handleAddManual} disabled={disable}>
-                    ADD
+                    <DatePicker
+                      defaultValue={moment()}
+                      bordered={false}
+                      onChange={handleChangeDurDate}
+                      format={dateFormat}
+                    />
+                  </Col>
+                  <Col span={0} sm={6} className="duration">
+                    <div className="flex-center">
+                      <DurationInput
+                        duration={Math.floor((moment(manualEnd).valueOf() - moment(manualStart).valueOf()) / 1000)}
+                        onChange={handleChangeDur}
+                      />
+                    </div>
+                  </Col>
+                  <Col span={3} className="flex-center">
+                    <Button type="primary" size="small" onClick={handleAddManual} disabled={disable}>
+                      ADD
                   </Button>
-                </Col>
-              </>
-            )}
+                  </Col>
+                </>
+              )}
             <Col span={1}>
               <div className={classNames('mode', { hidden: isRecording }, 'flex-col')}>
                 <ClockCircleOutlined
@@ -299,7 +292,6 @@ export const TimeTracker: React.FC<ITimeTracker> = (props: ITimeTracker) => {
     </div>
   );
 };
-
 interface IProjectDropdownMenuProps {
   projects?: IProject[];
   handleSelectProject: Function;
@@ -318,7 +310,7 @@ const ProjectDropdownMenu: React.FC<IProjectDropdownMenuProps> = ({ projects, ha
                 <Select
                   defaultValue="lucy"
                   style={{ width: 120 }}
-                  onChange={() => {}}
+                  onChange={() => { }}
                   onClick={(event) => event.stopPropagation()}
                 >
                   <Option value="jack">Jack</Option>

@@ -20,12 +20,12 @@ import {
   ISubscribeToTimeTrackerSubscription,
   ITimeRecordPubSubEvents,
 } from '@admin-layout/timetracker-core';
+import { useDispatch, useSelector } from 'react-redux';
 import { message, Spin } from 'antd';
 import * as _ from 'lodash';
-import Timer from 'react-compound-timer';
-import { useSelector } from 'react-redux';
 import { useFirstWeekDay } from '../../hooks';
 import TimerActivity from './TimerActivity';
+import { setCurrentTimerAction } from '@admin-layout/timetracker-core'
 import { useCreatePermissions, useDeletePermissions } from '../../hooks';
 
 type TimeTrackerSubscription = SubscribeToMoreOptions<
@@ -35,7 +35,6 @@ type TimeTrackerSubscription = SubscribeToMoreOptions<
 >;
 
 const TimeTrackerWrapper = (props) => {
-  const { setTime, reset, stop, start } = props.timer;
   const userId = useSelector<any>((state) => state.user.auth0UserId) as string;
   const orgName = useSelector<any>((state) => state.platform.orgName) as string;
   const [range, setRange] = useState({ startTime: moment().startOf('month'), endTime: moment().endOf('month') });
@@ -57,6 +56,7 @@ const TimeTrackerWrapper = (props) => {
   const [weekStart, setWeekStart] = useState(moment().startOf('week'));
   const { self: createPermit } = useCreatePermissions();
   const { self: deletePermit } = useDeletePermissions();
+  const dispatch = useDispatch();
 
   useEffect(() => {
     moment.locale('en', {
@@ -125,17 +125,16 @@ const TimeTrackerWrapper = (props) => {
 
   const resetTimerValues = () => {
     setIsRecording(false);
-    setCurrentTimeRecord({
-      startTime: moment(),
+    const defaultPlayingRecord = {
+      startTime: null,
       description: '',
       endTime: null,
       isBillable: false,
       projectId: '',
       taskName: '',
-    });
-    setTime(0);
-    reset();
-    stop();
+    };
+    setCurrentTimeRecord({ ...defaultPlayingRecord, startTime: moment() });
+    dispatch(setCurrentTimerAction(defaultPlayingRecord));
   };
 
   const getSubscriptionOptions = ({
@@ -149,7 +148,7 @@ const TimeTrackerWrapper = (props) => {
       document: SubscribeToTimeTrackerDocument,
       variables: { userId, orgName },
       updateQuery: (prev, { subscriptionData }) => {
-        const {} = prev;
+        const { } = prev;
         if (!subscriptionData.data.SubscribeToTimeTracker) {
           return prev;
         }
@@ -165,10 +164,12 @@ const TimeTrackerWrapper = (props) => {
           return newData;
         } else if (
           subscribedData.mutation === ITimeRecordPubSubEvents.TimeRecordUpdated &&
-          subscribedData.timeRecord?.endTime === null
+          subscribedData.timeRecord?.endTime !== null
         ) {
           return {
             getPlayingTimeRecord: {
+              __typename: "TimeRecord",
+              id: '',
               description: '',
               endTime: '',
               isBillable: false,
@@ -199,13 +200,13 @@ const TimeTrackerWrapper = (props) => {
   }, [orgName, userId, subscribeToMore]);
 
   useEffect(() => {
-    if (plData && plData.getPlayingTimeRecord) {
+    if (plData && plData.getPlayingTimeRecord && plData.getPlayingTimeRecord.startTime !== '') {
+      console.log('---PLDATA rednered', plData);
       const playingRecord = plData.getPlayingTimeRecord;
       const passDur = moment().valueOf() - moment(playingRecord.startTime).valueOf();
       setCurrentTimeRecord(playingRecord);
+      dispatch(setCurrentTimerAction(playingRecord));
       setIsRecording(true);
-      setTime(passDur);
-      start();
     }
   }, [plData, plLoading]);
 
@@ -232,11 +233,4 @@ const TimeTrackerWrapper = (props) => {
   );
 };
 
-const withTimer = (timerProps) => (WrappedComponent) => (wrappedComponentProps) =>
-  (
-    <Timer {...timerProps}>
-      {(timerRenderProps) => <WrappedComponent {...wrappedComponentProps} timer={timerRenderProps} />}
-    </Timer>
-  );
-
-export default withTimer({ startImmediately: false })(TimeTrackerWrapper);
+export default TimeTrackerWrapper;
